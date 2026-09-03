@@ -861,12 +861,14 @@
 {% liquid
   assign pdp_shared_content = shop.metaobjects.pdp_shared_content['global']
   assign shared_related_title = pdp_shared_content.related_products_title.value
+  assign preorder_return_to = request.path | append: '?preorder_success=' | append: ai_gen_id
 %}
 
 <product-carousel-{{ ai_gen_id }}
   class="ai-product-carousel-{{ ai_gen_id }}"
   data-modal-invalid-email="{{ block.settings.modal_invalid_email | escape }}"
   data-modal-submission-error="{{ block.settings.modal_error_text | escape }}"
+  data-preorder-instance="{{ ai_gen_id }}"
   {{ block.shopify_attributes }}
 >
   <div class="ai-carousel-container-{{ ai_gen_id }}">
@@ -948,7 +950,7 @@
     </div>
   </div>
 
-  {%- form 'customer', return_to: request.path, class: 'ai-preorder-native-form' -%}
+  {%- form 'customer', return_to: preorder_return_to, class: 'ai-preorder-native-form' -%}
     <div
       class="ai-preorder-modal-{{ ai_gen_id }}"
       data-preorder-modal
@@ -1107,10 +1109,12 @@
           });
           const responseHtml = await response.text();
           const responseDocument = new DOMParser().parseFromString(responseHtml, 'text/html');
+          const responseUrl = new URL(response.url || window.location.href, window.location.origin);
+          const responseSuccessFromRedirect = responseUrl.searchParams.get('preorder_success') === this.dataset.preorderInstance;
           const responseModal = responseDocument.querySelector('[data-preorder-modal]');
           const responseState = responseModal?.dataset.serverState || 'error';
 
-          if (response.ok && responseState === 'success') {
+          if (response.ok && (responseState === 'success' || responseSuccessFromRedirect)) {
             this.showModalSuccess();
           } else {
             const responseError = responseModal?.querySelector('[data-preorder-status]')?.textContent.trim();

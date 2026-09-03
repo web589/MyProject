@@ -185,6 +185,7 @@
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 {% assign newsletter_form_id = 'newsletter-form-' | append: ai_gen_id %}
 {% assign newsletter_anchor_id = 'newsletter-' | append: ai_gen_id %}
+{% assign newsletter_return_to = request.path | append: '?newsletter_success=' | append: ai_gen_id %}
 
 {% style %}
   .ai-newsletter-section-{{ ai_gen_id }} {
@@ -528,7 +529,7 @@
     {%- form 'customer',
       id: newsletter_form_id,
       class: 'ai-newsletter-native-form',
-      return_to: request.path,
+      return_to: newsletter_return_to,
       data-shopify-captcha: 'true'
     -%}
       <input type="hidden" name="contact[tags]" value="newsletter">
@@ -745,12 +746,14 @@
           });
           const responseHtml = await response.text();
           const responseDocument = new DOMParser().parseFromString(responseHtml, 'text/html');
+          const responseUrl = new URL(response.url || window.location.href, window.location.origin);
+          const responseSuccessFromRedirect = responseUrl.searchParams.get('newsletter_success') === this.dataset.newsletterInstance;
           const responseNewsletter = Array.from(responseDocument.querySelectorAll('[data-newsletter-instance]'))
             .find((element) => element.dataset.newsletterInstance === this.dataset.newsletterInstance);
           const responseSuccess = responseNewsletter?.querySelector('.ai-newsletter-success-{{ ai_gen_id }}');
           const responseError = responseNewsletter?.querySelector('.ai-newsletter-error-{{ ai_gen_id }}')?.textContent.trim();
 
-          if (response.ok && responseSuccess) {
+          if (response.ok && (responseSuccess || responseSuccessFromRedirect)) {
             this.showModal(this.dataset.successMessage, 'success');
           } else {
             throw new Error(responseError || this.dataset.errorTitle || 'Bitte versuche es erneut.');

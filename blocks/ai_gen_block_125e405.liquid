@@ -209,9 +209,21 @@
     font-size: {{ block.settings.title_size }}px;
     font-weight: 700;
     color: {{ block.settings.title_color }};
-    margin-bottom: {{ block.settings.title_margin_bottom }}px;
+    margin-bottom: {% if block.settings.subtitle != blank %}8{% else %}{{ block.settings.title_margin_bottom }}{% endif %}px;
     letter-spacing: -0.5px;
     font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+  }
+
+  .ai-comparison-subtitle-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.title_margin_bottom | minus: 8 }}px;
+    color: #596b82;
+    font-size: 16px;
+    line-height: 1.5;
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+  }
+
+  .ai-comparison-subtitle-{{ ai_gen_id }} p {
+    margin: 0;
   }
 
   .ai-comparison-wrapper-{{ ai_gen_id }} {
@@ -336,7 +348,7 @@
     {{ block.settings.section_title }}
   </h2>
   {% if block.settings.subtitle != blank %}
-    <p class="ai-comparison-subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle }}</p>
+    <div class="ai-comparison-subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
   {% endif %}
 {% endif %}
 
@@ -734,9 +746,9 @@
       "label": "VENUS E Max"
     },
     {
-      "type": "text",
+      "type": "richtext",
       "id": "subtitle",
-      "label": "副标题"
+      "label": "Subtitle"
     }
   ],
   "presets": [

@@ -28,8 +28,22 @@
     color: {{ block.settings.heading_color }};
     text-align: {{ block.settings.heading_align }};
     transform: translateX({{ block.settings.heading_offset_x }}px);
-    margin: 0 0 {{ block.settings.heading_bottom_gap }}px;
+    margin: 0 0 {% if block.settings.heading_subtitle != blank %}8{% else %}{{ block.settings.heading_bottom_gap }}{% endif %}px;
     line-height: 1.2;
+  }
+
+  .ai-tech-specs-heading-subtitle-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.heading_bottom_gap | minus: 8 }}px;
+    color: #596b82;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: {{ block.settings.heading_align }};
+    transform: translateX({{ block.settings.heading_offset_x }}px);
+    max-width: 800px;
+  }
+
+  .ai-tech-specs-heading-subtitle-{{ ai_gen_id }} p {
+    margin: 0;
   }
 
   .ai-tech-specs-category-{{ ai_gen_id }} {
@@ -143,6 +157,9 @@
     %}
     {% if technical_heading != blank %}
       <h2 class="ai-tech-specs-heading-{{ ai_gen_id }}">{{ technical_heading }}</h2>
+    {% endif %}
+    {% if block.settings.heading_subtitle != blank %}
+      <div class="ai-tech-specs-heading-subtitle-{{ ai_gen_id }} rte">{{ block.settings.heading_subtitle }}</div>
     {% endif %}
 
     {% capture specification_whitelist %}{% render 'product-spec-whitelist', spec_product: product %}{% endcapture %}
@@ -368,6 +385,11 @@
       "id": "heading_text",
       "label": "Heading text",
       "default": "Technische Daten"
+    },
+    {
+      "type": "richtext",
+      "id": "heading_subtitle",
+      "label": "Heading subtitle"
     },
     {
       "type": "font_picker",
