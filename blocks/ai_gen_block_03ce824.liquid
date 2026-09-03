@@ -185,7 +185,6 @@
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 {% assign newsletter_form_id = 'newsletter-form-' | append: ai_gen_id %}
 {% assign newsletter_anchor_id = 'newsletter-' | append: ai_gen_id %}
-{% assign newsletter_return_to = request.path | append: '?newsletter_success=' | append: ai_gen_id | append: '#' | append: newsletter_anchor_id %}
 
 {% style %}
   .ai-newsletter-section-{{ ai_gen_id }} {
@@ -348,6 +347,10 @@
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+  }
+
+  html.ai-newsletter-modal-open {
+    overflow: hidden;
   }
 
   .ai-newsletter-dialog-{{ ai_gen_id }} {
@@ -525,7 +528,7 @@
     {%- form 'customer',
       id: newsletter_form_id,
       class: 'ai-newsletter-native-form',
-      return_to: newsletter_return_to,
+      return_to: request.path,
       data-shopify-captcha: 'true'
     -%}
       <input type="hidden" name="contact[tags]" value="newsletter">
@@ -653,14 +656,13 @@
         this.modalTitle = this.querySelector('[data-newsletter-modal-title]');
         this.modalMessage = this.querySelector('[data-newsletter-modal-message]');
         this.modalCloseButtons = this.querySelectorAll('[data-newsletter-modal-close]');
+        this.submitting = false;
+        this.modalScrollPosition = null;
+        this.bodyLockStyles = null;
 
         if (this.form && this.emailInput) {
           this.form.noValidate = true;
-          this.form.addEventListener('submit', (event) => this.validateForm(event), true);
-        }
-
-        if (this.submitButton) {
-          this.submitButton.addEventListener('click', (event) => this.validateForm(event), true);
+          this.form.addEventListener('submit', (event) => this.submitForm(event), { capture: true });
         }
 
         this.modalCloseButtons.forEach((button) => {
@@ -681,14 +683,8 @@
         document.addEventListener('keydown', this.handleEscape);
 
         const serverSuccess = this.querySelector('.ai-newsletter-success-{{ ai_gen_id }}');
-        const url = new URL(window.location.href);
-        const successFromRedirect = url.searchParams.get('newsletter_success') === this.dataset.newsletterInstance;
-        if (serverSuccess || successFromRedirect) {
+        if (serverSuccess) {
           this.showModal(this.dataset.successMessage, 'success');
-          if (successFromRedirect) {
-            url.searchParams.delete('newsletter_success');
-            window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
-          }
         } else {
           const serverError = this.querySelector('.ai-newsletter-error-{{ ai_gen_id }}');
           if (serverError) this.showModal(serverError.textContent.trim(), 'error');
@@ -705,25 +701,70 @@
         if (!email) {
           this.stopSubmission(event);
           this.showModal(this.dataset.emptyEmailMessage, 'error');
-          this.emailInput.focus();
+          this.emailInput.focus({ preventScroll: true });
           return false;
         }
 
         if (!this.emailInput.validity.valid) {
           this.stopSubmission(event);
           this.showModal(this.dataset.invalidEmailMessage, 'error');
-          this.emailInput.focus();
+          this.emailInput.focus({ preventScroll: true });
           return false;
         }
 
         if (this.consentCheckbox && !this.consentCheckbox.checked) {
           this.stopSubmission(event);
           this.showModal(this.dataset.consentErrorMessage, 'error');
-          this.consentCheckbox.focus();
+          this.consentCheckbox.focus({ preventScroll: true });
           return false;
         }
 
+        this.emailInput.value = email;
         return true;
+      }
+
+      async submitForm(event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (this.submitting || !this.validateForm(event)) return;
+
+        const scrollPosition = { x: window.scrollX, y: window.scrollY };
+        this.submitting = true;
+        if (this.submitButton) {
+          this.submitButton.disabled = true;
+          this.submitButton.setAttribute('aria-busy', 'true');
+        }
+
+        try {
+          const response = await fetch(this.form.action, {
+            method: 'POST',
+            body: new FormData(this.form),
+            credentials: 'same-origin',
+            redirect: 'follow',
+            headers: { Accept: 'text/html' }
+          });
+          const responseHtml = await response.text();
+          const responseDocument = new DOMParser().parseFromString(responseHtml, 'text/html');
+          const responseNewsletter = Array.from(responseDocument.querySelectorAll('[data-newsletter-instance]'))
+            .find((element) => element.dataset.newsletterInstance === this.dataset.newsletterInstance);
+          const responseSuccess = responseNewsletter?.querySelector('.ai-newsletter-success-{{ ai_gen_id }}');
+          const responseError = responseNewsletter?.querySelector('.ai-newsletter-error-{{ ai_gen_id }}')?.textContent.trim();
+
+          if (response.ok && responseSuccess) {
+            this.showModal(this.dataset.successMessage, 'success');
+          } else {
+            throw new Error(responseError || this.dataset.errorTitle || 'Bitte versuche es erneut.');
+          }
+        } catch (error) {
+          this.showModal(error.message || 'Bitte versuche es erneut.', 'error');
+        } finally {
+          this.submitting = false;
+          if (this.submitButton) {
+            this.submitButton.disabled = false;
+            this.submitButton.removeAttribute('aria-busy');
+          }
+          window.scrollTo(scrollPosition.x, scrollPosition.y);
+        }
       }
 
       stopSubmission(event) {
@@ -741,20 +782,46 @@
         this.modalMessage.textContent = message;
         this.modal.classList.add('is-visible');
         this.modal.setAttribute('aria-hidden', 'false');
-        this.previousBodyOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
+        this.lockBodyScroll();
         const closeButton = this.modal.querySelector('[data-newsletter-modal-close]');
-        if (closeButton) closeButton.focus();
+        if (closeButton) closeButton.focus({ preventScroll: true });
       }
 
       hideModal() {
         if (!this.modal) return;
         this.modal.classList.remove('is-visible');
         this.modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = this.previousBodyOverflow || '';
+        this.unlockBodyScroll();
         if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === 'function') {
-          this.lastFocusedElement.focus();
+          this.lastFocusedElement.focus({ preventScroll: true });
         }
+      }
+
+      lockBodyScroll() {
+        if (this.modalScrollPosition) return;
+        this.modalScrollPosition = { x: window.scrollX, y: window.scrollY };
+        this.bodyLockStyles = {
+          position: document.body.style.position,
+          top: document.body.style.top,
+          width: document.body.style.width
+        };
+        document.documentElement.classList.add('ai-newsletter-modal-open');
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${this.modalScrollPosition.y}px`;
+        document.body.style.width = '100%';
+      }
+
+      unlockBodyScroll() {
+        if (!this.modalScrollPosition || !this.bodyLockStyles) return;
+        const scrollPosition = this.modalScrollPosition;
+        const bodyLockStyles = this.bodyLockStyles;
+        document.documentElement.classList.remove('ai-newsletter-modal-open');
+        document.body.style.position = bodyLockStyles.position;
+        document.body.style.top = bodyLockStyles.top;
+        document.body.style.width = bodyLockStyles.width;
+        this.modalScrollPosition = null;
+        this.bodyLockStyles = null;
+        window.scrollTo(scrollPosition.x, scrollPosition.y);
       }
     }
 

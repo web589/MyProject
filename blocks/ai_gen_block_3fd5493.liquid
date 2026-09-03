@@ -948,7 +948,7 @@
     </div>
   </div>
 
-  {%- form 'customer', class: 'ai-preorder-native-form' -%}
+  {%- form 'customer', return_to: request.path, class: 'ai-preorder-native-form' -%}
     <div
       class="ai-preorder-modal-{{ ai_gen_id }}"
       data-preorder-modal
