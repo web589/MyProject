@@ -1652,9 +1652,12 @@
       if (!option) return false;
       if (this.unavailableOptionKeys.has(this.getOptionKey(groupKey, option))) return false;
       if (groupKey === 'group1' && this.useNativeBundleCartValidation) {
-        // Shopify Bundles can report a stale `available: false` before Cart
-        // resolves the component inventory. Let the Cart API remain authoritative.
-        return Boolean(option.variantId);
+        // The native Bundle variant is validated by Shopify, but an explicit
+        // `available: false` is still authoritative for the current market.
+        // Ignoring that value leaves the button enabled in markets where a
+        // component is not published or has no fulfillable inventory.
+        if (!option.variantId) return false;
+        return typeof option.available === 'boolean' ? option.available : true;
       }
       if (groupKey === 'group1' && this.enforceSharedInventory) {
         if (!this.hasValidSharedInventory()) return false;
@@ -1673,10 +1676,8 @@
       ) {
         return Number(option.inventoryQuantity) > 0;
       }
-      // Native Shopify Bundles can expose `available: false` while their
-      // component inventory is still resolved by Cart. Keep the legacy
-      // fallback for variants without a concrete storefront quantity; Cart
-      // remains the final inventory authority.
+      // For legacy variants without a concrete storefront quantity, keep the
+      // existing fallback and let Cart remain the final inventory authority.
       return option.available !== false || !this.hasKnownInventoryQuantity(option);
     }
 
@@ -1761,7 +1762,10 @@
       if (!this.productHandle) return;
 
       const root = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
-      const productUrl = `${root}products/${encodeURIComponent(this.productHandle)}.js?availability=${Date.now()}`;
+      const pageUrl = new URL(window.location.href);
+      const countryInput = document.querySelector('[data-cart-localization-country]');
+      const countryCode = pageUrl.searchParams.get('country') || (countryInput ? countryInput.value : '');
+      const productUrl = `${root}products/${encodeURIComponent(this.productHandle)}.js?availability=${Date.now()}${countryCode ? `&country=${encodeURIComponent(countryCode)}` : ''}`;
 
       try {
         const response = await fetch(productUrl, {
@@ -1785,6 +1789,9 @@
           if (Object.prototype.hasOwnProperty.call(liveVariant, 'inventory_policy')) {
             option.inventoryPolicy = liveVariant.inventory_policy;
           }
+          if (Object.prototype.hasOwnProperty.call(liveVariant, 'inventory_quantity')) {
+            option.inventoryQuantity = liveVariant.inventory_quantity;
+          }
         });
 
         const liveSharedVariant = liveVariants.get(String(this.sharedInventory.variantId));
@@ -1798,6 +1805,9 @@
           if (Object.prototype.hasOwnProperty.call(liveSharedVariant, 'inventory_policy')) {
             this.sharedInventory.inventoryPolicy = liveSharedVariant.inventory_policy;
           }
+          if (Object.prototype.hasOwnProperty.call(liveSharedVariant, 'inventory_quantity')) {
+            this.sharedInventory.inventoryQuantity = liveSharedVariant.inventory_quantity;
+          }
         }
 
         this.hydrateOptionCards();
@@ -1808,8 +1818,36 @@
     }
 
     isInventoryErrorResponse(status, message) {
-      return status === 422
+      return (status === 400 || status === 422)
         && /stock|inventory|quantity|available|verfügbar|lager|ausverkauft|sold\s*out|out\s*of\s*stock/i.test(message || '');
+    }
+
+    getResponseMessage(result, rawMessage) {
+      const values = [];
+      const visit = (value, depth) => {
+        if (depth > 3 || value === null || value === undefined) return;
+        if (typeof value === 'string') {
+          const text = value.trim();
+          if (text) values.push(text);
+          return;
+        }
+        if (Array.isArray(value)) {
+          value.forEach(item => visit(item, depth + 1));
+          return;
+        }
+        if (typeof value === 'object') {
+          ['description', 'message', 'error', 'errors', 'details'].forEach(key => {
+            if (Object.prototype.hasOwnProperty.call(value, key)) visit(value[key], depth + 1);
+          });
+        }
+      };
+
+      visit(result, 0);
+      if (!values.length && typeof rawMessage === 'string') {
+        const text = rawMessage.trim();
+        if (text) values.push(text);
+      }
+      return [...new Set(values)].join(' ').trim();
     }
 
     markUnavailableOption(groupKey, option) {
@@ -2004,9 +2042,7 @@
         } catch (parseError) {
           result = null;
         }
-        const responseMessage = typeof result === 'object' && result
-          ? result.description || result.message || result.error
-          : '';
+        const responseMessage = this.getResponseMessage(result, responseText);
         const responseHasInventoryError = this.isInventoryErrorResponse(response.status, responseText);
         if (responseHasInventoryError) {
           // Native Shopify Bundles can return a 422 for publication or component
