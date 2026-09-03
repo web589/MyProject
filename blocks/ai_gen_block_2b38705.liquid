@@ -1843,7 +1843,7 @@
       };
 
       visit(result, 0);
-      if (!values.length && typeof rawMessage === 'string') {
+      if (!values.length && typeof rawMessage === 'string' && (!result || typeof result !== 'object')) {
         const text = rawMessage.trim();
         if (text) values.push(text);
       }
