@@ -1,0 +1,165 @@
+{% liquid
+  assign card_variant = carousel_product.selected_or_first_available_variant
+  assign source_title = carousel_product.title
+  assign automatic_title = source_title
+  assign automatic_specs = source_title
+  if source_title contains ' – '
+    assign title_parts = source_title | split: ' – '
+    assign automatic_title = title_parts.first | strip
+    assign automatic_specs = title_parts | slice: 1, title_parts.size | join: ' – ' | strip
+  elsif source_title contains ' - '
+    assign title_parts = source_title | split: ' - '
+    assign automatic_title = title_parts.first | strip
+    assign automatic_specs = title_parts | slice: 1, title_parts.size | join: ' - ' | strip
+  endif
+  assign card_title = title_override | default: carousel_product.metafields.custom.carousel_title.value | default: automatic_title
+  assign card_subtitle = subtitle_override | default: carousel_product.metafields.custom.carousel_subtitle.value
+  if card_subtitle == blank
+    assign normalized_vendor = carousel_product.vendor | downcase
+    if normalized_vendor contains 'marstek'
+      assign card_subtitle = 'Marstek'
+    else
+      assign card_subtitle = 'Flachste Plug-in Battery'
+    endif
+  endif
+  assign card_specs = specs_override | default: carousel_product.metafields.custom.carousel_specs.value
+  if card_specs == blank
+    assign card_specs = automatic_specs
+  endif
+  assign preorder_product_title = card_title
+  if carousel_product.vendor != blank
+    assign preorder_vendor = carousel_product.vendor | downcase
+    assign preorder_title_prefix = preorder_product_title | slice: 0, carousel_product.vendor.size | downcase
+    if preorder_title_prefix == preorder_vendor
+      assign preorder_product_title_without_vendor = preorder_product_title | slice: carousel_product.vendor.size, preorder_product_title.size | strip
+      if preorder_product_title_without_vendor != blank
+        assign preorder_product_title = preorder_product_title_without_vendor
+      endif
+    endif
+  endif
+  assign card_badge = badge_override | default: carousel_product.metafields.custom.carousel_badge.value
+  assign card_badge_tone = 'new'
+  if card_badge == blank and card_variant.compare_at_price > card_variant.price
+    assign card_saving = card_variant.compare_at_price | minus: card_variant.price
+    assign card_saving_money = card_saving | money_without_currency
+    assign card_badge = '-' | append: card_saving_money | append: '€'
+    assign card_badge_tone = 'discount'
+  elsif card_badge contains '-' or card_badge contains '€'
+    assign card_badge_tone = 'discount'
+  endif
+  assign primary_url = carousel_product.metafields.custom.carousel_primary_link.value | default: carousel_product.url
+  assign secondary_url = carousel_product.metafields.custom.carousel_secondary_link.value | default: carousel_product.url
+  assign card_image = custom_image | default: card_variant.featured_image | default: carousel_product.featured_image
+  assign primary_action = carousel_product.metafields.custom.carousel_primary_action.value | default: 'product'
+  assign secondary_action = carousel_product.metafields.custom.carousel_secondary_action.value | default: 'product'
+  assign primary_label = carousel_product.metafields.custom.carousel_primary_label.value | default: carousel_settings.view_button_text
+  assign secondary_label = carousel_product.metafields.custom.carousel_secondary_label.value | default: carousel_settings.details_button_text
+  assign preorder_enabled = carousel_product.metafields.custom.preorder_enabled.value
+  assign product_has_inventory = false
+  for product_variant in carousel_product.variants
+    if product_variant.inventory_management == blank
+      if product_variant.available
+        assign product_has_inventory = true
+        break
+      endif
+    elsif product_variant.inventory_quantity > 0
+      assign product_has_inventory = true
+      break
+    endif
+  endfor
+  unless product_has_inventory and carousel_product.available
+    assign preorder_enabled = true
+  endunless
+  if preorder_enabled
+    assign primary_action = 'modal'
+    assign primary_label = carousel_product.metafields.custom.preorder_button_label.value | default: 'Jetzt vormerken'
+  endif
+%}
+
+<article class="ai-product-card-{{ carousel_id }}" data-product-card>
+  <div class="ai-product-image-{{ carousel_id }}" data-product-image>
+    {% if card_image %}
+      <img
+        src="{{ card_image | image_url: width: 720 }}"
+        alt="{{ card_image.alt | default: card_title | escape }}"
+        loading="lazy"
+        width="720"
+        height="720"
+      >
+    {% else %}
+      <div class="ai-image-placeholder-wrapper-{{ carousel_id }}">
+        {{ 'product-1' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+    {% if card_badge != blank %}
+      <span class="ai-product-badge-{{ carousel_id }} ai-product-badge--{{ card_badge_tone }}">{{ card_badge }}</span>
+    {% endif %}
+  </div>
+
+  <div class="ai-product-info-{{ carousel_id }}">
+    <h3 class="ai-product-title-{{ carousel_id }}">
+      <a href="{{ carousel_product.url }}">{{ card_title }}</a>
+    </h3>
+
+    {% if card_subtitle != blank %}
+      <p class="ai-product-subtitle-{{ carousel_id }}">{{ card_subtitle }}</p>
+    {% endif %}
+
+    {% if card_specs != blank %}
+      <p class="ai-product-specs-{{ carousel_id }}">{{ card_specs }}</p>
+    {% endif %}
+
+    <div class="ai-product-price-{{ carousel_id }}">
+      {% if price_override != blank %}{{ price_override }}{% else %}{{ card_variant.price | money }}{% endif %}
+      {% if compare_override != blank %}
+        <span class="ai-product-compare-{{ carousel_id }}">{{ compare_override }}</span>
+      {% elsif card_variant.compare_at_price > card_variant.price %}
+        <span class="ai-product-compare-{{ carousel_id }}">{{ card_variant.compare_at_price | money }}</span>
+      {% endif %}
+    </div>
+
+    <div class="ai-product-actions-{{ carousel_id }}">
+      {% if primary_action == 'modal' %}
+        <button
+          type="button"
+          class="ai-product-btn-{{ carousel_id }} ai-btn-primary-{{ carousel_id }}"
+          data-preorder-open
+          data-product-title="{{ preorder_product_title | escape }}"
+          data-product-handle="{{ carousel_product.handle | escape }}"
+          data-product-id="{{ carousel_product.id }}"
+        >
+          <span>{{ primary_label }}</span>
+        </button>
+      {% elsif primary_action == 'add_to_cart' or primary_action == 'buy_now' %}
+        <button type="button" class="ai-product-btn-{{ carousel_id }} ai-btn-primary-{{ carousel_id }}" data-product-action="{{ primary_action }}" data-variant-id="{{ card_variant.id }}">
+          <span>{{ primary_label }}</span>
+        </button>
+      {% else %}
+        <a href="{{ primary_url }}" class="ai-product-btn-{{ carousel_id }} ai-btn-primary-{{ carousel_id }}">
+          <span>{{ primary_label }}</span>
+        </a>
+      {% endif %}
+
+      {% if secondary_action == 'modal' %}
+        <button
+          type="button"
+          class="ai-product-btn-{{ carousel_id }} ai-btn-outline-{{ carousel_id }}"
+          data-preorder-open
+          data-product-title="{{ preorder_product_title | escape }}"
+          data-product-handle="{{ carousel_product.handle | escape }}"
+          data-product-id="{{ carousel_product.id }}"
+        >
+          <span>{{ secondary_label }}</span>
+        </button>
+      {% elsif secondary_action == 'add_to_cart' or secondary_action == 'buy_now' %}
+        <button type="button" class="ai-product-btn-{{ carousel_id }} ai-btn-outline-{{ carousel_id }}" data-product-action="{{ secondary_action }}" data-variant-id="{{ card_variant.id }}">
+          <span>{{ secondary_label }}</span>
+        </button>
+      {% else %}
+        <a href="{{ secondary_url }}" class="ai-product-btn-{{ carousel_id }} ai-btn-outline-{{ carousel_id }}">
+          <span>{{ secondary_label }}</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</article>

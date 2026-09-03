@@ -1,0 +1,736 @@
+{% doc %}
+  @prompt
+    {% stylesheet %}
+    .balkon-hero-section {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .balkon-hero-wrap {
+      position: relative;
+      width: 100%;
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+    }
+    .balkon-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    
+    /* 左上角文字内容容器 */
+    .hero-text-container {
+      position: relative;
+      z-index: 2;
+      padding: 0 5%;
+      max-width: 520px;
+      color: #000;
+    
+      /* 初始动画状态：隐藏 + 向左偏移 */
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    
+    /* 页面进入后添加此类，触发滑入 */
+    .hero-text-container.animate-in {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .hero-main-title {
+      font-size: clamp(2.5rem, 6vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0 0 40px;
+    
+      /* 标题单独延迟滑入 */
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: opacity 0.9s ease-out 0.2s, transform 0.9s ease-out 0.2s;
+    }
+    
+    .hero-text-container.animate-in .hero-main-title {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .hero-feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    .hero-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    
+      /* 每个卖点从左侧滑入 */
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    
+    .hero-feature-item:nth-child(1) {
+      transition-delay: 0.4s;
+    }
+    .hero-feature-item:nth-child(2) {
+      transition-delay: 0.6s;
+    }
+    .hero-feature-item:nth-child(3) {
+      transition-delay: 0.8s;
+    }
+    
+    .hero-text-container.animate-in .hero-feature-item {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .feature-icon-box {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+    }
+    
+    .feature-text p {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+    
+    /* 右上角排名标签 */
+    .hero-badge-topright {
+      position: absolute;
+      top: 20px;
+      right: 5%;
+      z-index: 3;
+      width: 140px;
+    }
+    
+    /* 左下角NEW悬浮小模块 */
+    .hero-new-tag {
+      position: absolute;
+      bottom: 30px;
+      left: 3%;
+      z-index: 3;
+      width: 90px;
+    }
+    
+    /* 移动端适配 */
+    @media screen and (max-width:768px) {
+      .balkon-hero-wrap {
+        min-height: 70vh;
+      }
+      .hero-text-container {
+        padding-top: 80px;
+      }
+      .hero-badge-topright {
+        width: 100px;
+        top: 12px;
+      }
+    }
+    {% endstylesheet %}
+    
+    <section class="balkon-hero-section">
+      <div class="balkon-hero-wrap">
+        <!-- 背景大图 替换成你上传图片的Shopify CDN链接 -->
+        <img class="balkon-hero-bg" src="https://cdn.shopify.com/s/files/xxx/balkon-hero-main.jpg" alt="Mini-Solaranlage für Balkon Familie">
+        
+        <!-- 右上角 Nr.1 标签图 -->
+        <img class="hero-badge-topright" src="https://cdn.shopify.com/s/files/xxx/badge-nr1.png" alt="Weltweit Nr.1 Plug-and-Play Speicher">
+        
+        <!-- 左下角 NEW 新品模块图 -->
+        <img class="hero-new-tag" src="https://cdn.shopify.com/s/files/xxx/tag-neu.png" alt="NEU">
+    
+        <!-- 左侧标题+三大卖点文字 -->
+        <div class="hero-text-container">
+          <h1 class="hero-main-title">
+            Mini-Solaranlage für<br>Balkon
+          </h1>
+          <div class="hero-feature-list">
+            <!-- 卖点1 800W微型逆变器 -->
+            <div class="hero-feature-item">
+              <div class="feature-icon-box">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5">
+                  <path d="M4 7h16v10H4z"></path>
+                  <path d="M8 10h8M12 7V4"></path>
+                </svg>
+              </div>
+              <div class="feature-text">
+                <p>Mikrowechselrichter<br>800 Watt</p>
+              </div>
+            </div>
+            <!-- 卖点2 双面组件25%效率提升 -->
+            <div class="hero-feature-item">
+              <div class="feature-icon-box">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5">
+                  <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                  <path d="M3 12h18M12 5v14"></path>
+                </svg>
+              </div>
+              <div class="feature-text">
+                <p>25% PV Effizienz von<br>ABC & Bifazialen Modulen</p>
+              </div>
+            </div>
+            <!-- 卖点3 IP68防护 -->
+            <div class="hero-feature-item">
+              <div class="feature-icon-box">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5">
+                  <path d="M12 2.5c3.5 3 5.5 6 5.5 9a5.5 5.5 0 1 1-11 0c0-2 2-6 5.5-9z"></path>
+                </svg>
+              </div>
+              <div class="feature-text">
+                <p>IP68 Schutzklasse<br>für Solarmodule</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    {% javascript %}
+    // 页面进入视口时触发左侧滑入动画
+    document.addEventListener('DOMContentLoaded', function () {
+      const heroText = document.querySelector('.hero-text-container');
+    
+      if (heroText) {
+        setTimeout(() => {
+          heroText.classList.add('animate-in');
+        }, 150);
+      }
+    });
+    {% endjavascript %}
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-balkon-hero-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-balkon-hero-wrap-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    min-height: {{ block.settings.section_height }}vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .ai-balkon-hero-bg-{{ ai_gen_id }} {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .ai-balkon-hero-bg-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  .ai-balkon-hero-bg-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+  .ai-hero-text-container-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    padding: 0 5%;
+    max-width: {{ block.settings.content_max_width }}px;
+    color: {{ block.settings.text_color }};
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .ai-hero-text-container-{{ ai_gen_id }}.animate-in {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .ai-hero-main-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: {{ block.settings.title_weight }};
+    line-height: 1.1;
+    margin: 0 0 {{ block.settings.title_spacing }}px;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.9s ease-out 0.2s, transform 0.9s ease-out 0.2s;
+  }
+
+  .ai-hero-text-container-{{ ai_gen_id }}.animate-in .ai-hero-main-title-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .ai-hero-feature-list-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.feature_spacing }}px;
+  }
+
+  .ai-hero-feature-item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+
+  .ai-hero-feature-item-{{ ai_gen_id }}:nth-child(1) {
+    transition-delay: 0.4s;
+  }
+
+  .ai-hero-feature-item-{{ ai_gen_id }}:nth-child(2) {
+    transition-delay: 0.6s;
+  }
+
+  .ai-hero-feature-item-{{ ai_gen_id }}:nth-child(3) {
+    transition-delay: 0.8s;
+  }
+
+  .ai-hero-text-container-{{ ai_gen_id }}.animate-in .ai-hero-feature-item-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .ai-feature-icon-box-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .ai-feature-icon-box-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    stroke: {{ block.settings.icon_color }};
+  }
+
+  .ai-feature-text-{{ ai_gen_id }} p {
+    margin: 0;
+    font-size: {{ block.settings.feature_text_size }}px;
+    line-height: 1.5;
+  }
+
+  .ai-hero-badge-topright-{{ ai_gen_id }} {
+    position: absolute;
+    top: {{ block.settings.badge_top }}px;
+    right: 5%;
+    z-index: 3;
+    width: {{ block.settings.badge_width }}px;
+  }
+
+  .ai-hero-badge-topright-{{ ai_gen_id }} img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .ai-hero-new-tag-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: {{ block.settings.new_tag_bottom }}px;
+    left: 3%;
+    z-index: 3;
+    width: {{ block.settings.new_tag_width }}px;
+  }
+
+  .ai-hero-new-tag-{{ ai_gen_id }} img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-balkon-hero-wrap-{{ ai_gen_id }} {
+      min-height: {{ block.settings.mobile_height }}vh;
+    }
+
+    .ai-hero-text-container-{{ ai_gen_id }} {
+      padding-top: 80px;
+    }
+
+    .ai-hero-main-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.6 }}px;
+    }
+
+    .ai-feature-text-{{ ai_gen_id }} p {
+      font-size: {{ block.settings.feature_text_size | times: 0.9 }}px;
+    }
+
+    .ai-hero-badge-topright-{{ ai_gen_id }} {
+      width: {{ block.settings.badge_width | times: 0.7 }}px;
+      top: 12px;
+    }
+
+    .ai-hero-new-tag-{{ ai_gen_id }} {
+      width: {{ block.settings.new_tag_width | times: 0.8 }}px;
+    }
+  }
+{% endstyle %}
+
+<balkon-hero-{{ ai_gen_id }} class="ai-balkon-hero-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-balkon-hero-wrap-{{ ai_gen_id }}">
+    {% if block.settings.background_image %}
+      <img
+        class="ai-balkon-hero-bg-{{ ai_gen_id }}"
+        src="{{ block.settings.background_image | image_url: width: 2000 }}"
+        alt="{{ block.settings.background_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.background_image.width }}"
+        height="{{ block.settings.background_image.height }}"
+      >
+    {% else %}
+      <div class="ai-balkon-hero-bg-placeholder-{{ ai_gen_id }}">
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_badge and block.settings.badge_image %}
+      <img
+        class="ai-hero-badge-topright-{{ ai_gen_id }}"
+        src="{{ block.settings.badge_image | image_url: width: 300 }}"
+        alt="{{ block.settings.badge_image.alt | escape }}"
+        loading="lazy"
+      >
+    {% endif %}
+
+    {% if block.settings.show_new_tag and block.settings.new_tag_image %}
+      <img
+        class="ai-hero-new-tag-{{ ai_gen_id }}"
+        src="{{ block.settings.new_tag_image | image_url: width: 200 }}"
+        alt="{{ block.settings.new_tag_image.alt | escape }}"
+        loading="lazy"
+      >
+    {% endif %}
+
+    <div class="ai-hero-text-container-{{ ai_gen_id }}">
+      {% if block.settings.title != blank %}
+        <h1 class="ai-hero-main-title-{{ ai_gen_id }}">{{ block.settings.title }}</h1>
+      {% endif %}
+
+      <div class="ai-hero-feature-list-{{ ai_gen_id }}">
+        {% if block.settings.feature_1_text != blank %}
+          <div class="ai-hero-feature-item-{{ ai_gen_id }}">
+            <div class="ai-feature-icon-box-{{ ai_gen_id }}">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                <path d="M4 7h16v10H4z"></path>
+                <path d="M8 10h8M12 7V4"></path>
+              </svg>
+            </div>
+            <div class="ai-feature-text-{{ ai_gen_id }}">
+              {{ block.settings.feature_1_text }}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if block.settings.feature_2_text != blank %}
+          <div class="ai-hero-feature-item-{{ ai_gen_id }}">
+            <div class="ai-feature-icon-box-{{ ai_gen_id }}">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <path d="M3 12h18M12 5v14"></path>
+              </svg>
+            </div>
+            <div class="ai-feature-text-{{ ai_gen_id }}">
+              {{ block.settings.feature_2_text }}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if block.settings.feature_3_text != blank %}
+          <div class="ai-hero-feature-item-{{ ai_gen_id }}">
+            <div class="ai-feature-icon-box-{{ ai_gen_id }}">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                <path d="M12 2.5c3.5 3 5.5 6 5.5 9a5.5 5.5 0 1 1-11 0c0-2 2-6 5.5-9z"></path>
+              </svg>
+            </div>
+            <div class="ai-feature-text-{{ ai_gen_id }}">
+              {{ block.settings.feature_3_text }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</balkon-hero-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class BalkonHero{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.initAnimation();
+      }
+
+      initAnimation() {
+        const heroText = this.querySelector('.ai-hero-text-container-{{ ai_gen_id }}');
+        
+        if (heroText) {
+          setTimeout(() => {
+            heroText.classList.add('animate-in');
+          }, 150);
+        }
+      }
+    }
+
+    customElements.define('balkon-hero-{{ ai_gen_id }}', BalkonHero{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Balkon hero section",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Desktop height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 85
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 70
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "<p>Mini-Solaranlage für<br>Balkon</p>"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "title_weight",
+      "label": "Title weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 800
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "label": "Spacing below title",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content max width",
+      "min": 300,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_1_text",
+      "label": "Feature 1 text",
+      "default": "<p>Mikrowechselrichter<br>800 Watt</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_2_text",
+      "label": "Feature 2 text",
+      "default": "<p>25% PV Effizienz von<br>ABC & Bifazialen Modulen</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_3_text",
+      "label": "Feature 3 text",
+      "default": "<p>IP68 Schutzklasse<br>für Solarmodule</p>"
+    },
+    {
+      "type": "range",
+      "id": "feature_text_size",
+      "label": "Feature text size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "feature_spacing",
+      "label": "Spacing between features",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Badge (top right)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show badge",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_image",
+      "label": "Badge image"
+    },
+    {
+      "type": "range",
+      "id": "badge_width",
+      "label": "Badge width",
+      "min": 60,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "badge_top",
+      "label": "Distance from top",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "New tag (bottom left)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_new_tag",
+      "label": "Show new tag",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "new_tag_image",
+      "label": "New tag image"
+    },
+    {
+      "type": "range",
+      "id": "new_tag_width",
+      "label": "Tag width",
+      "min": 50,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "new_tag_bottom",
+      "label": "Distance from bottom",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Balkon hero section"
+    }
+  ]
+}
+{% endschema %}

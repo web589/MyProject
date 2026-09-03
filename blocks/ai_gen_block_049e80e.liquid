@@ -1,0 +1,1020 @@
+{% doc %}
+  @prompt
+    {% stylesheet %}
+    .review-slider-section {
+      width: 100%;
+      padding: 70px 20px;
+      background-color: #f5f5f5;
+      box-sizing: border-box;
+      position: relative;
+    }
+    .review-container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    .review-main-title {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      margin: 0 0 45px;
+      font-weight: 700;
+      color: #000;
+    }
+    /* 轮播外层 */
+    .review-outer {
+      overflow: hidden;
+      position: relative;
+    }
+    /* 滚动轨道 */
+    .review-track {
+      display: flex;
+      gap: 22px;
+      transition: transform 0.4s ease-out;
+      will-change: transform;
+    }
+    /* 单张卡片 */
+    .review-card {
+      flex: 0 0 320px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .review-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .review-card:hover .review-img {
+      transform: scale(1.06);
+    }
+    /* 悬浮遮罩+文字 */
+    .review-mask {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      padding: 26px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .review-card:hover .review-mask {
+      opacity: 1;
+    }
+    .review-stars {
+      font-size: 1.6rem;
+      color: #36d399;
+      margin-bottom: 12px;
+    }
+    .review-text {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin: 0 0 16px;
+    }
+    .review-author {
+      font-size: 0.98rem;
+      opacity: 0.85;
+    }
+    
+    /* 左右控制按钮 */
+    .slider-control-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      transition: background 0.2s ease;
+    }
+    .slider-control-btn:hover {
+      background: rgba(0,0,0,0.75);
+    }
+    .btn-prev {
+      left: 12px;
+    }
+    .btn-next {
+      right: 12px;
+    }
+    
+    /* 移动端适配 */
+    @media screen and (max-width:768px) {
+      .review-card {
+        flex: 0 0 260px;
+      }
+      .review-img {
+        height: 260px;
+      }
+      .slider-control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+      .btn-prev {
+        left: 6px;
+      }
+      .btn-next {
+        right: 6px;
+      }
+    }
+    {% endstylesheet %}
+    
+    <section class="review-slider-section">
+      <div class="review-container">
+        <h2 class="review-main-title">Hear from our users</h2>
+        <div class="review-outer">
+          <!-- 左右控制按钮 -->
+          <button class="slider-control-btn btn-prev" type="button">←</button>
+          <button class="slider-control-btn btn-next" type="button">→</button>
+    
+          <div class="review-track">
+            <!-- 卡片1 -->
+            <div class="review-card">
+              <img class="review-img" src="https://cdn.shopify.com/s/files/xxx/review1.jpg" alt="Kundenfoto 1">
+              <div class="review-mask">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">Sehr einfache Installation, Leistung übertrifft meine Erwartungen!</p>
+                <div class="review-author">@Markus W.</div>
+              </div>
+            </div>
+            <!-- 卡片2 -->
+            <div class="review-card">
+              <img class="review-img" src="https://cdn.shopify.com/s/files/xxx/review2.jpg" alt="Kundenfoto 2">
+              <div class="review-mask">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">Unboxing & Premières Impressions : 2400 Pro. Besonders positiv ist mir der massive Kühlkörper aufgefallen.</p>
+                <div class="review-author">@Sascha Hoffmann</div>
+              </div>
+            </div>
+            <!-- 卡片3 -->
+            <div class="review-card">
+              <img class="review-img" src="https://cdn.shopify.com/s/files/xxx/review3.jpg" alt="Kundenfoto 3">
+              <div class="review-mask">
+                <div class="review-stars">★★★★☆</div>
+                <p class="review-text">Funktioniert perfekt auf meinem Balkon, geringe Geräuschentwicklung.</p>
+                <div class="review-author">@Julia M.</div>
+              </div>
+            </div>
+            <!-- 卡片4 -->
+            <div class="review-card">
+              <img class="review-img" src="https://cdn.shopify.com/s/files/xxx/review4.jpg" alt="Kundenfoto 4">
+              <div class="review-mask">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">Hyper et AB2000. Mon objectif est de maximiser l'autoconsommation. Le matériel semble très solide.</p>
+                <div class="review-author">@Roger PALAZON</div>
+              </div>
+            </div>
+            <!-- 卡片5 -->
+            <div class="review-card">
+              <img class="review-img" src="https://cdn.shopify.com/s/files/xxx/review5.jpg" alt="Kundenfoto 5">
+              <div class="review-mask">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">Gute Verarbeitung, App intuitiv, kann ich jedem Mieter empfehlen.</p>
+                <div class="review-author">@Thomas K.</div>
+              </div>
+            </div>
+            <!-- 卡片6 -->
+            <div class="review-card">
+              <img class="review-img" src="https://cdn.shopify.com/s/files/xxx/review6.jpg" alt="Kundenfoto 6">
+           , 再添加4个Review
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-review-slider-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding }}px 20px;
+    background-color: {{ block.settings.background_color }};
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .ai-review-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-review-main-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    margin: 0 0 {{ block.settings.title_margin }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    text-align: {{ block.settings.title_alignment }};
+  }
+
+  .ai-review-outer-{{ ai_gen_id }} {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ai-review-track-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.card_gap }}px;
+    transition: transform 0.4s ease-out;
+    will-change: transform;
+  }
+
+  .ai-review-card-{{ ai_gen_id }} {
+    flex: 0 0 {{ block.settings.card_width }}px;
+    position: relative;
+    overflow: hidden;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    cursor: pointer;
+  }
+
+  .ai-review-img-{{ ai_gen_id }} {
+    width: 100%;
+    height: {{ block.settings.card_width }}px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-review-card-{{ ai_gen_id }}:hover .ai-review-img-{{ ai_gen_id }} {
+    transform: scale({{ block.settings.hover_scale }});
+  }
+
+  .ai-review-mask-{{ ai_gen_id }} {
+    position: absolute;
+    inset: 0;
+    background: {{ block.settings.overlay_color }};
+    padding: 26px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: {{ block.settings.overlay_text_color }};
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-review-card-{{ ai_gen_id }}:hover .ai-review-mask-{{ ai_gen_id }} {
+    opacity: 1;
+  }
+
+  .ai-review-stars-{{ ai_gen_id }} {
+    font-size: {{ block.settings.star_size }}px;
+    color: {{ block.settings.star_color }};
+    margin-bottom: 12px;
+  }
+
+  .ai-review-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.review_text_size }}px;
+    line-height: 1.6;
+    margin: 0 0 16px;
+  }
+
+  .ai-review-author-{{ ai_gen_id }} {
+    font-size: {{ block.settings.author_text_size }}px;
+    opacity: 0.85;
+  }
+
+  .ai-slider-control-btn-{{ ai_gen_id }} {
+    width: {{ block.settings.button_size }}px;
+    height: {{ block.settings.button_size }}px;
+    border-radius: 50%;
+    background: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_icon_color }};
+    border: none;
+    font-size: {{ block.settings.button_icon_size }}px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    transition: background 0.2s ease;
+  }
+
+  .ai-slider-control-btn-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.button_hover_bg_color }};
+  }
+
+  .ai-btn-prev-{{ ai_gen_id }} {
+    left: 12px;
+  }
+
+  .ai-btn-next-{{ ai_gen_id }} {
+    right: 12px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-review-card-{{ ai_gen_id }} {
+      flex: 0 0 260px;
+    }
+
+    .ai-review-img-{{ ai_gen_id }} {
+      height: 260px;
+    }
+
+    .ai-slider-control-btn-{{ ai_gen_id }} {
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+    }
+
+    .ai-btn-prev-{{ ai_gen_id }} {
+      left: 6px;
+    }
+
+    .ai-btn-next-{{ ai_gen_id }} {
+      right: 6px;
+    }
+  }
+{% endstyle %}
+
+<review-slider-{{ ai_gen_id }} class="ai-review-slider-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-review-container-{{ ai_gen_id }}">
+    {% if block.settings.title != blank %}
+      <h2 class="ai-review-main-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+    {% endif %}
+
+    <div class="ai-review-outer-{{ ai_gen_id }}">
+      <button class="ai-slider-control-btn-{{ ai_gen_id }} ai-btn-prev-{{ ai_gen_id }}" type="button" aria-label="Previous reviews">←</button>
+      <button class="ai-slider-control-btn-{{ ai_gen_id }} ai-btn-next-{{ ai_gen_id }}" type="button" aria-label="Next reviews">→</button>
+
+      <div class="ai-review-track-{{ ai_gen_id }}">
+        {% for i in (1..10) %}
+          {% liquid
+            assign image_key = 'review_image_' | append: i
+            assign stars_key = 'review_stars_' | append: i
+            assign text_key = 'review_text_' | append: i
+            assign author_key = 'review_author_' | append: i
+
+            assign review_image = block.settings[image_key]
+            assign review_stars = block.settings[stars_key]
+            assign review_text = block.settings[text_key]
+            assign review_author = block.settings[author_key]
+          %}
+
+          {% if review_image != blank or review_text != blank %}
+            <div class="ai-review-card-{{ ai_gen_id }}">
+              {% if review_image %}
+                <img
+                  class="ai-review-img-{{ ai_gen_id }}"
+                  src="{{ review_image | image_url: width: 640 }}"
+                  alt="{{ review_author | default: 'Customer review' }}"
+                  loading="lazy"
+                  width="640"
+                  height="640"
+                >
+              {% else %}
+                <div class="ai-review-img-{{ ai_gen_id }}" style="background-color: #f4f4f4; display: flex; align-items: center; justify-content: center;">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+
+              <div class="ai-review-mask-{{ ai_gen_id }}">
+                {% if review_stars > 0 %}
+                  <div class="ai-review-stars-{{ ai_gen_id }}">
+                    {% for star in (1..5) %}
+                      {% if star <= review_stars %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                {% if review_text != blank %}
+                  <p class="ai-review-text-{{ ai_gen_id }}">{{ review_text }}</p>
+                {% endif %}
+
+                {% if review_author != blank %}
+                  <div class="ai-review-author-{{ ai_gen_id }}">{{ review_author }}</div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</review-slider-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ReviewSlider{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.cardWidth = {{ block.settings.card_width }};
+        this.cardGap = {{ block.settings.card_gap }};
+        this.autoplayInterval = null;
+      }
+
+      connectedCallback() {
+        this.track = this.querySelector('.ai-review-track-{{ ai_gen_id }}');
+        this.cards = this.querySelectorAll('.ai-review-card-{{ ai_gen_id }}');
+        this.prevBtn = this.querySelector('.ai-btn-prev-{{ ai_gen_id }}');
+        this.nextBtn = this.querySelector('.ai-btn-next-{{ ai_gen_id }}');
+
+        if (!this.track || this.cards.length === 0) return;
+
+        this.setupEventListeners();
+        
+        {% if block.settings.autoplay %}
+          this.startAutoplay();
+        {% endif %}
+      }
+
+      setupEventListeners() {
+        this.prevBtn.addEventListener('click', () => this.slide(-1));
+        this.nextBtn.addEventListener('click', () => this.slide(1));
+
+        {% if block.settings.autoplay %}
+          this.addEventListener('mouseenter', () => this.stopAutoplay());
+          this.addEventListener('mouseleave', () => this.startAutoplay());
+        {% endif %}
+      }
+
+      slide(direction) {
+        const maxIndex = this.cards.length - this.getVisibleCards();
+        this.currentIndex = Math.max(0, Math.min(this.currentIndex + direction, maxIndex));
+        this.updatePosition();
+      }
+
+      updatePosition() {
+        const offset = this.currentIndex * (this.cardWidth + this.cardGap);
+        this.track.style.transform = `translateX(-${offset}px)`;
+      }
+
+      getVisibleCards() {
+        const containerWidth = this.querySelector('.ai-review-outer-{{ ai_gen_id }}').offsetWidth;
+        return Math.floor(containerWidth / (this.cardWidth + this.cardGap));
+      }
+
+      startAutoplay() {
+        this.autoplayInterval = setInterval(() => {
+          const maxIndex = this.cards.length - this.getVisibleCards();
+          if (this.currentIndex >= maxIndex) {
+            this.currentIndex = 0;
+          } else {
+            this.currentIndex++;
+          }
+          this.updatePosition();
+        }, {{ block.settings.autoplay_speed }} * 1000);
+      }
+
+      stopAutoplay() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+          this.autoplayInterval = null;
+        }
+      }
+
+      disconnectedCallback() {
+        this.stopAutoplay();
+      }
+    }
+
+    customElements.define('review-slider-{{ ai_gen_id }}', ReviewSlider{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Customer review slider",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Hear from our users"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Title alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Padding",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "header",
+      "content": "Title style"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "title_margin",
+      "label": "Bottom margin",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 45
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "label": "Card width",
+      "min": 200,
+      "max": 400,
+      "step": 20,
+      "unit": "px",
+      "default": 320
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap between cards",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "hover_scale",
+      "label": "Hover zoom",
+      "min": 1,
+      "max": 1.5,
+      "step": 0.1,
+      "default": 1.1
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Background color",
+      "default": "rgba(0,0,0,0.65)"
+    },
+    {
+      "type": "color",
+      "id": "overlay_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "star_size",
+      "label": "Star size",
+      "min": 12,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#36d399"
+    },
+    {
+      "type": "range",
+      "id": "review_text_size",
+      "label": "Review text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "author_text_size",
+      "label": "Author text size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Navigation buttons"
+    },
+    {
+      "type": "range",
+      "id": "button_size",
+      "label": "Button size",
+      "min": 30,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "button_icon_size",
+      "label": "Icon size",
+      "min": 14,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background color",
+      "default": "rgba(0,0,0,0.4)"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Hover background color",
+      "default": "rgba(0,0,0,0.75)"
+    },
+    {
+      "type": "color",
+      "id": "button_icon_color",
+      "label": "Icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Review 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_1",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_stars_1",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_text_1",
+      "label": "Review text",
+      "default": "Sehr einfache Installation, Leistung übertrifft meine Erwartungen!"
+    },
+    {
+      "type": "text",
+      "id": "review_author_1",
+      "label": "Author",
+      "default": "@Markus W."
+    },
+    {
+      "type": "header",
+      "content": "Review 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_2",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_stars_2",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_text_2",
+      "label": "Review text",
+      "default": "Unboxing & Premières Impressions : 2400 Pro. Besonders positiv ist mir der massive Kühlkörper aufgefallen."
+    },
+    {
+      "type": "text",
+      "id": "review_author_2",
+      "label": "Author",
+      "default": "@Sascha Hoffmann"
+    },
+    {
+      "type": "header",
+      "content": "Review 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_3",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_stars_3",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "textarea",
+      "id": "review_text_3",
+      "label": "Review text",
+      "default": "Funktioniert perfekt auf meinem Balkon, geringe Geräuschentwicklung."
+    },
+    {
+      "type": "text",
+      "id": "review_author_3",
+      "label": "Author",
+      "default": "@Julia M."
+    },
+    {
+      "type": "header",
+      "content": "Review 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_4",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_stars_4",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_text_4",
+      "label": "Review text",
+      "default": "Hyper et AB2000. Mon objectif est de maximiser l'autoconsommation. Le matériel semble très solide."
+    },
+    {
+      "type": "text",
+      "id": "review_author_4",
+      "label": "Author",
+      "default": "@Roger PALAZON"
+    },
+    {
+      "type": "header",
+      "content": "Review 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_5",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_stars_5",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_text_5",
+      "label": "Review text",
+      "default": "Gute Verarbeitung, App intuitiv, kann ich jedem Mieter empfehlen."
+    },
+    {
+      "type": "text",
+      "id": "review_author_5",
+      "label": "Author",
+      "default": "@Thomas K."
+    },
+    {
+      "type": "header",
+      "content": "Review 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_6",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_stars_6",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_text_6",
+      "label": "Review text"
+    },
+    {
+      "type": "text",
+      "id": "review_author_6",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Review 7"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_7",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_stars_7",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_text_7",
+      "label": "Review text"
+    },
+    {
+      "type": "text",
+      "id": "review_author_7",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Review 8"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_8",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_stars_8",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_text_8",
+      "label": "Review text"
+    },
+    {
+      "type": "text",
+      "id": "review_author_8",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Review 9"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_9",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_stars_9",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_text_9",
+      "label": "Review text"
+    },
+    {
+      "type": "text",
+      "id": "review_author_9",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Review 10"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_10",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_stars_10",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_text_10",
+      "label": "Review text"
+    },
+    {
+      "type": "text",
+      "id": "review_author_10",
+      "label": "Author"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer review slider"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,551 @@
+{% doc %}
+  @prompt
+    <style>
+    /* 信任通栏全局样式 */
+    .trust-banner-bar {
+      width: 100%;
+      padding: 24px 0;
+      background: #ffffff; /* 白底和截图一致 */
+      border-top: 1px solid #f0f0f0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .trust-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .trust-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px 8px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: Inter, sans-serif;
+      font-size: 16px;
+      color: #111827;
+      white-space: nowrap;
+    }
+    .trust-icon {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    
+    /* 响应式适配 */
+    @media (max-width: 992px) {
+      .trust-list {
+        justify-content: center;
+      }
+      .trust-item {
+        flex: 0 0 calc(33.33% - 12px);
+        justify-content: center;
+      }
+    }
+    @media (max-width: 576px) {
+      .trust-item {
+        flex: 0 0 calc(50% - 12px);
+        font-size: 14px;
+      }
+      .trust-icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    </style>
+    
+    <!-- HTML 主体区块 -->
+    <div class="trust-banner-bar">
+      <div class="trust-container">
+        <div class="trust-list">
+          <!-- 1. TÜV-zertifiziert -->
+          <div class="trust-item">
+            <svg class="trust-icon" viewBox="0 0 24 24" fill="#111827">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <span>TÜV-zertifiziert</span>
+          </div>
+    
+          <!-- 2. CE-zertifiziert -->
+          <div class="trust-item">
+            <svg class="trust-icon" viewBox="0 0 24 24" fill="#111827">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <span>CE-zertifiziert</span>
+          </div>
+    
+          <!-- 3. IP65 Schutz -->
+          <div class="trust-item">
+            <svg class="trust-icon" viewBox="0 0 24 24" fill="#111827">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+            </svg>
+            <span>IP65 Schutz</span>
+          </div>
+    
+          <!-- 4. 10 Jahre Garantie -->
+          <div class="trust-item">
+            <svg class="trust-icon" viewBox="0 0 24 24" fill="#111827">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+            </svg>
+            <span>10 Jahre Garantie</span>
+          </div>
+    
+          <!-- 5. 100.000+ Haushalte -->
+          <div class="trust-item">
+            <svg class="trust-icon" viewBox="0 0 24 24" fill="#111827">
+              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
+            <span>100.000+ Haushalte</span>
+          </div>
+    
+          <!-- 6. LiFePO4 Zellen -->
+          <div class="trust-item">
+            <svg class="trust-icon" viewBox="0 0 24 24" fill="#111827">
+              <path d="M17 4h-3V2h-4v2H7v18h10V4zm-2 16H9V6h6v14z"/>
+            </svg>
+            <span>LiFePO4 Zellen</span>
+          </div>
+        </div>
+      </div>
+    </div>, 每一个text前面的图标要变成可替换的图片
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-trust-banner-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.padding_vertical }}px 0;
+    background: {{ block.settings.background_color }};
+    border-top: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+    border-bottom: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+  }
+
+  .ai-trust-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-trust-list-{{ ai_gen_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px 8px;
+  }
+
+  .ai-trust-item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.icon_text_gap }}px;
+    font-family: {{ block.settings.font_family.family }}, sans-serif;
+    font-size: {{ block.settings.font_size }}px;
+    color: {{ block.settings.text_color }};
+    white-space: nowrap;
+  }
+
+  .ai-trust-icon-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  .ai-trust-icon-placeholder-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    flex-shrink: 0;
+    background-color: #f4f4f4;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-trust-icon-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  @media (max-width: 992px) {
+    .ai-trust-list-{{ ai_gen_id }} {
+      justify-content: center;
+    }
+    .ai-trust-item-{{ ai_gen_id }} {
+      flex: 0 0 calc(33.33% - 12px);
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .ai-trust-item-{{ ai_gen_id }} {
+      flex: 0 0 calc(50% - 12px);
+      font-size: {{ block.settings.font_size | times: 0.875 }}px;
+    }
+    .ai-trust-icon-{{ ai_gen_id }},
+    .ai-trust-icon-placeholder-{{ ai_gen_id }} {
+      width: {{ block.settings.icon_size | times: 0.9 }}px;
+      height: {{ block.settings.icon_size | times: 0.9 }}px;
+    }
+  }
+{% endstyle %}
+
+{% liquid
+  assign is_product_context = false
+  assign use_product_trust_items = false
+  assign trust_items = blank
+  if request.page_type == 'product' and product != blank and block.settings.content_source != 'theme_editor'
+    assign is_product_context = true
+    assign pdp_content_candidate = product.metafields.custom.pdp_content.value
+    if pdp_content_candidate != blank
+      assign pdp_content_owner = pdp_content_candidate.product.value
+      assign pdp_content_is_for_product = false
+      if pdp_content_owner != blank
+        if pdp_content_owner.handle == product.handle
+          assign pdp_content_is_for_product = true
+        endif
+      elsif pdp_content_candidate.system.handle == product.handle
+        assign pdp_content_is_for_product = true
+      endif
+      if pdp_content_is_for_product
+        assign trust_items = pdp_content_candidate.trust_items.value
+        if trust_items != blank
+          assign use_product_trust_items = true
+        endif
+      endif
+    endif
+  endif
+%}
+
+{% if trust_items != blank or is_product_context == false %}
+<trust-banner-{{ ai_gen_id }} class="ai-trust-banner-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-trust-container-{{ ai_gen_id }}">
+    <div class="ai-trust-list-{{ ai_gen_id }}">
+      {% if use_product_trust_items %}
+        {% for trust_item in trust_items limit: 6 %}
+          {% liquid
+            assign trust_icon = trust_item.image.value
+            assign trust_text = trust_item.title.value
+          %}
+          {% if trust_icon != blank or trust_text != blank %}
+            <div class="ai-trust-item-{{ ai_gen_id }}">
+              {% if trust_icon != blank %}
+                <img
+                  src="{{ trust_icon | image_url: width: 100 }}"
+                  alt="{{ trust_text | escape }}"
+                  class="ai-trust-icon-{{ ai_gen_id }}"
+                  loading="lazy"
+                  width="{{ trust_icon.width }}"
+                  height="{{ trust_icon.height }}"
+                >
+              {% endif %}
+              {% if trust_text != blank %}<span>{{ trust_text }}</span>{% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% for i in (1..6) %}
+          {% liquid
+            assign show_key = 'show_item_' | append: i
+            assign icon_key = 'item_' | append: i | append: '_icon'
+            assign text_key = 'item_' | append: i | append: '_text'
+            assign show_item = block.settings[show_key]
+            assign item_icon = block.settings[icon_key]
+            assign item_text = block.settings[text_key]
+          %}
+          {% if show_item %}
+            {% if item_icon != blank or item_text != blank %}
+              <div class="ai-trust-item-{{ ai_gen_id }}">
+                {% if item_icon != blank %}
+                  <img
+                    src="{{ item_icon | image_url: width: 100 }}"
+                    alt="{{ item_text | escape }}"
+                    class="ai-trust-icon-{{ ai_gen_id }}"
+                    loading="lazy"
+                    width="100"
+                    height="100"
+                  >
+                {% else %}
+                  <div class="ai-trust-icon-placeholder-{{ ai_gen_id }}">
+                    {{ 'image' | placeholder_svg_tag }}
+                  </div>
+                {% endif %}
+                {% if item_text != blank %}<span>{{ item_text }}</span>{% endif %}
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</trust-banner-{{ ai_gen_id }}>
+{% endif %}
+
+<script>
+  (function() {
+    class TrustBanner{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+    }
+    customElements.define('trust-banner-{{ ai_gen_id }}', TrustBanner{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Trust banner",
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_source",
+      "label": "内容来源",
+      "options": [
+        { "value": "theme_editor", "label": "右侧 Theme Editor（默认）" },
+        { "value": "pdp_content", "label": "PDP 后台内容（备份/旧模式）" }
+      ],
+      "default": "theme_editor",
+      "info": "选择右侧 Theme Editor 后，信任图标和文案只读取当前模板的下方字段。"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Container max width",
+      "min": 960,
+      "max": 1600,
+      "step": 40,
+      "unit": "px",
+      "default": 1280
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#111827"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "icon_text_gap",
+      "label": "Icon spacing",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Item 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_1",
+      "label": "Show item 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "item_1_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "item_1_text",
+      "label": "Text",
+      "default": "TÜV-zertifiziert"
+    },
+    {
+      "type": "header",
+      "content": "Item 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_2",
+      "label": "Show item 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "item_2_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "item_2_text",
+      "label": "Text",
+      "default": "CE-zertifiziert"
+    },
+    {
+      "type": "header",
+      "content": "Item 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_3",
+      "label": "Show item 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "item_3_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "item_3_text",
+      "label": "Text",
+      "default": "IP65 Schutz"
+    },
+    {
+      "type": "header",
+      "content": "Item 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_4",
+      "label": "Show item 4",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "item_4_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "item_4_text",
+      "label": "Text",
+      "default": "10 Jahre Garantie"
+    },
+    {
+      "type": "header",
+      "content": "Item 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_5",
+      "label": "Show item 5",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "item_5_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "item_5_text",
+      "label": "Text",
+      "default": "100.000+ Haushalte"
+    },
+    {
+      "type": "header",
+      "content": "Item 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_6",
+      "label": "Show item 6",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "item_6_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "item_6_text",
+      "label": "Text",
+      "default": "LiFePO4 Zellen"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust banner"
+    }
+  ]
+}
+{% endschema %}

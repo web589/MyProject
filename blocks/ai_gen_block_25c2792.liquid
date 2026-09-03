@@ -1,0 +1,936 @@
+{% doc %}
+  @prompt
+    <style>
+    .marstek-footer * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      list-style: none;
+      text-decoration: none;
+    }
+    
+    .marstek-footer {
+      background-color: #0A1628;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 60px 20px 30px;
+      font-family: system-ui, sans-serif;
+    }
+    
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    /* Newsletter 订阅区域 */
+    .footer-newsletter {
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .footer-newsletter h2 {
+      color: #ffffff;
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+    .footer-newsletter p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 20px;
+    }
+    .news-form {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .news-form input[type="email"] {
+      min-width: 300px;
+      flex: 1;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 2px;
+      color: #fff;
+      outline: none;
+    }
+    .news-form button {
+      padding: 14px 26px;
+      background: #fff;
+      color: #0A1628;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .news-form button:hover {
+      opacity: 0.9;
+    }
+    
+    /* 四栏导航主体 */
+    .footer-nav-wrap {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    /* 品牌第一列 */
+    .footer-brand h1 {
+      color: #ffffff;
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+    .footer-brand .brand-desc {
+      font-size: 18px;
+      line-height: 1.6;
+      max-width: 320px;
+    }
+    
+    /* 导航列通用样式 */
+    .footer-column h3 {
+      color: #ffffff;
+      font-size: 22px;
+      margin-bottom: 22px;
+      font-weight: 500;
+    }
+    .footer-column li {
+      margin-bottom: 16px;
+    }
+    .footer-column li a {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 17px;
+      transition: 0.2s;
+    }
+    .footer-column li a:hover {
+      color: #ffffff;
+    }
+    
+    /* 底部版权栏 */
+    .footer-bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      color: rgba(255,255,255,0.5);
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .lang-switch a {
+      color: rgba(255,255,255,0.5);
+    }
+    
+    /* 移动端自适应 */
+    @media (max-width: 1024px) {
+      .footer-nav-wrap {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+    }
+    @media (max-width: 640px) {
+      .footer-nav-wrap {
+        grid-template-columns: 1fr;
+      }
+      .news-form {
+        flex-direction: column;
+      }
+      .news-form input, .news-form button {
+        width: 100%;
+      }
+      .footer-bottom-bar {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+    </style>
+    
+    <div class="marstek-footer">
+      <div class="footer-container">
+    
+        <!-- 核心修复点：只用 'customer' 表单类型 -->
+        <div class="footer-newsletter">
+          <h2>Newsletter abonnieren</h2>
+          <p>Erhalten Sie Produktneuheiten, Rabatte und Tipps rund um Ihre private Solaranlage.</p>
+          {% form 'customer', class: 'news-form' %}
+            <input type="email" name="email" placeholder="Ihre E-Mail-Adresse eingeben" required>
+            <button type="submit">Anmelden</button>
+          {% endform %}
+        </div>
+    
+        <div class="footer-nav-wrap">
+          <!-- 品牌栏 -->
+          <div class="footer-column footer-brand">
+            <h1>MARSTEK</h1>
+            <p class="brand-desc">Sonne als zuverlässiger Strom für Ihr Zuhause.</p>
+          </div>
+    
+          <!-- Produkte -->
+          <div class="footer-column">
+            <h3>Produkte</h3>
+            <ul>
+              <li><a href="#">VENUSE Mini</a></li>
+              <li><a href="#">VENUSE 3.0</a></li>
+              <li><a href="#">VENUSE 4.0</a></li>
+              <li><a href="#">VENUSE MAX</a></li>
+            </ul>
+          </div>
+    
+          <!-- Support -->
+          <div class="footer-column">
+            <h3>Support</h3>
+            <ul>
+              <li><a href="#">Installationsanleitung</a></li>
+              <li><a href="#">App Download</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Kontakt</a></li>
+            </ul>
+          </div>
+    
+          <!-- Unternehmen -->
+          <div class="footer-column">
+            <h3>Unternehmen</h3>
+            <ul>
+              <li><a href="#">Über MARSTEK</a></li>
+              <li><a href="#">Presse</a></li>
+              <li><a href="#">Karriere</a></li>
+              <li><a href="#">Datenschutz</a></li>
+            </ul>
+          </div>
+        </div>
+    
+        <!-- 底部版权 -->
+        <div class="footer-bottom-bar">
+          <div class="copyright">© 2026 MARSTEK. All rights reserved.</div>
+          <div class="lang-switch">
+            <a href="#">Deutsch / Global</a>
+          </div>
+        </div>
+    
+      </div>
+    </div>
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-footer-{{ ai_gen_id }} * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+  }
+
+  .ai-footer-{{ ai_gen_id }} {
+    background-color: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    padding: 60px 20px 30px;
+    font-family: {{ block.settings.font_family.family }}, {{ block.settings.font_family.fallback_families }};
+    width: {{ block.settings.desktop_width_percent }}%;
+  }
+
+  .ai-footer-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-footer-newsletter-{{ ai_gen_id }} {
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid {{ block.settings.divider_color }};
+  }
+
+  .ai-footer-newsletter-{{ ai_gen_id }} h2 {
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.newsletter_heading_size }}px;
+    margin-bottom: 12px;
+  }
+
+  .ai-footer-newsletter-{{ ai_gen_id }} p {
+    font-size: {{ block.settings.newsletter_text_size }}px;
+    color: {{ block.settings.text_color }};
+    margin-bottom: 20px;
+  }
+
+  .ai-news-form-{{ ai_gen_id }} {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ai-news-form-{{ ai_gen_id }} input[type="email"] {
+    min-width: 300px;
+    flex: 1;
+    padding: 14px 16px;
+    background: {{ block.settings.input_background }};
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    color: {{ block.settings.input_text_color }};
+    outline: none;
+  }
+
+  .ai-news-form-{{ ai_gen_id }} input[type="email"]::placeholder {
+    color: {{ block.settings.placeholder_color }};
+  }
+
+  .ai-news-form-{{ ai_gen_id }} button {
+    padding: 14px 26px;
+    background: {{ block.settings.button_background }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .ai-news-form-{{ ai_gen_id }} button:hover {
+    opacity: 0.9;
+  }
+
+  .ai-footer-nav-wrap-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid {{ block.settings.divider_color }};
+  }
+
+  .ai-footer-brand-{{ ai_gen_id }} h1 {
+    color: {{ block.settings.brand_color }};
+    font-size: {{ block.settings.brand_size }}px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+  }
+
+  .ai-footer-brand-{{ ai_gen_id }} .ai-brand-desc-{{ ai_gen_id }} {
+    font-size: {{ block.settings.brand_desc_size }}px;
+    line-height: 1.6;
+    max-width: 320px;
+  }
+
+  .ai-footer-column-{{ ai_gen_id }} h3 {
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.column_heading_size }}px;
+    margin-bottom: 22px;
+    font-weight: 500;
+  }
+
+  .ai-footer-column-{{ ai_gen_id }} li {
+    margin-bottom: 16px;
+  }
+
+  .ai-footer-column-{{ ai_gen_id }} li a {
+    color: {{ block.settings.link_color }};
+    font-size: {{ block.settings.link_size }}px;
+    transition: color 0.2s;
+  }
+
+  .ai-footer-column-{{ ai_gen_id }} li a:hover {
+    color: {{ block.settings.link_hover_color }};
+  }
+
+  .ai-footer-bottom-bar-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: {{ block.settings.bottom_text_size }}px;
+    color: {{ block.settings.bottom_text_color }};
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .ai-lang-switch-{{ ai_gen_id }} a {
+    color: {{ block.settings.bottom_text_color }};
+  }
+
+  @media (max-width: 1024px) {
+    .ai-footer-nav-wrap-{{ ai_gen_id }} {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ai-footer-nav-wrap-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+    .ai-news-form-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+    .ai-news-form-{{ ai_gen_id }} input,
+    .ai-news-form-{{ ai_gen_id }} button {
+      width: 100%;
+    }
+    .ai-footer-bottom-bar-{{ ai_gen_id }} {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-footer-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-footer-container-{{ ai_gen_id }}">
+
+    {% if block.settings.show_newsletter %}
+      <div class="ai-footer-newsletter-{{ ai_gen_id }}">
+        <h2>{{ block.settings.newsletter_heading }}</h2>
+        <p>{{ block.settings.newsletter_text }}</p>
+        {% form 'customer' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="ai-news-form-{{ ai_gen_id }}">
+            <input
+              type="email"
+              name="contact[email]"
+              placeholder="{{ block.settings.email_placeholder }}"
+              required
+            >
+            <button type="submit">{{ block.settings.button_text }}</button>
+          </div>
+        {% endform %}
+      </div>
+    {% endif %}
+
+    <div class="ai-footer-nav-wrap-{{ ai_gen_id }}">
+      <div class="ai-footer-column-{{ ai_gen_id }} ai-footer-brand-{{ ai_gen_id }}">
+        <h1>{{ block.settings.brand_name }}</h1>
+        <p class="ai-brand-desc-{{ ai_gen_id }}">{{ block.settings.brand_description }}</p>
+      </div>
+
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        <h3>{{ block.settings.column_1_heading }}</h3>
+        <ul>
+          {% if block.settings.column_1_link_1_text != blank %}
+            <li><a href="{{ block.settings.column_1_link_1_url }}">{{ block.settings.column_1_link_1_text }}</a></li>
+          {% endif %}
+          {% if block.settings.column_1_link_2_text != blank %}
+            <li><a href="{{ block.settings.column_1_link_2_url }}">{{ block.settings.column_1_link_2_text }}</a></li>
+          {% endif %}
+          {% if block.settings.column_1_link_3_text != blank %}
+            <li><a href="{{ block.settings.column_1_link_3_url }}">{{ block.settings.column_1_link_3_text }}</a></li>
+          {% endif %}
+          {% if block.settings.column_1_link_4_text != blank %}
+            <li><a href="{{ block.settings.column_1_link_4_url }}">{{ block.settings.column_1_link_4_text }}</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        <h3>{{ block.settings.column_2_heading }}</h3>
+        <ul>
+          {% if block.settings.column_2_link_1_text != blank %}
+            <li><a href="{{ block.settings.column_2_link_1_url }}">{{ block.settings.column_2_link_1_text }}</a></li>
+          {% endif %}
+          {% if block.settings.column_2_link_2_text != blank %}
+            <li><a href="{{ block.settings.column_2_link_2_url }}">{{ block.settings.column_2_link_2_text }}</a></li>
+          {% endif %}
+          {% if block.settings.column_2_link_3_text != blank %}
+            <li><a href="{{ block.settings.column_2_link_3_url }}">{{ block.settings.column_2_link_3_text }}</a></li>
+          {% endif %}
+          {% if block.settings.column_2_link_4_text != blank %}
+            <li><a href="{{ block.settings.column_2_link_4_url }}">{{ block.settings.column_2_link_4_text }}</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="ai-footer-column-{{ ai_gen_id }}">
+        <h3>{{ block.settings.column_3_heading }}</h3>
+        <ul>
+          {% if block.settings.column_3_link_1_text != blank %}
+            <li><a href="{{ block.settings.column_3_link_1_url }}">{{ block.settings.column_3_link_1_text }}</a></li>
+          {% endif %}
+          {% if block.settings.column_3_link_2_text != blank %}
+            <li><a href="{{ block.settings.column_3_link_2_url }}">{{ block.settings.column_3_link_2_text }}</a></li>
+          {% endif %}
+          {% if block.settings.column_3_link_3_text != blank %}
+            <li><a href="{{ block.settings.column_3_link_3_url }}">{{ block.settings.column_3_link_3_text }}</a></li>
+          {% endif %}
+          {% if block.settings.column_3_link_4_text != blank %}
+            <li><a href="{{ block.settings.column_3_link_4_url }}">{{ block.settings.column_3_link_4_text }}</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-footer-bottom-bar-{{ ai_gen_id }}">
+      <div class="ai-copyright-{{ ai_gen_id }}">{{ block.settings.copyright_text }}</div>
+      {% if block.settings.show_language_switch %}
+        <div class="ai-lang-switch-{{ ai_gen_id }}">
+          <a href="{{ block.settings.language_switch_url }}">{{ block.settings.language_switch_text }}</a>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Footer navigation",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Heading",
+      "default": "Newsletter abonnieren"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Description",
+      "default": "Erhalten Sie Produktneuheiten, Rabatte und Tipps rund um Ihre private Solaranlage."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Ihre E-Mail-Adresse eingeben"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Anmelden"
+    },
+    {
+      "type": "range",
+      "id": "newsletter_heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "newsletter_text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "MARSTEK"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_description",
+      "label": "Brand description",
+      "default": "Sonne als zuverlässiger Strom für Ihr Zuhause."
+    },
+    {
+      "type": "range",
+      "id": "brand_size",
+      "label": "Brand name size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "range",
+      "id": "brand_desc_size",
+      "label": "Description size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Column 1"
+    },
+    {
+      "type": "text",
+      "id": "column_1_heading",
+      "label": "Heading",
+      "default": "Produkte"
+    },
+    {
+      "type": "text",
+      "id": "column_1_link_1_text",
+      "label": "Link 1 text",
+      "default": "VENUSE Mini"
+    },
+    {
+      "type": "url",
+      "id": "column_1_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_1_link_2_text",
+      "label": "Link 2 text",
+      "default": "VENUSE 3.0"
+    },
+    {
+      "type": "url",
+      "id": "column_1_link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_1_link_3_text",
+      "label": "Link 3 text",
+      "default": "VENUSE 4.0"
+    },
+    {
+      "type": "url",
+      "id": "column_1_link_3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_1_link_4_text",
+      "label": "Link 4 text",
+      "default": "VENUSE MAX"
+    },
+    {
+      "type": "url",
+      "id": "column_1_link_4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "header",
+      "content": "Column 2"
+    },
+    {
+      "type": "text",
+      "id": "column_2_heading",
+      "label": "Heading",
+      "default": "Support"
+    },
+    {
+      "type": "text",
+      "id": "column_2_link_1_text",
+      "label": "Link 1 text",
+      "default": "Installationsanleitung"
+    },
+    {
+      "type": "url",
+      "id": "column_2_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_2_link_2_text",
+      "label": "Link 2 text",
+      "default": "App Download"
+    },
+    {
+      "type": "url",
+      "id": "column_2_link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_2_link_3_text",
+      "label": "Link 3 text",
+      "default": "FAQ"
+    },
+    {
+      "type": "url",
+      "id": "column_2_link_3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_2_link_4_text",
+      "label": "Link 4 text",
+      "default": "Kontakt"
+    },
+    {
+      "type": "url",
+      "id": "column_2_link_4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "header",
+      "content": "Column 3"
+    },
+    {
+      "type": "text",
+      "id": "column_3_heading",
+      "label": "Heading",
+      "default": "Unternehmen"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_1_text",
+      "label": "Link 1 text",
+      "default": "Über MARSTEK"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_2_text",
+      "label": "Link 2 text",
+      "default": "Presse"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_3_text",
+      "label": "Link 3 text",
+      "default": "Karriere"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "column_3_link_4_text",
+      "label": "Link 4 text",
+      "default": "Datenschutz"
+    },
+    {
+      "type": "url",
+      "id": "column_3_link_4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "header",
+      "content": "Bottom bar"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright text",
+      "default": "© 2026 MARSTEK. All rights reserved."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language_switch",
+      "label": "Show language switch",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "language_switch_text",
+      "label": "Language switch text",
+      "default": "Deutsch / Global"
+    },
+    {
+      "type": "url",
+      "id": "language_switch_url",
+      "label": "Language switch URL"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font",
+      "default": "sans-serif"
+    },
+    {
+      "type": "range",
+      "id": "column_heading_size",
+      "label": "Column heading size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "label": "Link size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "bottom_text_size",
+      "label": "Bottom text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#0A1628"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#b3b3b3"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Headings",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "brand_color",
+      "label": "Brand name",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Links",
+      "default": "#a6a6a6"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Links hover",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Dividers",
+      "default": "#1a2a3f"
+    },
+    {
+      "type": "color",
+      "id": "bottom_text_color",
+      "label": "Bottom text",
+      "default": "#808080"
+    },
+    {
+      "type": "header",
+      "content": "Form style"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Input background",
+      "default": "#141f33"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border",
+      "default": "#263447"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_color",
+      "label": "Placeholder",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#0A1628"
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "label": "Input border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 2
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer navigation"
+    }
+  ]
+}
+{% endschema %}

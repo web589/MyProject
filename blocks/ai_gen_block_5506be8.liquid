@@ -1,0 +1,568 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In den Medien 滚动版块</title>
+    <style>
+      /* 基础重置 */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+    
+      body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #f8f9fa; /* 与图片一致的浅灰背景 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+    
+      /* 主模块容器 */
+      .media-section {
+        width: 100%;
+        max-width: 1200px;
+      }
+    
+      /* 标题 */
+      .media-section h2 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 32px;
+      }
+    
+      /* 滚动轨道外层容器 */
+      .scroll-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden; /* 隐藏超出部分 */
+        /* 左右两侧添加遮罩渐变，实现图片中的淡出效果 */
+        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        padding: 10px 0; /* 留出一点上下空间 */
+      }
+    
+      /* 滚动的轨道（无限循环的条带） */
+      .scroll-track {
+        display: flex;
+        gap: 20px; /* 卡片之间的间距 */
+        width: max-content; /* 宽度自适应内容 */
+        animation: scroll 40s linear infinite; /* 40秒匀速无限滚动 */
+      }
+    
+      /* 单个卡片样式 */
+      .media-item {
+        /* 固定宽度，保证排列整齐 */
+        flex: 0 0 160px; 
+        height: 56px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #cdd7e4; /* 浅灰蓝色背景 */
+        color: #475569; /* 文字颜色 */
+        border-radius: 12px; /* 圆角 */
+        font-size: 15px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        cursor: default;
+      }
+    
+      /* 鼠标悬停在卡片上的交互反馈（可选） */
+      .media-item:hover {
+        background-color: #bfcde0;
+        color: #1e293b;
+      }
+    
+      /* 鼠标悬停在滚动容器上时，暂停滚动，便于用户查看 */
+      .scroll-track:hover {
+        animation-play-state: paused;
+      }
+    
+      /* ----- 核心动画关键帧 ----- */
+      @keyframes scroll {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          /* 因为我们在 HTML 中复制了一组同样的项目，
+             所以移动 50% 的距离就能实现完美无缝衔接 */
+          transform: translateX(-50%);
+        }
+      }
+    
+      /* --- 移动端适配 --- */
+      @media (max-width: 768px) {
+        .media-section h2 {
+          font-size: 22px;
+          margin-bottom: 20px;
+        }
+        .media-item {
+          flex: 0 0 130px;
+          height: 46px;
+          font-size: 13px;
+        }
+      }
+    </style>
+    </head>
+    <body>
+    
+    <div class="media-section">
+      <h2>In den Medien</h2>
+      
+      <div class="scroll-container">
+        <div class="scroll-track">
+          <!-- ===== 第一组：真实的Logo列表 ===== -->
+          <div class="media-item">Forbes</div>
+          <div class="media-item">Bloomberg</div>
+          <div class="media-item">Handelsblatt</div>
+          <div class="media-item">PV Magazine</div>
+          <div class="media-item">Electrek</div>
+          <div class="media-item">CleanTechnica</div>
+          <div class="media-item">TechCrunch</div>
+          <div class="media-item">Wired</div>
+    
+          <!-- ===== 第二组：克隆的重复列表（必须与第一组完全一致，用于实现无缝衔接） ===== -->
+          <div class="media-item">Forbes</div>
+          <div class="media-item">Bloomberg</div>
+          <div class="media-item">Handelsblatt</div>
+          <div class="media-item">PV Magazine</div>
+          <div class="media-item">Electrek</div>
+          <div class="media-item">CleanTechnica</div>
+          <div class="media-item">TechCrunch</div>
+          <div class="media-item">Wired</div>
+        </div>
+      </div>
+    </div>
+    
+    </body>
+    </html>
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-media-scroll-{{ ai_gen_id }} {
+    --media-item-width: {{ block.settings.item_width }}px;
+    --media-item-height: {{ block.settings.item_height }}px;
+    --media-item-min-width: 104px;
+    --media-responsive-item-width: var(--media-item-width);
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.section_padding }}px clamp(16px, 3vw, 40px);
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-media-scroll__inner-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ai-media-scroll__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    margin-bottom: {{ block.settings.title_spacing }}px;
+    text-align: {{ block.settings.title_alignment }};
+  }
+
+  .ai-media-scroll__container-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    padding: 10px 0;
+  }
+
+  .ai-media-scroll__track-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.item_gap }}px;
+    width: max-content;
+    animation: ai-media-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
+  }
+
+  .ai-media-scroll__track-{{ ai_gen_id }}:hover {
+    animation-play-state: paused;
+  }
+
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item {
+    flex: 0 0 auto;
+    width: clamp(var(--media-item-min-width), var(--media-responsive-item-width), var(--media-item-width));
+    height: var(--media-item-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: {{ block.settings.item_bg_color }};
+    color: {{ block.settings.item_text_color }};
+    border-radius: {{ block.settings.item_border_radius }}px;
+    font-size: {{ block.settings.item_font_size }}px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: default;
+    padding: 10px 16px;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item--has-image {
+    width: clamp(
+      var(--media-item-min-width),
+      calc(var(--media-item-height) * var(--media-logo-aspect-ratio, 2.5)),
+      var(--media-responsive-item-width)
+    );
+    z-index: 0;
+  }
+
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item:hover {
+    background-color: {{ block.settings.item_hover_bg_color }};
+    color: {{ block.settings.item_hover_text_color }};
+  }
+
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item-image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+    transform: scale(1);
+    transform-origin: center;
+    transition: transform 0.25s ease;
+  }
+
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item--has-image:hover {
+    z-index: 1;
+  }
+
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item--has-image:hover .ai-media-scroll__item-image,
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item--has-image:focus-within .ai-media-scroll__item-image {
+    transform: scale(1.08);
+  }
+
+  @keyframes ai-media-scroll-{{ ai_gen_id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-media-scroll-{{ ai_gen_id }} {
+      --media-item-width: {{ block.settings.item_width | times: 0.8 }}px;
+      --media-item-height: {{ block.settings.item_height | times: 0.8 }}px;
+      --media-item-min-width: 88px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .ai-media-scroll__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.8 }}px;
+      margin-bottom: {{ block.settings.title_spacing | times: 0.7 }}px;
+    }
+
+    .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item {
+      width: clamp(var(--media-item-min-width), var(--media-responsive-item-width), var(--media-item-width));
+      height: var(--media-item-height);
+      font-size: {{ block.settings.item_font_size | times: 0.9 }}px;
+      padding: 8px 12px;
+    }
+
+    .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item--has-image {
+      width: clamp(
+        var(--media-item-min-width),
+        calc(var(--media-item-height) * var(--media-logo-aspect-ratio, 2.5)),
+        var(--media-responsive-item-width)
+      );
+    }
+  }
+{% endstyle %}
+
+<media-scroll-{{ ai_gen_id }} class="ai-media-scroll-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-media-scroll__inner-{{ ai_gen_id }}">
+    {% if block.settings.title != blank %}
+      <h2 class="ai-media-scroll__title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+    {% endif %}
+
+    <div class="ai-media-scroll__container-{{ ai_gen_id }}">
+      <div class="ai-media-scroll__track-{{ ai_gen_id }}" data-media-scroll-track>
+        {% content_for 'blocks' %}
+      </div>
+    </div>
+  </div>
+</media-scroll-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class MediaScroll{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.track = this.querySelector('[data-media-scroll-track]');
+        if (!this.track || this.track.dataset.cloned === 'true') return;
+
+        const items = Array.from(this.track.querySelectorAll('[data-media-logo-item]'));
+        this.originalItemCount = items.length;
+        this.container = this.querySelector('.ai-media-scroll__container-{{ ai_gen_id }}');
+        this.updateResponsiveItemWidth();
+        items.forEach((item) => {
+          const clone = item.cloneNode(true);
+          clone.setAttribute('aria-hidden', 'true');
+          clone.removeAttribute('data-shopify-editor-block');
+          clone.querySelectorAll('a, button, input').forEach((element) => element.setAttribute('tabindex', '-1'));
+          this.track.appendChild(clone);
+        });
+        this.track.dataset.cloned = 'true';
+
+        if (items.length < 2) this.track.style.animation = 'none';
+
+        if ('ResizeObserver' in window && this.container) {
+          this.resizeObserver = new ResizeObserver(() => this.updateResponsiveItemWidth());
+          this.resizeObserver.observe(this.container);
+        } else {
+          this.handleResize = () => this.updateResponsiveItemWidth();
+          window.addEventListener('resize', this.handleResize, { passive: true });
+        }
+      }
+
+      disconnectedCallback() {
+        if (this.resizeObserver) this.resizeObserver.disconnect();
+        if (this.handleResize) window.removeEventListener('resize', this.handleResize);
+      }
+
+      updateResponsiveItemWidth() {
+        if (!this.container || !this.track || !this.originalItemCount) return;
+        const styles = getComputedStyle(this);
+        const minimumWidth = parseFloat(styles.getPropertyValue('--media-item-min-width')) || 88;
+        const maximumWidth = parseFloat(styles.getPropertyValue('--media-item-width')) || 160;
+        const gap = parseFloat(getComputedStyle(this.track).columnGap) || 0;
+        const availableWidth = this.container.clientWidth - gap * Math.max(0, this.originalItemCount - 1);
+        const fittedWidth = availableWidth / this.originalItemCount;
+        const responsiveWidth = Math.max(minimumWidth, Math.min(maximumWidth, fittedWidth));
+        this.style.setProperty('--media-responsive-item-width', `${responsiveWidth}px`);
+      }
+    }
+
+    customElements.define('media-scroll-{{ ai_gen_id }}', MediaScroll{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Media logos scroll",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "In den Medien"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Title alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "label": "Title spacing",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Item style"
+    },
+    {
+      "type": "range",
+      "id": "item_width",
+      "label": "Item width",
+      "min": 100,
+      "max": 250,
+      "step": 10,
+      "unit": "px",
+      "default": 160
+    },
+    {
+      "type": "range",
+      "id": "item_height",
+      "label": "Item height",
+      "min": 40,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "label": "Gap between items",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "item_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "item_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "item_bg_color",
+      "label": "Background color",
+      "default": "#cdd7e4"
+    },
+    {
+      "type": "color",
+      "id": "item_text_color",
+      "label": "Text color",
+      "default": "#475569"
+    },
+    {
+      "type": "color",
+      "id": "item_hover_bg_color",
+      "label": "Hover background color",
+      "default": "#bfcde0"
+    },
+    {
+      "type": "color",
+      "id": "item_hover_text_color",
+      "label": "Hover text color",
+      "default": "#1e293b"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "label": "Scroll speed",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "s",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "blocks": [
+    {
+      "type": "media_logo_item"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media logos scroll"
+    }
+  ]
+}
+{% endschema %}

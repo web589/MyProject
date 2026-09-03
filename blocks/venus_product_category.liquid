@@ -1,0 +1,460 @@
+{% liquid
+  assign category_id = block.id | replace: '_', '' | downcase
+  assign shared_category_menu = linklists['venus-product-categories']
+  assign shared_category_collection = blank
+  assign category_label_handle = block.settings.label | handle
+  for shared_category_link in shared_category_menu.links
+    assign shared_label_handle = shared_category_link.title | handle
+    if shared_label_handle == category_label_handle and shared_category_link.type == 'collection_link'
+      assign shared_category_collection = shared_category_link.object
+      break
+    endif
+  endfor
+%}
+
+{% style %}
+  {{ block.settings.primary_button_font | font_face: font_display: 'swap' }}
+
+  .venus-category-panel-{{ category_id }} .venus-category-carousel {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .venus-category-panel-{{ category_id }} .venus-category-track {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    padding: 4px 0;
+    transition: transform 0.4s ease;
+    will-change: transform;
+  }
+
+  .venus-category-panel-{{ category_id }} .venus-category-nav {
+    align-items: center;
+    background: rgba(226, 226, 226, 0.92);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    height: 48px;
+    justify-content: center;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    z-index: 5;
+  }
+
+  .venus-category-panel-{{ category_id }} .venus-category-nav.prev {
+    left: 8px;
+  }
+
+  .venus-category-panel-{{ category_id }} .venus-category-nav.next {
+    right: 8px;
+  }
+
+  .venus-category-panel-{{ category_id }} .venus-category-nav:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .venus-category-panel-{{ category_id }} .venus-category-nav svg {
+    fill: none;
+    height: 22px;
+    stroke: #ffffff;
+    stroke-width: 3;
+    width: 22px;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-card-{{ category_id }} {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    display: flex;
+    flex: 0 0 22.4%;
+    flex-direction: column;
+    min-height: 520px;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-image-{{ category_id }} {
+    align-items: center;
+    background: #f7f9fc;
+    display: flex;
+    flex: 0 0 220px;
+    height: 220px;
+    justify-content: center;
+    margin: 16px 16px 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-image-{{ category_id }} img {
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-image-placeholder-wrapper-{{ category_id }},
+  .venus-category-panel-{{ category_id }} .ai-image-placeholder-wrapper-{{ category_id }} svg {
+    height: 100%;
+    width: 100%;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-badge-{{ category_id }} {
+    background: #8bd5ff;
+    border-radius: 0 0 6px 0;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    left: 0;
+    line-height: 1;
+    padding: 7px 12px;
+    position: absolute;
+    top: 0;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-badge--discount {
+    background: #ff6b13;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-info-{{ category_id }} {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 16px;
+    text-align: left;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-title-{{ category_id }} {
+    color: #242424;
+    display: -webkit-box;
+    font-family: var(--typeBasePrimary), var(--typeBaseFallback);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 9px;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    text-align: left;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-title-{{ category_id }} a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-subtitle-{{ category_id }},
+  .venus-category-panel-{{ category_id }} .ai-product-specs-{{ category_id }} {
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-subtitle-{{ category_id }} {
+    color: #0099fe;
+    margin-bottom: 9px;
+    min-height: 19px;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-specs-{{ category_id }} {
+    color: #596b82;
+    margin-bottom: 13px;
+    min-height: 38px;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-price-{{ category_id }} {
+    color: #242424;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-compare-{{ category_id }} {
+    color: #596b82;
+    font-size: 12px;
+    font-weight: 400;
+    margin-left: 6px;
+    text-decoration: line-through;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-actions-{{ category_id }} {
+    align-items: center;
+    display: flex;
+    gap: 4px;
+    margin-top: auto;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-btn-{{ category_id }} {
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    flex: 1;
+    justify-content: center;
+    line-height: 1.2;
+    min-width: 0;
+    padding: 0 6px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease, background-position 0.25s ease, border-color 0.2s ease, color 0.2s ease, filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-btn-primary-{{ category_id }} {
+    background: linear-gradient(90deg, #0099fe 0%, #00ecdd 100%);
+    color: #ffffff;
+    font-family: {{ block.settings.primary_button_font.family }}, {{ block.settings.primary_button_font.fallback_families }};
+    font-size: 16px;
+    font-weight: {{ block.settings.primary_button_font.weight }};
+    flex: 1.03 1 0;
+    min-height: 48px;
+    background-size: 160% 100%;
+    background-position: left center;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-btn-primary-{{ category_id }}:hover:not(:disabled),
+  .venus-category-panel-{{ category_id }} .ai-btn-primary-{{ category_id }}:focus-visible {
+    background-position: right center;
+    filter: saturate(1.12) brightness(0.96);
+    box-shadow: 0 9px 20px rgba(0, 153, 252, 0.28);
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-btn-outline-{{ category_id }} {
+    background: #ffffff;
+    border-color: #0099fe;
+    color: #0099fe;
+    font-family: var(--typeBasePrimary), var(--typeBaseFallback);
+    font-size: 13px;
+    font-weight: 500;
+    flex: 0.97 1 0;
+    min-height: 42px;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-btn-outline-{{ category_id }}:hover:not(:disabled),
+  .venus-category-panel-{{ category_id }} .ai-btn-outline-{{ category_id }}:focus-visible {
+    background: #e0f7ff;
+    border-color: #0099fc;
+    color: #0369a1;
+    box-shadow: 0 8px 18px rgba(0, 153, 252, 0.16);
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-btn-{{ category_id }}:hover:not(:disabled) {
+    animation: venus-category-button-bounce-{{ category_id }} 0.55s ease-in-out;
+    transform: translateY(-3px);
+  }
+
+  @keyframes venus-category-button-bounce-{{ category_id }} {
+    0%, 100% { transform: translateY(-3px); }
+    35% { transform: translateY(-8px); }
+    65% { transform: translateY(-1px); }
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-btn-{{ category_id }}:active:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 9px rgba(0, 153, 252, 0.18);
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-btn-{{ category_id }}:focus-visible {
+    outline: 2px solid #0099fc;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .venus-category-panel-{{ category_id }} .ai-product-btn-{{ category_id }}:hover:not(:disabled) {
+      animation: none;
+      transform: translateY(-3px);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .venus-category-panel-{{ category_id }} .ai-product-card-{{ category_id }} {
+      flex-basis: min(86vw, 330px);
+    }
+
+    .venus-category-panel-{{ category_id }} .venus-category-track {
+      gap: 14px;
+    }
+  }
+{% endstyle %}
+
+<div class="venus-category-unit" {{ block.shopify_attributes }}>
+  <button type="button" class="venus-category-tab" data-tab="{{ block.id }}">
+    {{ block.settings.label | escape }}
+  </button>
+
+  <div
+    class="venus-category-panel venus-category-panel-{{ category_id }}"
+    data-tab-content="{{ block.id }}"
+  >
+    <div class="venus-category-carousel" data-carousel-wrapper>
+      <button type="button" class="venus-category-nav prev" data-carousel-prev aria-label="{{ block.settings.previous_button_label | escape }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <div class="venus-category-track" data-carousel-track>
+        {% if shared_category_collection != blank %}
+          {% for selected_product in shared_category_collection.products limit: 6 %}
+            {% render 'venus-product-carousel-card',
+              carousel_product: selected_product,
+              carousel_settings: block.settings,
+              carousel_id: category_id
+            %}
+          {% endfor %}
+        {% else %}
+        {% for product_index in (1..6) %}
+          {% liquid
+            assign product_key = 'product_' | append: product_index
+            assign badge_key = 'badge_' | append: product_index
+            assign selected_product = block.settings[product_key]
+            assign badge_override = block.settings[badge_key]
+          %}
+          {% if selected_product != blank %}
+            {% render 'venus-product-carousel-card',
+              carousel_product: selected_product,
+              badge_override: badge_override,
+              carousel_settings: block.settings,
+              carousel_id: category_id
+            %}
+          {% endif %}
+        {% endfor %}
+        {% endif %}
+      </div>
+
+      <button type="button" class="venus-category-nav next" data-carousel-next aria-label="{{ block.settings.next_button_label | escape }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product category tab",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Category label",
+      "default": "New category"
+    },
+    {
+      "type": "header",
+      "content": "Products and badges"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "text",
+      "id": "badge_1",
+      "label": "Product 1 badge"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "text",
+      "id": "badge_2",
+      "label": "Product 2 badge"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "text",
+      "id": "badge_3",
+      "label": "Product 3 badge"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "text",
+      "id": "badge_4",
+      "label": "Product 4 badge"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "text",
+      "id": "badge_5",
+      "label": "Product 5 badge"
+    },
+    {
+      "type": "product",
+      "id": "product_6",
+      "label": "Product 6"
+    },
+    {
+      "type": "text",
+      "id": "badge_6",
+      "label": "Product 6 badge"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "view_button_text",
+      "label": "Primary button text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "text",
+      "id": "details_button_text",
+      "label": "Secondary button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "text",
+      "id": "previous_button_label",
+      "label": "Previous arrow label",
+      "default": "Vorherige Produkte"
+    },
+    {
+      "type": "text",
+      "id": "next_button_label",
+      "label": "Next arrow label",
+      "default": "Nächste Produkte"
+    },
+    {
+      "type": "font_picker",
+      "id": "primary_button_font",
+      "label": "Primary button font",
+      "default": "manrope_n6"
+    },
+    {
+      "type": "header",
+      "content": "Product preorder"
+    },
+    {
+      "type": "paragraph",
+      "content": "Products switch to email reservation automatically when no Shopify variant has inventory. The boolean metafield custom.preorder_enabled can force reservation while stock remains. Optional: custom.preorder_button_label."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product category tab"
+    }
+  ]
+}
+{% endschema %}

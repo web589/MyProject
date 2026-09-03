@@ -1,0 +1,928 @@
+{% doc %}
+  @prompt
+    <style>
+    /* 全局品牌配色变量 统一全站风格 */
+    :root {
+      --page-bg: #F8FAFC;
+      --accent-green: #00E676;
+      --green-dark: #00bd52;
+      --text-white: #ffffff;
+      --text-dark: #111827;
+      --text-gray: #4B5563;
+      --border-light: rgba(255, 255, 0.5);
+      --btn-glow: 0 0 8px rgba(0, 230, 118, 0.25),
+                  0 0 16px rgba(0, 230, 118, 0.35),
+                  0 0 28px rgba(0, 230, 118, 0.18);
+      --radius-card: 8px;
+      --grid-gap: 24px;
+      --section-padding: 80px;
+      --container-max: 1400px;
+      --side-padding: 20px;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+    
+    /* 产品板块外层 整体背景#F8FAFC */
+    .product-grid-section {
+      width: 100%;
+      background: var(--page-bg);
+      padding: var(--section-padding) 0;
+    }
+    .product-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--side-padding);
+    }
+    /* 2×2网格布局 */
+    .product-grid-wrap {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--grid-gap);
+    }
+    
+    /* 单张产品卡片 横向 宽:高=4:3 */
+    .product-card {
+      position: relative;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+    }
+    /* 背景图完全铺满卡片 */
+    .product-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .product-card:hover .product-bg-img {
+      transform: scale(1.03);
+    }
+    
+    /* 文字容器：居中偏上，高度限制40%（2/5），下方60%（3/5）留给图片，整体缩小 */
+    .product-content-wrap {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      padding: 20px 0;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-height: 40%;
+    }
+    /* 顶部小字标语 缩小字号 */
+    .product-top-slogan {
+      font-size: 11px;
+      color: #ffd02f;
+      font-weight: 600;
+      margin: 0 0 8px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.5px;
+    }
+    /* 产品型号大字 缩小 */
+    .product-model-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-white);
+      line-height: 1.2;
+      margin: 0 0 6px;
+    }
+    /* NEU新品小标签 同步缩小 */
+    .product-new-tag {
+      display: inline-block;
+      background: var(--accent-green);
+      color: #000;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 3px;
+      margin-left: 5px;
+      vertical-align: top;
+    }
+    /* 简短描述文案 缩小字号+缩减间距 */
+    .product-desc-text {
+      font-size: 12px;
+      color: var(--text-white);
+      opacity: 0.92;
+      margin: 0 0 16px;
+      line-height: 1.5;
+    }
+    /* 底部双按钮居中并排 */
+    .product-btn-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    /* 主按钮 缩小内边距字号，修复边框变量错误 */
+    .btn-primary-shop {
+      padding: 7px 16px;
+      background: var(--accent-green);
+      color: #000;
+      border: none;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn-primary-shop:hover {
+      background: var(--green-dark);
+      transform: translateY(-3px);
+      box-shadow: var(--btn-glow);
+    }
+    /* 次按钮 同步缩小，修复边框变量缺失值 */
+    .btn-secondary-info {
+      padding: 7px 16px;
+      background: transparent;
+      color: var(--text-white);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary-info:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      transform: translateY(-3px);
+    }
+    
+    /* 响应式适配 */
+    @media screen and (max-width: 1024px) {
+      .product-model-title {
+        font-size: 18px;
+      }
+      .product-content-wrap {
+        width: 68%;
+      }
+    }
+    @media screen and (max-width: 640px) {
+      .product-grid-wrap {
+        grid-template-columns: 1fr;
+      }
+      .product-model-title {
+        font-size: 16px;
+      }
+      .product-content-wrap {
+        width: 75%;
+        padding: 16px 0;
+        max-height: 42%;
+      }
+      .product-grid-section {
+        padding: 50px 0;
+      }
+    }
+    </style>
+    
+    <!-- 4宫格横版4:3产品卡片 HTML（全部卡片按钮完整，第三四张也补全双按钮） -->
+    <section class="product-grid-section">
+      <div class="product-container">
+        <div class="product-grid-wrap">
+    
+          <!-- 卡片1：VENUS E Mini -->
+          <div class="product-card">
+            <img class="product-bg-img" src="替换第一张产品图链接" alt="VENUS E Mini">
+            <div class="product-content-wrap">
+              <p class="product-top-slogan">Dünn & leicht 22kg</p>
+              <h3 class="product-model-title">
+                VENUS E Mini
+                <span class="product-new-tag">NEU</span>
+                <br>2kWh / 1.5kW
+              </h3>
+              <p class="product-desc-text">Welt dünnster Plug-in Speicher, nur 10,5cm Tiefe</p>
+              <div class="product-btn-group">
+                <a href="#" class="btn-primary-shop">Jetzt shoppen</a>
+                <a href="#" class="btn-secondary-info">Mehr erfahren</a>
+              </div>
+            </div>
+          </div>
+    
+          <!-- 卡片2：VENUS E 4.0 -->
+          <div class="product-card">
+            <img class="product-bg-img" src="替换第二张产品图链接" alt="VENUS E 4.0">
+            <div class="product-content-wrap">
+              <p class="product-top-slogan">3kW Spitzenleistung</p>
+              <h3 class="product-model-title">
+                VENUS E 4.0
+                <span class="product-new-tag">NEU</span>
+                <br>5kWh S
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-grid-section-{{ ai_gen_id }} {
+    width: 100%;
+    background: {{ block.settings.section_bg_color }};
+    padding: {{ block.settings.section_padding }}px 0;
+  }
+
+  .ai-product-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_max_width }}px;
+    margin: 0 auto;
+    padding: 0 {{ block.settings.side_padding }}px;
+  }
+
+  .ai-product-grid-wrap-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  .ai-product-card-{{ ai_gen_id }} {
+    position: relative;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .ai-product-bg-img-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .ai-product-card-{{ ai_gen_id }}:hover .ai-product-bg-img-{{ ai_gen_id }} {
+    transform: scale(1.03);
+  }
+
+  .ai-product-content-wrap-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    padding: 20px 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-height: 40%;
+  }
+
+  .ai-product-top-slogan-{{ ai_gen_id }} {
+    font-size: {{ block.settings.slogan_font_size }}px;
+    color: {{ block.settings.slogan_color }};
+    font-weight: 600;
+    margin: 0 0 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-product-model-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: 800;
+    color: {{ block.settings.title_color }};
+    line-height: 1.2;
+    margin: 0 0 6px;
+  }
+
+  .ai-product-new-tag-{{ ai_gen_id }} {
+    display: inline-block;
+    background: {{ block.settings.tag_bg_color }};
+    color: {{ block.settings.tag_text_color }};
+    font-size: {{ block.settings.tag_font_size }}px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: 5px;
+    vertical-align: top;
+  }
+
+  .ai-product-desc-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.desc_font_size }}px;
+    color: {{ block.settings.desc_color }};
+    opacity: 0.92;
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+
+  .ai-product-btn-group-{{ ai_gen_id }} {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .ai-btn-primary-shop-{{ ai_gen_id }} {
+    padding: 7px 16px;
+    background: {{ block.settings.primary_btn_bg }};
+    color: {{ block.settings.primary_btn_text }};
+    border: none;
+    border-radius: {{ block.settings.btn_border_radius }}px;
+    font-size: {{ block.settings.btn_font_size }}px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .ai-btn-primary-shop-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.primary_btn_hover_bg }};
+    transform: translateY(-3px);
+    box-shadow: 0 0 8px {{ block.settings.primary_btn_bg }}40,
+                0 0 16px {{ block.settings.primary_btn_bg }}59,
+                0 0 28px {{ block.settings.primary_btn_bg }}2E;
+  }
+
+  .ai-btn-secondary-info-{{ ai_gen_id }} {
+    padding: 7px 16px;
+    background: transparent;
+    color: {{ block.settings.secondary_btn_text }};
+    border: 1px solid {{ block.settings.secondary_btn_border }};
+    border-radius: {{ block.settings.btn_border_radius }}px;
+    font-size: {{ block.settings.btn_font_size }}px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .ai-btn-secondary-info-{{ ai_gen_id }}:hover {
+    border-color: {{ block.settings.primary_btn_bg }};
+    color: {{ block.settings.primary_btn_bg }};
+    transform: translateY(-3px);
+  }
+
+  @media screen and (max-width: 1024px) {
+    .ai-product-model-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_font_size }}px * 0.9);
+    }
+    .ai-product-content-wrap-{{ ai_gen_id }} {
+      width: 68%;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .ai-product-grid-wrap-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+    .ai-product-model-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_font_size }}px * 0.8);
+    }
+    .ai-product-content-wrap-{{ ai_gen_id }} {
+      width: 75%;
+      padding: 16px 0;
+      max-height: 42%;
+    }
+    .ai-product-grid-section-{{ ai_gen_id }} {
+      padding: 50px 0;
+    }
+  }
+{% endstyle %}
+
+<product-grid-{{ ai_gen_id }} class="ai-product-grid-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-product-container-{{ ai_gen_id }}">
+    <div class="ai-product-grid-wrap-{{ ai_gen_id }}">
+
+      {% for i in (1..4) %}
+        {% liquid
+          assign image_key = 'product_' | append: i | append: '_image'
+          assign slogan_key = 'product_' | append: i | append: '_slogan'
+          assign title_key = 'product_' | append: i | append: '_title'
+          assign show_tag_key = 'product_' | append: i | append: '_show_tag'
+          assign tag_text_key = 'product_' | append: i | append: '_tag_text'
+          assign desc_key = 'product_' | append: i | append: '_description'
+          assign primary_link_key = 'product_' | append: i | append: '_primary_link'
+          assign primary_text_key = 'product_' | append: i | append: '_primary_text'
+          assign secondary_link_key = 'product_' | append: i | append: '_secondary_link'
+          assign secondary_text_key = 'product_' | append: i | append: '_secondary_text'
+
+          assign product_image = block.settings[image_key]
+          assign product_slogan = block.settings[slogan_key]
+          assign product_title = block.settings[title_key]
+          assign show_tag = block.settings[show_tag_key]
+          assign tag_text = block.settings[tag_text_key]
+          assign product_desc = block.settings[desc_key]
+          assign primary_link = block.settings[primary_link_key]
+          assign primary_text = block.settings[primary_text_key]
+          assign secondary_link = block.settings[secondary_link_key]
+          assign secondary_text = block.settings[secondary_text_key]
+        %}
+
+        <div class="ai-product-card-{{ ai_gen_id }}">
+          {% if product_image %}
+            <img
+              class="ai-product-bg-img-{{ ai_gen_id }}"
+              src="{{ product_image | image_url: width: 1200 }}"
+              alt="{{ product_title | escape }}"
+              loading="lazy"
+              width="1200"
+              height="900"
+            >
+          {% else %}
+            <div class="ai-product-bg-img-{{ ai_gen_id }}" style="background-color: #f4f4f4;">
+              {{ 'product-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+
+          <div class="ai-product-content-wrap-{{ ai_gen_id }}">
+            {% if product_slogan != blank %}
+              <p class="ai-product-top-slogan-{{ ai_gen_id }}">{{ product_slogan }}</p>
+            {% endif %}
+
+            {% if product_title != blank %}
+              <h3 class="ai-product-model-title-{{ ai_gen_id }}">
+                {{ product_title }}
+                {% if show_tag and tag_text != blank %}
+                  <span class="ai-product-new-tag-{{ ai_gen_id }}">{{ tag_text }}</span>
+                {% endif %}
+              </h3>
+            {% endif %}
+
+            {% if product_desc != blank %}
+              <p class="ai-product-desc-text-{{ ai_gen_id }}">{{ product_desc }}</p>
+            {% endif %}
+
+            <div class="ai-product-btn-group-{{ ai_gen_id }}">
+              {% if primary_link != blank and primary_text != blank %}
+                <a href="{{ primary_link }}" class="ai-btn-primary-shop-{{ ai_gen_id }}">
+                  {{ primary_text }}
+                </a>
+              {% endif %}
+
+              {% if secondary_link != blank and secondary_text != blank %}
+                <a href="{{ secondary_link }}" class="ai-btn-secondary-info-{{ ai_gen_id }}">
+                  {{ secondary_text }}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</product-grid-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductGrid{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.style.display = 'block';
+      }
+    }
+
+    customElements.define('product-grid-{{ ai_gen_id }}', ProductGrid{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product grid 2x2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Background color",
+      "default": "#F8FAFC"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "label": "Container max width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "slogan_font_size",
+      "label": "Slogan font size",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "color",
+      "id": "slogan_color",
+      "label": "Slogan color",
+      "default": "#ffd02f"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title font size",
+      "min": 14,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "desc_font_size",
+      "label": "Description font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "desc_color",
+      "label": "Description color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Tag style"
+    },
+    {
+      "type": "range",
+      "id": "tag_font_size",
+      "label": "Tag font size",
+      "min": 7,
+      "max": 14,
+      "step": 1,
+      "unit": "px",
+      "default": 9
+    },
+    {
+      "type": "color",
+      "id": "tag_bg_color",
+      "label": "Tag background",
+      "default": "#00E676"
+    },
+    {
+      "type": "color",
+      "id": "tag_text_color",
+      "label": "Tag text color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "range",
+      "id": "btn_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "btn_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 3
+    },
+    {
+      "type": "color",
+      "id": "primary_btn_bg",
+      "label": "Primary background",
+      "default": "#00E676"
+    },
+    {
+      "type": "color",
+      "id": "primary_btn_hover_bg",
+      "label": "Primary hover background",
+      "default": "#00bd52"
+    },
+    {
+      "type": "color",
+      "id": "primary_btn_text",
+      "label": "Primary text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "secondary_btn_text",
+      "label": "Secondary text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "secondary_btn_border",
+      "label": "Secondary border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Product 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "product_1_slogan",
+      "label": "Slogan",
+      "default": "Dünn & leicht 22kg"
+    },
+    {
+      "type": "text",
+      "id": "product_1_title",
+      "label": "Title",
+      "default": "VENUS E Mini 2kWh / 1.5kW"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_1_show_tag",
+      "label": "Show tag",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "product_1_tag_text",
+      "label": "Tag text",
+      "default": "NEU"
+    },
+    {
+      "type": "text",
+      "id": "product_1_description",
+      "label": "Description",
+      "default": "Welt dünnster Plug-in Speicher, nur 10,5cm Tiefe"
+    },
+    {
+      "type": "url",
+      "id": "product_1_primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_1_primary_text",
+      "label": "Primary button text",
+      "default": "Jetzt shoppen"
+    },
+    {
+      "type": "url",
+      "id": "product_1_secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_1_secondary_text",
+      "label": "Secondary button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "header",
+      "content": "Product 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "product_2_slogan",
+      "label": "Slogan",
+      "default": "3kW Spitzenleistung"
+    },
+    {
+      "type": "text",
+      "id": "product_2_title",
+      "label": "Title",
+      "default": "VENUS E 4.0 5kWh"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_2_show_tag",
+      "label": "Show tag",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "product_2_tag_text",
+      "label": "Tag text",
+      "default": "NEU"
+    },
+    {
+      "type": "text",
+      "id": "product_2_description",
+      "label": "Description",
+      "default": "Modularer Speicher mit hoher Leistung"
+    },
+    {
+      "type": "url",
+      "id": "product_2_primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_2_primary_text",
+      "label": "Primary button text",
+      "default": "Jetzt shoppen"
+    },
+    {
+      "type": "url",
+      "id": "product_2_secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_2_secondary_text",
+      "label": "Secondary button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "header",
+      "content": "Product 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "product_3_slogan",
+      "label": "Slogan"
+    },
+    {
+      "type": "text",
+      "id": "product_3_title",
+      "label": "Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_3_show_tag",
+      "label": "Show tag",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "product_3_tag_text",
+      "label": "Tag text"
+    },
+    {
+      "type": "text",
+      "id": "product_3_description",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "product_3_primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_3_primary_text",
+      "label": "Primary button text",
+      "default": "Jetzt shoppen"
+    },
+    {
+      "type": "url",
+      "id": "product_3_secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_3_secondary_text",
+      "label": "Secondary button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "header",
+      "content": "Product 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "product_4_slogan",
+      "label": "Slogan"
+    },
+    {
+      "type": "text",
+      "id": "product_4_title",
+      "label": "Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_4_show_tag",
+      "label": "Show tag",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "product_4_tag_text",
+      "label": "Tag text"
+    },
+    {
+      "type": "text",
+      "id": "product_4_description",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "product_4_primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_4_primary_text",
+      "label": "Primary button text",
+      "default": "Jetzt shoppen"
+    },
+    {
+      "type": "url",
+      "id": "product_4_secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_4_secondary_text",
+      "label": "Secondary button text",
+      "default": "Mehr erfahren"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product grid 2x2"
+    }
+  ]
+}
+{% endschema %}

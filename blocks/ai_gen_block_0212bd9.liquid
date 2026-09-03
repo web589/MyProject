@@ -1,0 +1,559 @@
+{% doc %}
+  @prompt
+    {% comment %}
+    Newsletter Signup Block
+    Visual: blue background, centered icon, title, description, email input and button
+    {% endcomment %}
+    
+    {% schema %}
+    {
+      "name": "Newsletter signup",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title_text",
+          "label": "Title",
+          "default": "MARSTEK Newsletter"
+        },
+        {
+          "type": "textarea",
+          "id": "desc_text",
+          "label": "Description",
+          "default": "Neuheiten, VPP-Updates und Spartipps – einmal im Monat, jederzeit kündbar."
+        },
+        {
+          "type": "text",
+          "id": "input_placeholder",
+          "label": "Email placeholder",
+          "default": "E-Mail-Adresse eingeben"
+        },
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "Button text",
+          "default": "Abonnieren"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icon",
+          "label": "Show icon",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background color",
+          "default": "#00C6FF"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "label": "Top padding",
+          "min": 20,
+          "max": 200,
+          "step": 5,
+          "default": 90
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "label": "Bottom padding",
+          "min": 20,
+          "max": 200,
+          "step": 5,
+          "default": 90
+        }
+      ]
+    }
+    {% endschema %}
+    
+    <style>
+    .newsletter-section {
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    
+    .newsletter-inner {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    
+    .newsletter-icon {
+      color: #ffffff;
+      font-size: 40px;
+      margin: 0 0 24px;
+    }
+    
+    .newsletter-title {
+      color: #ffffff;
+      font-size: 48px;
+      font-weight: 700;
+      margin: 0 0 24px;
+      line-height: 1.2;
+    }
+    
+    .newsletter-desc {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 0 0 32px;
+    }
+    
+    .newsletter-form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .newsletter-input {
+      min-width: 320px;
+      padding: 16px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #ffffff !important;
+      color: #111111;
+      outline: none;
+    }
+    
+    .newsletter-button {
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #111111;
+      cursor: pointer;
+    }
+    
+    .newsletter-button:hover {
+      background-color: #f5f5f5;
+    }
+    
+    @media (max-width: 640px) {
+      .newsletter-title {
+        font-size: 36px;
+      }
+    
+      .newsletter-input {
+        width: 100%;
+        min-width: auto;
+      }
+    
+      .newsletter-button {
+        width: 100%;
+      }
+    }
+    </style>
+    
+    <div class="newsletter-section" style="
+      background-color: {{ settings.bg_color }};
+      padding-top: {{ settings.padding_top }}px;
+      padding-bottom: {{ settings.padding_bottom }}px;
+    ">
+      <div class="newsletter-inner">
+    
+        {% if settings.show_icon %}
+          <div class="newsletter-icon">✉</div>
+        {% endif %}
+    
+        <h2 class="newsletter-title">{{ settings.title_text }}</h2>
+    
+        <p class="newsletter-desc">{{ settings.desc_text }}</p>
+    
+        <div class="newsletter-form">
+          <input
+            type="email"
+            name="email"
+            class="newsletter-input"
+            placeholder="{{ settings.input_placeholder }}"
+            required
+          >
+          <button type="button" class="newsletter-button">{{ settings.btn_label }}</button>
+        </div>
+    
+      </div>
+    </div>, 在Email placeholder和Button底下添加“Ich stimme den Nutzungsbedingungen und der Datenschutzerklärung zu.”的选项，前面有个小方格可供勾选，勾选了之后才能点击按钮, “Ich stimme den Nutzungsbedingungen und der Datenschutzerklärung zu.”字体添加大小调节选项。“Email placeholder”的框添加宽度调节选项
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-newsletter-section-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    background-color: {{ block.settings.bg_color }};
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  }
+
+  .ai-newsletter-inner-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  .ai-newsletter-icon-{{ ai_gen_id }} {
+    color: #ffffff;
+    font-size: 40px;
+    margin: 0 0 24px;
+  }
+
+  .ai-newsletter-title-{{ ai_gen_id }} {
+    color: #ffffff;
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0 0 24px;
+    line-height: 1.2;
+  }
+
+  .ai-newsletter-desc-{{ ai_gen_id }} {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 0 0 32px;
+  }
+
+  .ai-newsletter-form-wrapper-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .ai-newsletter-input-{{ ai_gen_id }} {
+    width: {{ block.settings.input_width }}px;
+    padding: 16px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #111111;
+  }
+
+  .ai-newsletter-button-{{ ai_gen_id }} {
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #111111;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+  }
+
+  .ai-newsletter-button-{{ ai_gen_id }}:hover:not(:disabled) {
+    background-color: #f5f5f5;
+  }
+
+  .ai-newsletter-button-{{ ai_gen_id }}:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .ai-newsletter-consent-{{ ai_gen_id }} {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+    width: 100%;
+  }
+
+  .ai-newsletter-checkbox-{{ ai_gen_id }} {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .ai-newsletter-consent-label-{{ ai_gen_id }} {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: {{ block.settings.consent_font_size }}px;
+    line-height: 1.5;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .ai-newsletter-consent-label-{{ ai_gen_id }} a {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+
+  .ai-newsletter-message-{{ ai_gen_id }} {
+    margin-top: 16px;
+    font-size: 16px;
+    color: #ffffff;
+  }
+
+  .ai-newsletter-success-{{ ai_gen_id }} {
+    color: #ffffff;
+  }
+
+  .ai-newsletter-error-{{ ai_gen_id }} {
+    color: #ffcccc;
+  }
+
+  @media (max-width: 640px) {
+    .ai-newsletter-title-{{ ai_gen_id }} {
+      font-size: 36px;
+    }
+
+    .ai-newsletter-input-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-newsletter-button-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-newsletter-consent-{{ ai_gen_id }} {
+      text-align: left;
+    }
+  }
+{% endstyle %}
+
+<newsletter-signup-{{ ai_gen_id }} class="ai-newsletter-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-newsletter-inner-{{ ai_gen_id }}">
+    {% if block.settings.show_icon %}
+      <div class="ai-newsletter-icon-{{ ai_gen_id }}">✉</div>
+    {% endif %}
+
+    {% if block.settings.title_text != blank %}
+      <h2 class="ai-newsletter-title-{{ ai_gen_id }}">{{ block.settings.title_text }}</h2>
+    {% endif %}
+
+    {% if block.settings.desc_text != blank %}
+      <p class="ai-newsletter-desc-{{ ai_gen_id }}">{{ block.settings.desc_text }}</p>
+    {% endif %}
+
+    {%- form 'customer', class: 'ai-newsletter-form-{{ ai_gen_id }}' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      
+      <div class="ai-newsletter-form-wrapper-{{ ai_gen_id }}">
+        <input
+          type="email"
+          name="contact[email]"
+          class="ai-newsletter-input-{{ ai_gen_id }}"
+          value="{{ form.email }}"
+          placeholder="{{ block.settings.input_placeholder }}"
+          aria-required="true"
+          autocorrect="off"
+          autocapitalize="off"
+          autocomplete="email"
+          {% if form.errors %}
+            aria-invalid="true"
+            aria-describedby="ai-newsletter-error-{{ ai_gen_id }}"
+          {% endif %}
+          {% if form.posted_successfully? %}
+            aria-describedby="ai-newsletter-success-{{ ai_gen_id }}"
+          {% endif %}
+          required
+        >
+        <button 
+          type="submit" 
+          class="ai-newsletter-button-{{ ai_gen_id }}"
+          disabled
+        >
+          {{ block.settings.btn_label }}
+        </button>
+      </div>
+
+      <div class="ai-newsletter-consent-{{ ai_gen_id }}">
+        <input 
+          type="checkbox" 
+          id="ai-newsletter-consent-checkbox-{{ ai_gen_id }}"
+          class="ai-newsletter-checkbox-{{ ai_gen_id }}"
+          required
+        >
+        <label 
+          for="ai-newsletter-consent-checkbox-{{ ai_gen_id }}"
+          class="ai-newsletter-consent-label-{{ ai_gen_id }}"
+        >
+          {{ block.settings.consent_text }}
+        </label>
+      </div>
+
+      {%- if form.errors -%}
+        <div
+          id="ai-newsletter-error-{{ ai_gen_id }}"
+          class="ai-newsletter-message-{{ ai_gen_id }} ai-newsletter-error-{{ ai_gen_id }}"
+        >
+          {{ form.errors.messages.email }}
+        </div>
+      {%- endif -%}
+
+      {%- if form.posted_successfully? -%}
+        <div
+          id="ai-newsletter-success-{{ ai_gen_id }}"
+          class="ai-newsletter-message-{{ ai_gen_id }} ai-newsletter-success-{{ ai_gen_id }}"
+        >
+          {{ block.settings.success_message }}
+        </div>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</newsletter-signup-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class NewsletterSignup{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.form = this.querySelector('.ai-newsletter-form-{{ ai_gen_id }}');
+        this.checkbox = this.querySelector('#ai-newsletter-consent-checkbox-{{ ai_gen_id }}');
+        this.submitButton = this.querySelector('.ai-newsletter-button-{{ ai_gen_id }}');
+        
+        if (this.checkbox && this.submitButton) {
+          this.checkbox.addEventListener('change', this.handleCheckboxChange.bind(this));
+        }
+
+        if (this.form) {
+          this.form.addEventListener('submit', this.handleSubmit.bind(this));
+        }
+      }
+
+      handleCheckboxChange() {
+        this.submitButton.disabled = !this.checkbox.checked;
+      }
+
+      handleSubmit(event) {
+        const emailInput = this.form.querySelector('.ai-newsletter-input-{{ ai_gen_id }}');
+        if (emailInput && !emailInput.value) {
+          event.preventDefault();
+        }
+        if (!this.checkbox.checked) {
+          event.preventDefault();
+        }
+      }
+    }
+
+    customElements.define('newsletter-signup-{{ ai_gen_id }}', NewsletterSignup{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Newsletter signup",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Show icon",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title_text",
+      "label": "Title",
+      "default": "MARSTEK Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "desc_text",
+      "label": "Description",
+      "default": "Neuheiten, VPP-Updates und Spartipps – einmal im Monat, jederzeit kündbar."
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "label": "Email placeholder",
+      "default": "E-Mail-Adresse eingeben"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button text",
+      "default": "Abonnieren"
+    },
+    {
+      "type": "richtext",
+      "id": "consent_text",
+      "label": "Consent text",
+      "default": "<p>Ich stimme den Nutzungsbedingungen und der Datenschutzerklärung zu.</p>"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Vielen Dank für Ihre Anmeldung!"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#00C6FF"
+    },
+    {
+      "type": "range",
+      "id": "input_width",
+      "label": "Email input width",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 320
+    },
+    {
+      "type": "range",
+      "id": "consent_font_size",
+      "label": "Consent text size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 20,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 20,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 90
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter signup"
+    }
+  ]
+}
+{% endschema %}

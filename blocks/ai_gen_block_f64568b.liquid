@@ -1,0 +1,1408 @@
+{% doc %}
+  @prompt
+    <style>
+    /* 独立隔离样式，避免和主题冲突 */
+    .static-blog-carousel {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      font-family: Assistant, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    .blog-header {
+      margin-bottom: 42px;
+    }
+    .blog-header h2 {
+      font-size: 38px;
+      font-weight: 700;
+      color: #121212;
+      margin: 0 0 14px;
+      line-height: 1.2;
+    }
+    .blog-header p {
+      font-size: 16px;
+      color: #585858;
+      line-height: 1.65;
+      max-width: 980px;
+      margin: 0;
+    }
+    
+    /* 左右加宽内边距，给向内靠的箭头留出空间 */
+    .blog-slider-wrapper {
+      overflow: hidden;
+      position: relative;
+      padding: 0 75px;
+    }
+    
+    /* 桌面3列布局，一页只展示3张 */
+    .blog-cards-wrap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    
+    .blog-card-item {
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+    .blog-card-item:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.11);
+    }
+    
+    .blog-card-img-box {
+      width: 100%;
+      height: 210px;
+      background: #f5f7fa;
+    }
+    .blog-card-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.32s ease;
+    }
+    .blog-card-item:hover .blog-card-img-box img {
+      transform: scale(1.05);
+    }
+    
+    .blog-card-content {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .blog-card-content h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111111;
+      min-height: 76px;
+      margin: 0 0 14px;
+      line-height: 1.42;
+    }
+    .blog-card-content .excerpt {
+      font-size: 15px;
+      color: #636363;
+      line-height: 1.6;
+      margin: 0 0 26px;
+      flex-grow: 1;
+    }
+    
+    /* 阅读按钮样式 */
+    .blog-read-btn {
+      display: inline-block;
+      width: fit-content;
+      padding: 12px 28px;
+      background-color: #00c752;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 9px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.26s ease;
+      box-shadow: none !important;
+      border: 0;
+      cursor: pointer;
+    }
+    .blog-read-btn:hover {
+      background-color: #00ad46;
+      box-shadow: 0 0 10px rgba(0, 199, 82, 0.52), 0 0 20px rgba(0, 199, 82, 0.26);
+      transform: translateY(-2px);
+    }
+    
+    /* 翻页箭头：向内靠拢18px，视觉居中，层级拉满 */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      color: #111111;
+      cursor: pointer;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.22s ease;
+      padding: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .carousel-arrow.prev {
+      left: 18px;
+    }
+    .carousel-arrow.next {
+      right: 18px;
+    }
+    .carousel-arrow:hover {
+      background: #00c752;
+      border-color: #00c752;
+      color: #ffffff;
+    }
+    .carousel-arrow:disabled {
+      opacity: 0.35;
+      pointer-events: none !important;
+      cursor: default;
+    }
+    .carousel-arrow svg {
+      width: 24px;
+      height: 24px;
+      stroke-width: 2.4;
+    }
+    
+    /* 平板适配 2列 */
+    @media screen and (max-width: 1024px) {
+      .blog-slider-wrapper {
+        padding: 0 65px;
+      }
+      .blog-cards-wrap {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .carousel-arrow {
+        width: 44px;
+        height: 44px;
+      }
+      .carousel-arrow.prev {
+        left: 15px;
+      }
+      .carousel-arrow.next {
+        right: 15px;
+      }
+    }
+    
+    /* 手机适配 1列，箭头放底部居中 */
+    @media screen and (max-width: 640px) {
+      .blog-slider-wrapper {
+        padding: 0;
+      }
+      .blog-cards-wrap {
+        grid-template-columns: 1fr;
+      }
+      .blog-card-img-box {
+        height: 170px;
+      }
+      .blog-read-btn {
+        width: 100%;
+        text-align: center;
+      }
+      .carousel-arrow {
+        width: 40px;
+        height: 40px;
+        top: auto;
+        bottom: -65px;
+        transform: none;
+      }
+      .carousel-arrow.prev {
+        left: calc(50% - 50px);
+      }
+      .carousel-arrow.next {
+        right: calc(50% - 50px);
+      }
+    }
+    </style>
+    
+    <div class="static-blog-carousel">
+      <!-- 模块标题区域 -->
+      <div class="blog-header">
+        <h2>Blog / Inhaltsmarketing Eingang</h2>
+        <p>Hier werden ausgewählte Ratgeber, Produktkaufberatungen und aktuelle Gesetzesauswertungen rund um Balkonkraftwerke und Hausbatterien angezeigt.</p>
+      </div>
+    
+      <div class="blog-slider-wrapper">
+        <!-- 左翻页按钮 -->
+        <button class="carousel-arrow prev" id="blogPrevBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+    
+        <!-- 仅6篇文章卡片，共2页，每页3篇 -->
+        <div class="blog-cards-wrap" id="allBlogCardsBox">
+    
+          <!-- 第1篇 -->
+          <div class="blog-card-item">
+            <div class="blog-card-img-box">
+              <img src="BILD_URL_01" alt="Balkonkraftwerk Einstieg">
+            </div>
+            <div class="blog-card-content">
+              <h3>Was genau ist ein Balkonkraftwerk? Dein Einstieg in die eigene Solarenergie</h3>
+              <p class="excerpt">Erfahre, wie Plug&Play Solaranlagen funktionieren, für wen sie geeignet sind und warum sie sich 2026 lohnen.</p>
+              <a href="/blogs/news/artikel-01" class="blog-read-btn">Weiterlesen</a>
+            </div>
+          </div>
+    
+    , Heading和Description往中间移一些, 在最底部添加“Mehr erfahren→”的链接, 添加调整“Heading”和“Description”与左侧距离的选项, 每个card都要有添加图片、标题、描述和链接的选项
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-blog-carousel-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px 20px;
+    position: relative;
+    font-family: {{ block.settings.font_family.family }}, {{ block.settings.font_family.fallback_families }};
+  }
+
+  .ai-blog-header-{{ ai_gen_id }} {
+    margin-bottom: 42px;
+    text-align: {{ block.settings.header_alignment }};
+    max-width: 980px;
+    {% if block.settings.header_alignment == 'center' %}
+      margin-left: auto;
+      margin-right: auto;
+    {% elsif block.settings.header_alignment == 'left' %}
+      margin-left: {{ block.settings.header_left_offset }}px;
+    {% endif %}
+  }
+
+  .ai-blog-header-{{ ai_gen_id }} h2 {
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 14px;
+    line-height: 1.2;
+  }
+
+  .ai-blog-header-{{ ai_gen_id }} p {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.description_color }};
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .ai-blog-slider-wrapper-{{ ai_gen_id }} {
+    overflow: hidden;
+    position: relative;
+    padding: 0 75px;
+  }
+
+  .ai-blog-cards-wrap-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.card_gap }}px;
+  }
+
+  .ai-blog-card-item-{{ ai_gen_id }} {
+    background: {{ block.settings.card_bg_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+  }
+
+  .ai-blog-card-item-{{ ai_gen_id }}:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.11);
+  }
+
+  .ai-blog-card-img-box-{{ ai_gen_id }} {
+    width: 100%;
+    height: {{ block.settings.image_height }}px;
+    background: #f5f7fa;
+    overflow: hidden;
+  }
+
+  .ai-blog-card-img-box-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.32s ease;
+  }
+
+  .ai-blog-card-item-{{ ai_gen_id }}:hover .ai-blog-card-img-box-{{ ai_gen_id }} img {
+    transform: scale(1.05);
+  }
+
+  .ai-blog-card-img-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-blog-card-img-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-blog-card-content-{{ ai_gen_id }} {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ai-blog-card-content-{{ ai_gen_id }} h3 {
+    font-size: {{ block.settings.card_title_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.card_title_color }};
+    min-height: 76px;
+    margin: 0 0 14px;
+    line-height: 1.42;
+  }
+
+  .ai-blog-card-content-{{ ai_gen_id }} .excerpt {
+    font-size: {{ block.settings.card_excerpt_size }}px;
+    color: {{ block.settings.card_excerpt_color }};
+    line-height: 1.6;
+    margin: 0 0 26px;
+    flex-grow: 1;
+  }
+
+  .ai-blog-read-btn-{{ ai_gen_id }} {
+    display: inline-block;
+    width: fit-content;
+    padding: 12px 28px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.26s ease;
+    box-shadow: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .ai-blog-read-btn-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg_color }};
+    {% if block.settings.button_hover_glow %}
+      box-shadow: 0 0 10px {{ block.settings.button_bg_color | color_modify: 'alpha', 0.52 }}, 
+                  0 0 20px {{ block.settings.button_bg_color | color_modify: 'alpha', 0.26 }};
+    {% endif %}
+    transform: translateY(-2px);
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid {{ block.settings.arrow_border_color }};
+    background: {{ block.settings.arrow_bg_color }};
+    color: {{ block.settings.arrow_icon_color }};
+    cursor: pointer;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.22s ease;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }}.prev {
+    left: 18px;
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }}.next {
+    right: 18px;
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.arrow_hover_bg_color }};
+    border-color: {{ block.settings.arrow_hover_bg_color }};
+    color: {{ block.settings.arrow_hover_icon_color }};
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }}:disabled {
+    opacity: 0.35;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }} svg {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2.4;
+  }
+
+  .ai-blog-footer-link-{{ ai_gen_id }} {
+    text-align: {{ block.settings.footer_link_alignment }};
+    margin-top: 32px;
+  }
+
+  .ai-blog-footer-link-{{ ai_gen_id }} a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: {{ block.settings.footer_link_size }}px;
+    color: {{ block.settings.footer_link_color }};
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .ai-blog-footer-link-{{ ai_gen_id }} a:hover {
+    color: {{ block.settings.footer_link_hover_color }};
+  }
+
+  .ai-blog-footer-link-{{ ai_gen_id }} a svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+  }
+
+  .ai-blog-footer-link-{{ ai_gen_id }} a:hover svg {
+    transform: translateX(4px);
+  }
+
+  @media screen and (max-width: 1024px) {
+    .ai-blog-slider-wrapper-{{ ai_gen_id }} {
+      padding: 0 65px;
+    }
+    .ai-blog-cards-wrap-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_tablet }}, 1fr);
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }} {
+      width: 44px;
+      height: 44px;
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }}.prev {
+      left: 15px;
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }}.next {
+      right: 15px;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .ai-blog-carousel-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding | times: 0.7 }}px 20px;
+    }
+    .ai-blog-header-{{ ai_gen_id }} {
+      margin-left: 0;
+    }
+    .ai-blog-slider-wrapper-{{ ai_gen_id }} {
+      padding: 0;
+      margin-bottom: 80px;
+    }
+    .ai-blog-cards-wrap-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+    .ai-blog-card-img-box-{{ ai_gen_id }} {
+      height: {{ block.settings.image_height | times: 0.8 }}px;
+    }
+    .ai-blog-read-btn-{{ ai_gen_id }} {
+      width: 100%;
+      text-align: center;
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }} {
+      width: 40px;
+      height: 40px;
+      top: auto;
+      bottom: -65px;
+      transform: none;
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }}.prev {
+      left: calc(50% - 50px);
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }}.next {
+      right: calc(50% - 50px);
+    }
+  }
+{% endstyle %}
+
+<blog-carousel-{{ ai_gen_id }} class="ai-blog-carousel-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.heading != blank or block.settings.description != blank %}
+    <div class="ai-blog-header-{{ ai_gen_id }}">
+      {% if block.settings.heading != blank %}
+        <h2>{{ block.settings.heading }}</h2>
+      {% endif %}
+      {% if block.settings.description != blank %}
+        <p>{{ block.settings.description }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="ai-blog-slider-wrapper-{{ ai_gen_id }}">
+    <button class="ai-carousel-arrow-{{ ai_gen_id }} prev" aria-label="Previous articles">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <div class="ai-blog-cards-wrap-{{ ai_gen_id }}">
+      {% for i in (1..12) %}
+        {% liquid
+          assign card_enabled_key = 'card_' | append: i | append: '_enabled'
+          assign card_image_key = 'card_' | append: i | append: '_image'
+          assign card_title_key = 'card_' | append: i | append: '_title'
+          assign card_excerpt_key = 'card_' | append: i | append: '_excerpt'
+          assign card_link_key = 'card_' | append: i | append: '_link'
+
+          assign card_enabled = block.settings[card_enabled_key]
+          assign card_image = block.settings[card_image_key]
+          assign card_title = block.settings[card_title_key]
+          assign card_excerpt = block.settings[card_excerpt_key]
+          assign card_link = block.settings[card_link_key]
+        %}
+
+        {% if card_enabled %}
+          <div class="ai-blog-card-item-{{ ai_gen_id }}">
+            <div class="ai-blog-card-img-box-{{ ai_gen_id }}">
+              {% if card_image %}
+                <img
+                  src="{{ card_image | image_url: width: 600 }}"
+                  alt="{{ card_image.alt | escape }}"
+                  loading="lazy"
+                  width="600"
+                  height="{{ block.settings.image_height }}"
+                >
+              {% else %}
+                <div class="ai-blog-card-img-placeholder-{{ ai_gen_id }}">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="ai-blog-card-content-{{ ai_gen_id }}">
+              <h3>
+                {% if card_title != blank %}
+                  {{ card_title }}
+                {% else %}
+                  Article title {{ i }}
+                {% endif %}
+              </h3>
+              <p class="excerpt">
+                {% if card_excerpt != blank %}
+                  {{ card_excerpt }}
+                {% else %}
+                  Add a description for this article in the block settings.
+                {% endif %}
+              </p>
+              <a 
+                href="{% if card_link != blank %}{{ card_link }}{% else %}#{% endif %}" 
+                class="ai-blog-read-btn-{{ ai_gen_id }}"
+              >
+                {{ block.settings.button_text }}
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <button class="ai-carousel-arrow-{{ ai_gen_id }} next" aria-label="Next articles">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  {% if block.settings.footer_link_url != blank %}
+    <div class="ai-blog-footer-link-{{ ai_gen_id }}">
+      <a href="{{ block.settings.footer_link_url }}">
+        {{ block.settings.footer_link_text }}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  {% endif %}
+</blog-carousel-{{ ai_gen_id }}>
+
+<script>
+(function() {
+  class BlogCarousel{{ ai_gen_id }} extends HTMLElement {
+    constructor() {
+      super();
+      this.currentPage = 0;
+      this.itemsPerPage = {{ block.settings.columns_desktop }};
+    }
+
+    connectedCallback() {
+      this.cardsWrap = this.querySelector('.ai-blog-cards-wrap-{{ ai_gen_id }}');
+      this.cards = Array.from(this.querySelectorAll('.ai-blog-card-item-{{ ai_gen_id }}'));
+      this.prevBtn = this.querySelector('.ai-carousel-arrow-{{ ai_gen_id }}.prev');
+      this.nextBtn = this.querySelector('.ai-carousel-arrow-{{ ai_gen_id }}.next');
+      
+      this.totalPages = Math.ceil(this.cards.length / this.itemsPerPage);
+      
+      this.prevBtn.addEventListener('click', () => this.goToPrevPage());
+      this.nextBtn.addEventListener('click', () => this.goToNextPage());
+      
+      this.updateView();
+      this.updateButtons();
+      
+      window.addEventListener('resize', () => this.handleResize());
+    }
+
+    handleResize() {
+      const width = window.innerWidth;
+      if (width <= 640) {
+        this.itemsPerPage = 1;
+      } else if (width <= 1024) {
+        this.itemsPerPage = {{ block.settings.columns_tablet }};
+      } else {
+        this.itemsPerPage = {{ block.settings.columns_desktop }};
+      }
+      this.totalPages = Math.ceil(this.cards.length / this.itemsPerPage);
+      this.currentPage = Math.min(this.currentPage, this.totalPages - 1);
+      this.updateView();
+      this.updateButtons();
+    }
+
+    goToPrevPage() {
+      if (this.currentPage > 0) {
+        this.currentPage--;
+        this.updateView();
+        this.updateButtons();
+      }
+    }
+
+    goToNextPage() {
+      if (this.currentPage < this.totalPages - 1) {
+        this.currentPage++;
+        this.updateView();
+        this.updateButtons();
+      }
+    }
+
+    updateView() {
+      const startIndex = this.currentPage * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      
+      this.cards.forEach((card, index) => {
+        if (index >= startIndex && index < endIndex) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    updateButtons() {
+      this.prevBtn.disabled = this.currentPage === 0;
+      this.nextBtn.disabled = this.currentPage >= this.totalPages - 1;
+    }
+  }
+
+  customElements.define('blog-carousel-{{ ai_gen_id }}', BlogCarousel{{ ai_gen_id }});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Blog carousel",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Blog / Inhaltsmarketing Eingang"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Hier werden ausgewählte Ratgeber, Produktkaufberatungen und aktuelle Gesetzesauswertungen rund um Balkonkraftwerke und Hausbatterien angezeigt."
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Header alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "header_left_offset",
+      "label": "Left offset",
+      "info": "Distance from left edge when alignment is set to Left",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#585858"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 1000,
+      "max": 1600,
+      "step": 40,
+      "unit": "px",
+      "default": 1440
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "columns_tablet",
+      "label": "Columns on tablet",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap between cards",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Image height",
+      "min": 150,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 210
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Title size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Title color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "card_excerpt_size",
+      "label": "Excerpt size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "card_excerpt_color",
+      "label": "Excerpt color",
+      "default": "#636363"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Weiterlesen"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background color",
+      "default": "#00c752"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Hover background color",
+      "default": "#00ad46"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 9
+    },
+    {
+      "type": "checkbox",
+      "id": "button_hover_glow",
+      "label": "Enable hover glow effect",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Navigation arrows"
+    },
+    {
+      "type": "color",
+      "id": "arrow_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_bg_color",
+      "label": "Hover background color",
+      "default": "#00c752"
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Icon color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_icon_color",
+      "label": "Hover icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "arrow_border_color",
+      "label": "Border color",
+      "default": "#e5e7eb"
+    },
+    {
+      "type": "header",
+      "content": "Footer link"
+    },
+    {
+      "type": "text",
+      "id": "footer_link_text",
+      "label": "Link text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "footer_link_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "select",
+      "id": "footer_link_alignment",
+      "label": "Link alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "footer_link_size",
+      "label": "Link size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "footer_link_color",
+      "label": "Link color",
+      "default": "#2a3743"
+    },
+    {
+      "type": "color",
+      "id": "footer_link_hover_color",
+      "label": "Link hover color",
+      "default": "#00c752"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_1_enabled",
+      "label": "Enable card 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Title",
+      "default": "Was genau ist ein Balkonkraftwerk?"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_excerpt",
+      "label": "Description",
+      "default": "Erfahre, wie Plug&Play Solaranlagen funktionieren, für wen sie geeignet sind und warum sie sich 2026 lohnen."
+    },
+    {
+      "type": "url",
+      "id": "card_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_2_enabled",
+      "label": "Enable card 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Title",
+      "default": "Balkonkraftwerk Installation"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_excerpt",
+      "label": "Description",
+      "default": "Schritt-für-Schritt Anleitung zur Installation deines Balkonkraftwerks."
+    },
+    {
+      "type": "url",
+      "id": "card_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_3_enabled",
+      "label": "Enable card 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Title",
+      "default": "Energiespeicher Ratgeber"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_excerpt",
+      "label": "Description",
+      "default": "Alles über Energiespeicher und wie du deinen Eigenverbrauch maximierst."
+    },
+    {
+      "type": "url",
+      "id": "card_3_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_4_enabled",
+      "label": "Enable card 4",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_4_title",
+      "label": "Title",
+      "default": "Gesetzliche Regelungen 2026"
+    },
+    {
+      "type": "textarea",
+      "id": "card_4_excerpt",
+      "label": "Description",
+      "default": "Aktuelle Gesetzesänderungen und was sie für dein Balkonkraftwerk bedeuten."
+    },
+    {
+      "type": "url",
+      "id": "card_4_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_5_enabled",
+      "label": "Enable card 5",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_5_title",
+      "label": "Title",
+      "default": "Wirtschaftlichkeit berechnen"
+    },
+    {
+      "type": "textarea",
+      "id": "card_5_excerpt",
+      "label": "Description",
+      "default": "Berechne die Amortisationszeit und Ersparnis deines Balkonkraftwerks."
+    },
+    {
+      "type": "url",
+      "id": "card_5_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_6_enabled",
+      "label": "Enable card 6",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_6_title",
+      "label": "Title",
+      "default": "Wartung und Pflege"
+    },
+    {
+      "type": "textarea",
+      "id": "card_6_excerpt",
+      "label": "Description",
+      "default": "Tipps zur optimalen Wartung und Pflege deiner Solaranlage."
+    },
+    {
+      "type": "url",
+      "id": "card_6_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 7"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_7_enabled",
+      "label": "Enable card 7",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "card_7_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_7_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "card_7_excerpt",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "card_7_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 8"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_8_enabled",
+      "label": "Enable card 8",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "card_8_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_8_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "card_8_excerpt",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "card_8_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 9"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_9_enabled",
+      "label": "Enable card 9",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "card_9_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_9_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "card_9_excerpt",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "card_9_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 10"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_10_enabled",
+      "label": "Enable card 10",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "card_10_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_10_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "card_10_excerpt",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "card_10_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 11"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_11_enabled",
+      "label": "Enable card 11",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "card_11_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_11_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "card_11_excerpt",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "card_11_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 12"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_12_enabled",
+      "label": "Enable card 12",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "card_12_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_12_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "card_12_excerpt",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "card_12_link",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog carousel"
+    }
+  ]
+}
+{% endschema %}

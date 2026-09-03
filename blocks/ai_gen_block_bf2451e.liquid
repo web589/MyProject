@@ -1,0 +1,569 @@
+{% doc %}
+  @prompt
+    {% comment %}
+    高功率参数展示模块，复刻截图UI，Shopify Custom Liquid直接粘贴使用
+    功能全部可配置：标题、描述、图片尺寸、圆角、各个模块间距，适配移动端
+    UI遵循品牌字体规范：标题Manrope，正文Inter
+    {% endcomment %}
+    {% liquid
+    /* =====================全部配置参数，在这里直接修改===================== */
+    assign module_max_width = "1280px"
+    assign module_top_margin = "80px"
+    assign module_bottom_margin = "80px"
+    
+    /* 标题设置 */
+    assign heading_top_text = "12‑36kW Output"
+    assign heading_main_text = "High Power. High IQ."
+    assign heading_font_size = "44px"
+    assign heading_font_weight = "700"
+    assign heading_top_font_size = "24px"
+    assign heading_margin_bottom = "16px"
+    
+    /* 描述文本设置 */
+    assign desc_text = "DELTA Pro Ultra X scales from 12 to 36kW. With a new Adaptive Start algorithm, it intelligently identifies connected appliances and tailors startup for each, seamlessly handling surges up to 45kW and high‑demand appliances like a 5‑ton AC."
+    assign desc_font_size = "16px"
+    assign desc_font_color = "#666666"
+    assign desc_max_width = "900px"
+    assign desc_heading_gap = "24px"     /* 标题 ↔ 描述 间距 */
+    assign desc_image_gap = "32px"      /* 描述 ↔ 图片卡片 间距 */
+    
+    /* 图片卡片设置 */
+    assign card_img_width = "100%"
+    assign card_img_height = "620px"
+    assign card_border_radius = "12px"
+    %}
+    
+    <style>
+    :root {
+      --font‑heading: 'Manrope', sans‑serif;
+      --font‑body: 'Inter', sans‑serif;
+    }
+    .power‑feature‑module {
+      width: 100%;
+      margin: {{module_top_margin}} auto {{module_bottom_margin}};
+    }
+    .power‑feature‑inner {
+      max‑width: {{module_max_width}};
+      padding: 0 24px;
+      margin: 0 auto;
+      text‑align: center;
+    }
+    .power‑heading‑top {
+      font‑family: var(--font‑heading);
+      font‑size: {{heading_top_font_size}};
+      font‑weight: 600;
+      color: #111111;
+      margin:0 0 8px;
+    }
+    .power‑heading‑main {
+      font‑family: var(--font‑heading);
+      font‑size: {{heading_font_size}};
+      font‑weight: {{heading_font_weight}};
+      color: #111111;
+      margin:0 0 {{heading_margin_bottom}};
+      line‑height:1.2;
+    }
+    .power‑description {
+      max‑width: {{desc_max_width}};
+      margin: 0 auto {{desc_image_gap}};
+      font‑family: var(--font‑body);
+      font‑size: {{desc_font_size}};
+      color: {{desc_font_color}};
+      line‑height:1.6;
+    }
+    .power‑img‑wrap {
+      width: {{card_img_width}};
+      height: {{card_img_height}};
+      border‑radius: {{card_border_radius}};
+      overflow:hidden;
+      position:relative;
+    }
+    .power‑bg‑image {
+      width:100%;
+      height:100%;
+      object‑fit:cover;
+    }
+    /* 图片上4组悬浮参数文字 */
+    .power‑overlay‑texts {
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      display:flex;
+      justify‑content: space‑evenly;
+      align‑items:flex‑start;
+      padding‑top:80px;
+      box‑sizing:border‑box;
+    }
+    .power‑overlay‑item {
+      color:#ffffff;
+      text‑align:left;
+    }
+    .power‑overlay‑num {
+      font‑family: var(--font‑heading);
+      font‑size:40px;
+      font‑weight:700;
+      display:block;
+      margin‑bottom:4px;
+      border‑bottom:1px solid rgba(255,255,255,0.6);
+      padding‑bottom:6px;
+    }
+    .power‑overlay‑label {
+      font‑size:15px;
+      opacity:0.92;
+    }
+    
+    /* 移动端适配 */
+    @media(max‑width:768px){
+      .power‑heading‑main {
+        font‑size: 32px;
+      }
+      .power‑img‑wrap {
+        height: 400px;
+      }
+      .power‑overlay‑texts {
+        padding‑top:40px;
+        flex‑wrap:wrap;
+        gap:24px 16px;
+        justify‑content:center;
+      }
+      .power‑overlay‑num {
+        font‑size:26px;
+      }
+    }
+    </style>
+    
+    <div class="power‑feature‑module">
+      <div class="power‑feature‑inner">
+        <div class="power‑heading‑top">{{ heading_top_text }}</div>
+        <h2 class="power‑heading‑main">{{ heading_main_text }}</h2>
+    
+        <div class="power‑description">{{ desc_text }}</div>
+    
+        <div class="power‑img‑wrap">
+          <img class="power‑bg‑image" src="https://cdn.shopify.com/s/files/1/xxxx/xxxx/files/power‑house‑bg.jpg" alt="Haus Energiespeicher Hochleistung">
+          {% comment %}图片上面四层叠加文字参数，可直接修改内容{% endcomment %}
+          <div class="power‑overlay‑texts">
+            <div class="power‑overlay‑item">
+              <span class="power‑overlay‑num">12‑36 kW</span>
+              <span class="power‑overlay‑label">Output</span>
+            </div>
+            <div class="power‑overlay‑item">
+              <span class="power‑overlay‑num">200A</span>
+              <span class="power‑overlay‑label">Smart electric panel</span>
+            </div>
+            <div class="power‑overlay‑item">
+              <span class="power‑overlay‑num">12‑180kWh</span>
+              <span class="power‑overlay‑label">Capacity</span>
+            </div>
+            <div class="power‑overlay‑item">
+              <span class="power‑overlay‑num">100%</span>
+              <span class="power‑overlay‑label">Compatible with generator</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>, 把所有Statistic 模块删除，再把Top text删除, 增加一个可以调节容器外部与上下模块间距的设置，再增加一个可以调节容器内上下边距的设置, 请帮我把当前这个 section 里 "Maximum width"(布局最大宽度)这个滑块设置的 step(步长)从 40 改成 10,其他不用变。, 其他地方不变，分别加一个可以选择标题或描述区是左对齐、居中还有右对齐的设置
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .power-feature-module-{{ ai_gen_id }} {
+    width: 100%;
+    margin: {{ block.settings.outer_top_margin }}px auto {{ block.settings.outer_bottom_margin }}px;
+  }
+
+  .power-feature-inner-{{ ai_gen_id }} {
+    max-width: {{ block.settings.module_max_width }}px;
+    padding: {{ block.settings.inner_top_padding }}px 24px {{ block.settings.inner_bottom_padding }}px;
+    margin: 0 auto;
+  }
+
+  .power-heading-main-{{ ai_gen_id }} {
+    font-family: 'Manrope', sans-serif;
+    font-size: {{ block.settings.heading_font_size }}px;
+    font-weight: {{ block.settings.heading_font_weight }};
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 {{ block.settings.heading_margin_bottom }}px;
+    line-height: 1.2;
+    text-align: {{ block.settings.heading_alignment }};
+  }
+
+  .power-description-{{ ai_gen_id }} {
+    max-width: {{ block.settings.desc_max_width }}px;
+    margin: 0 auto {{ block.settings.desc_image_gap }}px;
+    font-family: 'Inter', sans-serif;
+    font-size: {{ block.settings.desc_font_size }}px;
+    color: {{ block.settings.desc_font_color }};
+    line-height: 1.6;
+    text-align: {{ block.settings.desc_alignment }};
+  }
+
+  .power-description-{{ ai_gen_id }}--left {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .power-description-{{ ai_gen_id }}--right {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .power-img-wrap-{{ ai_gen_id }} {
+    width: {{ block.settings.desktop_width_percent }}%;
+    height: {{ block.settings.card_img_height }}px;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+  }
+
+  .power-bg-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .power-img-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .power-img-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .power-heading-main-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_font_size | times: 0.7 }}px;
+    }
+
+    .power-img-wrap-{{ ai_gen_id }} {
+      height: {{ block.settings.card_img_height | times: 0.65 }}px;
+    }
+  }
+{% endstyle %}
+
+{% liquid
+  assign is_product_context = false
+  if request.page_type == 'product' and product != blank and block.settings.content_source != 'theme_editor'
+    assign is_product_context = true
+    assign pdp_content_candidate = product.metafields.custom.pdp_content.value
+    if pdp_content_candidate != blank
+      assign pdp_content_owner = pdp_content_candidate.product.value
+      assign pdp_content_is_for_product = false
+      if pdp_content_owner != blank
+        if pdp_content_owner.handle == product.handle
+          assign pdp_content_is_for_product = true
+        endif
+      elsif pdp_content_candidate.system.handle == product.handle
+        assign pdp_content_is_for_product = true
+      endif
+      if pdp_content_is_for_product
+        assign pdp_content = pdp_content_candidate
+        assign smart_energy_title = pdp_content.smart_energy_title.value
+        assign smart_energy_description = pdp_content.smart_energy_description.value
+        assign smart_energy_image = pdp_content.smart_energy_image.value
+      endif
+    endif
+  endif
+  if is_product_context == false
+    assign smart_energy_title = block.settings.heading_main_text
+    assign smart_energy_description = block.settings.desc_text
+    assign smart_energy_image = block.settings.background_image
+  endif
+%}
+{% if smart_energy_title != blank or smart_energy_description != blank or smart_energy_image != blank %}
+<div class="power-feature-module-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="power-feature-inner-{{ ai_gen_id }}">
+    {% if smart_energy_title != blank %}
+      <h2 class="power-heading-main-{{ ai_gen_id }}">{{ smart_energy_title }}</h2>
+    {% endif %}
+
+    {% if smart_energy_description != blank %}
+      <div class="power-description-{{ ai_gen_id }} power-description-{{ ai_gen_id }}--{{ block.settings.desc_alignment }}">{{ smart_energy_description }}</div>
+    {% endif %}
+
+    {% if smart_energy_image != blank %}
+      <div class="power-img-wrap-{{ ai_gen_id }}">
+        {% if smart_energy_image != blank %}
+        <img
+          class="power-bg-image-{{ ai_gen_id }}"
+          src="{{ smart_energy_image | image_url: width: 2000 }}"
+          alt="{{ smart_energy_title | escape }}"
+          loading="lazy"
+          width="{{ smart_energy_image.width }}"
+          height="{{ smart_energy_image.height }}"
+        >
+        {% else %}
+          <div class="power-img-placeholder-{{ ai_gen_id }}">{{ 'hero-apparel-1' | placeholder_svg_tag }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "High power feature",
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_source",
+      "label": "内容来源",
+      "options": [
+        { "value": "theme_editor", "label": "右侧 Theme Editor（默认）" },
+        { "value": "pdp_content", "label": "PDP 后台内容（备份/旧模式）" }
+      ],
+      "default": "theme_editor",
+      "info": "选择右侧 Theme Editor 后，标题、正文和图片只读取当前模板的下方字段。"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "module_max_width",
+      "label": "Maximum width",
+      "min": 800,
+      "max": 1600,
+      "step": 10,
+      "unit": "px",
+      "default": 1280
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Outer spacing"
+    },
+    {
+      "type": "range",
+      "id": "outer_top_margin",
+      "label": "Top margin",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "outer_bottom_margin",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Inner spacing"
+    },
+    {
+      "type": "range",
+      "id": "inner_top_padding",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "inner_bottom_padding",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_main_text",
+      "label": "Main heading",
+      "default": "High Power. High IQ."
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Font size",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_font_weight",
+      "label": "Font weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "label": "Bottom spacing",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "textarea",
+      "id": "desc_text",
+      "label": "Text",
+      "default": "DELTA Pro Ultra X scales from 12 to 36kW. With a new Adaptive Start algorithm, it intelligently identifies connected appliances and tailors startup for each, seamlessly handling surges up to 45kW and high‑demand appliances like a 5‑ton AC."
+    },
+    {
+      "type": "select",
+      "id": "desc_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "desc_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "desc_font_color",
+      "label": "Color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "desc_max_width",
+      "label": "Maximum width",
+      "min": 400,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 900
+    },
+    {
+      "type": "range",
+      "id": "desc_image_gap",
+      "label": "Spacing to image",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "card_img_height",
+      "label": "Height",
+      "min": 300,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 620
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "High power feature"
+    }
+  ]
+}
+{% endschema %}

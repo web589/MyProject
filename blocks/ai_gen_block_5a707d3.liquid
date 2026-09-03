@@ -1,0 +1,814 @@
+{% doc %}
+  @prompt
+    <style> /* ===================== 全局清爽明亮配色变量（锁定品牌指定色系） ===================== */ :root { /* 页面基底 清爽浅底色 */ --page-bg: #F8FAFC; /* 卡片模块底色 */ --card-bg: #FFFFFF; /* 品牌主高亮蓝（沿用你规定的站点色系） */ --primary-blue: #00C6FF; /* 文字层级 */ --text-title: #1E293B; --text-body: #64748B; --text-light: #94A3B8; /* 边框分割线 */ --border-color: #E2E8F0; /* 阴影柔和提亮 */ --shadow: 0 2px 12px rgba(0, 198, 255, 0.08); } /* ===================== 外层大容器 ===================== */ .solarbank-functions-wrapper { width: 100%; max-width: 1440px; margin: 0 auto; padding: 70px 24px; background-color: var(--page-bg); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; box-sizing: border-box; } /* ===================== 单行功能模块通用 ===================== */ .function-row { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-bottom: 90px; } /* 偶数行反转图文左右顺序 */ .function-row.reverse { direction: rtl; } .function-row.reverse .row-image, .function-row.reverse .row-text { direction: ltr; } /* 图片容器 */ .row-image img { width: 100%; height: auto; border-radius: 8px; box-shadow: var(--shadow); display: block; } /* 文字内容区域 */ .row-text h2 { color: var(--text-title); font-size: 28px; font-weight: 600; margin: 0 0 18px 0; line-height: 1.3; } .row-text p { color: var(--text-body); font-size: 16px; line-height: 1.75; margin: 0 0 28px 0; } /* ===================== 底部数据标签卡片组 ===================== */ .data-tags { display: flex; gap: 18px; flex-wrap: wrap; } .data-tag-item { background: var(--card-bg); border-left: 4px solid var(--primary-blue); padding: 10px 14px; border-radius: 0 6px 6px 0; box-shadow: var(--shadow); min-width: 110px; } .data-tag-num { font-size: 24px; font-weight: 700; color: var(--primary-blue); display: block; line-height: 1.2; } .data-tag-desc { font-size: 13px; color: var(--text-light); margin-top: 4px; } /* ===================== 场景化卖点模块样式 ===================== */ .scenario-selling-points { width: 100%; max-width: 1440px; margin: -30px auto 0; padding: 0 24px 70px; box-sizing: border-box; } .scenario-title { font-size: 30px; color: var(--text-title); margin-bottom: 36px; font-weight: 600; } .scenario-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; } .scenario-item { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 28px; box-shadow: var(--shadow); transition: all 0.2s ease; } .scenario-item:hover { transform: translateY(-3px); box-shadow: 0 4px 16px rgba(0, 198, 255, 0.12); } .scenario-item p { color: var(--text-body); font-size: 17px; line-height: 1.7; margin: 0; } .scenario-highlight { color: var(--primary-blue); font-weight: 600; } /* ===================== 移动端响应式适配 ===================== */ @media screen and (max-width: 768px) { .function-row, .function-row.reverse { grid-template-columns: 1fr; direction: ltr; gap: 30px; margin-bottom: 60px; } .row-text h2 { font-size: 24px; } .solarbank-functions-wrapper { padding: 50px 16px; } .scenario-list { grid-template-columns: 1fr; } .scenario-title { font-size: 26px; } } </style> <!-- ========== 第一部分：四大功能交替图文区块 ========== --> <div class="solarbank-functions-wrapper"> <!-- 模块1：4 MPPT 光伏高发电量 左图右文 --> <div class="function-row"> <div class="row-image"> <img src="替换为第1张MPPT产品图URL" alt="Anker Solix Solarbank 3 Pro 4 MPPT Eingang"> </div> <div class="row-text"> <h2>Mehr Leistung für eine stärkere Stromerzeugung</h2> <p>Die Solarbank 3 Pro begeistert mit 4 MPPT und unterstützt eine Solareingangsleistung von bis zu 3600W – 1,5-mal mehr als die Solarbank 2 Pro. Schließen Sie bis zu 8 Panels an, um maximale Effizienz zu erzielen und bis zu 4531 kWh jährlich zu erzeugen.</p> <div class="data-tags"> <div class="data-tag-item"> <span class="data-tag-num">4 MPPT</span> <span class="data-tag-desc">Kapazität für eine Einheit</span> </div> <div class="data-tag-item"> <span class="data-tag-num">3600W</span> <span class="data-tag-desc">Maximaler PV-Eingang</span> </div> <div class="data-tag-item"> <span class="data-tag-num">8 Panels</span> <span class="data-tag-desc">Maximal verbunden</span> </div> </div> </div> </div> <!-- 模块2：储能容量扩展 左文右图（反转布局） --> <div class="function-row reverse"> <div class="row-image"> <img src="替换为第2张堆叠电池组图片URL" alt="Erweiterbarer Energiespeicher Solarbank 3 Pro"> </div> <div class="row-text"> <h2>Mehr Power für grenzenlosen Speicher</h2> <p>Der Akku mit 50% höherer Energiedichte bietet 2,68kWh Kapazität und lässt sich mit bis zu 5 stapelbaren Packs auf 16kWh erweitern. Zusätzlich ist sie mit dem 16kWh Erweiterungsakku der Vorgängergeneratio, 添加上下Feature间距调节选项
+    , 在整个模块最上面加一个标题行，标题为Szenario，添加一个可以调节整个容器外部与上下两个模块之间的间距的设置, 再添加一个可以调节图片卡片圆角的设置，还添加一个页面内宽度的设置，, 每个图片卡片当鼠标悬浮在上面时，图片会放大一点, 将模块背景色去掉，模块没有背景, 请帮我把当前这个 section 里 "Container max width"(容器最大宽度)这个滑块设置的 step(步长)从 40 改成 10,其他不用变。, 标题下方增加一个描述区，字体大小粗细，还有位置可以自由调节
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-solarbank-functions-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: {{ block.settings.container_max_width }}px;
+    margin: {{ block.settings.section_margin_top }}px auto {{ block.settings.section_margin_bottom }}px;
+    padding: {{ block.settings.section_padding_top }}px 24px {{ block.settings.section_padding_bottom }}px;
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    box-sizing: border-box;
+  }
+
+  .ai-section-header-{{ ai_gen_id }} {
+    margin-bottom: {{ block.settings.header_bottom_spacing }}px;
+  }
+
+  .ai-section-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.section_title_size }}px;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 {{ block.settings.title_description_spacing }}px 0;
+    font-weight: 600;
+    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+    text-align: {{ block.settings.section_title_align }};
+  }
+
+  .ai-section-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    font-weight: {{ block.settings.description_weight }};
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+    margin: 0;
+    text-align: {{ block.settings.description_align }};
+  }
+
+  .ai-function-row-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    margin-bottom: {{ block.settings.feature_spacing }}px;
+  }
+
+  .ai-function-row-{{ ai_gen_id }}:last-child {
+    margin-bottom: 0;
+  }
+
+  .ai-function-row-{{ ai_gen_id }}.reverse {
+    direction: rtl;
+  }
+
+  .ai-function-row-{{ ai_gen_id }}.reverse .ai-row-image-{{ ai_gen_id }},
+  .ai-function-row-{{ ai_gen_id }}.reverse .ai-row-text-{{ ai_gen_id }} {
+    direction: ltr;
+  }
+
+  .ai-row-image-{{ ai_gen_id }} {
+    overflow: hidden;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    box-shadow: 0 2px 12px rgba(0, 198, 255, 0.08);
+  }
+
+  .ai-row-image-{{ ai_gen_id }} img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .ai-row-image-{{ ai_gen_id }}:hover img {
+    transform: scale(1.05);
+  }
+
+  .ai-row-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #f4f4f4;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-row-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 400px;
+    max-height: 400px;
+    transition: transform 0.4s ease;
+  }
+
+  .ai-row-image-placeholder-{{ ai_gen_id }}:hover svg {
+    transform: scale(1.05);
+  }
+
+  .ai-row-text-{{ ai_gen_id }} h2 {
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 600;
+    margin: 0 0 18px 0;
+    line-height: 1.3;
+    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+  }
+
+  .ai-row-text-{{ ai_gen_id }} p {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.75;
+    margin: 0 0 28px 0;
+  }
+
+  .ai-data-tags-{{ ai_gen_id }} {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .ai-data-tag-item-{{ ai_gen_id }} {
+    background: {{ block.settings.card_bg_color }};
+    border-left: 4px solid {{ block.settings.primary_color }};
+    padding: 10px 14px;
+    border-radius: 0 {{ block.settings.card_border_radius }}px {{ block.settings.card_border_radius }}px 0;
+    box-shadow: 0 2px 12px rgba(0, 198, 255, 0.08);
+    min-width: 110px;
+  }
+
+  .ai-data-tag-num-{{ ai_gen_id }} {
+    font-size: 24px;
+    font-weight: 700;
+    color: {{ block.settings.primary_color }};
+    display: block;
+    line-height: 1.2;
+  }
+
+  .ai-data-tag-desc-{{ ai_gen_id }} {
+    font-size: 13px;
+    color: {{ block.settings.text_light_color }};
+    margin-top: 4px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-solarbank-functions-{{ ai_gen_id }} {
+      margin: {{ block.settings.section_margin_top | times: 0.7 }}px auto {{ block.settings.section_margin_bottom | times: 0.7 }}px;
+      padding: {{ block.settings.section_padding_top | times: 0.7 }}px 16px {{ block.settings.section_padding_bottom | times: 0.7 }}px;
+    }
+
+    .ai-section-header-{{ ai_gen_id }} {
+      margin-bottom: {{ block.settings.header_bottom_spacing | times: 0.7 }}px;
+    }
+
+    .ai-section-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.section_title_size | times: 0.85 }}px;
+      margin-bottom: {{ block.settings.title_description_spacing | times: 0.7 }}px;
+    }
+
+    .ai-section-description-{{ ai_gen_id }} {
+      font-size: {{ block.settings.description_size | times: 0.9 }}px;
+    }
+
+    .ai-function-row-{{ ai_gen_id }},
+    .ai-function-row-{{ ai_gen_id }}.reverse {
+      grid-template-columns: 1fr;
+      direction: ltr;
+      gap: 30px;
+      margin-bottom: {{ block.settings.feature_spacing | times: 0.7 }}px;
+    }
+
+    .ai-row-text-{{ ai_gen_id }} h2 {
+      font-size: {{ block.settings.heading_size | times: 0.85 }}px;
+    }
+
+    .ai-row-text-{{ ai_gen_id }} p {
+      font-size: {{ block.settings.text_size | times: 0.9 }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-solarbank-functions-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.section_title != blank or block.settings.section_description != blank %}
+    <div class="ai-section-header-{{ ai_gen_id }}">
+      {% if block.settings.section_title != blank %}
+        <h2 class="ai-section-title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
+      {% endif %}
+
+      {% if block.settings.section_description != blank %}
+        <div class="ai-section-description-{{ ai_gen_id }}">{{ block.settings.section_description }}</div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% for i in (1..4) %}
+    {% liquid
+      assign feature_enabled_key = 'feature_' | append: i | append: '_enabled'
+      assign feature_image_key = 'feature_' | append: i | append: '_image'
+      assign feature_heading_key = 'feature_' | append: i | append: '_heading'
+      assign feature_text_key = 'feature_' | append: i | append: '_text'
+      assign tag1_num_key = 'feature_' | append: i | append: '_tag1_num'
+      assign tag1_desc_key = 'feature_' | append: i | append: '_tag1_desc'
+      assign tag2_num_key = 'feature_' | append: i | append: '_tag2_num'
+      assign tag2_desc_key = 'feature_' | append: i | append: '_tag2_desc'
+      assign tag3_num_key = 'feature_' | append: i | append: '_tag3_num'
+      assign tag3_desc_key = 'feature_' | append: i | append: '_tag3_desc'
+
+      assign feature_enabled = block.settings[feature_enabled_key]
+      assign feature_image = block.settings[feature_image_key]
+      assign feature_heading = block.settings[feature_heading_key]
+      assign feature_text = block.settings[feature_text_key]
+      assign tag1_num = block.settings[tag1_num_key]
+      assign tag1_desc = block.settings[tag1_desc_key]
+      assign tag2_num = block.settings[tag2_num_key]
+      assign tag2_desc = block.settings[tag2_desc_key]
+      assign tag3_num = block.settings[tag3_num_key]
+      assign tag3_desc = block.settings[tag3_desc_key]
+
+      assign is_reverse = false
+      assign remainder = i | modulo: 2
+      if remainder == 0
+        assign is_reverse = true
+      endif
+    %}
+
+    {% if feature_enabled %}
+      <div class="ai-function-row-{{ ai_gen_id }} {% if is_reverse %}reverse{% endif %}">
+        <div class="ai-row-image-{{ ai_gen_id }}">
+          {% if feature_image %}
+            <img
+              src="{{ feature_image | image_url: width: 1200 }}"
+              alt="{{ feature_image.alt | escape }}"
+              loading="lazy"
+              width="{{ feature_image.width }}"
+              height="{{ feature_image.height }}"
+            >
+          {% else %}
+            <div class="ai-row-image-placeholder-{{ ai_gen_id }}">
+              {{ 'product-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="ai-row-text-{{ ai_gen_id }}">
+          {% if feature_heading != blank %}
+            <h2>{{ feature_heading }}</h2>
+          {% endif %}
+
+          {% if feature_text != blank %}
+            <p>{{ feature_text }}</p>
+          {% endif %}
+
+          {% if tag1_num != blank or tag2_num != blank or tag3_num != blank %}
+            <div class="ai-data-tags-{{ ai_gen_id }}">
+              {% if tag1_num != blank %}
+                <div class="ai-data-tag-item-{{ ai_gen_id }}">
+                  <span class="ai-data-tag-num-{{ ai_gen_id }}">{{ tag1_num }}</span>
+                  {% if tag1_desc != blank %}
+                    <span class="ai-data-tag-desc-{{ ai_gen_id }}">{{ tag1_desc }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% if tag2_num != blank %}
+                <div class="ai-data-tag-item-{{ ai_gen_id }}">
+                  <span class="ai-data-tag-num-{{ ai_gen_id }}">{{ tag2_num }}</span>
+                  {% if tag2_desc != blank %}
+                    <span class="ai-data-tag-desc-{{ ai_gen_id }}">{{ tag2_desc }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% if tag3_num != blank %}
+                <div class="ai-data-tag-item-{{ ai_gen_id }}">
+                  <span class="ai-data-tag-num-{{ ai_gen_id }}">{{ tag3_num }}</span>
+                  {% if tag3_desc != blank %}
+                    <span class="ai-data-tag-desc-{{ ai_gen_id }}">{{ tag3_desc }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "Product features",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Title",
+      "default": "Szenario"
+    },
+    {
+      "type": "range",
+      "id": "section_title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "section_title_align",
+      "label": "Title alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "title_description_spacing",
+      "label": "Title to description spacing",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "textarea",
+      "id": "section_description",
+      "label": "Description"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "description_weight",
+      "label": "Description weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "description_align",
+      "label": "Description alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "header_bottom_spacing",
+      "label": "Header bottom spacing",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "label": "Container max width",
+      "min": 1000,
+      "max": 1920,
+      "step": 10,
+      "unit": "px",
+      "default": 1440
+    },
+    {
+      "type": "range",
+      "id": "section_margin_top",
+      "label": "Top margin",
+      "min": 0,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_margin_bottom",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "feature_spacing",
+      "label": "Feature spacing",
+      "min": 30,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 90
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary accent",
+      "default": "#00C6FF"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#1E293B"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Body text",
+      "default": "#64748B"
+    },
+    {
+      "type": "color",
+      "id": "text_light_color",
+      "label": "Light text",
+      "default": "#94A3B8"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 18,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Feature 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_1_enabled",
+      "label": "Enable feature 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_heading",
+      "label": "Heading",
+      "default": "Mehr Leistung für eine stärkere Stromerzeugung"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_1_text",
+      "label": "Description",
+      "default": "Die Solarbank 3 Pro begeistert mit 4 MPPT und unterstützt eine Solareingangsleistung von bis zu 3600W."
+    },
+    {
+      "type": "text",
+      "id": "feature_1_tag1_num",
+      "label": "Tag 1 number",
+      "default": "4 MPPT"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_tag1_desc",
+      "label": "Tag 1 description",
+      "default": "Kapazität für eine Einheit"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_tag2_num",
+      "label": "Tag 2 number",
+      "default": "3600W"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_tag2_desc",
+      "label": "Tag 2 description",
+      "default": "Maximaler PV-Eingang"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_tag3_num",
+      "label": "Tag 3 number",
+      "default": "8 Panels"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_tag3_desc",
+      "label": "Tag 3 description",
+      "default": "Maximal verbunden"
+    },
+    {
+      "type": "header",
+      "content": "Feature 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_2_enabled",
+      "label": "Enable feature 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_heading",
+      "label": "Heading",
+      "default": "Mehr Power für grenzenlosen Speicher"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_2_text",
+      "label": "Description",
+      "default": "Der Akku mit 50% höherer Energiedichte bietet 2,68kWh Kapazität und lässt sich mit bis zu 5 stapelbaren Packs auf 16kWh erweitern."
+    },
+    {
+      "type": "text",
+      "id": "feature_2_tag1_num",
+      "label": "Tag 1 number"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_tag1_desc",
+      "label": "Tag 1 description"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_tag2_num",
+      "label": "Tag 2 number"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_tag2_desc",
+      "label": "Tag 2 description"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_tag3_num",
+      "label": "Tag 3 number"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_tag3_desc",
+      "label": "Tag 3 description"
+    },
+    {
+      "type": "header",
+      "content": "Feature 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_3_enabled",
+      "label": "Enable feature 3",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_3_text",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_tag1_num",
+      "label": "Tag 1 number"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_tag1_desc",
+      "label": "Tag 1 description"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_tag2_num",
+      "label": "Tag 2 number"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_tag2_desc",
+      "label": "Tag 2 description"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_tag3_num",
+      "label": "Tag 3 number"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_tag3_desc",
+      "label": "Tag 3 description"
+    },
+    {
+      "type": "header",
+      "content": "Feature 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_4_enabled",
+      "label": "Enable feature 4",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_4_text",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_tag1_num",
+      "label": "Tag 1 number"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_tag1_desc",
+      "label": "Tag 1 description"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_tag2_num",
+      "label": "Tag 2 number"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_tag2_desc",
+      "label": "Tag 2 description"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_tag3_num",
+      "label": "Tag 3 number"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_tag3_desc",
+      "label": "Tag 3 description"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product features"
+    }
+  ]
+}
+{% endschema %}

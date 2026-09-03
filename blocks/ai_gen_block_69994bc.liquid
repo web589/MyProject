@@ -1,0 +1,634 @@
+{% doc %}
+  @prompt
+    {% comment %}
+    Shopify 面包屑导航模块 Custom Liquid
+    功能：斜杠/分隔，最后一项不可点击无悬浮效果；前面项可跳转链接；支持对齐、字号、颜色、边距全部可调
+    字体遵循项目规范 Manrope / Inter
+    {% endcomment %}
+    {% liquid
+    /* ==========全部可配置参数区========== */
+    assign bc_max_width = "1400px"
+    assign bc_container_height = "auto"       /* 容器高度 */
+    assign bc_padding_y = "20px"             /* 容器上下内边距 */
+    assign bc_padding_x = "24px"
+    
+    /* 整体对齐 left / center / right */
+    assign bc_align = "left"
+    assign bc_offset_x = "0px"               /* 整体水平偏移，步长1px */
+    
+    /* 文字样式 */
+    assign bc_font_size = "16px"
+    assign bc_font_weight_normal = "400"
+    assign bc_font_weight_active = "600"
+    assign bc_link_color = "#555555"
+    assign bc_link_hover_color = "#1958d9"
+    assign bc_current_color = "#1a1a1a"      /* 当前页最后一项颜色 */
+    assign bc_separator_color = "#999999"   /* 分隔斜杠颜色 */
+    
+    /* 面包屑数据，可随意增加删除条目
+    type: link=可跳转链接；current=当前页（最后一条固定current）
+    */
+    assign breadcrumb_items = '[
+      {"type":"link","text":"Startseite","url":"/"},
+      {"type":"link","text":"Venus E Serie","url":"/collections/venus‑e‑serie"},
+      {"type":"current","text":"VENUS E 3.0"}
+    ]'
+    %}
+    
+    <style>
+    :root {
+      --font‑heading: 'Manrope', sans‑serif;
+      --font‑body: 'Inter', sans‑serif;
+    }
+    .breadcrumb‑custom‑wrap {
+      width:100%;
+      height: {{bc_container_height}};
+      padding: {{bc_padding_y}} {{bc_padding_x}};
+    }
+    .breadcrumb‑inner {
+      max‑width: {{bc_max_width}};
+      margin:0 auto;
+      display:flex;
+      justify‑content: {{bc_align}};
+      transform: translateX({{bc_offset_x}});
+    }
+    .breadcrumb‑list {
+      display:flex;
+      align‑items:center;
+      flex‑wrap:wrap;
+      gap:0 12px;
+      font‑family: var(--font‑body);
+      font‑size: {{bc_font_size}};
+      font‑weight: {{bc_font_weight_normal}};
+    }
+    .breadcrumb‑link {
+      color: {{bc_link_color}};
+      text‑decoration:none;
+      transition: color 0.2s ease;
+    }
+    .breadcrumb‑link:hover {
+      color: {{bc_link_hover_color}};
+    }
+    .breadcrumb‑sep {
+      color: {{bc_separator_color}};
+      user‑select:none;
+    }
+    .breadcrumb‑current {
+      color: {{bc_current_color}};
+      font‑weight: {{bc_font_weight_active}};
+    }
+    
+    /* 移动端适配 */
+    @media(max‑width:768px){
+      .breadcrumb‑custom‑wrap {
+        padding: 14px 16px;
+      }
+      .breadcrumb‑list {
+        font‑size:14px;
+        gap:0 8px;
+      }
+    }
+    </style>
+    
+    <div class="breadcrumb‑custom‑wrap">
+      <div class="breadcrumb‑inner">
+        <nav class="breadcrumb‑list">
+          {%‑ assign items = breadcrumb_items | json‑parse ‑%}
+          {%‑ for item in items ‑%}
+            {%‑ if item.type == "link" ‑%}
+              <a class="breadcrumb‑link" href="{{ item.url }}">{{ item.text }}</a>
+              {%‑ if forloop.last == false ‑%}
+                <span class="breadcrumb‑sep">/</span>
+              {%‑ endif ‑%}
+            {%‑ elsif item.type == "current" ‑%}
+              <span class="breadcrumb‑current">{{ item.text }}</span>
+            {%‑ endif ‑%}
+          {%‑ endfor ‑%}
+        </nav>
+      </div>
+    </div>, Horizontal offset滑块步长为1, 文本数可以自由添加或删除
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% liquid
+  assign breadcrumb_current_text = block.settings.item_5_text
+  if product != blank
+    assign breadcrumb_current_text = product.title | strip
+  endif
+%}
+
+{% style %}
+  .ai-breadcrumb-container-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.padding_y }}px {{ block.settings.padding_x }}px;
+  }
+
+  .ai-breadcrumb-inner-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: {{ block.settings.alignment }};
+    transform: translateX({{ block.settings.offset_x }}px);
+  }
+
+  .ai-breadcrumb-list-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 12px;
+    font-family: {{ block.settings.font_family.family }}, {{ block.settings.font_family.fallback_families }};
+    font-size: {{ block.settings.font_size }}px;
+    font-weight: {{ block.settings.font_weight_normal }};
+  }
+
+  .ai-breadcrumb-link-{{ ai_gen_id }} {
+    color: {{ block.settings.link_color }};
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .ai-breadcrumb-link-disabled-{{ ai_gen_id }} {
+    color: {{ block.settings.link_color }};
+  }
+
+  .ai-breadcrumb-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.link_hover_color }};
+    text-decoration: underline;
+    text-decoration-color: {{ block.settings.underline_color }};
+    text-decoration-thickness: {{ block.settings.underline_thickness }}px;
+    text-underline-offset: {{ block.settings.underline_offset }}px;
+  }
+
+  .ai-breadcrumb-separator-{{ ai_gen_id }} {
+    color: {{ block.settings.separator_color }};
+    user-select: none;
+  }
+
+  .ai-breadcrumb-current-{{ ai_gen_id }} {
+    color: {{ block.settings.current_color }};
+    font-weight: {{ block.settings.font_weight_active }};
+  }
+
+  @media (max-width: 768px) {
+    .ai-breadcrumb-container-{{ ai_gen_id }} {
+      padding: {{ block.settings.mobile_padding_y }}px {{ block.settings.mobile_padding_x }}px;
+    }
+
+    .ai-breadcrumb-list-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_font_size }}px;
+      gap: 0 8px;
+    }
+  }
+{% endstyle %}
+
+<breadcrumb-nav-{{ ai_gen_id }} class="ai-breadcrumb-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-breadcrumb-inner-{{ ai_gen_id }}">
+    <nav class="ai-breadcrumb-list-{{ ai_gen_id }}" aria-label="Breadcrumb">
+      {% assign item_1_href = block.settings.item_1_url | default: routes.root_url %}
+      {% if block.settings.item_1_text != blank %}
+        {% if block.settings.item_1_type == 'link' %}
+          <a class="ai-breadcrumb-link-{{ ai_gen_id }}" href="{{ item_1_href }}">
+            {{ block.settings.item_1_text }}
+          </a>
+        {% else %}
+          <span class="ai-breadcrumb-current-{{ ai_gen_id }}">
+            {{ block.settings.item_1_text }}
+          </span>
+        {% endif %}
+      {% endif %}
+
+      {% if block.settings.item_2_text != blank %}
+        <span class="ai-breadcrumb-separator-{{ ai_gen_id }}">/</span>
+        {% if block.settings.item_2_type == 'link' and block.settings.item_2_url != blank %}
+          <a class="ai-breadcrumb-link-{{ ai_gen_id }}" href="{{ block.settings.item_2_url }}">
+            {{ block.settings.item_2_text }}
+          </a>
+        {% elsif block.settings.item_2_type == 'link' %}
+          <span class="ai-breadcrumb-link-disabled-{{ ai_gen_id }}">
+            {{ block.settings.item_2_text }}
+          </span>
+        {% else %}
+          <span class="ai-breadcrumb-current-{{ ai_gen_id }}">
+            {{ block.settings.item_2_text }}
+          </span>
+        {% endif %}
+      {% endif %}
+
+      {% if block.settings.item_3_text != blank %}
+        <span class="ai-breadcrumb-separator-{{ ai_gen_id }}">/</span>
+        {% if block.settings.item_3_type == 'link' %}
+          <a class="ai-breadcrumb-link-{{ ai_gen_id }}" href="{{ block.settings.item_3_url }}">
+            {{ block.settings.item_3_text }}
+          </a>
+        {% else %}
+          <span class="ai-breadcrumb-current-{{ ai_gen_id }}">
+            {{ block.settings.item_3_text }}
+          </span>
+        {% endif %}
+      {% endif %}
+
+      {% if block.settings.item_4_text != blank %}
+        <span class="ai-breadcrumb-separator-{{ ai_gen_id }}">/</span>
+        {% if block.settings.item_4_type == 'link' %}
+          <a class="ai-breadcrumb-link-{{ ai_gen_id }}" href="{{ block.settings.item_4_url }}">
+            {{ block.settings.item_4_text }}
+          </a>
+        {% else %}
+          <span class="ai-breadcrumb-current-{{ ai_gen_id }}">
+            {{ block.settings.item_4_text }}
+          </span>
+        {% endif %}
+      {% endif %}
+
+      {% if breadcrumb_current_text != blank %}
+        <span class="ai-breadcrumb-separator-{{ ai_gen_id }}">/</span>
+        <span class="ai-breadcrumb-current-{{ ai_gen_id }}" aria-current="page">
+          {{ breadcrumb_current_text }}
+        </span>
+      {% endif %}
+    </nav>
+  </div>
+</breadcrumb-nav-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class BreadcrumbNav{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+    }
+    customElements.define('breadcrumb-nav-{{ ai_gen_id }}', BreadcrumbNav{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Breadcrumb navigation",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 800,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "range",
+      "id": "offset_x",
+      "label": "Horizontal offset",
+      "min": -100,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_x",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_y",
+      "label": "Mobile vertical padding",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_x",
+      "label": "Mobile horizontal padding",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_font_size",
+      "label": "Mobile font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "font_weight_normal",
+      "label": "Link font weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "font_weight_active",
+      "label": "Current page font weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#555555"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover color",
+      "default": "#060607ff"
+    },
+    {
+      "type": "color",
+      "id": "current_color",
+      "label": "Current page color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "separator_color",
+      "label": "Separator color",
+      "default": "#999999"
+    },
+    {
+      "type": "header",
+      "content": "Hover underline"
+    },
+    {
+      "type": "color",
+      "id": "underline_color",
+      "label": "Underline color",
+      "default": "#000000ff"
+    },
+    {
+      "type": "range",
+      "id": "underline_thickness",
+      "label": "Underline thickness",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "underline_offset",
+      "label": "Underline offset (distance from text)",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Item 1"
+    },
+    {
+      "type": "header",
+      "content": "Item 1"
+    },
+    {
+      "type": "text",
+      "id": "item_1_text",
+      "label": "Text",
+      "default": "Startseite"
+    },
+    {
+      "type": "select",
+      "id": "item_1_type",
+      "label": "Type",
+      "options": [
+        {
+          "value": "link",
+          "label": "Link"
+        },
+        {
+          "value": "current",
+          "label": "Current page"
+        }
+      ],
+      "default": "link"
+    },
+    {
+      "type": "url",
+      "id": "item_1_url",
+      "label": "Link page (blank = homepage)"
+    },
+    {
+      "type": "header",
+      "content": "Item 2"
+    },
+    {
+      "type": "text",
+      "id": "item_2_text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "item_2_type",
+      "label": "Type",
+      "options": [
+        {
+          "value": "link",
+          "label": "Link"
+        },
+        {
+          "value": "current",
+          "label": "Current page"
+        }
+      ],
+      "default": "link"
+    },
+    {
+      "type": "url",
+      "id": "item_2_url",
+      "label": "Link page (blank = no link)"
+    },
+    {
+      "type": "header",
+      "content": "Item 3"
+    },
+    {
+      "type": "text",
+      "id": "item_3_text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "item_3_type",
+      "label": "Type",
+      "options": [
+        {
+          "value": "link",
+          "label": "Link"
+        },
+        {
+          "value": "current",
+          "label": "Current page"
+        }
+      ],
+      "default": "link"
+    },
+    {
+      "type": "url",
+      "id": "item_3_url",
+      "label": "URL"
+    },
+    {
+      "type": "header",
+      "content": "Item 4"
+    },
+    {
+      "type": "text",
+      "id": "item_4_text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "item_4_type",
+      "label": "Type",
+      "options": [
+        {
+          "value": "link",
+          "label": "Link"
+        },
+        {
+          "value": "current",
+          "label": "Current page"
+        }
+      ],
+      "default": "link"
+    },
+    {
+      "type": "url",
+      "id": "item_4_url",
+      "label": "URL"
+    },
+    {
+      "type": "header",
+      "content": "Item 5"
+    },
+    {
+      "type": "text",
+      "id": "item_5_text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "item_5_type",
+      "label": "Type",
+      "options": [
+        {
+          "value": "link",
+          "label": "Link"
+        },
+        {
+          "value": "current",
+          "label": "Current page"
+        }
+      ],
+      "default": "current"
+    },
+    {
+      "type": "url",
+      "id": "item_5_url",
+      "label": "URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Breadcrumb navigation"
+    }
+  ]
+}
+{% endschema %}

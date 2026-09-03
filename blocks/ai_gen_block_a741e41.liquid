@@ -1,0 +1,721 @@
+{% doc %}
+  @prompt
+    {% comment %}
+    环境耐受性双图对比模块，复刻截图UI，Shopify Custom Liquid直接复制粘贴
+    全部参数可配置：标题、描述、两张卡片尺寸、圆角、卡片间隙
+    交互逻辑：
+    1.普通图片：hover时图片放大；
+    2.gif / video：hover时开始播放，移出停止；
+    支持静态图、GIF、MP4视频放入卡片，移动端自动变为上下堆叠布局
+    字体遵循品牌规范：标题Manrope，正文Inter
+    {% endcomment %}
+    {% liquid
+    /* =====================全部配置参数，在这里直接修改===================== */
+    assign module_max_width = "1320px"
+    assign module_top_margin = "80px"
+    assign module_bottom_margin = "80px"
+    
+    /* 标题设置 */
+    assign heading_text = "Zuverlässiger Betrieb bis ‑20°C | IP65‑Schutzklasse"
+    assign heading_font_size = "42px"
+    assign heading_font_weight = "700"
+    assign heading_margin_bottom = "16px"
+    
+    /* 描述文本设置 */
+    assign desc_text = "Venus E Gen 3.0 garantiert stabile Leistung auch bei Frosttemperaturen bis zu ‑20°C. Das Gehäuse mit IP65‑Schutzklasse schützt vor Regen, Staub und widrigen Umgebungsbedingungen."
+    assign desc_font_size = "16px"
+    assign desc_font_color = "#444444"
+    assign desc_max_width = "1200px"
+    assign desc_heading_gap = "20px"     /* 标题 ↔ 描述 间距 */
+    assign desc_card_gap = "32px"       /* 描述 ↔ 卡片组 间距 */
+    
+    /* 双卡片全局设置 */
+    assign card_width = "100%"
+    assign card_height = "540px"
+    assign card_radius = "14px"
+    assign cards_gap = "4px"            /* 两张卡片中间间隙，填0实现无缝贴合 */
+    assign image_hover_scale = "1.05"    /* 图片悬浮放大倍数 */
+    %}
+    
+    <style>
+    :root {
+      --font-heading: 'Manrope', sans‑serif;
+      --font-body: 'Inter', sans‑serif;
+    }
+    .double‑compare‑module {
+      width: 100%;
+      margin: {{module_top_margin}} auto {{module_bottom_margin}};
+    }
+    .double‑compare‑inner {
+      max‑width: {{module_max_width}};
+      padding: 0 24px;
+      margin: 0 auto;
+      text‑align: center;
+    }
+    .double‑compare‑heading {
+      font‑family: var(--font‑heading);
+      font‑size: {{heading_font_size}};
+      font‑weight: {{heading_font_weight}};
+      color: #111111;
+      margin:0 0 {{heading_margin_bottom}};
+      line‑height:1.2;
+    }
+    .double‑compare‑desc {
+      max‑width: {{desc_max_width}};
+      margin: 0 auto {{desc_card_gap}};
+      font‑family: var(--font‑body);
+      font‑size: {{desc_font_size}};
+      color: {{desc_font_color}};
+      line‑height:1.6;
+    }
+    .double‑cards‑wrap {
+      display:flex;
+      gap: {{cards_gap}};
+      width:100%;
+    }
+    .compare‑card {
+      flex:1;
+      width: {{card_width}};
+      height: {{card_height}};
+      border‑radius: {{card_radius}};
+      overflow:hidden;
+      position:relative;
+    }
+    .compare‑media {
+      width:100%;
+      height:100%;
+      object‑fit:cover;
+      transition: transform 0.32s ease;
+    }
+    .compare‑card:hover .compare‑media {
+      transform: scale({{image_hover_scale}});
+    }
+    
+    /* 移动端：两张卡片上下堆叠 */
+    @media(max‑width:768px){
+      .double‑compare‑heading {
+        font‑size: 28px;
+      }
+      .double‑cards‑wrap {
+        flex‑direction:column;
+      }
+      .compare‑card {
+        height: 360px;
+      }
+    }
+    </style>
+    
+    <div class="double‑compare‑module">
+      <div class="double‑compare‑inner">
+        <h2 class="double‑compare‑heading">{{ heading_text }}</h2>
+        <div class="double‑compare‑desc">{{ desc_text }}</div>
+    
+        <div class="double‑cards‑wrap">
+          {% comment %}左侧卡片：可以放 img / gif / video 标签{% endcomment %}
+          <div class="compare‑card">
+            {% comment %}静态图片/GIF版本{% endcomment %}
+            <img class="compare‑media" src="https://cdn.shopify.com/s/files/1/xxxx/xxxx/files/snow‑scene.jpg" alt="Marstek Batterie im Schnee">
+    
+            {% comment %}如果要换成视频，注释上面img，启用下面video代码
+            <video class="compare‑media" muted loop preload="auto" data‑hover‑play>
+              <source src="https://cdn.shopify.com/s/files/1/xxxx/xxxx/files/snow.mp4" type="video/mp4">
+            </video>
+            {% endcomment %}
+          </div>
+    
+          {% comment %}右侧卡片：可以放 img / gif / video 标签{% endcomment %}
+          <div class="compare‑card">
+            {% comment %}静态图片/GIF版本{% endcomment %}
+            <img class="compare‑media" src="https://cdn.shopify.com/s/files/1/xxxx/xxxx/files/rain‑scene.jpg" alt="Marstek Batterie im Regen">
+    
+            {% comment %}如果要换成视频，注释上面img，启用下面video代码
+            <video class="compare‑media" muted loop preload="auto" data‑hover‑play>
+              <source src="https://cdn.shopify.com/s/files/1/xxxx/xxxx/files/rain.mp4" type="video/mp4">
+            </video>
+            {% endcomment %}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+    // hover逻辑：图片gif直接靠css放大；video鼠标移入播放、移出暂停
+    document.querySelectorAll('[data‑hover‑play]').forEach(vid=>{
+      vid.pause();
+      vid.addEventListener('mouseenter',()=>vid.play());
+      vid.addEventListener('mouseleave',()=>{
+        vid.pause();
+        vid.currentTime = 0;
+      })
+    })
+    </script>, 只有当鼠标放在图片卡片上方后，图片才开始播放动起来，鼠标不在图片卡片上方时，图片保持静态，画面不动, 请帮我把当前这个 section 里 "Maximum width"(布局最大宽度)这个滑块设置的 step(步长)从 40 改成 10,其他不用变。, 其他地方不变，分别加一个可以选择标题或描述区是左对齐、居中还有右对齐的设置, 描述区左对齐时要和容器左侧对齐
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-dual-compare-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    margin: {{ block.settings.top_margin }}px auto {{ block.settings.bottom_margin }}px;
+  }
+
+  .ai-dual-compare-inner-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    padding: 0 24px;
+    margin: 0 auto;
+  }
+
+  .ai-dual-compare-heading-{{ ai_gen_id }} {
+    font-family: 'Manrope', var(--font-heading), sans-serif;
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: {{ block.settings.heading_weight }};
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 {{ block.settings.heading_margin_bottom }}px;
+    line-height: 1.2;
+    text-align: {{ block.settings.heading_alignment }};
+  }
+
+  .ai-dual-compare-desc-{{ ai_gen_id }} {
+    font-family: 'Inter', var(--font-body), sans-serif;
+    font-size: {{ block.settings.desc_size }}px;
+    color: {{ block.settings.desc_color }};
+    line-height: 1.6;
+    text-align: {{ block.settings.desc_alignment }};
+    margin-bottom: {{ block.settings.desc_card_gap }}px;
+  }
+
+  .ai-dual-compare-desc-{{ ai_gen_id }}--center {
+    max-width: {{ block.settings.desc_max_width }}px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .ai-dual-compare-desc-{{ ai_gen_id }}--left {
+    max-width: {{ block.settings.desc_max_width }}px;
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .ai-dual-compare-desc-{{ ai_gen_id }}--right {
+    max-width: {{ block.settings.desc_max_width }}px;
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .ai-dual-cards-wrap-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.cards_gap }}px;
+    width: 100%;
+  }
+
+  .ai-compare-card-{{ ai_gen_id }} {
+    flex: 1;
+    width: 100%;
+    height: {{ block.settings.card_height }}px;
+    border-radius: {{ block.settings.card_radius }}px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ai-compare-media-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.32s ease;
+  }
+
+  .ai-compare-card-{{ ai_gen_id }}:hover .ai-compare-media-{{ ai_gen_id }}:not(video) {
+    transform: scale({{ block.settings.hover_scale }});
+  }
+
+  .ai-compare-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-compare-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+    opacity: 0.3;
+  }
+
+  .ai-compare-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+    font-family: 'Inter', var(--font-body), sans-serif;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-dual-compare-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.65 }}px;
+    }
+
+    .ai-dual-cards-wrap-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+
+    .ai-compare-card-{{ ai_gen_id }} {
+      height: {{ block.settings.card_height_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+{% liquid
+  assign is_product_context = false
+  if request.page_type == 'product' and product != blank and block.settings.content_source != 'theme_editor'
+    assign is_product_context = true
+    assign pdp_content_candidate = product.metafields.custom.pdp_content.value
+    if pdp_content_candidate != blank
+      assign pdp_content_owner = pdp_content_candidate.product.value
+      assign pdp_content_is_for_product = false
+      if pdp_content_owner != blank
+        if pdp_content_owner.handle == product.handle
+          assign pdp_content_is_for_product = true
+        endif
+      elsif pdp_content_candidate.system.handle == product.handle
+        assign pdp_content_is_for_product = true
+      endif
+      if pdp_content_is_for_product
+        assign pdp_content = pdp_content_candidate
+        assign durability_title = pdp_content.durability_title.value
+        assign durability_description = pdp_content.durability_description.value
+        assign durability_left_image = pdp_content.durability_left_image.value
+        assign durability_right_image = pdp_content.durability_right_image.value
+      endif
+    endif
+  endif
+  if is_product_context == false
+    assign durability_title = block.settings.heading
+    assign durability_description = block.settings.description
+    assign durability_left_image = block.settings.left_image
+    assign durability_right_image = block.settings.right_image
+  endif
+%}
+{% if durability_title != blank or durability_description != blank or durability_left_image != blank or durability_right_image != blank %}
+<dual-compare-{{ ai_gen_id }} class="ai-dual-compare-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-dual-compare-inner-{{ ai_gen_id }}">
+    {% if durability_title != blank %}
+      <h2 class="ai-dual-compare-heading-{{ ai_gen_id }}">{{ durability_title }}</h2>
+    {% endif %}
+
+    {% if durability_description != blank %}
+      <div class="ai-dual-compare-desc-{{ ai_gen_id }} ai-dual-compare-desc-{{ ai_gen_id }}--{{ block.settings.desc_alignment }}">
+        {{ durability_description }}
+      </div>
+    {% endif %}
+
+    <div class="ai-dual-cards-wrap-{{ ai_gen_id }}">
+      {% if durability_left_image != blank %}
+      <div class="ai-compare-card-{{ ai_gen_id }}" data-card="left">
+        {% if durability_left_image != blank %}
+          <img
+            class="ai-compare-media-{{ ai_gen_id }}"
+            src="{{ durability_left_image | image_url: width: 1200 }}"
+            alt="{{ durability_title | escape }}"
+            loading="lazy"
+            width="{{ durability_left_image.width }}"
+            height="{{ durability_left_image.height }}"
+          >
+        {% else %}
+          <div class="ai-compare-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if durability_right_image != blank %}
+      <div class="ai-compare-card-{{ ai_gen_id }}" data-card="right">
+        {% if durability_right_image != blank %}
+          <img
+            class="ai-compare-media-{{ ai_gen_id }}"
+            src="{{ durability_right_image | image_url: width: 1200 }}"
+            alt="{{ durability_title | escape }}"
+            loading="lazy"
+            width="{{ durability_right_image.width }}"
+            height="{{ durability_right_image.height }}"
+          >
+        {% else %}
+          <div class="ai-compare-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</dual-compare-{{ ai_gen_id }}>
+{% endif %}
+
+<script>
+(function() {
+  class DualCompare{{ ai_gen_id }} extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      this.cards = this.querySelectorAll('[data-card]');
+      this.setupHoverInteraction();
+    }
+
+    setupHoverInteraction() {
+      this.cards.forEach(card => {
+        const video = card.querySelector('[data-hover-play]');
+        
+        if (video) {
+          video.pause();
+          
+          card.addEventListener('mouseenter', () => {
+            video.play();
+          });
+          
+          card.addEventListener('mouseleave', () => {
+            video.pause();
+          });
+        }
+      });
+    }
+  }
+
+  customElements.define('dual-compare-{{ ai_gen_id }}', DualCompare{{ ai_gen_id }});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Dual card comparison",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_source",
+      "label": "内容来源",
+      "options": [
+        { "value": "theme_editor", "label": "右侧 Theme Editor（默认）" },
+        { "value": "pdp_content", "label": "PDP 后台内容（备份/旧模式）" }
+      ],
+      "default": "theme_editor",
+      "info": "选择右侧 Theme Editor 后，标题、正文和两张图片只读取当前模板的下方字段。"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 800,
+      "max": 1600,
+      "step": 10,
+      "unit": "px",
+      "default": 1320
+    },
+    {
+      "type": "range",
+      "id": "top_margin",
+      "label": "Top margin",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "bottom_margin",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading text",
+      "default": "Zuverlässiger Betrieb bis ‑20°C | IP65‑Schutzklasse"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Size",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#111111"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description text",
+      "default": "Venus E Gen 3.0 garantiert stabile Leistung auch bei Frosttemperaturen bis zu ‑20°C. Das Gehäuse mit IP65‑Schutzklasse schützt vor Regen, Staub und widrigen Umgebungsbedingungen."
+    },
+    {
+      "type": "range",
+      "id": "desc_size",
+      "label": "Size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "desc_color",
+      "label": "Color",
+      "default": "#444444"
+    },
+    {
+      "type": "select",
+      "id": "desc_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "desc_max_width",
+      "label": "Maximum width",
+      "min": 600,
+      "max": 1400,
+      "step": 40,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "desc_card_gap",
+      "label": "Bottom spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Left card"
+    },
+    {
+      "type": "select",
+      "id": "left_media_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "left_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "left_video",
+      "label": "Video URL"
+    },
+    {
+      "type": "header",
+      "content": "Right card"
+    },
+    {
+      "type": "select",
+      "id": "right_media_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "right_video",
+      "label": "Video URL"
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "label": "Height on desktop",
+      "min": 300,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 540
+    },
+    {
+      "type": "range",
+      "id": "card_height_mobile",
+      "label": "Height on mobile",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 360
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "cards_gap",
+      "label": "Gap between cards",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "hover_scale",
+      "label": "Hover zoom",
+      "min": 1,
+      "max": 1.5,
+      "step": 0.1,
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dual card comparison"
+    }
+  ]
+}
+{% endschema %}

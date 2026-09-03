@@ -1,0 +1,640 @@
+{% doc %}
+  @prompt
+    {% comment %}
+    Anker SOLIX Balkon Solar Mini PV 三栏交互区块
+    Hover效果：背景黑化遮罩 + 标题上移 + 详情淡入浮现
+    适用于Shopify 2.0+ 所有在线商店主题
+    {% endcomment %}
+    
+    {% stylesheet %}
+    /* 区块外层容器 */
+    .pv-balkon-section {
+      width: 100%;
+      padding: 60px 20px;
+      box-sizing: border-box;
+      background: #f7f7f7;
+    }
+    .pv-section-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      margin: 0 auto 40px;
+      max-width: 1400px;
+    }
+    /* 三栏网格容器 */
+    .pv-grid-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .pv-col-left-group {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+    }
+    .pv-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      min-height: 380px;
+      cursor: pointer;
+    }
+    .pv-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    /* 暗黑遮罩层 hover触发 */
+    .pv-card-mask {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.75));
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .pv-card:hover .pv-card-mask {
+      opacity: 1;
+    }
+    /* 卡片文字容器 */
+    .pv-card-text-box {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      right: 30px;
+      color: #fff;
+      z-index: 2;
+    }
+    .pv-card-heading {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 12px;
+      transform: translateY(0);
+      transition: transform 0.3s ease;
+    }
+    .pv-card:hover .pv-card-heading {
+      transform: translateY(-10px);
+    }
+    /* 详情文本 默认透明隐藏 hover浮现 */
+    .pv-card-desc {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.3s ease 0.1s;
+    }
+    .pv-card:hover .pv-card-desc {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* 右侧大图单独占整列 */
+    .pv-card-wide {
+      grid-row: span 2;
+    }
+    /* 移动端适配 */
+    @media screen and (max-width: 768px) {
+      .pv-grid-wrap {
+        grid-template-columns: 1fr;
+      }
+      .pv-card-wide {
+        grid-row: auto;
+      }
+      .pv-section-title {
+        font-size: 2rem;
+      }
+    }
+    {% endstylesheet %}
+    
+    <div class="pv-balkon-section">
+      <h2 class="pv-section-title">Anker SOLIX Mini-Solaranlage für Balkon</h2>
+      <div class="pv-grid-wrap">
+        <!-- 左侧上下两张卡片容器 -->
+        <div class="pv-col-left-group">
+          <!-- 卡片1 Flexibilität im Einsatz -->
+          <div class="pv-card">
+            <img class="pv-card-img" src="https://cdn.shopify.com/s/files/1/0000/0000/files/pv-balkon-1.jpg" alt="Flexibilität im Einsatz">
+            <div class="pv-card-mask"></div>
+            <div class="pv-card-text-box">
+              <h3 class="pv-card-heading">Flexibilität im Einsatz</h3>
+              <p class="pv-card-desc">
+                Die Anker SOLIX Mini Balkon Solaranlage, mit ihrem kompakten Format und zeitgemäßen Design, wurde speziell konzipiert, um Balkone in städtischen Gebieten, Mietwohnungen, Hotels und Gasthäusern in nutzbare Energiequellen zu verwandeln. Sie ist dabei nicht nur leistungsstark, sondern auch vielseitig und praktisch in ihrer Implementierung, was sie trotz begrenztem Raum sehr effizient macht.
+              </p>
+            </div>
+          </div>
+    
+          <!-- 卡片2 Nahtlose Integration und Ästhetik -->
+          <div class="pv-card">
+            <img class="pv-card-img" src="https://cdn.shopify.com/s/files/1/0000/0000/files/pv-balkon-2.jpg" alt="Nahtlose Integration und Erhöhung der Ästhetik">
+            <div class="pv-card-mask"></div>
+            <div class="pv-card-text-box">
+              <h3 class="pv-card-heading">Nahtlose Integration und Erhöhung der Ästhetik</h3>
+              <p class="pv-card-desc">
+                Schlankes, minimalistisches Design fügt sich harmonisch an jede Balkonverkleidung an. Einfache Montage ohne bauliche Eingriffe, passt zu modernen und klassischen Wohngebäuden gleichermaßen.
+              </p>
+            </div>
+          </div>
+        </div>
+    
+        <!-- 右侧整栏大图 Nachhaltigkeit und Kontrolle -->
+        <div class="pv-card pv-card-wide">
+          <img class="pv-card-img" src="https://cdn.shopify.com/s/files/1/0000/0000/files/pv-wind-3.jpg" alt="Nachhaltigkeit und Kontrolle">
+          <div class="pv-card-mask"></div>
+          <div class="pv-card-text-box">
+            <h3 class="pv-card-heading">Nachhaltigkeit und Kontrolle</h3>
+            <p class="pv-card-desc">
+                Erzeugen Sie sauberen Solarstrom direkt am Balkon, senken Sie Ihre Stromkosten und verringern Sie Ihren CO₂-Fußabdruck. Über die Anker App haben Sie jederzeit die volle Kontrolle über Energieerzeugung und Verbrauch.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    {% javascript %}
+    // 可选增强：鼠标进出平滑防抖（无需也能正常运行）
+    document.querySelectorAll('.pv-card').forEach(card => {
+      card.addEventListener('mouseenter', ()=> card.classList.add('active'))
+      card.addEventListener('mouseleave', ()=> card.classList.remove('active'))
+    })
+    {% endjavascript %}
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .pv-balkon-section-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding }}px 20px;
+    box-sizing: border-box;
+    background: {{ block.settings.background_color }};
+  }
+
+  .pv-section-title-{{ ai_gen_id }} {
+    font-size: clamp(2rem, 5vw, {{ block.settings.title_size }}px);
+    font-weight: 800;
+    margin: 0 auto {{ block.settings.title_spacing }}px;
+    max-width: {{ block.settings.max_width }}px;
+    color: {{ block.settings.title_color }};
+  }
+
+  .pv-grid-wrap-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  .pv-col-left-group-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  .pv-card-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    min-height: 380px;
+    cursor: pointer;
+  }
+
+  .pv-card-img-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .pv-card-mask-{{ ai_gen_id }} {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(0,0,0,0.1), {{ block.settings.overlay_color }});
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .pv-card-{{ ai_gen_id }}:hover .pv-card-mask-{{ ai_gen_id }} {
+    opacity: {{ block.settings.overlay_opacity }};
+  }
+
+  .pv-card-text-box-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    right: 30px;
+    color: {{ block.settings.text_color }};
+    z-index: 2;
+  }
+
+  .pv-card-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+
+  .pv-card-{{ ai_gen_id }}:hover .pv-card-heading-{{ ai_gen_id }} {
+    transform: translateY(-10px);
+  }
+
+  .pv-card-desc-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.3s ease 0.1s;
+  }
+
+  .pv-card-{{ ai_gen_id }}:hover .pv-card-desc-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .pv-card-wide-{{ ai_gen_id }} {
+    grid-row: span 2;
+  }
+
+  .pv-card-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pv-card-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .pv-grid-wrap-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+
+    .pv-card-wide-{{ ai_gen_id }} {
+      grid-row: auto;
+    }
+
+    .pv-section-title-{{ ai_gen_id }} {
+      font-size: 2rem;
+    }
+
+    .pv-card-text-box-{{ ai_gen_id }} {
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+    }
+  }
+{% endstyle %}
+
+<pv-balkon-cards-{{ ai_gen_id }} class="pv-balkon-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.section_title != blank %}
+    <h2 class="pv-section-title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
+  {% endif %}
+
+  <div class="pv-grid-wrap-{{ ai_gen_id }}">
+    <div class="pv-col-left-group-{{ ai_gen_id }}">
+      <div class="pv-card-{{ ai_gen_id }}">
+        {% if block.settings.card_1_image %}
+          <img
+            class="pv-card-img-{{ ai_gen_id }}"
+            src="{{ block.settings.card_1_image | image_url: width: 1000 }}"
+            alt="{{ block.settings.card_1_image.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.card_1_image.width }}"
+            height="{{ block.settings.card_1_image.height }}"
+          >
+        {% else %}
+          <div class="pv-card-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+        <div class="pv-card-mask-{{ ai_gen_id }}"></div>
+        <div class="pv-card-text-box-{{ ai_gen_id }}">
+          {% if block.settings.card_1_heading != blank %}
+            <h3 class="pv-card-heading-{{ ai_gen_id }}">{{ block.settings.card_1_heading }}</h3>
+          {% endif %}
+          {% if block.settings.card_1_description != blank %}
+            <div class="pv-card-desc-{{ ai_gen_id }}">{{ block.settings.card_1_description }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="pv-card-{{ ai_gen_id }}">
+        {% if block.settings.card_2_image %}
+          <img
+            class="pv-card-img-{{ ai_gen_id }}"
+            src="{{ block.settings.card_2_image | image_url: width: 1000 }}"
+            alt="{{ block.settings.card_2_image.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.card_2_image.width }}"
+            height="{{ block.settings.card_2_image.height }}"
+          >
+        {% else %}
+          <div class="pv-card-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+        <div class="pv-card-mask-{{ ai_gen_id }}"></div>
+        <div class="pv-card-text-box-{{ ai_gen_id }}">
+          {% if block.settings.card_2_heading != blank %}
+            <h3 class="pv-card-heading-{{ ai_gen_id }}">{{ block.settings.card_2_heading }}</h3>
+          {% endif %}
+          {% if block.settings.card_2_description != blank %}
+            <div class="pv-card-desc-{{ ai_gen_id }}">{{ block.settings.card_2_description }}</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="pv-card-{{ ai_gen_id }} pv-card-wide-{{ ai_gen_id }}">
+      {% if block.settings.card_3_image %}
+        <img
+          class="pv-card-img-{{ ai_gen_id }}"
+          src="{{ block.settings.card_3_image | image_url: width: 1000 }}"
+          alt="{{ block.settings.card_3_image.alt | escape }}"
+          loading="lazy"
+          width="{{ block.settings.card_3_image.width }}"
+          height="{{ block.settings.card_3_image.height }}"
+        >
+      {% else %}
+        <div class="pv-card-placeholder-{{ ai_gen_id }}">
+          {{ 'image' | placeholder_svg_tag }}
+        </div>
+      {% endif %}
+      <div class="pv-card-mask-{{ ai_gen_id }}"></div>
+      <div class="pv-card-text-box-{{ ai_gen_id }}">
+        {% if block.settings.card_3_heading != blank %}
+          <h3 class="pv-card-heading-{{ ai_gen_id }}">{{ block.settings.card_3_heading }}</h3>
+        {% endif %}
+        {% if block.settings.card_3_description != blank %}
+          <div class="pv-card-desc-{{ ai_gen_id }}">{{ block.settings.card_3_description }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</pv-balkon-cards-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class PvBalkonCards{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.cards = this.querySelectorAll('.pv-card-{{ ai_gen_id }}');
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.cards.forEach(card => {
+          card.addEventListener('mouseenter', () => {
+            card.classList.add('active');
+          });
+          card.addEventListener('mouseleave', () => {
+            card.classList.remove('active');
+          });
+        });
+      }
+    }
+
+    customElements.define('pv-balkon-cards-{{ ai_gen_id }}', PvBalkonCards{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Balkon solar cards",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "richtext",
+      "id": "section_title",
+      "label": "Title",
+      "default": "<p>Anker SOLIX Mini-Solaranlage für Balkon</p>"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Padding",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f7f7f7"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Title style"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "label": "Bottom spacing",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#2a3743"
+    },
+    {
+      "type": "header",
+      "content": "Cards layout"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Gap between cards",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Hover overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "rgba(0,0,0,0.75)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Text style"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_1_heading",
+      "label": "Heading",
+      "default": "Flexibilität im Einsatz"
+    },
+    {
+      "type": "richtext",
+      "id": "card_1_description",
+      "label": "Description",
+      "default": "<p>Die Anker SOLIX Mini Balkon Solaranlage, mit ihrem kompakten Format und zeitgemäßen Design, wurde speziell konzipiert, um Balkone in städtischen Gebieten, Mietwohnungen, Hotels und Gasthäusern in nutzbare Energiequellen zu verwandeln.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_2_heading",
+      "label": "Heading",
+      "default": "Nahtlose Integration und Erhöhung der Ästhetik"
+    },
+    {
+      "type": "richtext",
+      "id": "card_2_description",
+      "label": "Description",
+      "default": "<p>Schlankes, minimalistisches Design fügt sich harmonisch an jede Balkonverkleidung an. Einfache Montage ohne bauliche Eingriffe, passt zu modernen und klassischen Wohngebäuden gleichermaßen.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_3_heading",
+      "label": "Heading",
+      "default": "Nachhaltigkeit und Kontrolle"
+    },
+    {
+      "type": "richtext",
+      "id": "card_3_description",
+      "label": "Description",
+      "default": "<p>Erzeugen Sie sauberen Solarstrom direkt am Balkon, senken Sie Ihre Stromkosten und verringern Sie Ihren CO₂-Fußabdruck. Über die Anker App haben Sie jederzeit die volle Kontrolle über Energieerzeugung und Verbrauch.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Balkon solar cards"
+    }
+  ]
+}
+{% endschema %}

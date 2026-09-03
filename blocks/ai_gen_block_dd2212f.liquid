@@ -1,0 +1,745 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drei Formate Modul</title>
+    <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    body {
+      background-color: #f9f9f9;
+      padding: 80px 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    /* 顶部大标题 */
+    .section-title {
+      font-size: 44px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 48px;
+      line-height: 1.2;
+    }
+    
+    /* 三列卡片容器 */
+    .cards-wrap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    
+    /* 卡片整体 */
+    .format-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 40px 32px;
+      text-align: left;
+      transition: box-shadow 0.2s ease;
+    }
+    .format-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    
+    /* 图标占位容器（你直接替换img的src即可） */
+    .card-icon-box {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 20px;
+    }
+    .card-icon-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    
+    /* 卡片标题 */
+    .card-heading {
+      font-size: 28px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 16px;
+    }
+    
+    /* 描述文字 */
+    .card-desc {
+      font-size: 16px;
+      color: #6b7280;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    
+    /* 底部蓝色链接 */
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      font-size: 17px;
+      font-weight: 500;
+      color: #0099ff;
+      text-decoration: none;
+      gap: 6px;
+    }
+    .card-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* 移动端自适应 */
+    @media (max-width: 992px) {
+      .section-title {
+        font-size: 32px;
+      }
+      .cards-wrap {
+        grid-template-columns: 1fr;
+      }
+      .format-card {
+        padding: 32px 24px;
+      }
+      .card-icon-box {
+        width: 36px;
+        height: 36px;
+      }
+    }
+    </style>
+    </head>
+    <body>
+    <div class="container">
+      <h2 class="section-title">Drei Formate für unterschiedliche Energiebedürfnisse</h2>
+    
+      <div class="cards-wrap">
+        <!-- 卡片1 Plug & Play -->
+        <div class="format-card">
+          <div class="card-icon-box">
+            <!-- 在这里替换第一张图标，直接改src路径 -->
+            <img src="icon-plug.png" alt="Plug & Play Icon">
+          </div>
+          <h3 class="card-heading">Plug & Play</h3>
+          <p class="card-desc">
+            Einfach an die Steckdose – keine professionelle Installation erforderlich. Ideal für Balkonkraftwerke und kleine Haushalte.
+          </p>
+          <a href="#" class="card-link">
+            Plug & Play Produkte
+            <span>→</span>
+          </a>
+        </div>
+    
+        <!-- 卡片2 Erweiterbar -->
+        <div class="format-card">
+          <div class="card-icon-box">
+            <!-- 替换第二张图标 -->
+            <img src="icon-expand.png" alt="Erweiterbar Icon">
+          </div>
+          <h3 class="card-heading">Erweiterbar</h3>
+          <p class="card-desc">
+            Parallelschaltung mit SmartBox. Kapazität und Leistung wachsen mit Ihrem Energiebedarf.
+          </p>
+          <a href="#" class="card-link">
+            Erweiterung ansehen
+            <span>→</span>
+          </a>
+        </div>
+    
+        <!-- 卡片3 Zubehör -->
+        <div class="format-card">
+          <div class="card-icon-box">
+            <!-- 替换第三张图标 -->
+            <img src="icon-accessory.png" alt="Zubehör Icon">
+          </div>
+          <h3 class="card-heading">Zubehör</h3>
+          <p class="card-desc">
+            SmartBox, intelligente Stromzähler, tragbare EV-Ladegeräte und mehr für Ihr komplettes Heimsystem.
+          </p>
+          <a href="#" class="card-link">
+            Zubehör durchsuchen
+            <span>→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    </body>
+    </html>
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-format-cards-container-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding_top }}px {{ block.settings.section_padding_horizontal }}px {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-format-cards-inner-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .ai-format-cards-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 {{ block.settings.title_margin_bottom }}px;
+    line-height: 1.2;
+  }
+
+  .ai-format-cards-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: {{ block.settings.card_gap }}px;
+  }
+
+  .ai-format-card-{{ ai_gen_id }} {
+    background: {{ block.settings.card_background }};
+    border: 1px solid {{ block.settings.card_border_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    padding: {{ block.settings.card_padding_vertical }}px {{ block.settings.card_padding_horizontal }}px;
+    text-align: left;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .ai-format-card-{{ ai_gen_id }}:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .ai-format-card-icon-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    margin-bottom: {{ block.settings.icon_margin_bottom }}px;
+  }
+
+  .ai-format-card-icon-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .ai-format-card-icon-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+
+  .ai-format-card-icon-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-format-card-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_heading_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.card_heading_color }};
+    margin: 0 0 {{ block.settings.card_heading_margin_bottom }}px;
+  }
+
+  .ai-format-card-desc-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_text_size }}px;
+    color: {{ block.settings.card_text_color }};
+    line-height: 1.7;
+    margin-bottom: {{ block.settings.card_text_margin_bottom }}px;
+  }
+
+  .ai-format-card-link-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    font-size: {{ block.settings.link_size }}px;
+    font-weight: 500;
+    color: {{ block.settings.link_color }};
+    text-decoration: none;
+    gap: 6px;
+  }
+
+  .ai-format-card-link-{{ ai_gen_id }}:hover {
+    text-decoration: underline;
+  }
+
+  .ai-format-card-link-arrow-{{ ai_gen_id }} {
+    transition: transform 0.2s ease;
+  }
+
+  .ai-format-card-link-{{ ai_gen_id }}:hover .ai-format-card-link-arrow-{{ ai_gen_id }} {
+    transform: translateX(4px);
+  }
+
+  @media screen and (max-width: 992px) {
+    .ai-format-cards-container-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top | times: 0.7 }}px {{ block.settings.section_padding_horizontal | times: 0.7 }}px {{ block.settings.section_padding_bottom | times: 0.7 }}px;
+    }
+
+    .ai-format-cards-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.7 }}px;
+    }
+
+    .ai-format-cards-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-format-card-{{ ai_gen_id }} {
+      padding: {{ block.settings.card_padding_vertical | times: 0.8 }}px {{ block.settings.card_padding_horizontal | times: 0.75 }}px;
+    }
+
+    .ai-format-card-icon-{{ ai_gen_id }} {
+      width: {{ block.settings.icon_size | times: 0.9 }}px;
+      height: {{ block.settings.icon_size | times: 0.9 }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-format-cards-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-format-cards-inner-{{ ai_gen_id }}">
+    {% if block.settings.section_title != blank %}
+      <h2 class="ai-format-cards-title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
+    {% endif %}
+
+    <div class="ai-format-cards-grid-{{ ai_gen_id }}">
+      {% for i in (1..3) %}
+        {% liquid
+          assign card_enabled_key = 'card_' | append: i | append: '_enabled'
+          assign card_icon_key = 'card_' | append: i | append: '_icon'
+          assign card_heading_key = 'card_' | append: i | append: '_heading'
+          assign card_desc_key = 'card_' | append: i | append: '_description'
+          assign card_link_text_key = 'card_' | append: i | append: '_link_text'
+          assign card_link_url_key = 'card_' | append: i | append: '_link_url'
+
+          assign card_enabled = block.settings[card_enabled_key]
+          assign card_icon = block.settings[card_icon_key]
+          assign card_heading = block.settings[card_heading_key]
+          assign card_desc = block.settings[card_desc_key]
+          assign card_link_text = block.settings[card_link_text_key]
+          assign card_link_url = block.settings[card_link_url_key]
+        %}
+
+        {% if card_enabled %}
+          <div class="ai-format-card-{{ ai_gen_id }}">
+            <div class="ai-format-card-icon-{{ ai_gen_id }}">
+              {% if card_icon %}
+                <img
+                  src="{{ card_icon | image_url: width: 200 }}"
+                  alt="{{ card_heading | escape }}"
+                  loading="lazy"
+                  width="200"
+                  height="200"
+                >
+              {% else %}
+                <div class="ai-format-card-icon-placeholder-{{ ai_gen_id }}">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+
+            {% if card_heading != blank %}
+              <h3 class="ai-format-card-heading-{{ ai_gen_id }}">{{ card_heading }}</h3>
+            {% endif %}
+
+            {% if card_desc != blank %}
+              <div class="ai-format-card-desc-{{ ai_gen_id }}">{{ card_desc }}</div>
+            {% endif %}
+
+            {% if card_link_text != blank %}
+              <a
+                href="{{ card_link_url | default: '#' }}"
+                class="ai-format-card-link-{{ ai_gen_id }}"
+              >
+                {{ card_link_text }}
+                <span class="ai-format-card-link-arrow-{{ ai_gen_id }}">→</span>
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Drei Formate Karten",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Abschnitt"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_title",
+      "label": "Titel",
+      "default": "Drei Formate für unterschiedliche Energiebedürfnisse"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximale Breite",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Hintergrundfarbe",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Abstand oben",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Abstand unten",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_horizontal",
+      "label": "Seitlicher Abstand",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Titel-Stil"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Schriftgröße",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Farbe",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "label": "Abstand unten",
+      "min": 20,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Karten-Layout"
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Abstand zwischen Karten",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Hintergrund",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Rahmenfarbe",
+      "default": "#e5e7eb"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Eckenradius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_padding_vertical",
+      "label": "Innenabstand vertikal",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "card_padding_horizontal",
+      "label": "Innenabstand horizontal",
+      "min": 16,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Karten-Inhalt"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Symbolgröße",
+      "min": 24,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "icon_margin_bottom",
+      "label": "Symbol Abstand unten",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_heading_size",
+      "label": "Überschrift Größe",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "color",
+      "id": "card_heading_color",
+      "label": "Überschrift Farbe",
+      "default": "#111827"
+    },
+    {
+      "type": "range",
+      "id": "card_heading_margin_bottom",
+      "label": "Überschrift Abstand unten",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_text_size",
+      "label": "Text Größe",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Text Farbe",
+      "default": "#6b7280"
+    },
+    {
+      "type": "range",
+      "id": "card_text_margin_bottom",
+      "label": "Text Abstand unten",
+      "min": 12,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "label": "Link Größe",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link Farbe",
+      "default": "#0099ff"
+    },
+    {
+      "type": "header",
+      "content": "Karte 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_1_enabled",
+      "label": "Karte 1 aktivieren",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_icon",
+      "label": "Symbol"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_1_heading",
+      "label": "Überschrift",
+      "default": "Plug & Play"
+    },
+    {
+      "type": "richtext",
+      "id": "card_1_description",
+      "label": "Beschreibung",
+      "default": "<p>Einfach an die Steckdose – keine professionelle Installation erforderlich. Ideal für Balkonkraftwerke und kleine Haushalte.</p>"
+    },
+    {
+      "type": "text",
+      "id": "card_1_link_text",
+      "label": "Link-Text",
+      "default": "Plug & Play Produkte"
+    },
+    {
+      "type": "url",
+      "id": "card_1_link_url",
+      "label": "Link-URL"
+    },
+    {
+      "type": "header",
+      "content": "Karte 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_2_enabled",
+      "label": "Karte 2 aktivieren",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_icon",
+      "label": "Symbol"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_2_heading",
+      "label": "Überschrift",
+      "default": "Erweiterbar"
+    },
+    {
+      "type": "richtext",
+      "id": "card_2_description",
+      "label": "Beschreibung",
+      "default": "<p>Parallelschaltung mit SmartBox. Kapazität und Leistung wachsen mit Ihrem Energiebedarf.</p>"
+    },
+    {
+      "type": "text",
+      "id": "card_2_link_text",
+      "label": "Link-Text",
+      "default": "Erweiterung ansehen"
+    },
+    {
+      "type": "url",
+      "id": "card_2_link_url",
+      "label": "Link-URL"
+    },
+    {
+      "type": "header",
+      "content": "Karte 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_3_enabled",
+      "label": "Karte 3 aktivieren",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_icon",
+      "label": "Symbol"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_3_heading",
+      "label": "Überschrift",
+      "default": "Zubehör"
+    },
+    {
+      "type": "richtext",
+      "id": "card_3_description",
+      "label": "Beschreibung",
+      "default": "<p>SmartBox, intelligente Stromzähler, tragbare EV-Ladegeräte und mehr für Ihr komplettes Heimsystem.</p>"
+    },
+    {
+      "type": "text",
+      "id": "card_3_link_text",
+      "label": "Link-Text",
+      "default": "Zubehör durchsuchen"
+    },
+    {
+      "type": "url",
+      "id": "card_3_link_url",
+      "label": "Link-URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Drei Formate Karten"
+    }
+  ]
+}
+{% endschema %}

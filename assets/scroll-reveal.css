@@ -1,0 +1,99 @@
+/*
+ * Reusable, dependency-free scroll reveal states.
+ * Elements only receive the hidden state after scroll-reveal.js has initialized
+ * them, so page content remains available without JavaScript.
+ */
+
+html.scroll-reveal-js [data-scroll-reveal-ready] {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 240ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 260ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0ms;
+  will-change: opacity, transform;
+}
+
+html.scroll-reveal-js [data-scroll-reveal-ready][data-scroll-reveal-media] {
+  transform: scale(1.03);
+  transform-origin: center;
+  backface-visibility: hidden;
+}
+
+html.scroll-reveal-js [data-scroll-reveal-ready].is-scroll-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 650ms cubic-bezier(0.25, 1, 0.5, 1),
+    transform 750ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition-delay: var(--scroll-reveal-delay, 0ms);
+}
+
+html.scroll-reveal-js [data-scroll-reveal-ready][data-scroll-reveal-media].is-scroll-revealed {
+  transform: scale(1);
+}
+
+/* Homepage and product-content sections reveal as one visual module.
+   Descendant content is not registered here, so sliders, cards, forms, and
+   their own animations remain under the control of their existing components. */
+html.scroll-reveal-js [data-scroll-reveal-section-ready] {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  transition:
+    opacity 800ms cubic-bezier(0.25, 1, 0.5, 1),
+    transform 1100ms cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, transform;
+}
+
+html.scroll-reveal-js [data-scroll-reveal-section-ready].is-scroll-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Once the entrance motion is complete, release the transform-containing
+   block so fixed dialogs inside a homepage section keep viewport positioning. */
+html.scroll-reveal-js [data-scroll-reveal-section-ready].is-scroll-revealed.is-scroll-reveal-settled {
+  transform: none;
+  transition: opacity 800ms cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity;
+}
+
+/* Explicitly marked hero/background media follows the module state and gets
+   only a subtle scale settle, avoiding transforms on interactive media. */
+html.scroll-reveal-js [data-scroll-reveal-section-ready] [data-scroll-reveal-module-media] {
+  opacity: 0;
+  transform: scale(1.03);
+  transform-origin: center;
+  backface-visibility: hidden;
+  transition:
+    opacity 800ms cubic-bezier(0.25, 1, 0.5, 1),
+    transform 1100ms cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, transform;
+}
+
+html.scroll-reveal-js [data-scroll-reveal-section-ready].is-scroll-revealed [data-scroll-reveal-module-media] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.scroll-reveal-js [data-scroll-reveal-ready],
+  html.scroll-reveal-js [data-scroll-reveal-ready][data-scroll-reveal-media],
+  html.scroll-reveal-js [data-scroll-reveal-section-ready],
+  html.scroll-reveal-js [data-scroll-reveal-section-ready] [data-scroll-reveal-module-media] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
+}
+
+body[data-disable-animations="true"] [data-scroll-reveal-ready],
+body[data-disable-animations="true"] [data-scroll-reveal-ready][data-scroll-reveal-media],
+body[data-disable-animations="true"] [data-scroll-reveal-section-ready],
+body[data-disable-animations="true"] [data-scroll-reveal-section-ready] [data-scroll-reveal-module-media] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  will-change: auto;
+}

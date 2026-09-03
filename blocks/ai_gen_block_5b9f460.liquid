@@ -1,0 +1,842 @@
+{% doc %}
+  @prompt
+    {% stylesheet %}
+    /* 外层区块容器 */
+    .balkon-vorteile-slider-section {
+      width: 100%;
+      padding: 70px 20px;
+      box-sizing: border-box;
+      background: #ffffff;
+      overflow: hidden;
+    }
+    .vorteile-inner-wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      position: relative;
+    }
+    /* 标题区域 */
+    .vorteile-main-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      margin: 0 0 16px;
+      color: #000;
+    }
+    .vorteile-sub-desc {
+      font-size: 1.1rem;
+      color: #222;
+      margin: 0 0 50px;
+    }
+    /* 轮播容器 */
+    .slider-outer {
+      overflow: hidden;
+    }
+    .slider-track {
+      display: flex;
+      gap: 30px;
+      transition: transform 0.4s ease-out;
+    }
+    /* 单张卡片宽度 */
+    .vorteile-card {
+      flex: 0 0 calc(33.333% - 20px);
+      overflow: hidden;
+      background: #f7f7f7;
+    }
+    @media screen and (max-width: 992px) {
+      .vorteile-card {
+        flex: 0 0 calc(50% - 15px);
+      }
+    }
+    @media screen and (max-width: 640px) {
+      .vorteile-card {
+        flex: 0 0 100%;
+      }
+    }
+    /* 图片容器+缩放动画 */
+    .card-img-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .card-img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .vorteile-card:hover .card-img {
+      transform: scale(1.06);
+    }
+    /* 渐变分割线：hover从左到右展开 */
+    .card-divider-line {
+      height: 4px;
+      width: 0;
+      background: linear-gradient(90deg, #00b8e6, #36d399);
+      transition: width 0.3s ease-out;
+    }
+    .vorteile-card:hover .card-divider-line {
+      width: 100%;
+    }
+    /* 卡片文字区域 */
+    .card-text-area {
+      padding: 24px 20px;
+    }
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 14px;
+      color: #000;
+    }
+    .card-desc {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+    }
+    /* 左右悬浮切换箭头按钮 */
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(255,255,255,0.85);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      transition: background 0.2s ease;
+    }
+    .slider-arrow:hover {
+      background: #fff;
+    }
+    .arrow-left {
+      left: 0;
+    }
+    .arrow-right {
+      right: 0;
+    }
+    .arrow-icon {
+      width: 20px;
+      height: 20px;
+      stroke: #000;
+      stroke-width: 2.5;
+      fill: transparent;
+    }
+    {% endstylesheet %}
+    
+    <section class="balkon-vorteile-slider-section">
+      <div class="vorteile-inner-wrap">
+        <h2 class="vorteile-main-title">Welche Vorteile gibt es für ein Balkonkraftwerk für Balkon?</h2>
+        <p class="vorteile-sub-desc">Es gibt viele Vorteile der Installation eines Balkonkraftwerks auf Balkon:</p>
+    
+        <!-- 左右切换按钮 -->
+        <button class="slider-arrow arrow-left" id="slideLeft">
+          <svg class="arrow-icon" viewBox="0 0 24 24">
+            <path d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <button class="slider-arrow arrow-right" id="slideRight">
+          <svg class="arrow-icon" viewBox="0 0 24 24">
+            <path d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+    
+        <!-- 轮播滚动容器 -->
+        <div class="slider-outer">
+          <div class="slider-track" id="sliderTrack">
+            <!-- 卡片1 Städtische Umgebungen -->
+            <div class="vorteile-card">
+              <div class="card-img-wrap">
+                <img class="card-img" src="https://cdn.shopify.com/s/files/xxx/card1.jpg" alt="Stadt nachhaltige Solarenergie">
+              </div>
+              <div class="card-divider-line"></div>
+              <div class="card-text-area">
+                <h3 class="card-title">Städtische Umgebungen: Nachhaltiges Leben ermöglicht</h3>
+                <p class="card-desc">
+                  In belebten städtischen Gebieten ist der Platz oft begrenzt, aber das Potenzial für Solarenergie ist grenzenlos. Ankers Mini-Solaranlage für Balkon bietet Stadtbewohnern eine praktische und umweltfreundliche Lösung zur Erzeugung von sauberem Strom. Durch die Nutzung des vorhandenen Balkonraums können Bewohner die Kraft der Sonne nutzen, um ihren ökologischen Fußabdruck zu reduzieren, Energiekosten zu senken und zu einer nachhaltigeren Zukunft beizutragen.
+                </p>
+              </div>
+            </div>
+            <!-- 卡片2 Mietwohnungen -->
+            <div class="vorteile-card">
+              <div class="card-img-wrap">
+                <img class="card-img" src="https://cdn.shopify.com/s/files/xxx/card2.jpg" alt="Mietwohnung Balkon Solar">
+              </div>
+              <div class="card-divider-line"></div>
+              <div class="card-text-area">
+                <h3 class="card-title">Mietwohnungen: Energieunabhängigkeit für Mieter</h3>
+                <p class="card-desc">
+                  Im Bereich der Mietwohnungen stoßen Mieter oft auf Einschränkungen bei der Umsetzung nachhaltiger Maßnahmen. Eine Mini-Solaranlage für Balkon bietet jedoch eine praktikable Lösung. Mieter können portable Solarmodule installieren und so ihre eigene saubere Energie erzeugen und die Abhängigkeit vom Stromnetz verringern.
+                </p>
+              </div>
+            </div>
+            <!-- 卡片3 Ferienhäuser -->
+            <div class="vorteile-card">
+              <div class="card-img-wrap">
+                <img class="card-img" src="https://cdn.shopify.com/s/files/xxx/card3.jpg" alt="Ferienhaus Mini Solaranlage">
+              </div>
+              <div class="card-divider-line"></d
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-balkon-slider-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding }}px 20px;
+    box-sizing: border-box;
+    background: {{ block.settings.background_color }};
+    overflow: hidden;
+  }
+
+  .ai-balkon-inner-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .ai-balkon-title-{{ ai_gen_id }} {
+    font-size: clamp(2rem, 5vw, {{ block.settings.title_size }}px);
+    font-weight: 800;
+    margin: 0 0 16px;
+    color: {{ block.settings.title_color }};
+  }
+
+  .ai-balkon-subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subtitle_size }}px;
+    color: {{ block.settings.subtitle_color }};
+    margin: 0 0 50px;
+  }
+
+  .ai-slider-outer-{{ ai_gen_id }} {
+    overflow: hidden;
+  }
+
+  .ai-slider-track-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.card_gap }}px;
+    transition: transform 0.4s ease-out;
+  }
+
+  .ai-card-{{ ai_gen_id }} {
+    flex: 0 0 calc(33.333% - {{ block.settings.card_gap | times: 2 | divided_by: 3 }}px);
+    overflow: hidden;
+    background: {{ block.settings.card_background }};
+  }
+
+  @media screen and (max-width: 992px) {
+    .ai-card-{{ ai_gen_id }} {
+      flex: 0 0 calc(50% - {{ block.settings.card_gap | divided_by: 2 }}px);
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .ai-card-{{ ai_gen_id }} {
+      flex: 0 0 100%;
+    }
+  }
+
+  .ai-card-img-wrap-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-card-img-{{ ai_gen_id }} {
+    width: 100%;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .ai-card-{{ ai_gen_id }}:hover .ai-card-img-{{ ai_gen_id }} {
+    transform: scale(1.06);
+  }
+
+  .ai-card-divider-{{ ai_gen_id }} {
+    height: {{ block.settings.divider_height }}px;
+    width: 0;
+    background: linear-gradient(90deg, {{ block.settings.gradient_start }}, {{ block.settings.gradient_end }});
+    transition: width 0.3s ease-out;
+  }
+
+  .ai-card-{{ ai_gen_id }}:hover .ai-card-divider-{{ ai_gen_id }} {
+    width: 100%;
+  }
+
+  .ai-card-text-{{ ai_gen_id }} {
+    padding: {{ block.settings.card_padding }}px 20px;
+  }
+
+  .ai-card-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_title_size }}px;
+    font-weight: 700;
+    margin: 0 0 14px;
+    color: {{ block.settings.card_title_color }};
+  }
+
+  .ai-card-desc-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_desc_size }}px;
+    line-height: 1.6;
+    color: {{ block.settings.card_desc_color }};
+    margin: 0;
+  }
+
+  .ai-arrow-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: {{ block.settings.arrow_size }}px;
+    height: {{ block.settings.arrow_size }}px;
+    background: {{ block.settings.arrow_background }};
+    border: none;
+    border-radius: {{ block.settings.arrow_radius }}px;
+    cursor: pointer;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s ease;
+  }
+
+  .ai-arrow-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.arrow_hover_background }};
+  }
+
+  .ai-arrow-left-{{ ai_gen_id }} {
+    left: 0;
+  }
+
+  .ai-arrow-right-{{ ai_gen_id }} {
+    right: 0;
+  }
+
+  .ai-arrow-icon-{{ ai_gen_id }} {
+    width: 20px;
+    height: 20px;
+    stroke: {{ block.settings.arrow_color }};
+    stroke-width: 2.5;
+    fill: transparent;
+  }
+{% endstyle %}
+
+<balkon-slider-{{ ai_gen_id }} class="ai-balkon-slider-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-balkon-inner-{{ ai_gen_id }}">
+    {% if block.settings.title != blank %}
+      <h2 class="ai-balkon-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+    {% endif %}
+
+    {% if block.settings.subtitle != blank %}
+      <p class="ai-balkon-subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle }}</p>
+    {% endif %}
+
+    <button class="ai-arrow-{{ ai_gen_id }} ai-arrow-left-{{ ai_gen_id }}" aria-label="Previous slide">
+      <svg class="ai-arrow-icon-{{ ai_gen_id }}" viewBox="0 0 24 24">
+        <path d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+
+    <button class="ai-arrow-{{ ai_gen_id }} ai-arrow-right-{{ ai_gen_id }}" aria-label="Next slide">
+      <svg class="ai-arrow-icon-{{ ai_gen_id }}" viewBox="0 0 24 24">
+        <path d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+
+    <div class="ai-slider-outer-{{ ai_gen_id }}">
+      <div class="ai-slider-track-{{ ai_gen_id }}">
+        {% for i in (1..6) %}
+          {% liquid
+            assign card_enabled_key = 'card_' | append: i | append: '_enabled'
+            assign card_image_key = 'card_' | append: i | append: '_image'
+            assign card_title_key = 'card_' | append: i | append: '_title'
+            assign card_desc_key = 'card_' | append: i | append: '_description'
+
+            assign card_enabled = block.settings[card_enabled_key]
+            assign card_image = block.settings[card_image_key]
+            assign card_title = block.settings[card_title_key]
+            assign card_desc = block.settings[card_desc_key]
+          %}
+
+          {% if card_enabled %}
+            <div class="ai-card-{{ ai_gen_id }}">
+              <div class="ai-card-img-wrap-{{ ai_gen_id }}">
+                {% if card_image %}
+                  <img
+                    class="ai-card-img-{{ ai_gen_id }}"
+                    src="{{ card_image | image_url: width: 800 }}"
+                    alt="{{ card_image.alt | escape }}"
+                    loading="lazy"
+                    width="{{ card_image.width }}"
+                    height="{{ card_image.height }}"
+                  >
+                {% else %}
+                  <div class="ai-card-img-placeholder-{{ ai_gen_id }}">
+                    {{ 'image' | placeholder_svg_tag }}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="ai-card-divider-{{ ai_gen_id }}"></div>
+              <div class="ai-card-text-{{ ai_gen_id }}">
+                {% if card_title != blank %}
+                  <h3 class="ai-card-title-{{ ai_gen_id }}">{{ card_title }}</h3>
+                {% endif %}
+                {% if card_desc != blank %}
+                  <p class="ai-card-desc-{{ ai_gen_id }}">{{ card_desc }}</p>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</balkon-slider-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class BalkonSlider{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.track = this.querySelector('.ai-slider-track-{{ ai_gen_id }}');
+        this.cards = this.querySelectorAll('.ai-card-{{ ai_gen_id }}');
+        this.leftBtn = this.querySelector('.ai-arrow-left-{{ ai_gen_id }}');
+        this.rightBtn = this.querySelector('.ai-arrow-right-{{ ai_gen_id }}');
+      }
+
+      connectedCallback() {
+        if (!this.track || this.cards.length === 0) return;
+
+        this.leftBtn.addEventListener('click', () => this.slide(-1));
+        this.rightBtn.addEventListener('click', () => this.slide(1));
+
+        this.updateSlider();
+      }
+
+      slide(direction) {
+        const cardsPerView = this.getCardsPerView();
+        const maxIndex = Math.max(0, this.cards.length - cardsPerView);
+
+        this.currentIndex += direction;
+
+        if (this.currentIndex < 0) {
+          this.currentIndex = maxIndex;
+        } else if (this.currentIndex > maxIndex) {
+          this.currentIndex = 0;
+        }
+
+        this.updateSlider();
+      }
+
+      getCardsPerView() {
+        const width = window.innerWidth;
+        if (width <= 640) return 1;
+        if (width <= 992) return 2;
+        return 3;
+      }
+
+      updateSlider() {
+        const cardWidth = this.cards[0].offsetWidth;
+        const gap = {{ block.settings.card_gap }};
+        const offset = this.currentIndex * (cardWidth + gap);
+        this.track.style.transform = `translateX(-${offset}px)`;
+      }
+    }
+
+    customElements.define('balkon-slider-{{ ai_gen_id }}', BalkonSlider{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Balcony solar slider",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 40,
+      "unit": "px",
+      "label": "Max width",
+      "default": 1440
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Welche Vorteile gibt es für ein Balkonkraftwerk für Balkon?"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Size",
+      "default": 50
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Es gibt viele Vorteile der Installation eines Balkonkraftwerks auf Balkon:"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Size",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Color",
+      "default": "#222222"
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Background",
+      "default": "#f7f7f7"
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "min": 14,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 22
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "card_desc_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "card_desc_color",
+      "label": "Description color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Divider"
+    },
+    {
+      "type": "range",
+      "id": "divider_height",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "label": "Height",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "gradient_start",
+      "label": "Gradient start",
+      "default": "#00b8e6"
+    },
+    {
+      "type": "color",
+      "id": "gradient_end",
+      "label": "Gradient end",
+      "default": "#36d399"
+    },
+    {
+      "type": "header",
+      "content": "Arrows"
+    },
+    {
+      "type": "range",
+      "id": "arrow_size",
+      "min": 30,
+      "max": 70,
+      "step": 5,
+      "unit": "px",
+      "label": "Size",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "arrow_radius",
+      "min": 0,
+      "max": 25,
+      "step": 1,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "arrow_background",
+      "label": "Background",
+      "default": "rgba(255,255,255,0.85)"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_background",
+      "label": "Hover background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_1_enabled",
+      "label": "Enable card 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Title",
+      "default": "Städtische Umgebungen: Nachhaltiges Leben ermöglicht"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_description",
+      "label": "Description",
+      "default": "In belebten städtischen Gebieten ist der Platz oft begrenzt, aber das Potenzial für Solarenergie ist grenzenlos."
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_2_enabled",
+      "label": "Enable card 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Title",
+      "default": "Mietwohnungen: Energieunabhängigkeit für Mieter"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_description",
+      "label": "Description",
+      "default": "Im Bereich der Mietwohnungen stoßen Mieter oft auf Einschränkungen bei der Umsetzung nachhaltiger Maßnahmen."
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_3_enabled",
+      "label": "Enable card 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Title",
+      "default": "Ferienhäuser: Nachhaltige Energie für Urlaubsdomizile"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_description",
+      "label": "Description",
+      "default": "Ferienhäuser bieten eine einzigartige Gelegenheit, Solarenergie zu nutzen und gleichzeitig die Umwelt zu schonen."
+    },
+    {
+      "type": "header",
+      "content": "Card 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_4_enabled",
+      "label": "Enable card 4",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_4_title",
+      "label": "Title",
+      "default": "Umweltfreundlich: Reduzierung des CO2-Fußabdrucks"
+    },
+    {
+      "type": "textarea",
+      "id": "card_4_description",
+      "label": "Description",
+      "default": "Durch die Nutzung von Solarenergie tragen Sie aktiv zur Reduzierung von Treibhausgasemissionen bei."
+    },
+    {
+      "type": "header",
+      "content": "Card 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_5_enabled",
+      "label": "Enable card 5",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_5_title",
+      "label": "Title",
+      "default": "Kosteneinsparungen: Niedrigere Stromrechnungen"
+    },
+    {
+      "type": "textarea",
+      "id": "card_5_description",
+      "label": "Description",
+      "default": "Mit einem Balkonkraftwerk können Sie Ihre Energiekosten erheblich senken und langfristig Geld sparen."
+    },
+    {
+      "type": "header",
+      "content": "Card 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_6_enabled",
+      "label": "Enable card 6",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_6_title",
+      "label": "Title",
+      "default": "Einfache Installation: Plug-and-Play-Lösung"
+    },
+    {
+      "type": "textarea",
+      "id": "card_6_description",
+      "label": "Description",
+      "default": "Die Installation eines Balkonkraftwerks ist einfach und erfordert keine aufwendigen baulichen Maßnahmen."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Balcony solar slider"
+    }
+  ]
+}
+{% endschema %}

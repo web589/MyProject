@@ -1,0 +1,23 @@
+{%- comment -%}
+  PDP technical-specification whitelist.
+
+  The block parses each group as:
+  group title@@label::key_alias,key_alias||label::source::key_alias###next group...
+
+  Only keys listed here can be rendered. Values always come from the current
+  product's Shopify Metafields; this file contains no product data. A row may
+  opt into a special source with a source token between the label and aliases.
+{%- endcomment -%}
+{%- liquid
+  assign whitelist_product_type = spec_product.type | downcase
+  assign whitelist_product_handle = spec_product.handle | downcase
+  assign whitelist_is_smart_meter = false
+  if whitelist_product_type contains 'smart meter' or whitelist_product_handle contains 'ct002' or whitelist_product_handle contains 'ct003'
+    assign whitelist_is_smart_meter = true
+  endif
+-%}
+{%- if whitelist_is_smart_meter -%}
+Produkt &amp; Messsystem@@Modell::model,modell||Messsystem::messsystem,measurement_system,measuring_system,metering_system||Verbindung zum Stromzähler::meter_connection,connection_to_meter,verbindung_zum_stromzaehler,verbindung_zum_stromzahler||P1-Protokoll::p1_protocol,p1_protokoll||Kompatibilität::compatibility,kompatibilitaet,kompatibilitat###Elektrische Daten@@Stromversorgung::power_supply,stromversorgung||Versorgungsspannungsabweichung::supply_voltage_deviation,supply_voltage_tolerance,versorgungsspannungsabweichung||Spannungsmessbereich::voltage_measurement_range,voltage_range,spannungsmessbereich||Max. Messstrom::max_measuring_current,max_measurement_current,max_messstrom,max_messstromstaerke,max_messstromstarke||Strommessgenauigkeit::current_measurement_accuracy,current_accuracy,strommessgenauigkeit||Spannungsmessgenauigkeit::voltage_measurement_accuracy,voltage_accuracy,spannungsmessgenauigkeit||Leistungsaufnahme::power_consumption,leistungsaufnahme||Modulationsart::modulation_type,modulation,modulationsart###Kommunikation &amp; Installation@@Kommunikation::communication,kommunikation||Wi-Fi::wi_fi,wifi,wlan||Bluetooth::bluetooth||Installation::installation,installation_type||Gehäuse::housing,gehaeuse,gehause###Betrieb@@Schutzart::ip_rating,ingress_protection,schutzart||Betriebstemperatur::operating_temperature,operating_temp,betriebstemperatur||Abmessungen::dimensions,abmessungen||Gerätegewicht::device_weight,weight,geraetegewicht,gerategewicht||Garantie::warranty,garantie
+{%- else -%}
+Batterie &amp; System@@Modell::model,modell||Speicherkapazität::variant_if_present::capacity,storage_capacity,speicherkapazitaet,speicherkapazitat||Batterietyp::battery_type,batterietyp,cell_type,zelltyp||Nennspannung::nominal_voltage,rated_voltage,nennspannung||Zellkapazität::cell_capacity,cell_capacity_per_cell,zellkapazitaet,zellkapazitat||Entladetiefe::dod,depth_of_discharge,entladetiefe||Ladezyklen::cycles,charging_cycles,cycle_life,ladezyklen,lebenszyklen||Lebensdauer::lifespan,lifetime,service_life,lebensdauer###Leistung &amp; Notstrom@@AC-Eingangsleistung::ac_input,ac_input_power,ac_eingangsleistung,pv_input_power,pv_eingangsleistung||AC-Ausgangsleistung::ac_output,ac_output_power,ac_ausgangsleistung||Bidirektionale Leistung::bidirectional_power,bidirektionale_leistung||Notstromleistung::backup_power,emergency_power,notstromleistung,notstrom||Spitzenleistung::peak_power,peak_output_power,spitzenleistung||EPS-Umschaltzeit::eps_switch_time,eps_switching_time,eps_transfer_time,eps_umschaltzeit||Wirkungsgrad::efficiency,conversion_efficiency,wirkungsgrad###Installation &amp; Erweiterung@@Installation::installation,installation_type||AC-Kopplung::ac_coupling,ac_gekoppelt,ac_kopplung||Erweiterbarkeit::scalability,expandability,erweiterbarkeit,max_erweiterung||SmartBox-kompatibel::smartbox_compatible,smartbox_compatibility,smartbox_kompatibel###Smart Energy@@Nulleinspeisung::zero_feed_in,zero_export,zero_injection,nulleinspeisung||VPP-Unterstützung::vpp,vpp_support,vpp_unterstuetzung,vpp_unterstutzung||KI-Energiemanagement::ai_energy_management,ai_energy_manager,ki_energiemanagement,ki_energiemanagementsystem||Smart EV Charging::smart_ev_charging,ev_charging,smart_ev_laden||Kommunikation::communication,kommunikation||Wi-Fi::wi_fi,wifi,wlan||Bluetooth::bluetooth###Betrieb &amp; Gehäuse@@Schutzart::ip_rating,ingress_protection,schutzart||Kühlung::cooling,cooling_type,kuehlung||Betriebstemperatur::operating_temperature,operating_temp||Abmessungen::dimensions,abmessungen||Gerätegewicht::device_weight,weight,geraetegewicht,gerategewicht||Garantie::warranty,garantie||Kompatibilität::compatibility,kompatibilitaet,kompatibilitat
+{%- endif -%}

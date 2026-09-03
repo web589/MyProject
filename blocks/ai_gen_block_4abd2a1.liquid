@@ -1,0 +1,649 @@
+{% doc %}
+  @prompt
+    <style>
+    /* 产品概念介绍 全局样式 */
+    .product-concept-section {
+      width: 100%;
+      padding: 80px 0;
+      background-color: #ffffff;
+    }
+    .concept-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .concept-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 60px;
+      align-items: center;
+    }
+    
+    /* 左侧图片容器（仅做容器，内容由你自己放图片） */
+    .concept-left-box {
+      border-radius: 8px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .concept-left-box img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+    
+    /* 右侧文字内容区域 */
+    .concept-right-wrap .tag-label {
+      font-size: 18px;
+      color: #00d85c;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 16px;
+    }
+    .concept-right-wrap h2 {
+      font-size: 46px;
+      font-weight: 800;
+      color: #111827;
+      line-height: 1.2;
+      margin: 0 0 24px;
+    }
+    .concept-desc-text {
+      font-size: 18px;
+      color: #4b5563;
+      line-height: 1.7;
+      margin: 0 0 32px;
+    }
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 40px;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 17px;
+      color: #111827;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      margin-top: 3px;
+      fill: #00d85c;
+    }
+    .more-btn {
+      display: inline-block;
+      padding: 16px 36px;
+      background-color: #00d85c;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      /* 初始无阴影 */
+      box-shadow: 0 0 0 rgba(0, 216, 92, 0);
+    }
+    /* 鼠标悬浮效果：上浮+四周绿色柔光扩散 */
+    .more-btn:hover {
+      background-color: #00bd52;
+      transform: translateY(-4px);
+      /* 多层绿色外发光，模拟四周淡光散发 */
+      box-shadow: 0 0 8px rgba(0, 216, 92, 0.2),
+                  0 0 16px rgba(0, 216, 92, 0.35),
+                  0 0 28px rgba(0, 216, 92, 0.2);
+    }
+    
+    /* 响应式适配：平板&手机自动上下排列 */
+    @media screen and (max-width: 992px) {
+      .concept-row {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .concept-right-wrap h2 {
+        font-size: 32px;
+      }
+      .product-concept-section {
+        padding: 50px 0;
+      }
+    }
+    @media screen and (max-width: 640px) {
+      .concept-right-wrap h2 {
+        font-size: 28px;
+      }
+      .concept-desc-text,
+      .feature-list li {
+        font-size: 16px;
+      }
+    }
+    </style>
+    
+    <!-- HTML主体 -->
+    <section class="product-concept-section">
+      <div class="concept-container">
+        <div class="concept-row">
+          <!-- ========== 左侧：自己插入图片区域 ========== -->
+          <div class="concept-left-box">
+            <!-- 把引号里替换成你的图片URL即可 -->
+            <img src="此处粘贴你的图片链接地址" alt="Plug-in Battery Heimspeicher">
+          </div>
+    
+          <!-- 右侧德语文案区域 -->
+          <div class="concept-right-wrap">
+            <p class="tag-label">KONZEPT</p>
+            <h2>Was ist eine Plug-in Battery?</h2>
+            <p class="concept-desc-text">
+              Eine Plug-in Battery ist ein Heimspeicher, der ohne Elektriker an die Steckdose angeschlossen werden kann. Sie speichert überschüssigen Solarstrom tagsüber und gibt ihn nachts oder bei Stromausfällen wieder ab.
+            </p>
+            <ul class="feature-list">
+              <li>
+                <svg class="feature-icon" viewBox="0 0 24 24">
+                  <path d="M17 4h-3V2h-4v2H7v18h10V4zm-2 16H9V6h6v14z" />
+                </svg>
+                Plug & Play: Keine komplexe Installation – in 30 Minuten angeschlossen
+              </li>
+              <li>
+                <svg class="feature-icon" viewBox="0 0 24 24">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+                15 ms Umschaltung: Automatische Übernahme bei Stromausfall
+              </li>
+              <li>
+                <svg class="feature-icon" viewBox="0 0 24 24">
+                  <path d="M12 7.27l4.28 10.43-9.28-1.93L12 7.27M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+                </svg>
+                PV-kompatibel: Nahtlose Integration mit Balkon- und Dachanlagen
+              </li>
+            </ul>
+            <a href="#mehr-details" class="more-btn">Mehr erfahren</a>
+          </div>
+        </div>
+      </div>
+    </section>
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-concept-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding_top }}px 0 {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-concept-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_width }}px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .ai-concept-row-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .ai-concept-left-box-{{ ai_gen_id }} {
+    border-radius: {{ block.settings.image_border_radius }}px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .ai-concept-left-box-{{ ai_gen_id }} img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .ai-concept-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: {{ block.settings.image_border_radius }}px;
+  }
+
+  .ai-concept-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .ai-concept-right-wrap-{{ ai_gen_id }} .ai-tag-label-{{ ai_gen_id }} {
+    font-size: {{ block.settings.tag_font_size }}px;
+    color: {{ block.settings.tag_color }};
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 16px;
+  }
+
+  .ai-concept-right-wrap-{{ ai_gen_id }} h2 {
+    font-size: {{ block.settings.heading_font_size }}px;
+    font-weight: 800;
+    color: {{ block.settings.heading_color }};
+    line-height: 1.2;
+    margin: 0 0 24px;
+  }
+
+  .ai-concept-desc-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_font_size }}px;
+    color: {{ block.settings.description_color }};
+    line-height: 1.7;
+    margin: 0 0 32px;
+  }
+
+  .ai-feature-list-{{ ai_gen_id }} {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px;
+  }
+
+  .ai-feature-list-{{ ai_gen_id }} li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: {{ block.settings.feature_font_size }}px;
+    color: {{ block.settings.feature_text_color }};
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .ai-feature-icon-{{ ai_gen_id }} {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    fill: {{ block.settings.feature_icon_color }};
+  }
+
+  .ai-more-btn-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 16px 36px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: 600;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0 rgba(0, 216, 92, 0);
+  }
+
+  .ai-more-btn-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg_color }};
+    transform: translateY(-4px);
+    box-shadow: 0 0 8px {{ block.settings.button_bg_color | color_modify: 'alpha', 0.2 }},
+                0 0 16px {{ block.settings.button_bg_color | color_modify: 'alpha', 0.35 }},
+                0 0 28px {{ block.settings.button_bg_color | color_modify: 'alpha', 0.2 }};
+  }
+
+  @media screen and (max-width: 992px) {
+    .ai-concept-row-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .ai-concept-right-wrap-{{ ai_gen_id }} h2 {
+      font-size: calc({{ block.settings.heading_font_size }}px * 0.7);
+    }
+
+    .ai-product-concept-{{ ai_gen_id }} {
+      padding: 50px 0;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .ai-concept-right-wrap-{{ ai_gen_id }} h2 {
+      font-size: calc({{ block.settings.heading_font_size }}px * 0.6);
+    }
+
+    .ai-concept-desc-text-{{ ai_gen_id }},
+    .ai-feature-list-{{ ai_gen_id }} li {
+      font-size: 16px;
+    }
+  }
+{% endstyle %}
+
+<product-concept-{{ ai_gen_id }} class="ai-product-concept-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-concept-container-{{ ai_gen_id }}">
+    <div class="ai-concept-row-{{ ai_gen_id }}">
+      <div class="ai-concept-left-box-{{ ai_gen_id }}">
+        {% if block.settings.image %}
+          <img
+            src="{{ block.settings.image | image_url: width: 1000 }}"
+            alt="{{ block.settings.image.alt | escape }}"
+            loading="lazy"
+            width="{{ block.settings.image.width }}"
+            height="{{ block.settings.image.height }}"
+          >
+        {% else %}
+          <div class="ai-concept-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="ai-concept-right-wrap-{{ ai_gen_id }}">
+        {% if block.settings.tag_text != blank %}
+          <p class="ai-tag-label-{{ ai_gen_id }}">{{ block.settings.tag_text }}</p>
+        {% endif %}
+
+        {% if block.settings.heading != blank %}
+          <h2>{{ block.settings.heading }}</h2>
+        {% endif %}
+
+        {% if block.settings.description != blank %}
+          <div class="ai-concept-desc-text-{{ ai_gen_id }}">
+            {{ block.settings.description }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.feature_1 != blank or block.settings.feature_2 != blank or block.settings.feature_3 != blank %}
+          <ul class="ai-feature-list-{{ ai_gen_id }}">
+            {% if block.settings.feature_1 != blank %}
+              <li>
+                <svg class="ai-feature-icon-{{ ai_gen_id }}" viewBox="0 0 24 24">
+                  <path d="M17 4h-3V2h-4v2H7v18h10V4zm-2 16H9V6h6v14z" />
+                </svg>
+                {{ block.settings.feature_1 }}
+              </li>
+            {% endif %}
+
+            {% if block.settings.feature_2 != blank %}
+              <li>
+                <svg class="ai-feature-icon-{{ ai_gen_id }}" viewBox="0 0 24 24">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+                {{ block.settings.feature_2 }}
+              </li>
+            {% endif %}
+
+            {% if block.settings.feature_3 != blank %}
+              <li>
+                <svg class="ai-feature-icon-{{ ai_gen_id }}" viewBox="0 0 24 24">
+                  <path d="M12 7.27l4.28 10.43-9.28-1.93L12 7.27M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+                </svg>
+                {{ block.settings.feature_3 }}
+              </li>
+            {% endif %}
+          </ul>
+        {% endif %}
+
+        {% if block.settings.button_text != blank %}
+          <a href="{{ block.settings.button_link }}" class="ai-more-btn-{{ ai_gen_id }}">
+            {{ block.settings.button_text }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</product-concept-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductConcept{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+    }
+    customElements.define('product-concept-{{ ai_gen_id }}', ProductConcept{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product concept",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Container width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1300
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Tag"
+    },
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tag text",
+      "default": "KONZEPT"
+    },
+    {
+      "type": "range",
+      "id": "tag_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "tag_color",
+      "label": "Color",
+      "default": "#00d85c"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Was ist eine Plug-in Battery?"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Font size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 46
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#111827"
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Eine Plug-in Battery ist ein Heimspeicher, der ohne Elektriker an die Steckdose angeschlossen werden kann. Sie speichert überschüssigen Solarstrom tagsüber und gibt ihn nachts oder bei Stromausfällen wieder ab.</p>"
+    },
+    {
+      "type": "range",
+      "id": "description_font_size",
+      "label": "Font size",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Color",
+      "default": "#4b5563"
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "text",
+      "id": "feature_1",
+      "label": "Feature 1",
+      "default": "Plug & Play: Keine komplexe Installation – in 30 Minuten angeschlossen"
+    },
+    {
+      "type": "text",
+      "id": "feature_2",
+      "label": "Feature 2",
+      "default": "15 ms Umschaltung: Automatische Übernahme bei Stromausfall"
+    },
+    {
+      "type": "text",
+      "id": "feature_3",
+      "label": "Feature 3",
+      "default": "PV-kompatibel: Nahtlose Integration mit Balkon- und Dachanlagen"
+    },
+    {
+      "type": "range",
+      "id": "feature_font_size",
+      "label": "Font size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "color",
+      "id": "feature_text_color",
+      "label": "Text color",
+      "default": "#111827"
+    },
+    {
+      "type": "color",
+      "id": "feature_icon_color",
+      "label": "Icon color",
+      "default": "#00d85c"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Font size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background color",
+      "default": "#00d85c"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Hover background color",
+      "default": "#00bd52"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product concept"
+    }
+  ]
+}
+{% endschema %}

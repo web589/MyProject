@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Shopify 风格轮播 Banner</title>
+  <!-- 使用 Google Font 提升字体质感 (可选) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .carousel-wrapper {
+      max-width: 1200px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 32px;
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
+      overflow: hidden;
+      padding: 20px 20px 30px;
+    }
+
+    /* 轮播容器 — 16:9 比例 */
+    .carousel {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #eef2f6;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    /* 滑动轨道 */
+    .carousel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+
+    /* 每张 slide — 16:9 内部填满 */
+    .slide {
+      flex: 0 0 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 40px;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #fff;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* 每张 slide 独立的背景 + 渐变遮罩，保证文字清晰 */
+    .slide-1 {
+      background-image: linear-gradient(135deg, rgba(20, 30, 48, 0.6) 0%, rgba(36, 59, 85, 0.3) 100%), 
+                        url('https://images.unsplash.com/photo-1618220179428-22790b461013?w=1200&q=80&auto=format&fit=crop');
+    }
+    .slide-2 {
+      background-image: linear-gradient(145deg, rgba(40, 20, 30, 0.6) 0%, rgba(80, 40, 60, 0.3) 100%),
+                        url('https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=1200&q=80&auto=format&fit=crop');
+    }
+    .slide-3 {
+      background-image: linear-gradient(160deg, rgba(10, 40, 30, 0.7) 0%, rgba(30, 70, 50, 0.3) 100%),
+                        url('https://images.unsplash.com/photo-1558618666-fcd25c85f2f7?w=1200&q=80&auto=format&fit=crop');
+    }
+    .slide-4 {
+      background-image: linear-gradient(150deg, rgba(50, 20, 40, 0.65) 0%, rgba(90, 40, 70, 0.3) 100%),
+                        url('https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1200&q=80&auto=format&fit=crop');
+    }
+
+    /* 内容容器 — 保持层次 */
+    .slide-content {
+      max-width: 560px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 8px 0;
+      backdrop-filter: blur(2px);
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      padding: 24px 32px;
+      border-left: 4px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+
+    .slide-title {
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .slide-description {
+      font-size: clamp(0.95rem, 2vw, 1.25rem);
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      opacity: 0.95;
+      color: #f0f4ff;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      max-width: 90%;
+    }
+
+    .slide-btn {
+      display: inline-block;
+      background: #ffffff;
+      color: #1a1e2b;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 32px;
+      border-radius: 60px;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      background: rgba(255, 255, 255, 0.9);
+      color: #1a1e2b;
+      font-weight: 600;
+      text-shadow: none;
+      align-self: flex-start;
+    }
+
+    .slide-btn:hover {
+      background: #ffffff;
+      transform: scale(1.04);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+      border-color: #ffffff;
+    }
+
+    /* 指示器 (小圆点) */
+    .carousel-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 24px;
+      padding: 0 10px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 40px;
+      background: #d0d7e2;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      padding: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      flex-shrink: 0;
+    }
+
+    .dot.active {
+      background: #1f2a3a;
+      width: 36px;
+      background: #1e2b3c;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .dot:hover {
+      background: #3e4d62;
+      transform: scale(1.1);
+    }
+
+    /* 左右箭头 — 简洁、现代 */
+    .carousel-controls {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+    }
+
+    .carousel-btn {
+      pointer-events: auto;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 300;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: rgba(20, 30, 40, 0.25);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .carousel-btn:hover {
+      background: rgba(255, 255, 255, 0.35);
+      transform: scale(1.06);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    .carousel-btn:active {
+      transform: scale(0.94);
+    }
+
+    /* 移动端适应 */
+    @media (max-width: 680px) {
+      .slide {
+        padding: 20px;
+      }
+      .slide-content {
+        padding: 18px 20px;
+        max-width: 100%;
+        backdrop-filter: blur(4px);
+        background: rgba(0,0,0,0.15);
+        border-left-width: 3px;
+      }
+      .slide-title {
+        font-size: 1.8rem;
+      }
+      .slide-description {
+        font-size: 0.95rem;
+        max-width: 100%;
+      }
+      .slide-btn {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+      }
+      .carousel-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.4rem;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .carousel-wrapper {
+        padding: 12px;
+      }
+      .slide-content {
+        padding: 14px 16px;
+      }
+      .slide-title {
+        font-size: 1.5rem;
+      }
+      .carousel-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="carousel-wrapper">
+  <div class="carousel" id="carousel">
+
+    <!-- 滑动轨道 -->
+    <div class="carousel-track" id="carouselTrack">
+
+      <!-- Slide 1 -->
+      <div class="slide slide-1">
+        <div class="slide-content">
+          <h2 class="slide-title">夏日精选</h2>
+          <p class="slide-description">清新风格，点亮你的每一天。全新系列现已上线。</p>
+          <a href="#" class="slide-btn" onclick="event.preventDefault(); alert('跳转到 /summer-collection');">探索夏日</a>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="slide slide-2">
+        <div class="slide-content">
+          <h2 class="slide-title">经典永恒</h2>
+          <p class="slide-description">永不过时的设计，为你的生活增添质感。</p>
+          <a href="#" class="slide-btn" onclick="event.preventDefault(); alert('跳转到 /classic');">查看经典</a>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="slide slide-3">
+        <div class="slide-content">
+          <h2 class="slide-title">自然灵感</h2>
+          <p class="slide-description">来自森林与海洋的配色，让身心回归宁静。</p>
+          <a href="#" class="slide-btn" onclick="event.preventDefault(); alert('跳转到 /nature');">探索自然</a>
+        </div>
+      </div>
+
+      <!-- Slide 4 -->
+      <div class="slide slide-4">
+        <div class="slide-content">
+          <h2 class="slide-title">未来科技</h2>
+          <p class="slide-description">智能穿戴，极简设计，开启你的数字化生活。</p>
+          <a href="#" class="slide-btn" onclick="event.preventDefault(); alert('跳转到 /tech');">了解科技</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 左右控制按钮 -->
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="prevBtn" aria-label="上一张">‹</button>
+      <button class="carousel-btn" id="nextBtn" aria-label="下一张">›</button>
+    </div>
+  </div>
+
+  <!-- 指示器 -->
+  <div class="carousel-indicators" id="indicators">
+    <button class="dot active" data-index="0" aria-label="Slide 1"></button>
+    <button class="dot" data-index="1" aria-label="Slide 2"></button>
+    <button class="dot" data-index="2" aria-label="Slide 3"></button>
+    <button class="dot" data-index="3" aria-label="Slide 4"></button>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const track = document.getElementById('carouselTrack');
+    const slides = track.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+    let isTransitioning = false;
+
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // 更新轨道位置 & 指示器状态
+    function updateCarousel(index, animate = true) {
+      if (isTransitioning) return;
+      if (index < 0) index = totalSlides - 1;
+      if (index >= totalSlides) index = 0;
+      
+      isTransitioning = true;
+      currentIndex = index;
+
+      // 移动轨道
+      track.style.transition = animate ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+      // 更新指示器
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentIndex);
+      });
+
+      // 过渡结束后解锁
+      setTimeout(() => {
+        isTransitioning = false;
+      }, 620);
+    }
+
+    // 下一张
+    function nextSlide() {
+      if (isTransitioning) return;
+      updateCarousel(currentIndex + 1);
+    }
+
+    // 上一张
+    function prevSlide() {
+      if (isTransitioning) return;
+      updateCarousel(currentIndex - 1);
+    }
+
+    // 点击指示器跳转
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (idx === currentIndex || isTransitioning) return;
+        updateCarousel(idx);
+      });
+    });
+
+    // 按钮事件
+    prevBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      prevSlide();
+    });
+
+    nextBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nextSlide();
+    });
+
+    // 键盘操控 (可选)
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        nextSlide();
+      }
+    });
+
+    // 触摸滑动支持 (移动端)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const carouselElement = document.getElementById('carousel');
+
+    carouselElement.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    carouselElement.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      // 滑动阈值 40px
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }, { passive: true });
+
+    // 初始化第一张 (确保位置)
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(0%)';
+    // 强制重绘后恢复过渡
+    requestAnimationFrame(() => {
+      track.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    });
+
+    // 自动播放 (每5秒切换) 但用户交互时暂停/重启? 简单实现: 设置间隔
+    let autoPlayInterval = setInterval(nextSlide, 5000);
+
+    // 鼠标/触摸进入暂停自动播放，离开恢复 (提升体验)
+    const carouselContainer = document.querySelector('.carousel-wrapper');
+    carouselContainer.addEventListener('mouseenter', function() {
+      clearInterval(autoPlayInterval);
+    });
+    carouselContainer.addEventListener('mouseleave', function() {
+      autoPlayInterval = setInterval(nextSlide, 5000);
+    });
+    // 触摸设备：触摸时暂停
+    carouselContainer.addEventListener('touchstart', function() {
+      clearInterval(autoPlayInterval);
+    }, { passive: true });
+    carouselContainer.addEventListener('touchend', function() {
+      autoPlayInterval = setInterval(nextSlide, 5000);
+    }, { passive: true });
+
+    // 暴露方法给调试 (非必须)
+    window.carouselGoTo = updateCarousel;
+  })();
+</script>
+</body>
+</html>

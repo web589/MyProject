@@ -1,0 +1,1045 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>NODE Rabot · Produkte</title>
+      <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+    
+        body {
+          background: #f2f4f8;
+          min-height: 100vh;
+          padding: 2rem 1rem;
+        }
+    
+        /* 页面标题 */
+        .page-header {
+          max-width: 1400px;
+          margin: 0 auto 2rem;
+          padding: 0 0.5rem;
+        }
+    
+        .page-header h2 {
+          font-size: 2rem;
+          font-weight: 650;
+          color: #0b1a2b;
+          letter-spacing: -0.5px;
+        }
+    
+        .page-header p {
+          color: #5a6f82;
+          font-size: 1rem;
+          margin-top: 0.25rem;
+        }
+    
+        /* 4列网格 */
+        .product-grid {
+          max-width: 1400px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.5rem;
+        }
+    
+        /* 每个产品卡片 */
+        .product-card {
+          background: #ffffff;
+          border-radius: 28px;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 8px 20px rgba(0, 0, 0, 0.03);
+          padding: 1.5rem 1.2rem 1.2rem;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          border: 1px solid rgba(0, 0, 0, 0.02);
+          display: flex;
+          flex-direction: column;
+        }
+    
+        .product-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 24px 48px rgba(0, 0, 0, 0.06);
+        }
+    
+        /* 品牌标题 */
+        .brand-headline {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          margin-bottom: 0.15rem;
+        }
+    
+        .brand-headline h3 {
+          font-size: 1.2rem;
+          font-weight: 650;
+          color: #0b1a2b;
+        }
+    
+        .brand-headline .badge {
+          font-size: 0.6rem;
+          font-weight: 500;
+          background: #eef2f6;
+          padding: 0.15rem 0.6rem;
+          border-radius: 30px;
+          color: #1f2a3a;
+        }
+    
+        /* 产品名称 */
+        .product-name {
+          font-size: 0.85rem;
+          font-weight: 450;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+          border-left: 3px solid #c0cfde;
+          padding-left: 0.6rem;
+          background: #fafcfe;
+          border-radius: 0 4px 4px 0;
+          display: inline-block;
+          padding-right: 0.6rem;
+        }
+    
+        /* 1:1 图片容器 */
+        .product-image {
+          width: 100%;
+          aspect-ratio: 1 / 1;
+          background: #ffffff;
+          border-radius: 20px;
+          margin-bottom: 1.2rem;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid #f0f2f5;
+          box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+    
+        .product-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          display: block;
+        }
+    
+        /* 如果没有图片，显示占位SVG */
+        .product-image .placeholder {
+          width: 70%;
+          height: 70%;
+          color: #b6c9db;
+          opacity: 0.4;
+        }
+    
+        /* 价格块 */
+        .price-block {
+          display: flex;
+          align-items: baseline;
+          flex-wrap: wrap;
+          gap: 0.3rem 0.6rem;
+          margin: 0.3rem 0 0.8rem 0;
+          background: #f9fbfd;
+          padding: 0.3rem 0.6rem 0.3rem 0;
+          border-radius: 40px;
+        }
+    
+        .price-current {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #0b1a2b;
+          letter-spacing: -0.3px;
+        }
+    
+        .price-old {
+          font-size: 1rem;
+          font-weight: 400;
+          color: #7c8b9c;
+          text-decoration: line-through;
+        }
+    
+        .price-tax-note {
+          font-size: 0.6rem;
+          font-weight: 450;
+          color: #3d5a73;
+          background: #e2f0e6;
+          padding: 0.1rem 0.6rem;
+          border-radius: 30px;
+          margin-left: auto;
+          white-space: nowrap;
+        }
+    
+        /* 分期付款块 */
+        .financing-block {
+          background: #f2f6fc;
+          border-radius: 16px;
+          padding: 0.6rem 0.9rem;
+          margin: 0.5rem 0 0.8rem 0;
+          border: 1px solid #e5ecf3;
+          flex-shrink: 0;
+        }
+    
+        .financing-logos {
+          display: flex;
+          align-items: center;
+          gap: 0.3rem 0.6rem;
+          flex-wrap: wrap;
+          margin-bottom: 0.15rem;
+        }
+    
+        .financing-logos .bank {
+          font-weight: 650;
+          font-size: 0.7rem;
+          color: #1a2b3c;
+        }
+    
+        .financing-logos .bank-bnp {
+          font-weight: 700;
+          color: #0055a5;
+          background: white;
+          padding: 0.05rem 0.7rem 0.05rem 0.5rem;
+          border-radius: 40px;
+          font-size: 0.65rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.15rem;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+        }
+    
+        .financing-logos .bank-bnp::before {
+          content: "●";
+          color: #0095d9;
+          font-size: 0.4rem;
+          margin-right: 0.1rem;
+        }
+    
+        .financing-details {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: baseline;
+          justify-content: space-between;
+          margin-top: 0.15rem;
+        }
+    
+        .interest-rate {
+          font-weight: 550;
+          color: #1f3a4b;
+          background: #ffffffcc;
+          padding: 0.05rem 0.6rem 0.05rem 0.5rem;
+          border-radius: 40px;
+          font-size: 0.7rem;
+        }
+    
+        .interest-rate stro
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-grid-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px 1rem;
+    background: {{ block.settings.background_color }};
+  }
+
+  .ai-product-grid-header-{{ ai_gen_id }} {
+    max-width: 1400px;
+    margin: 0 auto 2rem;
+    padding: 0 0.5rem;
+  }
+
+  .ai-product-grid-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 650;
+    color: {{ block.settings.title_color }};
+    letter-spacing: -0.5px;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .ai-product-grid-subtitle-{{ ai_gen_id }} {
+    color: {{ block.settings.subtitle_color }};
+    font-size: {{ block.settings.subtitle_size }}px;
+    margin: 0;
+  }
+
+  .ai-product-grid-container-{{ ai_gen_id }} {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .ai-product-card-{{ ai_gen_id }} {
+    background: {{ block.settings.card_background }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 8px 20px rgba(0, 0, 0, 0.03);
+    padding: 1.5rem 1.2rem 1.2rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ai-product-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.06);
+  }
+
+  .ai-brand-headline-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.15rem;
+  }
+
+  .ai-brand-name-{{ ai_gen_id }} {
+    font-size: 1.2rem;
+    font-weight: 650;
+    color: {{ block.settings.brand_color }};
+    margin: 0;
+  }
+
+  .ai-badge-{{ ai_gen_id }} {
+    font-size: 0.6rem;
+    font-weight: 500;
+    background: {{ block.settings.badge_background }};
+    padding: 0.15rem 0.6rem;
+    border-radius: 30px;
+    color: {{ block.settings.badge_text_color }};
+  }
+
+  .ai-product-name-{{ ai_gen_id }} {
+    font-size: 0.85rem;
+    font-weight: 450;
+    color: {{ block.settings.product_name_color }};
+    margin-bottom: 1rem;
+    border-left: 3px solid {{ block.settings.product_name_border }};
+    padding-left: 0.6rem;
+    background: {{ block.settings.product_name_background }};
+    border-radius: 0 4px 4px 0;
+    display: inline-block;
+    padding-right: 0.6rem;
+  }
+
+  .ai-product-image-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #ffffff;
+    border-radius: 20px;
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #f0f2f5;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
+  }
+
+  .ai-product-image-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .ai-product-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-product-image-placeholder-{{ ai_gen_id }} svg {
+    width: 70%;
+    height: 70%;
+    color: #b6c9db;
+    opacity: 0.4;
+  }
+
+  .ai-price-block-{{ ai_gen_id }} {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.6rem;
+    margin: 0.3rem 0 0.8rem 0;
+    background: {{ block.settings.price_block_background }};
+    padding: 0.3rem 0.6rem 0.3rem 0;
+    border-radius: 40px;
+  }
+
+  .ai-price-current-{{ ai_gen_id }} {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: {{ block.settings.price_color }};
+    letter-spacing: -0.3px;
+  }
+
+  .ai-price-old-{{ ai_gen_id }} {
+    font-size: 1rem;
+    font-weight: 400;
+    color: {{ block.settings.compare_price_color }};
+    text-decoration: line-through;
+  }
+
+  .ai-price-tax-note-{{ ai_gen_id }} {
+    font-size: 0.6rem;
+    font-weight: 450;
+    color: {{ block.settings.tax_note_text_color }};
+    background: {{ block.settings.tax_note_background }};
+    padding: 0.1rem 0.6rem;
+    border-radius: 30px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .ai-financing-block-{{ ai_gen_id }} {
+    background: {{ block.settings.financing_background }};
+    border-radius: 16px;
+    padding: 0.6rem 0.9rem;
+    margin: 0.5rem 0 0.8rem 0;
+    border: 1px solid {{ block.settings.financing_border }};
+    flex-shrink: 0;
+  }
+
+  .ai-financing-logos-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.15rem;
+  }
+
+  .ai-bank-{{ ai_gen_id }} {
+    font-weight: 650;
+    font-size: 0.7rem;
+    color: {{ block.settings.financing_text_color }};
+  }
+
+  .ai-bank-bnp-{{ ai_gen_id }} {
+    font-weight: 700;
+    color: #0055a5;
+    background: white;
+    padding: 0.05rem 0.7rem 0.05rem 0.5rem;
+    border-radius: 40px;
+    font-size: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  }
+
+  .ai-bank-bnp-{{ ai_gen_id }}::before {
+    content: "●";
+    color: #0095d9;
+    font-size: 0.4rem;
+    margin-right: 0.1rem;
+  }
+
+  .ai-financing-details-{{ ai_gen_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-top: 0.15rem;
+  }
+
+  .ai-interest-rate-{{ ai_gen_id }} {
+    font-weight: 550;
+    color: {{ block.settings.financing_text_color }};
+    background: #ffffffcc;
+    padding: 0.05rem 0.6rem 0.05rem 0.5rem;
+    border-radius: 40px;
+    font-size: 0.7rem;
+  }
+
+  .ai-monthly-payment-{{ ai_gen_id }} {
+    font-weight: 600;
+    color: {{ block.settings.financing_text_color }};
+    font-size: 0.75rem;
+  }
+
+  .ai-product-link-{{ ai_gen_id }} {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  @media screen and (max-width: 1200px) {
+    .ai-product-grid-container-{{ ai_gen_id }} {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-product-grid-container-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
+      gap: 1rem;
+    }
+
+    .ai-product-grid-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.7);
+    }
+
+    .ai-product-grid-subtitle-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.subtitle_size }}px * 0.85);
+    }
+
+    .ai-product-card-{{ ai_gen_id }} {
+      padding: 1rem 0.8rem 0.8rem;
+    }
+  }
+{% endstyle %}
+
+<product-grid-{{ ai_gen_id }} class="ai-product-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.title != blank or block.settings.subtitle != blank %}
+    <div class="ai-product-grid-header-{{ ai_gen_id }}">
+      {% if block.settings.title != blank %}
+        <h2 class="ai-product-grid-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+      {% endif %}
+      {% if block.settings.subtitle != blank %}
+        <p class="ai-product-grid-subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="ai-product-grid-container-{{ ai_gen_id }}">
+    {% for i in (1..8) %}
+      {% liquid
+        assign product_key = 'product_' | append: i
+        assign product = block.settings[product_key]
+        assign brand_key = 'brand_' | append: i
+        assign brand = block.settings[brand_key]
+        assign badge_key = 'badge_' | append: i
+        assign badge = block.settings[badge_key]
+        assign product_name_key = 'product_name_' | append: i
+        assign product_name = block.settings[product_name_key]
+      %}
+
+      {% if product != blank %}
+        <div class="ai-product-card-{{ ai_gen_id }}">
+          <a href="{{ product.url }}" class="ai-product-link-{{ ai_gen_id }}">
+            <div class="ai-brand-headline-{{ ai_gen_id }}">
+              {% if brand != blank %}
+                <h3 class="ai-brand-name-{{ ai_gen_id }}">{{ brand }}</h3>
+              {% endif %}
+              {% if badge != blank %}
+                <span class="ai-badge-{{ ai_gen_id }}">{{ badge }}</span>
+              {% endif %}
+            </div>
+
+            {% if product_name != blank %}
+              <div class="ai-product-name-{{ ai_gen_id }}">{{ product_name }}</div>
+            {% endif %}
+
+            <div class="ai-product-image-{{ ai_gen_id }}">
+              {% if product.featured_image %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                >
+              {% else %}
+                <div class="ai-product-image-placeholder-{{ ai_gen_id }}">
+                  {{ 'product-1' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="ai-price-block-{{ ai_gen_id }}">
+              <span class="ai-price-current-{{ ai_gen_id }}">{{ product.price | money }}</span>
+              {% if product.compare_at_price > product.price %}
+                <span class="ai-price-old-{{ ai_gen_id }}">{{ product.compare_at_price | money }}</span>
+              {% endif %}
+              {% if block.settings.show_tax_note %}
+                <span class="ai-price-tax-note-{{ ai_gen_id }}">{{ block.settings.tax_note_text }}</span>
+              {% endif %}
+            </div>
+
+            {% if block.settings.show_financing %}
+              <div class="ai-financing-block-{{ ai_gen_id }}">
+                <div class="ai-financing-logos-{{ ai_gen_id }}">
+                  <span class="ai-bank-{{ ai_gen_id }}">{{ block.settings.financing_bank_1 }}</span>
+                  <span class="ai-bank-bnp-{{ ai_gen_id }}">{{ block.settings.financing_bank_2 }}</span>
+                </div>
+                <div class="ai-financing-details-{{ ai_gen_id }}">
+                  <span class="ai-interest-rate-{{ ai_gen_id }}">{{ block.settings.financing_rate_text }}</span>
+                  {% if block.settings.show_monthly_payment %}
+                    {% assign monthly = product.price | divided_by: block.settings.financing_months %}
+                    <span class="ai-monthly-payment-{{ ai_gen_id }}">{{ monthly | money }}/{{ block.settings.financing_period_label }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          </a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</product-grid-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductGrid{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.cards = this.querySelectorAll('.ai-product-card-{{ ai_gen_id }}');
+        this.setupAccessibility();
+      }
+
+      setupAccessibility() {
+        this.cards.forEach((card) => {
+          const link = card.querySelector('.ai-product-link-{{ ai_gen_id }}');
+          if (link) {
+            link.setAttribute('aria-label', 'View product details');
+          }
+        });
+      }
+    }
+
+    customElements.define('product-grid-{{ ai_gen_id }}', ProductGrid{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product grid 4-column",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "NODE Rabot · Produkte"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "text",
+      "id": "brand_1",
+      "label": "Brand name 1"
+    },
+    {
+      "type": "text",
+      "id": "badge_1",
+      "label": "Badge 1"
+    },
+    {
+      "type": "text",
+      "id": "product_name_1",
+      "label": "Product name 1"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "text",
+      "id": "brand_2",
+      "label": "Brand name 2"
+    },
+    {
+      "type": "text",
+      "id": "badge_2",
+      "label": "Badge 2"
+    },
+    {
+      "type": "text",
+      "id": "product_name_2",
+      "label": "Product name 2"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "text",
+      "id": "brand_3",
+      "label": "Brand name 3"
+    },
+    {
+      "type": "text",
+      "id": "badge_3",
+      "label": "Badge 3"
+    },
+    {
+      "type": "text",
+      "id": "product_name_3",
+      "label": "Product name 3"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "text",
+      "id": "brand_4",
+      "label": "Brand name 4"
+    },
+    {
+      "type": "text",
+      "id": "badge_4",
+      "label": "Badge 4"
+    },
+    {
+      "type": "text",
+      "id": "product_name_4",
+      "label": "Product name 4"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "text",
+      "id": "brand_5",
+      "label": "Brand name 5"
+    },
+    {
+      "type": "text",
+      "id": "badge_5",
+      "label": "Badge 5"
+    },
+    {
+      "type": "text",
+      "id": "product_name_5",
+      "label": "Product name 5"
+    },
+    {
+      "type": "product",
+      "id": "product_6",
+      "label": "Product 6"
+    },
+    {
+      "type": "text",
+      "id": "brand_6",
+      "label": "Brand name 6"
+    },
+    {
+      "type": "text",
+      "id": "badge_6",
+      "label": "Badge 6"
+    },
+    {
+      "type": "text",
+      "id": "product_name_6",
+      "label": "Product name 6"
+    },
+    {
+      "type": "product",
+      "id": "product_7",
+      "label": "Product 7"
+    },
+    {
+      "type": "text",
+      "id": "brand_7",
+      "label": "Brand name 7"
+    },
+    {
+      "type": "text",
+      "id": "badge_7",
+      "label": "Badge 7"
+    },
+    {
+      "type": "text",
+      "id": "product_name_7",
+      "label": "Product name 7"
+    },
+    {
+      "type": "product",
+      "id": "product_8",
+      "label": "Product 8"
+    },
+    {
+      "type": "text",
+      "id": "brand_8",
+      "label": "Brand name 8"
+    },
+    {
+      "type": "text",
+      "id": "badge_8",
+      "label": "Badge 8"
+    },
+    {
+      "type": "text",
+      "id": "product_name_8",
+      "label": "Product name 8"
+    },
+    {
+      "type": "header",
+      "content": "Financing"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_financing",
+      "label": "Show financing",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "financing_bank_1",
+      "label": "Bank 1 name",
+      "default": "Santander"
+    },
+    {
+      "type": "text",
+      "id": "financing_bank_2",
+      "label": "Bank 2 name",
+      "default": "BNP Paribas"
+    },
+    {
+      "type": "text",
+      "id": "financing_rate_text",
+      "label": "Interest rate text",
+      "default": "0% eff. Jahreszins"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_monthly_payment",
+      "label": "Show monthly payment",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "financing_months",
+      "label": "Financing months",
+      "min": 6,
+      "max": 60,
+      "step": 6,
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "financing_period_label",
+      "label": "Period label",
+      "default": "Monat"
+    },
+    {
+      "type": "header",
+      "content": "Tax note"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tax_note",
+      "label": "Show tax note",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tax_note_text",
+      "label": "Tax note text",
+      "default": "inkl. MwSt."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f2f4f8"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#0b1a2b"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle",
+      "default": "#5a6f82"
+    },
+    {
+      "type": "color",
+      "id": "brand_color",
+      "label": "Brand name",
+      "default": "#0b1a2b"
+    },
+    {
+      "type": "color",
+      "id": "badge_background",
+      "label": "Badge background",
+      "default": "#eef2f6"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text",
+      "default": "#1f2a3a"
+    },
+    {
+      "type": "color",
+      "id": "product_name_color",
+      "label": "Product name",
+      "default": "#2c3e50"
+    },
+    {
+      "type": "color",
+      "id": "product_name_border",
+      "label": "Product name border",
+      "default": "#c0cfde"
+    },
+    {
+      "type": "color",
+      "id": "product_name_background",
+      "label": "Product name background",
+      "default": "#fafcfe"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price",
+      "default": "#0b1a2b"
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Compare price",
+      "default": "#7c8b9c"
+    },
+    {
+      "type": "color",
+      "id": "price_block_background",
+      "label": "Price block background",
+      "default": "#f9fbfd"
+    },
+    {
+      "type": "color",
+      "id": "tax_note_background",
+      "label": "Tax note background",
+      "default": "#e2f0e6"
+    },
+    {
+      "type": "color",
+      "id": "tax_note_text_color",
+      "label": "Tax note text",
+      "default": "#3d5a73"
+    },
+    {
+      "type": "color",
+      "id": "financing_background",
+      "label": "Financing background",
+      "default": "#f2f6fc"
+    },
+    {
+      "type": "color",
+      "id": "financing_border",
+      "label": "Financing border",
+      "default": "#e5ecf3"
+    },
+    {
+      "type": "color",
+      "id": "financing_text_color",
+      "label": "Financing text",
+      "default": "#1a2b3c"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Subtitle size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product grid 4-column"
+    }
+  ]
+}
+{% endschema %}

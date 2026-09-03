@@ -1,0 +1,319 @@
+{% assign scenario_id = block.id | replace: '_', '' | downcase %}
+{% liquid
+  assign is_product_context = false
+  assign use_product_scenario = false
+  assign show_scenario_tags = false
+  if request.page_type == 'product' and product != blank and block.settings.content_source != 'theme_editor'
+    assign is_product_context = true
+    assign pdp_content_candidate = product.metafields.custom.pdp_content.value
+    if pdp_content_candidate != blank
+      assign pdp_content_owner = pdp_content_candidate.product.value
+      assign pdp_content_is_for_product = false
+      if pdp_content_owner != blank
+        if pdp_content_owner.handle == product.handle
+          assign pdp_content_is_for_product = true
+        endif
+      elsif pdp_content_candidate.system.handle == product.handle
+        assign pdp_content_is_for_product = true
+      endif
+      if pdp_content_is_for_product
+        assign pdp_content = pdp_content_candidate
+        assign pdp_scenarios = pdp_content.scenarios.value
+        if pdp_scenarios != blank
+          assign pdp_scenario_index = block.settings.product_content_index | minus: 1
+          assign pdp_scenario = pdp_scenarios[pdp_scenario_index]
+          if pdp_scenario != blank
+            assign use_product_scenario = true
+            assign show_scenario_tags = true
+            assign scenario_section_title = pdp_content.scenario_title.value
+            assign scenario_section_description = pdp_content.scenario_subtitle.value
+            assign scenario_image = pdp_scenario.image.value
+            assign scenario_heading = pdp_scenario.title.value
+            assign scenario_text = pdp_scenario.description.value
+          endif
+        endif
+      endif
+    endif
+  endif
+  if is_product_context == false
+    assign scenario_section_title = block.settings.section_title
+    assign scenario_section_description = block.settings.section_description
+    assign scenario_image = block.settings.image
+    assign scenario_heading = block.settings.heading
+    assign scenario_text = block.settings.text
+    if block.settings.tag_1_value != blank or block.settings.tag_2_value != blank or block.settings.tag_3_value != blank
+      assign show_scenario_tags = true
+    endif
+  endif
+%}
+
+{% style %}
+  .pdp-scenario-item-{{ scenario_id }} {
+    width: 100%;
+    max-width: {{ block.settings.container_max_width }}px;
+    margin: {{ block.settings.margin_top }}px auto {{ block.settings.margin_bottom }}px;
+    padding: {{ block.settings.padding_top }}px 24px {{ block.settings.padding_bottom }}px;
+    box-sizing: border-box;
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+  }
+
+  .pdp-scenario-item__header-{{ scenario_id }} {
+    margin-bottom: {{ block.settings.header_spacing }}px;
+  }
+
+  .pdp-scenario-item__section-title-{{ scenario_id }} {
+    margin: 0 0 {{ block.settings.title_description_spacing }}px;
+    color: {{ block.settings.heading_color }};
+    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+    font-size: {{ block.settings.section_title_size }}px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: {{ block.settings.header_alignment }};
+  }
+
+  .pdp-scenario-item__section-description-{{ scenario_id }} {
+    margin: 0;
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.section_description_size }}px;
+    font-weight: {{ block.settings.section_description_weight }};
+    line-height: 1.6;
+    text-align: {{ block.settings.header_alignment }};
+  }
+
+  .pdp-scenario-item__grid-{{ scenario_id }} {
+    display: grid;
+    grid-template-columns: minmax(0, {{ block.settings.image_width }}fr) minmax(0, {{ 100 | minus: block.settings.image_width }}fr);
+    gap: {{ block.settings.column_gap }}px;
+    align-items: center;
+  }
+
+  .pdp-scenario-item__grid-{{ scenario_id }}--text-only {
+    grid-template-columns: 1fr;
+  }
+
+  .pdp-scenario-item__grid-{{ scenario_id }}--image-right .pdp-scenario-item__media-{{ scenario_id }} {
+    order: 2;
+  }
+
+  .pdp-scenario-item__grid-{{ scenario_id }}--image-right .pdp-scenario-item__content-{{ scenario_id }} {
+    order: 1;
+  }
+
+  .pdp-scenario-item__media-{{ scenario_id }} {
+    overflow: hidden;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    background: {{ block.settings.image_background }};
+  }
+
+  .pdp-scenario-item__media-{{ scenario_id }} img,
+  .pdp-scenario-item__placeholder-{{ scenario_id }} svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.4s ease;
+  }
+
+  .pdp-scenario-item__media-{{ scenario_id }} img {
+    aspect-ratio: {{ block.settings.image_ratio }};
+    object-fit: {{ block.settings.image_fit }};
+  }
+
+  .pdp-scenario-item__placeholder-{{ scenario_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: {{ block.settings.image_ratio }};
+  }
+
+  .pdp-scenario-item__placeholder-{{ scenario_id }} svg {
+    max-width: 55%;
+    max-height: 55%;
+  }
+
+  .pdp-scenario-item__media-{{ scenario_id }}:hover img,
+  .pdp-scenario-item__media-{{ scenario_id }}:hover svg {
+    transform: scale(1.05);
+  }
+
+  .pdp-scenario-item__heading-{{ scenario_id }} {
+    margin: 0 0 18px;
+    color: {{ block.settings.heading_color }};
+    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .pdp-scenario-item__text-{{ scenario_id }} {
+    margin: 0 0 28px;
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.75;
+  }
+
+  .pdp-scenario-item__tags-{{ scenario_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .pdp-scenario-item__tag-{{ scenario_id }} {
+    min-width: 110px;
+    padding: 10px 14px;
+    border-left: 4px solid {{ block.settings.accent_color }};
+    border-radius: 0 {{ block.settings.tag_border_radius }}px {{ block.settings.tag_border_radius }}px 0;
+    background: {{ block.settings.tag_background }};
+    box-shadow: 0 2px 12px rgba(0, 198, 255, 0.08);
+  }
+
+  .pdp-scenario-item__tag-value-{{ scenario_id }} {
+    display: block;
+    color: {{ block.settings.accent_color }};
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .pdp-scenario-item__tag-label-{{ scenario_id }} {
+    display: block;
+    margin-top: 4px;
+    color: {{ block.settings.light_text_color }};
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .pdp-scenario-item-{{ scenario_id }} {
+      margin-top: {{ block.settings.margin_top | times: 0.7 }}px;
+      margin-bottom: {{ block.settings.margin_bottom | times: 0.7 }}px;
+      padding: {{ block.settings.padding_top | times: 0.7 }}px 16px {{ block.settings.padding_bottom | times: 0.7 }}px;
+    }
+
+    .pdp-scenario-item__grid-{{ scenario_id }} {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .pdp-scenario-item__grid-{{ scenario_id }}--image-right .pdp-scenario-item__media-{{ scenario_id }},
+    .pdp-scenario-item__grid-{{ scenario_id }}--image-right .pdp-scenario-item__content-{{ scenario_id }} {
+      order: initial;
+    }
+
+    .pdp-scenario-item__section-title-{{ scenario_id }} {
+      font-size: {{ block.settings.section_title_size | times: 0.85 }}px;
+    }
+
+    .pdp-scenario-item__heading-{{ scenario_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.85 }}px;
+    }
+  }
+{% endstyle %}
+
+{% if scenario_image != blank or scenario_heading != blank or scenario_text != blank %}
+<section class="pdp-scenario-item-{{ scenario_id }}" data-scenario-item {{ block.shopify_attributes }}>
+  {% if block.settings.show_section_header %}
+    {% if scenario_section_title != blank or scenario_section_description != blank %}
+      <div class="pdp-scenario-item__header-{{ scenario_id }}">
+        {% if scenario_section_title != blank %}
+          <h2 class="pdp-scenario-item__section-title-{{ scenario_id }}">{{ scenario_section_title }}</h2>
+        {% endif %}
+        {% if scenario_section_description != blank %}
+          <div class="pdp-scenario-item__section-description-{{ scenario_id }}">{{ scenario_section_description }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endif %}
+
+  <div class="pdp-scenario-item__grid-{{ scenario_id }}{% if block.settings.layout == 'image_right' %} pdp-scenario-item__grid-{{ scenario_id }}--image-right{% endif %}{% if scenario_image == blank %} pdp-scenario-item__grid-{{ scenario_id }}--text-only{% endif %}">
+    {% if scenario_image != blank %}
+    <div class="pdp-scenario-item__media-{{ scenario_id }}">
+      {% if scenario_image != blank %}{{ scenario_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200, 1600', sizes: '(max-width: 768px) 100vw, 50vw', alt: scenario_heading }}{% else %}<div class="pdp-scenario-item__placeholder-{{ scenario_id }}">{{ 'product-1' | placeholder_svg_tag }}</div>{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="pdp-scenario-item__content-{{ scenario_id }}">
+      {% if scenario_heading != blank %}<h2 class="pdp-scenario-item__heading-{{ scenario_id }}">{{ scenario_heading }}</h2>{% endif %}
+      {% if scenario_text != blank %}<div class="pdp-scenario-item__text-{{ scenario_id }}">{{ scenario_text }}</div>{% endif %}
+
+      {% if show_scenario_tags %}
+        <div class="pdp-scenario-item__tags-{{ scenario_id }}">
+          {% for index in (1..3) %}
+            {% liquid
+              assign value_key = 'tag_' | append: index | append: '_value'
+              assign label_key = 'tag_' | append: index | append: '_label'
+              if use_product_scenario
+                assign tag_value = pdp_scenario[value_key].value
+                assign tag_label = pdp_scenario[label_key].value
+              else
+                assign tag_value = block.settings[value_key]
+                assign tag_label = block.settings[label_key]
+              endif
+            %}
+            {% if tag_value != blank %}
+              <div class="pdp-scenario-item__tag-{{ scenario_id }}">
+                <span class="pdp-scenario-item__tag-value-{{ scenario_id }}">{{ tag_value }}</span>
+                {% if tag_label != blank %}<span class="pdp-scenario-item__tag-label-{{ scenario_id }}">{{ tag_label }}</span>{% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Scenario item",
+  "tag": null,
+  "settings": [
+    { "type": "select", "id": "content_source", "label": "内容来源", "options": [{ "value": "theme_editor", "label": "右侧 Theme Editor（默认）" }, { "value": "pdp_content", "label": "PDP 后台内容（备份/旧模式）" }], "default": "theme_editor", "info": "选择右侧 Theme Editor 后，此场景只读取当前模板的下方字段。" },
+    { "type": "header", "content": "Section header" },
+    { "type": "checkbox", "id": "show_section_header", "label": "Show section header", "default": false },
+    { "type": "text", "id": "section_title", "label": "Section title", "default": "Szenario" },
+    { "type": "textarea", "id": "section_description", "label": "Section description" },
+    { "type": "range", "id": "section_title_size", "label": "Section title size", "min": 20, "max": 60, "step": 2, "unit": "px", "default": 42 },
+    { "type": "range", "id": "section_description_size", "label": "Section description size", "min": 12, "max": 28, "step": 1, "unit": "px", "default": 16 },
+    { "type": "select", "id": "section_description_weight", "label": "Description weight", "options": [{ "value": "300", "label": "Light" }, { "value": "400", "label": "Normal" }, { "value": "500", "label": "Medium" }, { "value": "600", "label": "Semi bold" }, { "value": "700", "label": "Bold" }], "default": "400" },
+    { "type": "select", "id": "header_alignment", "label": "Header alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" }], "default": "left" },
+    { "type": "range", "id": "title_description_spacing", "label": "Title to description spacing", "min": 0, "max": 50, "step": 5, "unit": "px", "default": 15 },
+    { "type": "range", "id": "header_spacing", "label": "Header bottom spacing", "min": 0, "max": 100, "step": 5, "unit": "px", "default": 40 },
+    { "type": "header", "content": "Content" },
+    { "type": "range", "id": "product_content_index", "label": "Product scenario position", "min": 1, "max": 8, "step": 1, "default": 1, "info": "Reads this position from product metafield custom.pdp_content > scenarios." },
+    { "type": "select", "id": "layout", "label": "Desktop layout", "options": [{ "value": "image_left", "label": "Image left" }, { "value": "image_right", "label": "Image right" }], "default": "image_left" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Mehr Leistung für eine stärkere Stromerzeugung" },
+    { "type": "textarea", "id": "text", "label": "Description", "default": "Beschreibe hier den Vorteil dieses Szenarios." },
+    { "type": "text", "id": "tag_1_value", "label": "Tag 1 value", "default": "4 MPPT" },
+    { "type": "text", "id": "tag_1_label", "label": "Tag 1 label", "default": "Kapazität für eine Einheit" },
+    { "type": "text", "id": "tag_2_value", "label": "Tag 2 value", "default": "3600W" },
+    { "type": "text", "id": "tag_2_label", "label": "Tag 2 label", "default": "Maximaler PV-Eingang" },
+    { "type": "text", "id": "tag_3_value", "label": "Tag 3 value", "default": "8 Panels" },
+    { "type": "text", "id": "tag_3_label", "label": "Tag 3 label", "default": "Maximal verbunden" },
+    { "type": "header", "content": "Layout and spacing" },
+    { "type": "range", "id": "container_max_width", "label": "Container max width", "min": 920, "max": 1920, "step": 10, "unit": "px", "default": 1260 },
+    { "type": "range", "id": "image_width", "label": "Image column width", "min": 35, "max": 65, "step": 1, "unit": "%", "default": 50 },
+    { "type": "range", "id": "column_gap", "label": "Column gap", "min": 16, "max": 100, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "margin_top", "label": "Top margin", "min": 0, "max": 150, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Bottom margin", "min": 0, "max": 150, "step": 10, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 150, "step": 10, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 150, "step": 10, "unit": "px", "default": 40 },
+    { "type": "select", "id": "image_ratio", "label": "Image ratio", "options": [{ "value": "16 / 9", "label": "Landscape" }, { "value": "4 / 3", "label": "Standard" }, { "value": "1 / 1", "label": "Square" }], "default": "16 / 9" },
+    { "type": "select", "id": "image_fit", "label": "Image fit", "options": [{ "value": "cover", "label": "Cover" }, { "value": "contain", "label": "Contain" }], "default": "contain" },
+    { "type": "range", "id": "image_border_radius", "label": "Image border radius", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 8 },
+    { "type": "range", "id": "tag_border_radius", "label": "Tag border radius", "min": 0, "max": 30, "step": 2, "unit": "px", "default": 6 },
+    { "type": "header", "content": "Colors and typography" },
+    { "type": "color", "id": "image_background", "label": "Image background", "default": "#f4f4f4" },
+    { "type": "color", "id": "tag_background", "label": "Tag background", "default": "#ffffff" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#00c6ff" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#1e293b" },
+    { "type": "color", "id": "text_color", "label": "Body text", "default": "#64748b" },
+    { "type": "color", "id": "light_text_color", "label": "Light text", "default": "#94a3b8" },
+    { "type": "font_picker", "id": "heading_font", "label": "Heading font", "default": "sans_serif_n4" },
+    { "type": "font_picker", "id": "body_font", "label": "Body font", "default": "sans_serif_n4" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 18, "max": 48, "step": 2, "unit": "px", "default": 28 },
+    { "type": "range", "id": "text_size", "label": "Text size", "min": 12, "max": 24, "step": 1, "unit": "px", "default": 16 }
+  ],
+  "presets": [{ "name": "Scenario item" }]
+}
+{% endschema %}

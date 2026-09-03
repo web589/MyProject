@@ -1,0 +1,1174 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kundenbewertungen Slider</title>
+    <style>
+    .review-slider-section {
+      width: 100%;
+      padding: 70px 20px;
+      background-color: #f5f5f5;
+      box-sizing: border-box;
+      position: relative;
+    }
+    .review-container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    .review-main-title {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      margin: 0 0 45px;
+      font-weight: 700;
+      color: #000;
+    }
+    /* 轮播外层 */
+    .review-outer {
+      overflow: hidden;
+      position: relative;
+    }
+    /* 滚动轨道 */
+    .review-track {
+      display: flex;
+      gap: 22px;
+      transition: transform 0.4s ease-out;
+      will-change: transform;
+    }
+    /* 单张卡片 */
+    .review-card {
+      flex: 0 0 320px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .review-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .review-card:hover .review-img {
+      transform: scale(1.06);
+    }
+    /* 悬浮遮罩+文字 */
+    .review-mask {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      padding: 26px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .review-card:hover .review-mask {
+      opacity: 1;
+    }
+    .review-stars {
+      font-size: 1.6rem;
+      color: #36d399;
+      margin-bottom: 12px;
+    }
+    .review-text {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin: 0 0 16px;
+    }
+    .review-author {
+      font-size: 0.98rem;
+      opacity: 0.85;
+    }
+    
+    /* 左右控制按钮 */
+    .slider-control-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      transition: background 0.2s ease;
+    }
+    .slider-control-btn:hover {
+      background: rgba(0,0,0,0.75);
+    }
+    .btn-prev {
+      left: 12px;
+    }
+    .btn-next {
+      right: 12px;
+    }
+    
+    /* 移动端适配 */
+    @media screen and (max-width:768px) {
+      .review-card {
+        flex: 0 0 260px;
+      }
+      .review-img {
+        height: 260px;
+      }
+      .slider-control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+      .btn-prev {
+        left: 6px;
+      }
+      .btn-next {
+        right: 6px;
+      }
+    }
+    </style>
+    </head>
+    <body>
+    <section class="review-slider-section">
+      <div class="review-container">
+        <h2 class="review-main-title">Hear from our users</h2>
+        <div class="review-outer">
+          <!-- 左右控制按钮 -->
+          <button class="slider-control-btn btn-prev" type="button">←</button>
+          <button class="slider-control-btn btn-next" type="button">→</button>
+    
+          <div class="review-track">
+            <!-- 卡片1 -->
+            <div class="review-card">
+              <img class="review-img" src="https://placehold.co/320x320/cccccc/333333?text=Foto1" alt="Kundenfoto 1">
+              <div class="review-mask">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">Sehr einfache Installation, Leistung übertrifft meine Erwartungen!</p>
+                <div class="review-author">@Markus W.</div>
+              </div>
+            </div>
+            <!-- 卡片2 -->
+            <div class="review-card">
+              <img class="review-img" src="https://placehold.co/320x320/bbbbbb/222222?text=Foto2" alt="Kundenfoto 2">
+              <div class="review-mask">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">Unboxing & Premières Impressions : 2400 Pro. Besonders positiv ist mir der massive Kühlkörper aufgefallen.</p>
+                <div class="review-author">@Sascha Hoffmann</div>
+              </div>
+            </div>
+            <!-- 卡片3 -->
+            <div class="review-card">
+              <img class="review-img" src="https://placehold.co/320x320/aaaaaa/111111?text=Foto3" alt="Kundenfoto 3">
+              <div class="review-mask">
+                <div class="review-stars">★★★★☆</div>
+                <p class="review-text">Funktioniert perfekt auf meinem Balkon, geringe Geräuschentwicklung.</p>
+                <div class="review-author">@Julia M.</div>
+              </div>
+            </div>
+            <!-- 卡片4 -->
+            <div class="review-card">
+              <img class="review-img" src="https://placehold.co/320x320/999999/000000?text=Foto4" alt="Kundenfoto 4">
+              <div class="review-mask">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">Hyper et AB2000. Mon objectif est de maximiser l'autoconsommation. Le matériel semble très solide.</p>
+                <div class="review-author">@Roger PALAZON</div>
+              </div>
+            </div>
+            <!-- 卡片5 -->
+            <div class="review-card">
+              <img class="review-img" src="https://placehold.co/320x320/888888/ffffff?text=Foto5" alt="Kundenfoto 5">
+              <div class="review-mask">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">Gute Verarbeitung, App intuitiv, kann ich jedem Mieter empfehlen.</p>
+                <div class="review-author">@Thomas K.</div>
+        
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-review-slider-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding }}px 20px;
+    background-color: {{ block.settings.background_color }};
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .ai-review-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-review-main-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    margin: 0 0 {{ block.settings.title_spacing }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    text-align: {{ block.settings.title_alignment }};
+  }
+
+  .ai-review-outer-{{ ai_gen_id }} {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ai-review-track-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.card_gap }}px;
+    transition: transform 0.4s ease-out;
+    will-change: transform;
+  }
+
+  .ai-review-card-{{ ai_gen_id }} {
+    flex: 0 0 {{ block.settings.card_width }}px;
+    position: relative;
+    overflow: hidden;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    cursor: pointer;
+  }
+
+  .ai-review-img-{{ ai_gen_id }} {
+    width: 100%;
+    height: {{ block.settings.card_width }}px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-review-card-{{ ai_gen_id }}:hover .ai-review-img-{{ ai_gen_id }} {
+    transform: scale({{ block.settings.hover_scale }});
+  }
+
+  .ai-review-mask-{{ ai_gen_id }} {
+    position: absolute;
+    inset: 0;
+    background: {{ block.settings.overlay_color }};
+    padding: 26px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: {{ block.settings.overlay_text_color }};
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-review-card-{{ ai_gen_id }}:hover .ai-review-mask-{{ ai_gen_id }} {
+    opacity: 1;
+  }
+
+  .ai-review-stars-{{ ai_gen_id }} {
+    font-size: {{ block.settings.star_size }}px;
+    color: {{ block.settings.star_color }};
+    margin-bottom: 12px;
+  }
+
+  .ai-review-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.review_text_size }}px;
+    line-height: 1.6;
+    margin: 0 0 16px;
+  }
+
+  .ai-review-author-{{ ai_gen_id }} {
+    font-size: {{ block.settings.author_text_size }}px;
+    opacity: 0.85;
+  }
+
+  .ai-slider-control-btn-{{ ai_gen_id }} {
+    width: {{ block.settings.button_size }}px;
+    height: {{ block.settings.button_size }}px;
+    border-radius: 50%;
+    background: {{ block.settings.button_background }};
+    color: {{ block.settings.button_color }};
+    border: none;
+    font-size: {{ block.settings.button_icon_size }}px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    transition: background 0.2s ease;
+  }
+
+  .ai-slider-control-btn-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.button_hover_background }};
+  }
+
+  .ai-btn-prev-{{ ai_gen_id }} {
+    left: 12px;
+  }
+
+  .ai-btn-next-{{ ai_gen_id }} {
+    right: 12px;
+  }
+
+  .ai-review-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: {{ block.settings.card_width }}px;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-review-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-review-slider-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding | times: 0.7 }}px 20px;
+    }
+
+    .ai-review-card-{{ ai_gen_id }} {
+      flex: 0 0 {{ block.settings.card_width | times: 0.8 }}px;
+    }
+
+    .ai-review-img-{{ ai_gen_id }},
+    .ai-review-image-placeholder-{{ ai_gen_id }} {
+      height: {{ block.settings.card_width | times: 0.8 }}px;
+    }
+
+    .ai-slider-control-btn-{{ ai_gen_id }} {
+      width: {{ block.settings.button_size | times: 0.8 }}px;
+      height: {{ block.settings.button_size | times: 0.8 }}px;
+      font-size: {{ block.settings.button_icon_size | times: 0.8 }}px;
+    }
+
+    .ai-btn-prev-{{ ai_gen_id }} {
+      left: 6px;
+    }
+
+    .ai-btn-next-{{ ai_gen_id }} {
+      right: 6px;
+    }
+  }
+{% endstyle %}
+
+<review-slider-{{ ai_gen_id }} class="ai-review-slider-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-review-container-{{ ai_gen_id }}">
+    {% if block.settings.title != blank %}
+      <h2 class="ai-review-main-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+    {% endif %}
+
+    <div class="ai-review-outer-{{ ai_gen_id }}">
+      <button class="ai-slider-control-btn-{{ ai_gen_id }} ai-btn-prev-{{ ai_gen_id }}" type="button" aria-label="Previous reviews">←</button>
+      <button class="ai-slider-control-btn-{{ ai_gen_id }} ai-btn-next-{{ ai_gen_id }}" type="button" aria-label="Next reviews">→</button>
+
+      <div class="ai-review-track-{{ ai_gen_id }}">
+        {% for i in (1..10) %}
+          {% liquid
+            assign review_enabled_key = 'review_' | append: i | append: '_enabled'
+            assign review_image_key = 'review_' | append: i | append: '_image'
+            assign review_rating_key = 'review_' | append: i | append: '_rating'
+            assign review_text_key = 'review_' | append: i | append: '_text'
+            assign review_author_key = 'review_' | append: i | append: '_author'
+
+            assign review_enabled = block.settings[review_enabled_key]
+            assign review_image = block.settings[review_image_key]
+            assign review_rating = block.settings[review_rating_key]
+            assign review_text = block.settings[review_text_key]
+            assign review_author = block.settings[review_author_key]
+          %}
+
+          {% if review_enabled %}
+            <div class="ai-review-card-{{ ai_gen_id }}">
+              {% if review_image %}
+                <img
+                  class="ai-review-img-{{ ai_gen_id }}"
+                  src="{{ review_image | image_url: width: 640 }}"
+                  alt="{{ review_author | escape }}"
+                  loading="lazy"
+                  width="640"
+                  height="640"
+                >
+              {% else %}
+                <div class="ai-review-image-placeholder-{{ ai_gen_id }}">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+
+              <div class="ai-review-mask-{{ ai_gen_id }}">
+                {% if review_rating > 0 %}
+                  <div class="ai-review-stars-{{ ai_gen_id }}">
+                    {% for star in (1..5) %}
+                      {% if star <= review_rating %}
+                        ★
+                      {% else %}
+                        ☆
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                {% if review_text != blank %}
+                  <p class="ai-review-text-{{ ai_gen_id }}">{{ review_text }}</p>
+                {% endif %}
+
+                {% if review_author != blank %}
+                  <div class="ai-review-author-{{ ai_gen_id }}">{{ review_author }}</div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</review-slider-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ReviewSlider{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.autoplayInterval = null;
+        this.loopEnabled = {{ block.settings.loop }};
+        this.autoplayEnabled = {{ block.settings.autoplay }};
+      }
+
+      connectedCallback() {
+        this.track = this.querySelector('.ai-review-track-{{ ai_gen_id }}');
+        this.cards = this.querySelectorAll('.ai-review-card-{{ ai_gen_id }}');
+        this.prevBtn = this.querySelector('.ai-btn-prev-{{ ai_gen_id }}');
+        this.nextBtn = this.querySelector('.ai-btn-next-{{ ai_gen_id }}');
+
+        if (!this.track || this.cards.length === 0) return;
+
+        this.cardWidth = this.cards[0].offsetWidth;
+        this.gap = {{ block.settings.card_gap }};
+        this.visibleCards = this.getVisibleCards();
+
+        this.setupEventListeners();
+        this.updateSlider();
+
+        if (this.autoplayEnabled) {
+          this.startAutoplay();
+        }
+
+        window.addEventListener('resize', () => {
+          this.visibleCards = this.getVisibleCards();
+          this.updateSlider();
+        });
+      }
+
+      getVisibleCards() {
+        const containerWidth = this.track.parentElement.offsetWidth;
+        const cardTotalWidth = this.cardWidth + this.gap;
+        return Math.floor(containerWidth / cardTotalWidth);
+      }
+
+      setupEventListeners() {
+        this.prevBtn.addEventListener('click', () => {
+          this.prev();
+          if (this.autoplayEnabled) {
+            this.resetAutoplay();
+          }
+        });
+
+        this.nextBtn.addEventListener('click', () => {
+          this.next();
+          if (this.autoplayEnabled) {
+            this.resetAutoplay();
+          }
+        });
+
+        this.track.addEventListener('mouseenter', () => {
+          if (this.autoplayEnabled) {
+            this.stopAutoplay();
+          }
+        });
+
+        this.track.addEventListener('mouseleave', () => {
+          if (this.autoplayEnabled) {
+            this.startAutoplay();
+          }
+        });
+      }
+
+      prev() {
+        if (this.currentIndex > 0) {
+          this.currentIndex--;
+          this.updateSlider();
+        }
+      }
+
+      next() {
+        const maxIndex = this.cards.length - this.visibleCards;
+        if (this.currentIndex < maxIndex) {
+          this.currentIndex++;
+          this.updateSlider();
+        } else if (this.loopEnabled) {
+          this.currentIndex = 0;
+          this.updateSlider();
+        }
+      }
+
+      updateSlider() {
+        const offset = this.currentIndex * (this.cardWidth + this.gap);
+        this.track.style.transform = `translateX(-${offset}px)`;
+
+        this.prevBtn.disabled = this.currentIndex === 0;
+        this.nextBtn.disabled = this.currentIndex >= this.cards.length - this.visibleCards && !this.loopEnabled;
+      }
+
+      startAutoplay() {
+        this.autoplayInterval = setInterval(() => {
+          this.next();
+        }, {{ block.settings.autoplay_speed }} * 1000);
+      }
+
+      stopAutoplay() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+          this.autoplayInterval = null;
+        }
+      }
+
+      resetAutoplay() {
+        this.stopAutoplay();
+        this.startAutoplay();
+      }
+
+      disconnectedCallback() {
+        this.stopAutoplay();
+      }
+    }
+
+    customElements.define('review-slider-{{ ai_gen_id }}', ReviewSlider{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Customer review slider",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Hear from our users"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Title alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "label": "Title spacing",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 1000,
+      "max": 1600,
+      "step": 40,
+      "unit": "px",
+      "default": 1440
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "label": "Card width",
+      "min": 200,
+      "max": 400,
+      "step": 20,
+      "unit": "px",
+      "default": 320
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card gap",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "hover_scale",
+      "label": "Hover scale",
+      "min": 1,
+      "max": 1.2,
+      "step": 0.1,
+      "default": 1.1
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "rgba(0,0,0,0.65)"
+    },
+    {
+      "type": "color",
+      "id": "overlay_text_color",
+      "label": "Overlay text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "star_size",
+      "label": "Star size",
+      "min": 12,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#36d399"
+    },
+    {
+      "type": "range",
+      "id": "review_text_size",
+      "label": "Review text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "author_text_size",
+      "label": "Author text size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Navigation buttons"
+    },
+    {
+      "type": "range",
+      "id": "button_size",
+      "label": "Button size",
+      "min": 30,
+      "max": 70,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "button_icon_size",
+      "label": "Button icon size",
+      "min": 14,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "rgba(0,0,0,0.4)"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "rgba(0,0,0,0.75)"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Slider behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop slider",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Review 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_1_enabled",
+      "label": "Enable review 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "review_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_1_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_1_text",
+      "label": "Review text",
+      "default": "Sehr einfache Installation, Leistung übertrifft meine Erwartungen!"
+    },
+    {
+      "type": "text",
+      "id": "review_1_author",
+      "label": "Author",
+      "default": "@Markus W."
+    },
+    {
+      "type": "header",
+      "content": "Review 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_2_enabled",
+      "label": "Enable review 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "review_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_2_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_2_text",
+      "label": "Review text",
+      "default": "Unboxing & Premières Impressions : 2400 Pro. Besonders positiv ist mir der massive Kühlkörper aufgefallen."
+    },
+    {
+      "type": "text",
+      "id": "review_2_author",
+      "label": "Author",
+      "default": "@Sascha Hoffmann"
+    },
+    {
+      "type": "header",
+      "content": "Review 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_3_enabled",
+      "label": "Enable review 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "review_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_3_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "textarea",
+      "id": "review_3_text",
+      "label": "Review text",
+      "default": "Funktioniert perfekt auf meinem Balkon, geringe Geräuschentwicklung."
+    },
+    {
+      "type": "text",
+      "id": "review_3_author",
+      "label": "Author",
+      "default": "@Julia M."
+    },
+    {
+      "type": "header",
+      "content": "Review 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_4_enabled",
+      "label": "Enable review 4",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "review_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_4_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_4_text",
+      "label": "Review text",
+      "default": "Hyper et AB2000. Mon objectif est de maximiser l'autoconsommation. Le matériel semble très solide."
+    },
+    {
+      "type": "text",
+      "id": "review_4_author",
+      "label": "Author",
+      "default": "@Roger PALAZON"
+    },
+    {
+      "type": "header",
+      "content": "Review 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_5_enabled",
+      "label": "Enable review 5",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "review_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_5_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_5_text",
+      "label": "Review text",
+      "default": "Gute Verarbeitung, App intuitiv, kann ich jedem Mieter empfehlen."
+    },
+    {
+      "type": "text",
+      "id": "review_5_author",
+      "label": "Author",
+      "default": "@Thomas K."
+    },
+    {
+      "type": "header",
+      "content": "Review 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_6_enabled",
+      "label": "Enable review 6",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "review_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_6_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_6_text",
+      "label": "Review text"
+    },
+    {
+      "type": "text",
+      "id": "review_6_author",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Review 7"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_7_enabled",
+      "label": "Enable review 7",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "review_7_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_7_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_7_text",
+      "label": "Review text"
+    },
+    {
+      "type": "text",
+      "id": "review_7_author",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Review 8"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_8_enabled",
+      "label": "Enable review 8",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "review_8_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_8_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_8_text",
+      "label": "Review text"
+    },
+    {
+      "type": "text",
+      "id": "review_8_author",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Review 9"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_9_enabled",
+      "label": "Enable review 9",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "review_9_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_9_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_9_text",
+      "label": "Review text"
+    },
+    {
+      "type": "text",
+      "id": "review_9_author",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Review 10"
+    },
+    {
+      "type": "checkbox",
+      "id": "review_10_enabled",
+      "label": "Enable review 10",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "review_10_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "review_10_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "textarea",
+      "id": "review_10_text",
+      "label": "Review text"
+    },
+    {
+      "type": "text",
+      "id": "review_10_author",
+      "label": "Author"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer review slider"
+    }
+  ]
+}
+{% endschema %}

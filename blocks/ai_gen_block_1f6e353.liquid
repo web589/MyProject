@@ -1,0 +1,601 @@
+{% doc %}
+  @prompt
+    <style>
+    /* 全局配色与尺寸变量，直接修改即可 */
+    .venus-hero-fullscreen {
+      --desktop-height: 82vh;
+      --mobile-height: 90vh;
+      --mask-opacity: 0.55;
+      --brand-blue: #224378;
+      --highlight-yellow: #FFDD57;
+    
+      width: 100%;
+      min-height: var(--desktop-height);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #ffffff;
+      overflow: hidden;
+    }
+    
+    /* 背景大图容器（后续替换全丽青设计的图片URL） */
+    .hero-bg-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-image: url('替换为阳台庭院Venus E3.0场景高清图片链接');
+      z-index: 1;
+    }
+    
+    /* 深色遮罩层 */
+    .hero-dark-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, var(--mask-opacity));
+      z-index: 2;
+    }
+    
+    /* 文字内容容器，层级最高 */
+    .hero-content-wrap {
+      position: relative;
+      z-index: 3;
+      max-width: 900px;
+      padding: 0 20px;
+    }
+    
+    /* 顶部价格引流小标签 */
+    .hero-kicker-tag {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--highlight-yellow);
+      letter-spacing: 0.6px;
+      margin-bottom: 22px;
+      display: inline-block;
+    }
+    
+    /* H1主标题 */
+    .hero-main-h1 {
+      font-size: clamp(34px, 5vw, 58px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0 0 26px 0;
+    }
+    
+    /* 副标题价值描述 */
+    .hero-sub-desc {
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.7;
+      opacity: 0.93;
+      margin: 0 0 42px 0;
+    }
+    
+    /* 按钮组容器 */
+    .hero-btn-group {
+      display: flex;
+      gap: 22px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    /* 主实心按钮 */
+    .btn-primary-main {
+      padding: 17px 38px;
+      background-color: var(--brand-blue);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 17px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+    .btn-primary-main:hover {
+      background-color: #1a355c;
+      transform: translateY(-3px);
+    }
+    
+    /* 副描边按钮 */
+    .btn-outline-secondary {
+      padding: 17px 38px;
+      background: transparent;
+      color: #ffffff;
+      border: 2px solid #fff;
+      border-radius: 6px;
+      font-size: 17px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+    .btn-outline-secondary:hover {
+      background-color: rgba(255,255,255,0.12);
+      transform: translateY(-3px);
+    }
+    
+    /* 手机端高度适配 */
+    @media screen and (max-width: 768px) {
+      .venus-hero-fullscreen {
+        min-height: var(--mobile-height);
+      }
+    }
+    </style>
+    
+    <div class="venus-hero-fullscreen">
+      <!-- 背景图片 -->
+      <div class="hero-bg-container"></div>
+      <!-- 暗色遮罩 -->
+      <div class="hero-dark-mask"></div>
+    
+      <!-- 居中文案内容 -->
+      <div class="hero-content-wrap">
+        <div class="hero-kicker-tag">🚀 Ab 559 € erhältlich</div>
+    
+        <h1 class="hero-main-h1">Venus E Serie: Dein smartes Balkon-Speichersystem</h1>
+    
+        <p class="hero-sub-desc">
+          Von kompakten 559 € bis zur starken Notstrom-Lösung. Wähle dein Setup – das Venus E 3.0 (5.12kWh) ist sofort lieferbar!
+        </p>
+    
+        <div class="hero-btn-group">
+          <!-- 主按钮：锚点跳转下方产品表格区块 ID=produkt-uebersicht -->
+          <a href="#produkt-uebersicht" class="btn-primary-main">Jetzt entdecken</a>
+          <!-- 副按钮：直接跳转Venus E3.0产品详情页，替换为真实路径 -->
+          <a href="/products/venus-e-3-0-5-12kwh-p1" class="btn-outline-secondary">Direkt zum Venus E 3.0</a>
+        </div>
+      </div>
+    </div>
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-venus-hero-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    min-height: {{ block.settings.desktop_height }}vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: {{ block.settings.text_color }};
+    overflow: hidden;
+  }
+
+  .ai-hero-bg-container-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: 1;
+  }
+
+  .ai-hero-bg-container-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-hero-bg-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-hero-bg-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+  .ai-hero-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .ai-hero-dark-mask-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+    z-index: 2;
+  }
+
+  .ai-hero-content-wrap-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 3;
+    max-width: {{ block.settings.content_max_width }}px;
+    padding: 0 20px;
+  }
+
+  .ai-hero-kicker-tag-{{ ai_gen_id }} {
+    font-size: {{ block.settings.kicker_font_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.kicker_color }};
+    letter-spacing: 0.6px;
+    margin-bottom: 22px;
+    display: inline-block;
+  }
+
+  .ai-hero-main-h1-{{ ai_gen_id }} {
+    font-size: clamp(34px, 5vw, {{ block.settings.heading_font_size }}px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 26px 0;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-hero-sub-desc-{{ ai_gen_id }} {
+    font-size: clamp(16px, 2vw, {{ block.settings.subtext_font_size }}px);
+    line-height: 1.7;
+    opacity: 0.93;
+    margin: 0 0 42px 0;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-hero-btn-group-{{ ai_gen_id }} {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ai-btn-primary-main-{{ ai_gen_id }} {
+    padding: 17px 38px;
+    background-color: {{ block.settings.primary_button_bg }};
+    color: {{ block.settings.primary_button_text_color }};
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 17px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+  }
+
+  .ai-btn-primary-main-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.primary_button_hover_bg }};
+    color: {{ block.settings.primary_button_text_color }};
+    transform: translateY(-3px);
+  }
+
+  .ai-btn-outline-secondary-{{ ai_gen_id }} {
+    padding: 17px 38px;
+    background: transparent;
+    color: {{ block.settings.secondary_button_text_color }};
+    border: 2px solid {{ block.settings.secondary_button_border }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 17px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+  }
+
+  .ai-btn-outline-secondary-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.secondary_button_hover_bg }};
+    color: {{ block.settings.secondary_button_text_color }};
+    transform: translateY(-3px);
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-venus-hero-{{ ai_gen_id }} {
+      min-height: {{ block.settings.mobile_height }}vh;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-venus-hero-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-hero-bg-container-{{ ai_gen_id }}">
+    {% if block.settings.background_image %}
+      <img
+        src="{{ block.settings.background_image | image_url: width: 2000 }}"
+        alt="{{ block.settings.background_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.background_image.width }}"
+        height="{{ block.settings.background_image.height }}"
+      >
+    {% else %}
+      <div class="ai-hero-bg-placeholder-{{ ai_gen_id }}">
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+        <div class="ai-hero-empty-state-{{ ai_gen_id }}">
+          Next, add a background image
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ai-hero-dark-mask-{{ ai_gen_id }}"></div>
+
+  <div class="ai-hero-content-wrap-{{ ai_gen_id }}">
+    {% if block.settings.kicker_text != blank %}
+      <div class="ai-hero-kicker-tag-{{ ai_gen_id }}">{{ block.settings.kicker_text }}</div>
+    {% endif %}
+
+    {% if block.settings.heading != blank %}
+      <h1 class="ai-hero-main-h1-{{ ai_gen_id }}">{{ block.settings.heading }}</h1>
+    {% endif %}
+
+    {% if block.settings.subtext != blank %}
+      <div class="ai-hero-sub-desc-{{ ai_gen_id }}">{{ block.settings.subtext }}</div>
+    {% endif %}
+
+    {% if block.settings.show_buttons %}
+      <div class="ai-hero-btn-group-{{ ai_gen_id }}">
+        {% if block.settings.primary_button_label != blank %}
+          <a
+            href="{{ block.settings.primary_button_link }}"
+            class="ai-btn-primary-main-{{ ai_gen_id }}"
+          >
+            {{ block.settings.primary_button_label }}
+          </a>
+        {% endif %}
+
+        {% if block.settings.secondary_button_label != blank %}
+          <a
+            href="{{ block.settings.secondary_button_link }}"
+            class="ai-btn-outline-secondary-{{ ai_gen_id }}"
+          >
+            {{ block.settings.secondary_button_label }}
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Venus hero fullscreen",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content max width",
+      "min": 400,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 900
+    },
+    {
+      "type": "header",
+      "content": "Kicker tag"
+    },
+    {
+      "type": "text",
+      "id": "kicker_text",
+      "label": "Kicker text",
+      "default": "🚀 Ab 559 € erhältlich"
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker color",
+      "default": "#FFDD57"
+    },
+    {
+      "type": "range",
+      "id": "kicker_font_size",
+      "label": "Kicker font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Venus E Serie: Dein smartes Balkon-Speichersystem"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Heading font size",
+      "min": 30,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 58
+    },
+    {
+      "type": "header",
+      "content": "Subtext"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Von kompakten 559 € bis zur starken Notstrom-Lösung. Wähle dein Setup – das Venus E 3.0 (5.12kWh) ist sofort lieferbar!"
+    },
+    {
+      "type": "range",
+      "id": "subtext_font_size",
+      "label": "Subtext font size",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buttons",
+      "label": "Show buttons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "primary_button_label",
+      "label": "Primary button label",
+      "default": "Jetzt entdecken"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "color",
+      "id": "primary_button_bg",
+      "label": "Primary button background",
+      "default": "#224378"
+    },
+    {
+      "type": "color",
+      "id": "primary_button_hover_bg",
+      "label": "Primary button hover background",
+      "default": "#1a355c"
+    },
+    {
+      "type": "color",
+      "id": "primary_button_text_color",
+      "label": "Primary button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary button label",
+      "default": "Direkt zum Venus E 3.0"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_text_color",
+      "label": "Secondary button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_border",
+      "label": "Secondary button border color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_hover_bg",
+      "label": "Secondary button hover background",
+      "default": "rgba(255, 255, 255, 0.12)"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Venus hero fullscreen"
+    }
+  ]
+}
+{% endschema %}

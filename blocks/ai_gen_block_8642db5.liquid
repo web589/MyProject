@@ -1,0 +1,764 @@
+{% doc %}
+  @prompt
+    {% stylesheet %}
+    .blog-latest-section {
+      width: 100%;
+      padding: 80px 20px;
+      background-color: #f8f8f8;
+      box-sizing: border-box;
+    }
+    .blog-container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    /* 标题行：左标题 右链接 */
+    .blog-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 45px;
+    }
+    .blog-main-title {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      margin: 0;
+      color: #000;
+    }
+    .all-blogs-link {
+      font-size: 1.1rem;
+      color: #222;
+      text-decoration: none;
+    }
+    .all-blogs-link:hover {
+      text-decoration: underline;
+    }
+    /* 三栏网格 */
+    .blog-grid-wrap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    /* 单张博客卡片容器 */
+    .blog-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    /* 鼠标悬浮卡片整体轻微放大 */
+    .blog-card:hover {
+      transform: scale(1.03);
+    }
+    /* 博客图片 */
+    .blog-card-img {
+      width: 100%;
+      display: block;
+    }
+    /* 卡片文字区域 */
+    .blog-card-text {
+      padding: 26px 22px 32px;
+      text-align: center;
+    }
+    .blog-card-title {
+      font-size: 1.15rem;
+      line-height: 1.5;
+      color: #111;
+      margin: 0 0 24px;
+      font-weight: 500;
+    }
+    /* Learn more 淡蓝色圆角按钮 */
+    .blog-learn-link {
+      display: inline-block;
+      padding: 10px 36px;
+      background-color: #33a0ff;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 999px;
+      font-size: 1.05rem;
+      transition: background 0.25s ease;
+    }
+    .blog-learn-link:hover {
+      background-color: #0084ff;
+    }
+    /* 响应式适配 */
+    @media screen and (max-width: 990px) {
+      .blog-grid-wrap {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media screen and (max-width: 640px) {
+      .blog-grid-wrap {
+        grid-template-columns: 1fr;
+      }
+      .blog-header-row {
+        flex-direction: column;
+        gap:12px;
+      }
+    }
+    {% endstylesheet %}
+    
+    <section class="blog-latest-section">
+      <div class="blog-container">
+        <div class="blog-header-row">
+          <h2 class="blog-main-title">Our Latest Blog Posts</h2>
+          <a href="/blogs/news" class="all-blogs-link">All blogs &gt;</a>
+        </div>
+    
+        <div class="blog-grid-wrap">
+          <!-- 博客卡片1 -->
+          <div class="blog-card">
+            <img class="blog-card-img" src="https://cdn.shopify.com/s/files/xxx/blog1.jpg" alt="Solar Battery Charge Cycle">
+            <div class="blog-card-text">
+              <h3 class="blog-card-title">What is a Battery Charge Cycle and How to Maximize Your Solar Storage Lifespan?</h3>
+              <a href="/blogs/news/article-1" class="blog-learn-link">Learn more</a>
+            </div>
+          </div>
+    
+          <!-- 博客卡片2 -->
+          <div class="blog-card">
+            <img class="blog-card-img" src="https://cdn.shopify.com/s/files/xxx/blog2.jpg" alt="Solar Battery Efficiency">
+            <div class="blog-card-text">
+              <h3 class="blog-card-title">Everything You Need to Know About Solar Battery Efficiency: Optimize Your Energy Autonomy</h3>
+              <a href="/blogs/news/article-2" class="blog-learn-link">Learn more</a>
+            </div>
+          </div>
+    
+          <!-- 博客卡片3 -->
+          <div class="blog-card">
+            <img class="blog-card-img" src="https://cdn.shopify.com/s/files/xxx/blog3.jpg" alt="Zendure SolarFlow 1600 AC+">
+            <div class="blog-card-text">
+              <h3 class="blog-card-title">Zendure SolarFlow 1600 AC+: The Ultimate Product Guide</h3>
+              <a href="/blogs/news/article-3" class="blog-learn-link">Learn more</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-blog-section-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding_top }}px 20px {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+    box-sizing: border-box;
+  }
+
+  .ai-blog-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-blog-header-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: {{ block.settings.header_spacing }}px;
+  }
+
+  .ai-blog-title-{{ ai_gen_id }} {
+    font-size: clamp(2.2rem, 5vw, {{ block.settings.title_size }}px);
+    font-weight: {{ block.settings.title_weight }};
+    margin: 0;
+    color: {{ block.settings.title_color }};
+  }
+
+  .ai-blog-all-link-{{ ai_gen_id }} {
+    font-size: {{ block.settings.link_size }}px;
+    color: {{ block.settings.link_color }};
+    text-decoration: none;
+  }
+
+  .ai-blog-all-link-{{ ai_gen_id }}:hover {
+    text-decoration: underline;
+  }
+
+  .ai-blog-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  .ai-blog-card-{{ ai_gen_id }} {
+    background: {{ block.settings.card_background }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-blog-card-{{ ai_gen_id }}:hover {
+    transform: scale(1.05);
+  }
+
+  .ai-blog-card-img-{{ ai_gen_id }} {
+    width: 100%;
+    display: block;
+    aspect-ratio: {{ block.settings.image_aspect_ratio }};
+    object-fit: cover;
+  }
+
+  .ai-blog-card-img-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: {{ block.settings.image_aspect_ratio }};
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-blog-card-img-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  .ai-blog-card-text-{{ ai_gen_id }} {
+    padding: {{ block.settings.card_padding }}px;
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-blog-card-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_title_size }}px;
+    line-height: 1.5;
+    color: {{ block.settings.card_title_color }};
+    margin: 0 0 {{ block.settings.title_spacing }}px;
+    font-weight: {{ block.settings.card_title_weight }};
+  }
+
+  .ai-blog-learn-link-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_text_size }}px;
+    transition: background 0.25s ease;
+  }
+
+  .ai-blog-learn-link-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+  }
+
+  @media screen and (max-width: 990px) {
+    .ai-blog-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_tablet }}, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .ai-blog-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
+    }
+
+    .ai-blog-header-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
+{% endstyle %}
+
+<ai-blog-section-{{ ai_gen_id }} class="ai-blog-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-blog-container-{{ ai_gen_id }}">
+    <div class="ai-blog-header-{{ ai_gen_id }}">
+      {% if block.settings.section_title != blank %}
+        <h2 class="ai-blog-title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
+      {% endif %}
+      {% if block.settings.blog_link != blank %}
+        <a href="{{ block.settings.blog_link }}" class="ai-blog-all-link-{{ ai_gen_id }}">
+          {{ block.settings.link_text }} &gt;
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="ai-blog-grid-{{ ai_gen_id }}">
+      {% for i in (1..3) %}
+        {% liquid
+          assign article_key = 'article_' | append: i
+          assign article = block.settings[article_key]
+        %}
+
+        <div class="ai-blog-card-{{ ai_gen_id }}">
+          {% if article != blank %}
+            {% if article.image %}
+              <a href="{{ article.url }}">
+                <img
+                  class="ai-blog-card-img-{{ ai_gen_id }}"
+                  src="{{ article.image | image_url: width: 800 }}"
+                  alt="{{ article.image.alt | escape }}"
+                  loading="lazy"
+                  width="800"
+                  height="{{ 800 | divided_by: block.settings.image_aspect_ratio | round }}"
+                >
+              </a>
+            {% else %}
+              <div class="ai-blog-card-img-placeholder-{{ ai_gen_id }}">
+                {{ 'image' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+
+            <div class="ai-blog-card-text-{{ ai_gen_id }}">
+              <h3 class="ai-blog-card-title-{{ ai_gen_id }}">
+                {{ article.title }}
+              </h3>
+              <a href="{{ article.url }}" class="ai-blog-learn-link-{{ ai_gen_id }}">
+                {{ block.settings.button_text }}
+              </a>
+            </div>
+          {% else %}
+            <div class="ai-blog-card-img-placeholder-{{ ai_gen_id }}">
+              {{ 'image' | placeholder_svg_tag }}
+            </div>
+            <div class="ai-blog-card-text-{{ ai_gen_id }}">
+              <h3 class="ai-blog-card-title-{{ ai_gen_id }}">
+                Select an article for blog post {{ i }}
+              </h3>
+              <a href="#" class="ai-blog-learn-link-{{ ai_gen_id }}">
+                {{ block.settings.button_text }}
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</ai-blog-section-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class AiBlogSection{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+      }
+    }
+
+    customElements.define('ai-blog-section-{{ ai_gen_id }}', AiBlogSection{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Latest blog posts",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_title",
+      "label": "Title",
+      "default": "Our Latest Blog Posts"
+    },
+    {
+      "type": "url",
+      "id": "blog_link",
+      "label": "Blog link"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "link_text",
+      "label": "Link text",
+      "default": "All blogs"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Container max width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "header",
+      "content": "Title style"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Title weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "header_spacing",
+      "label": "Header spacing",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "label": "Link size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#222222"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Columns on tablet",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Card padding",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        {
+          "value": "1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "1.33",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "1.5",
+          "label": "Landscape (3:2)"
+        },
+        {
+          "value": "1.78",
+          "label": "Landscape (16:9)"
+        },
+        {
+          "value": "0.75",
+          "label": "Portrait (3:4)"
+        },
+        {
+          "value": "0.67",
+          "label": "Portrait (2:3)"
+        }
+      ],
+      "default": "1.33"
+    },
+    {
+      "type": "header",
+      "content": "Card title"
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Title size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "card_title_weight",
+      "label": "Title weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Title color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "label": "Title spacing",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Learn more"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "label": "Button text size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Button vertical padding",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Button horizontal padding",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 35
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button color",
+      "default": "#33a0ff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#0084ff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Blog articles"
+    },
+    {
+      "type": "article",
+      "id": "article_1",
+      "label": "Article 1"
+    },
+    {
+      "type": "article",
+      "id": "article_2",
+      "label": "Article 2"
+    },
+    {
+      "type": "article",
+      "id": "article_3",
+      "label": "Article 3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Latest blog posts"
+    }
+  ]
+}
+{% endschema %}

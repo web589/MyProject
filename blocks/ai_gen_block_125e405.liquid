@@ -1,0 +1,748 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Finden Sie Ihr VENUS E</title>
+      <style>
+        /* ===== 整体区块 ===== */
+        .comparison-section {
+          max-width: 1280px;
+          margin: 0 auto 60px;
+          padding: 0 20px;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+    
+        .comparison-section .section-title {
+          font-size: 38px;
+          font-weight: 700;
+          color: #0A1628;
+          margin-bottom: 32px;
+          letter-spacing: -0.5px;
+        }
+        .comparison-section .section-title span {
+          color: #0099FC;
+        }
+    
+        /* ===== 表格容器 ===== */
+        .comparison-table-wrapper {
+          overflow-x: auto;
+          border-radius: 20px;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+          border: 1px solid #E2E8F0;
+          background: #FFFFFF;
+        }
+    
+        /* ===== 表格 ===== */
+        .comparison-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 15px;
+          min-width: 600px;
+        }
+    
+        /* 表头强制蓝色 #0099FC */
+        .comparison-table th {
+          padding: 16px 20px;
+          text-align: left;
+          font-weight: 700;
+          color: #FFFFFF;
+          font-size: 16px;
+          border-bottom: none;
+          background-color: #0099FC !important;  /* 强制蓝色 */
+        }
+    
+        .comparison-table th:first-child {
+          border-radius: 20px 0 0 0;
+        }
+        .comparison-table th:last-child {
+          border-radius: 0 20px 0 0;
+        }
+    
+        /* 行分隔线 */
+        .comparison-table td {
+          padding: 14px 20px;
+          border-bottom: 1px solid #E2E8F0;
+          color: #242424;
+          vertical-align: middle;
+        }
+    
+        /* 最后一行的底部边框去掉 */
+        .comparison-table tbody tr:last-child td {
+          border-bottom: none;
+        }
+    
+        /* 第一列（规格名）加粗，深蓝色 */
+        .comparison-table td:first-child {
+          font-weight: 600;
+          color: #0369A1;
+        }
+    
+        /* 行悬停浅蓝色背景 */
+        .comparison-table tbody tr:hover {
+          background: #E0F7FF;
+        }
+    
+        /* 特殊值标记 */
+        .comparison-table .check-yes {
+          color: #0099FC;
+          font-weight: 700;
+        }
+        .comparison-table .check-optional {
+          color: #FF8C00;
+          font-weight: 600;
+        }
+        .comparison-table .check-no {
+          color: #999;
+        }
+    
+        /* 产品列（第2～5列）可加粗突出 */
+        .comparison-table td:not(:first-child) {
+          font-weight: 500;
+        }
+    
+        /* 移动端适配 */
+        @media (max-width: 640px) {
+          .comparison-section .section-title {
+            font-size: 26px;
+          }
+          .comparison-table {
+            font-size: 13px;
+            min-width: 480px;
+          }
+          .comparison-table th,
+          .comparison-table td {
+            padding: 10px 14px;
+          }
+        }
+    
+        @media (max-width: 480px) {
+          .comparison-table {
+            font-size: 12px;
+            min-width: 380px;
+          }
+          .comparison-table th,
+          .comparison-table td {
+            padding: 8px 10px;
+          }
+        }
+      </style>
+    </head>
+    <body>
+    
+      <!-- ============================================ -->
+      <!-- 板块：Finden Sie Ihr VENUS E                 -->
+      <!-- ============================================ -->
+      <section class="comparison-section">
+        <h2 class="section-title">Finden Sie Ihr <span>VENUS E</span></h2>
+    
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Spezifikation</th>
+                <th>VENUS E Mini</th>
+                <th>VENUS E 3.0</th>
+                <th>VENUS E 4.0</th>
+                <th>VENUS E MAX</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Kapazität</td>
+                <td>2 kWh</td>
+                <td>5.12 kWh</td>
+                <td>5 kWh</td>
+                <td>10 kWh</td>
+              </tr>
+              <tr>
+                <td>Leistung</td>
+                <td>1.5 kW</td>
+                <td>2.5 kW</td>
+                <td>3 kW</td>
+                <td>3.6 kW</td>
+              </tr>
+              <tr>
+                <td>EPS Umschaltung</td>
+                <td>&lt;15 ms</td>
+                <td>&lt;15 ms</td>
+                <td>&lt;10 ms</td>
+                <td>&lt;10 ms</td>
+              </tr>
+              <tr>
+                <td>VPP</td>
+                <td><span class="check-no">—</span></td>
+                <td><span class="check-optional">Optional</span></td>
+                <td><span class="check-yes">Ja</span></td>
+                <td><span class="check-yes">Ja</span></td>
+              </tr>
+              <tr>
+                <td>Max. Erweiterung</td>
+                <td>2 kWh</td>
+                <td>20 kWh</td>
+                <td>30 kWh</td>
+                <td>30 kWh</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    
+    </body>
+    </html>
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-comparison-section-{{ ai_gen_id }} {
+    display: block;
+    max-width: 1280px;
+    margin: {{ block.settings.section_top_margin }}px auto {{ block.settings.section_bottom_margin }}px;
+    padding: 0 20px;
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    width: {{ block.settings.desktop_width_percent }}%;
+  }
+
+  .ai-comparison-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    margin-bottom: {{ block.settings.title_margin_bottom }}px;
+    letter-spacing: -0.5px;
+    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+  }
+
+  .ai-comparison-wrapper-{{ ai_gen_id }} {
+    overflow-x: auto;
+    border-radius: {{ block.settings.table_border_radius }}px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, {{ block.settings.shadow_opacity | divided_by: 100.0 }});
+    border: 1px solid {{ block.settings.border_color }};
+    background: {{ block.settings.table_background }};
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: {{ block.settings.table_font_size }}px;
+    min-width: 920px;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} th {
+    padding: {{ block.settings.header_padding }}px 20px;
+    text-align: left;
+    font-weight: 700;
+    color: {{ block.settings.header_text_color }};
+    font-size: {{ block.settings.header_font_size }}px;
+    border-bottom: none;
+    background-color: {{ block.settings.header_background }};
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} th:first-child {
+    border-radius: {{ block.settings.table_border_radius }}px 0 0 0;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} th:last-child {
+    border-radius: 0 {{ block.settings.table_border_radius }}px 0 0;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} td {
+    padding: {{ block.settings.cell_padding }}px 20px;
+    border-bottom: 1px solid {{ block.settings.row_border_color }};
+    color: {{ block.settings.cell_text_color }};
+    vertical-align: middle;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} td:first-child {
+    font-weight: 600;
+    color: {{ block.settings.spec_label_color }};
+  }
+
+  {% if block.settings.enable_row_hover %}
+    .ai-comparison-table-{{ ai_gen_id }} tbody tr:hover {
+      background: {{ block.settings.row_hover_color }};
+    }
+  {% endif %}
+
+  .ai-comparison-yes-{{ ai_gen_id }} {
+    color: {{ block.settings.yes_color }};
+    font-weight: 700;
+  }
+
+  .ai-comparison-optional-{{ ai_gen_id }} {
+    color: {{ block.settings.optional_color }};
+    font-weight: 600;
+  }
+
+  .ai-comparison-no-{{ ai_gen_id }} {
+    color: {{ block.settings.no_color }};
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} td:not(:first-child) {
+    font-weight: 500;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} th,
+  .ai-comparison-table-{{ ai_gen_id }} td {
+    min-width: 150px;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} th:first-child,
+  .ai-comparison-table-{{ ai_gen_id }} td:first-child {
+    min-width: 210px;
+  }
+
+  @media (max-width: 749px) {
+    .ai-comparison-section-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-comparison-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.7 }}px;
+    }
+
+    .ai-comparison-table-{{ ai_gen_id }} {
+      font-size: {{ block.settings.table_font_size | minus: 2 }}px;
+      min-width: 860px;
+    }
+
+    .ai-comparison-table-{{ ai_gen_id }} th,
+    .ai-comparison-table-{{ ai_gen_id }} td {
+      padding: 10px 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ai-comparison-table-{{ ai_gen_id }} {
+      font-size: {{ block.settings.table_font_size | minus: 3 }}px;
+      min-width: 800px;
+    }
+
+    .ai-comparison-table-{{ ai_gen_id }} th,
+    .ai-comparison-table-{{ ai_gen_id }} td {
+      padding: 8px 10px;
+    }
+  }
+{% endstyle %}
+
+<product-comparison-{{ ai_gen_id }} class="ai-comparison-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+{% if block.settings.section_title != blank %}
+  <h2 class="ai-comparison-title-{{ ai_gen_id }}">
+    {{ block.settings.section_title }}
+  </h2>
+  {% if block.settings.subtitle != blank %}
+    <p class="ai-comparison-subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle }}</p>
+  {% endif %}
+{% endif %}
+
+  <div class="ai-comparison-wrapper-{{ ai_gen_id }}">
+    <table class="ai-comparison-table-{{ ai_gen_id }}">
+      <thead>
+        <tr>
+          <th>{{ block.settings.header_spec }}</th>
+          <th>{{ block.settings.header_product_1 }}</th>
+          <th>{{ block.settings.header_product_2 }}</th>
+          <th>{{ block.settings.header_product_3 }}</th>
+          <th>{{ block.settings.header_product_4 }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in (1..10) %}
+          {% liquid
+            assign row_source = 'product'
+            case i
+              when 1
+                assign row_spec = 'Speicherkapazität'
+                assign row_keys = 'capacity,speicherkapazitat,speicherkapazitaet,speicherkapazität,storage_capacity'
+                assign row_source = 'variant'
+              when 2
+                assign row_spec = 'Bidirektionale Leistung'
+                assign row_keys = 'bidirectional_power,bidirektionale_leistung,leistung'
+              when 3
+                assign row_spec = 'Notstromleistung'
+                assign row_keys = 'backup_power,notstromleistung,emergency_power,notstrom'
+              when 4
+                assign row_spec = 'EPS-Umschaltzeit'
+                assign row_keys = 'eps_switch_time,eps_umschaltzeit,eps_switching_time,eps_transfer_time'
+              when 5
+                assign row_spec = 'Ladezyklen'
+                assign row_keys = 'cycles,ladezyklen,charging_cycles,cycle_life,lebenszyklen'
+              when 6
+                assign row_spec = 'Erweiterbarkeit'
+                assign row_keys = 'scalability,erweiterbarkeit,expandability,max_erweiterung'
+              when 7
+                assign row_spec = 'Nulleinspeisung'
+                assign row_keys = 'nulleinspeisung,zero_export,zero_feed_in,zero_injection'
+              when 8
+                assign row_spec = 'VPP-Unterstützung'
+                assign row_keys = 'vpp,vpp_support,vpp_unterstutzung,vpp_unterstuetzung'
+              when 9
+                assign row_spec = 'Installation'
+                assign row_keys = 'installation,installation_type'
+              when 10
+                assign row_spec = 'Ideal für'
+                assign row_keys = 'ideal_fur,ideal_fuer,ideal_for,recommended_for'
+            endcase
+          %}
+          <tr>
+            <td>{{ row_spec }}</td>
+            {% for product_index in (1..4) %}
+              {% liquid
+                assign product_setting_key = 'comparison_product_' | append: product_index
+                assign comparison_product = block.settings[product_setting_key]
+              %}
+              {% capture metafield_value %}{% render 'product-comparison-value', spec_product: comparison_product, spec_source: row_source, spec_variant_option: '1×', spec_keys: row_keys, spec_namespace: settings.technical_specs_namespace %}{% endcapture %}
+              {% assign display_value = metafield_value | strip %}
+              <td>{% if display_value == blank %}–{% else %}{{ display_value }}{% endif %}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</product-comparison-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductComparison{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.table = this.querySelector('.ai-comparison-table-{{ ai_gen_id }}');
+      }
+    }
+
+    customElements.define('product-comparison-{{ ai_gen_id }}', ProductComparison{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product comparison table",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "richtext",
+      "id": "section_title",
+      "label": "Title",
+      "default": "<p>Finden Sie Ihr VENUS E</p>"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "section_top_margin",
+      "label": "Top margin",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_bottom_margin",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "label": "Title margin bottom",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "header_font_size",
+      "label": "Header font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "table_font_size",
+      "label": "Table font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#0A1628"
+    },
+    {
+      "type": "color",
+      "id": "table_background",
+      "label": "Table background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "header_background",
+      "label": "Header background",
+      "default": "#0099FC"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Header text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "cell_text_color",
+      "label": "Cell text color",
+      "default": "#242424"
+    },
+    {
+      "type": "color",
+      "id": "spec_label_color",
+      "label": "Spec label color",
+      "default": "#0369A1"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#E2E8F0"
+    },
+    {
+      "type": "color",
+      "id": "row_border_color",
+      "label": "Row border color",
+      "default": "#E2E8F0"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_row_hover",
+      "label": "Enable row hover",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "row_hover_color",
+      "label": "Row hover color",
+      "default": "#E0F7FF"
+    },
+    {
+      "type": "header",
+      "content": "Special values"
+    },
+    {
+      "type": "text",
+      "id": "yes_text",
+      "label": "Yes text",
+      "default": "Ja"
+    },
+    {
+      "type": "color",
+      "id": "yes_color",
+      "label": "Yes color",
+      "default": "#0099FC"
+    },
+    {
+      "type": "text",
+      "id": "optional_text",
+      "label": "Optional text",
+      "default": "Optional"
+    },
+    {
+      "type": "color",
+      "id": "optional_color",
+      "label": "Optional color",
+      "default": "#FF8C00"
+    },
+    {
+      "type": "text",
+      "id": "no_text",
+      "label": "No text",
+      "default": "—"
+    },
+    {
+      "type": "color",
+      "id": "no_color",
+      "label": "No color",
+      "default": "#999999"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "table_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "shadow_opacity",
+      "label": "Shadow opacity",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "%",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "header_padding",
+      "label": "Header padding",
+      "min": 10,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "cell_padding",
+      "label": "Cell padding",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Table headers"
+    },
+    {
+      "type": "text",
+      "id": "header_spec",
+      "label": "Specification header",
+      "default": "Spezifikation"
+    },
+    {
+      "type": "text",
+      "id": "header_product_1",
+      "label": "Product 1 header",
+      "default": "VENUS E Mini"
+    },
+    {
+      "type": "text",
+      "id": "header_product_2",
+      "label": "Product 2 header",
+      "default": "VENUS E 3.0"
+    },
+    {
+      "type": "text",
+      "id": "header_product_3",
+      "label": "Product 3 header",
+      "default": "VENUS E 4.0"
+    },
+    {
+      "type": "text",
+      "id": "header_product_4",
+      "label": "Product 4 header",
+      "default": "VENUS E MAX"
+    },
+    {
+      "type": "header",
+      "content": "Products (metafield source)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Values are read from each selected product's metafields. Empty metafields are displayed as an en dash."
+    },
+    {
+      "type": "product",
+      "id": "comparison_product_1",
+      "label": "VENUS E Mini"
+    },
+    {
+      "type": "product",
+      "id": "comparison_product_2",
+      "label": "VENUS E 3.0"
+    },
+    {
+      "type": "product",
+      "id": "comparison_product_3",
+      "label": "VENUS E 4.0"
+    },
+    {
+      "type": "product",
+      "id": "comparison_product_4",
+      "label": "VENUS E Max"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "副标题"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product comparison table"
+    }
+  ]
+}
+{% endschema %}

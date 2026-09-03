@@ -1,0 +1,763 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balkonkraftwerk 4 Schritte Loop Animation</title>
+    <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    body{
+      background: #ffffff;
+      padding: 60px 20px;
+    }
+    
+    /* 外层容器 */
+    .wrapper{
+      max-width: 1600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    /* 顶部大标题 */
+    .main-title{
+      font-size: 64px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 80px;
+    }
+    
+    /* 四列布局容器 */
+    .steps-row{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      position: relative;
+    }
+    
+    /* 单个步骤模块 */
+    .step-item{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    
+    /* 图标圆角卡片 */
+    .icon-card{
+      width: 160px;
+      height: 160px;
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 0 0 rgba(0,0,0);
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .icon-card img{
+      max-width: 85%;
+      max-height: 85%;
+      object-fit: contain;
+    }
+    .icon-card.active{
+      transform: translateY(-10px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+    
+    /* 圆点容器 */
+    .dot-wrap{
+      width: 14px;
+      height: 14px;
+      margin: 26px 0 22px;
+      position: relative;
+    }
+    .dot-core{
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #dddddd;
+      position: relative;
+      z-index: 2;
+    }
+    .dot-glow-ring{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #0066ff;
+      opacity: 0;
+    }
+    
+    /* 标题样式+扫光遮罩 */
+    .step-title{
+      font-size: 32px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+      min-height: 40px;
+    }
+    .light-sweep-mask{
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    }
+    .step-title.active{
+      color: #0066ff;
+    }
+    
+    /* 描述文本 */
+    .step-desc{
+      font-size: 18px;
+      color: #666;
+      line-height: 1.6;
+      max-width: 240px;
+    }
+    
+    /* 速度控制面板 */
+    .speed-control-box{
+      margin-top: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .speed-control-box label{
+      font-size: 18px;
+    }
+    #speedSlider{
+      width: 350px;
+    }
+    .speed-value-text{
+      width: 70px;
+      font-size: 18px;
+    }
+    
+    /* 关键帧动画 */
+    @keyframes dotLightOn {
+      from { background: #ddd; }
+      to { background: #0066ff; }
+    }
+    @keyframes glowPulseSpread {
+      0% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(3);
+      }
+    }
+    @keyframes titleSweepMove {
+      from { left: -100%; }
+      to { left: 100%; }
+    }
+    
+    /* 响应式适配 */
+    @media(max-width: 1200px){
+      .main-title { font-size: 46px; }
+      .icon-card { width: 130px; height: 130px; }
+      .step-title { font-size: 26px; }
+    }
+    @media(max-width: 768px){
+      .steps-row { grid-template-columns: 1fr; gap: 60px; }
+      .main-title { font-size: 34px; }
+    }
+    </style>
+    </head>
+    <body>
+    <div class="wrapper">
+      <h1 class="main-title">Energie für Zuhause, Geld für dich!</h1>
+    
+      <div class="steps-row">
+        <!-- 第1项 -->
+        <div class="step-item item1">
+          <div class="icon-card">
+            <img src="house-solar.png" alt="Maximal kompatibel">
+          </div>
+          <div class="dot-wrap">
+            <div class="dot-core"></div>
+            <div class="dot-glow-ring"></div>
+          </div>
+          <h3 class="step-title">
+            Maximal kompatibel
+            <span class="light-sweep-mask"></span>
+          </h3>
+          <p class="step-desc">Erweitere deine Solaranlage nahtlos, ohne Umbau oder Komponententausch.</p>
+        </div>
+    
+        <!-- 第2项 -->
+        <div class="step-item item2">
+          <div class="icon-card">
+            <img src="plug-socket.png" alt="Plug & Play">
+          </div>
+          <div class="dot-wrap">
+            <div class="dot-core"></div>
+            <div class="dot-glow-ring"></div>
+          </div>
+          <h3 class="step-title">
+            Plug & Play
+            <span class="light-sweep-mask"></span>
+          </h3>
+          <p class="step-desc">Kabel einstecken, mit der Steckdose verbinden – bereit in Sekunden.</p>
+        </div>
+    
+        <!-- 第3项 -->
+        <div class="step-item item3">
+          <div class="icon-card">
+            <img src="battery-storage.png" alt="Eigenstrom bei Nacht">
+          </div>
+          <div class="dot-wrap">
+            <div class="dot-core"></div>
+            <div class="dot-glow-ring"></div>
+          </div>
+          <h3 class="step-title">
+            Eigenstrom bei Nacht
+            <span class="light-sweep-mask"></span>
+          </h3>
+          <p class="step-desc">Nutze deinen Sonnenstrom auch nach Sonnenuntergang gratis.</p>
+        </div>
+    
+        <!-- 第4项 -->
+        <div class="step-item item4">
+          <div class="icon-card">
+            <img src="home-appliance.png" alt="Nutzung bei Nacht">
+          </div>
+          <div class="dot-wrap">
+            <div class="dot-core"></div>
+            <div class="dot-glow-ring"></div>
+          </div>
+          <h3 class="step-title">
+            Nutzung bei Nacht
+      
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-steps-animation-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 60px 20px;
+    background: {{ block.settings.background_color }};
+  }
+
+  .ai-steps-wrapper-{{ ai_gen_id }} {
+    max-width: 1600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .ai-steps-main-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    margin-bottom: 80px;
+    line-height: 1.2;
+  }
+
+  .ai-steps-row-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    position: relative;
+  }
+
+  .ai-step-item-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .ai-icon-card-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    background: {{ block.settings.card_background }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+    transition: all 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .ai-icon-card-{{ ai_gen_id }} img {
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
+  }
+
+  .ai-icon-card-{{ ai_gen_id }}.active {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  }
+
+  .ai-dot-wrap-{{ ai_gen_id }} {
+    width: 14px;
+    height: 14px;
+    margin: 26px 0 22px;
+    position: relative;
+  }
+
+  .ai-dot-core-{{ ai_gen_id }} {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: {{ block.settings.dot_inactive_color }};
+    position: relative;
+    z-index: 2;
+  }
+
+  .ai-dot-glow-ring-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: {{ block.settings.dot_active_color }};
+    opacity: 0;
+  }
+
+  .ai-step-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.step_title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.step_title_color }};
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+    min-height: 40px;
+  }
+
+  .ai-light-sweep-mask-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+  }
+
+  .ai-step-title-{{ ai_gen_id }}.active {
+    color: {{ block.settings.step_title_active_color }};
+  }
+
+  .ai-step-desc-{{ ai_gen_id }} {
+    font-size: {{ block.settings.step_desc_size }}px;
+    color: {{ block.settings.step_desc_color }};
+    line-height: 1.6;
+    max-width: 240px;
+  }
+
+  @keyframes ai-dot-light-on-{{ ai_gen_id }} {
+    from { background: {{ block.settings.dot_inactive_color }}; }
+    to { background: {{ block.settings.dot_active_color }}; }
+  }
+
+  @keyframes ai-glow-pulse-spread-{{ ai_gen_id }} {
+    0% {
+      opacity: 0.7;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(3);
+    }
+  }
+
+  @keyframes ai-title-sweep-move-{{ ai_gen_id }} {
+    from { left: -100%; }
+    to { left: 100%; }
+  }
+
+  @media(max-width: 1200px){
+    .ai-steps-main-title-{{ ai_gen_id }} { 
+      font-size: calc({{ block.settings.title_size }}px * 0.7); 
+    }
+    .ai-icon-card-{{ ai_gen_id }} { 
+      width: calc({{ block.settings.icon_size }}px * 0.8); 
+      height: calc({{ block.settings.icon_size }}px * 0.8); 
+    }
+    .ai-step-title-{{ ai_gen_id }} { 
+      font-size: calc({{ block.settings.step_title_size }}px * 0.8); 
+    }
+  }
+
+  @media(max-width: 768px){
+    .ai-steps-row-{{ ai_gen_id }} { 
+      grid-template-columns: 1fr; 
+      gap: 60px; 
+    }
+    .ai-steps-main-title-{{ ai_gen_id }} { 
+      font-size: calc({{ block.settings.title_size }}px * 0.5); 
+    }
+  }
+{% endstyle %}
+
+<steps-animation-{{ ai_gen_id }}
+  class="ai-steps-animation-{{ ai_gen_id }}"
+  data-animation-speed="{{ block.settings.animation_speed }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-steps-wrapper-{{ ai_gen_id }}">
+    {% if block.settings.main_title != blank %}
+      <h2 class="ai-steps-main-title-{{ ai_gen_id }}">{{ block.settings.main_title }}</h2>
+    {% endif %}
+
+    <div class="ai-steps-row-{{ ai_gen_id }}">
+      {% for i in (1..4) %}
+        {% liquid
+          assign step_image_key = 'step_' | append: i | append: '_image'
+          assign step_title_key = 'step_' | append: i | append: '_title'
+          assign step_desc_key = 'step_' | append: i | append: '_desc'
+          
+          assign step_image = block.settings[step_image_key]
+          assign step_title = block.settings[step_title_key]
+          assign step_desc = block.settings[step_desc_key]
+        %}
+
+        <div class="ai-step-item-{{ ai_gen_id }} ai-step-item-{{ ai_gen_id }}-{{ i }}" data-step="{{ i }}">
+          <div class="ai-icon-card-{{ ai_gen_id }}">
+            {% if step_image %}
+              <img
+                src="{{ step_image | image_url: width: 300 }}"
+                alt="{{ step_title | escape }}"
+                loading="lazy"
+                width="300"
+                height="300"
+              >
+            {% else %}
+              <div class="ai-icon-placeholder-{{ ai_gen_id }}">
+                {{ 'image' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+          </div>
+          <div class="ai-dot-wrap-{{ ai_gen_id }}">
+            <div class="ai-dot-core-{{ ai_gen_id }}"></div>
+            <div class="ai-dot-glow-ring-{{ ai_gen_id }}"></div>
+          </div>
+          <h3 class="ai-step-title-{{ ai_gen_id }}">
+            {{ step_title }}
+            <span class="ai-light-sweep-mask-{{ ai_gen_id }}"></span>
+          </h3>
+          <p class="ai-step-desc-{{ ai_gen_id }}">{{ step_desc }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</steps-animation-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class StepsAnimation{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentStep = 0;
+        this.totalSteps = 4;
+        this.animationSpeed = parseFloat(this.dataset.animationSpeed) || 3;
+        this.intervalId = null;
+      }
+
+      connectedCallback() {
+        this.startAnimation();
+      }
+
+      disconnectedCallback() {
+        if (this.intervalId) {
+          clearInterval(this.intervalId);
+        }
+      }
+
+      startAnimation() {
+        this.animateStep(this.currentStep);
+        
+        this.intervalId = setInterval(() => {
+          this.currentStep = (this.currentStep + 1) % this.totalSteps;
+          this.animateStep(this.currentStep);
+        }, this.animationSpeed * 1000);
+      }
+
+      animateStep(stepIndex) {
+        const stepItems = this.querySelectorAll('.ai-step-item-{{ ai_gen_id }}');
+        
+        stepItems.forEach((item, index) => {
+          const iconCard = item.querySelector('.ai-icon-card-{{ ai_gen_id }}');
+          const dotCore = item.querySelector('.ai-dot-core-{{ ai_gen_id }}');
+          const dotGlow = item.querySelector('.ai-dot-glow-ring-{{ ai_gen_id }}');
+          const stepTitle = item.querySelector('.ai-step-title-{{ ai_gen_id }}');
+          const lightSweep = item.querySelector('.ai-light-sweep-mask-{{ ai_gen_id }}');
+          
+          if (index === stepIndex) {
+            iconCard.classList.add('active');
+            stepTitle.classList.add('active');
+            
+            dotCore.style.animation = 'ai-dot-light-on-{{ ai_gen_id }} 0.4s ease forwards';
+            dotGlow.style.animation = 'ai-glow-pulse-spread-{{ ai_gen_id }} 0.6s ease-out forwards';
+            lightSweep.style.animation = 'ai-title-sweep-move-{{ ai_gen_id }} 0.8s ease forwards';
+          } else {
+            iconCard.classList.remove('active');
+            stepTitle.classList.remove('active');
+            
+            dotCore.style.animation = '';
+            dotGlow.style.animation = '';
+            lightSweep.style.animation = '';
+          }
+        });
+      }
+    }
+
+    customElements.define('steps-animation-{{ ai_gen_id }}', StepsAnimation{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Steps animation",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Main title"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "main_title",
+      "label": "Title",
+      "default": "Energie für Zuhause, Geld für dich!"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#222222"
+    },
+    {
+      "type": "header",
+      "content": "Step 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "step_1_image",
+      "label": "Icon"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "step_1_title",
+      "label": "Title",
+      "default": "Maximal kompatibel"
+    },
+    {
+      "type": "text",
+      "id": "step_1_desc",
+      "label": "Description",
+      "default": "Erweitere deine Solaranlage nahtlos, ohne Umbau oder Komponententausch."
+    },
+    {
+      "type": "header",
+      "content": "Step 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "step_2_image",
+      "label": "Icon"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "step_2_title",
+      "label": "Title",
+      "default": "Plug & Play"
+    },
+    {
+      "type": "text",
+      "id": "step_2_desc",
+      "label": "Description",
+      "default": "Kabel einstecken, mit der Steckdose verbinden – bereit in Sekunden."
+    },
+    {
+      "type": "header",
+      "content": "Step 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "step_3_image",
+      "label": "Icon"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "step_3_title",
+      "label": "Title",
+      "default": "Eigenstrom bei Nacht"
+    },
+    {
+      "type": "text",
+      "id": "step_3_desc",
+      "label": "Description",
+      "default": "Nutze deinen Sonnenstrom auch nach Sonnenuntergang gratis."
+    },
+    {
+      "type": "header",
+      "content": "Step 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "step_4_image",
+      "label": "Icon"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "step_4_title",
+      "label": "Title",
+      "default": "Nutzung bei Nacht"
+    },
+    {
+      "type": "text",
+      "id": "step_4_desc",
+      "label": "Description",
+      "default": "Spare Geld und schone die Umwelt mit selbst erzeugtem Strom."
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "label": "Animation speed",
+      "min": 1,
+      "max": 10,
+      "step": 0.5,
+      "unit": "s",
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 80,
+      "max": 240,
+      "step": 10,
+      "unit": "px",
+      "default": 160
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "step_title_size",
+      "label": "Step title size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "step_title_color",
+      "label": "Step title color",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "step_title_active_color",
+      "label": "Step title active color",
+      "default": "#0066ff"
+    },
+    {
+      "type": "range",
+      "id": "step_desc_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "step_desc_color",
+      "label": "Description color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "dot_inactive_color",
+      "label": "Dot inactive color",
+      "default": "#dddddd"
+    },
+    {
+      "type": "color",
+      "id": "dot_active_color",
+      "label": "Dot active color",
+      "default": "#0066ff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Steps animation"
+    }
+  ]
+}
+{% endschema %}

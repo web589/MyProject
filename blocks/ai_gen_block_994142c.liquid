@@ -1,0 +1,902 @@
+{% doc %}
+  @prompt
+    {% comment %}
+    Marstek Im Lieferumfang 包装清单模块
+    完全复刻截图UI，遵循品牌设计规范
+    功能：
+    1.顶部标题字号、粗细、边距全部可调
+    2.正方形统一尺寸卡片，左对齐排列，卡片大小、卡片间距可配置
+    3.卡片右上角椭圆角数量标签，标签颜色、文字可自定义
+    4.hover交互：卡片上浮、背景变为纯白、浮现阴影
+    5.卡片可自由增删，每张包含图片、右上角数量角标、底部说明文字
+    6.移动端自动适配换行
+    {% endcomment %}
+    {% liquid
+    /* ===================== 配置区域，所有参数在这里修改 ===================== */
+    assign module_max_width = "1280px"
+    assign module_top_margin = "80px"
+    assign module_bottom_margin = "80px"
+    
+    /* 标题设置 */
+    assign heading_text = "Im Lieferumfang"
+    assign heading_font_size = "56px"
+    assign heading_font_weight = "700"
+    assign heading_margin_bottom = "48px"
+    
+    /* 卡片全局设置 */
+    assign card_size = "280px"        /* 正方形卡片宽高 */
+    assign card_gap = "32px"          /* 卡片之间间距 */
+    assign card_bg_normal = "#fbfbfd" /* 默认灰白背景 */
+    assign card_bg_hover = "#ffffff"  /* hover纯白背景 */
+    assign card_radius = "20px"
+    
+    /* 右上角数量角标设置 */
+    assign badge_bg_color = "#f1f1f3"
+    assign badge_text_color = "#222222"
+    assign badge_font_size = "14px"
+    
+    /* 卡片底部文字 */
+    assign card_text_size = "20px"
+    assign card_text_weight = "500"
+    assign card_text_color = "#333333"
+    
+    /* hover悬浮参数 */
+    assign hover_translate_y = "-8px"
+    %}
+    
+    <style>
+    :root {
+      --font-heading: 'Manrope', sans‑serif;
+      --font-body: 'Inter', sans‑serif;
+    }
+    .delivery‑scope‑module {
+      width: 100%;
+      margin: {{module_top_margin}} auto {{module_bottom_margin}};
+    }
+    .delivery‑scope‑inner {
+      max‑width: {{module_max_width}};
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .delivery‑scope‑heading {
+      font‑family: var(--font-heading);
+      font‑size: {{heading_font_size}};
+      font‑weight: {{heading_font_weight}};
+      margin: 0 0 {{heading_margin_bottom}};
+      color: #2c2c2c;
+    }
+    .delivery‑cards‑wrap {
+      display: grid;
+      grid‑template‑columns: repeat(auto‑fill, minmax({{card_size}}, 1fr));
+      gap: {{card_gap}};
+      justify‑items: start;
+    }
+    .delivery‑card {
+      width: {{card_size}};
+    }
+    .delivery‑card‑inner {
+      width: 100%;
+      height: {{card_size}};
+      background: {{card_bg_normal}};
+      border‑radius: {{card_radius}};
+      position: relative;
+      display: flex;
+      align‑items: center;
+      justify‑content: center;
+      overflow: hidden;
+      transition: all 0.24s ease‑out;
+    }
+    .delivery‑card‑inner:hover {
+      background: {{card_bg_hover}};
+      transform: translateY({{hover_translate_y}});
+      box‑shadow: 0 12px 30px rgba(0,0,0,0.09);
+    }
+    /* 右上角数量椭圆角标 */
+    .delivery‑badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: {{badge_bg_color}};
+      color: {{badge_text_color}};
+      font‑size: {{badge_font_size}};
+      padding:4px 10px;
+      border‑radius: 999px;
+    }
+    .delivery‑card‑img {
+      max‑width: 70%;
+      max‑height: 70%;
+      object‑fit: contain;
+    }
+    .delivery‑card‑text {
+      margin‑top:16px;
+      font‑family: var(--font-body);
+      font‑size: {{card_text_size}};
+      font‑weight: {{card_text_weight}};
+      color: {{card_text_color}};
+      text‑align: center;
+      line‑height:1.3;
+    }
+    
+    /* 移动端适配 */
+    @media(max‑width:768px){
+      .delivery‑scope‑heading {
+        font‑size: 36px;
+      }
+      .delivery‑cards‑wrap{
+        justify‑items:center;
+      }
+    }
+    </style>
+    
+    <div class="delivery‑scope‑module">
+      <div class="delivery‑scope‑inner">
+        <h2 class="delivery‑scope‑heading">{{heading_text}}</h2>
+        <div class="delivery‑cards‑wrap">
+    
+          {% comment %} =========复制下面整块card，自由增加/删除卡片========= {% endcomment %}
+          {% comment %}卡片1{% endcomment %}
+          <div class="delivery‑card">
+            <div class="delivery‑card‑inner">
+              <span class="delivery‑badge">×1</span>
+              <img class="delivery‑card‑img" src="https://cdn.shopify.com/s/files/1/xxxx/xxxx/files/venus‑e3‑main‑unit.png" alt="MARSTEK Venus E Gen 3.0 Plug‑in Batterie">
+            </div>
+            <p class="delivery‑card‑text">MARSTEK Venus E Gen 3.0<br>Plug‑in Batterie</p>
+          </div>
+    
+          {% comment %}卡片2{% endcomment %}
+          <div class="delivery‑card">
+            <div class="delivery‑card‑inner">
+              <span class="delivery‑badge">×1</span>
+              <img class="delivery‑card‑img" src="https://cdn.shopify.com/s/files/1/xxxx/xxxx/files/ac‑kabel.png" alt="AC‑Kabel">
+            </div>
+            <p class="delivery‑card‑text">AC‑Kabel</p>
+          </div>
+    
+          {% comment %}卡片3{% endcomment %}
+          <div class="delivery‑card">
+            <div class="delivery‑card‑inner">
+              <span class="delivery‑badge">×1</span>
+              <img class="delivery‑card‑img" src="https://cdn.shopify.com/s/files/1/xxxx/xxxx/files/garantiekarte.png" alt="Garantiekarte">
+            </div>
+            <p class="delivery‑card‑text">Garantiekarte</p>
+          </div>
+    
+          {% comment %}卡片4{% endcomment %}
+          <div class="delivery‑card">
+            <div class="delivery‑card‑inner">
+              <span class="delivery‑badge">×1</span>
+              <img class="delivery‑card‑img" src="https://cdn.shopify.com/s/files/1/xxxx/xxxx/files/befestigungen.png" alt="Befestigungen">
+            </div>
+            <p class="delivery‑card‑text">Befestigungen</p>
+          </div>
+    
+        </div>
+      </div>
+    </div>, 增加一个可以调节容器外部与上下模块间距的设置，再添加一个可以调节容器内部上下边距的设置，还有整个模块卡片和标题都保持居中，每个卡片都有边框颜色，卡片的圆角也可以自由调节, 其他地方不变，加一个可以选择标题是左对齐、居中还有右对齐的设置, 增加一个可以调节整个容器宽度的设置, 请帮我把当前这个 section 里 "Max width"(容器最大宽度)这个滑块设置的 step(步长)从 40 改成 10,其他不用变。, 请帮我把当前这个 section 里 "Card gap"(卡片间距)这个滑块设置的 step(步长)改成1，其他不用变。
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-delivery-scope-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    margin: {{ block.settings.section_margin_top }}px auto {{ block.settings.section_margin_bottom }}px;
+    padding: {{ block.settings.container_padding_top }}px 0 {{ block.settings.container_padding_bottom }}px;
+  }
+
+  .ai-delivery-scope-inner-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .ai-delivery-scope-heading-{{ ai_gen_id }} {
+    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+    font-weight: {{ block.settings.heading_font.weight }};
+    font-size: {{ block.settings.heading_size }}px;
+    margin: 0 0 {{ block.settings.heading_margin_bottom }}px;
+    color: {{ block.settings.heading_color }};
+    line-height: 1.2;
+    text-align: {{ block.settings.heading_alignment }};
+  }
+
+  .ai-delivery-cards-wrap-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax({{ block.settings.card_size }}px, 1fr));
+    gap: {{ block.settings.card_gap }}px;
+    justify-items: center;
+  }
+
+  .ai-delivery-card-{{ ai_gen_id }} {
+    width: {{ block.settings.card_size }}px;
+  }
+
+  .ai-delivery-card-inner-{{ ai_gen_id }} {
+    width: 100%;
+    height: {{ block.settings.card_size }}px;
+    background: {{ block.settings.card_bg_normal }};
+    border-radius: {{ block.settings.card_radius }}px;
+    border: {{ block.settings.card_border_width }}px solid {{ block.settings.card_border_color }};
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: all 0.24s ease-out;
+  }
+
+  .ai-delivery-card-inner-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.card_bg_hover }};
+    transform: translateY({{ block.settings.hover_translate_y }}px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.09);
+  }
+
+  .ai-delivery-badge-{{ ai_gen_id }} {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: {{ block.settings.badge_bg_color }};
+    color: {{ block.settings.badge_text_color }};
+    font-size: {{ block.settings.badge_font_size }}px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+
+  .ai-delivery-card-img-{{ ai_gen_id }} {
+    max-width: 70%;
+    max-height: 70%;
+    object-fit: contain;
+  }
+
+  .ai-delivery-card-text-{{ ai_gen_id }} {
+    margin-top: 16px;
+    font-size: {{ block.settings.card_text_size }}px;
+    font-weight: {{ block.settings.card_text_weight }};
+    color: {{ block.settings.card_text_color }};
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  @media (max-width: 768px) {
+    .ai-delivery-scope-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-delivery-scope-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.65 }}px;
+    }
+
+    .ai-delivery-card-{{ ai_gen_id }} {
+      width: {{ block.settings.card_size | times: 0.85 }}px;
+    }
+
+    .ai-delivery-card-inner-{{ ai_gen_id }} {
+      height: {{ block.settings.card_size | times: 0.85 }}px;
+    }
+  }
+{% endstyle %}
+
+{% liquid
+  assign is_product_context = false
+  assign use_product_included_items = false
+  if request.page_type == 'product' and product != blank and block.settings.content_source != 'theme_editor'
+    assign is_product_context = true
+    assign pdp_content_candidate = product.metafields.custom.pdp_content.value
+    if pdp_content_candidate != blank
+      assign pdp_content_owner = pdp_content_candidate.product.value
+      assign pdp_content_is_for_product = false
+      if pdp_content_owner != blank
+        if pdp_content_owner.handle == product.handle
+          assign pdp_content_is_for_product = true
+        endif
+      elsif pdp_content_candidate.system.handle == product.handle
+        assign pdp_content_is_for_product = true
+      endif
+      if pdp_content_is_for_product
+        assign pdp_content = pdp_content_candidate
+        assign included_title = pdp_content.included_title.value
+        assign included_subtitle = pdp_content.included_subtitle.value
+        assign included_items = pdp_content.included_items.value
+        assign use_product_included_items = true
+      endif
+    endif
+  endif
+  if is_product_context == false
+    assign included_title = block.settings.heading
+    assign included_subtitle = block.settings.subtitle
+    assign has_theme_editor_item = false
+    if block.settings.item_1_image != blank or block.settings.item_1_description != blank or block.settings.item_2_image != blank or block.settings.item_2_description != blank or block.settings.item_3_image != blank or block.settings.item_3_description != blank or block.settings.item_4_image != blank or block.settings.item_4_description != blank or block.settings.item_5_image != blank or block.settings.item_5_description != blank or block.settings.item_6_image != blank or block.settings.item_6_description != blank
+      assign has_theme_editor_item = true
+    endif
+  endif
+%}
+
+{% if included_title != blank or included_subtitle != blank or included_items != blank or has_theme_editor_item %}
+<delivery-scope-{{ ai_gen_id }}
+  id="pdp-included"
+  class="ai-delivery-scope-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-delivery-scope-inner-{{ ai_gen_id }}">
+    {% if included_title != blank %}
+      <h2 class="ai-delivery-scope-heading-{{ ai_gen_id }}">{{ included_title }}</h2>
+    {% endif %}
+    {% if included_subtitle != blank %}<div class="ai-delivery-scope-subtitle-{{ ai_gen_id }}">{{ included_subtitle }}</div>{% endif %}
+
+    <div class="ai-delivery-cards-wrap-{{ ai_gen_id }}">
+      {% for included_item in included_items %}
+        {% liquid
+          assign included_image = included_item.image.value
+          assign included_label = included_item.title.value
+          assign included_quantity = included_item.quantity.value
+          assign included_image_class = 'ai-delivery-card-img-' | append: ai_gen_id
+        %}
+        {% if included_image != blank or included_label != blank %}
+          <div class="ai-delivery-card-{{ ai_gen_id }}">
+            <div class="ai-delivery-card-inner-{{ ai_gen_id }}">
+              {% if included_quantity != blank %}<span class="ai-delivery-badge-{{ ai_gen_id }}">{{ included_quantity }}</span>{% endif %}
+              {% if included_image != blank %}{{ included_image | image_url: width: 800 | image_tag: class: included_image_class, loading: 'lazy', widths: '240, 400, 600, 800', sizes: '240px', alt: included_label }}{% endif %}
+            </div>
+            {% if included_label != blank %}<p class="ai-delivery-card-text-{{ ai_gen_id }}">{{ included_label }}</p>{% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+      {% if use_product_included_items == false %}
+      {% if block.settings.item_1_image != blank or block.settings.item_1_description != blank %}
+        <div class="ai-delivery-card-{{ ai_gen_id }}">
+          <div class="ai-delivery-card-inner-{{ ai_gen_id }}">
+            {% if block.settings.item_1_quantity != blank %}
+              <span class="ai-delivery-badge-{{ ai_gen_id }}">{{ block.settings.item_1_quantity }}</span>
+            {% endif %}
+            {% if block.settings.item_1_image != blank %}
+              <img
+                class="ai-delivery-card-img-{{ ai_gen_id }}"
+                src="{{ block.settings.item_1_image | image_url: width: 400 }}"
+                alt="{{ block.settings.item_1_description | escape }}"
+                loading="lazy"
+                width="400"
+                height="400"
+              >
+            {% endif %}
+          </div>
+          {% if block.settings.item_1_description != blank %}
+            <p class="ai-delivery-card-text-{{ ai_gen_id }}">{{ block.settings.item_1_description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if block.settings.item_2_image != blank or block.settings.item_2_description != blank %}
+        <div class="ai-delivery-card-{{ ai_gen_id }}">
+          <div class="ai-delivery-card-inner-{{ ai_gen_id }}">
+            {% if block.settings.item_2_quantity != blank %}
+              <span class="ai-delivery-badge-{{ ai_gen_id }}">{{ block.settings.item_2_quantity }}</span>
+            {% endif %}
+            {% if block.settings.item_2_image != blank %}
+              <img
+                class="ai-delivery-card-img-{{ ai_gen_id }}"
+                src="{{ block.settings.item_2_image | image_url: width: 400 }}"
+                alt="{{ block.settings.item_2_description | escape }}"
+                loading="lazy"
+                width="400"
+                height="400"
+              >
+            {% endif %}
+          </div>
+          {% if block.settings.item_2_description != blank %}
+            <p class="ai-delivery-card-text-{{ ai_gen_id }}">{{ block.settings.item_2_description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if block.settings.item_3_image != blank or block.settings.item_3_description != blank %}
+        <div class="ai-delivery-card-{{ ai_gen_id }}">
+          <div class="ai-delivery-card-inner-{{ ai_gen_id }}">
+            {% if block.settings.item_3_quantity != blank %}
+              <span class="ai-delivery-badge-{{ ai_gen_id }}">{{ block.settings.item_3_quantity }}</span>
+            {% endif %}
+            {% if block.settings.item_3_image != blank %}
+              <img
+                class="ai-delivery-card-img-{{ ai_gen_id }}"
+                src="{{ block.settings.item_3_image | image_url: width: 400 }}"
+                alt="{{ block.settings.item_3_description | escape }}"
+                loading="lazy"
+                width="400"
+                height="400"
+              >
+            {% endif %}
+          </div>
+          {% if block.settings.item_3_description != blank %}
+            <p class="ai-delivery-card-text-{{ ai_gen_id }}">{{ block.settings.item_3_description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if block.settings.item_4_image != blank or block.settings.item_4_description != blank %}
+        <div class="ai-delivery-card-{{ ai_gen_id }}">
+          <div class="ai-delivery-card-inner-{{ ai_gen_id }}">
+            {% if block.settings.item_4_quantity != blank %}
+              <span class="ai-delivery-badge-{{ ai_gen_id }}">{{ block.settings.item_4_quantity }}</span>
+            {% endif %}
+            {% if block.settings.item_4_image != blank %}
+              <img
+                class="ai-delivery-card-img-{{ ai_gen_id }}"
+                src="{{ block.settings.item_4_image | image_url: width: 400 }}"
+                alt="{{ block.settings.item_4_description | escape }}"
+                loading="lazy"
+                width="400"
+                height="400"
+              >
+            {% endif %}
+          </div>
+          {% if block.settings.item_4_description != blank %}
+            <p class="ai-delivery-card-text-{{ ai_gen_id }}">{{ block.settings.item_4_description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if block.settings.item_5_image != blank or block.settings.item_5_description != blank %}
+        <div class="ai-delivery-card-{{ ai_gen_id }}">
+          <div class="ai-delivery-card-inner-{{ ai_gen_id }}">
+            {% if block.settings.item_5_quantity != blank %}
+              <span class="ai-delivery-badge-{{ ai_gen_id }}">{{ block.settings.item_5_quantity }}</span>
+            {% endif %}
+            {% if block.settings.item_5_image != blank %}
+              <img
+                class="ai-delivery-card-img-{{ ai_gen_id }}"
+                src="{{ block.settings.item_5_image | image_url: width: 400 }}"
+                alt="{{ block.settings.item_5_description | escape }}"
+                loading="lazy"
+                width="400"
+                height="400"
+              >
+            {% endif %}
+          </div>
+          {% if block.settings.item_5_description != blank %}
+            <p class="ai-delivery-card-text-{{ ai_gen_id }}">{{ block.settings.item_5_description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if block.settings.item_6_image != blank or block.settings.item_6_description != blank %}
+        <div class="ai-delivery-card-{{ ai_gen_id }}">
+          <div class="ai-delivery-card-inner-{{ ai_gen_id }}">
+            {% if block.settings.item_6_quantity != blank %}
+              <span class="ai-delivery-badge-{{ ai_gen_id }}">{{ block.settings.item_6_quantity }}</span>
+            {% endif %}
+            {% if block.settings.item_6_image != blank %}
+              <img
+                class="ai-delivery-card-img-{{ ai_gen_id }}"
+                src="{{ block.settings.item_6_image | image_url: width: 400 }}"
+                alt="{{ block.settings.item_6_description | escape }}"
+                loading="lazy"
+                width="400"
+                height="400"
+              >
+            {% endif %}
+          </div>
+          {% if block.settings.item_6_description != blank %}
+            <p class="ai-delivery-card-text-{{ ai_gen_id }}">{{ block.settings.item_6_description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</delivery-scope-{{ ai_gen_id }}>
+{% endif %}
+
+<script>
+  (function() {
+    class DeliveryScope{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+    }
+    customElements.define('delivery-scope-{{ ai_gen_id }}', DeliveryScope{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Im Lieferumfang",
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_source",
+      "label": "内容来源",
+      "options": [
+        { "value": "theme_editor", "label": "右侧 Theme Editor（默认）" },
+        { "value": "pdp_content", "label": "PDP 后台内容（备份/旧模式）" }
+      ],
+      "default": "theme_editor",
+      "info": "选择右侧 Theme Editor 后，标题、副标题和清单只读取当前模板的下方字段。"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Im Lieferumfang"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "副标题"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "manrope_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#2c2c2c"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "label": "Heading bottom margin",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "card_size",
+      "label": "Card size",
+      "min": 180,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card gap",
+      "min": 16,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "label": "Card border width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_normal",
+      "label": "Card background",
+      "default": "#fbfbfd"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_hover",
+      "label": "Card hover background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "hover_translate_y",
+      "label": "Hover lift distance",
+      "min": -20,
+      "max": 0,
+      "step": 2,
+      "unit": "px",
+      "default": -8
+    },
+    {
+      "type": "header",
+      "content": "Badge style"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge background",
+      "default": "#f1f1f3"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text color",
+      "default": "#222222"
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "label": "Badge font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Card text"
+    },
+    {
+      "type": "range",
+      "id": "card_text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_text_weight",
+      "label": "Text weight",
+      "min": 400,
+      "max": 700,
+      "step": 100,
+      "default": 500
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 960,
+      "max": 1600,
+      "step": 10,
+      "unit": "px",
+      "default": 1280
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_margin_top",
+      "label": "Section top margin",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_margin_bottom",
+      "label": "Section bottom margin",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "container_padding_top",
+      "label": "Container top padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "container_padding_bottom",
+      "label": "Container bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Item 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "item_1_quantity",
+      "label": "Quantity badge",
+      "default": "×1"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_1_description",
+      "label": "Description",
+      "default": "MARSTEK Venus E Gen 3.0 Plug-in Batterie"
+    },
+    {
+      "type": "header",
+      "content": "Item 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "item_2_quantity",
+      "label": "Quantity badge",
+      "default": "×1"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_2_description",
+      "label": "Description",
+      "default": "AC-Kabel"
+    },
+    {
+      "type": "header",
+      "content": "Item 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "item_3_quantity",
+      "label": "Quantity badge",
+      "default": "×1"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_3_description",
+      "label": "Description",
+      "default": "Garantiekarte"
+    },
+    {
+      "type": "header",
+      "content": "Item 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "item_4_quantity",
+      "label": "Quantity badge",
+      "default": "×1"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_4_description",
+      "label": "Description",
+      "default": "Befestigungen"
+    },
+    {
+      "type": "header",
+      "content": "Item 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "item_5_quantity",
+      "label": "Quantity badge"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_5_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Item 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "item_6_quantity",
+      "label": "Quantity badge"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "item_6_description",
+      "label": "Description"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Im Lieferumfang"
+    }
+  ]
+}
+{% endschema %}

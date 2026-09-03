@@ -1,0 +1,1058 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solarbank Produkte</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      }
+    
+      body {
+        background: #ffffff;
+        padding: 2rem 1rem;
+      }
+    
+      .product-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+      }
+    
+      @media (max-width: 900px) {
+        .product-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+    
+      @media (max-width: 600px) {
+        .product-grid { grid-template-columns: 1fr; }
+      }
+    
+      /* 卡片 */
+      .product-card {
+        border: 1px solid #ececec;
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+      }
+    
+      /* 图片区域 */
+      .product-media {
+        position: relative;
+        background: #fafafa;
+        aspect-ratio: 4 / 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    
+      .product-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    
+      /* 左上角折扣角标 */
+      .discount-badge {
+        position: absolute;
+        top: 12px;
+        left: 0;
+        background: #f5a623;
+        color: #ffffff;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 0.3rem 0.8rem 0.3rem 0.6rem;
+        clip-path: polygon(0 0, 100% 0, 88% 100%, 0% 100%);
+      }
+    
+      /* 右上角赠品圆形角标 */
+      .gift-badge {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        background: #2ec5f6;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.15;
+        box-shadow: 0 4px 10px rgba(46, 197, 246, 0.35);
+      }
+    
+      .gift-badge .gift-label {
+        font-size: 0.62rem;
+        font-weight: 600;
+      }
+    
+      .gift-badge .gift-price {
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+    
+      /* 内容区 */
+      .product-content {
+        padding: 1rem 1.1rem 1.2rem;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+    
+      /* 产品名称 */
+      .product-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        line-height: 1.4;
+        margin-bottom: 0.9rem;
+        min-height: 2.6rem;
+      }
+    
+      /* 卖点三列 */
+      .selling-points {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+    
+      .selling-point {
+        text-align: left;
+      }
+    
+      .selling-point .value {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #1a1a1a;
+      }
+    
+      .selling-point .label {
+        font-size: 0.72rem;
+        color: #6b6b6b;
+        margin-top: 0.1rem;
+        line-height: 1.3;
+      }
+    
+      /* 价格 + 按钮行 */
+      .price-row {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+    
+      .price-group {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+      }
+    
+      .price-current {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #1a1a1a;
+      }
+    
+      .price-old {
+        font-size: 0.85rem;
+        color: #9b9b9b;
+        text-decoration: line-through;
+      }
+    
+      .buy-btn {
+        background: #14b8b0;
+        color: #ffffff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.6rem 1.1rem;
+        border-radius: 4px;
+        border: none;
+        text-decoration: none;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+      }
+    
+      .buy-btn:hover {
+        background: #0fa39c;
+      }
+    </style>
+    </head>
+    <body>
+    
+      <div class="product-grid">
+    
+        <!-- 产品1 -->
+        <div class="product-card">
+          <div class="product-media">
+            <span class="discount-badge">550€ Rabatt</span>
+            <div class="gift-badge">
+              <span class="gift-label">Gratis</span>
+              <span class="gift-price">99€</span>
+            </div>
+            <img src="https://via.placeholder.com/600x450.png?text=Solarbank+4+E5000+Pro+2000Wp" alt="Solarbank 4 E5000 Pro + 2000Wp Solarpanel">
+          </div>
+          <div class="product-content">
+            <h3 class="product-title">Solarbank 4 E5000 Pro + 2000Wp Doppelseitiges Solarpanel</h3>
+    
+            <div class="selling-points">
+              <div class="selling-point">
+                <div class="value">5024Wh</div>
+                <div class="label">Speicherkapazität</div>
+              </div>
+              <div class="selling-point">
+                <div class="value">2500W</div>
+                <div class="label">Wechselstromausgang</div>
+              </div>
+              <div class="selling-point">
+                <div class="value">4×500Wp</div>
+                <div class="label">Doppelseitige Panels (2000Wp)</div>
+              </div>
+            </div>
+    
+            <div class="price-row">
+              <div class="price-group">
+                <span class="price-current">1.999,00€</span>
+                <span class="price-old">2.549,00€</span>
+              </div>
+              <a href="/products/solarbank-4-e5000-pro-2000wp" class="buy-btn">Jetzt kaufen</a>
+            </div>
+          </div>
+        </div>
+    
+        <!-- 产品2 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-grid-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px 0;
+  }
+
+  .ai-product-grid-container-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  @media (max-width: 900px) {
+    .ai-product-grid-container-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .ai-product-grid-container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ai-product-card-{{ ai_gen_id }} {
+    border: 1px solid {{ block.settings.card_border_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: {{ block.settings.card_background }};
+  }
+
+  .ai-product-media-{{ ai_gen_id }} {
+    position: relative;
+    background: {{ block.settings.image_background }};
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-product-media-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-product-media-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-product-media-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .ai-discount-badge-{{ ai_gen_id }} {
+    position: absolute;
+    top: 12px;
+    left: 0;
+    background: {{ block.settings.discount_badge_color }};
+    color: {{ block.settings.discount_badge_text_color }};
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem 0.3rem 0.6rem;
+    clip-path: polygon(0 0, 100% 0, 88% 100%, 0% 100%);
+  }
+
+  .ai-gift-badge-{{ ai_gen_id }} {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: {{ block.settings.gift_badge_color }};
+    color: {{ block.settings.gift_badge_text_color }};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.15;
+    box-shadow: 0 4px 10px rgba(46, 197, 246, 0.35);
+  }
+
+  .ai-gift-label-{{ ai_gen_id }} {
+    font-size: 0.62rem;
+    font-weight: 600;
+  }
+
+  .ai-gift-price-{{ ai_gen_id }} {
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .ai-product-content-{{ ai_gen_id }} {
+    padding: 1rem 1.1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .ai-product-title-{{ ai_gen_id }} {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: {{ block.settings.title_color }};
+    line-height: 1.4;
+    margin-bottom: 0.9rem;
+    min-height: 2.6rem;
+  }
+
+  .ai-selling-points-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .ai-selling-point-{{ ai_gen_id }} {
+    text-align: left;
+  }
+
+  .ai-selling-point-value-{{ ai_gen_id }} {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: {{ block.settings.selling_point_value_color }};
+  }
+
+  .ai-selling-point-label-{{ ai_gen_id }} {
+    font-size: 0.72rem;
+    color: {{ block.settings.selling_point_label_color }};
+    margin-top: 0.1rem;
+    line-height: 1.3;
+  }
+
+  .ai-price-row-{{ ai_gen_id }} {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .ai-price-group-{{ ai_gen_id }} {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .ai-price-current-{{ ai_gen_id }} {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: {{ block.settings.price_color }};
+  }
+
+  .ai-price-old-{{ ai_gen_id }} {
+    font-size: 0.85rem;
+    color: {{ block.settings.compare_price_color }};
+    text-decoration: line-through;
+  }
+
+  .ai-buy-btn-{{ ai_gen_id }} {
+    background: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.6rem 1.1rem;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    border: none;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  .ai-buy-btn-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.button_hover_color }};
+  }
+{% endstyle %}
+
+<product-grid-{{ ai_gen_id }} class="ai-product-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-product-grid-container-{{ ai_gen_id }}">
+    {% for i in (1..6) %}
+      {% liquid
+        assign product_key = 'product_' | append: i
+        assign product = block.settings[product_key]
+        assign discount_key = 'discount_text_' | append: i
+        assign discount_text = block.settings[discount_key]
+        assign gift_key = 'gift_text_' | append: i
+        assign gift_text = block.settings[gift_key]
+        assign gift_price_key = 'gift_price_' | append: i
+        assign gift_price = block.settings[gift_price_key]
+        assign point1_value_key = 'point1_value_' | append: i
+        assign point1_value = block.settings[point1_value_key]
+        assign point1_label_key = 'point1_label_' | append: i
+        assign point1_label = block.settings[point1_label_key]
+        assign point2_value_key = 'point2_value_' | append: i
+        assign point2_value = block.settings[point2_value_key]
+        assign point2_label_key = 'point2_label_' | append: i
+        assign point2_label = block.settings[point2_label_key]
+        assign point3_value_key = 'point3_value_' | append: i
+        assign point3_value = block.settings[point3_value_key]
+        assign point3_label_key = 'point3_label_' | append: i
+        assign point3_label = block.settings[point3_label_key]
+      %}
+
+      {% if product != blank %}
+        <div class="ai-product-card-{{ ai_gen_id }}">
+          <div class="ai-product-media-{{ ai_gen_id }}">
+            {% if discount_text != blank %}
+              <span class="ai-discount-badge-{{ ai_gen_id }}">{{ discount_text }}</span>
+            {% endif %}
+
+            {% if gift_text != blank %}
+              <div class="ai-gift-badge-{{ ai_gen_id }}">
+                <span class="ai-gift-label-{{ ai_gen_id }}">{{ gift_text }}</span>
+                {% if gift_price != blank %}
+                  <span class="ai-gift-price-{{ ai_gen_id }}">{{ gift_price }}</span>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            {% if product.featured_image %}
+              <img
+                src="{{ product.featured_image | image_url: width: 600 }}"
+                alt="{{ product.featured_image.alt | escape }}"
+                loading="lazy"
+                width="600"
+                height="450"
+              >
+            {% else %}
+              <div class="ai-product-media-placeholder-{{ ai_gen_id }}">
+                {{ 'product-1' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="ai-product-content-{{ ai_gen_id }}">
+            <h3 class="ai-product-title-{{ ai_gen_id }}">{{ product.title }}</h3>
+
+            <div class="ai-selling-points-{{ ai_gen_id }}">
+              {% if point1_value != blank %}
+                <div class="ai-selling-point-{{ ai_gen_id }}">
+                  <div class="ai-selling-point-value-{{ ai_gen_id }}">{{ point1_value }}</div>
+                  {% if point1_label != blank %}
+                    <div class="ai-selling-point-label-{{ ai_gen_id }}">{{ point1_label }}</div>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% if point2_value != blank %}
+                <div class="ai-selling-point-{{ ai_gen_id }}">
+                  <div class="ai-selling-point-value-{{ ai_gen_id }}">{{ point2_value }}</div>
+                  {% if point2_label != blank %}
+                    <div class="ai-selling-point-label-{{ ai_gen_id }}">{{ point2_label }}</div>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% if point3_value != blank %}
+                <div class="ai-selling-point-{{ ai_gen_id }}">
+                  <div class="ai-selling-point-value-{{ ai_gen_id }}">{{ point3_value }}</div>
+                  {% if point3_label != blank %}
+                    <div class="ai-selling-point-label-{{ ai_gen_id }}">{{ point3_label }}</div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="ai-price-row-{{ ai_gen_id }}">
+              <div class="ai-price-group-{{ ai_gen_id }}">
+                <span class="ai-price-current-{{ ai_gen_id }}">{{ product.price | money }}</span>
+                {% if product.compare_at_price > product.price %}
+                  <span class="ai-price-old-{{ ai_gen_id }}">{{ product.compare_at_price | money }}</span>
+                {% endif %}
+              </div>
+              <a href="{{ product.url }}" class="ai-buy-btn-{{ ai_gen_id }}">{{ block.settings.button_text }}</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</product-grid-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductGrid{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+    }
+    customElements.define('product-grid-{{ ai_gen_id }}', ProductGrid{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Border color",
+      "default": "#ececec"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "image_background",
+      "label": "Image background",
+      "default": "#fafafa"
+    },
+    {
+      "type": "header",
+      "content": "Badges"
+    },
+    {
+      "type": "color",
+      "id": "discount_badge_color",
+      "label": "Discount badge color",
+      "default": "#f5a623"
+    },
+    {
+      "type": "color",
+      "id": "discount_badge_text_color",
+      "label": "Discount badge text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "gift_badge_color",
+      "label": "Gift badge color",
+      "default": "#2ec5f6"
+    },
+    {
+      "type": "color",
+      "id": "gift_badge_text_color",
+      "label": "Gift badge text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "selling_point_value_color",
+      "label": "Selling point value",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "selling_point_label_color",
+      "label": "Selling point label",
+      "default": "#6b6b6b"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Compare price color",
+      "default": "#9b9b9b"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Background",
+      "default": "#14b8b0"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Hover background",
+      "default": "#0fa39c"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "discount_text_1",
+      "label": "Discount text"
+    },
+    {
+      "type": "text",
+      "id": "gift_text_1",
+      "label": "Gift text"
+    },
+    {
+      "type": "text",
+      "id": "gift_price_1",
+      "label": "Gift price"
+    },
+    {
+      "type": "text",
+      "id": "point1_value_1",
+      "label": "Selling point 1 value"
+    },
+    {
+      "type": "text",
+      "id": "point1_label_1",
+      "label": "Selling point 1 label"
+    },
+    {
+      "type": "text",
+      "id": "point2_value_1",
+      "label": "Selling point 2 value"
+    },
+    {
+      "type": "text",
+      "id": "point2_label_1",
+      "label": "Selling point 2 label"
+    },
+    {
+      "type": "text",
+      "id": "point3_value_1",
+      "label": "Selling point 3 value"
+    },
+    {
+      "type": "text",
+      "id": "point3_label_1",
+      "label": "Selling point 3 label"
+    },
+    {
+      "type": "header",
+      "content": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "discount_text_2",
+      "label": "Discount text"
+    },
+    {
+      "type": "text",
+      "id": "gift_text_2",
+      "label": "Gift text"
+    },
+    {
+      "type": "text",
+      "id": "gift_price_2",
+      "label": "Gift price"
+    },
+    {
+      "type": "text",
+      "id": "point1_value_2",
+      "label": "Selling point 1 value"
+    },
+    {
+      "type": "text",
+      "id": "point1_label_2",
+      "label": "Selling point 1 label"
+    },
+    {
+      "type": "text",
+      "id": "point2_value_2",
+      "label": "Selling point 2 value"
+    },
+    {
+      "type": "text",
+      "id": "point2_label_2",
+      "label": "Selling point 2 label"
+    },
+    {
+      "type": "text",
+      "id": "point3_value_2",
+      "label": "Selling point 3 value"
+    },
+    {
+      "type": "text",
+      "id": "point3_label_2",
+      "label": "Selling point 3 label"
+    },
+    {
+      "type": "header",
+      "content": "Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "discount_text_3",
+      "label": "Discount text"
+    },
+    {
+      "type": "text",
+      "id": "gift_text_3",
+      "label": "Gift text"
+    },
+    {
+      "type": "text",
+      "id": "gift_price_3",
+      "label": "Gift price"
+    },
+    {
+      "type": "text",
+      "id": "point1_value_3",
+      "label": "Selling point 1 value"
+    },
+    {
+      "type": "text",
+      "id": "point1_label_3",
+      "label": "Selling point 1 label"
+    },
+    {
+      "type": "text",
+      "id": "point2_value_3",
+      "label": "Selling point 2 value"
+    },
+    {
+      "type": "text",
+      "id": "point2_label_3",
+      "label": "Selling point 2 label"
+    },
+    {
+      "type": "text",
+      "id": "point3_value_3",
+      "label": "Selling point 3 value"
+    },
+    {
+      "type": "text",
+      "id": "point3_label_3",
+      "label": "Selling point 3 label"
+    },
+    {
+      "type": "header",
+      "content": "Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "discount_text_4",
+      "label": "Discount text"
+    },
+    {
+      "type": "text",
+      "id": "gift_text_4",
+      "label": "Gift text"
+    },
+    {
+      "type": "text",
+      "id": "gift_price_4",
+      "label": "Gift price"
+    },
+    {
+      "type": "text",
+      "id": "point1_value_4",
+      "label": "Selling point 1 value"
+    },
+    {
+      "type": "text",
+      "id": "point1_label_4",
+      "label": "Selling point 1 label"
+    },
+    {
+      "type": "text",
+      "id": "point2_value_4",
+      "label": "Selling point 2 value"
+    },
+    {
+      "type": "text",
+      "id": "point2_label_4",
+      "label": "Selling point 2 label"
+    },
+    {
+      "type": "text",
+      "id": "point3_value_4",
+      "label": "Selling point 3 value"
+    },
+    {
+      "type": "text",
+      "id": "point3_label_4",
+      "label": "Selling point 3 label"
+    },
+    {
+      "type": "header",
+      "content": "Product 5"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "discount_text_5",
+      "label": "Discount text"
+    },
+    {
+      "type": "text",
+      "id": "gift_text_5",
+      "label": "Gift text"
+    },
+    {
+      "type": "text",
+      "id": "gift_price_5",
+      "label": "Gift price"
+    },
+    {
+      "type": "text",
+      "id": "point1_value_5",
+      "label": "Selling point 1 value"
+    },
+    {
+      "type": "text",
+      "id": "point1_label_5",
+      "label": "Selling point 1 label"
+    },
+    {
+      "type": "text",
+      "id": "point2_value_5",
+      "label": "Selling point 2 value"
+    },
+    {
+      "type": "text",
+      "id": "point2_label_5",
+      "label": "Selling point 2 label"
+    },
+    {
+      "type": "text",
+      "id": "point3_value_5",
+      "label": "Selling point 3 value"
+    },
+    {
+      "type": "text",
+      "id": "point3_label_5",
+      "label": "Selling point 3 label"
+    },
+    {
+      "type": "header",
+      "content": "Product 6"
+    },
+    {
+      "type": "product",
+      "id": "product_6",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "discount_text_6",
+      "label": "Discount text"
+    },
+    {
+      "type": "text",
+      "id": "gift_text_6",
+      "label": "Gift text"
+    },
+    {
+      "type": "text",
+      "id": "gift_price_6",
+      "label": "Gift price"
+    },
+    {
+      "type": "text",
+      "id": "point1_value_6",
+      "label": "Selling point 1 value"
+    },
+    {
+      "type": "text",
+      "id": "point1_label_6",
+      "label": "Selling point 1 label"
+    },
+    {
+      "type": "text",
+      "id": "point2_value_6",
+      "label": "Selling point 2 value"
+    },
+    {
+      "type": "text",
+      "id": "point2_label_6",
+      "label": "Selling point 2 label"
+    },
+    {
+      "type": "text",
+      "id": "point3_value_6",
+      "label": "Selling point 3 value"
+    },
+    {
+      "type": "text",
+      "id": "point3_label_6",
+      "label": "Selling point 3 label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product grid"
+    }
+  ]
+}
+{% endschema %}

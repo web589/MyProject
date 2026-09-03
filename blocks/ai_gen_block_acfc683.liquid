@@ -1,0 +1,1028 @@
+{% doc %}
+  @prompt
+    .pgc {
+      --pgc-bg: #ffffff;
+      --pgc-ink: #1a1a1a;
+      --pgc-muted: #6b7280;
+      --pgc-line: #e5e7eb;
+      --pgc-red: #dc2626;
+      --pgc-gray-badge: #9ca3af;
+      --pgc-btn-bg: #1f2937;
+      --pgc-btn-bg-hover: #111827;
+      --pgc-radius: 4px;
+      --pgc-gap: 24px;
+    
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: var(--pgc-ink);
+    }
+    
+    .pgc__header {
+      margin-bottom: 24px;
+    }
+    
+    .pgc__heading {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+    }
+    
+    .pgc__viewport {
+      position: relative;
+    }
+    
+    .pgc__track {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--pgc-gap);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .pgc__slide {
+      min-width: 0;
+    }
+    
+    @media (max-width: 989px) {
+      .pgc__track {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 599px) {
+      .pgc__track {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .pgc__card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .pgc__media {
+      position: relative;
+      display: block;
+      background: var(--pgc-bg);
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+    }
+    
+    .pgc__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    
+    .pgc__media-placeholder svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .pgc__badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 2px;
+      letter-spacing: 0.02em;
+    }
+    
+    .pgc__badge--discount {
+      background: var(--pgc-red);
+      color: #ffffff;
+    }
+    
+    .pgc__badge--soldout {
+      background: var(--pgc-gray-badge);
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+    
+    .pgc__content {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 16px;
+    }
+    
+    .pgc__title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--pgc-ink);
+      text-decoration: none;
+      line-height: 1.4;
+    }
+    
+    .pgc__title:hover {
+      text-decoration: underline;
+    }
+    
+    .pgc__price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: 2px;
+    }
+    
+    .pgc__price {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    
+    .pgc__price-compare {
+      font-size: 14px;
+      color: var(--pgc-muted);
+      text-decoration: line-through;
+    }
+    
+    .pgc__subtext {
+      font-size: 12px;
+      color: var(--pgc-muted);
+      text-decoration: underline;
+      text-decoration-color: var(--pgc-line);
+      margin: 4px 0 10px;
+    }
+    
+    .pgc__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      border-radius: 24px;
+      background: var(--pgc-btn-bg);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+      width: 100%;
+    }
+    
+    .pgc__btn:hover {
+      background: var(--pgc-btn-bg-hover);
+    }
+    
+    .pgc__btn--disabled,
+    .pgc__btn--disabled:hover {
+      background: #f3f4f6;
+      color: #b0b4ba;
+      cursor: not-allowed;
+    }
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .pgc-{{ ai_gen_id }} {
+    display: block;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px {{ block.settings.horizontal_padding }}px;
+    font-family: {{ block.settings.font_family.family }}, {{ block.settings.font_family.fallback_families }};
+    color: {{ block.settings.text_color }};
+    background-color: {{ block.settings.background_color }};
+    width: {{ block.settings.desktop_width_percent }}%;
+  }
+
+  .pgc-header-{{ ai_gen_id }} {
+    margin-bottom: {{ block.settings.header_spacing }}px;
+  }
+
+  .pgc-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: {{ block.settings.heading_weight }};
+    margin: 0;
+    color: {{ block.settings.heading_color }};
+  }
+
+  .pgc-track-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (max-width: 989px) {
+    .pgc-track-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_tablet }}, 1fr);
+    }
+  }
+
+  @media (max-width: 599px) {
+    .pgc-track-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
+    }
+  }
+
+  .pgc-slide-{{ ai_gen_id }} {
+    min-width: 0;
+  }
+
+  .pgc-card-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .pgc-media-{{ ai_gen_id }} {
+    position: relative;
+    display: block;
+    background: {{ block.settings.image_background }};
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: {{ block.settings.image_radius }}px;
+  }
+
+  .pgc-media-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: {{ block.settings.image_fit }};
+    display: block;
+  }
+
+  .pgc-media-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.image_background }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pgc-media-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .pgc-badge-{{ ai_gen_id }} {
+    position: absolute;
+    top: {{ block.settings.badge_offset }}px;
+    left: {{ block.settings.badge_offset }}px;
+    z-index: 2;
+    font-size: {{ block.settings.badge_font_size }}px;
+    font-weight: {{ block.settings.badge_font_weight }};
+    padding: {{ block.settings.badge_padding_vertical }}px {{ block.settings.badge_padding_horizontal }}px;
+    border-radius: {{ block.settings.badge_radius }}px;
+    letter-spacing: 0.02em;
+  }
+
+  .pgc-badge-discount-{{ ai_gen_id }} {
+    background: {{ block.settings.discount_badge_bg }};
+    color: {{ block.settings.discount_badge_text }};
+  }
+
+  .pgc-badge-soldout-{{ ai_gen_id }} {
+    background: {{ block.settings.soldout_badge_bg }};
+    color: {{ block.settings.soldout_badge_text }};
+    text-transform: uppercase;
+  }
+
+  .pgc-content-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.content_gap }}px;
+    padding-top: {{ block.settings.content_padding_top }}px;
+  }
+
+  .pgc-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: {{ block.settings.title_weight }};
+    color: {{ block.settings.title_color }};
+    text-decoration: none;
+    line-height: 1.4;
+  }
+
+  .pgc-title-{{ ai_gen_id }}:hover {
+    text-decoration: underline;
+  }
+
+  .pgc-price-row-{{ ai_gen_id }} {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 2px;
+  }
+
+  .pgc-price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_size }}px;
+    font-weight: {{ block.settings.price_weight }};
+    color: {{ block.settings.price_color }};
+  }
+
+  .pgc-price-compare-{{ ai_gen_id }} {
+    font-size: {{ block.settings.compare_price_size }}px;
+    color: {{ block.settings.compare_price_color }};
+    text-decoration: line-through;
+  }
+
+  .pgc-subtext-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subtext_size }}px;
+    color: {{ block.settings.subtext_color }};
+    text-decoration: underline;
+    text-decoration-color: {{ block.settings.subtext_underline_color }};
+    margin: 4px 0 10px;
+  }
+
+  .pgc-btn-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    border-radius: {{ block.settings.button_radius }}px;
+    background: {{ block.settings.button_bg }};
+    color: {{ block.settings.button_text_color }};
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: {{ block.settings.button_font_weight }};
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    width: 100%;
+  }
+
+  .pgc-btn-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.button_bg_hover }};
+  }
+
+  .pgc-btn-disabled-{{ ai_gen_id }},
+  .pgc-btn-disabled-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.button_disabled_bg }};
+    color: {{ block.settings.button_disabled_text }};
+    cursor: not-allowed;
+  }
+{% endstyle %}
+
+<product-grid-{{ ai_gen_id }} class="pgc-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.heading != blank %}
+    <div class="pgc-header-{{ ai_gen_id }}">
+      <h2 class="pgc-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+    </div>
+  {% endif %}
+
+  <div class="pgc-viewport-{{ ai_gen_id }}">
+    <ul class="pgc-track-{{ ai_gen_id }}">
+      {% if block.settings.product_list != blank %}
+        {% for product in block.settings.product_list %}
+          <li class="pgc-slide-{{ ai_gen_id }}">
+            <div class="pgc-card-{{ ai_gen_id }}">
+              <a href="{{ product.url }}" class="pgc-media-{{ ai_gen_id }}">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 600 }}"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    loading="lazy"
+                    width="600"
+                    height="600"
+                  >
+                {% else %}
+                  <div class="pgc-media-placeholder-{{ ai_gen_id }}">
+                    {{ 'product-1' | placeholder_svg_tag }}
+                  </div>
+                {% endif %}
+
+                {% if product.available == false %}
+                  <span class="pgc-badge-{{ ai_gen_id }} pgc-badge-soldout-{{ ai_gen_id }}">
+                    {{ block.settings.soldout_text }}
+                  </span>
+                {% elsif product.compare_at_price > product.price %}
+                  {% if block.settings.show_discount_badge %}
+                    <span class="pgc-badge-{{ ai_gen_id }} pgc-badge-discount-{{ ai_gen_id }}">
+                      {% if block.settings.discount_type == 'percentage' %}
+                        {% assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round %}
+                        -{{ discount }}%
+                      {% else %}
+                        {% assign discount = product.compare_at_price | minus: product.price %}
+                        -{{ discount | money }}
+                      {% endif %}
+                    </span>
+                  {% endif %}
+                {% endif %}
+              </a>
+
+              <div class="pgc-content-{{ ai_gen_id }}">
+                <a href="{{ product.url }}" class="pgc-title-{{ ai_gen_id }}">
+                  {{ product.title }}
+                </a>
+
+                <div class="pgc-price-row-{{ ai_gen_id }}">
+                  <span class="pgc-price-{{ ai_gen_id }}">{{ product.price | money }}</span>
+                  {% if product.compare_at_price > product.price %}
+                    <span class="pgc-price-compare-{{ ai_gen_id }}">{{ product.compare_at_price | money }}</span>
+                  {% endif %}
+                </div>
+
+                {% if block.settings.show_subtext and block.settings.subtext != blank %}
+                  <div class="pgc-subtext-{{ ai_gen_id }}">{{ block.settings.subtext }}</div>
+                {% endif %}
+
+                {% if product.available %}
+                  <a href="{{ product.url }}" class="pgc-btn-{{ ai_gen_id }}">
+                    {{ block.settings.button_label }}
+                  </a>
+                {% else %}
+                  <button class="pgc-btn-{{ ai_gen_id }} pgc-btn-disabled-{{ ai_gen_id }}" disabled>
+                    {{ block.settings.soldout_button_label }}
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      {% else %}
+        {% for i in (1..block.settings.columns_desktop) %}
+          <li class="pgc-slide-{{ ai_gen_id }}">
+            <div class="pgc-card-{{ ai_gen_id }}">
+              <div class="pgc-media-{{ ai_gen_id }}">
+                <div class="pgc-media-placeholder-{{ ai_gen_id }}">
+                  {{ 'product-1' | placeholder_svg_tag }}
+                </div>
+              </div>
+              <div class="pgc-content-{{ ai_gen_id }}">
+                <span class="pgc-title-{{ ai_gen_id }}">Product title</span>
+                <div class="pgc-price-row-{{ ai_gen_id }}">
+                  <span class="pgc-price-{{ ai_gen_id }}">€99.00</span>
+                </div>
+                <button class="pgc-btn-{{ ai_gen_id }}">{{ block.settings.button_label }}</button>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+  </div>
+</product-grid-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductGrid{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+      }
+    }
+
+    customElements.define('product-grid-{{ ai_gen_id }}', ProductGrid{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured products"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Products",
+      "limit": 12
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 800,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Columns on tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "header_spacing",
+      "label": "Header spacing",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Product title",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Compare price",
+      "default": "#6b7280"
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subtext",
+      "default": "#6b7280"
+    },
+    {
+      "type": "color",
+      "id": "subtext_underline_color",
+      "label": "Subtext underline",
+      "default": "#e5e7eb"
+    },
+    {
+      "type": "color",
+      "id": "image_background",
+      "label": "Image background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Product title size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "title_weight",
+      "label": "Product title weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Price size",
+      "min": 12,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "price_weight",
+      "label": "Price weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "compare_price_size",
+      "label": "Compare price size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "subtext_size",
+      "label": "Subtext size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Product images"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "contain",
+          "label": "Contain"
+        },
+        {
+          "value": "cover",
+          "label": "Cover"
+        }
+      ],
+      "default": "contain"
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "label": "Content gap",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "content_padding_top",
+      "label": "Content top padding",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Badges"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_discount_badge",
+      "label": "Show discount badge",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "discount_type",
+      "label": "Discount type",
+      "options": [
+        {
+          "value": "percentage",
+          "label": "Percentage"
+        },
+        {
+          "value": "amount",
+          "label": "Amount"
+        }
+      ],
+      "default": "percentage"
+    },
+    {
+      "type": "color",
+      "id": "discount_badge_bg",
+      "label": "Discount background",
+      "default": "#dc2626"
+    },
+    {
+      "type": "color",
+      "id": "discount_badge_text",
+      "label": "Discount text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "soldout_badge_bg",
+      "label": "Sold out background",
+      "default": "#9ca3af"
+    },
+    {
+      "type": "color",
+      "id": "soldout_badge_text",
+      "label": "Sold out text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "soldout_text",
+      "label": "Sold out text",
+      "default": "Sold out"
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "label": "Badge font size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_font_weight",
+      "label": "Badge font weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "badge_padding_vertical",
+      "label": "Badge vertical padding",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "badge_padding_horizontal",
+      "label": "Badge horizontal padding",
+      "min": 6,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "badge_radius",
+      "label": "Badge border radius",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "badge_offset",
+      "label": "Badge offset",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Subtext"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subtext",
+      "label": "Show subtext",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "View product"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "soldout_button_label",
+      "label": "Sold out button label",
+      "default": "Sold out"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button background",
+      "default": "#1f2937"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_hover",
+      "label": "Button hover background",
+      "default": "#111827"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_disabled_bg",
+      "label": "Disabled button background",
+      "default": "#f3f4f6"
+    },
+    {
+      "type": "color",
+      "id": "button_disabled_text",
+      "label": "Disabled button text",
+      "default": "#b0b4ba"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button font size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_font_weight",
+      "label": "Button font weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Button vertical padding",
+      "min": 8,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Button horizontal padding",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product grid"
+    }
+  ]
+}
+{% endschema %}

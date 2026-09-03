@@ -1,0 +1,67 @@
+{%- comment -%}
+  Render one value for the homepage product comparison table.
+  Product values come from Product Metafields. Capacity passes spec_source:
+  'variant' and therefore reads only the 1x Variant Metafield.
+{%- endcomment -%}
+{%- liquid
+  assign preferred_namespace = spec_namespace | default: settings.technical_specs_namespace | default: 'custom' | strip
+  assign namespaces = preferred_namespace | append: ',custom,specs,features,specifications,technical_specifications,technical' | split: ','
+  assign keys = spec_keys | split: ','
+  assign value_object = spec_product
+  assign resolved = false
+
+  if spec_source == 'variant' and spec_product != blank
+    assign value_object = blank
+    assign requested_variant_option = spec_variant_option | default: '1×' | strip | downcase | replace: '×', 'x' | remove: ' '
+    for candidate_variant in spec_product.variants
+      assign candidate_option = candidate_variant.option1 | default: candidate_variant.title | strip | downcase | replace: '×', 'x' | remove: ' '
+      if candidate_option == requested_variant_option or candidate_option contains requested_variant_option
+        assign value_object = candidate_variant
+        break
+      endif
+    endfor
+  endif
+-%}
+
+{%- if value_object != blank -%}
+  {%- for namespace in namespaces -%}
+    {%- assign clean_namespace = namespace | strip -%}
+    {%- unless clean_namespace == blank or resolved -%}
+      {%- for key in keys -%}
+        {%- assign clean_key = key | strip -%}
+        {%- if clean_key != blank -%}
+          {%- assign spec_metafield = value_object.metafields[clean_namespace][clean_key] -%}
+          {%- if spec_metafield.type == 'boolean' -%}
+            {%- if spec_metafield.value == true -%}
+              Ja
+              {%- assign resolved = true -%}
+              {%- break -%}
+            {%- elsif spec_metafield.value == false -%}
+              Nein
+              {%- assign resolved = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- elsif spec_metafield != blank -%}
+            {%- capture spec_output -%}
+              {%- if spec_metafield.type contains 'list.' -%}
+                {{- spec_metafield.value | join: ', ' -}}
+              {%- else -%}
+                {{- spec_metafield | metafield_text -}}
+              {%- endif -%}
+            {%- endcapture -%}
+            {%- assign spec_output = spec_output | strip -%}
+            {%- if spec_output == blank and spec_metafield.value != blank -%}
+              {%- capture spec_output -%}{{- spec_metafield.value -}}{%- endcapture -%}
+              {%- assign spec_output = spec_output | strip -%}
+            {%- endif -%}
+            {%- if spec_output != blank -%}
+              {{- spec_output | escape_once -}}
+              {%- assign resolved = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endunless -%}
+  {%- endfor -%}
+{%- endif -%}

@@ -1,0 +1,1034 @@
+{% doc %}
+  @prompt
+    <style>
+    /* 全局品牌配色变量 统一全站风格 */
+    :root {
+      --page-bg: #F8FAFC;
+      --accent-green: #00E676;
+      --green-dark: #00bd52;
+      --text-white: #ffffff;
+      --text-dark: #111827;
+      --text-gray: #4B5563;
+      --border-light: rgba(255, 255, 255, 0.5);
+      --btn-glow: 0 0 8px rgba(0, 230, 118, 0.25), 0 0 16px rgba(0, 230, 118, 0.35), 0 0 28px rgba(0, 230, 118, 0.18);
+      --radius-card: 8px;
+      --grid-gap: 24px;
+      --section-padding: 80px;
+      --container-max: 1400px;
+      --side-padding: 20px;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+    
+    /* 产品板块外层 整体背景#F8FAFC */
+    .product-grid-section {
+      width: 100%;
+      background: var(--page-bg);
+      padding: var(--section-padding) 0;
+    }
+    .product-container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--side-padding);
+    }
+    
+    /* 四张卡片上方 板块顶部标语 */
+    .section-title-wrap {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .section-tag {
+      font-size: 16px;
+      color: var(--accent-green);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 12px;
+      font-family: 'Inter', sans-serif;
+    }
+    .section-main-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin: 0;
+      line-height: 1.2;
+    }
+    
+    /* 2×2网格布局 */
+    .product-grid-wrap {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--grid-gap);
+    }
+    
+    /* 单张产品卡片 横向 宽:高=4:3 */
+    .product-card {
+      position: relative;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+    }
+    /* 背景图完全铺满卡片 */
+    .product-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .product-card:hover .product-bg-img {
+      transform: scale(1.03);
+    }
+    
+    /* 文字容器：居中偏上，高度限制40%（2/5），下方60%留给图片，整体缩小 */
+    .product-content-wrap {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      padding: 20px 0;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-height: 40%;
+    }
+    /* 卡片内顶部小字标语 */
+    .product-top-slogan {
+      font-size: 11px;
+      color: #ffd02f;
+      font-weight: 600;
+      margin: 0 0 8px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.5px;
+    }
+    /* 产品型号 强制单行不换行 */
+    .product-model-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-white);
+      line-height: 1.2;
+      margin: 0 0 6px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    /* NEU新品小标签 同步缩小 */
+    .product-new-tag {
+      display: inline-block;
+      background: var(--accent-green);
+      color: #000;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 3px;
+      margin-left: 5px;
+      vertical-align: top;
+    }
+    /* 简短描述文案 */
+    .product-desc-text {
+      font-size: 12px;
+      color: var(--text-white);
+      opacity: 0.92;
+      margin: 0 0 12px;
+      line-height: 1.5;
+    }
+    /* 原价现价模块（描述下方、按钮上方） */
+    .price-line {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin: 0 0 14px;
+    }
+    .old-price-text {
+      font-size: 11px;
+      color: #cccccc;
+      text-decoration: line-through;
+    }
+    .new-price-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-green);
+    }
+    /* 底部双按钮居中并排 */
+    .product-btn-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    /* 主按钮 */
+    .btn-primary-shop {
+      padding: 7px 16px;
+      background: var(--accent-green);
+      color: #000;
+      border: none;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn-primary-shop:hover {
+      background: var(--green-dark);
+      transform: translateY(-3px);
+      box-shadow: var(--btn-glow);
+    }
+    /* 次按钮 */
+    .btn-secondary-info {
+      padding: 7px 16px;
+      background: transparent;
+      color: var(--text-white);
+      border: 1px solid var(--border-light);
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary-info:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      transform: translateY(-3px);
+    }
+    
+    /* 响应式适配 */
+    @media screen and (max-width: 1024px) {
+      .section-main-title {
+        font-size: 36px;
+      }
+      .product-model-title {
+        font-size: 18px;
+      }
+      .product-content-wrap {
+        width: 68%;
+      }
+    }
+    @media screen and (max-width: 640px) {
+      .section-title-wrap {
+        margin-bottom: 32px;
+      }
+      .section-main-title {
+        font-size: 30px;
+      }
+      .product-grid-wrap {
+        grid-template-columns: 1fr;
+      }
+      .product-model-title {
+        font-size: 16px;
+      }
+      .product-content-wrap {
+        width: 75%;
+        padding: 16px 0;
+        max-height: 42%;
+      }
+      .product-grid-section {
+        padding: 50px 0;
+      }
+    }
+    </style>
+    
+    <!-- 4宫格产品板块完整HTML -->
+    <section class="product-grid-section">
+      <div class="product-container">
+        <!-- 四张卡片上方 板块大标语 -->
+        <div class="section-title-wrap">
+          <p class="section-tag">PRODUKTREIHE VENUS E</p>
+          <h2 class="section-main-title">Wähle deine passende Heimbatterie</h2>
+        </div>
+    
+        <div class="product-grid-wrap">
+          <!-- 卡片1：VENUS E Mini -->
+          <div class="product-card">
+           , 添加4个产品卡片的Top slogan、Description、Old price、New price字体大小调节选项
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-grid-section-{{ ai_gen_id }} {
+    width: 100%;
+    background: {{ block.settings.section_bg_color }};
+    padding: {{ block.settings.section_padding }}px 0;
+    display: block;
+  }
+
+  .ai-product-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_max_width }}px;
+    margin: 0 auto;
+    padding: 0 {{ block.settings.side_padding }}px;
+  }
+
+  .ai-section-title-wrap-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .ai-section-tag-{{ ai_gen_id }} {
+    font-size: 16px;
+    color: {{ block.settings.accent_color }};
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 12px;
+  }
+
+  .ai-section-main-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 800;
+    color: {{ block.settings.title_color }};
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .ai-product-grid-wrap-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  .ai-product-card-{{ ai_gen_id }} {
+    position: relative;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .ai-product-bg-img-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .ai-product-card-{{ ai_gen_id }}:hover .ai-product-bg-img-{{ ai_gen_id }} {
+    transform: scale(1.03);
+  }
+
+  .ai-product-content-wrap-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    padding: 20px 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-height: 40%;
+  }
+
+  .ai-product-top-slogan-{{ ai_gen_id }} {
+    font-size: {{ block.settings.slogan_font_size }}px;
+    color: {{ block.settings.slogan_color }};
+    font-weight: 600;
+    margin: 0 0 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-product-model-title-{{ ai_gen_id }} {
+    font-size: 20px;
+    font-weight: 800;
+    color: {{ block.settings.card_text_color }};
+    line-height: 1.2;
+    margin: 0 0 6px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .ai-product-new-tag-{{ ai_gen_id }} {
+    display: inline-block;
+    background: {{ block.settings.accent_color }};
+    color: #000;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: 5px;
+    vertical-align: top;
+  }
+
+  .ai-product-desc-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.desc_font_size }}px;
+    color: {{ block.settings.card_text_color }};
+    opacity: 0.92;
+    margin: 0 0 12px;
+    line-height: 1.5;
+  }
+
+  .ai-price-line-{{ ai_gen_id }} {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 0 0 14px;
+  }
+
+  .ai-old-price-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.old_price_font_size }}px;
+    color: #cccccc;
+    text-decoration: line-through;
+  }
+
+  .ai-new-price-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.new_price_font_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.accent_color }};
+  }
+
+  .ai-product-btn-group-{{ ai_gen_id }} {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .ai-btn-primary-shop-{{ ai_gen_id }} {
+    padding: 7px 16px;
+    background: {{ block.settings.accent_color }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .ai-btn-primary-shop-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.button_hover_color }};
+    transform: translateY(-3px);
+    box-shadow: 0 0 8px rgba(0, 230, 118, 0.25), 0 0 16px rgba(0, 230, 118, 0.35), 0 0 28px rgba(0, 230, 118, 0.18);
+  }
+
+  .ai-btn-secondary-info-{{ ai_gen_id }} {
+    padding: 7px 16px;
+    background: transparent;
+    color: {{ block.settings.card_text_color }};
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .ai-btn-secondary-info-{{ ai_gen_id }}:hover {
+    border-color: {{ block.settings.accent_color }};
+    color: {{ block.settings.accent_color }};
+    transform: translateY(-3px);
+  }
+
+  .ai-product-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-product-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .ai-section-main-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.85 }}px;
+    }
+    .ai-product-model-title-{{ ai_gen_id }} {
+      font-size: 18px;
+    }
+    .ai-product-content-wrap-{{ ai_gen_id }} {
+      width: 68%;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .ai-section-title-wrap-{{ ai_gen_id }} {
+      margin-bottom: 32px;
+    }
+    .ai-section-main-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.7 }}px;
+    }
+    .ai-product-grid-wrap-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+    .ai-product-model-title-{{ ai_gen_id }} {
+      font-size: 16px;
+    }
+    .ai-product-content-wrap-{{ ai_gen_id }} {
+      width: 75%;
+      padding: 16px 0;
+      max-height: 42%;
+    }
+    .ai-product-grid-section-{{ ai_gen_id }} {
+      padding: 50px 0;
+    }
+  }
+{% endstyle %}
+
+<ai-product-grid-{{ ai_gen_id }} class="ai-product-grid-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-product-container-{{ ai_gen_id }}">
+    {% if block.settings.section_tag != blank or block.settings.section_title != blank %}
+      <div class="ai-section-title-wrap-{{ ai_gen_id }}">
+        {% if block.settings.section_tag != blank %}
+          <p class="ai-section-tag-{{ ai_gen_id }}">{{ block.settings.section_tag }}</p>
+        {% endif %}
+        {% if block.settings.section_title != blank %}
+          <h2 class="ai-section-main-title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="ai-product-grid-wrap-{{ ai_gen_id }}">
+      {% for i in (1..4) %}
+        {% liquid
+          assign product_key = 'product_' | append: i
+          assign slogan_key = 'product_' | append: i | append: '_slogan'
+          assign desc_key = 'product_' | append: i | append: '_desc'
+          assign show_new_key = 'product_' | append: i | append: '_show_new'
+          assign old_price_key = 'product_' | append: i | append: '_old_price'
+          assign new_price_key = 'product_' | append: i | append: '_new_price'
+          assign btn1_text_key = 'product_' | append: i | append: '_btn1_text'
+          assign btn1_url_key = 'product_' | append: i | append: '_btn1_url'
+          assign btn2_text_key = 'product_' | append: i | append: '_btn2_text'
+          assign btn2_url_key = 'product_' | append: i | append: '_btn2_url'
+          assign bg_image_key = 'product_' | append: i | append: '_bg_image'
+
+          assign product = block.settings[product_key]
+          assign slogan = block.settings[slogan_key]
+          assign desc = block.settings[desc_key]
+          assign show_new = block.settings[show_new_key]
+          assign old_price = block.settings[old_price_key]
+          assign new_price = block.settings[new_price_key]
+          assign btn1_text = block.settings[btn1_text_key]
+          assign btn1_url = block.settings[btn1_url_key]
+          assign btn2_text = block.settings[btn2_text_key]
+          assign btn2_url = block.settings[btn2_url_key]
+          assign bg_image = block.settings[bg_image_key]
+        %}
+
+        <div class="ai-product-card-{{ ai_gen_id }}">
+          {% if bg_image %}
+            <img
+              src="{{ bg_image | image_url: width: 1200 }}"
+              alt="{{ bg_image.alt | escape }}"
+              loading="lazy"
+              width="{{ bg_image.width }}"
+              height="{{ bg_image.height }}"
+              class="ai-product-bg-img-{{ ai_gen_id }}"
+            >
+          {% else %}
+            <div class="ai-product-placeholder-{{ ai_gen_id }}">
+              {{ 'product-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+
+          <div class="ai-product-content-wrap-{{ ai_gen_id }}">
+            {% if slogan != blank %}
+              <p class="ai-product-top-slogan-{{ ai_gen_id }}">{{ slogan }}</p>
+            {% endif %}
+
+            {% if product %}
+              <h3 class="ai-product-model-title-{{ ai_gen_id }}">
+                {{ product.title }}
+                {% if show_new %}
+                  <span class="ai-product-new-tag-{{ ai_gen_id }}">NEU</span>
+                {% endif %}
+              </h3>
+            {% endif %}
+
+            {% if desc != blank %}
+              <p class="ai-product-desc-text-{{ ai_gen_id }}">{{ desc }}</p>
+            {% endif %}
+
+            {% if old_price != blank or new_price != blank %}
+              <div class="ai-price-line-{{ ai_gen_id }}">
+                {% if old_price != blank %}
+                  <span class="ai-old-price-text-{{ ai_gen_id }}">{{ old_price }}</span>
+                {% endif %}
+                {% if new_price != blank %}
+                  <span class="ai-new-price-text-{{ ai_gen_id }}">{{ new_price }}</span>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            <div class="ai-product-btn-group-{{ ai_gen_id }}">
+              {% if btn1_text != blank %}
+                <a
+                  href="{% if btn1_url != blank %}{{ btn1_url }}{% elsif product %}{{ product.url }}{% else %}#{% endif %}"
+                  class="ai-btn-primary-shop-{{ ai_gen_id }}"
+                >
+                  {{ btn1_text }}
+                </a>
+              {% endif %}
+
+              {% if btn2_text != blank %}
+                <a
+                  href="{% if btn2_url != blank %}{{ btn2_url }}{% elsif product %}{{ product.url }}{% else %}#{% endif %}"
+                  class="ai-btn-secondary-info-{{ ai_gen_id }}"
+                >
+                  {{ btn2_text }}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</ai-product-grid-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class AiProductGrid{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.style.display = 'block';
+      }
+    }
+
+    customElements.define('ai-product-grid-{{ ai_gen_id }}', AiProductGrid{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product grid 2x2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "text",
+      "id": "section_tag",
+      "label": "Tag line",
+      "default": "PRODUKTREIHE VENUS E"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Main title",
+      "default": "Wähle deine passende Heimbatterie"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "header",
+      "content": "Product card 1"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_1_bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "product_1_slogan",
+      "label": "Top slogan"
+    },
+    {
+      "type": "textarea",
+      "id": "product_1_desc",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_1_show_new",
+      "label": "Show NEU badge",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "product_1_old_price",
+      "label": "Old price"
+    },
+    {
+      "type": "text",
+      "id": "product_1_new_price",
+      "label": "New price"
+    },
+    {
+      "type": "text",
+      "id": "product_1_btn1_text",
+      "label": "Primary button text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "url",
+      "id": "product_1_btn1_url",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_1_btn2_text",
+      "label": "Secondary button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "product_1_btn2_url",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Product card 2"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_2_bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "product_2_slogan",
+      "label": "Top slogan"
+    },
+    {
+      "type": "textarea",
+      "id": "product_2_desc",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_2_show_new",
+      "label": "Show NEU badge",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "product_2_old_price",
+      "label": "Old price"
+    },
+    {
+      "type": "text",
+      "id": "product_2_new_price",
+      "label": "New price"
+    },
+    {
+      "type": "text",
+      "id": "product_2_btn1_text",
+      "label": "Primary button text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "url",
+      "id": "product_2_btn1_url",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_2_btn2_text",
+      "label": "Secondary button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "product_2_btn2_url",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Product card 3"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_3_bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "product_3_slogan",
+      "label": "Top slogan"
+    },
+    {
+      "type": "textarea",
+      "id": "product_3_desc",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_3_show_new",
+      "label": "Show NEU badge",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "product_3_old_price",
+      "label": "Old price"
+    },
+    {
+      "type": "text",
+      "id": "product_3_new_price",
+      "label": "New price"
+    },
+    {
+      "type": "text",
+      "id": "product_3_btn1_text",
+      "label": "Primary button text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "url",
+      "id": "product_3_btn1_url",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_3_btn2_text",
+      "label": "Secondary button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "product_3_btn2_url",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Product card 4"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_4_bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "product_4_slogan",
+      "label": "Top slogan"
+    },
+    {
+      "type": "textarea",
+      "id": "product_4_desc",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_4_show_new",
+      "label": "Show NEU badge",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "product_4_old_price",
+      "label": "Old price"
+    },
+    {
+      "type": "text",
+      "id": "product_4_new_price",
+      "label": "New price"
+    },
+    {
+      "type": "text",
+      "id": "product_4_btn1_text",
+      "label": "Primary button text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "url",
+      "id": "product_4_btn1_url",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "product_4_btn2_text",
+      "label": "Secondary button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "product_4_btn2_url",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "slogan_font_size",
+      "label": "Slogan font size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "desc_font_size",
+      "label": "Description font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "old_price_font_size",
+      "label": "Old price font size",
+      "min": 8,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "new_price_font_size",
+      "label": "New price font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "label": "Container max width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Section background",
+      "default": "#F8FAFC"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#111827"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#00E676"
+    },
+    {
+      "type": "color",
+      "id": "slogan_color",
+      "label": "Slogan color",
+      "default": "#ffd02f"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#00bd52"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product grid 2x2"
+    }
+  ]
+}
+{% endschema %}

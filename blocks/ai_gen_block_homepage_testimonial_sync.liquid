@@ -1,0 +1,91 @@
+{% comment %}
+  Product pages reuse the rendered homepage testimonial section instead of
+  keeping a second set of block settings. This makes the homepage the only
+  content and style source for this module.
+{% endcomment %}
+<div
+  id="HomepageTestimonialsSync-{{ block.id }}"
+  data-homepage-testimonials-sync
+  aria-busy="true"
+  {{ block.shopify_attributes }}
+></div>
+
+<script>
+  (function () {
+    var mount = document.getElementById('HomepageTestimonialsSync-{{ block.id }}');
+    var sectionId = '17866880723359951f';
+
+    if (!mount || !window.fetch) return;
+
+    var rootUrl = window.Shopify && window.Shopify.routes && window.Shopify.routes.root
+      ? window.Shopify.routes.root
+      : '/';
+    var homepageUrl = new URL(rootUrl, window.location.origin);
+    var requestUrl = new URL(homepageUrl.toString());
+    requestUrl.searchParams.set('section_id', sectionId);
+
+    // Keep Shopify's development-theme preview context when this page is
+    // opened from a preview URL.
+    var previewThemeId = new URLSearchParams(window.location.search).get('preview_theme_id');
+    if (previewThemeId) {
+      requestUrl.searchParams.set('preview_theme_id', previewThemeId);
+      homepageUrl.searchParams.set('preview_theme_id', previewThemeId);
+    }
+
+    function requestMarkup(url) {
+      return fetch(url, {
+        credentials: 'same-origin',
+        headers: { Accept: 'text/html' }
+      }).then(function (response) {
+        if (!response.ok) throw new Error('Homepage testimonial request failed.');
+        return response.text();
+      });
+    }
+
+    requestMarkup(requestUrl.toString())
+      .catch(function () {
+        // Shopify CLI's local preview server does not expose the Section
+        // Rendering endpoint. Read the homepage and extract the same section
+        // so the theme editor preview still matches the storefront.
+        return requestMarkup(homepageUrl.toString()).then(function (homepageMarkup) {
+          var documentCopy = new DOMParser().parseFromString(homepageMarkup, 'text/html');
+          var homepageSection = documentCopy.getElementById('shopify-section-' + sectionId)
+            || documentCopy.querySelector('[id^="shopify-section-"][id$="__' + sectionId + '"]');
+          if (!homepageSection) throw new Error('Homepage testimonial section is unavailable.');
+          return homepageSection.outerHTML;
+        });
+      })
+      .then(function (markup) {
+        if (!markup || !markup.trim()) throw new Error('Homepage testimonial section is unavailable.');
+
+        mount.innerHTML = markup;
+        mount.removeAttribute('aria-busy');
+
+        // Scripts inserted with innerHTML do not execute. Reinsert only the
+        // homepage section scripts so its carousel behaviour remains identical.
+        mount.querySelectorAll('script').forEach(function (oldScript) {
+          var script = document.createElement('script');
+          Array.prototype.forEach.call(oldScript.attributes, function (attribute) {
+            script.setAttribute(attribute.name, attribute.value);
+          });
+          script.text = oldScript.text || oldScript.textContent;
+          oldScript.parentNode.replaceChild(script, oldScript);
+        });
+      })
+      .catch(function () {
+        mount.removeAttribute('aria-busy');
+      });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Homepage testimonial sync",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Homepage testimonial sync"
+    }
+  ]
+}
+{% endschema %}

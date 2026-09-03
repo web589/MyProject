@@ -1,0 +1,1556 @@
+{% doc %}
+  @prompt
+    {% comment %}
+    ===== 自定义配置区，在这里直接改参数 =====
+    module_title:模块大标题
+    container_max_width:模块整体最大宽度
+    container_top_margin / container_bottom_margin:模块上下外边距
+    card_gap:卡片之间间距
+    card_border_radius:卡片圆角
+    card_1~card4：4张卡片，image填图片链接，title标题，desc描述
+    font_size_title：模块总标题字号
+    font_size_card_title：卡片内标题字号
+    font_size_card_desc：卡片内描述字号
+    {% endcomment %}
+    <style>
+    .feature-card-module {
+      width: 100%;
+      margin: var(--module-top) auto var(--module-bottom);
+      max-width: var(--container-width);
+    }
+    .feature-card-module__heading {
+      font-size: var(--heading-font-size);
+      margin-bottom: 32px;
+      font-weight: 700;
+    }
+    .feature-card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--card-gap);
+    }
+    .feature-card-item {
+      position: relative;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      aspect-ratio: 16 /9;
+    }
+    .feature-card-item img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    .feature-card-text-wrap {
+      position: absolute;
+      top:24px;
+      left:24px;
+      color:#ffffff;
+    }
+    .feature-card-card-title {
+      font-size: var(--card-title-font);
+      font-weight:600;
+      margin:0 0 8px;
+    }
+    .feature-card-card-desc {
+      font-size: var(--card-desc-font);
+      margin:0;
+    }
+    /*移动端自动变成1列*/
+    @media(max-width:768px){
+      .feature-card-grid{
+        grid-template-columns:1fr;
+      }
+    }
+    </style>
+    
+    {% assign module_title = "Revolutionäre Power. Wegweisende Einsparungen." %}
+    {% assign container_max_width = "1400px" %}
+    {% assign container_top_margin = "60px" %}
+    {% assign container_bottom_margin = "60px" %}
+    {% assign card_gap = "20px" %}
+    {% assign card_border_radius = "12px" %}
+    {% assign font_size_title = "42px" %}
+    {% assign font_size_card_title = "24px" %}
+    {% assign font_size_card_desc = "18px" %}
+    
+    {% comment %}卡片内容配置，替换image为你的图片链接，修改title、desc文字{% endcomment %}
+    {% assign card1_image = "https://cdn.shopify.com/s/files/1/0000/0000/0000/files/card1.jpg" %}
+    {% assign card1_title = "3600W PV‑Eingang" %}
+    {% assign card1_desc = "4 MPPT" %}
+    
+    {% assign card2_image = "https://cdn.shopify.com/s/files/1/0000/0000/0000/files/card2.jpg" %}
+    {% assign card2_title = "Bis zu 1566€" %}
+    {% assign card2_desc = "jährliche Einsparungen" %}
+    
+    {% assign card3_image = "https://cdn.shopify.com/s/files/1/0000/0000/0000/files/card3.jpg" %}
+    {% assign card3_title = "Anker Intelligence™" %}
+    {% assign card3_desc = "Optimiert Energieverbrauch & Einsparungen" %}
+    
+    {% assign card4_image = "https://cdn.shopify.com/s/files/1/0000/0000/0000/files/card4.jpg" %}
+    {% assign card4_title = "2,68‑16kWh" %}
+    {% assign card4_desc = "erweiterbare Kapazität" %}
+    
+    <div class="feature-card-module"
+    style="
+    --container-width:{{container_max_width}};
+    --module-top:{{container_top_margin}};
+    --module-bottom:{{container_bottom_margin}};
+    --card-gap:{{card_gap}};
+    --card-radius:{{card_border_radius}};
+    --heading-font-size:{{font_size_title}};
+    --card-title-font:{{font_size_card_title}};
+    --card-desc-font:{{font_size_card_desc}};
+    ">
+      <h2 class="feature-card-module__heading">{{module_title}}</h2>
+      <div class="feature-card-grid">
+        <!--卡片1-->
+        <div class="feature-card-item">
+          <img src="{{card1_image}}" alt="{{card1_title}}">
+          <div class="feature-card-text-wrap">
+            <div class="feature-card-card-title">{{card1_title}}</div>
+            <div class="feature-card-card-desc">{{card1_desc}}</div>
+          </div>
+        </div>
+        <!--卡片2-->
+        <div class="feature-card-item">
+          <img src="{{card2_image}}" alt="{{card2_title}}">
+          <div class="feature-card-text-wrap">
+            <div class="feature-card-card-title">{{card2_title}}</div>
+            <div class="feature-card-card-desc">{{card2_desc}}</div>
+          </div>
+        </div>
+        <!--卡片3-->
+        <div class="feature-card-item">
+          <img src="{{card3_image}}" alt="{{card3_title}}">
+          <div class="feature-card-text-wrap">
+            <div class="feature-card-card-title">{{card3_title}}</div>
+            <div class="feature-card-card-desc">{{card3_desc}}</div>
+          </div>
+        </div>
+        <!--卡片4-->
+        <div class="feature-card-item">
+          <img src="{{card4_image}}" alt="{{card4_title}}">
+          <div class="feature-card-text-wrap">
+            <div class="feature-card-card-title">{{card4_title}}</div>
+            <div class="feature-card-card-desc">{{card4_desc}}</div>
+          </div>
+        </div>
+      </div>
+    </div>, 每张卡片的高度宽度可以单独自由调节, 每张卡片的宽度可以单独独立调节，高度也可以单独独立调节，在调节宽度时，只拉宽或变窄卡片，卡片高度不变，高度在调节时，宽度也不会变化, 整个卡片模块要整体保持居中, 其他地方不变，加一个可以调节整个模块容器与上一个模块间距的设置，还有给每个卡片加一层由顶部到卡片2分之一处黑色至透明渐变的遮罩, 其他不用变，再添加一个可以调节容器内标题距离顶部的距离的设置，还有容器下面内部边距设置，还有整个模块容器与下面一个模块间距的设置, 其他地方不用变化，添加一个可以调节卡片内文字位置的设置, 在前两排卡片下方再加一排图片卡片,为三个卡片并排,, 每张卡片可以单独调节宽度，可以单独高度，并且宽度可以调节无上限，但整个模块始终保持居中，左侧卡片的左边不能超过左边容器边框，右侧卡片的右边不能超过右边容器边框, 增加一个可以调节每个图片卡片里标题和描述的上下左右位置的设置，这个设置的滑块设置的 step(步长)单位为1来调节，图片里的黑色遮罩的位置和高度还有透明度也可以自定义调节, 增加一个可以调节标题在左边还是居中还是右边的设置，请帮我把当前这个 section 里 "Container max width"(容器最大宽度)这个滑块设置的 step(步长)从 40 改成 10,其他不用变。还有再增加一个每个卡片里的标题和描述可以选择左对齐、居中、右对齐的设置
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+<div id="pdp-overview" class="ai-feature-cards-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+{% style %}
+  .ai-feature-cards-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    margin-top: {{ block.settings.module_top_margin }}px;
+    margin-bottom: {{ block.settings.module_bottom_margin }}px;
+  }
+
+  .ai-feature-cards-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_max_width }}px;
+    margin: 0 auto;
+    padding-top: {{ block.settings.container_top_padding }}px;
+    padding-bottom: {{ block.settings.container_bottom_padding }}px;
+  }
+
+  .ai-feature-cards-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_font_size }}px;
+    margin: 0;
+    font-weight: 700;
+    text-align: {{ block.settings.heading_alignment }};
+  }
+
+  .ai-feature-cards-heading-group-{{ ai_gen_id }} {
+    margin-bottom: {{ block.settings.heading_bottom_margin }}px;
+  }
+
+  .ai-feature-cards-subheading-{{ ai_gen_id }} {
+    margin: 8px 0 0;
+    font-size: 18px;
+    line-height: 1.5;
+    text-align: {{ block.settings.heading_alignment }};
+  }
+
+  .ai-feature-cards-grid-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: {{ block.settings.card_gap }}px;
+    flex-wrap: wrap;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }} {
+    position: relative;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-feature-card-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-feature-card-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  .ai-feature-card-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, {{ block.settings.overlay_opacity }}), transparent);
+    pointer-events: none;
+  }
+
+  .ai-feature-card-text-{{ ai_gen_id }} {
+    position: absolute;
+    color: #ffffff;
+    z-index: 1;
+  }
+
+  .ai-feature-card-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_title_font_size }}px;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+
+  .ai-feature-card-desc-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_desc_font_size }}px;
+    margin: 0;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--1 {
+    width: {{ block.settings.card_1_width }}px;
+    height: {{ block.settings.card_1_height }}px;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--1 .ai-feature-card-overlay-{{ ai_gen_id }} {
+    top: {{ block.settings.card_1_overlay_top }}%;
+    height: {{ block.settings.card_1_overlay_height }}%;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--1 .ai-feature-card-text-{{ ai_gen_id }} {
+    top: {{ block.settings.card_1_text_top }}px;
+    left: {{ block.settings.card_1_text_left }}px;
+    right: {{ block.settings.card_1_text_right }}px;
+    bottom: {{ block.settings.card_1_text_bottom }}px;
+    text-align: {{ block.settings.card_1_text_align }};
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--2 {
+    width: {{ block.settings.card_2_width }}px;
+    height: {{ block.settings.card_2_height }}px;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--2 .ai-feature-card-overlay-{{ ai_gen_id }} {
+    top: {{ block.settings.card_2_overlay_top }}%;
+    height: {{ block.settings.card_2_overlay_height }}%;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--2 .ai-feature-card-text-{{ ai_gen_id }} {
+    top: {{ block.settings.card_2_text_top }}px;
+    left: {{ block.settings.card_2_text_left }}px;
+    right: {{ block.settings.card_2_text_right }}px;
+    bottom: {{ block.settings.card_2_text_bottom }}px;
+    text-align: {{ block.settings.card_2_text_align }};
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--3 {
+    width: {{ block.settings.card_3_width }}px;
+    height: {{ block.settings.card_3_height }}px;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--3 .ai-feature-card-overlay-{{ ai_gen_id }} {
+    top: {{ block.settings.card_3_overlay_top }}%;
+    height: {{ block.settings.card_3_overlay_height }}%;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--3 .ai-feature-card-text-{{ ai_gen_id }} {
+    top: {{ block.settings.card_3_text_top }}px;
+    left: {{ block.settings.card_3_text_left }}px;
+    right: {{ block.settings.card_3_text_right }}px;
+    bottom: {{ block.settings.card_3_text_bottom }}px;
+    text-align: {{ block.settings.card_3_text_align }};
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--4 {
+    width: {{ block.settings.card_4_width }}px;
+    height: {{ block.settings.card_4_height }}px;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--4 .ai-feature-card-overlay-{{ ai_gen_id }} {
+    top: {{ block.settings.card_4_overlay_top }}%;
+    height: {{ block.settings.card_4_overlay_height }}%;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--4 .ai-feature-card-text-{{ ai_gen_id }} {
+    top: {{ block.settings.card_4_text_top }}px;
+    left: {{ block.settings.card_4_text_left }}px;
+    right: {{ block.settings.card_4_text_right }}px;
+    bottom: {{ block.settings.card_4_text_bottom }}px;
+    text-align: {{ block.settings.card_4_text_align }};
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--5 {
+    width: {{ block.settings.card_5_width }}px;
+    height: {{ block.settings.card_5_height }}px;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--5 .ai-feature-card-overlay-{{ ai_gen_id }} {
+    top: {{ block.settings.card_5_overlay_top }}%;
+    height: {{ block.settings.card_5_overlay_height }}%;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--5 .ai-feature-card-text-{{ ai_gen_id }} {
+    top: {{ block.settings.card_5_text_top }}px;
+    left: {{ block.settings.card_5_text_left }}px;
+    right: {{ block.settings.card_5_text_right }}px;
+    bottom: {{ block.settings.card_5_text_bottom }}px;
+    text-align: {{ block.settings.card_5_text_align }};
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--6 {
+    width: {{ block.settings.card_6_width }}px;
+    height: {{ block.settings.card_6_height }}px;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--6 .ai-feature-card-overlay-{{ ai_gen_id }} {
+    top: {{ block.settings.card_6_overlay_top }}%;
+    height: {{ block.settings.card_6_overlay_height }}%;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--6 .ai-feature-card-text-{{ ai_gen_id }} {
+    top: {{ block.settings.card_6_text_top }}px;
+    left: {{ block.settings.card_6_text_left }}px;
+    right: {{ block.settings.card_6_text_right }}px;
+    bottom: {{ block.settings.card_6_text_bottom }}px;
+    text-align: {{ block.settings.card_6_text_align }};
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--7 {
+    width: {{ block.settings.card_7_width }}px;
+    height: {{ block.settings.card_7_height }}px;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--7 .ai-feature-card-overlay-{{ ai_gen_id }} {
+    top: {{ block.settings.card_7_overlay_top }}%;
+    height: {{ block.settings.card_7_overlay_height }}%;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}--7 .ai-feature-card-text-{{ ai_gen_id }} {
+    top: {{ block.settings.card_7_text_top }}px;
+    left: {{ block.settings.card_7_text_left }}px;
+    right: {{ block.settings.card_7_text_right }}px;
+    bottom: {{ block.settings.card_7_text_bottom }}px;
+    text-align: {{ block.settings.card_7_text_align }};
+  }
+
+  @media (max-width: 768px) {
+    .ai-feature-cards-grid-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .ai-feature-card-{{ ai_gen_id }}--1,
+    .ai-feature-card-{{ ai_gen_id }}--2,
+    .ai-feature-card-{{ ai_gen_id }}--3,
+    .ai-feature-card-{{ ai_gen_id }}--4,
+    .ai-feature-card-{{ ai_gen_id }}--5,
+    .ai-feature-card-{{ ai_gen_id }}--6,
+    .ai-feature-card-{{ ai_gen_id }}--7 {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+{% endstyle %}
+
+{% liquid
+  assign is_product_context = false
+  assign use_product_features = false
+  assign pdp_feature_title = blank
+  assign pdp_features = blank
+  if request.page_type == 'product' and product != blank and block.settings.content_source != 'theme_editor'
+    assign is_product_context = true
+    assign pdp_content_candidate = product.metafields.custom.pdp_content.value
+    if pdp_content_candidate != blank
+      assign pdp_content_owner = pdp_content_candidate.product.value
+      assign pdp_content_is_for_product = false
+      if pdp_content_owner != blank
+        if pdp_content_owner.handle == product.handle
+          assign pdp_content_is_for_product = true
+        endif
+      elsif pdp_content_candidate.system.handle == product.handle
+        assign pdp_content_is_for_product = true
+      endif
+      if pdp_content_is_for_product
+        assign pdp_content = pdp_content_candidate
+        assign pdp_feature_title = pdp_content.overview_title.value
+        assign pdp_features = pdp_content.features.value
+        if pdp_features != blank
+          assign use_product_features = true
+        endif
+      endif
+    endif
+  endif
+  if is_product_context == false
+    assign pdp_feature_title = block.settings.module_title
+  endif
+%}
+
+{% if is_product_context == false or pdp_features != blank %}
+  <div class="ai-feature-cards-container-{{ ai_gen_id }}">
+    {% if pdp_feature_title != blank %}
+      <div class="ai-feature-cards-heading-group-{{ ai_gen_id }}">
+        <h2 class="ai-feature-cards-heading-{{ ai_gen_id }}">{{ pdp_feature_title | escape }}</h2>
+        {% if block.settings.module_subtitle != blank %}
+          <div class="ai-feature-cards-subheading-{{ ai_gen_id }}">{{ block.settings.module_subtitle | escape | newline_to_br }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="ai-feature-cards-grid-{{ ai_gen_id }}">
+      {% if is_product_context == false %}
+        {% for feature_index in (1..4) %}
+          {% liquid
+            assign image_key = 'card_' | append: feature_index | append: '_image'
+            assign title_key = 'card_' | append: feature_index | append: '_title'
+            assign description_key = 'card_' | append: feature_index | append: '_desc'
+            assign feature_image = block.settings[image_key]
+            assign feature_title = block.settings[title_key]
+            assign feature_description = block.settings[description_key]
+          %}
+          {% if feature_image != blank or feature_title != blank or feature_description != blank %}
+            <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}">
+              {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 50vw', alt: feature_title }}{% else %}<div class="ai-feature-card-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>{% endif %}
+              <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
+              <div class="ai-feature-card-text-{{ ai_gen_id }}">
+                {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
+                {% if feature_description != blank %}<div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div>{% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% elsif use_product_features %}
+      {% for pdp_feature in pdp_features limit: 4 %}
+      {% liquid
+        assign feature_image = pdp_feature.image.value
+        assign feature_title = pdp_feature.title.value
+        assign feature_description = pdp_feature.description.value
+      %}
+      {% if feature_image != blank or feature_title != blank or feature_description != blank %}
+      <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ forloop.index }}">
+        {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 50vw', alt: feature_title }}{% endif %}
+        <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
+        <div class="ai-feature-card-text-{{ ai_gen_id }}">
+          {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
+          {% if feature_description != blank %}<div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div>{% endif %}
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="ai-feature-cards-grid-{{ ai_gen_id }}" style="margin-top: {{ block.settings.card_gap }}px;">
+      {% if is_product_context == false %}
+        {% for feature_index in (5..7) %}
+          {% liquid
+            assign image_key = 'card_' | append: feature_index | append: '_image'
+            assign title_key = 'card_' | append: feature_index | append: '_title'
+            assign description_key = 'card_' | append: feature_index | append: '_desc'
+            assign feature_image = block.settings[image_key]
+            assign feature_title = block.settings[title_key]
+            assign feature_description = block.settings[description_key]
+          %}
+          {% if feature_image != blank or feature_title != blank or feature_description != blank %}
+            <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}">
+              {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 33vw', alt: feature_title }}{% else %}<div class="ai-feature-card-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>{% endif %}
+              <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
+              <div class="ai-feature-card-text-{{ ai_gen_id }}">
+                {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
+                {% if feature_description != blank %}<div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div>{% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% elsif use_product_features %}
+      {% for pdp_feature in pdp_features offset: 4 limit: 3 %}
+        {% liquid
+          assign feature_image = pdp_feature.image.value
+          assign feature_title = pdp_feature.title.value
+          assign feature_description = pdp_feature.description.value
+          assign feature_index = forloop.index | plus: 4
+        %}
+        {% if feature_image != blank or feature_title != blank or feature_description != blank %}
+          <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}">
+            {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 33vw', alt: feature_title }}{% endif %}
+            <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
+            <div class="ai-feature-card-text-{{ ai_gen_id }}">
+              {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
+              {% if feature_description != blank %}<div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div>{% endif %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+{% elsif request.design_mode %}
+  <div class="ai-feature-cards-container-{{ ai_gen_id }}">
+    <p>为当前产品创建并关联独立的 PDP content 后，Feature cards 的文案和图片会显示在这里。</p>
+  </div>
+{% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Feature cards",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_source",
+      "label": "内容来源",
+      "options": [
+        {
+          "value": "theme_editor",
+          "label": "右侧 Theme Editor（默认）"
+        },
+        {
+          "value": "pdp_content",
+          "label": "PDP 后台内容（备份/旧模式）"
+        }
+      ],
+      "default": "theme_editor",
+      "info": "选择右侧 Theme Editor 后，此模块只读取当前模板的下方字段，不再读取 PDP content。"
+    },
+    {
+      "type": "header",
+      "content": "Module settings"
+    },
+    {
+      "type": "paragraph",
+      "content": "PDP 后台内容模式：从当前产品的 PDP content 读取。右侧 Theme Editor 模式：使用本模板下方的标题、图片和文案。"
+    },
+    {
+      "type": "text",
+      "id": "module_title",
+      "label": "Module title",
+      "default": "Revolutionäre Power. Wegweisende Einsparungen."
+    },
+    {
+      "type": "textarea",
+      "id": "module_subtitle",
+      "label": "Module subtitle"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "label": "Container max width",
+      "min": 800,
+      "max": 2000,
+      "step": 12,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "module_top_margin",
+      "label": "Top margin",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "module_bottom_margin",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "container_top_padding",
+      "label": "Container top padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "container_bottom_padding",
+      "label": "Container bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Heading font size",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "range",
+      "id": "heading_bottom_margin",
+      "label": "Heading bottom margin",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card gap",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_title_font_size",
+      "label": "Card title font size",
+      "min": 14,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_desc_font_size",
+      "label": "Card description font size",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.6
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Title",
+      "default": "3600W PV‑Eingang"
+    },
+    {
+      "type": "text",
+      "id": "card_1_desc",
+      "label": "Description",
+      "default": "4 MPPT"
+    },
+    {
+      "type": "select",
+      "id": "card_1_text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "card_1_width",
+      "label": "Width",
+      "min": 100,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 680
+    },
+    {
+      "type": "range",
+      "id": "card_1_height",
+      "label": "Height",
+      "min": 100,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "card_1_overlay_top",
+      "label": "Overlay top position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_1_overlay_height",
+      "label": "Overlay height",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "card_1_text_top",
+      "label": "Text top",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_1_text_left",
+      "label": "Text left",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_1_text_right",
+      "label": "Text right",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_1_text_bottom",
+      "label": "Text bottom",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Title",
+      "default": "Bis zu 1566€"
+    },
+    {
+      "type": "text",
+      "id": "card_2_desc",
+      "label": "Description",
+      "default": "jährliche Einsparungen"
+    },
+    {
+      "type": "select",
+      "id": "card_2_text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "card_2_width",
+      "label": "Width",
+      "min": 100,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 680
+    },
+    {
+      "type": "range",
+      "id": "card_2_height",
+      "label": "Height",
+      "min": 100,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "card_2_overlay_top",
+      "label": "Overlay top position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_2_overlay_height",
+      "label": "Overlay height",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "card_2_text_top",
+      "label": "Text top",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_2_text_left",
+      "label": "Text left",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_2_text_right",
+      "label": "Text right",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_2_text_bottom",
+      "label": "Text bottom",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Title",
+      "default": "Anker Intelligence™"
+    },
+    {
+      "type": "text",
+      "id": "card_3_desc",
+      "label": "Description",
+      "default": "Optimiert Energieverbrauch & Einsparungen"
+    },
+    {
+      "type": "select",
+      "id": "card_3_text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "card_3_width",
+      "label": "Width",
+      "min": 100,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 680
+    },
+    {
+      "type": "range",
+      "id": "card_3_height",
+      "label": "Height",
+      "min": 100,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "card_3_overlay_top",
+      "label": "Overlay top position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_3_overlay_height",
+      "label": "Overlay height",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "card_3_text_top",
+      "label": "Text top",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_3_text_left",
+      "label": "Text left",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_3_text_right",
+      "label": "Text right",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_3_text_bottom",
+      "label": "Text bottom",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Card 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_4_title",
+      "label": "Title",
+      "default": "2,68‑16kWh"
+    },
+    {
+      "type": "text",
+      "id": "card_4_desc",
+      "label": "Description",
+      "default": "erweiterbare Kapazität"
+    },
+    {
+      "type": "select",
+      "id": "card_4_text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "card_4_width",
+      "label": "Width",
+      "min": 100,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 680
+    },
+    {
+      "type": "range",
+      "id": "card_4_height",
+      "label": "Height",
+      "min": 100,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "card_4_overlay_top",
+      "label": "Overlay top position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_4_overlay_height",
+      "label": "Overlay height",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "card_4_text_top",
+      "label": "Text top",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_4_text_left",
+      "label": "Text left",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_4_text_right",
+      "label": "Text right",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_4_text_bottom",
+      "label": "Text bottom",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Card 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_5_title",
+      "label": "Title",
+      "default": "Feature 5"
+    },
+    {
+      "type": "text",
+      "id": "card_5_desc",
+      "label": "Description",
+      "default": "Description 5"
+    },
+    {
+      "type": "select",
+      "id": "card_5_text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "card_5_width",
+      "label": "Width",
+      "min": 100,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 440
+    },
+    {
+      "type": "range",
+      "id": "card_5_height",
+      "label": "Height",
+      "min": 100,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "card_5_overlay_top",
+      "label": "Overlay top position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_5_overlay_height",
+      "label": "Overlay height",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "card_5_text_top",
+      "label": "Text top",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_5_text_left",
+      "label": "Text left",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_5_text_right",
+      "label": "Text right",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_5_text_bottom",
+      "label": "Text bottom",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Card 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_6_title",
+      "label": "Title",
+      "default": "Feature 6"
+    },
+    {
+      "type": "text",
+      "id": "card_6_desc",
+      "label": "Description",
+      "default": "Description 6"
+    },
+    {
+      "type": "select",
+      "id": "card_6_text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "card_6_width",
+      "label": "Width",
+      "min": 100,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 440
+    },
+    {
+      "type": "range",
+      "id": "card_6_height",
+      "label": "Height",
+      "min": 100,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "card_6_overlay_top",
+      "label": "Overlay top position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_6_overlay_height",
+      "label": "Overlay height",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "card_6_text_top",
+      "label": "Text top",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_6_text_left",
+      "label": "Text left",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_6_text_right",
+      "label": "Text right",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_6_text_bottom",
+      "label": "Text bottom",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Card 7"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_7_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_7_title",
+      "label": "Title",
+      "default": "Feature 7"
+    },
+    {
+      "type": "text",
+      "id": "card_7_desc",
+      "label": "Description",
+      "default": "Description 7"
+    },
+    {
+      "type": "select",
+      "id": "card_7_text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "card_7_width",
+      "label": "Width",
+      "min": 100,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 440
+    },
+    {
+      "type": "range",
+      "id": "card_7_height",
+      "label": "Height",
+      "min": 100,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "card_7_overlay_top",
+      "label": "Overlay top position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_7_overlay_height",
+      "label": "Overlay height",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "card_7_text_top",
+      "label": "Text top",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_7_text_left",
+      "label": "Text left",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_7_text_right",
+      "label": "Text right",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_7_text_bottom",
+      "label": "Text bottom",
+      "min": 0,
+      "max": 300,
+      "step": 3,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature cards"
+    }
+  ]
+}
+{% endschema %}

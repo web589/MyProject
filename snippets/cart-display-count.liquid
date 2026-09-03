@@ -1,0 +1,15 @@
+{%- liquid
+  assign display_count = 0
+  assign display_cart = display_cart | default: cart
+
+  for item in display_cart.items
+    assign pack_size = item.properties['_venus_pack_size'] | default: 1 | plus: 0
+    if pack_size < 1
+      assign pack_size = 1
+    endif
+
+    assign line_display_quantity = item.quantity | divided_by: pack_size
+    assign display_count = display_count | plus: line_display_quantity
+  endfor
+-%}
+{{- display_count -}}

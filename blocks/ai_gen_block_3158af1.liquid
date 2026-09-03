@@ -1,0 +1,840 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Verschiedene Einsatzszenarien</title>
+      <style>
+        /* ===================================================
+           可调节变量（修改数值即可调整卡片尺寸）
+           =================================================== */
+        :root {
+          /* 所有卡片的统一高度（单位：px） */
+          --card-height: 280px;
+    
+          /* 整个板块的最大宽度，卡片宽度由 grid 自动分配 */
+          --card-max-width: 1280px;
+    
+          /* 卡片之间的间距 */
+          --card-gap: 24px;
+        }
+    
+        /* ===== 整体区块 ===== */
+        .scenario-section {
+          max-width: var(--card-max-width);
+          margin: 0 auto 60px;
+          padding: 0 20px;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+    
+        .scenario-section .section-title {
+          font-size: 38px;
+          font-weight: 700;
+          color: #0A1628;
+          margin-bottom: 32px;
+          letter-spacing: -0.5px;
+        }
+        .scenario-section .section-title span {
+          color: #0099FC;
+        }
+    
+        /* ===== 网格布局：上一下二，高度固定 ===== */
+        .scenario-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: var(--card-gap);
+          /* 让每行高度自动，但卡片高度固定 */
+        }
+    
+        /* 第一张卡片横跨两列（顶部大图） */
+        .scenario-card:first-child {
+          grid-column: 1 / -1;
+        }
+    
+        /* ===== 单个卡片（背景图，固定高度） ===== */
+        .scenario-card {
+          height: var(--card-height);
+          border-radius: 20px;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+          transition: transform 0.3s ease;
+          /* 默认占位图，用户自行替换 */
+          background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&h=450&fit=crop&crop=center');
+        }
+        .scenario-card:hover {
+          transform: scale(1.01);
+        }
+    
+        /* 卡片2（左下） */
+        .scenario-card:nth-child(2) {
+          background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=450&fit=crop&crop=center');
+        }
+        /* 卡片3（右下） */
+        .scenario-card:nth-child(3) {
+          background-image: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=450&fit=crop&crop=center');
+        }
+    
+        /* ===== 暗色遮罩 ===== */
+        .scenario-card .card-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.05) 60%);
+          pointer-events: none;
+        }
+    
+        /* ===== 文字：左下角 ===== */
+        .scenario-card .card-text {
+          position: absolute;
+          bottom: 28px;
+          left: 28px;
+          z-index: 2;
+          max-width: 70%;
+          color: #fff;
+          text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+          pointer-events: none;
+        }
+        .scenario-card .card-text h3 {
+          font-size: 26px;
+          font-weight: 700;
+          margin: 0 0 6px 0;
+          letter-spacing: -0.3px;
+        }
+        .scenario-card .card-text p {
+          font-size: 15px;
+          margin: 0;
+          opacity: 0.95;
+          line-height: 1.5;
+          font-weight: 400;
+          max-width: 400px;
+        }
+        .scenario-card .card-text p strong {
+          font-weight: 700;
+        }
+    
+        /* ===== 按钮：右下角 ===== */
+        .scenario-card .card-btn {
+          position: absolute;
+          bottom: 28px;
+          right: 28px;
+          z-index: 2;
+          pointer-events: auto;
+        }
+        .scenario-card .card-btn a {
+          display: inline-block;
+          padding: 10px 28px;
+          background: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(4px);
+          color: #0A1628;
+          border-radius: 50px;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 15px;
+          transition: all 0.25s ease;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .scenario-card .card-btn a:hover {
+          background: #ffffff;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+        }
+    
+        /* ===== 响应式：手机堆叠 ===== */
+        @media (max-width: 640px) {
+          :root {
+            --card-height: 220px;  /* 手机上稍矮 */
+          }
+          .scenario-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          .scenario-card:first-child {
+            grid-column: 1;
+          }
+          .scenario-section .section-title {
+            font-size: 26px;
+          }
+          .scenario-card .card-text {
+            bottom: 18px;
+            left: 18px;
+            max-width: 75%;
+          }
+          .scenario-card .card-text h3 {
+            font-size: 20px;
+          }
+          .scenario-card .card-text p {
+            font-size: 13px;
+            max-width: 200px;
+          }
+          .scenario-card .card-btn {
+            bottom: 18px;
+            right: 18px;
+          }
+          .scenario-card .card-btn a {
+            padding: 6px 18px;
+            font-size: 13px;
+          }
+        }
+    
+        @media (max-width: 480px) {
+          :root {
+            --card-height: 180px;
+          }
+          .scenario-card .card-text h3 {
+            font-size: 18px;
+          }
+          .scenario-card .card-text p {
+            font-size: 12px;
+          }
+          .scenario-card .card-btn a {
+            pad, card1高度添加单独的调节高度选项
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-scenario-section-{{ ai_gen_id }} {
+    display: block;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto {{ block.settings.section_bottom_margin }}px;
+    padding: 0 20px;
+    width: 100%;
+  }
+
+  .ai-scenario-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    margin-bottom: {{ block.settings.title_margin }}px;
+    letter-spacing: -0.5px;
+  }
+
+  .ai-scenario-title-{{ ai_gen_id }} .ai-scenario-title-highlight-{{ ai_gen_id }} {
+    color: {{ block.settings.title_highlight_color }};
+  }
+
+  .ai-scenario-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: {{ block.settings.card_gap }}px;
+  }
+
+  .ai-scenario-card-{{ ai_gen_id }}:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .ai-scenario-card-{{ ai_gen_id }} {
+    height: {{ block.settings.card_height }}px;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease;
+  }
+
+  .ai-scenario-card-{{ ai_gen_id }}:first-child {
+    height: {{ block.settings.card_1_height }}px;
+  }
+
+  .ai-scenario-card-{{ ai_gen_id }}:hover {
+    transform: scale(1.01);
+  }
+
+  .ai-scenario-card-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, {{ block.settings.overlay_opacity }}) 0%, rgba(0, 0, 0, {{ block.settings.overlay_opacity | times: 0.125 }}) 60%);
+    pointer-events: none;
+  }
+
+  .ai-scenario-card-text-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: {{ block.settings.content_padding }}px;
+    left: {{ block.settings.content_padding }}px;
+    z-index: 2;
+    max-width: 70%;
+    color: {{ block.settings.text_color }};
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+  }
+
+  .ai-scenario-card-text-{{ ai_gen_id }} h3 {
+    font-size: {{ block.settings.card_title_size }}px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.3px;
+  }
+
+  .ai-scenario-card-text-{{ ai_gen_id }} p {
+    font-size: {{ block.settings.card_description_size }}px;
+    margin: 0;
+    opacity: 0.95;
+    line-height: 1.5;
+    font-weight: 400;
+    max-width: 400px;
+  }
+
+  .ai-scenario-card-btn-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: {{ block.settings.content_padding }}px;
+    right: {{ block.settings.content_padding }}px;
+    z-index: 2;
+    pointer-events: auto;
+  }
+
+  .ai-scenario-card-btn-{{ ai_gen_id }} a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: 120px;
+    min-height: 40px;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background: {{ block.settings.button_bg_color | color_modify: 'alpha', block.settings.button_bg_opacity }};
+    color: {{ block.settings.button_text_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    text-decoration: none;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: {{ block.settings.button_text_size }}px;
+    line-height: 1.2;
+    white-space: nowrap;
+    border: 1px solid {{ block.settings.button_border_color }};
+    box-shadow: none;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .ai-scenario-card-btn-{{ ai_gen_id }} a:hover {
+    background: {{ block.settings.button_hover_bg }};
+    color: {{ block.settings.button_hover_text_color }};
+    border-color: {{ block.settings.button_border_color }};
+  }
+
+  .ai-scenario-card-btn-{{ ai_gen_id }} a:focus-visible {
+    outline: 2px solid {{ block.settings.button_border_color }};
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 749px) {
+    .ai-scenario-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .ai-scenario-card-{{ ai_gen_id }}:first-child {
+      grid-column: 1;
+      height: {{ block.settings.card_1_height | times: 0.785 }}px;
+    }
+
+    .ai-scenario-card-{{ ai_gen_id }} {
+      height: {{ block.settings.card_height | times: 0.785 }}px;
+    }
+
+    .ai-scenario-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.68 }}px;
+    }
+
+    .ai-scenario-card-text-{{ ai_gen_id }} {
+      bottom: 18px;
+      left: 18px;
+      max-width: 75%;
+    }
+
+    .ai-scenario-card-text-{{ ai_gen_id }} h3 {
+      font-size: {{ block.settings.card_title_size | times: 0.77 }}px;
+    }
+
+    .ai-scenario-card-text-{{ ai_gen_id }} p {
+      font-size: {{ block.settings.card_description_size | times: 0.87 }}px;
+      max-width: 200px;
+    }
+
+    .ai-scenario-card-btn-{{ ai_gen_id }} {
+      bottom: 18px;
+      right: 18px;
+    }
+
+    .ai-scenario-card-btn-{{ ai_gen_id }} a {
+      min-width: 112px;
+      min-height: 38px;
+      padding: 8px 14px;
+      font-size: {{ block.settings.button_text_size }}px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ai-scenario-card-{{ ai_gen_id }}:first-child {
+      height: {{ block.settings.card_1_height | times: 0.64 }}px;
+    }
+
+    .ai-scenario-card-{{ ai_gen_id }} {
+      height: {{ block.settings.card_height | times: 0.64 }}px;
+    }
+
+    .ai-scenario-card-text-{{ ai_gen_id }} h3 {
+      font-size: {{ block.settings.card_title_size | times: 0.69 }}px;
+    }
+
+    .ai-scenario-card-text-{{ ai_gen_id }} p {
+      font-size: {{ block.settings.card_description_size | times: 0.8 }}px;
+    }
+  }
+{% endstyle %}
+
+<scenario-cards-{{ ai_gen_id }} class="ai-scenario-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.section_title != blank %}
+    <h2 class="ai-scenario-title-{{ ai_gen_id }}">
+      {{ block.settings.section_title }}
+    </h2>
+  {% endif %}
+
+  <div class="ai-scenario-grid-{{ ai_gen_id }}">
+    {% for i in (1..3) %}
+      {% liquid
+        assign image_key = 'card_' | append: i | append: '_image'
+        assign title_key = 'card_' | append: i | append: '_title'
+        assign description_key = 'card_' | append: i | append: '_description'
+        assign button_text_key = 'card_' | append: i | append: '_button_text'
+        assign button_link_key = 'card_' | append: i | append: '_button_link'
+
+        assign card_image = block.settings[image_key]
+        assign card_title = block.settings[title_key]
+        assign card_description = block.settings[description_key]
+        assign card_button_text = block.settings[button_text_key]
+        assign card_button_link = block.settings[button_link_key]
+      %}
+
+      <div
+        class="ai-scenario-card-{{ ai_gen_id }}"
+        {% if card_image %}
+          style="background-image: url('{{ card_image | image_url: width: 2000 }}');"
+        {% endif %}
+      >
+        <div class="ai-scenario-card-overlay-{{ ai_gen_id }}"></div>
+
+        {% if card_title != blank or card_description != blank %}
+          <div class="ai-scenario-card-text-{{ ai_gen_id }}">
+            {% if card_title != blank %}
+              <h3>{{ card_title }}</h3>
+            {% endif %}
+            {% if card_description != blank %}
+              <p>{{ card_description }}</p>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if card_button_text != blank and card_button_link != blank %}
+          <div class="ai-scenario-card-btn-{{ ai_gen_id }}">
+            <a href="{{ card_button_link }}">{{ card_button_text }}</a>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</scenario-cards-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ScenarioCards{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.applyHighlight();
+      }
+
+      applyHighlight() {
+        const titleElement = this.querySelector('.ai-scenario-title-{{ ai_gen_id }}');
+        if (!titleElement) return;
+
+        const highlightText = '{{ block.settings.title_highlight_text }}';
+        if (!highlightText) return;
+
+        const titleHTML = titleElement.innerHTML;
+        const highlightedHTML = titleHTML.replace(
+          new RegExp(highlightText, 'gi'),
+          '<span class="ai-scenario-title-highlight-{{ ai_gen_id }}">$&</span>'
+        );
+        titleElement.innerHTML = highlightedHTML;
+      }
+    }
+
+    customElements.define('scenario-cards-{{ ai_gen_id }}', ScenarioCards{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Scenario cards",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_title",
+      "label": "Title",
+      "default": "Verschiedene Einsatzszenarien"
+    },
+    {
+      "type": "text",
+      "id": "title_highlight_text",
+      "label": "Highlight text",
+      "info": "Enter text from the title to highlight in a different color"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "title_margin",
+      "label": "Title bottom margin",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 800,
+      "max": 1600,
+      "step": 40,
+      "unit": "px",
+      "default": 1280
+    },
+    {
+      "type": "range",
+      "id": "section_bottom_margin",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#0A1628"
+    },
+    {
+      "type": "color",
+      "id": "title_highlight_color",
+      "label": "Title highlight color",
+      "default": "#0099FC"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Card text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Card layout"
+    },
+    {
+      "type": "range",
+      "id": "card_1_height",
+      "label": "Card 1 height",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "label": "Card 2 & 3 height",
+      "min": 200,
+      "max": 500,
+      "step": 20,
+      "unit": "px",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap between cards",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "label": "Content padding",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.4
+    },
+    {
+      "type": "header",
+      "content": "Card text"
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Title size",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "card_description_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Vertical padding",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "button_bg_opacity",
+      "label": "Background opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#0099FC"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Border color",
+      "default": "#0099FC"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg",
+      "label": "Hover background",
+      "default": "#E0F7FF"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Hover text color",
+      "default": "#0369A1"
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_1_title",
+      "label": "Title",
+      "default": "Balkonkraftwerk"
+    },
+    {
+      "type": "text",
+      "id": "card_1_description",
+      "label": "Description",
+      "default": "Ideal für Mietwohnungen und Eigentumswohnungen"
+    },
+    {
+      "type": "text",
+      "id": "card_1_button_text",
+      "label": "Button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "card_1_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_2_title",
+      "label": "Title",
+      "default": "Einfamilienhaus"
+    },
+    {
+      "type": "text",
+      "id": "card_2_description",
+      "label": "Description",
+      "default": "Komplettlösung für Ihr Zuhause"
+    },
+    {
+      "type": "text",
+      "id": "card_2_button_text",
+      "label": "Button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "card_2_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_3_title",
+      "label": "Title",
+      "default": "Gewerbe"
+    },
+    {
+      "type": "text",
+      "id": "card_3_description",
+      "label": "Description",
+      "default": "Skalierbare Lösungen für Unternehmen"
+    },
+    {
+      "type": "text",
+      "id": "card_3_button_text",
+      "label": "Button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "card_3_button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scenario cards"
+    }
+  ]
+}
+{% endschema %}

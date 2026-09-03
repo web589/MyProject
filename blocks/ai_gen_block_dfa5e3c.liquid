@@ -1,0 +1,994 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog / Inhaltsmarketing Eingang</title>
+    <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    
+    body {
+      background-color: #f7f7f7;
+      padding: 60px 20px;
+    }
+    
+    .blog-section {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    
+    /* 头部 */
+    .blog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    
+    .blog-title {
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 700;
+      color: #111;
+    }
+    
+    .blog-all-link {
+      font-size: 0.95rem;
+      color: #111;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .blog-all-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* 卡片网格 */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    
+    /* 单张卡片 */
+    .blog-card {
+      background-color: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* 图片区域，预留位置 */
+    .blog-card-image {
+      width: 100%;
+      height: 0;
+      padding-bottom: 66%;
+      position: relative;
+      background-color: #f0f4f8;
+    }
+    
+    .blog-card-image img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* 内容区域 */
+    .blog-card-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    
+    .blog-card-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    
+    .blog-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    
+    .blog-card-excerpt {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+    
+    .blog-card-link {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #111;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .blog-card-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* 移动端适配 */
+    @media (max-width: 1024px) {
+      .blog-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .blog-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    </style>
+    </head>
+    <body>
+    
+    <section class="blog-section">
+      <div class="blog-header">
+        <h2 class="blog-title">Blog / Inhaltsmarketing Eingang</h2>
+        <a href="#" class="blog-all-link">Alle Beiträge</a>
+      </div>
+    
+      <div class="blog-grid">
+    
+        <!-- Card 1 -->
+        <article class="blog-card">
+          <div class="blog-card-image">
+            <img src="your-blog-1.jpg" alt="Blog Bild 1">
+          </div>
+          <div class="blog-card-content">
+            <span class="blog-card-tag">Batterie?</span>
+            <h3 class="blog-card-title">Was ist eine Plug & Play Batterie?</h3>
+            <p class="blog-card-excerpt">Steckerfertige Speicher für Ihr Balkonkraftwerk. Einfach anschließen, Energie speichern und später nutzen.</p>
+            <a href="#" class="blog-card-link">Mehr erfahren →</a>
+          </div>
+        </article>
+    
+        <!-- Card 2 -->
+        <article class="blog-card">
+          <div class="blog-card-image">
+            <img src="your-blog-2.jpg" alt="Blog Bild 2">
+          </div>
+          <div class="blog-card-content">
+            <span class="blog-card-tag">Speicher</span>
+            <h3 class="blog-card-title">Balkonkraftwerk mit Speicher</h3>
+            <p class="blog-card-excerpt">Lohnt sich ein Batteriespeicher für Ihr Balkonkraftwerk? Wir zeigen Ihnen die Vorteile.</p>
+            <a href="#" class="blog-card-link">Mehr erfahren →</a>
+          </div>
+        </article>
+    
+        <!-- Card 3 -->
+        <article class="blog-card">
+          <div class="blog-card-image">
+            <img src="your-blog-3.jpg" alt="Blog Bild 3">
+          </div>
+          <div class="blog-card-content">
+            <span class="blog-card-tag">Heimspeicher</span>
+            <h3 class="blog-card-title">Förderungen für Heimspeicher</h3>
+            <p class="blog-card-excerpt">Übersicht zu Zuschüssen, Steuervorteilen und aktuellen Förderprogrammen in Deutschland.</p>
+            <a href="#" class="blog-card-link">Mehr erfahren →</a>
+          </div>
+        </article>
+    
+        <!-- Card 4 -->
+        <article class="blog-card">
+          <div class="blog-card-image">
+            <img src="your-blog-4.jpg" alt="Blog Bild 4">
+          </div>
+          <div class="blog-card-content">
+            <span class="blog-card-tag">Vergleich</span>
+            <h3 class="blog-card-title">VENUS Evs. Konkurrenz</h3>
+            <p class="blog-card-excerpt">Vergleich von Kapazität, Leistung, Design und Preis-Leistung bei beliebten Heimspeichern.</p>
+            <a href="#" class="blog-card-link">Mehr erfahren →</a>
+          </div>
+        </article>
+    
+      </div>
+    </section>
+    
+    </body>
+    </html>, 博客我要自己放图片，自己写标题描述，链接我自己填
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-custom-blog-section-{{ ai_gen_id }} {
+    display: block;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding_top }}px 20px {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+    width: {{ block.settings.desktop_width_percent }}%;
+  }
+
+  .ai-custom-blog-header-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .ai-custom-blog-title-{{ ai_gen_id }} {
+    font-size: clamp(1.5rem, 2.5vw, {{ block.settings.heading_size }}px);
+    font-weight: 700;
+    color: {{ block.settings.heading_color }};
+    margin: 0;
+  }
+
+  .ai-custom-blog-all-link-{{ ai_gen_id }} {
+    font-size: {{ block.settings.link_size }}px;
+    color: {{ block.settings.link_color }};
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ai-custom-blog-all-link-{{ ai_gen_id }}:hover {
+    color: #007dcc;
+  }
+
+  .ai-custom-blog-arrow-{{ ai_gen_id }} {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    transition: transform 0.2s ease;
+  }
+
+  .ai-custom-blog-all-link-{{ ai_gen_id }}:hover .ai-custom-blog-arrow-{{ ai_gen_id }},
+  .ai-custom-blog-all-link-{{ ai_gen_id }}:focus-visible .ai-custom-blog-arrow-{{ ai_gen_id }} {
+    transform: translateX(3px);
+  }
+
+  .ai-custom-blog-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  .ai-custom-blog-card-{{ ai_gen_id }} {
+    background-color: {{ block.settings.card_background }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dfe6ee;
+    box-shadow: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  {% if block.settings.enable_card_hover %}
+    .ai-custom-blog-card-{{ ai_gen_id }}:hover,
+    .ai-custom-blog-card-{{ ai_gen_id }}:focus-within {
+      border-color: #0099fe;
+      box-shadow: 0 8px 24px rgba(0, 153, 254, 0.1);
+    }
+  {% endif %}
+
+  .ai-custom-blog-card-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 0;
+    padding-bottom: {{ block.settings.image_aspect_ratio }}%;
+    position: relative;
+    background-color: #e9eef4;
+  }
+
+  .ai-custom-blog-card-image-{{ ai_gen_id }} img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-custom-blog-card-image-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #e9eef4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-custom-blog-card-image-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-custom-blog-card-content-{{ ai_gen_id }} {
+    padding: {{ block.settings.card_padding }}px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .ai-custom-blog-card-tag-{{ ai_gen_id }} {
+    font-size: {{ block.settings.tag_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.tag_color }};
+    background: {{ block.settings.tag_background }};
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    align-self: flex-start;
+    text-decoration: none;
+  }
+
+  .ai-custom-blog-card-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.card_title_color }};
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .ai-custom-blog-card-title-{{ ai_gen_id }} a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ai-custom-blog-card-title-{{ ai_gen_id }} a:hover {
+    color: #0099fe;
+  }
+
+  .ai-custom-blog-card-excerpt-{{ ai_gen_id }} {
+    font-size: {{ block.settings.excerpt_size }}px;
+    color: {{ block.settings.excerpt_color }};
+    line-height: 1.5;
+    margin-bottom: 16px;
+    flex-grow: 1;
+  }
+
+  .ai-custom-blog-card-link-{{ ai_gen_id }} {
+    font-size: {{ block.settings.read_more_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.read_more_color }};
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ai-custom-blog-card-link-{{ ai_gen_id }}:hover {
+    color: #0099fe;
+  }
+
+  {% if block.settings.enable_card_hover %}
+    .ai-custom-blog-card-{{ ai_gen_id }}:hover .ai-custom-blog-card-title-{{ ai_gen_id }} a,
+    .ai-custom-blog-card-{{ ai_gen_id }}:hover .ai-custom-blog-card-link-{{ ai_gen_id }},
+    .ai-custom-blog-card-{{ ai_gen_id }}:focus-within .ai-custom-blog-card-title-{{ ai_gen_id }} a,
+    .ai-custom-blog-card-{{ ai_gen_id }}:focus-within .ai-custom-blog-card-link-{{ ai_gen_id }} {
+      color: #0099fe;
+    }
+  {% endif %}
+
+  .ai-custom-blog-card-link-{{ ai_gen_id }}:hover .ai-custom-blog-arrow-{{ ai_gen_id }},
+  .ai-custom-blog-card-link-{{ ai_gen_id }}:focus-visible .ai-custom-blog-arrow-{{ ai_gen_id }} {
+    transform: translateX(3px);
+  }
+
+  .ai-custom-blog-empty-state-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+    font-size: 16px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .ai-custom-blog-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_tablet }}, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .ai-custom-blog-header-{{ ai_gen_id }} {
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .ai-custom-blog-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
+    }
+  }
+{% endstyle %}
+
+{% liquid
+  assign view_all_url = block.settings.view_all_link
+  assign enabled_cards = 0
+%}
+
+<custom-blog-section-{{ ai_gen_id }} class="ai-custom-blog-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-custom-blog-header-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <h2 class="ai-custom-blog-title-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+    {% endif %}
+    {% if block.settings.show_view_all and view_all_url != blank %}
+      <a href="{{ view_all_url }}" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
+        {{ block.settings.view_all_text | escape }}
+        <svg class="ai-custom-blog-arrow-{{ ai_gen_id }}" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="ai-custom-blog-grid-{{ ai_gen_id }}">
+    {% for card_index in (1..4) %}
+      {% liquid
+        assign enabled_key = 'card_' | append: card_index | append: '_enabled'
+        assign image_key = 'card_' | append: card_index | append: '_image'
+        assign tag_key = 'card_' | append: card_index | append: '_tag'
+        assign title_key = 'card_' | append: card_index | append: '_title'
+        assign excerpt_key = 'card_' | append: card_index | append: '_excerpt'
+        assign link_key = 'card_' | append: card_index | append: '_link'
+        assign card_image = block.settings[image_key]
+        assign card_tag = block.settings[tag_key]
+        assign card_title = block.settings[title_key]
+        assign card_excerpt = block.settings[excerpt_key]
+        assign card_link = block.settings[link_key]
+      %}
+
+      {% if block.settings[enabled_key] %}
+        {% assign enabled_cards = enabled_cards | plus: 1 %}
+        <article
+          class="ai-custom-blog-card-{{ ai_gen_id }}"
+        >
+          <div class="ai-custom-blog-card-image-{{ ai_gen_id }}">
+            {% if card_image != blank %}
+              <img
+                src="{{ card_image | image_url: width: 800 }}"
+                alt="{{ card_image.alt | default: card_title | escape }}"
+                loading="lazy"
+                width="800"
+                height="{{ 800 | times: block.settings.image_aspect_ratio | divided_by: 100 }}"
+              >
+            {% else %}
+              <div class="ai-custom-blog-card-image-placeholder-{{ ai_gen_id }}">
+                {{ 'image' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="ai-custom-blog-card-content-{{ ai_gen_id }}">
+            {% if block.settings.show_article_badge and card_tag != blank %}
+              <span class="ai-custom-blog-card-tag-{{ ai_gen_id }}">
+                {{ card_tag | escape }}
+              </span>
+            {% endif %}
+
+            <h3 class="ai-custom-blog-card-title-{{ ai_gen_id }}">
+              {% if card_link != blank %}
+                <a href="{{ card_link }}">{{ card_title | escape }}</a>
+              {% else %}
+                {{ card_title | escape }}
+              {% endif %}
+            </h3>
+
+            <div class="ai-custom-blog-card-excerpt-{{ ai_gen_id }}">
+              {{ card_excerpt | escape | newline_to_br }}
+            </div>
+
+            {% if block.settings.show_read_more and card_link != blank %}
+              <a href="{{ card_link }}" class="ai-custom-blog-card-link-{{ ai_gen_id }}">
+                {{ block.settings.read_more_text | escape }}
+                <svg class="ai-custom-blog-arrow-{{ ai_gen_id }}" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            {% endif %}
+          </div>
+        </article>
+      {% endif %}
+    {% endfor %}
+
+    {% if enabled_cards == 0 %}
+      <div class="ai-custom-blog-empty-state-{{ ai_gen_id }}">
+        Bitte aktivieren Sie im Theme-Editor mindestens eine Karte.
+      </div>
+    {% endif %}
+  </div>
+</custom-blog-section-{{ ai_gen_id }}>
+
+{% schema %}
+{
+  "name": "Custom blog cards",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Blog / Inhaltsmarketing Eingang"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view all link",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "view_all_text",
+      "label": "View all text",
+      "default": "Alle Beiträge"
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_1_enabled",
+      "label": "Enable card 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_1_tag",
+      "label": "Tag",
+      "default": "Batterie?"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Title",
+      "default": "Was ist eine Plug & Play Batterie?"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_excerpt",
+      "label": "Excerpt",
+      "default": "Steckerfertige Speicher für Ihr Balkonkraftwerk. Einfach anschließen, Energie speichern und später nutzen."
+    },
+    {
+      "type": "url",
+      "id": "card_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_2_enabled",
+      "label": "Enable card 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_2_tag",
+      "label": "Tag",
+      "default": "Speicher"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Title",
+      "default": "Balkonkraftwerk mit Speicher"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_excerpt",
+      "label": "Excerpt",
+      "default": "Lohnt sich ein Batteriespeicher für Ihr Balkonkraftwerk? Wir zeigen Ihnen die Vorteile."
+    },
+    {
+      "type": "url",
+      "id": "card_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_3_enabled",
+      "label": "Enable card 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_3_tag",
+      "label": "Tag",
+      "default": "Heimspeicher"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Title",
+      "default": "Förderungen für Heimspeicher"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_excerpt",
+      "label": "Excerpt",
+      "default": "Übersicht zu Zuschüssen, Steuervorteilen und aktuellen Förderprogrammen in Deutschland."
+    },
+    {
+      "type": "url",
+      "id": "card_3_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_4_enabled",
+      "label": "Enable card 4",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_4_tag",
+      "label": "Tag",
+      "default": "Vergleich"
+    },
+    {
+      "type": "text",
+      "id": "card_4_title",
+      "label": "Title",
+      "default": "VENUS Evs. Konkurrenz"
+    },
+    {
+      "type": "textarea",
+      "id": "card_4_excerpt",
+      "label": "Excerpt",
+      "default": "Vergleich von Kapazität, Leistung, Design und Preis-Leistung bei beliebten Heimspeichern."
+    },
+    {
+      "type": "url",
+      "id": "card_4_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Read more link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_article_badge",
+      "label": "Show card tags",
+      "info": "Displays the tag configured for each enabled card.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_read_more",
+      "label": "Show read more link",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "read_more_text",
+      "label": "Read more text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_tablet",
+      "label": "Columns on tablet",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "image_aspect_ratio",
+      "label": "Image aspect ratio",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "%",
+      "default": 65
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Card padding",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_card_hover",
+      "label": "Enable card hover effect",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f7f7f7"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "View all link",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "tag_color",
+      "label": "Tag",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "tag_background",
+      "label": "Tag background",
+      "default": "#e9eef4"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card title",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "excerpt_color",
+      "label": "Excerpt",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "read_more_color",
+      "label": "Read more link",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "label": "View all link size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "tag_size",
+      "label": "Tag size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Card title size",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "excerpt_size",
+      "label": "Excerpt size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "read_more_size",
+      "label": "Read more link size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom blog cards"
+    }
+  ]
+}
+{% endschema %}

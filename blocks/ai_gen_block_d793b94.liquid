@@ -1,0 +1,549 @@
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-savings-calculator-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    background: linear-gradient(110deg, #e8f7ff 0%, #d1eaff 100%);
+    padding: 64px 24px;
+  }
+
+  .ai-savings-calculator-container-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 420px);
+    align-items: center;
+    gap: 88px;
+    width: 100%;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-savings-text-column-{{ ai_gen_id }} {
+    max-width: 560px;
+  }
+
+  .ai-savings-heading-{{ ai_gen_id }} {
+    margin: 0 0 16px;
+    color: #242424;
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .ai-savings-description-{{ ai_gen_id }} {
+    margin: 0 0 28px;
+    color: #596b82;
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.65;
+  }
+
+  .ai-savings-description-{{ ai_gen_id }} p {
+    margin: 0;
+  }
+
+  .ai-savings-feature-list-{{ ai_gen_id }} {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ai-savings-feature-item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #242424;
+    font-size: {{ block.settings.feature_text_size }}px;
+    line-height: 1.45;
+  }
+
+  .ai-savings-icon-wrapper-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    border-radius: 50%;
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+
+  .ai-savings-icon-wrapper-{{ ai_gen_id }} svg {
+    width: 13px;
+    height: 13px;
+    fill: currentColor;
+  }
+
+  .ai-savings-form-column-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 28px;
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 12px 32px rgba(3, 105, 161, 0.08);
+  }
+
+  .ai-savings-form-{{ ai_gen_id }} {
+    margin: 0;
+  }
+
+  .ai-savings-form-group-{{ ai_gen_id }} {
+    margin: 0 0 18px;
+  }
+
+  .ai-savings-field-error-{{ ai_gen_id }} {
+    display: none;
+    margin: 6px 0 0;
+    color: #b42318;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .ai-savings-field-error-{{ ai_gen_id }}[data-visible='true'] {
+    display: block;
+  }
+
+  .ai-savings-form-label-{{ ai_gen_id }} {
+    display: block;
+    margin: 0 0 8px;
+    color: #596b82;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .ai-savings-form-input-{{ ai_gen_id }} {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    outline: none;
+    background: #ffffff;
+    color: #242424;
+    font: inherit;
+    font-size: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ai-savings-form-input-{{ ai_gen_id }}:focus {
+    border-color: #0099fc;
+    box-shadow: 0 0 0 3px rgba(0, 153, 252, 0.12);
+  }
+
+  .ai-savings-form-input-{{ ai_gen_id }}[aria-invalid='true'] {
+    border-color: #b42318;
+    background: #fff8f7;
+    box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.08);
+  }
+
+  .ai-savings-result-box-{{ ai_gen_id }} {
+    width: 100%;
+    margin: 4px 0 16px;
+    padding: 17px 18px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #0099fc 0%, #00efdd 100%);
+    color: #ffffff;
+  }
+
+  .ai-savings-result-label-{{ ai_gen_id }} {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .ai-savings-result-amount-{{ ai_gen_id }} {
+    display: block;
+    font-size: {{ block.settings.result_amount_size }}px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .ai-savings-recommendation-{{ ai_gen_id }} {
+    display: block;
+    margin-top: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .ai-savings-status-{{ ai_gen_id }} {
+    display: none;
+    margin-top: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .ai-savings-status-{{ ai_gen_id }}[data-visible='true'] {
+    display: block;
+  }
+
+  .ai-savings-cta-button-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 18px;
+    border: 1px solid #0099fc;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #0099fc;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ai-savings-cta-button-{{ ai_gen_id }}:hover {
+    border-color: #0099fc;
+    background: #e0f7ff;
+    color: #0369a1;
+    box-shadow: 0 5px 14px rgba(0, 153, 252, 0.12);
+  }
+
+  .ai-savings-cta-button-{{ ai_gen_id }}:focus-visible {
+    outline: 2px solid #0099fc;
+    outline-offset: 3px;
+  }
+
+  .ai-savings-disclaimer-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 20px auto 0;
+    color: #596b82;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .ai-savings-disclaimer-{{ ai_gen_id }} a {
+    color: #0369a1;
+    text-underline-offset: 3px;
+  }
+
+  @media screen and (max-width: 900px) {
+    .ai-savings-calculator-{{ ai_gen_id }} {
+      padding: 48px 20px;
+    }
+
+    .ai-savings-calculator-container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      max-width: 640px;
+    }
+
+    .ai-savings-text-column-{{ ai_gen_id }} {
+      max-width: none;
+    }
+
+    .ai-savings-form-column-{{ ai_gen_id }} {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+  }
+
+  @media screen and (max-width: 520px) {
+    .ai-savings-calculator-{{ ai_gen_id }} {
+      padding: 40px 16px;
+    }
+
+    .ai-savings-heading-{{ ai_gen_id }} {
+      font-size: 28px;
+    }
+
+    .ai-savings-form-column-{{ ai_gen_id }} {
+      padding: 22px 18px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-savings-form-input-{{ ai_gen_id }},
+    .ai-savings-cta-button-{{ ai_gen_id }} {
+      transition: none;
+    }
+  }
+{% endstyle %}
+
+<savings-calculator-{{ ai_gen_id }}
+  class="ai-savings-calculator-{{ ai_gen_id }}"
+  data-electricity-price="{{ block.settings.electricity_price }}"
+  data-annual-sun-hours="{{ block.settings.annual_sun_hours }}"
+  data-baseline-self-use="{{ block.settings.baseline_self_use_rate }}"
+  data-storage-self-use="{{ block.settings.storage_self_use_rate }}"
+  data-bonus-factor="{{ block.settings.bonus_factor }}"
+  data-mini-threshold="{{ block.settings.mini_threshold }}"
+  data-max-threshold="{{ block.settings.max_threshold }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-savings-calculator-container-{{ ai_gen_id }}">
+    <div class="ai-savings-text-column-{{ ai_gen_id }}">
+      {% if block.settings.heading != blank %}
+        <h2 class="ai-savings-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+      {% endif %}
+
+      {% if block.settings.description != blank %}
+        <div class="ai-savings-description-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+      {% endif %}
+
+      <ul class="ai-savings-feature-list-{{ ai_gen_id }}">
+        {% for feature_index in (1..3) %}
+          {% assign feature_key = 'feature_' | append: feature_index %}
+          {% assign feature = block.settings[feature_key] %}
+          {% if feature != blank %}
+            <li class="ai-savings-feature-item-{{ ai_gen_id }}">
+              <span class="ai-savings-icon-wrapper-{{ ai_gen_id }}" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </span>
+              <span>{{ feature }}</span>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="ai-savings-form-column-{{ ai_gen_id }}">
+      <form class="ai-savings-form-{{ ai_gen_id }}" data-calculator-form novalidate>
+        <div class="ai-savings-form-group-{{ ai_gen_id }}">
+          <label for="ai-savings-cost-{{ ai_gen_id }}" class="ai-savings-form-label-{{ ai_gen_id }}">
+            {{ block.settings.label_monthly_cost }}
+          </label>
+          <input
+            type="number"
+            id="ai-savings-cost-{{ ai_gen_id }}"
+            class="ai-savings-form-input-{{ ai_gen_id }}"
+            value="{{ block.settings.default_monthly_cost }}"
+            min="0"
+            step="1"
+            inputmode="decimal"
+            data-input="cost"
+            aria-describedby="ai-savings-cost-error-{{ ai_gen_id }}"
+          >
+          <span
+            id="ai-savings-cost-error-{{ ai_gen_id }}"
+            class="ai-savings-field-error-{{ ai_gen_id }}"
+            data-error="cost"
+            data-visible="false"
+            role="alert"
+          ></span>
+        </div>
+
+        <div class="ai-savings-form-group-{{ ai_gen_id }}">
+          <label for="ai-savings-pv-{{ ai_gen_id }}" class="ai-savings-form-label-{{ ai_gen_id }}">
+            {{ block.settings.label_pv_power }}
+          </label>
+          <input
+            type="text"
+            id="ai-savings-pv-{{ ai_gen_id }}"
+            class="ai-savings-form-input-{{ ai_gen_id }}"
+            value="{{ block.settings.default_pv_power }}"
+            inputmode="decimal"
+            data-input="pv"
+            aria-describedby="ai-savings-pv-error-{{ ai_gen_id }}"
+          >
+          <span
+            id="ai-savings-pv-error-{{ ai_gen_id }}"
+            class="ai-savings-field-error-{{ ai_gen_id }}"
+            data-error="pv"
+            data-visible="false"
+            role="alert"
+          ></span>
+        </div>
+
+        <div class="ai-savings-result-box-{{ ai_gen_id }}" aria-live="polite">
+          <span class="ai-savings-result-label-{{ ai_gen_id }}">{{ block.settings.result_label }}</span>
+          <span class="ai-savings-result-amount-{{ ai_gen_id }}" data-result>€0 / Jahr</span>
+          <span class="ai-savings-recommendation-{{ ai_gen_id }}" data-recommendation></span>
+          <span class="ai-savings-status-{{ ai_gen_id }}" data-status data-visible="false"></span>
+        </div>
+
+        {% if block.settings.button_link != blank %}
+          <a href="{{ block.settings.button_link }}" class="ai-savings-cta-button-{{ ai_gen_id }}">{{ block.settings.button_text }}</a>
+        {% else %}
+          <button type="button" class="ai-savings-cta-button-{{ ai_gen_id }}">{{ block.settings.button_text }}</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+
+  {% if block.settings.disclaimer_text != blank %}
+    <p class="ai-savings-disclaimer-{{ ai_gen_id }}">
+      {{ block.settings.disclaimer_text }}
+      {% if block.settings.disclaimer_link != blank %}
+        <a href="{{ block.settings.disclaimer_link }}">{{ block.settings.disclaimer_link_text }}</a>
+      {% endif %}
+    </p>
+  {% endif %}
+</savings-calculator-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class SavingsCalculator{{ ai_gen_id }} extends HTMLElement {
+      connectedCallback() {
+        this.costInput = this.querySelector('[data-input="cost"]');
+        this.pvInput = this.querySelector('[data-input="pv"]');
+        this.resultDisplay = this.querySelector('[data-result]');
+        this.recommendationDisplay = this.querySelector('[data-recommendation]');
+        this.costError = this.querySelector('[data-error="cost"]');
+        this.pvError = this.querySelector('[data-error="pv"]');
+        this.statusDisplay = this.querySelector('[data-status]');
+
+        this.electricityPrice = Number(this.dataset.electricityPrice) || 0.4;
+        this.annualSunHours = Number(this.dataset.annualSunHours) || 1000;
+        this.baselineSelfUse = Number(this.dataset.baselineSelfUse) || 0.3;
+        this.storageSelfUse = Number(this.dataset.storageSelfUse) || 0.8;
+        this.bonusFactor = Number(this.dataset.bonusFactor) || 1.15;
+        this.miniThreshold = Number(this.dataset.miniThreshold) || 650;
+        this.maxThreshold = Number(this.dataset.maxThreshold) || 1600;
+
+        if (!this.costInput || !this.pvInput || !this.resultDisplay || !this.recommendationDisplay || !this.costError || !this.pvError || !this.statusDisplay) return;
+
+        this.costInput.addEventListener('input', () => this.calculate());
+        this.pvInput.addEventListener('input', () => this.calculate());
+        this.calculate();
+      }
+
+      parseNumber(value) {
+        const normalized = String(value).trim().replace(/\s/g, '').replace(',', '.');
+        return normalized === '' ? Number.NaN : Number(normalized);
+      }
+
+      setFieldError(input, errorElement, message) {
+        const hasError = message !== '';
+        input.setAttribute('aria-invalid', String(hasError));
+        errorElement.textContent = message;
+        errorElement.dataset.visible = String(hasError);
+      }
+
+      setStatus(message) {
+        this.statusDisplay.textContent = message;
+        this.statusDisplay.dataset.visible = String(message !== '');
+      }
+
+      calculate() {
+        const monthlyBill = this.parseNumber(this.costInput.value);
+        const pvPower = this.parseNumber(this.pvInput.value);
+        const billInvalid = !Number.isFinite(monthlyBill) || monthlyBill <= 0;
+        const pvInvalid = !Number.isFinite(pvPower) || pvPower < 0;
+        const noPvInstalled = Number.isFinite(pvPower) && pvPower === 0;
+
+        this.setFieldError(
+          this.costInput,
+          this.costError,
+          billInvalid ? '{{ block.settings.bill_error_message | escape }}' : ''
+        );
+        this.setFieldError(
+          this.pvInput,
+          this.pvError,
+          noPvInstalled
+            ? '{{ block.settings.no_pv_message | escape }}'
+            : (pvInvalid ? '{{ block.settings.pv_error_message | escape }}' : '')
+        );
+
+        if (billInvalid || pvInvalid || noPvInstalled) {
+          this.resultDisplay.textContent = '€0 / Jahr';
+          this.recommendationDisplay.textContent = '';
+          this.setStatus(noPvInstalled
+            ? '{{ block.settings.no_pv_message | escape }}'
+            : '{{ block.settings.invalid_message | escape }}'
+          );
+          return;
+        }
+
+        const annualUse = (monthlyBill / this.electricityPrice) * 12;
+        const annualPvYield = pvPower * this.annualSunHours;
+        if (annualPvYield === 0) {
+          this.resultDisplay.textContent = '€0 / Jahr';
+          this.recommendationDisplay.textContent = '';
+          this.setStatus('{{ block.settings.no_pv_message | escape }}');
+          return;
+        }
+
+        const rateWasAdjusted = this.storageSelfUse < this.baselineSelfUse;
+        const effectiveStorageSelfUse = rateWasAdjusted
+          ? this.baselineSelfUse + 0.3
+          : this.storageSelfUse;
+        const baselineEnergy = Math.min(annualPvYield * this.baselineSelfUse, annualUse);
+        const storageEnergy = Math.min(annualPvYield * effectiveStorageSelfUse, annualUse);
+        const extraSelfUse = Math.max(0, storageEnergy - baselineEnergy);
+        const yearlySaving = Math.max(0, Math.round(extraSelfUse * this.electricityPrice * this.bonusFactor));
+
+        let model = 'VENUS E Mini';
+        if (yearlySaving >= this.miniThreshold && yearlySaving <= this.maxThreshold) {
+          model = 'VENUS E 4.0';
+        } else if (yearlySaving > this.maxThreshold) {
+          model = 'VENUS E MAX';
+        }
+
+        this.resultDisplay.textContent = '€' + new Intl.NumberFormat('de-DE', {
+          maximumFractionDigits: 0
+        }).format(yearlySaving) + ' / Jahr';
+        this.recommendationDisplay.textContent = '{{ block.settings.recommendation_prefix | escape }} ' + model;
+        this.setStatus(rateWasAdjusted ? '{{ block.settings.rate_adjustment_message | escape }}' : '');
+      }
+    }
+
+    if (!customElements.get('savings-calculator-{{ ai_gen_id }}')) {
+      customElements.define('savings-calculator-{{ ai_gen_id }}', SavingsCalculator{{ ai_gen_id }});
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Savings calculator",
+  "settings": [
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "max_width", "label": "Maximum width", "min": 900, "max": 1400, "step": 50, "unit": "px", "default": 1100 },
+    { "type": "header", "content": "Content" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Berechnen Sie Ihre Ersparnis" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 24, "max": 44, "step": 2, "unit": "px", "default": 32 },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Geben Sie Ihre monatlichen Stromkosten und die PV-Leistung ein, um Ihre jährliche Ersparnis zu schätzen.</p>" },
+    { "type": "range", "id": "text_size", "label": "Description size", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16 },
+    { "type": "text", "id": "feature_1", "label": "Feature 1", "default": "Berücksichtigt Eigenverbrauch und Solarertrag" },
+    { "type": "text", "id": "feature_2", "label": "Feature 2", "default": "Empfiehlt das passende VENUS E Modell" },
+    { "type": "text", "id": "feature_3", "label": "Feature 3" },
+    { "type": "range", "id": "feature_text_size", "label": "Feature text size", "min": 13, "max": 18, "step": 1, "unit": "px", "default": 15 },
+    { "type": "header", "content": "Form" },
+    { "type": "text", "id": "label_monthly_cost", "label": "Monthly cost label", "default": "Monatl. Stromkosten (€)" },
+    { "type": "text", "id": "default_monthly_cost", "label": "Default monthly cost", "default": "150" },
+    { "type": "text", "id": "label_pv_power", "label": "PV power label", "default": "PV-Leistung (kWp)" },
+    { "type": "text", "id": "default_pv_power", "label": "Default PV power", "default": "5,0" },
+    { "type": "text", "id": "result_label", "label": "Result label", "default": "Geschätzte Ersparnis" },
+    { "type": "range", "id": "result_amount_size", "label": "Result amount size", "min": 22, "max": 34, "step": 2, "unit": "px", "default": 28 },
+    { "type": "text", "id": "recommendation_prefix", "label": "Recommendation prefix", "default": "Empfohlen:" },
+    { "type": "text", "id": "invalid_message", "label": "Invalid input message", "default": "Bitte gültige Werte eingeben." },
+    { "type": "text", "id": "bill_error_message", "label": "Invalid bill message", "default": "Bitte geben Sie gültige monatliche Stromkosten ein." },
+    { "type": "text", "id": "pv_error_message", "label": "Invalid PV message", "default": "Bitte geben Sie eine gültige PV-Leistung ein." },
+    { "type": "text", "id": "no_pv_message", "label": "No PV message", "default": "Bitte installieren Sie zuerst eine PV-Anlage." },
+    { "type": "text", "id": "rate_adjustment_message", "label": "Rate adjustment message", "default": "Die Eigenverbrauchsrate wurde automatisch angepasst." },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Details anfordern" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "header", "content": "Calculation" },
+    { "type": "range", "id": "electricity_price", "label": "Electricity price", "min": 0.2, "max": 0.8, "step": 0.1, "unit": "€", "default": 0.4 },
+    { "type": "range", "id": "annual_sun_hours", "label": "Annual sun hours", "min": 700, "max": 1400, "step": 25, "unit": "h", "default": 1000 },
+    { "type": "range", "id": "baseline_self_use_rate", "label": "Self-use without storage", "min": 0.1, "max": 0.6, "step": 0.1, "default": 0.3 },
+    { "type": "range", "id": "storage_self_use_rate", "label": "Self-use with storage", "min": 0.5, "max": 1.0, "step": 0.1, "default": 0.8 },
+    { "type": "text", "id": "bonus_factor", "label": "Bonus factor", "default": "1.15" },
+    { "type": "range", "id": "mini_threshold", "label": "Mini threshold", "min": 300, "max": 1000, "step": 25, "unit": "€", "default": 650 },
+    { "type": "range", "id": "max_threshold", "label": "MAX threshold", "min": 1000, "max": 2500, "step": 50, "unit": "€", "default": 1600 },
+    { "type": "header", "content": "Disclaimer" },
+    { "type": "textarea", "id": "disclaimer_text", "label": "Disclaimer", "default": "Die Berechnung ist eine unverbindliche Schätzung. Tatsächliche Einsparungen hängen unter anderem von Stromtarif, Solarertrag und Verbrauchsprofil ab." },
+    { "type": "text", "id": "disclaimer_link_text", "label": "Disclaimer link text", "default": "Berechnungsgrundlage ansehen" },
+    { "type": "url", "id": "disclaimer_link", "label": "Disclaimer link" }
+  ],
+  "presets": [
+    { "name": "Savings calculator" }
+  ]
+}
+{% endschema %}

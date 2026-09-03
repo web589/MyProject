@@ -1,0 +1,1201 @@
+{% doc %}
+  @prompt
+    {% comment %}
+    PDP顶部悬浮购买导航栏（Sticky Buy Bar）
+    固定悬浮在Header下方，页面滚动时保持置顶
+    左侧：产品标题+次级标题 + 小图
+    中间：锚点导航文本（居中，可增删）
+    右侧：价格+划线原价 + 渐变加购按钮 + 白底立即购买按钮
+    字体规范：Manrope Bold(700)标题 / Inter 正文/按钮
+    {% endcomment %}
+    {% liquid
+    /* ===================== 全部可配置参数区 ===================== */
+    assign bar_bg_color = "#ffffff"
+    assign bar_border_color = "#e5e7eb"
+    assign bar_padding_y = "12px"
+    assign bar_padding_x = "24px"
+    assign bar_max_width = "1440px"
+    assign bar_z_index = "99"
+    
+    /* 左侧产品信息 */
+    assign product_title_text = "MARSTEK Venus E Mini"
+    assign sub_title_1 = "1× VENUS E Mini"
+    assign sub_title_2 = "PF‑Zähler CT003"
+    assign title_font_size = "16px"
+    assign title_font_weight = "700"
+    assign subtitle_font_size = "12px"
+    assign subtitle_color = "#666666"
+    assign mini_img_size = "44px"
+    assign mini_img_radius = "6px"
+    assign left_info_gap = "12px"
+    
+    /* 中间导航文本 */
+    assign nav_font_size = "14px"
+    assign nav_font_weight = "500"
+    assign nav_color_normal = "#444444"
+    assign nav_color_active = "#1958d9"
+    assign nav_item_gap = "28px"
+    
+    /* 价格 */
+    assign price_text = "599,00 €"
+    assign price_font_size = "20px"
+    assign price_font_weight = "700"
+    assign price_color = "#111111"
+    assign orig_price_text = "699,00 €"
+    assign orig_price_font_size = "14px"
+    assign orig_price_color = "#999999"
+    assign price_gap = "8px"
+    
+    /* 按钮通用 */
+    assign btn_height = "40px"
+    assign btn_radius = "8px"
+    assign btn_font_size = "14px"
+    assign btn_font_weight = "600"
+    assign btn_padding_x = "20px"
+    assign btn_gap = "10px"
+    
+    /* 加购按钮（渐变） */
+    assign addcart_grad_left = "#00c853"
+    assign addcart_grad_right = "#00e5ff"
+    assign addcart_text_color = "#ffffff"
+    
+    /* 立即购买按钮（白底蓝边） */
+    assign buynow_border_color = "#1958d9"
+    assign buynow_text_color = "#1958d9"
+    assign buynow_hover_grad_left = "#00c853"
+    assign buynow_hover_grad_right = "#00e5ff"
+    %}
+    
+    <style>
+    :root {
+      --font-heading: 'Manrope', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --primary: #1958d9;
+    }
+    .sticky-buy-bar {
+      position: sticky;
+      top: 0;
+      z-index: {{bar_z_index}};
+      background: {{bar_bg_color}};
+      border-bottom: 1px solid {{bar_border_color}};
+      width: 100%;
+    }
+    .sticky-buy-bar-inner {
+      max-width: {{bar_max_width}};
+      margin: 0 auto;
+      padding: {{bar_padding_y}} {{bar_padding_x}};
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    /* ========== 左侧：产品信息 ========== */
+    .bar-left {
+      display: flex;
+      align-items: center;
+      gap: {{left_info_gap}};
+      flex-shrink: 0;
+    }
+    .bar-left-texts {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .bar-product-title {
+      font-family: var(--font-heading);
+      font-size: {{title_font_size}};
+      font-weight: {{title_font_weight}};
+      color: #111;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .bar-subtitles {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bar-subtitle {
+      font-family: var(--font-body);
+      font-size: {{subtitle_font_size}};
+      color: {{subtitle_color}};
+      margin: 0;
+    }
+    .bar-subtitle-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: {{subtitle_color}};
+      flex-shrink: 0;
+    }
+    .bar-mini-img {
+      width: {{mini_img_size}};
+      height: {{mini_img_size}};
+      border-radius: {{mini_img_radius}};
+      overflow: hidden;
+      border: 1px solid #eee;
+      flex-shrink: 0;
+      background: #fafafa;
+    }
+    .bar-mini-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    /* ========== 中间：锚点导航（居中） ========== */
+    .bar-nav {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      gap: {{nav_item_gap}};
+      min-width: 0;
+    }
+    .bar-nav-item {
+      font-family: var(--font-body);
+      font-size: {{nav_font_size}};
+      font-weight: {{nav_font_weight}};
+      color: {{nav_color_normal}};
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+    .bar-nav-item:hover,
+    .bar-nav-item.active {
+      color: {{nav_color_active}};
+    }
+    
+    /* ========== 右侧：价格+按钮 ========== */
+    .bar-right {
+      display: flex;
+      align-items: center;
+      gap: {{price_gap}};
+      flex-shrink: 0;
+    }
+    .bar-price {
+      font-family: var(--font-heading);
+      font-size: {{price_font_size}};
+      font-weight: {{price_font_weight}};
+      color: {{price_color}};
+      margin: 0;
+    }
+    .bar-orig-price {
+      font-family: var(--font-body);
+      font-size: {{orig_price_font_size}};
+      color: {{orig_price_color}};
+      text-decoration: line-through;
+      margin: 0;
+    }
+    .bar-buttons {
+      display: flex;
+      gap: {{btn_gap}};
+      margin-left: 8px;
+    }
+    .btn-add-cart-bar {
+      height: {{btn_height}};
+      padding: 0 {{btn_padding_x}};
+      border: none;
+      border-radius: {{btn_radius}};
+      background: linear-gradient(90deg, {{addcart_grad_left}}, {{addcart_grad_right}});
+      color: {{addcart_text_color}};
+      font-family: var(--font-body);
+      font-size: {{btn_font_size}};
+      font-weight: {{btn_font_weight}};
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.3s ease;
+    }
+    .btn-add-cart-bar:hover {
+      background: linear-gradient(90deg, {{addcart_grad_right}}, {{addcart_grad_left}});
+    }
+    .btn-buy-now-bar {
+      height: {{btn_height}};
+      padding: 0 {{btn_padding_x}};
+      border: 2px solid {{buynow_border_color}};
+      border-radius: {{btn_radius}};
+      background: #fff;
+      color: {{buynow_text_color}};
+      font-family: var(--font-body);
+    , 其他不用变，将Maximum width的滑块步长调节为10，将左边的放图片的卡片放到标题和次级小标题的右边，还有最右边的立即购买按钮当鼠标悬浮上去后，边框会消失，只有背景色填充，, 其他地方不用变，增加一个可以调节左边标题和下面小标题与右边图片卡片之间间距的设置，还有在两个Subtitle 之间的间隔小点用居中的小圆点符号，还有右侧的左边那个加入购物车按钮，当鼠标悬停时，他的背景渐变的左右两个颜色会平滑的滑动互相调换方向, 其他不用变，去除左边两个次级标题之间的圆点，右边的加入购物车按钮的左右渐变色在按钮中55对半渐变，还有增加一个可以调节按钮左边的价格数字的设置，再增加一个可以调节原始价格数字的设置，, 其他不用变，原始价格要显示在当前价格的右边，加入购物车按钮的左边，字体大小比当前价格小，然后字体颜色为灰色，中间有一条横划线，还有在左边的两个次级标题中间加一个对于次级标题这一行上下居中，对于两个次级标题之间间距左右居中的小圆点，圆点大小可以调节, 其他不用变，右边的立即购买按钮点击后可以跳转一个页面，左边的加入购物车按钮，点击后可以链接到购物车，还有原始价格要显示在这个模块上，显示在Custom price和加入购物车按钮之间, 其他地方不用变，增加一个可以调节整个导航栏距离容器左右边距的设置，然后右边的加入购物车按钮常态时是左右两个颜色渐变的背景色，当鼠标悬浮在上面时，左右两个颜色对调方向，变成反向渐变背景色, 其他不用变，加一个可以整体调节整个导航栏内容左右位置的设置, 其他不用变，其他所有东西都不变，只让整个导航栏结构整体居中，
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .sticky-buy-bar-{{ ai_gen_id }} {
+    position: relative;
+    background: {{ block.settings.bar_bg_color }};
+    border-bottom: 1px solid {{ block.settings.bar_border_color }};
+    width: 100%;
+    display: block;
+  }
+
+  .shopify-section:has(.sticky-buy-bar-{{ ai_gen_id }}) {
+    position: sticky;
+    top: var(--site-header-group-height, 0px);
+    z-index: {{ block.settings.bar_z_index }};
+  }
+
+  .sticky-buy-bar-inner-{{ ai_gen_id }} {
+    max-width: {{ block.settings.bar_max_width }}px;
+    margin: 0 auto;
+    padding: {{ block.settings.bar_padding_y }}px {{ block.settings.bar_padding_x }}px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .bar-left-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.left_info_gap }}px;
+    flex-shrink: 0;
+  }
+
+  .bar-left-texts-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .bar-product-title-{{ ai_gen_id }} {
+    font-family: 'Manrope', {{ block.settings.title_font.family }}, sans-serif;
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: {{ block.settings.title_font_weight }};
+    color: {{ block.settings.title_color }};
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .bar-subtitles-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.subtitle_gap }}px;
+  }
+
+  .bar-subtitle-{{ ai_gen_id }} {
+    font-family: 'Inter', {{ block.settings.subtitle_font.family }}, sans-serif;
+    font-size: {{ block.settings.subtitle_font_size }}px;
+    color: {{ block.settings.subtitle_color }};
+    margin: 0;
+  }
+
+  .bar-subtitle-dot-{{ ai_gen_id }} {
+    width: {{ block.settings.subtitle_dot_size }}px;
+    height: {{ block.settings.subtitle_dot_size }}px;
+    border-radius: 50%;
+    background: {{ block.settings.subtitle_color }};
+    flex-shrink: 0;
+  }
+
+  .bar-mini-img-{{ ai_gen_id }} {
+    width: {{ block.settings.mini_img_size }}px;
+    height: {{ block.settings.mini_img_size }}px;
+    border-radius: {{ block.settings.mini_img_radius }}px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    flex-shrink: 0;
+    background: #fafafa;
+  }
+
+  .bar-mini-img-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .bar-nav-{{ ai_gen_id }} {
+    flex: 0 0 100%;
+    order: 3;
+    display: flex;
+    justify-content: flex-start;
+    gap: {{ block.settings.nav_item_gap }}px;
+    min-width: 0;
+    margin-top: 1px;
+  }
+
+  .bar-nav-item-{{ ai_gen_id }} {
+    font-family: 'Inter', {{ block.settings.nav_font.family }}, sans-serif;
+    font-size: {{ block.settings.nav_font_size }}px;
+    font-weight: {{ block.settings.nav_font_weight }};
+    color: {{ block.settings.nav_color_normal }};
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+
+  .bar-nav-item-{{ ai_gen_id }}:hover,
+  .bar-nav-item-{{ ai_gen_id }}.active {
+    color: {{ block.settings.nav_color_active }};
+  }
+
+  .bar-right-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.price_gap }}px;
+    flex-shrink: 0;
+  }
+
+  .bar-price-stack-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  .bar-price-row-{{ ai_gen_id }} {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: {{ block.settings.price_gap }}px;
+  }
+
+  .bar-financing-{{ ai_gen_id }} {
+    margin: 0;
+    color: {{ block.settings.financing_text_color }};
+    font-family: 'Inter', var(--font-body, sans-serif);
+    font-size: {{ block.settings.financing_text_size }}px;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  .bar-financing-{{ ai_gen_id }} a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .bar-price-{{ ai_gen_id }} {
+    font-family: 'Manrope', {{ block.settings.price_font.family }}, sans-serif;
+    font-size: {{ block.settings.price_font_size }}px;
+    font-weight: {{ block.settings.price_font_weight }};
+    color: {{ block.settings.price_color }};
+    margin: 0;
+  }
+
+  .bar-orig-price-{{ ai_gen_id }} {
+    font-family: 'Inter', {{ block.settings.orig_price_font.family }}, sans-serif;
+    font-size: {{ block.settings.orig_price_font_size }}px;
+    color: {{ block.settings.orig_price_color }};
+    text-decoration: line-through;
+    margin: 0;
+  }
+
+  .bar-buttons-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.btn_gap }}px;
+  }
+
+  @media screen and (min-width: 1101px) {
+    .sticky-buy-bar-inner-{{ ai_gen_id }} {
+      flex-wrap: nowrap;
+      gap: 16px;
+    }
+
+    .bar-nav-{{ ai_gen_id }} {
+      flex: 1 1 auto;
+      justify-content: safe center;
+      margin-top: 0;
+      order: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+    }
+
+    .bar-nav-{{ ai_gen_id }}::-webkit-scrollbar {
+      display: none;
+    }
+
+    .bar-nav-item-{{ ai_gen_id }} {
+      flex: 0 0 auto;
+    }
+  }
+
+  .btn-add-cart-bar-{{ ai_gen_id }} {
+    height: {{ block.settings.btn_height }}px;
+    padding: 0 {{ block.settings.btn_padding_x }}px;
+    border: 2px solid transparent;
+    border-radius: {{ block.settings.btn_radius }}px;
+    background:
+      linear-gradient(#fff, #fff) padding-box,
+      linear-gradient({{ block.settings.buynow_border_color }}, {{ block.settings.buynow_border_color }}) border-box;
+    color: {{ block.settings.buynow_text_color }};
+    font-family: 'Inter', {{ block.settings.btn_font.family }}, sans-serif;
+    font-size: {{ block.settings.btn_font_size }}px;
+    font-weight: {{ block.settings.btn_font_weight }};
+    cursor: pointer;
+    box-sizing: border-box;
+    white-space: nowrap;
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-add-cart-bar-{{ ai_gen_id }}:focus,
+  .btn-add-cart-bar-{{ ai_gen_id }}:focus-visible {
+    outline: none;
+  }
+
+  .btn-buy-now-bar-{{ ai_gen_id }} {
+    height: {{ block.settings.btn_height }}px;
+    padding: 0 {{ block.settings.btn_padding_x }}px;
+    border: none;
+    border-radius: {{ block.settings.btn_radius }}px;
+    background: linear-gradient(90deg, {{ block.settings.addcart_grad_left }}, {{ block.settings.addcart_grad_right }});
+    color: {{ block.settings.addcart_text_color }};
+    font-family: 'Inter', {{ block.settings.btn_font.family }}, sans-serif;
+    font-size: {{ block.settings.btn_font_size }}px;
+    font-weight: {{ block.settings.btn_font_weight }};
+    cursor: pointer;
+    box-sizing: border-box;
+    white-space: nowrap;
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-add-cart-bar-{{ ai_gen_id }}:hover:not(:disabled),
+  .btn-buy-now-bar-{{ ai_gen_id }}:hover:not(:disabled) {
+    animation: pdp-button-bounce-{{ ai_gen_id }} 0.55s ease-in-out;
+  }
+
+  .btn-add-cart-bar-{{ ai_gen_id }}:hover:not(:disabled) {
+    color: {{ block.settings.addcart_text_color }};
+    background:
+      linear-gradient(90deg, {{ block.settings.addcart_grad_left }}, {{ block.settings.addcart_grad_right }}) padding-box,
+      linear-gradient(90deg, {{ block.settings.addcart_grad_left }}, {{ block.settings.addcart_grad_right }}) border-box;
+  }
+
+  .btn-buy-now-bar-{{ ai_gen_id }}:hover:not(:disabled) {
+    background: linear-gradient(90deg, {{ block.settings.addcart_grad_right }}, {{ block.settings.addcart_grad_left }});
+  }
+
+  .btn-add-cart-bar-{{ ai_gen_id }}:disabled,
+  .btn-buy-now-bar-{{ ai_gen_id }}:disabled {
+    cursor: wait;
+  }
+
+  @keyframes pdp-button-bounce-{{ ai_gen_id }} {
+    0%, 100% { transform: translateY(0); }
+    35% { transform: translateY(-5px); }
+    65% { transform: translateY(2px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-add-cart-bar-{{ ai_gen_id }}:hover:not(:disabled),
+    .btn-buy-now-bar-{{ ai_gen_id }}:hover:not(:disabled) {
+      animation: none;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .sticky-buy-bar-inner-{{ ai_gen_id }} {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .bar-left-{{ ai_gen_id }},
+    .bar-right-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .bar-right-{{ ai_gen_id }} {
+      flex-wrap: wrap;
+      gap: 6px {{ block.settings.price_gap }}px;
+    }
+
+    .bar-price-stack-{{ ai_gen_id }} {
+      align-items: flex-start;
+    }
+
+    .bar-buttons-{{ ai_gen_id }} {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: 100%;
+    }
+
+    .btn-add-cart-bar-{{ ai_gen_id }},
+    .btn-buy-now-bar-{{ ai_gen_id }} {
+      min-width: 0;
+      padding-right: 8px;
+      padding-left: 8px;
+    }
+
+    .bar-nav-{{ ai_gen_id }} {
+      order: 3;
+      width: 100%;
+      justify-content: flex-start;
+      overflow-x: auto;
+    }
+  }
+{% endstyle %}
+
+{% liquid
+  assign sticky_product = product
+  assign sticky_variant = sticky_product.selected_or_first_available_variant
+  assign sticky_title = sticky_product.title | default: block.settings.product_title
+  assign sticky_title = sticky_title | strip
+  assign sticky_image = sticky_variant.featured_image | default: sticky_product.featured_image | default: block.settings.mini_img
+  assign sticky_price = sticky_variant.price
+  assign sticky_compare_price = sticky_variant.compare_at_price
+%}
+
+<sticky-buy-bar-{{ ai_gen_id }} class="sticky-buy-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="sticky-buy-bar-inner-{{ ai_gen_id }}">
+    <div class="bar-left-{{ ai_gen_id }}">
+      {% if sticky_image %}
+        <div class="bar-mini-img-{{ ai_gen_id }}" data-sticky-img>
+          <img
+            src="{{ sticky_image | image_url: width: 200 }}"
+            alt="{{ sticky_image.alt | default: sticky_title | escape }}"
+            loading="eager"
+            width="200"
+            height="200"
+            data-sticky-img-el
+          >
+        </div>
+      {% endif %}
+      <div class="bar-left-texts-{{ ai_gen_id }}">
+        <h2 class="bar-product-title-{{ ai_gen_id }}" data-sticky-title>{{ sticky_title }}</h2>
+        <div class="bar-subtitles-{{ ai_gen_id }}">
+          <p class="bar-subtitle-{{ ai_gen_id }}" data-sticky-sub1></p>
+          <span class="bar-subtitle-dot-{{ ai_gen_id }}" data-sticky-subtitle-dot hidden></span>
+          <p class="bar-subtitle-{{ ai_gen_id }}" data-sticky-sub2 hidden></p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="bar-nav-{{ ai_gen_id }}" aria-label="Produktbereiche">
+      {% for i in (1..8) %}
+        {% assign nav_text_key = 'nav_item_' | append: i %}
+        {% assign nav_link_key = 'nav_link_' | append: i %}
+        {% assign nav_text = block.settings[nav_text_key] %}
+        {% assign nav_link = block.settings[nav_link_key] %}
+        {% if nav_text != blank and nav_link != blank %}
+          <a href="{{ nav_link }}" class="bar-nav-item-{{ ai_gen_id }}">{{ nav_text }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+
+    <div class="bar-right-{{ ai_gen_id }}">
+      <div class="bar-price-stack-{{ ai_gen_id }}">
+        <div class="bar-price-row-{{ ai_gen_id }}">
+          <p class="bar-price-{{ ai_gen_id }}" data-sticky-price>{% if sticky_variant %}{{ sticky_price | money }}{% else %}{{ block.settings.price_text }}{% endif %}</p>
+          <p class="bar-orig-price-{{ ai_gen_id }}" data-sticky-orig-price{% unless sticky_compare_price > sticky_price %} hidden{% endunless %}>{% if sticky_compare_price > sticky_price %}{{ sticky_compare_price | money }}{% else %}{{ block.settings.orig_price_text }}{% endif %}</p>
+        </div>
+        {% if block.settings.financing_text != blank %}
+          <p class="bar-financing-{{ ai_gen_id }}">
+            {{ block.settings.financing_text }}
+            {% if block.settings.financing_link_text != blank %}
+              <span aria-hidden="true"> · </span>
+              {% if block.settings.financing_link != blank %}
+                <a href="{{ block.settings.financing_link }}">{{ block.settings.financing_link_text }}</a>
+              {% else %}
+                <span>{{ block.settings.financing_link_text }}</span>
+              {% endif %}
+            {% endif %}
+          </p>
+        {% endif %}
+      </div>
+      <div class="bar-buttons-{{ ai_gen_id }}">
+        <button type="button" class="btn-add-cart-bar-{{ ai_gen_id }}" data-bundle-add-cart data-bundle-action="add-cart" data-loading-text="{{ block.settings.loading_text | escape }}">
+          <span data-bundle-button-label>{{ block.settings.addcart_btn_text }}</span>
+        </button>
+        <button type="button" class="btn-buy-now-bar-{{ ai_gen_id }}" data-bundle-buy-now data-bundle-action="buy-now" data-loading-text="{{ block.settings.loading_text | escape }}">
+          <span data-bundle-button-label>{{ block.settings.buynow_btn_text }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</sticky-buy-bar-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class StickyBuyBar{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.navItems = this.querySelectorAll('.bar-nav-item-{{ ai_gen_id }}');
+        this.setupNavigation();
+      }
+
+      setupNavigation() {
+        this.navItems.forEach(item => {
+          item.addEventListener('click', (e) => {
+            const href = item.getAttribute('href');
+            if (href && href.startsWith('#')) {
+              e.preventDefault();
+              const targetId = href.substring(1);
+              const targetElement = document.getElementById(targetId);
+              if (targetElement) {
+                // Use the bar's actual viewport position so the offset also
+                // includes the full header group (announcement bar included).
+                const barBottom = this.getBoundingClientRect().bottom;
+                const targetTop = targetElement.getBoundingClientRect().top + window.scrollY - barBottom - 8;
+                window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+                window.history.replaceState(null, '', href);
+                this.navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+              }
+            }
+          });
+        });
+      }
+    }
+
+    customElements.define('sticky-buy-bar-{{ ai_gen_id }}', StickyBuyBar{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sticky buy bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Bar settings"
+    },
+    {
+      "type": "color",
+      "id": "bar_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "bar_border_color",
+      "label": "Border color",
+      "default": "#e5e7eb"
+    },
+    {
+      "type": "range",
+      "id": "bar_padding_y",
+      "label": "Vertical padding",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "bar_padding_x",
+      "label": "Horizontal padding",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "bar_max_width",
+      "label": "Maximum width",
+      "min": 1000,
+      "max": 2000,
+      "step": 10,
+      "unit": "px",
+      "default": 1440
+    },
+    {
+      "type": "range",
+      "id": "bar_z_index",
+      "label": "Z-index",
+      "min": 1,
+      "max": 19,
+      "step": 9,
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Product info"
+    },
+    {
+      "type": "paragraph",
+      "content": "Product title, image, selected option information, price and original price are loaded from the purchase module and Shopify products."
+    },
+    {
+      "type": "font_picker",
+      "id": "title_font",
+      "label": "Title font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "title_font_weight",
+      "label": "Title font weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#111111"
+    },
+    {
+      "type": "font_picker",
+      "id": "subtitle_font",
+      "label": "Subtitle font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_size",
+      "label": "Subtitle font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_gap",
+      "label": "Subtitle gap",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "subtitle_dot_size",
+      "label": "Dot size",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "mini_img_size",
+      "label": "Image size",
+      "min": 30,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "mini_img_radius",
+      "label": "Image border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "left_info_gap",
+      "label": "Text to image gap",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "text",
+      "id": "nav_item_1",
+      "label": "Nav item 1"
+    },
+    {
+      "type": "url",
+      "id": "nav_link_1",
+      "label": "Nav link 1"
+    },
+    {
+      "type": "text",
+      "id": "nav_item_2",
+      "label": "Nav item 2"
+    },
+    {
+      "type": "url",
+      "id": "nav_link_2",
+      "label": "Nav link 2"
+    },
+    {
+      "type": "text",
+      "id": "nav_item_3",
+      "label": "Nav item 3"
+    },
+    {
+      "type": "url",
+      "id": "nav_link_3",
+      "label": "Nav link 3"
+    },
+    {
+      "type": "text",
+      "id": "nav_item_4",
+      "label": "Nav item 4"
+    },
+    {
+      "type": "url",
+      "id": "nav_link_4",
+      "label": "Nav link 4"
+    },
+    {
+      "type": "text",
+      "id": "nav_item_5",
+      "label": "Nav item 5"
+    },
+    {
+      "type": "url",
+      "id": "nav_link_5",
+      "label": "Nav link 5"
+    },
+    {
+      "type": "text",
+      "id": "nav_item_6",
+      "label": "Nav item 6"
+    },
+    {
+      "type": "url",
+      "id": "nav_link_6",
+      "label": "Nav link 6"
+    },
+    {
+      "type": "text",
+      "id": "nav_item_7",
+      "label": "Nav item 7"
+    },
+    {
+      "type": "url",
+      "id": "nav_link_7",
+      "label": "Nav link 7"
+    },
+    {
+      "type": "text",
+      "id": "nav_item_8",
+      "label": "Nav item 8"
+    },
+    {
+      "type": "url",
+      "id": "nav_link_8",
+      "label": "Nav link 8"
+    },
+    {
+      "type": "font_picker",
+      "id": "nav_font",
+      "label": "Nav font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "nav_font_size",
+      "label": "Nav font size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "nav_font_weight",
+      "label": "Nav font weight",
+      "min": 400,
+      "max": 700,
+      "step": 100,
+      "default": 500
+    },
+    {
+      "type": "color",
+      "id": "nav_color_normal",
+      "label": "Nav color",
+      "default": "#444444"
+    },
+    {
+      "type": "color",
+      "id": "nav_color_active",
+      "label": "Nav active color",
+      "default": "#1958d9"
+    },
+    {
+      "type": "range",
+      "id": "nav_item_gap",
+      "label": "Nav item gap",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "header",
+      "content": "Price"
+    },
+    {
+      "type": "font_picker",
+      "id": "price_font",
+      "label": "Price font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "label": "Price font size",
+      "min": 14,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "price_font_weight",
+      "label": "Price font weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price color",
+      "default": "#111111"
+    },
+    {
+      "type": "text",
+      "id": "financing_text",
+      "label": "Financing text",
+      "default": "4,08% eff. Zins für 6–60 Monate"
+    },
+    {
+      "type": "text",
+      "id": "financing_link_text",
+      "label": "Financing link text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "financing_link",
+      "label": "Financing link"
+    },
+    {
+      "type": "range",
+      "id": "financing_text_size",
+      "label": "Financing text size",
+      "min": 9,
+      "max": 15,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "color",
+      "id": "financing_text_color",
+      "label": "Financing text color",
+      "default": "#5f6670"
+    },
+    {
+      "type": "font_picker",
+      "id": "orig_price_font",
+      "label": "Original price font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "orig_price_font_size",
+      "label": "Original price font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "orig_price_color",
+      "label": "Original price color",
+      "default": "#999999"
+    },
+    {
+      "type": "range",
+      "id": "price_gap",
+      "label": "Price gap",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "addcart_btn_text",
+      "label": "Add to cart text",
+      "default": "In den Warenkorb"
+    },
+    {
+      "type": "text",
+      "id": "buynow_btn_text",
+      "label": "Buy now text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "text",
+      "id": "loading_text",
+      "label": "Loading text",
+      "default": "Wird geladen …",
+      "info": "Shown inside both purchase buttons while the cart is being updated."
+    },
+    {
+      "type": "url",
+      "id": "buynow_link",
+      "label": "Buy now link"
+    },
+    {
+      "type": "font_picker",
+      "id": "btn_font",
+      "label": "Button font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "btn_height",
+      "label": "Button height",
+      "min": 30,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "btn_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "btn_font_size",
+      "label": "Button font size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "btn_font_weight",
+      "label": "Button font weight",
+      "min": 400,
+      "max": 700,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_x",
+      "label": "Button padding",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "btn_gap",
+      "label": "Button gap",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "color",
+      "id": "addcart_grad_left",
+      "label": "Add to cart gradient left",
+      "default": "#00c853"
+    },
+    {
+      "type": "color",
+      "id": "addcart_grad_right",
+      "label": "Add to cart gradient right",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "color",
+      "id": "addcart_text_color",
+      "label": "Add to cart text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "buynow_border_color",
+      "label": "Buy now border color",
+      "default": "#1958d9"
+    },
+    {
+      "type": "color",
+      "id": "buynow_text_color",
+      "label": "Buy now text color",
+      "default": "#1958d9"
+    },
+    {
+      "type": "color",
+      "id": "buynow_hover_grad_left",
+      "label": "Buy now hover gradient left",
+      "default": "#00c853"
+    },
+    {
+      "type": "color",
+      "id": "buynow_hover_grad_right",
+      "label": "Buy now hover gradient right",
+      "default": "#00e5ff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sticky buy bar"
+    }
+  ]
+}
+{% endschema %}

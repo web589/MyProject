@@ -1,0 +1,89 @@
+<div
+  class="ai-tab-content-{{ carousel_id }}{% if is_active %} active{% endif %}"
+  data-tab-content="{{ tab_id }}"
+>
+  <div class="ai-carousel-wrapper-{{ carousel_id }}" data-carousel-wrapper>
+    <button class="ai-carousel-nav-{{ carousel_id }} prev" data-carousel-prev data-direction="prev" aria-label="{{ carousel_settings.previous_button_label | escape }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <div class="ai-carousel-track-{{ carousel_id }}" data-carousel-track>
+      {% if category_link != blank %}
+        {% for product_link in category_link.links %}
+          {% assign menu_product = product_link.object %}
+          {% assign menu_product_vendor = menu_product.vendor | downcase | strip %}
+          {% if menu_product != blank and product_link.type == 'product_link' and menu_product_vendor == 'marstek' %}
+            {% render 'venus-product-carousel-card',
+              carousel_product: menu_product,
+              title_override: product_link.title,
+              carousel_settings: carousel_settings,
+              carousel_id: carousel_id
+            %}
+          {% endif %}
+        {% endfor %}
+        {% assign cta_link = category_link.url %}
+      {% else %}
+        {% for product_index in (1..6) %}
+          {% liquid
+            assign product_key = 'tab_' | append: tab_id | append: '_product_' | append: product_index
+            assign image_key = 'tab_' | append: tab_id | append: '_image_' | append: product_index
+            assign content_key = 'tab_' | append: tab_id | append: '_content_' | append: product_index
+            assign card_product = carousel_settings[product_key]
+            assign card_product_vendor = card_product.vendor | downcase | strip
+            assign custom_image = carousel_settings[image_key]
+            assign content_value = carousel_settings[content_key]
+            assign content_lines = content_value | newline_to_br | split: '<br />'
+            assign title_override = content_lines[0] | strip
+            assign subtitle_override = content_lines[1] | strip
+            assign specs_override = content_lines[2] | strip
+            assign price_override = content_lines[3] | strip
+            assign compare_override = content_lines[4] | strip
+            assign badge_override = content_lines[5] | strip
+          %}
+          {% if card_product != blank and card_product_vendor == 'marstek' %}
+            {% render 'venus-product-carousel-card',
+              carousel_product: card_product,
+              custom_image: custom_image,
+              title_override: title_override,
+              subtitle_override: subtitle_override,
+              specs_override: specs_override,
+              price_override: price_override,
+              compare_override: compare_override,
+              badge_override: badge_override,
+              carousel_settings: carousel_settings,
+              carousel_id: carousel_id
+            %}
+          {% endif %}
+        {% endfor %}
+        {% assign cta_link_key = 'tab_' | append: tab_id | append: '_cta_link' %}
+        {% assign cta_link = carousel_settings[cta_link_key] %}
+      {% endif %}
+
+      {% if carousel_settings.show_cta_card %}
+        {% if cta_link != blank %}
+          <a href="{{ cta_link }}" class="ai-product-card-{{ carousel_id }} ai-cta-card-{{ carousel_id }}">
+            <div class="ai-cta-content-{{ carousel_id }}">
+              <h3>{{ carousel_settings.cta_title }}</h3>
+              <p>{{ carousel_settings.cta_text }}</p>
+            </div>
+          </a>
+        {% else %}
+          <div class="ai-product-card-{{ carousel_id }} ai-cta-card-{{ carousel_id }}">
+            <div class="ai-cta-content-{{ carousel_id }}">
+              <h3>{{ carousel_settings.cta_title }}</h3>
+              <p>{{ carousel_settings.cta_text }}</p>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <button class="ai-carousel-nav-{{ carousel_id }} next" data-carousel-next data-direction="next" aria-label="{{ carousel_settings.next_button_label | escape }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+{%- comment -%}
+  Render the first populated metafield from a whitelist alias list. The object
+  may be either a product or a variant.
+
+  Boolean fields are intentionally opt-in by their Shopify metafield type:
+  true renders as "Ja" and false/blank renders nothing.
+{%- endcomment -%}
+{%- liquid
+  assign preferred_namespace = spec_namespace | default: settings.technical_specs_namespace | default: 'custom' | strip
+  assign namespaces = preferred_namespace | append: ',specs,custom,features,specifications,technical_specifications,technical' | split: ','
+  assign keys = spec_keys | split: ','
+  assign spec_resolved = false
+-%}
+{%- if spec_product != blank -%}
+  {%- for namespace in namespaces -%}
+    {%- assign clean_namespace = namespace | strip -%}
+    {%- unless clean_namespace == blank or spec_resolved -%}
+      {%- for key in keys -%}
+        {%- assign clean_key = key | strip -%}
+        {%- if clean_key != blank -%}
+          {%- assign spec_metafield = spec_product.metafields[clean_namespace][clean_key] -%}
+          {%- if spec_metafield.type == 'boolean' -%}
+            {%- assign spec_resolved = true -%}
+            {%- if spec_metafield.value == true -%}
+              Ja
+            {%- endif -%}
+            {%- break -%}
+          {%- elsif spec_metafield != blank -%}
+            {%- capture spec_output -%}
+              {%- if spec_metafield.type contains 'list.' -%}
+                {{- spec_metafield.value | join: ', ' -}}
+              {%- else -%}
+                {{- spec_metafield | metafield_text -}}
+              {%- endif -%}
+            {%- endcapture -%}
+            {%- assign spec_output = spec_output | strip -%}
+            {%- if spec_output == blank and spec_metafield.value != blank -%}
+              {%- capture spec_output -%}{{- spec_metafield.value -}}{%- endcapture -%}
+              {%- assign spec_output = spec_output | strip -%}
+            {%- endif -%}
+            {%- if spec_output != blank -%}
+              {%- comment -%}
+                Normalize both a literal entity saved in the metafield and the
+                escaped output returned by metafield_text, then escape once for
+                valid HTML. This makes "Plug &amp; Play" display as "Plug & Play".
+              {%- endcomment -%}
+                {{- spec_output
+                  | replace: '&amp;amp;', '&amp;'
+                  | replace: '&amp;lt;', '<'
+                  | replace: '&amp;gt;', '>'
+                  | replace: '&lt;', '<'
+                  | replace: '&gt;', '>'
+                  | replace: '&amp;', '&'
+                  | escape
+                -}}
+              {%- assign spec_resolved = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endunless -%}
+  {%- endfor -%}
+{%- endif -%}

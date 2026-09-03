@@ -1,0 +1,339 @@
+{% comment %}
+16:9 Banner Carousel
+4 Slides | Titel + Beschreibung + Button
+Alle Bilder werden auf 16:9 zugeschnitten
+{% endcomment %}
+{% stylesheet %}
+.banner-carousel-section {
+  width: 100%;
+  padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  background: {{ section.settings.bg_color }};
+}
+
+.banner-carousel-container {
+  max-width: {{ section.settings.max_width }}px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.banner-swiper {
+  position: relative;
+  overflow: hidden;
+  border-radius: {{ section.settings.radius }}px;
+}
+
+.banner-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.banner-slide {
+  flex: 0 0 100%;
+  position: relative;
+}
+
+/* 强制 16:9 容器 */
+.aspect-16-9 {
+  width: 100%;
+  padding-top: 56.25%;
+  position: relative;
+  overflow: hidden;
+}
+
+.aspect-16-9 img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.65));
+}
+
+.banner-text-wrap {
+  position: absolute;
+  bottom: 60px;
+  left: 60px;
+  right: 60px;
+  color: #fff;
+  z-index: 2;
+  max-width: 700px;
+}
+
+.banner-title {
+  font-size: clamp(26px,3vw,44px);
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.banner-desc {
+  font-size: clamp(16px,1.2vw,20px);
+  line-height: 1.6;
+  margin: 0 0 24px;
+  opacity: 0.92;
+}
+
+.banner-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: {{ section.settings.btn_color }};
+  color: {{ section.settings.btn_text_color }};
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.25s ease;
+}
+
+.banner-btn:hover {
+  opacity: 0.85;
+}
+
+.banner-dots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.banner-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #cccccc;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.banner-dot.active {
+  background: #222222;
+}
+
+.banner-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.arrow-prev {
+  left: 20px;
+}
+
+.arrow-next {
+  right: 20px;
+}
+
+@media screen and (max-width: 749px) {
+  .banner-text-wrap {
+    bottom: 30px;
+    left: 24px;
+    right: 24px;
+  }
+
+  .banner-btn {
+    padding: 12px 24px;
+  }
+
+  .banner-arrow {
+    width: 36px;
+    height: 36px;
+  }
+}
+{% endstylesheet %}
+
+<section class="banner-carousel-section">
+  <div class="banner-carousel-container">
+    <div class="banner-swiper" data-autoplay="{{ section.settings.autoplay }}">
+      <div class="banner-track">
+        {% for block in section.blocks %}
+        <div class="banner-slide">
+          <a href="{{ block.settings.link }}" class="aspect-16-9">
+            <img src="{{ block.settings.image }}" alt="{{ block.settings.alt }}">
+            <div class="banner-overlay"></div>
+            <div class="banner-text-wrap">
+              <h2 class="banner-title">{{ block.settings.title }}</h2>
+              <p class="banner-desc">{{ block.settings.desc }}</p>
+              <span class="banner-btn">{{ block.settings.button_text }}</span>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+
+      <button class="banner-arrow arrow-prev">&lt;</button>
+      <button class="banner-arrow arrow-next">&gt;</button>
+    </div>
+
+    <div class="banner-dots"></div>
+  </div>
+</section>
+
+{% javascript %}
+document.addEventListener('DOMContentLoaded', function(){
+  const swiperWrap = document.querySelector('.banner-swiper');
+  const track = swiperWrap.querySelector('.banner-track');
+  const slides = swiperWrap.querySelectorAll('.banner-slide');
+  const dotsWrap = document.querySelector('.banner-dots');
+  const prevBtn = document.querySelector('.arrow-prev');
+  const nextBtn = document.querySelector('.arrow-next');
+  const autoplay = swiperWrap.dataset.autoplay === 'true';
+
+  let index = 0;
+  let timer;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'banner-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goSlide(i));
+    dotsWrap.appendChild(dot);
+  });
+
+  const dots = document.querySelectorAll('.banner-dot');
+
+  function updateSlide(){
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+  }
+
+  function goSlide(i){
+    index = i;
+    updateSlide();
+    resetTimer();
+  }
+
+  function nextSlide(){
+    index = (index + 1) % slides.length;
+    updateSlide();
+  }
+
+  function prevSlide(){
+    index = (index - 1 + slides.length) % slides.length;
+    updateSlide();
+  }
+
+  function startTimer(){
+    if(!autoplay) return;
+    timer = setInterval(nextSlide, 5000);
+  }
+
+  function resetTimer(){
+    clearInterval(timer);
+    startTimer();
+  }
+
+  prevBtn.addEventListener('click', prevSlide);
+  nextBtn.addEventListener('click', nextSlide);
+  swiperWrap.addEventListener('mouseenter', () => clearInterval(timer));
+  swiperWrap.addEventListener('mouseleave', startTimer);
+
+  startTimer();
+});
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Banner 16:9",
+  "presets": [
+    {
+      "name": "4 Slides",
+      "blocks": [
+        {"type":"slide"},
+        {"type":"slide"},
+        {"type":"slide"},
+        {"type":"slide"}
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type":"range",
+      "id":"max_width",
+      "label":"Max Breite",
+      "min":600,
+      "max":1600,
+      "step":20,
+      "default":1400
+    },
+    {
+      "type":"range",
+      "id":"padding_top",
+      "label":"Oberer Abstand",
+      "min":0,
+      "max":160,
+      "step":8,
+      "default":64
+    },
+    {
+      "type":"range",
+      "id":"padding_bottom",
+      "label":"Unterer Abstand",
+      "min":0,
+      "max":160,
+      "step":8,
+      "default":64
+    },
+    {
+      "type":"range",
+      "id":"radius",
+      "label":"Eckenradius",
+      "min":0,
+      "max":24,
+      "step":4,
+      "default":8
+    },
+    {
+      "type":"checkbox",
+      "id":"autoplay",
+      "label":"Autoplay aktivieren",
+      "default":true
+    },
+    {
+      "type":"color",
+      "id":"bg_color",
+      "label":"Hintergrundfarbe",
+      "default":"#ffffff"
+    },
+    {
+      "type":"color",
+      "id":"btn_color",
+      "label":"Button Farbe",
+      "default":"#222222"
+    },
+    {
+      "type":"color",
+      "id":"btn_text_color",
+      "label":"Button Textfarbe",
+      "default":"#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type":"slide",
+      "name":"Slide",
+      "settings": [
+        {"type":"image_picker","id":"image","label":"Bild 16:9"},
+        {"type":"text","id":"title","label":"Titel"},
+        {"type":"textarea","id":"desc","label":"Beschreibung"},
+        {"type":"text","id":"button_text","label":"Button Text","default":"Mehr erfahren"},
+        {"type":"url","id":"link","label":"Link"},
+        {"type":"text","id":"alt","label":"Alt-Text"}
+      ]
+    }
+  ]
+}
+{% endschema %}

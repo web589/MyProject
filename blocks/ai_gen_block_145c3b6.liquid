@@ -1,0 +1,934 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Lust auf noch mehr Power?</title>
+      <style>
+        /* ===================================================
+           可调节变量 – 修改数值即可调整右侧距离
+           =================================================== */
+        :root {
+          /* 整个区块右侧内边距（增大则整体右移） */
+          --section-padding-right: 20px;
+    
+          /* 卡片宽度（百分比），控制一屏显示多少个卡片 
+             60% 表示显示 1.5 个（因为还有 gap） */
+          --card-width: 60%;
+    
+          /* 卡片之间的间距 */
+          --card-gap: 24px;
+    
+          /* 右侧额外留白（在卡片轨道尾部增加，使右侧露出部分更宽） */
+          --track-padding-right: 0px;  /* 增大此值可让右侧露出更多空白 */
+        }
+    
+        /* ===== 整体区块 ===== */
+        .power-section {
+          max-width: 1280px;
+          margin: 0 auto 60px;
+          padding: 0 20px 0 calc(20px + var(--section-padding-right)); /* 左侧20px，右侧可调 */
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+    
+        .power-section .section-title {
+          font-size: 38px;
+          font-weight: 700;
+          color: #0A1628;
+          margin-bottom: 32px;
+          letter-spacing: -0.5px;
+        }
+        .power-section .section-title span {
+          color: #0099FC;
+        }
+    
+        /* ===== 轮播容器 ===== */
+        .power-carousel {
+          position: relative;
+          overflow: hidden;
+          border-radius: 20px;
+        }
+    
+        /* ===== 卡片轨道 ===== */
+        .power-track {
+          display: flex;
+          gap: var(--card-gap);
+          transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          will-change: transform;
+          padding-right: var(--track-padding-right); /* 右侧额外空白，可调节露出距离 */
+        }
+    
+        /* ===== 单个卡片 ===== */
+        .power-card {
+          flex: 0 0 var(--card-width);
+          aspect-ratio: 16 / 9;
+          border-radius: 20px;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+          transition: transform 0.3s ease;
+          /* 默认图片（用户需替换） */
+          background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&h=450&fit=crop&crop=center');
+        }
+        .power-card:hover {
+          transform: scale(1.01);
+        }
+    
+        /* 卡片2 — 用户替换 */
+        .power-card:nth-child(2) {
+          background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=450&fit=crop&crop=center');
+        }
+        /* 卡片3 — 用户替换 */
+        .power-card:nth-child(3) {
+          background-image: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=450&fit=crop&crop=center');
+        }
+    
+        /* ===== 卡片暗色遮罩 ===== */
+        .power-card .card-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.05) 60%);
+          pointer-events: none;
+        }
+    
+        /* ===== 文字：左下角 ===== */
+        .power-card .card-text {
+          position: absolute;
+          bottom: 28px;
+          left: 28px;
+          z-index: 2;
+          max-width: 60%;
+          color: #fff;
+          text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+          pointer-events: none;
+        }
+        .power-card .card-text h3 {
+          font-size: 26px;
+          font-weight: 700;
+          margin: 0 0 6px 0;
+          letter-spacing: -0.3px;
+        }
+        .power-card .card-text p {
+          font-size: 15px;
+          margin: 0;
+          opacity: 0.92;
+          line-height: 1.5;
+          font-weight: 400;
+          max-width: 400px;
+        }
+    
+        /* ===== 按钮：右下角 ===== */
+        .power-card .card-btn {
+          position: absolute;
+          bottom: 28px;
+          right: 28px;
+          z-index: 2;
+          pointer-events: auto;
+        }
+        .power-card .card-btn a {
+          display: inline-block;
+          padding: 10px 28px;
+          background: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(4px);
+          color: #0A1628;
+          border-radius: 50px;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 15px;
+          transition: all 0.25s ease;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .power-card .card-btn a:hover {
+          background: #ffffff;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+        }
+    
+        /* ===== 导航按钮 ===== */
+        .power-nav {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          border: none;
+          background: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(6px);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+          font-size: 26px;
+          font-weight: 300;
+          color: #0A1628;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.25s ease;
+          user-select: none;
+          border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .power-nav:hover {
+          background: #ffffff;
+          box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+          transform: translateY(-50%) scale(1.04);
+        }
+        .power-nav:active {
+          transform: translateY(-50%) scale(0.94, Title添加“左对齐、居中、右对齐”选项
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-power-carousel-{{ ai_gen_id }} {
+    display: block;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto {{ block.settings.bottom_margin }}px;
+    padding: 0 {{ block.settings.padding_left }}px 0 {{ block.settings.padding_right }}px;
+    font-family: {{ block.settings.font_family.family }}, {{ block.settings.font_family.fallback_families }};
+    width: {{ block.settings.desktop_width_percent }}%;
+  }
+
+  .ai-power-carousel__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    margin-bottom: {{ block.settings.title_margin }}px;
+    letter-spacing: -0.5px;
+    text-align: {{ block.settings.title_alignment }};
+  }
+
+  .ai-power-carousel__title-{{ ai_gen_id }} span {
+    color: {{ block.settings.title_accent_color }};
+  }
+
+  .ai-power-carousel__wrapper-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    border-radius: {{ block.settings.carousel_border_radius }}px;
+  }
+
+  .ai-power-carousel__track-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.card_gap }}px;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+    padding-right: {{ block.settings.track_padding_right }}px;
+  }
+
+  .ai-power-carousel__card-{{ ai_gen_id }} {
+    flex: 0 0 {{ block.settings.card_width }}%;
+    aspect-ratio: 16 / 9;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease;
+  }
+
+  .ai-power-carousel__card-{{ ai_gen_id }}:hover {
+    transform: scale(1.01);
+  }
+
+  .ai-power-carousel__card-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, {{ block.settings.overlay_opacity }}) 0%, rgba(0, 0, 0, {{ block.settings.overlay_opacity | times: 0.15 }}) 60%);
+    pointer-events: none;
+  }
+
+  .ai-power-carousel__card-text-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 28px;
+    left: 28px;
+    z-index: 2;
+    max-width: 60%;
+    color: {{ block.settings.card_text_color }};
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+  }
+
+  .ai-power-carousel__card-text-{{ ai_gen_id }} h3 {
+    font-size: {{ block.settings.card_title_size }}px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.3px;
+  }
+
+  .ai-power-carousel__card-text-{{ ai_gen_id }} p {
+    font-size: {{ block.settings.card_description_size }}px;
+    margin: 0;
+    opacity: 0.92;
+    line-height: 1.5;
+    font-weight: 400;
+    max-width: 400px;
+  }
+
+  .ai-power-carousel__card-btn-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 28px;
+    right: 28px;
+    z-index: 2;
+    pointer-events: auto;
+  }
+
+  .ai-power-carousel__card-btn-{{ ai_gen_id }} a {
+    display: inline-block;
+    padding: 10px 28px;
+    background: {{ block.settings.button_bg_color }};
+    backdrop-filter: blur(4px);
+    color: {{ block.settings.button_text_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: {{ block.settings.button_font_size }}px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .ai-power-carousel__card-btn-{{ ai_gen_id }} a:hover {
+    background: {{ block.settings.button_hover_bg_color }};
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-power-carousel__nav-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: {{ block.settings.nav_bg_color }};
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+    font-size: 26px;
+    font-weight: 300;
+    color: {{ block.settings.nav_icon_color }};
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    user-select: none;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  .ai-power-carousel__nav-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.nav_hover_bg_color }};
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-50%) scale(1.04);
+  }
+
+  .ai-power-carousel__nav-{{ ai_gen_id }}:active {
+    transform: translateY(-50%) scale(0.94);
+  }
+
+  .ai-power-carousel__nav-{{ ai_gen_id }}--prev {
+    left: 16px;
+  }
+
+  .ai-power-carousel__nav-{{ ai_gen_id }}--next {
+    right: 16px;
+  }
+
+  .ai-power-carousel__placeholder-{{ ai_gen_id }} {
+    background-color: #f4f4f4;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-power-carousel__placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-power-carousel__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.7 }}px;
+    }
+
+    .ai-power-carousel__card-{{ ai_gen_id }} {
+      flex: 0 0 {{ block.settings.card_width_mobile }}%;
+    }
+
+    .ai-power-carousel__card-text-{{ ai_gen_id }} h3 {
+      font-size: {{ block.settings.card_title_size | times: 0.8 }}px;
+    }
+
+    .ai-power-carousel__card-text-{{ ai_gen_id }} p {
+      font-size: {{ block.settings.card_description_size | times: 0.9 }}px;
+    }
+
+    .ai-power-carousel__nav-{{ ai_gen_id }} {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+    }
+  }
+{% endstyle %}
+
+<power-carousel-{{ ai_gen_id }} class="ai-power-carousel-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.section_title != blank %}
+    <h2 class="ai-power-carousel__title-{{ ai_gen_id }}">
+      {{ block.settings.section_title }}
+    </h2>
+  {% endif %}
+
+  <div class="ai-power-carousel__wrapper-{{ ai_gen_id }}">
+    <div class="ai-power-carousel__track-{{ ai_gen_id }}" data-track>
+      {% for i in (1..3) %}
+        {% liquid
+          assign image_key = 'card_' | append: i | append: '_image'
+          assign title_key = 'card_' | append: i | append: '_title'
+          assign description_key = 'card_' | append: i | append: '_description'
+          assign button_text_key = 'card_' | append: i | append: '_button_text'
+          assign button_url_key = 'card_' | append: i | append: '_button_url'
+
+          assign card_image = block.settings[image_key]
+          assign card_title = block.settings[title_key]
+          assign card_description = block.settings[description_key]
+          assign button_text = block.settings[button_text_key]
+          assign button_url = block.settings[button_url_key]
+        %}
+
+        <div
+          class="ai-power-carousel__card-{{ ai_gen_id }}"
+          {% if card_image %}
+            style="background-image: url('{{ card_image | image_url: width: 1600 }}');"
+          {% endif %}
+        >
+          {% unless card_image %}
+            <div class="ai-power-carousel__placeholder-{{ ai_gen_id }}">
+              {{ 'image' | placeholder_svg_tag }}
+            </div>
+          {% endunless %}
+
+          <div class="ai-power-carousel__card-overlay-{{ ai_gen_id }}"></div>
+
+          {% if card_title != blank or card_description != blank %}
+            <div class="ai-power-carousel__card-text-{{ ai_gen_id }}">
+              {% if card_title != blank %}
+                <h3>{{ card_title }}</h3>
+              {% endif %}
+              {% if card_description != blank %}
+                <p>{{ card_description }}</p>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          {% if button_text != blank and button_url != blank %}
+            <div class="ai-power-carousel__card-btn-{{ ai_gen_id }}">
+              <a href="{{ button_url }}">{{ button_text }}</a>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if block.settings.show_navigation %}
+      <button
+        class="ai-power-carousel__nav-{{ ai_gen_id }} ai-power-carousel__nav-{{ ai_gen_id }}--prev"
+        data-prev
+        aria-label="Previous slide"
+      >
+        ‹
+      </button>
+      <button
+        class="ai-power-carousel__nav-{{ ai_gen_id }} ai-power-carousel__nav-{{ ai_gen_id }}--next"
+        data-next
+        aria-label="Next slide"
+      >
+        ›
+      </button>
+    {% endif %}
+  </div>
+</power-carousel-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class PowerCarousel{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.track = this.querySelector('[data-track]');
+        this.prevBtn = this.querySelector('[data-prev]');
+        this.nextBtn = this.querySelector('[data-next]');
+        this.cards = this.querySelectorAll('.ai-power-carousel__card-{{ ai_gen_id }}');
+        this.totalCards = this.cards.length;
+      }
+
+      connectedCallback() {
+        if (this.prevBtn && this.nextBtn) {
+          this.prevBtn.addEventListener('click', () => this.navigate(-1));
+          this.nextBtn.addEventListener('click', () => this.navigate(1));
+        }
+
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        this.track.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          isDragging = true;
+        });
+
+        this.track.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          currentX = e.touches[0].clientX;
+        });
+
+        this.track.addEventListener('touchend', () => {
+          if (!isDragging) return;
+          const diff = startX - currentX;
+          if (Math.abs(diff) > 50) {
+            this.navigate(diff > 0 ? 1 : -1);
+          }
+          isDragging = false;
+        });
+      }
+
+      navigate(direction) {
+        this.currentIndex += direction;
+
+        if (this.currentIndex < 0) {
+          this.currentIndex = this.totalCards - 1;
+        } else if (this.currentIndex >= this.totalCards) {
+          this.currentIndex = 0;
+        }
+
+        this.updateCarousel();
+      }
+
+      updateCarousel() {
+        const cardWidth = this.cards[0].offsetWidth;
+        const gap = {{ block.settings.card_gap }};
+        const offset = -(this.currentIndex * (cardWidth + gap));
+        this.track.style.transform = `translateX(${offset}px)`;
+      }
+    }
+
+    customElements.define('power-carousel-{{ ai_gen_id }}', PowerCarousel{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Power carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section title"
+    },
+    {
+      "type": "richtext",
+      "id": "section_title",
+      "label": "Title",
+      "default": "<p>Lust auf noch mehr <span>Power?</span></p>"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Title alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "title_margin",
+      "label": "Title bottom margin",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#0A1628"
+    },
+    {
+      "type": "color",
+      "id": "title_accent_color",
+      "label": "Title accent color",
+      "default": "#0099FC"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 800,
+      "max": 1600,
+      "step": 40,
+      "unit": "px",
+      "default": 1280
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "label": "Left padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "label": "Right padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "bottom_margin",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "header",
+      "content": "Carousel"
+    },
+    {
+      "type": "range",
+      "id": "carousel_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "label": "Card width (desktop)",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "card_width_mobile",
+      "label": "Card width (mobile)",
+      "min": 70,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 85
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap between cards",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "track_padding_right",
+      "label": "Right edge spacing",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.4
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Title",
+      "default": "Discover More"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_description",
+      "label": "Description",
+      "default": "Explore our latest collection"
+    },
+    {
+      "type": "text",
+      "id": "card_1_button_text",
+      "label": "Button text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "card_1_button_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Title",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_description",
+      "label": "Description",
+      "default": "Check out what's new"
+    },
+    {
+      "type": "text",
+      "id": "card_2_button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "card_2_button_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Title",
+      "default": "Special Offers"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_description",
+      "label": "Description",
+      "default": "Don't miss our exclusive deals"
+    },
+    {
+      "type": "text",
+      "id": "card_3_button_text",
+      "label": "Button text",
+      "default": "View Deals"
+    },
+    {
+      "type": "url",
+      "id": "card_3_button_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Card text style"
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Title size",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "card_description_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background color",
+      "default": "rgba(255, 255, 255, 0.92)"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Hover background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#0A1628"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "nav_bg_color",
+      "label": "Background color",
+      "default": "rgba(255, 255, 255, 0.92)"
+    },
+    {
+      "type": "color",
+      "id": "nav_hover_bg_color",
+      "label": "Hover background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "nav_icon_color",
+      "label": "Icon color",
+      "default": "#0A1628"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Power carousel"
+    }
+  ]
+}
+{% endschema %}

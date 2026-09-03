@@ -1,0 +1,430 @@
+{% doc %}
+  @prompt
+    <style>
+    /* --------------------------可自由修改参数区-------------------------- */
+    .venuse-announcement-bar {
+      --bar-height: 44px;        /* 公告栏整体高度，改数字即可 */
+      --base-font-size: 14.5px;  /* 基础字体大小 */
+      --text-main-color: #FFFFFF;/* 正文文字颜色 */
+      --bg-color: #1A365D;       /* 公告栏背景色 */
+      --tag-highlight-color: #FFE066; /* 活动标签高亮颜色 */
+    
+      width: 100%;
+      height: var(--bar-height);
+      line-height: var(--bar-height);
+      background-color: var(--bg-color);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    
+    /* 滚动核心容器 */
+    .marquee-wrapper {
+      display: flex;
+      white-space: nowrap;
+      animation: fullMarquee 35s linear infinite;
+    }
+    
+    /* 鼠标悬浮暂停滚动 */
+    .marquee-wrapper:hover {
+      animation-play-state: paused;
+    }
+    
+    /* 单条公告通用样式 */
+    .marquee-item {
+      font-size: var(--base-font-size);
+      color: var(--text-main-color);
+      padding: 0 70px;
+      text-align: center;
+    }
+    
+    /* 左侧活动标签（加粗高亮区分） */
+    .announce-tag {
+      font-weight: 700;
+      color: var(--tag-highlight-color);
+    }
+    
+    /* 链接基础样式 */
+    .marquee-item a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .marquee-item a:hover {
+      text-decoration: underline;
+    }
+    
+    /* 无缝滚动动画 */
+    @keyframes fullMarquee {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+    </style>
+    
+    <div class="venuse-announcement-bar">
+      <div class="marquee-wrapper">
+    
+        <!-- 第1条公告 -->
+        <div class="marquee-item">
+          <a href="/collections/venus-e-mini">
+            <span class="announce-tag">【Neuerscheinung】</span> Venus E Mini ist jetzt erhältlich >>
+          </a>
+        </div>
+    
+        <!-- 第2条公告 -->
+        <div class="marquee-item">
+          <a href="/collections/alle-venus-e-serie">
+            <span class="announce-tag">【Sonderrabatt】</span> Sonderpreis auf alle Venus E Speichersysteme >>
+          </a>
+        </div>
+    
+        <!-- 第3条公告 -->
+        <div class="marquee-item">
+          <a href="/pages/montage-anleitung">
+            <span class="announce-tag">【Service】</span> Kostenlose Installationsanleitung zum Download >>
+          </a>
+        </div>
+    
+        <!-- 第4条公告 -->
+        <div class="marquee-item">
+          <a href="/pages/faq-netzanmeldung">
+            <span class="announce-tag">【Tipp】</span> Schritt-für-Schritt Guide zur Netzbetreiber-Anmeldung >>
+          </a>
+        </div>
+    
+        <!-- ====== 下面整段复制一遍，实现无缝循环滚动，请勿删除 ====== -->
+        <div class="marquee-item">
+          <a href="/collections/venus-e-mini">
+            <span class="announce-tag">【Neuerscheinung】</span> Venus E Mini ist jetzt erhältlich >>
+          </a>
+        </div>
+        <div class="marquee-item">
+          <a href="/collections/alle-venus-e-serie">
+            <span class="announce-tag">【Sonderrabatt】</span> Sonderpreis auf alle Venus E Speichersysteme >>
+          </a>
+        </div>
+        <div class="marquee-item">
+          <a href="/pages/montage-anleitung">
+            <span class="announce-tag">【Service】</span> Kostenlose Installationsanleitung zum Download >>
+          </a>
+        </div>
+        <div class="marquee-item">
+          <a href="/pages/faq-netzanmeldung">
+            <span class="announce-tag">【Tipp】</span> Schritt-für-Schritt Guide zur Netzbetreiber-Anmeldung >>
+          </a>
+        </div>
+    
+      </div>
+    </div>
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-marquee-bar-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    height: {{ block.settings.bar_height }}px;
+    background-color: {{ block.settings.bg_color }};
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ai-marquee-wrapper-{{ ai_gen_id }} {
+    display: flex;
+    white-space: nowrap;
+    animation: ai-marquee-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
+    height: 100%;
+    align-items: center;
+  }
+
+  {% if block.settings.pause_on_hover %}
+    .ai-marquee-wrapper-{{ ai_gen_id }}:hover {
+      animation-play-state: paused;
+    }
+  {% endif %}
+
+  .ai-marquee-item-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 {{ block.settings.item_spacing }}px;
+    font-size: {{ block.settings.font_size }}px;
+    color: {{ block.settings.text_color }};
+    line-height: {{ block.settings.bar_height }}px;
+  }
+
+  .ai-marquee-item-{{ ai_gen_id }} a {
+    color: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ai-marquee-item-{{ ai_gen_id }} a:hover {
+    text-decoration: underline;
+  }
+
+  .ai-marquee-tag-{{ ai_gen_id }} {
+    font-weight: 700;
+    color: {{ block.settings.tag_color }};
+    margin-right: 8px;
+  }
+
+  @keyframes ai-marquee-scroll-{{ ai_gen_id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+{% endstyle %}
+
+<marquee-bar-{{ ai_gen_id }} class="ai-marquee-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-marquee-wrapper-{{ ai_gen_id }}">
+    {% for i in (1..4) %}
+      {% liquid
+        assign tag_key = 'announcement_' | append: i | append: '_tag'
+        assign text_key = 'announcement_' | append: i | append: '_text'
+        assign link_key = 'announcement_' | append: i | append: '_link'
+        
+        assign tag = block.settings[tag_key]
+        assign text = block.settings[text_key]
+        assign link = block.settings[link_key]
+      %}
+      
+      {% if text != blank %}
+        <div class="ai-marquee-item-{{ ai_gen_id }}">
+          {% if link != blank %}
+            <a href="{{ link | escape }}">
+              {% if tag != blank %}
+                <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
+              {% endif %}
+              {{ text | escape }}
+            </a>
+          {% else %}
+            {% if tag != blank %}
+              <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
+            {% endif %}
+            {{ text | escape }}
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {% for i in (1..4) %}
+      {% liquid
+        assign tag_key = 'announcement_' | append: i | append: '_tag'
+        assign text_key = 'announcement_' | append: i | append: '_text'
+        assign link_key = 'announcement_' | append: i | append: '_link'
+        
+        assign tag = block.settings[tag_key]
+        assign text = block.settings[text_key]
+        assign link = block.settings[link_key]
+      %}
+      
+      {% if text != blank %}
+        <div class="ai-marquee-item-{{ ai_gen_id }}">
+          {% if link != blank %}
+            <a href="{{ link | escape }}">
+              {% if tag != blank %}
+                <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
+              {% endif %}
+              {{ text | escape }}
+            </a>
+          {% else %}
+            {% if tag != blank %}
+              <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
+            {% endif %}
+            {{ text | escape }}
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</marquee-bar-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class MarqueeBar{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.wrapper = this.querySelector('.ai-marquee-wrapper-{{ ai_gen_id }}');
+      }
+    }
+
+    customElements.define('marquee-bar-{{ ai_gen_id }}', MarqueeBar{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Marquee announcement bar",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Bar style"
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Bar height",
+      "min": 30,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#1A365D"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "tag_color",
+      "label": "Tag highlight color",
+      "default": "#FFE066"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "label": "Scroll speed",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "default": 35
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "label": "Item spacing",
+      "min": 30,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 70
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Announcement 1"
+    },
+    {
+      "type": "text",
+      "id": "announcement_1_tag",
+      "label": "Tag"
+    },
+    {
+      "type": "text",
+      "id": "announcement_1_text",
+      "label": "Text",
+      "default": "Venus E Mini ist jetzt erhältlich >>"
+    },
+    {
+      "type": "url",
+      "id": "announcement_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Announcement 2"
+    },
+    {
+      "type": "text",
+      "id": "announcement_2_tag",
+      "label": "Tag"
+    },
+    {
+      "type": "text",
+      "id": "announcement_2_text",
+      "label": "Text",
+      "default": "Sonderpreis auf alle Venus E Speichersysteme >>"
+    },
+    {
+      "type": "url",
+      "id": "announcement_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Announcement 3"
+    },
+    {
+      "type": "text",
+      "id": "announcement_3_tag",
+      "label": "Tag"
+    },
+    {
+      "type": "text",
+      "id": "announcement_3_text",
+      "label": "Text",
+      "default": "Kostenlose Installationsanleitung zum Download >>"
+    },
+    {
+      "type": "url",
+      "id": "announcement_3_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Announcement 4"
+    },
+    {
+      "type": "text",
+      "id": "announcement_4_tag",
+      "label": "Tag"
+    },
+    {
+      "type": "text",
+      "id": "announcement_4_text",
+      "label": "Text",
+      "default": "Schritt-für-Schritt Guide zur Netzbetreiber-Anmeldung >>"
+    },
+    {
+      "type": "url",
+      "id": "announcement_4_link",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee announcement bar"
+    }
+  ]
+}
+{% endschema %}

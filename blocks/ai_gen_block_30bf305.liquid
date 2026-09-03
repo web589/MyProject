@@ -1,0 +1,1015 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+      --color-bg-page: #f7f7f7;
+      --color-blue-dark: #0f2b61;
+      --color-blue-mid: #162b48;
+      --color-blue-light: #405a88;
+      --color-gray-bg: #e9edf2;
+      --color-text-white: #ffffff;
+      --color-text-gray: #c5cdd8;
+      --color-text-dark: #1a1a1a;
+      --color-brand: #00C6FF;
+      --radius-card: 12px;
+      --gap-grid: 16px;
+      --font-main: 'Inter', sans-serif;
+      --transition-speed: 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: var(--color-bg-page);
+      font-family: var(--font-main);
+    }
+    
+    .why-marstek-section {
+      width: 100%;
+      padding: 80px 24px;
+      background-color: var(--color-bg-page);
+    }
+    
+    .section-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    
+    .section-title {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--color-text-dark);
+    }
+    
+    .header-link {
+      font-size: 16px;
+      color: var(--color-brand);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition-speed);
+    }
+    
+    .header-link:hover {
+      text-decoration: underline;
+      opacity: 0.8;
+    }
+    
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      grid-template-rows: auto auto;
+      gap: var(--gap-grid);
+      grid-template-areas:
+        "safe plug vpp"
+        "safe ki notstrom";
+    }
+    
+    .card-safe { grid-area: safe; }
+    .card-plug { grid-area: plug; }
+    .card-vpp { grid-area: vpp; }
+    .card-ki { grid-area: ki; }
+    .card-notstrom { grid-area: notstrom; }
+    
+    .feature-card {
+      border-radius: var(--radius-card);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition-speed);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px 24px;
+    }
+    
+    .card-image-box {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    
+    .card-image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform var(--transition-speed);
+    }
+    
+    .feature-card:hover .card-image-box img {
+      transform: scale(1.03);
+    }
+    
+    /* 统一文字遮罩：从下到上渐变阴影 */
+    .card-text-overlay {
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 100%);
+      margin: -28px -24px;
+      padding: 56px 24px 28px;
+      border-radius: var(--radius-card);
+    }
+    
+    .card-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--color-text-white);
+      line-height: 1.3;
+    }
+    
+    .card-desc-wrap {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--transition-speed), margin-top var(--transition-speed);
+      margin-top: 0;
+    }
+    
+    .feature-card:hover .card-desc-wrap {
+      max-height: 300px;
+      margin-top: 12px;
+    }
+    
+    .card-desc {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text-gray);
+    }
+    
+    /* 左侧竖卡 */
+    .card-safe {
+      background-color: var(--color-blue-dark);
+      min-height: 520px;
+    }
+    
+    /* 中上卡片 */
+    .card-plug {
+      background-color: var(--color-blue-mid);
+      min-height: 252px;
+    }
+    
+    /* 右上卡片 */
+    .card-vpp {
+      background-color: var(--color-blue-light);
+      min-height: 252px;
+    }
+    
+    /* 中间底部卡片：删除独立浅蓝图片块，文字宽度与中上卡片一致 */
+    .card-ki {
+      background-color: var(--color-gray-bg);
+      min-height: 252px;
+    }
+    
+    .card-ki .card-text-overlay {
+      margin: -28px -24px;
+      padding: 56px 24px 28px;
+      border-radius: var(--radius-card);
+    }
+    
+    .card-ki .card-title {
+      color: var(--color-text-white);
+    }
+    
+    .card-ki .card-desc {
+      color: var(--color-text-gray);
+    }
+    
+    /* 右下卡片 */
+    .card-notstrom {
+      background-color: var(--color-blue-mid);
+      min-height: 252px;
+    }
+    
+    /* 响应式 */
+    @media screen and (max-width: 1024px) {
+      .cards-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          "safe plug"
+          "vpp notstrom"
+          "ki ki";
+      }
+    
+      .card-safe {
+        min-height: 400px;
+      }
+    }
+    
+    @media screen and (max-width: 640px) {
+      .section-title {
+        font-size: 28px;
+      }
+    
+      .cards-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "safe"
+          "plug"
+          "vpp"
+          "ki"
+          "notstrom";
+      }
+    
+      .card-safe,
+      .card-plug,
+      .card-vpp,
+      .card-ki,
+      .card-notstrom {
+        min-height: 220px;
+      }
+    }
+    </style>
+    </head>
+    <body>
+    
+    <section class="why-marstek-section">
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Warum MARSTEK?</h2>
+          <a href="#" class="header-link">Mehr erfahren</a>
+        </div>
+    
+        <div class="cards-grid">
+    
+          <!-- 1. Sicher & Langlebig -->
+          <div class="feature-card card-safe">
+            <div class="card-image-box">
+              <img src="此处替换安全耐用卡片图片链接" alt="Sicher & Langlebig">
+            </div>
+            <div class="card-text-overlay">
+              <h3 class="card-title">Sicher & Langle
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-feature-grid-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding_top }}px 0 {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-feature-grid-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: 0 {{ block.settings.section_padding_horizontal }}px;
+    box-sizing: border-box;
+  }
+
+  #shopify-block-{{ block.id }} {
+    display: block;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-feature-grid-header-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    margin-bottom: {{ block.settings.header_spacing }}px;
+  }
+
+  .ai-feature-grid-heading-{{ ai_gen_id }} {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .ai-feature-grid-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    line-height: 1.2;
+    letter-spacing: 0;
+    margin: 0;
+  }
+
+  .ai-feature-grid-subtitle-{{ ai_gen_id }} {
+    margin: 12px 0 0;
+    color: #596b82;
+    font-size: 16px;
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  .ai-feature-grid-link-{{ ai_gen_id }} {
+    font-size: {{ block.settings.link_size }}px;
+    color: {{ block.settings.link_color }};
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.3s ease;
+  }
+
+  .ai-feature-grid-link-{{ ai_gen_id }}:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+  }
+
+  .ai-feature-grid-cards-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1.7fr 0.9fr;
+    grid-template-rows: 160px 88px 160px;
+    gap: {{ block.settings.grid_gap }}px;
+    grid-template-areas:
+      "card1 card2 card3"
+      "card1 card2 card5"
+      "card1 card4 card5";
+  }
+
+  .ai-feature-card-{{ ai_gen_id }} {
+    border-radius: {{ block.settings.card_radius }}px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px 24px;
+    min-height: 0;
+    text-decoration: none;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-2px);
+  }
+
+  .ai-feature-card-1-{{ ai_gen_id }} {
+    grid-area: card1;
+  }
+
+  .ai-feature-card-2-{{ ai_gen_id }} {
+    grid-area: card2;
+  }
+
+  .ai-feature-card-3-{{ ai_gen_id }} {
+    grid-area: card3;
+  }
+
+  .ai-feature-card-4-{{ ai_gen_id }} {
+    grid-area: card4;
+  }
+
+  .ai-feature-card-5-{{ ai_gen_id }} {
+    grid-area: card5;
+  }
+
+  .ai-feature-card-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .ai-feature-card-image-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}:hover .ai-feature-card-image-{{ ai_gen_id }} img {
+    transform: scale(1.03);
+  }
+
+  .ai-feature-card-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-feature-card-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    opacity: 0.3;
+  }
+
+  .ai-feature-card-overlay-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(to top, rgba(0,0,0,{{ block.settings.overlay_opacity }}) 0%, rgba(0,0,0,{{ block.settings.overlay_opacity | times: 0.5 }}) 45%, rgba(0,0,0,0) 100%);
+    margin: -28px -24px;
+    padding: 56px 24px 28px;
+    border-radius: {{ block.settings.card_radius }}px;
+  }
+
+  .ai-feature-card-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_title_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.card_text_color }};
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .ai-feature-card-desc-wrap-{{ ai_gen_id }} {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(18px);
+    transition: max-height 0.35s ease, margin-top 0.35s ease, opacity 0.25s ease, transform 0.35s ease, visibility 0s linear 0.35s;
+    margin-top: 0;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}:hover .ai-feature-card-desc-wrap-{{ ai_gen_id }},
+  .ai-feature-card-{{ ai_gen_id }}:focus-visible .ai-feature-card-desc-wrap-{{ ai_gen_id }} {
+    max-height: 300px;
+    margin-top: 12px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
+  }
+
+  .ai-feature-card-desc-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_desc_size }}px;
+    line-height: 1.6;
+    color: {{ block.settings.card_desc_color }};
+    margin: 0;
+  }
+
+  @media screen and (max-width: 900px) {
+    .ai-feature-grid-cards-{{ ai_gen_id }} {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      grid-template-areas:
+        "card1 card2"
+        "card3 card5"
+        "card4 card4";
+    }
+
+    .ai-feature-card-{{ ai_gen_id }} {
+      min-height: 280px;
+    }
+
+    .ai-feature-card-1-{{ ai_gen_id }} {
+      min-height: 400px;
+    }
+  }
+
+  @media screen and (max-width: 1248px) and (min-width: 901px) {
+    .ai-feature-grid-container-{{ ai_gen_id }} {
+      padding-right: 24px;
+      padding-left: 24px;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .ai-feature-grid-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top | times: 0.6 }}px 0 {{ block.settings.section_padding_bottom | times: 0.6 }}px;
+    }
+
+    .ai-feature-grid-container-{{ ai_gen_id }} {
+      padding-right: 16px;
+      padding-left: 16px;
+    }
+
+    .ai-feature-grid-header-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .ai-feature-grid-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.8 }}px;
+    }
+
+    .ai-feature-grid-cards-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      grid-template-areas:
+        "card1"
+        "card2"
+        "card3"
+        "card4"
+        "card5";
+    }
+
+    .ai-feature-card-1-{{ ai_gen_id }},
+    .ai-feature-card-2-{{ ai_gen_id }},
+    .ai-feature-card-3-{{ ai_gen_id }},
+    .ai-feature-card-4-{{ ai_gen_id }},
+    .ai-feature-card-5-{{ ai_gen_id }} {
+      min-height: 220px;
+    }
+  }
+{% endstyle %}
+
+<feature-grid-{{ ai_gen_id }} class="ai-feature-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-feature-grid-container-{{ ai_gen_id }}">
+    <div class="ai-feature-grid-header-{{ ai_gen_id }}">
+      <div class="ai-feature-grid-heading-{{ ai_gen_id }}">
+        {% if block.settings.section_title != blank %}
+          <h2 class="ai-feature-grid-title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
+        {% endif %}
+        {% if block.settings.section_subtitle != blank %}
+          <div class="ai-feature-grid-subtitle-{{ ai_gen_id }}">{{ block.settings.section_subtitle }}</div>
+        {% endif %}
+      </div>
+      {% if block.settings.header_link_url != blank and block.settings.header_link_text != blank %}
+        <a href="{{ block.settings.header_link_url }}" class="ai-feature-grid-link-{{ ai_gen_id }}">
+          {{ block.settings.header_link_text }}
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="ai-feature-grid-cards-{{ ai_gen_id }}">
+      {% for i in (1..5) %}
+        {% liquid
+          assign card_enabled_key = 'card_' | append: i | append: '_enabled'
+          assign card_bg_key = 'card_' | append: i | append: '_bg_color'
+          assign card_image_key = 'card_' | append: i | append: '_image'
+          assign card_title_key = 'card_' | append: i | append: '_title'
+          assign card_desc_key = 'card_' | append: i | append: '_description'
+          assign card_link_key = 'card_' | append: i | append: '_link'
+
+          assign card_enabled = block.settings[card_enabled_key]
+          assign card_bg = block.settings[card_bg_key]
+          assign card_image = block.settings[card_image_key]
+          assign card_title = block.settings[card_title_key]
+          assign card_desc = block.settings[card_desc_key]
+          assign card_link = block.settings[card_link_key]
+        %}
+
+        {% if card_enabled %}
+          <a
+            href="{% if card_link != blank %}{{ card_link }}{% else %}#{% endif %}"
+            class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ i }}-{{ ai_gen_id }}"
+            style="background-color: {{ card_bg }};"
+          >
+            <div class="ai-feature-card-image-{{ ai_gen_id }}">
+              {% if card_image %}
+                <img
+                  src="{{ card_image | image_url: width: 1200 }}"
+                  alt="{{ card_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ card_image.width }}"
+                  height="{{ card_image.height }}"
+                >
+              {% else %}
+                <div class="ai-feature-card-placeholder-{{ ai_gen_id }}">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="ai-feature-card-overlay-{{ ai_gen_id }}">
+              {% if card_title != blank %}
+                <h3 class="ai-feature-card-title-{{ ai_gen_id }}">{{ card_title }}</h3>
+              {% endif %}
+              {% if card_desc != blank %}
+                <div class="ai-feature-card-desc-wrap-{{ ai_gen_id }}">
+                  <p class="ai-feature-card-desc-{{ ai_gen_id }}">{{ card_desc }}</p>
+                </div>
+              {% endif %}
+            </div>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</feature-grid-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FeatureGrid{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.cards = this.querySelectorAll('.ai-feature-card-{{ ai_gen_id }}');
+        this.setupAccessibility();
+      }
+
+      setupAccessibility() {
+        this.cards.forEach((card) => {
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              card.click();
+            }
+          });
+        });
+      }
+    }
+
+    customElements.define('feature-grid-{{ ai_gen_id }}', FeatureGrid{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Feature grid",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_title",
+      "label": "Title",
+      "default": "Warum MARSTEK?"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "header_link_text",
+      "label": "Link text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "header_link_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f7f7f7"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_horizontal",
+      "label": "Padding horizontal",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Header style"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "label": "Link size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#00C6FF"
+    },
+    {
+      "type": "range",
+      "id": "header_spacing",
+      "label": "Header spacing",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 8,
+      "max": 32,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Card title size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "card_desc_size",
+      "label": "Card description size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_desc_color",
+      "label": "Card description color",
+      "default": "#c5cdd8"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.8
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_1_enabled",
+      "label": "Enable card 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_1_title",
+      "label": "Title",
+      "default": "Sicher & Langlebig"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_description",
+      "label": "Description",
+      "default": "Hochwertige Materialien und geprüfte Sicherheit für langfristige Zuverlässigkeit."
+    },
+    {
+      "type": "color",
+      "id": "card_1_bg_color",
+      "label": "Background color",
+      "default": "#0f2b61"
+    },
+    {
+      "type": "url",
+      "id": "card_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_2_enabled",
+      "label": "Enable card 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_2_title",
+      "label": "Title",
+      "default": "Plug & Play"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_description",
+      "label": "Description",
+      "default": "Einfache Installation ohne Fachkenntnisse – direkt einstecken und loslegen."
+    },
+    {
+      "type": "color",
+      "id": "card_2_bg_color",
+      "label": "Background color",
+      "default": "#162b48"
+    },
+    {
+      "type": "url",
+      "id": "card_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_3_enabled",
+      "label": "Enable card 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_3_title",
+      "label": "Title",
+      "default": "VPP-Ready"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_description",
+      "label": "Description",
+      "default": "Bereit für virtuelle Kraftwerke und intelligente Energieverwaltung."
+    },
+    {
+      "type": "color",
+      "id": "card_3_bg_color",
+      "label": "Background color",
+      "default": "#405a88"
+    },
+    {
+      "type": "url",
+      "id": "card_3_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_4_enabled",
+      "label": "Enable card 4",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_4_title",
+      "label": "Title",
+      "default": "KI-gesteuert"
+    },
+    {
+      "type": "textarea",
+      "id": "card_4_description",
+      "label": "Description",
+      "default": "Intelligente Optimierung für maximale Effizienz und Energieeinsparung."
+    },
+    {
+      "type": "color",
+      "id": "card_4_bg_color",
+      "label": "Background color",
+      "default": "#e9edf2"
+    },
+    {
+      "type": "url",
+      "id": "card_4_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_5_enabled",
+      "label": "Enable card 5",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "card_5_title",
+      "label": "Title",
+      "default": "Notstromfähig"
+    },
+    {
+      "type": "textarea",
+      "id": "card_5_description",
+      "label": "Description",
+      "default": "Zuverlässige Stromversorgung auch bei Netzausfall."
+    },
+    {
+      "type": "color",
+      "id": "card_5_bg_color",
+      "label": "Background color",
+      "default": "#162b48"
+    },
+    {
+      "type": "url",
+      "id": "card_5_link",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature grid"
+    }
+  ]
+}
+{% endschema %}

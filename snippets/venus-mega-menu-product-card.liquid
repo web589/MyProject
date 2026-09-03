@@ -1,0 +1,47 @@
+{% liquid
+  assign mega_variant = mega_variant | default: mega_product.selected_or_first_available_variant
+  assign mega_title = mega_product.title
+  assign mega_specs = mega_variant.title
+  if mega_title contains ' – '
+    assign mega_title_parts = mega_title | split: ' – '
+    assign mega_title = mega_title_parts.first | strip
+    if mega_specs == blank
+      assign mega_specs = mega_title_parts | slice: 1, mega_title_parts.size | join: ' – ' | strip
+    endif
+  elsif mega_title contains ' - '
+    assign mega_title_parts = mega_title | split: ' - '
+    assign mega_title = mega_title_parts.first | strip
+    if mega_specs == blank
+      assign mega_specs = mega_title_parts | slice: 1, mega_title_parts.size | join: ' - ' | strip
+    endif
+  endif
+  assign mega_title = mega_product.metafields.custom.carousel_title.value | default: mega_title
+  assign mega_image = mega_variant.featured_image | default: mega_product.featured_image
+  assign mega_quantity_label = mega_quantity | default: 1 | append: '×'
+  if mega_specs == 'Default Title'
+    assign mega_specs = mega_product.metafields.custom.carousel_specs.value
+  endif
+%}
+
+<a class="megamenu__promo venus-megamenu-product text-left" href="{{ mega_product.url }}?variant={{ mega_variant.id }}">
+  <div class="megamenu__promo-image venus-megamenu-product__media">
+    {% if mega_image %}
+      {%- render 'image-element',
+        img: mega_image,
+        widths: '300, 600',
+        sizeVariable: '250px',
+        classes: 'megamenu__promo-img venus-megamenu-product__image',
+        loading: 'eager',
+      -%}
+    {% else %}
+      {{ 'product-1' | placeholder_svg_tag: 'megamenu__promo-img' }}
+    {% endif %}
+  </div>
+  <div class="megamenu__promo-content">
+    <p class="megamenu__promo-heading venus-megamenu-product__title">{{ mega_quantity_label }} {{ mega_title }}</p>
+    {% if mega_specs != blank %}
+      <p class="megamenu__promo-text venus-megamenu-product__specs">{{ mega_specs }}</p>
+    {% endif %}
+    <p class="megamenu__promo-text venus-megamenu-product__price">{{ mega_variant.price | money }}</p>
+  </div>
+</a>

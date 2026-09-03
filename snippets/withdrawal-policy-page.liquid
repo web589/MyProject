@@ -1,0 +1,366 @@
+{%- liquid
+  assign withdrawal_instance_id = instance_id | default: 'withdrawal'
+  assign withdrawal_title = title | default: 'Widerrufsrecht'
+  assign withdrawal_nav_title = nav_title | default: 'INHALT'
+  assign withdrawal_max_width = max_width | default: 1200
+  assign withdrawal_nav_width = nav_width | default: 220
+  assign withdrawal_column_gap = column_gap | default: 40
+  assign withdrawal_section_gap = section_gap | default: 40
+  assign withdrawal_accent_color = accent_color | default: '#0099fc'
+  assign withdrawal_show_navigation = show_navigation
+-%}
+
+<section
+  id="WithdrawalPage-{{ withdrawal_instance_id | escape }}"
+  class="withdrawal-page"
+  data-withdrawal-page
+  data-withdrawal-instance="{{ withdrawal_instance_id | escape }}"
+  style="
+    --withdrawal-max-width: {{ withdrawal_max_width }}px;
+    --withdrawal-nav-width: {{ withdrawal_nav_width }}px;
+    --withdrawal-gap: {{ withdrawal_column_gap }}px;
+    --withdrawal-section-gap: {{ withdrawal_section_gap }}px;
+    --withdrawal-accent: {{ withdrawal_accent_color }};
+  "
+>
+  <div class="page-width">
+    <h1 class="withdrawal-page__title">{{ withdrawal_title | escape }}</h1>
+
+    <div class="withdrawal-page__layout{% unless withdrawal_show_navigation %} withdrawal-page__layout--no-navigation{% endunless %}">
+      {% if withdrawal_show_navigation %}
+        <nav
+          class="withdrawal-page__nav"
+          aria-label="{{ withdrawal_nav_title | escape }}"
+          data-withdrawal-nav
+          hidden
+        >
+          <p class="withdrawal-page__nav-title">{{ withdrawal_nav_title | escape }}</p>
+          <div class="withdrawal-page__nav-divider"></div>
+          <ol class="withdrawal-page__nav-list" data-withdrawal-nav-list></ol>
+        </nav>
+      {% endif %}
+
+      <div class="withdrawal-page__content">
+        <div class="withdrawal-page__text rte" data-withdrawal-content>{{ content }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% style %}
+  .withdrawal-page {
+    background: var(--colorBody);
+    color: var(--colorTextBody);
+    padding: 44px 0 72px;
+  }
+
+  .withdrawal-page__title {
+    font-family: var(--typeHeaderPrimary), var(--typeHeaderFallback);
+    font-size: 32px;
+    line-height: 1.25;
+    margin: 0 0 54px;
+    text-align: center;
+  }
+
+  .withdrawal-page__layout {
+    align-items: start;
+    display: grid;
+    gap: var(--withdrawal-gap);
+    grid-template-columns: var(--withdrawal-nav-width) minmax(0, 1fr);
+    margin: 0 auto;
+    max-width: var(--withdrawal-max-width);
+  }
+
+  .withdrawal-page__layout--no-navigation,
+  .withdrawal-page__layout.is-navigation-hidden {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .withdrawal-page__nav {
+    position: sticky;
+    top: 24px;
+  }
+
+  .withdrawal-page__nav-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 0 12px 14px;
+    text-transform: uppercase;
+  }
+
+  .withdrawal-page__nav-divider {
+    background: var(--colorBorder);
+    height: 1px;
+    margin-bottom: 8px;
+    width: 100%;
+  }
+
+  .withdrawal-page__nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .withdrawal-page__nav-item {
+    margin: 0;
+  }
+
+  .withdrawal-page__nav-link {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    display: block;
+    font-size: 13px;
+    line-height: 1.45;
+    padding: 6px 12px;
+    text-align: left;
+    text-decoration: none;
+    width: 100%;
+  }
+
+  .withdrawal-page__nav-link:hover,
+  .withdrawal-page__nav-link:focus-visible,
+  .withdrawal-page__nav-link.is-active {
+    color: var(--withdrawal-accent);
+  }
+
+  .withdrawal-page__content {
+    min-width: 0;
+  }
+
+  .withdrawal-page__text {
+    color: inherit;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .withdrawal-page__text h2 {
+    scroll-margin-top: var(--withdrawal-scroll-margin, 24px);
+  }
+
+  .withdrawal-page__text p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .withdrawal-page {
+      padding: 32px 0 48px;
+    }
+
+    .withdrawal-page__title {
+      font-size: 26px;
+      margin-bottom: 32px;
+    }
+
+    .withdrawal-page__layout {
+      gap: 36px;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .withdrawal-page__nav {
+      position: static;
+    }
+
+    .withdrawal-page__nav-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media only screen and (max-width: 480px) {
+    .withdrawal-page__nav-list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+{% endstyle %}
+
+<script>
+  (() => {
+    const stateKey = '__withdrawalPolicyNavigation';
+
+    const initializeWithdrawalPage = (root) => {
+      if (!root || root.dataset.withdrawalInitialized === 'true') return;
+
+      const content = root.querySelector('[data-withdrawal-content]');
+      const navigation = root.querySelector('[data-withdrawal-nav]');
+      const navigationList = root.querySelector('[data-withdrawal-nav-list]');
+      const layout = root.querySelector('.withdrawal-page__layout');
+
+      if (!content) return;
+
+      root.dataset.withdrawalInitialized = 'true';
+
+      const headings = Array.from(content.querySelectorAll('h2')).filter((heading) => {
+        return heading.textContent.trim() !== '';
+      });
+
+      if (!navigation || !navigationList || headings.length === 0) {
+        if (navigation) navigation.hidden = true;
+        if (layout) layout.classList.add('is-navigation-hidden');
+        return;
+      }
+
+      const instanceId = root.dataset.withdrawalInstance || 'withdrawal';
+      const headerOffset = () => {
+        const header = document.querySelector('.site-header');
+        return (header ? header.getBoundingClientRect().height : 0) + 24;
+      };
+
+      const makeUniqueHeadingId = (index) => {
+        const baseId = `${instanceId}-heading-${index + 1}`;
+        let uniqueId = baseId;
+        let suffix = 1;
+
+        while (document.getElementById(uniqueId)) {
+          uniqueId = `${baseId}-${suffix}`;
+          suffix += 1;
+        }
+
+        return uniqueId;
+      };
+
+      headings.forEach((heading, index) => {
+        heading.id = makeUniqueHeadingId(index);
+      });
+
+      const links = headings.map((heading) => {
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+
+        item.className = 'withdrawal-page__nav-item';
+        link.className = 'withdrawal-page__nav-link';
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent.trim();
+        link.dataset.withdrawalTarget = heading.id;
+        link.setAttribute('aria-controls', heading.id);
+
+        item.appendChild(link);
+        navigationList.appendChild(item);
+
+        return link;
+      });
+
+      const setActiveLink = (targetId) => {
+        links.forEach((link) => {
+          const isActive = link.dataset.withdrawalTarget === targetId;
+          link.classList.toggle('is-active', isActive);
+
+          if (isActive) {
+            link.setAttribute('aria-current', 'location');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      };
+
+      const updateScrollMargins = () => {
+        const offset = headerOffset();
+        root.style.setProperty('--withdrawal-scroll-margin', `${offset}px`);
+      };
+
+      const scrollToHeading = (heading, behavior) => {
+        const offset = headerOffset();
+        const targetTop = window.scrollY + heading.getBoundingClientRect().top - offset;
+
+        window.scrollTo({ top: targetTop, behavior });
+      };
+
+      const updateActiveLink = () => {
+        const activationLine = headerOffset() + 8;
+        let activeHeading = headings[0];
+
+        headings.forEach((heading) => {
+          if (heading.getBoundingClientRect().top <= activationLine) {
+            activeHeading = heading;
+          }
+        });
+
+        setActiveLink(activeHeading.id);
+      };
+
+      const handleLocationChange = () => {
+        let targetId = window.location.hash.replace(/^#/, '');
+
+        try {
+          targetId = decodeURIComponent(targetId);
+        } catch (error) {
+          return;
+        }
+
+        const targetHeading = headings.find((heading) => heading.id === targetId);
+
+        if (!targetHeading) return;
+
+        setActiveLink(targetHeading.id);
+        scrollToHeading(targetHeading, 'auto');
+      };
+
+      const handleNavigationClick = (event) => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+          return;
+        }
+
+        event.preventDefault();
+
+        const targetId = event.currentTarget.dataset.withdrawalTarget;
+        const targetHeading = headings.find((heading) => heading.id === targetId);
+
+        if (!targetHeading) return;
+
+        history.pushState(null, '', `#${targetId}`);
+        setActiveLink(targetId);
+        scrollToHeading(targetHeading, 'smooth');
+      };
+
+      links.forEach((link) => link.addEventListener('click', handleNavigationClick));
+      window.addEventListener('hashchange', handleLocationChange);
+      window.addEventListener('popstate', handleLocationChange);
+      window.addEventListener('resize', updateScrollMargins);
+      window.addEventListener('scroll', updateActiveLink, { passive: true });
+
+      root.__withdrawalCleanup = () => {
+        links.forEach((link) => link.removeEventListener('click', handleNavigationClick));
+        window.removeEventListener('hashchange', handleLocationChange);
+        window.removeEventListener('popstate', handleLocationChange);
+        window.removeEventListener('resize', updateScrollMargins);
+        window.removeEventListener('scroll', updateActiveLink);
+      };
+
+      navigation.hidden = false;
+      if (layout) layout.classList.remove('is-navigation-hidden');
+      updateScrollMargins();
+      updateActiveLink();
+
+      if (window.location.hash) {
+        window.requestAnimationFrame(handleLocationChange);
+      }
+    };
+
+    const boot = (scope) => {
+      const roots = scope.matches?.('[data-withdrawal-page]')
+        ? [scope]
+        : Array.from(scope.querySelectorAll('[data-withdrawal-page]'));
+
+      roots.forEach(initializeWithdrawalPage);
+    };
+
+    if (!window[stateKey]) {
+      window[stateKey] = { boot };
+
+      document.addEventListener('shopify:section:load', (event) => {
+        boot(event.target);
+      });
+
+      document.addEventListener('shopify:section:unload', (event) => {
+        const root = event.target.matches?.('[data-withdrawal-page]')
+          ? event.target
+          : event.target.querySelector?.('[data-withdrawal-page]');
+
+        root?.__withdrawalCleanup?.();
+      });
+    }
+
+    window[stateKey].boot(document);
+  })();
+</script>

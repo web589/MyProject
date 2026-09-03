@@ -1,0 +1,1268 @@
+{% doc %}
+  @prompt
+    <style>
+    /* ===== 全局统一按钮样式 ===== */
+    :root {
+      --brand-blue: #224378;
+      --highlight-yellow: #FFDD57;
+      --btn-radius: 6px;
+      --btn-padding: 17px 38px;
+      --btn-fontsize: 17px;
+      --btn-fontweight: 600;
+      --btn-transition: all 0.25s ease;
+    }
+    
+    .btn-primary-main {
+      padding: var(--btn-padding);
+      background-color: var(--brand-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--btn-radius);
+      font-size: var(--btn-fontsize);
+      font-weight: var(--btn-fontweight);
+      text-decoration: none;
+      transition: var(--btn-transition);
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .btn-primary-main:hover {
+      background-color: #1a355c;
+      transform: translateY(-3px);
+    }
+    
+    .btn-outline-secondary {
+      padding: var(--btn-padding);
+      background: transparent;
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: var(--btn-radius);
+      font-size: var(--btn-fontsize);
+      font-weight: var(--btn-fontweight);
+      text-decoration: none;
+      transition: var(--btn-transition);
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .btn-outline-secondary:hover {
+      background-color: rgba(255,255,255,0.12);
+      transform: translateY(-3px);
+    }
+    
+    /* ===== 整页轮播Hero ===== */
+    .venus-e-fullpage-slider {
+      width: 100%;
+      min-height: 88vh;
+      position: relative;
+      overflow: hidden;
+      color: #ffffff;
+    }
+    
+    .slide-wrapper {
+      display: flex;
+      width: 400%;
+      height: 100%;
+      transition: transform 0.6s ease-in-out;
+    }
+    
+    .slide-item {
+      width: 25%;
+      min-height: 88vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      background-size: cover;
+      background-position: center right;
+      background-repeat: no-repeat;
+    }
+    
+    /* 每张背景图单独替换 */
+    .slide-venus-3-0 {
+      background-image: url('替换Venus E 3.0阳台庭院场景大图，产品主体在右侧');
+    }
+    
+    .slide-venus-mini {
+      background-image: url('替换Venus E Mini阳台场景大图，产品主体在右侧');
+    }
+    
+    .slide-venus-4-0 {
+      background-image: url('替换Venus E 4.0庭院场景大图，产品主体在右侧');
+    }
+    
+    .slide-venus-max {
+      background-image: url('替换Venus E Max全屋储能场景大图，产品主体在右侧');
+    }
+    
+    /* 左侧遮罩，不遮挡右侧产品 */
+    .slide-dark-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, rgba(0,0,0,0.66) 0%, rgba(0,0,0,0.38) 45%, rgba(0,0,0,0.12) 70%);
+      z-index: 1;
+    }
+    
+    /* 左侧文字内容 */
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      justify-content: flex-start;
+    }
+    
+    .slide-text-block {
+      max-width: 520px;
+    }
+    
+    .slide-kicker {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--highlight-yellow);
+      letter-spacing: 0.6px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    
+    .slide-title {
+      font-size: clamp(30px, 5vw, 54px);
+      font-weight: 700;
+      line-height: 1.25;
+      margin: 0 0 24px 0;
+    }
+    
+    .slide-desc {
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.7;
+      opacity: 0.92;
+      margin: 0 0 40px 0;
+    }
+    
+    .slide-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    /* ===== 居中轮播指示器 ===== */
+    .slide-dots {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 3;
+    }
+    
+    .slide-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    
+    .slide-dot.active {
+      background: var(--highlight-yellow);
+    }
+    
+    /* ===== 左右切换箭头 ===== */
+    .slide-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: background 0.2s ease;
+    }
+    
+    .slide-arrow:hover {
+      background: rgba(255,255,255,0.18);
+    }
+    
+    .slide-arrow.prev {
+      left: 24px;
+    }
+    
+    .slide-arrow.next {
+      right: 24px;
+    }
+    
+    /* ===== 移动端适配 ===== */
+    @media screen and (max-width: 768px) {
+      .venus-e-fullpage-slider {
+        min-height: 92vh;
+      }
+    
+      .slide-item {
+        min-height: 92vh;
+        background-position: center center;
+      }
+    
+      .slide-dark-mask {
+        background: rgba(0,0,0,0.58);
+      }
+    
+      .slide-content {
+        padding: 0 16px;
+      }
+    
+      .slide-text-block {
+        max-width: 100%;
+      }
+    
+      .slide-arrow {
+        display: none;
+      }
+    
+      .slide-dots {
+        bottom: 16px;
+      }
+    }
+    </style>
+    
+    <section class="venus-e-fullpage-slider">
+      <div class="slide-wrapper" id="fullpageSlider">
+        <!-- Slide 1 主推 Venus E 3.0 -->
+        <div class="slide-item slide-venus-3-0">
+          <div class="slide-dark-mask"></div>
+          <div class="slide-content">
+            <div class="slide-text-block">
+              <div class="slide-kicker">🚀 Ab 929 € sofort lieferbar</div>
+              <h2 class="slide-title">Venus E 3.0 | 5,12 kWh</h2>
+              <p class="slide-desc">
+                Das sofort verfügbare Balkonspeicher-Modell mit großer Kapazität. Ideal für Haushalte, die mehr Eigenverbrauch und Notstromfunktion wollen.
+              </p>
+              <div class="slide-buttons">
+                <a href="/products/venus-e-3-0" class="btn-primary-main">Jetzt kaufen</a
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-fullpage-slider-{{ ai_gen_id }} {
+    width: 100%;
+    min-height: {{ block.settings.min_height_desktop }}vh;
+    position: relative;
+    overflow: hidden;
+    color: #ffffff;
+    display: block;
+  }
+
+  .ai-slide-wrapper-{{ ai_gen_id }} {
+    display: flex;
+    width: 400%;
+    height: 100%;
+    transition: transform 0.6s ease-in-out;
+  }
+
+  .ai-slide-item-{{ ai_gen_id }} {
+    width: 25%;
+    min-height: {{ block.settings.min_height_desktop }}vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-size: cover;
+    background-position: {{ block.settings.image_position }};
+    background-repeat: no-repeat;
+  }
+
+  .ai-slide-item-{{ ai_gen_id }}.slide-1 {
+    background-image: url('{{ block.settings.slide_1_image | image_url: width: 2400 }}');
+  }
+
+  .ai-slide-item-{{ ai_gen_id }}.slide-2 {
+    background-image: url('{{ block.settings.slide_2_image | image_url: width: 2400 }}');
+  }
+
+  .ai-slide-item-{{ ai_gen_id }}.slide-3 {
+    background-image: url('{{ block.settings.slide_3_image | image_url: width: 2400 }}');
+  }
+
+  .ai-slide-item-{{ ai_gen_id }}.slide-4 {
+    background-image: url('{{ block.settings.slide_4_image | image_url: width: 2400 }}');
+  }
+
+  .ai-slide-dark-mask-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      {{ block.settings.overlay_color }}{{ block.settings.overlay_opacity_left | divided_by: 100.0 | times: 255 | round | prepend: '0' | slice: -2, 2 }} 0%,
+      {{ block.settings.overlay_color }}{{ block.settings.overlay_opacity_middle | divided_by: 100.0 | times: 255 | round | prepend: '0' | slice: -2, 2 }} 45%,
+      {{ block.settings.overlay_color }}{{ block.settings.overlay_opacity_right | divided_by: 100.0 | times: 255 | round | prepend: '0' | slice: -2, 2 }} 70%
+    );
+    z-index: 1;
+  }
+
+  .ai-slide-content-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: {{ block.settings.content_max_width }}px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    justify-content: {{ block.settings.content_alignment }};
+  }
+
+  .ai-slide-text-block-{{ ai_gen_id }} {
+    max-width: {{ block.settings.text_block_max_width }}px;
+  }
+
+  .ai-slide-kicker-{{ ai_gen_id }} {
+    font-size: {{ block.settings.kicker_font_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.kicker_color }};
+    letter-spacing: 0.6px;
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+
+  .ai-slide-title-{{ ai_gen_id }} {
+    font-size: clamp(30px, 5vw, {{ block.settings.title_font_size }}px);
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 24px 0;
+    color: {{ block.settings.title_color }};
+  }
+
+  .ai-slide-desc-{{ ai_gen_id }} {
+    font-size: clamp(16px, 2vw, {{ block.settings.description_font_size }}px);
+    line-height: 1.7;
+    opacity: 0.92;
+    margin: 0 0 40px 0;
+    color: {{ block.settings.description_color }};
+  }
+
+  .ai-slide-buttons-{{ ai_gen_id }} {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .ai-btn-primary-{{ ai_gen_id }} {
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.primary_button_bg }};
+    color: {{ block.settings.primary_button_text }};
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .ai-btn-primary-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.primary_button_bg_hover }};
+    transform: translateY(-3px);
+  }
+
+  .ai-btn-secondary-{{ ai_gen_id }} {
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background: transparent;
+    color: {{ block.settings.secondary_button_text }};
+    border: 2px solid {{ block.settings.secondary_button_border }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .ai-btn-secondary-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.secondary_button_bg_hover }};
+    transform: translateY(-3px);
+  }
+
+  .ai-slide-dots-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 3;
+  }
+
+  .ai-slide-dot-{{ ai_gen_id }} {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: {{ block.settings.dot_color_inactive }};
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .ai-slide-dot-{{ ai_gen_id }}.active {
+    background: {{ block.settings.dot_color_active }};
+  }
+
+  .ai-slide-arrow-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: {{ block.settings.arrow_bg_color }};
+    color: {{ block.settings.arrow_icon_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    border: 1px solid {{ block.settings.arrow_border_color }};
+    transition: background 0.2s ease;
+  }
+
+  .ai-slide-arrow-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.arrow_bg_hover }};
+  }
+
+  .ai-slide-arrow-{{ ai_gen_id }}.prev {
+    left: 24px;
+  }
+
+  .ai-slide-arrow-{{ ai_gen_id }}.next {
+    right: 24px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-fullpage-slider-{{ ai_gen_id }} {
+      min-height: {{ block.settings.min_height_mobile }}vh;
+    }
+
+    .ai-slide-item-{{ ai_gen_id }} {
+      min-height: {{ block.settings.min_height_mobile }}vh;
+      background-position: center center;
+    }
+
+    .ai-slide-dark-mask-{{ ai_gen_id }} {
+      background: {{ block.settings.overlay_color }}{{ block.settings.overlay_opacity_mobile | divided_by: 100.0 | times: 255 | round | prepend: '0' | slice: -2, 2 }};
+    }
+
+    .ai-slide-content-{{ ai_gen_id }} {
+      padding: 0 16px;
+    }
+
+    .ai-slide-text-block-{{ ai_gen_id }} {
+      max-width: 100%;
+    }
+
+    .ai-slide-arrow-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-slide-dots-{{ ai_gen_id }} {
+      bottom: 16px;
+    }
+  }
+{% endstyle %}
+
+<fullpage-slider-{{ ai_gen_id }} class="ai-fullpage-slider-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-slide-wrapper-{{ ai_gen_id }}" id="fullpageSlider{{ ai_gen_id }}">
+    <div class="ai-slide-item-{{ ai_gen_id }} slide-1">
+      <div class="ai-slide-dark-mask-{{ ai_gen_id }}"></div>
+      <div class="ai-slide-content-{{ ai_gen_id }}">
+        <div class="ai-slide-text-block-{{ ai_gen_id }}">
+          {% if block.settings.slide_1_kicker != blank %}
+            <div class="ai-slide-kicker-{{ ai_gen_id }}">{{ block.settings.slide_1_kicker }}</div>
+          {% endif %}
+          {% if block.settings.slide_1_title != blank %}
+            <h2 class="ai-slide-title-{{ ai_gen_id }}">{{ block.settings.slide_1_title }}</h2>
+          {% endif %}
+          {% if block.settings.slide_1_description != blank %}
+            <div class="ai-slide-desc-{{ ai_gen_id }}">{{ block.settings.slide_1_description }}</div>
+          {% endif %}
+          <div class="ai-slide-buttons-{{ ai_gen_id }}">
+            {% if block.settings.slide_1_button_1_text != blank %}
+              <a href="{{ block.settings.slide_1_button_1_link }}" class="ai-btn-primary-{{ ai_gen_id }}">
+                {{ block.settings.slide_1_button_1_text }}
+              </a>
+            {% endif %}
+            {% if block.settings.slide_1_button_2_text != blank %}
+              <a href="{{ block.settings.slide_1_button_2_link }}" class="ai-btn-secondary-{{ ai_gen_id }}">
+                {{ block.settings.slide_1_button_2_text }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-slide-item-{{ ai_gen_id }} slide-2">
+      <div class="ai-slide-dark-mask-{{ ai_gen_id }}"></div>
+      <div class="ai-slide-content-{{ ai_gen_id }}">
+        <div class="ai-slide-text-block-{{ ai_gen_id }}">
+          {% if block.settings.slide_2_kicker != blank %}
+            <div class="ai-slide-kicker-{{ ai_gen_id }}">{{ block.settings.slide_2_kicker }}</div>
+          {% endif %}
+          {% if block.settings.slide_2_title != blank %}
+            <h2 class="ai-slide-title-{{ ai_gen_id }}">{{ block.settings.slide_2_title }}</h2>
+          {% endif %}
+          {% if block.settings.slide_2_description != blank %}
+            <div class="ai-slide-desc-{{ ai_gen_id }}">{{ block.settings.slide_2_description }}</div>
+          {% endif %}
+          <div class="ai-slide-buttons-{{ ai_gen_id }}">
+            {% if block.settings.slide_2_button_1_text != blank %}
+              <a href="{{ block.settings.slide_2_button_1_link }}" class="ai-btn-primary-{{ ai_gen_id }}">
+                {{ block.settings.slide_2_button_1_text }}
+              </a>
+            {% endif %}
+            {% if block.settings.slide_2_button_2_text != blank %}
+              <a href="{{ block.settings.slide_2_button_2_link }}" class="ai-btn-secondary-{{ ai_gen_id }}">
+                {{ block.settings.slide_2_button_2_text }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-slide-item-{{ ai_gen_id }} slide-3">
+      <div class="ai-slide-dark-mask-{{ ai_gen_id }}"></div>
+      <div class="ai-slide-content-{{ ai_gen_id }}">
+        <div class="ai-slide-text-block-{{ ai_gen_id }}">
+          {% if block.settings.slide_3_kicker != blank %}
+            <div class="ai-slide-kicker-{{ ai_gen_id }}">{{ block.settings.slide_3_kicker }}</div>
+          {% endif %}
+          {% if block.settings.slide_3_title != blank %}
+            <h2 class="ai-slide-title-{{ ai_gen_id }}">{{ block.settings.slide_3_title }}</h2>
+          {% endif %}
+          {% if block.settings.slide_3_description != blank %}
+            <div class="ai-slide-desc-{{ ai_gen_id }}">{{ block.settings.slide_3_description }}</div>
+          {% endif %}
+          <div class="ai-slide-buttons-{{ ai_gen_id }}">
+            {% if block.settings.slide_3_button_1_text != blank %}
+              <a href="{{ block.settings.slide_3_button_1_link }}" class="ai-btn-primary-{{ ai_gen_id }}">
+                {{ block.settings.slide_3_button_1_text }}
+              </a>
+            {% endif %}
+            {% if block.settings.slide_3_button_2_text != blank %}
+              <a href="{{ block.settings.slide_3_button_2_link }}" class="ai-btn-secondary-{{ ai_gen_id }}">
+                {{ block.settings.slide_3_button_2_text }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-slide-item-{{ ai_gen_id }} slide-4">
+      <div class="ai-slide-dark-mask-{{ ai_gen_id }}"></div>
+      <div class="ai-slide-content-{{ ai_gen_id }}">
+        <div class="ai-slide-text-block-{{ ai_gen_id }}">
+          {% if block.settings.slide_4_kicker != blank %}
+            <div class="ai-slide-kicker-{{ ai_gen_id }}">{{ block.settings.slide_4_kicker }}</div>
+          {% endif %}
+          {% if block.settings.slide_4_title != blank %}
+            <h2 class="ai-slide-title-{{ ai_gen_id }}">{{ block.settings.slide_4_title }}</h2>
+          {% endif %}
+          {% if block.settings.slide_4_description != blank %}
+            <div class="ai-slide-desc-{{ ai_gen_id }}">{{ block.settings.slide_4_description }}</div>
+          {% endif %}
+          <div class="ai-slide-buttons-{{ ai_gen_id }}">
+            {% if block.settings.slide_4_button_1_text != blank %}
+              <a href="{{ block.settings.slide_4_button_1_link }}" class="ai-btn-primary-{{ ai_gen_id }}">
+                {{ block.settings.slide_4_button_1_text }}
+              </a>
+            {% endif %}
+            {% if block.settings.slide_4_button_2_text != blank %}
+              <a href="{{ block.settings.slide_4_button_2_link }}" class="ai-btn-secondary-{{ ai_gen_id }}">
+                {{ block.settings.slide_4_button_2_text }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-slide-dots-{{ ai_gen_id }}">
+    <div class="ai-slide-dot-{{ ai_gen_id }} active" data-slide="0"></div>
+    <div class="ai-slide-dot-{{ ai_gen_id }}" data-slide="1"></div>
+    <div class="ai-slide-dot-{{ ai_gen_id }}" data-slide="2"></div>
+    <div class="ai-slide-dot-{{ ai_gen_id }}" data-slide="3"></div>
+  </div>
+
+  <div class="ai-slide-arrow-{{ ai_gen_id }} prev" aria-label="Previous slide">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+  </div>
+
+  <div class="ai-slide-arrow-{{ ai_gen_id }} next" aria-label="Next slide">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </div>
+</fullpage-slider-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FullpageSlider{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentSlide = 0;
+        this.totalSlides = 4;
+        this.autoplayInterval = {{ block.settings.autoplay_duration | times: 1000 }};
+        this.autoplayTimer = null;
+      }
+
+      connectedCallback() {
+        this.slider = this.querySelector('#fullpageSlider{{ ai_gen_id }}');
+        this.dots = this.querySelectorAll('.ai-slide-dot-{{ ai_gen_id }}');
+        this.prevBtn = this.querySelector('.ai-slide-arrow-{{ ai_gen_id }}.prev');
+        this.nextBtn = this.querySelector('.ai-slide-arrow-{{ ai_gen_id }}.next');
+
+        this.setupEventListeners();
+        
+        {% if block.settings.autoplay %}
+          this.startAutoplay();
+        {% endif %}
+      }
+
+      setupEventListeners() {
+        this.dots.forEach((dot, index) => {
+          dot.addEventListener('click', () => {
+            this.goToSlide(index);
+            this.resetAutoplay();
+          });
+        });
+
+        this.prevBtn.addEventListener('click', () => {
+          this.previousSlide();
+          this.resetAutoplay();
+        });
+
+        this.nextBtn.addEventListener('click', () => {
+          this.nextSlide();
+          this.resetAutoplay();
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        this.slider.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+
+        this.slider.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          this.handleSwipe(touchStartX, touchEndX);
+        });
+      }
+
+      handleSwipe(startX, endX) {
+        const swipeThreshold = 50;
+        const diff = startX - endX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0) {
+            this.nextSlide();
+          } else {
+            this.previousSlide();
+          }
+          this.resetAutoplay();
+        }
+      }
+
+      goToSlide(index) {
+        this.currentSlide = index;
+        const offset = -index * 25;
+        this.slider.style.transform = `translateX(${offset}%)`;
+        this.updateDots();
+      }
+
+      nextSlide() {
+        this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+        this.goToSlide(this.currentSlide);
+      }
+
+      previousSlide() {
+        this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.goToSlide(this.currentSlide);
+      }
+
+      updateDots() {
+        this.dots.forEach((dot, index) => {
+          if (index === this.currentSlide) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
+
+      startAutoplay() {
+        if (this.autoplayInterval > 0) {
+          this.autoplayTimer = setInterval(() => {
+            this.nextSlide();
+          }, this.autoplayInterval);
+        }
+      }
+
+      stopAutoplay() {
+        if (this.autoplayTimer) {
+          clearInterval(this.autoplayTimer);
+          this.autoplayTimer = null;
+        }
+      }
+
+      resetAutoplay() {
+        {% if block.settings.autoplay %}
+          this.stopAutoplay();
+          this.startAutoplay();
+        {% endif %}
+      }
+
+      disconnectedCallback() {
+        this.stopAutoplay();
+      }
+    }
+
+    customElements.define('fullpage-slider-{{ ai_gen_id }}', FullpageSlider{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Full-page slider",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "min_height_desktop",
+      "label": "Desktop height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Mobile height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 90
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "center right", "label": "Center right" },
+        { "value": "center center", "label": "Center center" },
+        { "value": "center left", "label": "Center left" },
+        { "value": "top center", "label": "Top center" },
+        { "value": "bottom center", "label": "Bottom center" }
+      ],
+      "default": "center right"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content max width",
+      "min": 800,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Right" }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "range",
+      "id": "text_block_max_width",
+      "label": "Text block max width",
+      "min": 300,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity_left",
+      "label": "Overlay opacity left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 65
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity_middle",
+      "label": "Overlay opacity middle",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity_right",
+      "label": "Overlay opacity right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity_mobile",
+      "label": "Overlay opacity mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "kicker_font_size",
+      "label": "Kicker font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker color",
+      "default": "#FFDD57"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title font size",
+      "min": 30,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 54
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "description_font_size",
+      "label": "Description font size",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Padding vertical",
+      "min": 8,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Padding horizontal",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "color",
+      "id": "primary_button_bg",
+      "label": "Primary background",
+      "default": "#224378"
+    },
+    {
+      "type": "color",
+      "id": "primary_button_bg_hover",
+      "label": "Primary background hover",
+      "default": "#1a355c"
+    },
+    {
+      "type": "color",
+      "id": "primary_button_text",
+      "label": "Primary text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_text",
+      "label": "Secondary text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_border",
+      "label": "Secondary border",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_bg_hover",
+      "label": "Secondary background hover",
+      "default": "rgba(255,255,255,0.12)"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_duration",
+      "label": "Autoplay duration",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "color",
+      "id": "dot_color_active",
+      "label": "Active dot color",
+      "default": "#FFDD57"
+    },
+    {
+      "type": "color",
+      "id": "dot_color_inactive",
+      "label": "Inactive dot color",
+      "default": "rgba(255,255,255,0.35)"
+    },
+    {
+      "type": "color",
+      "id": "arrow_bg_color",
+      "label": "Arrow background",
+      "default": "rgba(255,255,255,0.08)"
+    },
+    {
+      "type": "color",
+      "id": "arrow_bg_hover",
+      "label": "Arrow background hover",
+      "default": "rgba(255,255,255,0.18)"
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Arrow icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "arrow_border_color",
+      "label": "Arrow border color",
+      "default": "rgba(255,255,255,0.15)"
+    },
+    {
+      "type": "header",
+      "content": "Slide 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "slide_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "slide_1_kicker",
+      "label": "Kicker text",
+      "default": "🚀 Ab 929 € sofort lieferbar"
+    },
+    {
+      "type": "text",
+      "id": "slide_1_title",
+      "label": "Title",
+      "default": "Venus E 3.0 | 5,12 kWh"
+    },
+    {
+      "type": "textarea",
+      "id": "slide_1_description",
+      "label": "Description",
+      "default": "Das sofort verfügbare Balkonspeicher-Modell mit großer Kapazität. Ideal für Haushalte, die mehr Eigenverbrauch und Notstromfunktion wollen."
+    },
+    {
+      "type": "text",
+      "id": "slide_1_button_1_text",
+      "label": "Button 1 text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "url",
+      "id": "slide_1_button_1_link",
+      "label": "Button 1 link"
+    },
+    {
+      "type": "text",
+      "id": "slide_1_button_2_text",
+      "label": "Button 2 text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "slide_1_button_2_link",
+      "label": "Button 2 link"
+    },
+    {
+      "type": "header",
+      "content": "Slide 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "slide_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "slide_2_kicker",
+      "label": "Kicker text",
+      "default": "💡 Kompakt & leistungsstark"
+    },
+    {
+      "type": "text",
+      "id": "slide_2_title",
+      "label": "Title",
+      "default": "Venus E Mini | 2,56 kWh"
+    },
+    {
+      "type": "textarea",
+      "id": "slide_2_description",
+      "label": "Description",
+      "default": "Die perfekte Einstiegslösung für kleine Balkone. Maximale Effizienz auf minimalem Raum."
+    },
+    {
+      "type": "text",
+      "id": "slide_2_button_1_text",
+      "label": "Button 1 text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "url",
+      "id": "slide_2_button_1_link",
+      "label": "Button 1 link"
+    },
+    {
+      "type": "text",
+      "id": "slide_2_button_2_text",
+      "label": "Button 2 text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "slide_2_button_2_link",
+      "label": "Button 2 link"
+    },
+    {
+      "type": "header",
+      "content": "Slide 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "slide_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "slide_3_kicker",
+      "label": "Kicker text",
+      "default": "⚡ Maximale Leistung"
+    },
+    {
+      "type": "text",
+      "id": "slide_3_title",
+      "label": "Title",
+      "default": "Venus E 4.0 | 10,24 kWh"
+    },
+    {
+      "type": "textarea",
+      "id": "slide_3_description",
+      "label": "Description",
+      "default": "Für größere Haushalte mit hohem Energiebedarf. Doppelte Kapazität für maximale Unabhängigkeit."
+    },
+    {
+      "type": "text",
+      "id": "slide_3_button_1_text",
+      "label": "Button 1 text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "url",
+      "id": "slide_3_button_1_link",
+      "label": "Button 1 link"
+    },
+    {
+      "type": "text",
+      "id": "slide_3_button_2_text",
+      "label": "Button 2 text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "slide_3_button_2_link",
+      "label": "Button 2 link"
+    },
+    {
+      "type": "header",
+      "content": "Slide 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "slide_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "slide_4_kicker",
+      "label": "Kicker text",
+      "default": "🏠 Komplette Energielösung"
+    },
+    {
+      "type": "text",
+      "id": "slide_4_title",
+      "label": "Title",
+      "default": "Venus E Max | 15,36 kWh"
+    },
+    {
+      "type": "textarea",
+      "id": "slide_4_description",
+      "label": "Description",
+      "default": "Die ultimative Speicherlösung für vollständige Energieautarkie. Perfekt für große Haushalte und Gewerbe."
+    },
+    {
+      "type": "text",
+      "id": "slide_4_button_1_text",
+      "label": "Button 1 text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "url",
+      "id": "slide_4_button_1_link",
+      "label": "Button 1 link"
+    },
+    {
+      "type": "text",
+      "id": "slide_4_button_2_text",
+      "label": "Button 2 text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "slide_4_button_2_link",
+      "label": "Button 2 link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Full-page slider"
+    }
+  ]
+}
+{% endschema %}

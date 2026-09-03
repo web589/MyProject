@@ -1,0 +1,965 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=Inter:wght@400;500;600&display=swap');
+    
+    /* ========== 全局可调节变量 ========== */
+    :root {
+      --bg-dark: #F8FAFC;
+      --accent-blue: #00C6FF;
+    
+      --text-primary: #1E293B;
+      --text-muted: #64748B;
+    
+      --radius-btn: 4px;
+      --radius-pill: 20px;
+    
+      --font-heading: 'Manrope', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    
+      --content-max-width: 1200px;
+      --side-padding: 120px;
+    
+      --badge-max-width: 320px;
+      --heading-max-width: 520px;
+      --desc-max-width: 480px;
+      --btns-wrap-max-width: 500px;
+      --footer-note-max-width: 400px;
+    
+      /* 间距调节选项 */
+      --badge-bottom-gap: 28px;
+      --heading-bottom-gap: 24px;
+      --desc-bottom-gap: 36px;
+      --buttons-bottom-gap: 24px;
+      --footer-note-top-gap: 24px;
+    
+      /* 大标题行距：视觉参考里更紧凑 */
+      --heading-line-height: 1.15;
+    
+      /* 按钮间距 */
+      --button-gap: 12px;
+    
+      --badge-dot-breathe-speed: 4s;
+    }
+    
+    @keyframes badge-dot-breathe {
+      0% { opacity: 0.25; }
+      50% { opacity: 1; }
+      100% { opacity: 0.25; }
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background-color: var(--bg-dark);
+      font-family: var(--font-body);
+    }
+    
+    .venus-e-static-hero {
+      width: 100%;
+      min-height: 88vh;
+      background-color: var(--bg-dark);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    
+    .hero-bg-image {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60%;
+      height: 100%;
+      background-image: url('粘贴产品大图链接');
+      background-size: contain;
+      background-position: right center;
+      background-repeat: no-repeat;
+    }
+    
+    .hero-gradient-overlay {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(248,250,252,0.98) 0%, rgba(248,250,252,0.75) 55%, rgba(248,250,252,0.1) 80%);
+    }
+    
+    .hero-content-wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: var(--content-max-width);
+      margin: 0 auto;
+      padding: 0 var(--side-padding);
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    
+    .hero-text-block {
+      width: 100%;
+      max-width: 520px;
+      text-align: left;
+      margin-left: 0;
+      margin-right: auto;
+    }
+    
+    .hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      border: 1px solid var(--accent-blue);
+      color: var(--accent-blue);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      margin-bottom: var(--badge-bottom-gap);
+      max-width: var(--badge-max-width);
+      text-align: left;
+    }
+    
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      min-width: 8px;
+      min-height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent-blue);
+      animation: badge-dot-breathe var(--badge-dot-breathe-speed) ease-in-out infinite;
+      display: block;
+      opacity: 1;
+    }
+    
+    .hero-main-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 700;
+      line-height: var(--heading-line-height);
+      color: var(--text-primary);
+      margin: 0 0 var(--heading-bottom-gap) 0;
+      max-width: var(--heading-max-width);
+      text-align: left;
+      white-space: pre-line;
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+    
+    .hero-desc-paragraph {
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin: 0 0 var(--desc-bottom-gap) 0;
+      max-width: var(--desc-max-width);
+      text-align: left;
+    }
+    
+    .hero-button-group {
+      display: flex;
+      gap: var(--button-gap);
+      flex-wrap: nowrap;
+      margin-bottom: var(--buttons-bottom-gap);
+      max-width: var(--btns-wrap-max-width);
+      justify-content: flex-start;
+      align-items: center;
+    }
+    
+    .btn-primary {
+      padding: 16px 32px;
+      background-color: var(--accent-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-btn);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    
+    .btn-primary:hover {
+      filter: brightness(0.9);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0,198,255,0.2);
+    }
+    
+    .btn-outline {
+      padding: 16px 32px;
+      background: transparent;
+      color: var(--text-primary);
+      border: 2px solid var(--accent-blue);
+      border-radius: var(--radius-btn);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    
+    .btn-outline:hover {
+      background-color: rgba(0, 198, 255, 0.08);
+      transform: translateY(-2px);
+    }
+    
+    .hero-footer-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: var(--footer-note-max-width);
+      justify-content: flex-start;
+      margin-top: var(--footer-note-top-gap);
+    }
+    
+    .hero-footer-note .check-icon {
+      width: 16px;
+      height: 16px;
+      fill: var(--accent-blue, 除背景图外所有元素整体往左靠近贴近左侧, 背景图要布满整个版面, 添加背景颜色渐变调节选项
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-venus-hero-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    min-height: {{ block.settings.min_height }}vh;
+    background-color: {{ block.settings.background_color }};
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-venus-hero-inner-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: {{ block.settings.min_height }}vh;
+  }
+
+  .ai-venus-hero-bg-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+  }
+
+  .ai-venus-hero-gradient-{{ ai_gen_id }} {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      {{ block.settings.gradient_direction }}deg,
+      {{ block.settings.gradient_color_start }} {{ block.settings.gradient_start_position }}%,
+      rgba({{ block.settings.gradient_color_start | color_extract: 'red' }}, {{ block.settings.gradient_color_start | color_extract: 'green' }}, {{ block.settings.gradient_color_start | color_extract: 'blue' }}, {{ block.settings.gradient_mid_opacity | times: 0.01 }}) {{ block.settings.gradient_mid_position }}%,
+      rgba({{ block.settings.gradient_color_end | color_extract: 'red' }}, {{ block.settings.gradient_color_end | color_extract: 'green' }}, {{ block.settings.gradient_color_end | color_extract: 'blue' }}, {{ block.settings.gradient_end_opacity | times: 0.01 }}) {{ block.settings.gradient_end_position }}%
+    );
+    z-index: 2;
+  }
+
+  .ai-venus-hero-content-wrap-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    padding: 60px {{ block.settings.side_padding }}px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .ai-venus-hero-text-block-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: {{ block.settings.text_block_max_width }}px;
+    text-align: left;
+  }
+
+  .ai-venus-hero-badge-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    border: 1px solid {{ block.settings.accent_color }};
+    color: {{ block.settings.accent_color }};
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: {{ block.settings.badge_border_radius }}px;
+    margin-bottom: {{ block.settings.badge_bottom_gap }}px;
+    max-width: {{ block.settings.badge_max_width }}px;
+  }
+
+  .ai-venus-hero-badge-dot-{{ ai_gen_id }} {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 50%;
+    background-color: {{ block.settings.accent_color }};
+    animation: ai-venus-badge-breathe-{{ ai_gen_id }} {{ block.settings.badge_animation_speed }}s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes ai-venus-badge-breathe-{{ ai_gen_id }} {
+    0% { opacity: 0.25; }
+    50% { opacity: 1; }
+    100% { opacity: 0.25; }
+  }
+
+  .ai-venus-hero-heading-{{ ai_gen_id }} {
+    font-size: clamp(36px, 6vw, {{ block.settings.heading_size }}px);
+    font-weight: 700;
+    line-height: {{ block.settings.heading_line_height | times: 0.1 }};
+    color: {{ block.settings.text_color }};
+    margin: 0 0 {{ block.settings.heading_bottom_gap }}px 0;
+    max-width: {{ block.settings.heading_max_width }}px;
+    white-space: pre-line;
+  }
+
+  .ai-venus-hero-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    line-height: 1.7;
+    color: {{ block.settings.text_muted_color }};
+    margin: 0 0 {{ block.settings.description_bottom_gap }}px 0;
+    max-width: {{ block.settings.description_max_width }}px;
+  }
+
+  .ai-venus-hero-buttons-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.button_gap }}px;
+    flex-wrap: wrap;
+    margin-bottom: {{ block.settings.buttons_bottom_gap }}px;
+    max-width: {{ block.settings.buttons_max_width }}px;
+  }
+
+  .ai-venus-hero-btn-primary-{{ ai_gen_id }} {
+    padding: 16px 32px;
+    background-color: {{ block.settings.accent_color }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .ai-venus-hero-btn-primary-{{ ai_gen_id }}:hover {
+    filter: brightness(0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba({{ block.settings.accent_color | color_extract: 'red' }}, {{ block.settings.accent_color | color_extract: 'green' }}, {{ block.settings.accent_color | color_extract: 'blue' }}, 0.2);
+  }
+
+  .ai-venus-hero-btn-outline-{{ ai_gen_id }} {
+    padding: 16px 32px;
+    background: transparent;
+    color: {{ block.settings.text_color }};
+    border: 2px solid {{ block.settings.accent_color }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .ai-venus-hero-btn-outline-{{ ai_gen_id }}:hover {
+    background-color: rgba({{ block.settings.accent_color | color_extract: 'red' }}, {{ block.settings.accent_color | color_extract: 'green' }}, {{ block.settings.accent_color | color_extract: 'blue' }}, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .ai-venus-hero-footer-note-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: {{ block.settings.text_muted_color }};
+    max-width: {{ block.settings.footer_note_max_width }}px;
+    margin-top: {{ block.settings.footer_note_top_gap }}px;
+  }
+
+  .ai-venus-hero-check-icon-{{ ai_gen_id }} {
+    width: 16px;
+    height: 16px;
+    fill: {{ block.settings.accent_color }};
+    flex-shrink: 0;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-venus-hero-{{ ai_gen_id }} {
+      min-height: {{ block.settings.min_height_mobile }}vh;
+    }
+
+    .ai-venus-hero-inner-{{ ai_gen_id }} {
+      min-height: {{ block.settings.min_height_mobile }}vh;
+    }
+
+    .ai-venus-hero-bg-image-{{ ai_gen_id }} {
+      opacity: 0.3;
+    }
+
+    .ai-venus-hero-content-wrap-{{ ai_gen_id }} {
+      padding: 40px 20px;
+    }
+
+    .ai-venus-hero-heading-{{ ai_gen_id }} {
+      font-size: clamp(28px, 8vw, 42px);
+    }
+
+    .ai-venus-hero-buttons-{{ ai_gen_id }} {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .ai-venus-hero-btn-primary-{{ ai_gen_id }},
+    .ai-venus-hero-btn-outline-{{ ai_gen_id }} {
+      width: 100%;
+      text-align: center;
+    }
+  }
+{% endstyle %}
+
+<venus-hero-{{ ai_gen_id }} class="ai-venus-hero-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-venus-hero-inner-{{ ai_gen_id }}">
+    {% if block.settings.background_image %}
+      <div
+        class="ai-venus-hero-bg-image-{{ ai_gen_id }}"
+        style="background-image: url('{{ block.settings.background_image | image_url: width: 2000 }}');"
+      ></div>
+    {% endif %}
+
+    <div class="ai-venus-hero-gradient-{{ ai_gen_id }}"></div>
+
+    <div class="ai-venus-hero-content-wrap-{{ ai_gen_id }}">
+      <div class="ai-venus-hero-text-block-{{ ai_gen_id }}">
+        {% if block.settings.badge_text != blank %}
+          <div class="ai-venus-hero-badge-{{ ai_gen_id }}">
+            {% if block.settings.show_badge_dot %}
+              <span class="ai-venus-hero-badge-dot-{{ ai_gen_id }}"></span>
+            {% endif %}
+            {{ block.settings.badge_text }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.heading != blank %}
+          <h1 class="ai-venus-hero-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h1>
+        {% endif %}
+
+        {% if block.settings.description != blank %}
+          <div class="ai-venus-hero-description-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+        {% endif %}
+
+        <div class="ai-venus-hero-buttons-{{ ai_gen_id }}">
+          {% if block.settings.primary_button_text != blank %}
+            <a
+              href="{{ block.settings.primary_button_link }}"
+              class="ai-venus-hero-btn-primary-{{ ai_gen_id }}"
+            >
+              {{ block.settings.primary_button_text }}
+            </a>
+          {% endif %}
+
+          {% if block.settings.secondary_button_text != blank %}
+            <a
+              href="{{ block.settings.secondary_button_link }}"
+              class="ai-venus-hero-btn-outline-{{ ai_gen_id }}"
+            >
+              {{ block.settings.secondary_button_text }}
+            </a>
+          {% endif %}
+        </div>
+
+        {% if block.settings.footer_note != blank %}
+          <div class="ai-venus-hero-footer-note-{{ ai_gen_id }}">
+            <svg
+              class="ai-venus-hero-check-icon-{{ ai_gen_id }}"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>{{ block.settings.footer_note }}</span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</venus-hero-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class VenusHero{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.style.display = 'block';
+      }
+    }
+
+    customElements.define('venus-hero-{{ ai_gen_id }}', VenusHero{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Venus hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Desktop min height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Mobile min height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding",
+      "min": 20,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "text_block_max_width",
+      "label": "Text block max width",
+      "min": 400,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F8FAFC"
+    },
+    {
+      "type": "header",
+      "content": "Gradient overlay"
+    },
+    {
+      "type": "range",
+      "id": "gradient_direction",
+      "label": "Gradient direction",
+      "min": 0,
+      "max": 360,
+      "step": 45,
+      "unit": "deg",
+      "default": 90,
+      "info": "0=top, 90=right, 180=bottom, 270=left"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_start",
+      "label": "Gradient start color",
+      "default": "#F8FAFC"
+    },
+    {
+      "type": "range",
+      "id": "gradient_start_position",
+      "label": "Start position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_end",
+      "label": "Gradient end color",
+      "default": "#F8FAFC"
+    },
+    {
+      "type": "range",
+      "id": "gradient_mid_opacity",
+      "label": "Mid opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 75
+    },
+    {
+      "type": "range",
+      "id": "gradient_mid_position",
+      "label": "Mid position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "range",
+      "id": "gradient_end_opacity",
+      "label": "End opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "gradient_end_position",
+      "label": "End position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Badge"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "Neu eingetroffen"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge_dot",
+      "label": "Show animated dot",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "label": "Badge border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "badge_max_width",
+      "label": "Badge max width",
+      "min": 200,
+      "max": 500,
+      "step": 20,
+      "unit": "px",
+      "default": 320
+    },
+    {
+      "type": "range",
+      "id": "badge_bottom_gap",
+      "label": "Badge bottom spacing",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "badge_animation_speed",
+      "label": "Dot animation speed",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "s",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Balkon-PV\nfür Ihr Zuhause"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 40,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "heading_line_height",
+      "label": "Heading line height",
+      "min": 10,
+      "max": 15,
+      "step": 1,
+      "default": 11,
+      "info": "Divided by 10 in CSS"
+    },
+    {
+      "type": "range",
+      "id": "heading_max_width",
+      "label": "Heading max width",
+      "min": 300,
+      "max": 700,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+    {
+      "type": "range",
+      "id": "heading_bottom_gap",
+      "label": "Heading bottom spacing",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Nachhaltige Energie für Ihr Zuhause. Einfach zu installieren, maximale Effizienz.</p>"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "description_max_width",
+      "label": "Description max width",
+      "min": 300,
+      "max": 700,
+      "step": 20,
+      "unit": "px",
+      "default": 480
+    },
+    {
+      "type": "range",
+      "id": "description_bottom_gap",
+      "label": "Description bottom spacing",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_button_text",
+      "label": "Primary button text",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Secondary button text",
+      "default": "Mehr erfahren"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "button_gap",
+      "label": "Button gap",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "buttons_max_width",
+      "label": "Buttons max width",
+      "min": 300,
+      "max": 700,
+      "step": 20,
+      "unit": "px",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "buttons_bottom_gap",
+      "label": "Buttons bottom spacing",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Footer note"
+    },
+    {
+      "type": "text",
+      "id": "footer_note",
+      "label": "Footer note",
+      "default": "Kostenloser Versand ab 500€"
+    },
+    {
+      "type": "range",
+      "id": "footer_note_max_width",
+      "label": "Footer note max width",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "footer_note_top_gap",
+      "label": "Footer note top spacing",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#00C6FF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1E293B"
+    },
+    {
+      "type": "color",
+      "id": "text_muted_color",
+      "label": "Muted text color",
+      "default": "#64748B"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Venus hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NODE Rabot · Erweiterungsakku</title>
+  <!-- 干净的白底风格，与产品图模板保持一致 -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: #f2f4f8;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Karte – exakt wie das weiße Produktbild-Template */
+    .product-card {
+      max-width: 420px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 8px 20px rgba(0, 0, 0, 0.03);
+      padding: 2rem 1.8rem 1.8rem;
+      transition: transform 0.2s ease;
+      border: 1px solid rgba(0,0,0,0.02);
+    }
+
+    .product-card:hover {
+      transform: scale(1.005);
+    }
+
+    /* Headline – NODE Rabot */
+    .brand-headline {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-headline h1 {
+      font-size: 1.9rem;
+      font-weight: 650;
+      color: #0b1a2b;
+      line-height: 1.2;
+    }
+
+    .brand-headline .badge {
+      font-size: 0.7rem;
+      font-weight: 500;
+      background: #eef2f6;
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      color: #1f2a3a;
+      letter-spacing: 0.2px;
+    }
+
+    /* Untertitel */
+    .sub-title {
+      font-size: 1.1rem;
+      font-weight: 450;
+      color: #2c3e50;
+      margin-bottom: 1.5rem;
+      border-left: 3px solid #c0cfde;
+      padding-left: 0.7rem;
+      background: #fafcfe;
+      border-radius: 0 4px 4px 0;
+      display: inline-block;
+      padding-right: 0.8rem;
+    }
+
+    /* Produktbild-Platzhalter – exakt weiße Fläche (wie im Template) */
+    .product-image-placeholder {
+      background: #ffffff;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.8rem;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.02), 0 6px 12px rgba(0,0,0,0.01);
+      border: 1px solid #f0f2f5;
+    }
+
+    .product-image-placeholder svg {
+      width: 80%;
+      height: 80%;
+      color: #b6c9db;
+      opacity: 0.5;
+    }
+
+    .product-image-placeholder img {
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* Preisblock */
+    .price-block {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.8rem;
+      margin: 0.5rem 0 1.2rem 0;
+      background: #f9fbfd;
+      padding: 0.4rem 0.8rem 0.4rem 0;
+      border-radius: 40px;
+    }
+
+    .price-current {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #0b1a2b;
+      letter-spacing: -0.5px;
+    }
+
+    .price-old {
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: #7c8b9c;
+      text-decoration: line-through;
+      margin-left: 0.2rem;
+    }
+
+    .price-tax-note {
+      font-size: 0.7rem;
+      font-weight: 450;
+      color: #3d5a73;
+      background: #e2f0e6;
+      padding: 0.15rem 0.8rem;
+      border-radius: 30px;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* Finanzierungs-Block – exakt wie im Bild: CONSORS FINANZ + BRP PARIBAS */
+    .financing-block {
+      background: #f2f6fc;
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0 1.2rem 0;
+      border: 1px solid #e5ecf3;
+    }
+
+    .financing-logos {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.2rem;
+    }
+
+    .financing-logos .bank {
+      font-weight: 650;
+      font-size: 0.95rem;
+      color: #1a2b3c;
+      letter-spacing: -0.2px;
+    }
+
+    .financing-logos .bank-bnp {
+      font-weight: 700;
+      color: #0055a5;
+      background: white;
+      padding: 0.1rem 1rem 0.1rem 0.8rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+
+    .financing-logos .bank-bnp::before {
+      content: "●";
+      color: #0095d9;
+      font-size: 0.5rem;
+      margin-right: 0.2rem;
+    }
+
+    .financing-details {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-top: 0.3rem;
+    }
+
+    .interest-rate {
+      font-weight: 550;
+      color: #1f3a4b;
+      background: #ffffffcc;
+      padding: 0.1rem 0.9rem 0.1rem 0.7rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      backdrop-filter: blur(2px);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .interest-rate strong {
+      font-weight: 700;
+      color: #0e2a3b;
+    }
+
+    .monthly-price {
+      background: #0b1a2b;
+      color: white;
+      padding: 0.15rem 1rem 0.15rem 0.9rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .monthly-price small {
+      font-weight: 400;
+      font-size: 0.7rem;
+      opacity: 0.8;
+    }
+
+    .financing-hint {
+      font-size: 0.7rem;
+      color: #3a4d5e;
+      margin-top: 0.5rem;
+      border-top: 1px dashed #d0dce8;
+      padding-top: 0.4rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.3rem;
+      letter-spacing: -0.1px;
+    }
+
+    .financing-hint span {
+      background: #eef3f8;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+    }
+
+    /* Jetzt kaufen – Button */
+    .btn-buy {
+      display: block;
+      width: 100%;
+      background: #0b1a2b;
+      color: white;
+      border: none;
+      padding: 1rem 0.5rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+      border-radius: 60px;
+      margin-top: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      letter-spacing: 0.8px;
+      box-shadow: 0 4px 8px rgba(11, 26, 43, 0.08);
+      border: 1px solid #1f3448;
+    }
+
+    .btn-buy:hover {
+      background: #1d3145;
+      transform: scale(0.98);
+      box-shadow: 0 8px 14px rgba(0, 0, 0, 0.06);
+    }
+
+    .btn-buy:active {
+      background: #0b1725;
+      transform: scale(0.96);
+    }
+
+    /* zusätzliche kleine Fußnote – originalgetreu */
+    .product-footer {
+      margin-top: 0.9rem;
+      display: flex;
+      justify-content: flex-end;
+      font-size: 0.65rem;
+      color: #788b9e;
+      letter-spacing: 0.2px;
+      border-top: 1px solid #eef3f8;
+      padding-top: 0.7rem;
+    }
+
+    .product-footer span {
+      background: #f4f8fc;
+      padding: 0.1rem 0.9rem;
+      border-radius: 40px;
+    }
+
+    /* Responsive Anpassungen */
+    @media (max-width: 450px) {
+      .product-card {
+        padding: 1.5rem 1.2rem;
+      }
+      .brand-headline h1 {
+        font-size: 1.7rem;
+      }
+      .price-current {
+        font-size: 1.9rem;
+      }
+      .financing-logos {
+        gap: 0.3rem;
+      }
+      .financing-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+      }
+      .monthly-price {
+        align-self: flex-start;
+      }
+      .price-tax-note {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="product-card">
+    
+    <!-- Kopf: NODE Rabot + Erweiterungsakku -->
+    <div class="brand-headline">
+      <h1>NODE Rabot</h1>
+      <span class="badge">BP2700</span>
+    </div>
+    <div class="sub-title">Erweiterungsakku (0% MwSt.)</div>
+
+    <!-- Produktbild – weisse Fläche, exakt wie im Template (Platzhalter) -->
+    <div class="product-image-placeholder">
+      <!-- SVG als Platzhalter für das Produkt (weiss mit dezentem Akku-Symbol) -->
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="30" width="60" height="45" rx="8" fill="#eef3f8" stroke="#d5dfe9" stroke-width="1.5" />
+        <rect x="38" y="20" width="24" height="12" rx="3" fill="#d5dfe9" stroke="#bccbd8" stroke-width="1.2" />
+        <rect x="42" y="75" width="16" height="8" rx="2" fill="#d5dfe9" stroke="#bccbd8" stroke-width="1" />
+        <circle cx="50" cy="52" r="8" fill="#f2f6fc" stroke="#b6c9db" stroke-width="1.2" />
+        <path d="M47 52 L53 52 M50 49 L50 55" stroke="#b0c4d6" stroke-width="1.8" stroke-linecap="round" />
+        <rect x="28" y="38" width="6" height="14" rx="1.5" fill="#dde6ef" />
+        <rect x="66" y="38" width="6" height="14" rx="1.5" fill="#dde6ef" />
+        <text x="50" y="92" font-family="system-ui, sans-serif" font-size="6" fill="#a0b6ca" text-anchor="middle" font-weight="400">BP2700</text>
+      </svg>
+      <!-- Hinweis: Das Bild ist ein reiner Platzhalter, da die Vorlage ein weißes Produktbild zeigt -->
+    </div>
+
+    <!-- Preisblock 799,00€ / 899,00€ + MwSt. Hinweis -->
+    <div class="price-block">
+      <span class="price-current">799,00€</span>
+      <span class="price-old">899,00€</span>
+      <span class="price-tax-note">0% MwSt.</span>
+    </div>
+
+    <!-- Finanzierungs-Block: CONSORS FINANZ + BRP PARIBAS + Zins + Monatsrate -->
+    <div class="financing-block">
+      <div class="financing-logos">
+        <span class="bank">CONSORS FINANZ</span>
+        <span class="bank-bnp">BRP PARIBAS</span>
+      </div>
+      
+      <div class="financing-details">
+        <span class="interest-rate">
+          <strong>4,08%</strong> eff. Zins für 60 Monate
+        </span>
+        <span class="monthly-price">
+          14,74€ <small>/ Monat</small>
+        </span>
+      </div>
+
+      <div class="financing-hint">
+        <span>ab</span> Jetzt profitieren
+      </div>
+    </div>
+
+    <!-- Jetzt kaufen – Button -->
+    <button class="btn-buy">Jetzt kaufen</button>
+
+    <!-- kleiner Footer – wie im Original die dezenten Infos -->
+    <div class="product-footer">
+      <span>BP2700 · Erweiterungsakku</span>
+    </div>
+  </div>
+</body>
+</html>

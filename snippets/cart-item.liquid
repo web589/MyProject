@@ -1,0 +1,227 @@
+{%- liquid
+  assign venus_pack_size = product.properties['_venus_pack_size'] | default: 1 | plus: 0
+  if venus_pack_size < 1
+    assign venus_pack_size = 1
+  endif
+  assign venus_display_quantity = product.quantity | divided_by: venus_pack_size
+  assign is_venus_shared_inventory = false
+  if product.properties['_venus_pack_size'] != blank
+    assign is_venus_shared_inventory = true
+  endif
+  assign de_zero_vat_metafield = product.product.metafields.custom.de_zero_vat_eligible
+  assign de_zero_vat_eligible = de_zero_vat_metafield.value
+  if de_zero_vat_eligible != true
+    if product.product.tags contains 'DE-0-VAT-PV' or product.product.tags contains 'DE 0% MwSt. PV'
+      assign de_zero_vat_eligible = true
+    endif
+  endif
+  assign de_zero_vat_variant = product.variant.metafields.custom.de_zero_vat_variant.value
+  assign de_standard_vat_variant = product.variant.metafields.custom.de_standard_vat_variant.value
+  assign de_vat_mode = product.properties['_de_vat_mode']
+  if de_vat_mode != 'zero' and de_vat_mode != 'standard'
+    if product.product.tags contains 'DE-0-VAT-PV' or product.product.tags contains 'DE 0% MwSt. PV' or de_standard_vat_variant != blank
+      assign de_vat_mode = 'zero'
+    else
+      assign de_vat_mode = 'standard'
+    endif
+  endif
+  if de_zero_vat_variant != blank
+    assign de_zero_vat_eligible = true
+  endif
+  if de_vat_mode == 'zero' and de_standard_vat_variant != blank
+    assign de_zero_vat_eligible = true
+  endif
+  assign has_visible_variant_option = false
+  for option in product.options_with_values
+    assign is_bundle_capacity_summary = false
+    if option.value contains '×' and option.value contains 'VENUS E'
+      assign is_bundle_capacity_summary = true
+    endif
+    unless is_bundle_capacity_summary
+      assign has_visible_variant_option = true
+    endunless
+  endfor
+-%}
+<div
+  class="cart__item"
+  data-key="{{ product.key }}"
+  data-de-zero-vat-eligible="{{ de_zero_vat_eligible | default: false }}"
+  data-de-vat-mode="{{ de_vat_mode }}"
+  data-de-vat-product-id="{{ product.product.id }}"
+  data-de-vat-variant-id="{{ product.variant_id }}"
+  data-de-vat-is-zero-product="{% if de_vat_mode == 'zero' %}true{% else %}false{% endif %}"
+  data-de-standard-vat-variant-id="{% if de_vat_mode == 'zero' %}{{ de_standard_vat_variant.id }}{% else %}{{ product.variant_id }}{% endif %}"
+  data-de-zero-vat-variant-id="{% if de_vat_mode == 'zero' %}{{ product.variant_id }}{% else %}{{ de_zero_vat_variant.id }}{% endif %}"
+  {% if is_venus_shared_inventory %}
+    data-venus-shared-variant-id="{{ product.variant_id }}"
+    data-venus-shared-inventory-limit="{{ product.variant.inventory_quantity | default: 0 }}"
+    data-venus-inventory-message="{{ product.properties['_venus_inventory_error'] | default: 'Nicht genügend gemeinsamer Lagerbestand verfügbar. Bitte reduziere die gewählte Menge.' | escape }}"
+  {% endif %}
+>
+  <div class="cart__image">
+    {% if product.image != blank %}
+      <a href="{{ product.url }}" class="image-wrap">
+        {%- render 'image-element',
+          img: product,
+          alt: product.product.title,
+          widths: '180, 360, 540',
+          sizes: sizes,
+          sizeVariable: sizeVariable,
+          fallback: fallback,
+        -%}
+      </a>
+    {% endif %}
+  </div>
+  <div class="cart__item-details">
+    <div class="cart__item-title">
+      <a href="{{ product.url }}" class="cart__item-name">
+        {{ product.product.title }}
+      </a>
+      {%- unless product.product.has_only_default_variant or has_visible_variant_option == false -%}
+        <div class="cart__item--variants">
+          {%- for option in product.options_with_values -%}
+            {%- liquid
+              assign is_bundle_capacity_summary = false
+              if option.value contains '×' and option.value contains 'VENUS E'
+                assign is_bundle_capacity_summary = true
+              endif
+            -%}
+            {%- unless is_bundle_capacity_summary -%}
+              <div><span>{{ option.name }}:</span> {{ option.value }}</div>
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+      {%- endunless -%}
+      {%- if product.selling_plan_allocation != empty -%}
+        <div class="cart__item--variants">
+          {{ product.selling_plan_allocation.selling_plan.name }}
+        </div>
+      {%- endif -%}
+      {%- assign property_size = product.properties | size -%}
+      {%- assign bundle_capacity_rendered = false -%}
+      {% if property_size > 0 %}
+        {% for p in product.properties %}
+          {%- assign first_character_in_key = p.first | truncate: 1, '' -%}
+          {% unless p.last == blank or first_character_in_key == '_' %}
+            {%- assign is_bundle_capacity_duplicate = false -%}
+            {%- if p.last contains '×' and p.last contains 'VENUS E' -%}
+              {%- if bundle_capacity_rendered -%}
+                {%- assign is_bundle_capacity_duplicate = true -%}
+              {%- else -%}
+                {%- assign bundle_capacity_rendered = true -%}
+              {%- endif -%}
+            {%- endif -%}
+            {%- unless is_bundle_capacity_duplicate -%}
+              <div class="cart__item--properties">
+                <span>{{ p.first }}:</span>
+                {% if p.last contains '/uploads/' %}
+                  <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+                {% else %}
+                  {{ p.last }}
+                {% endif %}
+              </div>
+            {%- endunless -%}
+          {% endunless %}
+        {% endfor %}
+      {% endif %}
+
+    </div>
+    <div class="cart__item-sub">
+      <div>
+        <div class="js-qty__wrapper">
+          <label for="cart_updates_{{ product.key }}" class="hidden-label">{{ 'cart.label.quantity' | t }}</label>
+          <input type="text"
+            id="cart_updates_{{ product.key }}"
+            name="updates[]"
+            class="js-qty__num"
+            value="{{ venus_display_quantity }}"
+            min="0"
+            pattern="[0-9]*"
+            data-id="{{ product.key }}"
+            data-quantity-multiplier="{{ venus_pack_size }}">
+          <button type="button"
+            class="js-qty__adjust js-qty__adjust--minus"
+            aria-label="{{ 'cart.general.reduce_quantity' | t }}">
+              <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-minus" viewBox="0 0 20 20"><path fill="#444" d="M17.543 11.029H2.1A1.032 1.032 0 0 1 1.071 10c0-.566.463-1.029 1.029-1.029h15.443c.566 0 1.029.463 1.029 1.029 0 .566-.463 1.029-1.029 1.029z"/></svg>
+              <span class="icon__fallback-text" aria-hidden="true">&minus;</span>
+          </button>
+          <button type="button"
+            class="js-qty__adjust js-qty__adjust--plus"
+            aria-label="{{ 'cart.general.increase_quantity' | t }}">
+              <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" viewBox="0 0 20 20"><path fill="#444" d="M17.409 8.929h-6.695V2.258c0-.566-.506-1.029-1.071-1.029s-1.071.463-1.071 1.029v6.671H1.967C1.401 8.929.938 9.435.938 10s.463 1.071 1.029 1.071h6.605V17.7c0 .566.506 1.029 1.071 1.029s1.071-.463 1.071-1.029v-6.629h6.695c.566 0 1.029-.506 1.029-1.071s-.463-1.071-1.029-1.071z"/></svg>
+              <span class="icon__fallback-text" aria-hidden="true">+</span>
+          </button>
+        </div>
+
+      </div>
+
+      <div class="cart__item-price-col text-right">
+        {%- liquid
+          assign cart_item_current_price = product.final_line_price
+          assign cart_item_original_price = product.original_line_price
+          if product.variant.compare_at_price > product.variant.price
+            assign cart_item_original_price = product.variant.compare_at_price | times: product.quantity
+          endif
+        -%}
+        <span class="cart__price cart__price--current">
+          {{ cart_item_current_price | money }}
+        </span>
+
+        {% if cart_item_original_price > cart_item_current_price %}
+          <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+          <small class="cart__price cart__price--strikethrough">
+            {{ cart_item_original_price | money }}
+          </small>
+        {% endif %}
+
+        {%- if product.line_level_discount_allocations != blank -%}
+          {%- for discount_allocation in product.line_level_discount_allocations -%}
+            <small class="cart__discount">{{ discount_allocation.discount_application.title }} (-{{ discount_allocation.amount | money }})</small>
+          {%- endfor -%}
+        {%- endif -%}
+
+        {%- if product.unit_price_measurement -%}
+          {%- capture unit_price_base_unit -%}
+            <span class="unit-price-base">
+              {%- if product.unit_price_measurement -%}
+                {%- if product.unit_price_measurement.reference_value != 1 -%}
+                  {{ product.unit_price_measurement.reference_value }}
+                {%- endif -%}
+                {{ product.unit_price_measurement.reference_unit }}
+              {%- endif -%}
+            </span>
+          {%- endcapture -%}
+
+          <div class="product__unit-price">{{ product.unit_price | money }}/{{ unit_price_base_unit }}</div>
+        {%- endif -%}
+
+        <div class="cart__remove">
+          <a
+            href="{{ routes.cart_change_url }}?id={{ product.key }}&amp;quantity=0"
+            class="cart__remove-button"
+            data-cart-remove
+            data-cart-key="{{ product.key }}"
+            aria-label="{{ 'cart.general.remove' | t }}: {{ product.product.title | escape }}"
+          >
+            <span class="cart__remove-icon-card">
+              {% if settings.cart_remove_icon != blank %}
+                <img
+                  src="{{ settings.cart_remove_icon | image_url: width: 112 }}"
+                  alt=""
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                >
+              {% else %}
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13M10 11v5m4-5v5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              {% endif %}
+            </span>
+            <span class="visually-hidden">{{ 'cart.general.remove' | t }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

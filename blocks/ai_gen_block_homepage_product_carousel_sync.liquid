@@ -1,0 +1,94 @@
+{% comment %}
+  Product pages reuse the complete rendered homepage product carousel.
+  Homepage block settings and live Shopify product data remain the single
+  source for products, prices, inventory states, badges, styles and scripts.
+{% endcomment %}
+<div
+  id="HomepageProductCarouselSync-{{ block.id }}"
+  data-homepage-product-carousel-sync
+  aria-busy="true"
+  {{ block.shopify_attributes }}
+></div>
+
+<script>
+  (function () {
+    var mount = document.getElementById('HomepageProductCarouselSync-{{ block.id }}');
+    var sectionKey = '17864389448c0111e2';
+
+    if (!mount || !window.fetch) return;
+
+    var rootUrl = window.Shopify && window.Shopify.routes && window.Shopify.routes.root
+      ? window.Shopify.routes.root
+      : '/';
+    var homepageUrl = new URL(rootUrl, window.location.origin);
+    var requestUrl = new URL(homepageUrl.toString());
+    requestUrl.searchParams.set('section_id', sectionKey);
+
+    var previewThemeId = new URLSearchParams(window.location.search).get('preview_theme_id');
+    if (previewThemeId) {
+      requestUrl.searchParams.set('preview_theme_id', previewThemeId);
+      homepageUrl.searchParams.set('preview_theme_id', previewThemeId);
+    }
+
+    function requestMarkup(url) {
+      return fetch(url, {
+        credentials: 'same-origin',
+        headers: { Accept: 'text/html' }
+      }).then(function (response) {
+        if (!response.ok) throw new Error('Homepage product carousel request failed.');
+        return response.text();
+      });
+    }
+
+    requestMarkup(requestUrl.toString())
+      .catch(function () {
+        // Shopify CLI local previews do not expose the Section Rendering
+        // endpoint. Extract the exact section from the rendered homepage.
+        return requestMarkup(homepageUrl.toString()).then(function (homepageMarkup) {
+          var documentCopy = new DOMParser().parseFromString(homepageMarkup, 'text/html');
+          var homepageSection = documentCopy.getElementById('shopify-section-' + sectionKey)
+            || documentCopy.querySelector('[id^="shopify-section-"][id$="__' + sectionKey + '"]');
+          if (!homepageSection) throw new Error('Homepage product carousel is unavailable.');
+          return homepageSection.outerHTML;
+        });
+      })
+      .then(function (markup) {
+        if (!markup || !markup.trim()) throw new Error('Homepage product carousel is unavailable.');
+
+        mount.innerHTML = markup;
+        mount.removeAttribute('aria-busy');
+
+        // Scripts inserted via innerHTML do not execute. Recreate every script
+        // from the homepage section so tabs, carousel, cart actions, sold-out
+        // modal and inventory-dependent interactions remain identical.
+        mount.querySelectorAll('script').forEach(function (oldScript) {
+          var script = document.createElement('script');
+          Array.prototype.forEach.call(oldScript.attributes, function (attribute) {
+            script.setAttribute(attribute.name, attribute.value);
+          });
+          script.text = oldScript.text || oldScript.textContent;
+          oldScript.parentNode.replaceChild(script, oldScript);
+        });
+      })
+      .catch(function () {
+        mount.removeAttribute('aria-busy');
+      });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Homepage product sync",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "venus_product_category"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Homepage product sync"
+    }
+  ]
+}
+{% endschema %}

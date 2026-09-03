@@ -1,0 +1,1975 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>VENUS E Familie</title>
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+          background: #F7F9FC;
+          color: #242424;
+          padding: 40px 20px 80px;
+        }
+        .container { max-width: 1280px; margin: 0 auto; }
+        .page-header { text-align: center; margin-bottom: 40px; }
+        .page-header h1 { font-size: 38px; font-weight: 700; letter-spacing: -0.5px; }
+        .page-header h1 span { color: #0099FC; }
+        .tab-nav {
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+          margin-bottom: 40px;
+          flex-wrap: wrap;
+        }
+        .tab-nav button {
+          background: #FFFFFF;
+          border: 1px solid #E2E8F0;
+          padding: 10px 28px;
+          font-size: 18px;
+          font-weight: 500;
+          color: #596B82;
+          cursor: pointer;
+          border-radius: 50px;
+          transition: all 0.25s ease;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .tab-nav button:hover { background: #f0f4f8; color: #242424; }
+        .tab-nav button.active {
+          background: #0099FC;
+          color: #fff;
+          border-color: #0099FC;
+          box-shadow: 0 4px 14px rgba(0, 153, 252, 0.25);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    
+        /* ----- 轮播容器 ----- */
+        .carousel-wrapper {
+          position: relative;
+          overflow: hidden;
+          border-radius: 20px;
+        }
+        .carousel-track {
+          display: flex;
+          flex-wrap: nowrap;
+          gap: 28px;
+          transition: transform 0.4s ease;
+          padding: 4px 0;
+          will-change: transform;
+        }
+        .carousel-wrapper {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .carousel-wrapper::-webkit-scrollbar {
+          display: none;
+        }
+    
+        /* 卡片样式 */
+        .product-card {
+          flex: 0 0 280px;
+          background: #FFFFFF;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+          border: 1px solid #E2E8F0;
+          display: flex;
+          flex-direction: column;
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .product-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+        }
+        .product-image {
+          background: #F7F9FC;
+          aspect-ratio: 1 / 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          position: relative;
+        }
+        .product-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.4s ease;
+        }
+        .product-card:hover .product-image img { transform: scale(1.02); }
+        .product-badge {
+          position: absolute;
+          top: 14px;
+          left: 14px;
+          background: #e74c3c;
+          color: #fff;
+          font-weight: 600;
+          font-size: 12px;
+          padding: 4px 14px;
+          border-radius: 50px;
+          letter-spacing: 0.5px;
+        }
+        .product-info {
+          padding: 20px 20px 22px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+        .product-title {
+          font-size: 20px;
+          font-weight: 700;
+          margin-bottom: 10px;
+          color: #0369A1;
+        }
+        .product-features {
+          list-style: none;
+          margin-bottom: 12px;
+          font-size: 14px;
+          color: #242424;
+          line-height: 1.6;
+        }
+        .product-features li::before {
+          content: "• ";
+          color: #0099FC;
+          font-weight: bold;
+        }
+        .product-savings {
+          font-size: 15px;
+          font-weight: 600;
+          color: #0369A1;
+          margin-bottom: 14px;
+          background: #E0F7FF;
+          padding: 4px 12px;
+          border-radius: 50px;
+          display: inline-block;
+          align-self: flex-start;
+        }
+        .product-actions {
+          display: flex;
+          gap: 10px;
+          margin-top: auto;
+        }
+        .product-actions .btn {
+          flex: 1;
+          display: inline-block;
+          padding: 10px 0;
+          border-radius: 50px;
+          font-weight: 600;
+          font-size: 14px;
+          text-decoration: none;
+          text-align: center;
+          transition: all 0.25s ease;
+          border: 2px solid transparent;
+          cursor: pointer;
+        }
+        .btn-primary { background: #0099FC; color: #fff; border-color: #0099FC; }
+        .btn-primary:hover { background: #0369A1; border-color: #0369A1; }
+        .btn-outline { background: transparent; color: #0099FC; border-color: #0099FC; }
+        .btn-outline:hover { background: #E0F7FF; }
+        .btn-soldout {
+          background: #f1f3f5;
+          color: #999;
+          border-color: #e2e6ea;
+          cursor: default;
+          pointer-events: none;
+        }
+    
+        /* 引导卡片（无图标） */
+        .product-card.cta-card {
+          background: linear-gradient(145deg, #f0f6ff, #ffffff);
+          border: 2px dashed #E0F7FF;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 30px 20px;
+          min-height: 320px;
+          flex: 0 0, 每个tab下的产品我要自己单独选择，不选择产品系列，请各预留6个产品位置，每个产品的图片我要自己放置。每个tab最后的“Entdecken Sie mehr”我要自己填链接, 每个tab的左右两侧中间都要有按钮，可以左右移动产品卡片, 每个tab下的CTA link不要单独的按钮，链到“Entdecken Sie mehr”这个CTA title上
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-carousel-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    background: {{ block.settings.background_color }};
+  }
+
+  .ai-carousel-container-{{ ai_gen_id }} {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .ai-carousel-header-{{ ai_gen_id }} {
+    text-align: left;
+    margin-bottom: 28px;
+  }
+
+  .ai-carousel-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: {{ block.settings.title_color }};
+    margin: 0;
+  }
+
+  .ai-carousel-title-{{ ai_gen_id }} .highlight {
+    color: {{ block.settings.highlight_color }};
+  }
+
+  .ai-tab-nav-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: flex-start;
+    gap: 44px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    border-bottom: 0;
+  }
+
+  .ai-tab-button-{{ ai_gen_id }} {
+    position: relative;
+    background: transparent;
+    border: 0;
+    padding: 0 0 10px;
+    font-size: {{ block.settings.tab_font_size }}px;
+    font-weight: 500;
+    color: {{ block.settings.tab_text_color }};
+    cursor: pointer;
+    border-radius: 0;
+    transition: all 0.25s ease;
+    box-shadow: none;
+  }
+
+  .ai-tab-button-{{ ai_gen_id }}:hover {
+    background: transparent;
+    color: {{ block.settings.tab_hover_text }};
+  }
+
+  .ai-tab-button-{{ ai_gen_id }}.active {
+    background: transparent;
+    color: {{ block.settings.tab_active_bg }};
+    box-shadow: inset 0 -3px 0 {{ block.settings.tab_active_bg }};
+  }
+
+  .ai-tab-content-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  .ai-tab-content-{{ ai_gen_id }}.active {
+    display: block;
+  }
+
+  .ai-carousel-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .ai-carousel-track-{{ ai_gen_id }} {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    transition: transform 0.4s ease;
+    padding: 4px 0;
+    will-change: transform;
+  }
+
+  .ai-carousel-nav-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(226, 226, 226, 0.92);
+    border: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    box-shadow: none;
+  }
+
+  .ai-carousel-nav-{{ ai_gen_id }}:hover {
+    background: rgba(188, 188, 188, 0.96);
+    transform: translateY(-50%);
+    box-shadow: none;
+  }
+
+  .ai-carousel-nav-{{ ai_gen_id }}:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .ai-carousel-nav-{{ ai_gen_id }}.prev {
+    left: 8px;
+  }
+
+  .ai-carousel-nav-{{ ai_gen_id }}.next {
+    right: 8px;
+  }
+
+  .ai-carousel-nav-{{ ai_gen_id }} svg {
+    width: 26px;
+    height: 26px;
+    stroke: #ffffff;
+    stroke-width: 3;
+    fill: none;
+  }
+
+  .ai-product-card-{{ ai_gen_id }} {
+    flex: 0 0 22.4%;
+    min-width: 0;
+    min-height: 540px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: none;
+    border: 1px solid {{ block.settings.card_border_color }};
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .ai-product-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-3px);
+    border-color: #0EA5E9;
+    box-shadow: 0 10px 24px rgba(89, 107, 130, 0.16);
+  }
+
+  .ai-product-image-{{ ai_gen_id }} {
+    background: {{ block.settings.image_bg_color }};
+    flex: 0 0 230px;
+    height: 230px;
+    margin: 16px 16px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ai-product-image-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+  }
+
+  .ai-product-card-{{ ai_gen_id }}:hover .ai-product-image-{{ ai_gen_id }} img {
+    transform: scale(1.02);
+  }
+
+  .ai-image-placeholder-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background: {{ block.settings.image_bg_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-image-placeholder-wrapper-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-product-badge-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 96px;
+    background: #8bd5ff;
+    color: {{ block.settings.badge_text_color }};
+    font-weight: 600;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 0 0 6px 0;
+    letter-spacing: 0;
+  }
+
+  .ai-product-badge-{{ ai_gen_id }}.ai-product-badge--discount {
+    background: #ff6b13;
+  }
+
+  .ai-product-info-{{ ai_gen_id }} {
+    padding: 18px 16px 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ai-product-title-{{ ai_gen_id }} {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 10px;
+    text-align: left;
+    color: {{ block.settings.product_title_color }};
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .ai-product-title-{{ ai_gen_id }} a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ai-product-title-{{ ai_gen_id }} a:hover {
+    color: {{ block.settings.highlight_color }};
+  }
+
+  .ai-product-subtitle-{{ ai_gen_id }},
+  .ai-product-specs-{{ ai_gen_id }} {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .ai-product-subtitle-{{ ai_gen_id }} {
+    min-height: 19px;
+    margin-bottom: 10px;
+    color: {{ block.settings.highlight_color }};
+    font-weight: 500;
+  }
+
+  .ai-product-specs-{{ ai_gen_id }} {
+    min-height: 39px;
+    margin-bottom: 14px;
+    color: {{ block.settings.features_text_color }};
+  }
+
+  .ai-product-price-{{ ai_gen_id }} {
+    font-size: 20px;
+    font-weight: 700;
+    color: {{ block.settings.price_color }};
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+
+  .ai-product-compare-{{ ai_gen_id }} {
+    font-size: 13px;
+    color: {{ block.settings.compare_price_color }};
+    text-decoration: line-through;
+    margin-left: 8px;
+  }
+
+  .ai-product-savings-{{ ai_gen_id }} {
+    font-size: 16px;
+    font-weight: 700;
+    color: {{ block.settings.savings_text_color }};
+    margin-bottom: 20px;
+    background: {{ block.settings.savings_bg_color }};
+    padding: 9px 12px;
+    border-radius: 8px;
+    line-height: 1.3;
+    display: inline-block;
+    align-self: flex-start;
+  }
+
+  .ai-product-actions-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: auto;
+  }
+
+  .ai-product-btn-{{ ai_gen_id }} {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    min-width: 0;
+    padding: 0 6px;
+    border-radius: 8px;
+    font-family: Manrope, var(--typeBasePrimary), var(--typeBaseFallback);
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    text-align: center;
+    line-height: 1.2;
+    transition: background-color 0.2s ease, background-position 0.25s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .ai-btn-primary-{{ ai_gen_id }} {
+    background: linear-gradient(90deg, #0099FE 0%, #00F0DD 100%);
+    background-size: 160% 100%;
+    background-position: left center;
+    background-origin: border-box;
+    background-clip: border-box;
+    background-repeat: no-repeat;
+    color: {{ block.settings.button_text_color }};
+    border-color: transparent;
+    flex: 1.03 1 0;
+  }
+
+  .ai-btn-primary-{{ ai_gen_id }}:hover:not(:disabled),
+  .ai-btn-primary-{{ ai_gen_id }}:focus-visible {
+    background-position: right center;
+    filter: saturate(1.12) brightness(0.96);
+    transform: translateY(-3px);
+    box-shadow: 0 9px 20px rgba(0, 153, 252, 0.28);
+  }
+
+  .ai-btn-outline-{{ ai_gen_id }} {
+    background: #ffffff;
+    color: #0099FE;
+    border-color: #0099FE;
+    font-family: var(--typeBasePrimary), var(--typeBaseFallback);
+    font-size: 13px;
+    font-weight: 500;
+    flex: 0.97 1 0;
+    min-height: 42px;
+  }
+
+  .ai-btn-outline-{{ ai_gen_id }}:hover:not(:disabled),
+  .ai-btn-outline-{{ ai_gen_id }}:focus-visible {
+    background: {{ block.settings.button_outline_hover_bg }};
+    border-color: #0099FC;
+    color: #0369A1;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0, 153, 252, 0.16);
+  }
+
+  .ai-product-btn-{{ ai_gen_id }}:active:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 9px rgba(0, 153, 252, 0.18);
+  }
+
+  .ai-product-btn-{{ ai_gen_id }}:focus-visible {
+    outline: 2px solid #0099FC;
+    outline-offset: 2px;
+  }
+
+  .ai-btn-soldout-{{ ai_gen_id }} {
+    background: #F7F9FC;
+    color: #596B82;
+    border-color: #E2E8F0;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .ai-cta-card-{{ ai_gen_id }} {
+    background: #F7F9FC;
+    border: 1px dashed {{ block.settings.cta_border_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 20px;
+    min-height: 540px;
+    flex: 0 0 22.4%;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .ai-cta-card-{{ ai_gen_id }}:hover {
+    background: #E0F7FF;
+    border-color: #0EA5E9;
+    transform: translateY(-2px);
+    box-shadow: none;
+  }
+
+  .ai-cta-content-{{ ai_gen_id }} h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: {{ block.settings.cta_title_color }};
+    margin-bottom: 12px;
+  }
+
+  .ai-cta-content-{{ ai_gen_id }} p {
+    font-size: 15px;
+    color: {{ block.settings.cta_text_color }};
+    margin: 0;
+  }
+
+  .ai-preorder-modal-{{ ai_gen_id }} {
+    align-items: center;
+    background: rgba(17, 24, 39, 0.58);
+    display: none;
+    inset: 0;
+    justify-content: center;
+    padding: 20px;
+    position: fixed;
+    z-index: 10000;
+  }
+
+  .ai-preorder-modal-{{ ai_gen_id }}.is-open {
+    display: flex;
+  }
+
+  .ai-preorder-dialog-{{ ai_gen_id }} {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+    max-width: 460px;
+    padding: 30px;
+    position: relative;
+    width: 100%;
+  }
+
+  .ai-preorder-close-{{ ai_gen_id }} {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: #6b7280;
+    cursor: pointer;
+    display: flex;
+    font-size: 22px;
+    height: 36px;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    position: absolute;
+    right: 14px;
+    top: 12px;
+    width: 36px;
+  }
+
+  .ai-preorder-title-{{ ai_gen_id }} {
+    color: #111827;
+    font-size: 22px;
+    line-height: 1.25;
+    margin: 0 34px 10px 0;
+  }
+
+  .ai-preorder-text-{{ ai_gen_id }} {
+    color: #596b82;
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0 0 18px;
+  }
+
+  .ai-preorder-input-{{ ai_gen_id }} {
+    border: 1px solid #d7dee8;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 15px;
+    height: 48px;
+    padding: 0 14px;
+    width: 100%;
+  }
+
+  .ai-preorder-submit-{{ ai_gen_id }},
+  .ai-preorder-return-{{ ai_gen_id }} {
+    align-items: center;
+    background: linear-gradient(90deg, #0099fc 0%, #00efdd 100%);
+    border: 0;
+    border-radius: 5px;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    font-size: 15px;
+    font-weight: 600;
+    justify-content: center;
+    margin-top: 12px;
+    min-height: 48px;
+    padding: 0 18px;
+    width: 100%;
+  }
+
+  .ai-preorder-note-{{ ai_gen_id }},
+  .ai-preorder-status-{{ ai_gen_id }} {
+    color: #7b8798;
+    font-size: 11px;
+    line-height: 1.45;
+    margin: 10px 0 0;
+    text-align: center;
+  }
+
+  .ai-preorder-status-{{ ai_gen_id }}[data-state="error"] {
+    color: #dc2626;
+    text-align: left;
+  }
+
+  .ai-preorder-success-{{ ai_gen_id }} {
+    text-align: center;
+  }
+
+  .ai-preorder-success-icon-{{ ai_gen_id }} {
+    align-items: center;
+    background: #dff8ec;
+    border-radius: 50%;
+    color: #16a36a;
+    display: flex;
+    font-size: 24px;
+    height: 54px;
+    justify-content: center;
+    margin: 6px auto 16px;
+    width: 54px;
+  }
+
+  .ai-preorder-success-{{ ai_gen_id }}[hidden],
+  .ai-preorder-fields-{{ ai_gen_id }}[hidden] {
+    display: none;
+  }
+
+  .ai-dynamic-tabs-{{ ai_gen_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 44px;
+  }
+
+  .ai-dynamic-tabs-{{ ai_gen_id }}:not(:has(.venus-category-unit)) {
+    display: none;
+  }
+
+  .ai-dynamic-tabs-{{ ai_gen_id }} .venus-category-unit {
+    display: contents;
+  }
+
+  .ai-dynamic-tabs-{{ ai_gen_id }} > .shopify-block {
+    display: contents;
+  }
+
+  .ai-dynamic-tabs-{{ ai_gen_id }} .venus-category-tab {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    color: {{ block.settings.tab_text_color }};
+    cursor: pointer;
+    flex: 0 0 auto;
+    font-size: {{ block.settings.tab_font_size }}px;
+    font-weight: 500;
+    margin: 0 0 32px;
+    order: 0;
+    padding: 0 0 10px;
+  }
+
+  .ai-dynamic-tabs-{{ ai_gen_id }} .venus-category-tab.active {
+    box-shadow: inset 0 -3px 0 {{ block.settings.tab_active_bg }};
+    color: {{ block.settings.tab_active_bg }};
+  }
+
+  .ai-dynamic-tabs-{{ ai_gen_id }} .venus-category-panel {
+    display: none;
+    flex: 0 0 100%;
+    min-width: 0;
+    order: 2;
+  }
+
+  .ai-dynamic-tabs-{{ ai_gen_id }} .venus-category-panel.active {
+    display: block;
+  }
+
+  .ai-product-carousel-{{ ai_gen_id }}:has(.venus-category-unit) [data-legacy-tabs] {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-product-carousel-{{ ai_gen_id }} {
+      padding: 30px 15px 60px;
+    }
+
+    .ai-carousel-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.7 }}px;
+    }
+
+    .ai-tab-nav-{{ ai_gen_id }} {
+      flex-wrap: nowrap;
+      gap: 32px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .ai-dynamic-tabs-{{ ai_gen_id }} {
+      flex-wrap: wrap;
+      gap: 0 10px;
+    }
+
+    .ai-dynamic-tabs-{{ ai_gen_id }} .venus-category-tab {
+      font-size: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 8px;
+    }
+
+    .ai-tab-nav-{{ ai_gen_id }}::-webkit-scrollbar {
+      display: none;
+    }
+
+    .ai-tab-button-{{ ai_gen_id }} {
+      flex: 0 0 auto;
+      font-size: {{ block.settings.tab_font_size | times: 0.9 }}px;
+      padding: 0 0 8px;
+    }
+
+    .ai-product-card-{{ ai_gen_id }} {
+      flex: 0 0 min(86vw, 340px);
+      min-height: 620px;
+    }
+
+    .ai-carousel-track-{{ ai_gen_id }} {
+      gap: 16px;
+    }
+
+    .ai-carousel-wrapper-{{ ai_gen_id }} {
+      padding: 0;
+    }
+
+    .ai-carousel-nav-{{ ai_gen_id }} {
+      width: 48px;
+      height: 48px;
+    }
+
+    .ai-carousel-nav-{{ ai_gen_id }} svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .ai-preorder-dialog-{{ ai_gen_id }} {
+      padding: 26px 22px;
+    }
+  }
+{% endstyle %}
+
+{% liquid
+  assign pdp_shared_content = shop.metaobjects.pdp_shared_content['global']
+  assign shared_related_title = pdp_shared_content.related_products_title.value
+%}
+
+<product-carousel-{{ ai_gen_id }}
+  class="ai-product-carousel-{{ ai_gen_id }}"
+  data-modal-invalid-email="{{ block.settings.modal_invalid_email | escape }}"
+  data-modal-submission-error="{{ block.settings.modal_error_text | escape }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-carousel-container-{{ ai_gen_id }}">
+    {% assign carousel_title = shared_related_title | default: block.settings.title %}
+    {% if carousel_title != blank %}
+      <div class="ai-carousel-header-{{ ai_gen_id }}">
+        <h1 class="ai-carousel-title-{{ ai_gen_id }}">{{ carousel_title }}</h1>
+      </div>
+    {% endif %}
+
+    <div class="ai-dynamic-tabs-{{ ai_gen_id }}" data-dynamic-tabs>
+      {% content_for 'blocks' %}
+    </div>
+
+    <div data-legacy-tabs>
+    {% assign dynamic_category_menu = block.settings.category_menu %}
+    {% if dynamic_category_menu == blank %}
+      {% assign dynamic_category_menu = linklists['venus-product-categories'] %}
+    {% endif %}
+    <div class="ai-tab-nav-{{ ai_gen_id }}">
+      {% if dynamic_category_menu != blank and dynamic_category_menu.links.size > 0 %}
+        {% for category_link in dynamic_category_menu.links %}
+          <button class="ai-tab-button-{{ ai_gen_id }}{% if forloop.first %} active{% endif %}" data-tab="menu-{{ forloop.index }}">
+            {{ category_link.title }}
+          </button>
+        {% endfor %}
+      {% else %}
+        {% assign first_legacy_tab_rendered = false %}
+        {% for i in (1..3) %}
+          {% liquid
+            assign tab_enabled_key = 'tab_' | append: i | append: '_enabled'
+            assign tab_label_key = 'tab_' | append: i | append: '_label'
+            assign tab_enabled = block.settings[tab_enabled_key]
+            assign tab_label = block.settings[tab_label_key]
+          %}
+          {% if tab_enabled and tab_label != blank %}
+            <button class="ai-tab-button-{{ ai_gen_id }}{% unless first_legacy_tab_rendered %} active{% endunless %}" data-tab="{{ i }}">
+              {{ tab_label }}
+            </button>
+            {% assign first_legacy_tab_rendered = true %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% if dynamic_category_menu != blank and dynamic_category_menu.links.size > 0 %}
+      {% for category_link in dynamic_category_menu.links %}
+        {% assign menu_tab_id = 'menu-' | append: forloop.index %}
+        {% render 'venus-product-carousel-panel',
+          category_link: category_link,
+          tab_id: menu_tab_id,
+          is_active: forloop.first,
+          carousel_settings: block.settings,
+          carousel_id: ai_gen_id
+        %}
+      {% endfor %}
+    {% else %}
+      {% assign first_legacy_panel_rendered = false %}
+      {% for tab_index in (1..3) %}
+        {% assign tab_enabled_key = 'tab_' | append: tab_index | append: '_enabled' %}
+        {% if block.settings[tab_enabled_key] %}
+          {% assign legacy_panel_is_active = false %}
+          {% unless first_legacy_panel_rendered %}
+            {% assign legacy_panel_is_active = true %}
+          {% endunless %}
+          {% render 'venus-product-carousel-panel',
+            tab_id: tab_index,
+            is_active: legacy_panel_is_active,
+            carousel_settings: block.settings,
+            carousel_id: ai_gen_id
+          %}
+          {% assign first_legacy_panel_rendered = true %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    </div>
+  </div>
+
+  {%- form 'customer', class: 'ai-preorder-native-form' -%}
+    <div
+      class="ai-preorder-modal-{{ ai_gen_id }}"
+      data-preorder-modal
+      data-server-state="{% if form.posted_successfully? %}success{% elsif form.errors %}error{% else %}initial{% endif %}"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ai-preorder-title-{{ ai_gen_id }}"
+    >
+      <div class="ai-preorder-dialog-{{ ai_gen_id }}" data-preorder-dialog>
+        <button type="button" class="ai-preorder-close-{{ ai_gen_id }}" data-preorder-close aria-label="{{ block.settings.modal_close_label | escape }}">×</button>
+        <input type="hidden" name="contact[tags]" value="newsletter, preorder" data-preorder-tags>
+
+        <div class="ai-preorder-fields-{{ ai_gen_id }}" data-preorder-fields{% if form.posted_successfully? %} hidden{% endif %}>
+          <h2 class="ai-preorder-title-{{ ai_gen_id }}" id="ai-preorder-title-{{ ai_gen_id }}">
+            {{ block.settings.modal_title_prefix | escape }}
+            <span data-preorder-product-title></span>
+            {{ block.settings.modal_title_suffix | escape }}
+          </h2>
+          <div class="ai-preorder-text-{{ ai_gen_id }}">{{ block.settings.modal_text }}</div>
+          <input
+            class="ai-preorder-input-{{ ai_gen_id }}"
+            type="email"
+            name="contact[email]"
+            value="{{ form.email }}"
+            placeholder="{{ block.settings.modal_email_placeholder | escape }}"
+            autocomplete="email"
+            autocapitalize="off"
+            autocorrect="off"
+            aria-label="{{ block.settings.modal_email_placeholder | escape }}"
+            required
+          >
+          <p class="ai-preorder-status-{{ ai_gen_id }}" data-preorder-status data-state="{% if form.errors %}error{% else %}initial{% endif %}" role="status" aria-live="polite">
+            {% if form.errors %}{{ block.settings.modal_error_text }}{% endif %}
+          </p>
+          <button class="ai-preorder-submit-{{ ai_gen_id }}" type="button" data-preorder-submit>{{ block.settings.modal_submit_label }}</button>
+          <div class="ai-preorder-note-{{ ai_gen_id }}">{{ block.settings.modal_note }}</div>
+        </div>
+
+        <div class="ai-preorder-success-{{ ai_gen_id }}" data-preorder-success{% unless form.posted_successfully? %} hidden{% endunless %}>
+          <span class="ai-preorder-success-icon-{{ ai_gen_id }}" aria-hidden="true">✓</span>
+          <h2 class="ai-preorder-title-{{ ai_gen_id }}">{{ block.settings.modal_success_title }}</h2>
+          <p class="ai-preorder-text-{{ ai_gen_id }}">
+            {{ block.settings.modal_success_prefix | escape }}
+            <span data-preorder-product-title></span>
+            {{ block.settings.modal_success_suffix | escape }}
+          </p>
+          <button class="ai-preorder-return-{{ ai_gen_id }}" type="button" data-preorder-close>{{ block.settings.modal_return_label }}</button>
+        </div>
+      </div>
+    </div>
+  {%- endform -%}
+
+  <form action="{{ routes.cart_url }}" method="post" data-carousel-checkout-form hidden>
+    <button type="submit" name="checkout" data-carousel-checkout>{{ block.settings.checkout_button_label }}</button>
+  </form>
+</product-carousel-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductCarousel{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentPositions = {};
+      }
+
+      connectedCallback() {
+        const dynamicTabButtons = this.querySelectorAll('.venus-category-tab');
+        const dynamicTabContents = this.querySelectorAll('.venus-category-panel');
+        this.tabButtons = dynamicTabButtons.length ? dynamicTabButtons : this.querySelectorAll('.ai-tab-button-{{ ai_gen_id }}');
+        this.tabContents = dynamicTabContents.length ? dynamicTabContents : this.querySelectorAll('.ai-tab-content-{{ ai_gen_id }}');
+        if (dynamicTabButtons.length) {
+          this.tabButtons.forEach((button, index) => button.classList.toggle('active', index === 0));
+          this.tabContents.forEach((content, index) => content.classList.toggle('active', index === 0));
+        }
+        this.setupTabs();
+        this.setupCarousels();
+        this.setupModal();
+        this.setupProductActions();
+      }
+
+      setupModal() {
+        this.modal = this.querySelector('[data-preorder-modal]');
+        if (!this.modal) return;
+        this.modalTriggers = this.querySelectorAll('[data-preorder-open]');
+        this.modalCloseButtons = this.querySelectorAll('[data-preorder-close]');
+        this.modalStatus = this.querySelector('[data-preorder-status]');
+        this.modalEmail = this.querySelector('.ai-preorder-input-{{ ai_gen_id }}');
+        this.modalForm = this.querySelector('.ai-preorder-native-form');
+        this.modalSubmit = this.querySelector('[data-preorder-submit]');
+        this.modalTags = this.querySelector('[data-preorder-tags]');
+        this.modalProductTitles = this.querySelectorAll('[data-preorder-product-title]');
+        this.modalFields = this.querySelector('[data-preorder-fields]');
+        this.modalSuccess = this.querySelector('[data-preorder-success]');
+        this.modalStorageKey = 'venus-preorder-{{ ai_gen_id }}';
+        this.modalSubmitting = false;
+
+        this.modalTriggers.forEach((trigger) => trigger.addEventListener('click', () => this.openModal(trigger)));
+        this.modalCloseButtons.forEach((button) => button.addEventListener('click', () => this.closeModal()));
+        this.modal.addEventListener('click', (event) => {
+          if (event.target === this.modal) this.closeModal();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && this.modal.classList.contains('is-open')) this.closeModal();
+        });
+        if (this.modalForm) {
+          this.modalForm.noValidate = true;
+          this.modalForm.addEventListener('submit', (event) => this.submitModal(event));
+        }
+        this.modalSubmit?.addEventListener('click', () => {
+          this.modalForm?.requestSubmit();
+        });
+        if (this.modal.dataset.serverState !== 'initial') {
+          this.restoreModalProduct();
+          this.openModal();
+        }
+      }
+
+      validateModalSubmission(event) {
+        const email = this.modalEmail?.value.trim() || '';
+        if (email && this.modalEmail.validity.valid) return true;
+        event?.preventDefault();
+        if (this.modalStatus) {
+          this.modalStatus.textContent = this.dataset.modalInvalidEmail || '';
+          this.modalStatus.dataset.state = 'error';
+        }
+        this.modalEmail?.focus();
+        return false;
+      }
+
+      async submitModal(event) {
+        event.preventDefault();
+        if (this.modalSubmitting || !this.validateModalSubmission()) return;
+
+        const scrollPosition = { x: window.scrollX, y: window.scrollY };
+        this.modalSubmitting = true;
+        if (this.modalSubmit) {
+          this.modalSubmit.disabled = true;
+          this.modalSubmit.setAttribute('aria-busy', 'true');
+        }
+        if (this.modalStatus) {
+          this.modalStatus.textContent = '';
+          this.modalStatus.dataset.state = 'initial';
+        }
+
+        try {
+          const response = await fetch(this.modalForm.action, {
+            method: 'POST',
+            body: new FormData(this.modalForm),
+            credentials: 'same-origin',
+            headers: { Accept: 'text/html' }
+          });
+          const responseHtml = await response.text();
+          const responseDocument = new DOMParser().parseFromString(responseHtml, 'text/html');
+          const responseModal = responseDocument.querySelector('[data-preorder-modal]');
+          const responseState = responseModal?.dataset.serverState || 'error';
+
+          if (response.ok && responseState === 'success') {
+            this.showModalSuccess();
+          } else {
+            const responseError = responseModal?.querySelector('[data-preorder-status]')?.textContent.trim();
+            throw new Error(responseError || this.dataset.modalSubmissionError || 'Bitte versuche es erneut.');
+          }
+        } catch (error) {
+          if (this.modalStatus) {
+            this.modalStatus.textContent = error.message;
+            this.modalStatus.dataset.state = 'error';
+          }
+        } finally {
+          this.modalSubmitting = false;
+          if (this.modalSubmit) {
+            this.modalSubmit.disabled = false;
+            this.modalSubmit.removeAttribute('aria-busy');
+          }
+          requestAnimationFrame(() => window.scrollTo(scrollPosition.x, scrollPosition.y));
+        }
+      }
+
+      showModalSuccess() {
+        if (this.modalFields) this.modalFields.hidden = true;
+        if (this.modalSuccess) this.modalSuccess.hidden = false;
+        this.modal?.classList.add('is-open');
+        document.documentElement.classList.add('js-drawer-open');
+        const closeButton = this.modalSuccess?.querySelector('[data-preorder-close]');
+        closeButton?.focus({ preventScroll: true });
+      }
+
+      setModalProduct(trigger) {
+        const product = {
+          title: trigger.dataset.productTitle?.trim() || '',
+          handle: trigger.dataset.productHandle?.trim() || '',
+          id: trigger.dataset.productId?.trim() || ''
+        };
+        this.applyModalProduct(product);
+        try {
+          window.sessionStorage.setItem(this.modalStorageKey, JSON.stringify(product));
+        } catch (error) {
+          // The tags still preserve the source when browser storage is unavailable.
+        }
+      }
+
+      applyModalProduct(product) {
+        if (!product?.title) return;
+        this.modalProductTitles.forEach((element) => {
+          element.textContent = product.title;
+        });
+        if (this.modalTags) {
+          const sourceTags = ['newsletter', 'preorder'];
+          if (product.handle) sourceTags.push(`preorder-source-${product.handle}`);
+          if (product.id) sourceTags.push(`preorder-product-${product.id}`);
+          this.modalTags.value = sourceTags.join(', ');
+        }
+      }
+
+      restoreModalProduct() {
+        try {
+          const savedProduct = JSON.parse(window.sessionStorage.getItem(this.modalStorageKey) || 'null');
+          this.applyModalProduct(savedProduct);
+        } catch (error) {
+          // Keep the server response usable even if stored data cannot be read.
+        }
+      }
+
+      openModal(trigger) {
+        if (!this.modal) return;
+        if (trigger) this.setModalProduct(trigger);
+        this.modal.classList.add('is-open');
+        document.documentElement.classList.add('js-drawer-open');
+        window.setTimeout(() => this.modalEmail?.focus(), 50);
+      }
+
+      closeModal() {
+        if (!this.modal) return;
+        this.modal.classList.remove('is-open');
+        document.documentElement.classList.remove('js-drawer-open');
+      }
+
+      setupProductActions() {
+        this.querySelectorAll('[data-product-action]').forEach((button) => {
+          button.addEventListener('click', () => this.handleProductAction(button));
+        });
+      }
+
+      async handleProductAction(button) {
+        const variantId = Number(button.dataset.variantId);
+        if (!variantId || button.disabled) return;
+        button.disabled = true;
+        const root = window.Shopify?.routes?.root || '/';
+        try {
+          const response = await fetch(`${root}cart/add.js`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
+          });
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.description || result.message || 'Produkt konnte nicht hinzugefügt werden.');
+          if (button.dataset.productAction === 'buy_now') {
+            this.querySelector('[data-carousel-checkout-form]')?.requestSubmit();
+          } else {
+            document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: result }));
+          }
+        } catch (error) {
+          if (this.modalStatus) {
+            this.modalStatus.textContent = error.message;
+            this.modalStatus.dataset.state = 'error';
+          }
+        } finally {
+          button.disabled = false;
+        }
+      }
+
+      setupTabs() {
+        this.tabButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
+            
+            this.tabButtons.forEach((btn) => btn.classList.remove('active'));
+            this.tabContents.forEach((content) => content.classList.remove('active'));
+            
+            button.classList.add('active');
+            const activeContent = this.querySelector(`[data-tab-content="${tabId}"]`);
+            if (activeContent) {
+              activeContent.classList.add('active');
+            }
+          });
+        });
+      }
+
+      setupCarousels() {
+        this.tabContents.forEach((tabContent, index) => {
+          const track = tabContent.querySelector('[data-carousel-track]');
+          const prevBtn = tabContent.querySelector('[data-carousel-prev]');
+          const nextBtn = tabContent.querySelector('[data-carousel-next]');
+          
+          if (!track || !prevBtn || !nextBtn) return;
+
+          const tabId = tabContent.getAttribute('data-tab-content');
+          this.currentPositions[tabId] = 0;
+
+          const updateButtons = () => {
+            const cards = track.querySelectorAll('[data-product-card]');
+            const cardWidth = cards[0]?.offsetWidth || 282;
+            const gap = parseFloat(getComputedStyle(track).gap) || 16;
+            const scrollAmount = cardWidth + gap;
+            const wrapperWidth = track.parentElement.clientWidth;
+            const visibleCards = Math.max(1, Math.floor((wrapperWidth + gap) / scrollAmount));
+            const maxPosition = Math.max(0, (cards.length - visibleCards) * scrollAmount);
+
+            prevBtn.disabled = this.currentPositions[tabId] <= 0;
+            nextBtn.disabled = this.currentPositions[tabId] >= maxPosition;
+          };
+
+          prevBtn.addEventListener('click', () => {
+            const cards = track.querySelectorAll('[data-product-card]');
+            const cardWidth = cards[0]?.offsetWidth || 282;
+            const gap = parseFloat(getComputedStyle(track).gap) || 16;
+            const scrollAmount = cardWidth + gap;
+
+            this.currentPositions[tabId] = Math.max(0, this.currentPositions[tabId] - scrollAmount);
+            track.style.transform = `translateX(-${this.currentPositions[tabId]}px)`;
+            updateButtons();
+          });
+
+          nextBtn.addEventListener('click', () => {
+            const cards = track.querySelectorAll('[data-product-card]');
+            const cardWidth = cards[0]?.offsetWidth || 282;
+            const gap = parseFloat(getComputedStyle(track).gap) || 16;
+            const scrollAmount = cardWidth + gap;
+            const wrapperWidth = track.parentElement.clientWidth;
+            const visibleCards = Math.max(1, Math.floor((wrapperWidth + gap) / scrollAmount));
+            const maxPosition = Math.max(0, (cards.length - visibleCards) * scrollAmount);
+
+            this.currentPositions[tabId] = Math.min(maxPosition, this.currentPositions[tabId] + scrollAmount);
+            track.style.transform = `translateX(-${this.currentPositions[tabId]}px)`;
+            updateButtons();
+          });
+
+          updateButtons();
+
+          window.addEventListener('resize', () => {
+            this.currentPositions[tabId] = 0;
+            track.style.transform = 'translateX(0)';
+            updateButtons();
+          });
+        });
+      }
+    }
+
+    customElements.define('product-carousel-{{ ai_gen_id }}', ProductCarousel{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "<p>VENUS E Familie</p>"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Dynamic categories"
+    },
+    {
+      "type": "link_list",
+      "id": "category_menu",
+      "label": "Category and product menu"
+    },
+    {
+      "type": "paragraph",
+      "content": "Optional: select a Shopify navigation menu. Every top-level menu item becomes a category tab; add individual product links beneath it. Add as many categories and products as needed. The top-level item link is used by the Entdecken Sie mehr card. When no menu is selected, the three legacy tabs below remain active."
+    },
+    {
+      "type": "paragraph",
+      "content": "Card content comes from the selected Shopify product. Optional product metafields: custom.carousel_title, custom.carousel_subtitle, custom.carousel_specs, custom.carousel_badge, custom.carousel_primary_link and custom.carousel_secondary_link."
+    },
+    {
+      "type": "header",
+      "content": "Tab 1"
+    },
+    {
+      "type": "paragraph",
+      "content": "Each card content override uses six lines: title, blue subtitle, grey specifications, current price, original price and badge. Leave the entire field empty to use Shopify product data and metafields."
+    },
+    {
+      "type": "checkbox",
+      "id": "tab_1_enabled",
+      "label": "Enable tab 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tab_1_label",
+      "label": "Tab label",
+      "default": "Alle Produkte"
+    },
+    {
+      "type": "product",
+      "id": "tab_1_product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_1_image_1",
+      "label": "Custom image 1"
+    },
+    {
+      "type": "product",
+      "id": "tab_1_product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_1_image_2",
+      "label": "Custom image 2"
+    },
+    {
+      "type": "product",
+      "id": "tab_1_product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_1_image_3",
+      "label": "Custom image 3"
+    },
+    {
+      "type": "product",
+      "id": "tab_1_product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_1_image_4",
+      "label": "Custom image 4"
+    },
+    {
+      "type": "product",
+      "id": "tab_1_product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_1_image_5",
+      "label": "Custom image 5"
+    },
+    {
+      "type": "product",
+      "id": "tab_1_product_6",
+      "label": "Product 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_1_image_6",
+      "label": "Custom image 6"
+    },
+    { "type": "textarea", "id": "tab_1_content_1", "label": "Card 1 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_1_content_2", "label": "Card 2 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_1_content_3", "label": "Card 3 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_1_content_4", "label": "Card 4 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_1_content_5", "label": "Card 5 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_1_content_6", "label": "Card 6 content override (6 lines)" },
+    {
+      "type": "url",
+      "id": "tab_1_cta_link",
+      "label": "CTA link"
+    },
+    {
+      "type": "header",
+      "content": "Tab 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "tab_2_enabled",
+      "label": "Enable tab 2",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tab_2_label",
+      "label": "Tab label",
+      "default": "Bestseller"
+    },
+    {
+      "type": "product",
+      "id": "tab_2_product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_2_image_1",
+      "label": "Custom image 1"
+    },
+    {
+      "type": "product",
+      "id": "tab_2_product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_2_image_2",
+      "label": "Custom image 2"
+    },
+    {
+      "type": "product",
+      "id": "tab_2_product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_2_image_3",
+      "label": "Custom image 3"
+    },
+    {
+      "type": "product",
+      "id": "tab_2_product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_2_image_4",
+      "label": "Custom image 4"
+    },
+    {
+      "type": "product",
+      "id": "tab_2_product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_2_image_5",
+      "label": "Custom image 5"
+    },
+    {
+      "type": "product",
+      "id": "tab_2_product_6",
+      "label": "Product 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_2_image_6",
+      "label": "Custom image 6"
+    },
+    { "type": "textarea", "id": "tab_2_content_1", "label": "Card 1 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_2_content_2", "label": "Card 2 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_2_content_3", "label": "Card 3 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_2_content_4", "label": "Card 4 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_2_content_5", "label": "Card 5 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_2_content_6", "label": "Card 6 content override (6 lines)" },
+    {
+      "type": "url",
+      "id": "tab_2_cta_link",
+      "label": "CTA link"
+    },
+    {
+      "type": "header",
+      "content": "Tab 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "tab_3_enabled",
+      "label": "Enable tab 3",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tab_3_label",
+      "label": "Tab label",
+      "default": "Neu"
+    },
+    {
+      "type": "product",
+      "id": "tab_3_product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_3_image_1",
+      "label": "Custom image 1"
+    },
+    {
+      "type": "product",
+      "id": "tab_3_product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_3_image_2",
+      "label": "Custom image 2"
+    },
+    {
+      "type": "product",
+      "id": "tab_3_product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_3_image_3",
+      "label": "Custom image 3"
+    },
+    {
+      "type": "product",
+      "id": "tab_3_product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_3_image_4",
+      "label": "Custom image 4"
+    },
+    {
+      "type": "product",
+      "id": "tab_3_product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_3_image_5",
+      "label": "Custom image 5"
+    },
+    {
+      "type": "product",
+      "id": "tab_3_product_6",
+      "label": "Product 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "tab_3_image_6",
+      "label": "Custom image 6"
+    },
+    { "type": "textarea", "id": "tab_3_content_1", "label": "Card 1 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_3_content_2", "label": "Card 2 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_3_content_3", "label": "Card 3 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_3_content_4", "label": "Card 4 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_3_content_5", "label": "Card 5 content override (6 lines)" },
+    { "type": "textarea", "id": "tab_3_content_6", "label": "Card 6 content override (6 lines)" },
+    {
+      "type": "url",
+      "id": "tab_3_cta_link",
+      "label": "CTA link"
+    },
+    {
+      "type": "header",
+      "content": "Call to action card"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta_card",
+      "label": "Show CTA card",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTA title",
+      "default": "Entdecken Sie mehr"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Sehen Sie sich unsere vollständige Produktpalette an"
+    },
+    {
+      "type": "header",
+      "content": "Button labels"
+    },
+    {
+      "type": "text",
+      "id": "view_button_text",
+      "label": "View button",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "text",
+      "id": "details_button_text",
+      "label": "Details button",
+      "default": "Vorbestellen"
+    },
+    {
+      "type": "text",
+      "id": "previous_button_label",
+      "label": "Previous arrow label",
+      "default": "Vorherige Produkte"
+    },
+    {
+      "type": "text",
+      "id": "next_button_label",
+      "label": "Next arrow label",
+      "default": "Nächste Produkte"
+    },
+    {
+      "type": "header",
+      "content": "Product preorder"
+    },
+    {
+      "type": "paragraph",
+      "content": "Products switch to email reservation automatically when no Shopify variant has inventory. The boolean product metafield custom.preorder_enabled can force reservation while stock remains. Optional: custom.preorder_button_label. Product titles and source tags are added automatically."
+    },
+    {
+      "type": "text",
+      "id": "modal_title_prefix",
+      "label": "Title before product name",
+      "default": "Informiere mich, sobald"
+    },
+    {
+      "type": "text",
+      "id": "modal_title_suffix",
+      "label": "Title after product name",
+      "default": "verfügbar ist"
+    },
+    {
+      "type": "richtext",
+      "id": "modal_text",
+      "label": "Description",
+      "default": "<p>Hinterlege deine E-Mail-Adresse, dann benachrichtigen wir dich, sobald das Produkt erhältlich ist.</p>"
+    },
+    {
+      "type": "text",
+      "id": "modal_email_placeholder",
+      "label": "Email placeholder",
+      "default": "Deine E-Mail-Adresse"
+    },
+    {
+      "type": "text",
+      "id": "modal_submit_label",
+      "label": "Submit button",
+      "default": "Per E-Mail vormerken"
+    },
+    {
+      "type": "richtext",
+      "id": "modal_note",
+      "label": "Privacy note",
+      "default": "<p>Mit dem Absenden akzeptierst du unsere Datenschutzerklärung.</p>"
+    },
+    {
+      "type": "text",
+      "id": "modal_invalid_email",
+      "label": "Invalid email message",
+      "default": "Bitte gib eine gültige E-Mail-Adresse ein."
+    },
+    {
+      "type": "text",
+      "id": "modal_error_text",
+      "label": "Server error message",
+      "default": "Das hat leider nicht funktioniert. Bitte versuche es erneut."
+    },
+    {
+      "type": "text",
+      "id": "modal_success_title",
+      "label": "Success title",
+      "default": "Du bist vorgemerkt!"
+    },
+    {
+      "type": "text",
+      "id": "modal_success_prefix",
+      "label": "Success text before product name",
+      "default": "Vielen Dank! Wir benachrichtigen dich, sobald"
+    },
+    {
+      "type": "text",
+      "id": "modal_success_suffix",
+      "label": "Success text after product name",
+      "default": "verfügbar ist."
+    },
+    {
+      "type": "text",
+      "id": "modal_return_label",
+      "label": "Success button",
+      "default": "Zurück zum Shop"
+    },
+    {
+      "type": "text",
+      "id": "modal_close_label",
+      "label": "Close button accessible label",
+      "default": "Schließen"
+    },
+    {
+      "type": "text",
+      "id": "checkout_button_label",
+      "label": "Checkout submit button",
+      "default": "Checkout"
+    },
+    {
+      "type": "text",
+      "id": "soldout_text",
+      "label": "Sold out text",
+      "default": "Ausverkauft"
+    },
+    {
+      "type": "text",
+      "id": "sale_badge_text",
+      "label": "Sale badge",
+      "default": "SALE"
+    },
+    {
+      "type": "text",
+      "id": "savings_text",
+      "label": "Savings text",
+      "default": "Sparen Sie"
+    },
+    {
+      "type": "header",
+      "content": "Navigation buttons"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_bg",
+      "label": "Background",
+      "default": "#F7F9FC"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_hover_bg",
+      "label": "Hover background",
+      "default": "#E0F7FF"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_border",
+      "label": "Border",
+      "default": "#E2E8F0"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_icon_color",
+      "label": "Icon color",
+      "default": "#596B82"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#F7F9FC"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#242424"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlight",
+      "default": "#0099FC"
+    },
+    {
+      "type": "color",
+      "id": "tab_border_color",
+      "label": "Tab border",
+      "default": "#E2E8F0"
+    },
+    {
+      "type": "color",
+      "id": "tab_text_color",
+      "label": "Tab text",
+      "default": "#596B82"
+    },
+    {
+      "type": "color",
+      "id": "tab_hover_bg",
+      "label": "Tab hover background",
+      "default": "#f0f4f8"
+    },
+    {
+      "type": "color",
+      "id": "tab_hover_text",
+      "label": "Tab hover text",
+      "default": "#242424"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_bg",
+      "label": "Tab active background",
+      "default": "#0099FC"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_text",
+      "label": "Tab active text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border",
+      "default": "#E2E8F0"
+    },
+    {
+      "type": "color",
+      "id": "image_bg_color",
+      "label": "Image background",
+      "default": "#F7F9FC"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge background",
+      "default": "#0EA5E9"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "product_title_color",
+      "label": "Product title",
+      "default": "#242424"
+    },
+    {
+      "type": "color",
+      "id": "features_text_color",
+      "label": "Features text",
+      "default": "#596B82"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price",
+      "default": "#242424"
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Compare price",
+      "default": "#596B82"
+    },
+    {
+      "type": "color",
+      "id": "savings_text_color",
+      "label": "Savings text",
+      "default": "#0369A1"
+    },
+    {
+      "type": "color",
+      "id": "savings_bg_color",
+      "label": "Savings background",
+      "default": "#E0F2FE"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#0099FC"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg",
+      "label": "Button hover background",
+      "default": "#0369A1"
+    },
+    {
+      "type": "color",
+      "id": "button_outline_hover_bg",
+      "label": "Outline button hover",
+      "default": "#E0F7FF"
+    },
+    {
+      "type": "color",
+      "id": "cta_border_color",
+      "label": "CTA border",
+      "default": "#E0F7FF"
+    },
+    {
+      "type": "color",
+      "id": "cta_title_color",
+      "label": "CTA title",
+      "default": "#0369A1"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "CTA text",
+      "default": "#596B82"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "tab_font_size",
+      "label": "Tab font size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    }
+  ],
+  "blocks": [
+    {
+      "type": "venus_product_category"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product carousel"
+    }
+  ]
+}
+{% endschema %}

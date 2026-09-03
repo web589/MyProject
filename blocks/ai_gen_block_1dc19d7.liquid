@@ -1,0 +1,359 @@
+{% doc %}
+  @prompt
+    <style>
+    @keyframes scrollMove {
+    0%{transform:translateX(0)}
+    100%{transform:translateX(-50%)}
+    }
+    .bar-box{
+    width:100%;
+    height:44px;
+    display:flex;
+    align-items:center;
+    background:linear-gradient(90deg,#00a8e8,#00d8b6);
+    overflow:hidden;
+    }
+    .scroll-inner{
+    display:flex;
+    white-space:nowrap;
+    animation:scrollMove 32s linear infinite;
+    }
+    .bar-box:hover .scroll-inner{
+    animation-play-state:paused;
+    }
+    .bar-item{
+    color:#fff;
+    font-size:14.5px;
+    text-decoration:none;
+    padding:0 70px;
+    }
+    .bar-item span{
+    font-weight:bold;
+    color:#fff9b0;
+    }
+    .bar-item:hover{
+    text-decoration:underline;
+    }
+    </style>
+    
+    <div class="bar-box">
+    <div class="scroll-inner">
+    <a href="/collections/venus-e-mini" class="bar-item">
+    <span>【Neuerscheinung】</span> Venus E Mini ist jetzt erhältlich >>
+    </a>
+    <a href="/collections/alle-venus-e-serie" class="bar-item">
+    <span>【Sonderrabatt】</span> Sonderpreis auf alle Venus E Speichersysteme >>
+    </a>
+    <a href="/pages/montage-anleitung" class="bar-item">
+    <span>【Service】</span> Kostenlose Installationsanleitung zum Download >>
+    </a>
+    <a href="/pages/faq-netzanmeldung" class="bar-item">
+    <span>【Tipp】</span> Schritt-für-Schritt Guide zur Netzbetreiber-Anmeldung >>
+    </a>
+    
+    <a href="/collections/venus-e-mini" class="bar-item">
+    <span>【Neuerscheinung】</span> Venus E Mini ist jetzt erhältlich >>
+    </a>
+    <a href="/collections/alle-venus-e-serie" class="bar-item">
+    <span>【Sonderrabatt】</span> Sonderpreis auf alle Venus E Speichersysteme >>
+    </a>
+    <a href="/pages/montage-anleitung" class="bar-item">
+    <span>【Service】</span> Kostenlose Installationsanleitung zum Download >>
+    </a>
+    <a href="/pages/faq-netzanmeldung" class="bar-item">
+    <span>【Tipp】</span> Schritt-für-Schritt Guide zur Netzbetreiber-Anmeldung >>
+    </a>
+    </div>
+    </div>
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-scroll-bar-{{ ai_gen_id }} {
+    width: 100%;
+    height: {{ block.settings.bar_height }}px;
+    display: flex;
+    align-items: center;
+    background: {{ block.settings.background_gradient_start }};
+    {% if block.settings.use_gradient %}
+      background: linear-gradient(90deg, {{ block.settings.background_gradient_start }}, {{ block.settings.background_gradient_end }});
+    {% endif %}
+    overflow: hidden;
+  }
+
+  .ai-scroll-inner-{{ ai_gen_id }} {
+    display: flex;
+    white-space: nowrap;
+    animation: ai-scroll-move-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
+  }
+
+  .ai-scroll-bar-{{ ai_gen_id }}:hover .ai-scroll-inner-{{ ai_gen_id }} {
+    animation-play-state: paused;
+  }
+
+  .ai-scroll-item-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    text-decoration: none;
+    padding: 0 {{ block.settings.item_spacing }}px;
+    display: inline-block;
+  }
+
+  .ai-scroll-item-{{ ai_gen_id }} span {
+    font-weight: bold;
+    color: {{ block.settings.highlight_color }};
+  }
+
+  .ai-scroll-item-{{ ai_gen_id }}:hover {
+    text-decoration: underline;
+  }
+
+  @keyframes ai-scroll-move-{{ ai_gen_id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+{% endstyle %}
+
+<div class="ai-scroll-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-scroll-inner-{{ ai_gen_id }}">
+    {% for i in (1..4) %}
+      {% liquid
+        assign label_key = 'item_' | append: i | append: '_label'
+        assign text_key = 'item_' | append: i | append: '_text'
+        assign url_key = 'item_' | append: i | append: '_url'
+        assign enabled_key = 'item_' | append: i | append: '_enabled'
+
+        assign item_label = block.settings[label_key]
+        assign item_text = block.settings[text_key]
+        assign item_url = block.settings[url_key]
+        assign item_enabled = block.settings[enabled_key]
+      %}
+
+      {% if item_enabled and item_text != blank %}
+        <a href="{{ item_url }}" class="ai-scroll-item-{{ ai_gen_id }}">
+          {% if item_label != blank %}<span>{{ item_label }}</span> {% endif %}{{ item_text }}
+        </a>
+      {% endif %}
+    {% endfor %}
+
+    {% for i in (1..4) %}
+      {% liquid
+        assign label_key = 'item_' | append: i | append: '_label'
+        assign text_key = 'item_' | append: i | append: '_text'
+        assign url_key = 'item_' | append: i | append: '_url'
+        assign enabled_key = 'item_' | append: i | append: '_enabled'
+
+        assign item_label = block.settings[label_key]
+        assign item_text = block.settings[text_key]
+        assign item_url = block.settings[url_key]
+        assign item_enabled = block.settings[enabled_key]
+      %}
+
+      {% if item_enabled and item_text != blank %}
+        <a href="{{ item_url }}" class="ai-scroll-item-{{ ai_gen_id }}">
+          {% if item_label != blank %}<span>{{ item_label }}</span> {% endif %}{{ item_text }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Scrolling announcement",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Bar style"
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Bar height",
+      "min": 30,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "checkbox",
+      "id": "use_gradient",
+      "label": "Use gradient background",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "background_gradient_start",
+      "label": "Background start color",
+      "default": "#00a8e8"
+    },
+    {
+      "type": "color",
+      "id": "background_gradient_end",
+      "label": "Background end color",
+      "default": "#00d8b6"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlight color",
+      "default": "#fff9b0"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "label": "Item spacing",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "label": "Scroll speed",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "s",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Item 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_1_enabled",
+      "label": "Enable item 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "item_1_label",
+      "label": "Label",
+      "default": "【Neuerscheinung】"
+    },
+    {
+      "type": "text",
+      "id": "item_1_text",
+      "label": "Text",
+      "default": "Venus E Mini ist jetzt erhältlich >>"
+    },
+    {
+      "type": "url",
+      "id": "item_1_url",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Item 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_2_enabled",
+      "label": "Enable item 2",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "item_2_label",
+      "label": "Label",
+      "default": "【Sonderrabatt】"
+    },
+    {
+      "type": "text",
+      "id": "item_2_text",
+      "label": "Text",
+      "default": "Sonderpreis auf alle Venus E Speichersysteme >>"
+    },
+    {
+      "type": "url",
+      "id": "item_2_url",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Item 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_3_enabled",
+      "label": "Enable item 3",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "item_3_label",
+      "label": "Label",
+      "default": "【Service】"
+    },
+    {
+      "type": "text",
+      "id": "item_3_text",
+      "label": "Text",
+      "default": "Kostenlose Installationsanleitung zum Download >>"
+    },
+    {
+      "type": "url",
+      "id": "item_3_url",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Item 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_4_enabled",
+      "label": "Enable item 4",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "item_4_label",
+      "label": "Label",
+      "default": "【Tipp】"
+    },
+    {
+      "type": "text",
+      "id": "item_4_text",
+      "label": "Text",
+      "default": "Schritt-für-Schritt Guide zur Netzbetreiber-Anmeldung >>"
+    },
+    {
+      "type": "url",
+      "id": "item_4_url",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling announcement"
+    }
+  ]
+}
+{% endschema %}

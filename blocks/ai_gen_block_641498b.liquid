@@ -1,0 +1,763 @@
+{% doc %}
+  @prompt
+    {% comment %}
+    FAQ折叠模块，复刻截图样式，Shopify Custom Liquid直接粘贴
+    功能：点击右侧箭头展开/收起答案，高度自动撑开，下方条目自动下移
+    全部样式可配置：标题、整体宽度、内边距、字体，遵循Manrope/Inter字体规范
+    默认全部收起，点击才展开答案
+    {% endcomment %}
+    {% liquid
+    /* =====================可配置参数区===================== */
+    assign module_top_margin = "80px"
+    assign module_bottom_margin = "80px"
+    assign faq_max_width = "1120px"         /* FAQ模块整体最大宽度 */
+    
+    /* 标题设置 */
+    assign faq_title_text = "FAQ"
+    assign faq_title_size = "36px"
+    assign faq_title_weight = "700"
+    assign faq_title_bottom_gap = "36px"
+    
+    /* FAQ条目卡片设置 */
+    assign faq_item_bg = "#f7f9fb"
+    assign faq_item_radius = "12px"
+    assign faq_item_gap = "16px"           /* 条目之间的间距 */
+    assign faq_padding_x = "28px"          /* 问题、答案左右内边距 */
+    assign faq_padding_y_top = "24px"
+    assign faq_padding_y_bottom = "24px"
+    
+    /* 文字样式 */
+    assign question_font_size = "17px"
+    assign question_font_weight = "600"
+    assign answer_font_size = "15px"
+    assign answer_text_color = "#546474"
+    %}
+    
+    <style>
+    :root {
+      --font‑heading: 'Manrope', sans‑serif;
+      --font‑body: 'Inter', sans‑serif;
+    }
+    .faq‑custom‑module {
+      width:100%;
+      margin: {{module_top_margin}} auto {{module_bottom_margin}};
+    }
+    .faq‑container {
+      max‑width: {{faq_max_width}};
+      padding:0 24px;
+      margin:0 auto;
+    }
+    .faq‑main‑title {
+      font‑family: var(--font‑heading);
+      font‑size: {{faq_title_size}};
+      font‑weight: {{faq_title_weight}};
+      color:#1a1a1a;
+      margin:0 0 {{faq_title_bottom_gap}};
+    }
+    .faq‑item {
+      background: {{faq_item_bg}};
+      border‑radius: {{faq_item_radius}};
+      margin‑bottom: {{faq_item_gap}};
+      overflow:hidden;
+    }
+    .faq‑question‑wrap {
+      display:flex;
+      justify‑content:space‑between;
+      align‑items:center;
+      padding: {{faq_padding_y_top}} {{faq_padding_x}};
+      cursor:pointer;
+    }
+    .faq‑question {
+      font‑family: var(--font‑body);
+      font‑size: {{question_font_size}};
+      font‑weight: {{question_font_weight}};
+      color:#1a1a1a;
+      margin:0;
+    }
+    .faq‑arrow {
+      width:20px;
+      height:20px;
+      position:relative;
+      flex‑shrink:0;
+      transition: transform 0.25s ease;
+    }
+    .faq‑arrow::before,
+    .faq‑arrow::after {
+      content:"";
+      position:absolute;
+      background‑color:#1a1a1a;
+      width:2px;
+      height:12px;
+      top:4px;
+      left:9px;
+    }
+    .faq‑arrow::before {transform: rotate(45deg);}
+    .faq‑arrow::after  {transform: rotate(-45deg);}
+    .faq‑item.active .faq‑arrow {transform: rotate(180deg);}
+    
+    .faq‑answer‑wrap {
+      max‑height:0;
+      overflow:hidden;
+      transition: max‑height 0.35s ease;
+    }
+    .faq‑answer {
+      padding:0 {{faq_padding_x}} {{faq_padding_y_bottom}};
+      font‑family: var(--font‑body);
+      font‑size: {{answer_font_size}};
+      color: {{answer_text_color}};
+      line‑height:1.65;
+    }
+    
+    /* 移动端适配 */
+    @media(max‑width:768px){
+      .faq‑main‑title{font‑size:28px;}
+      .faq‑question‑wrap{padding:18px 20px;}
+      .faq‑answer{padding:0 20px 18px;}
+    }
+    </style>
+    
+    <div class="faq‑custom‑module">
+      <div class="faq‑container">
+        <h2 class="faq‑main‑title">{{ faq_title_text }}</h2>
+    
+        {% comment %}FAQ条目，复制整块faq‑item可以增加更多问答{% endcomment %}
+        <div class="faq‑item">
+          <div class="faq‑question‑wrap">
+            <h3 class="faq‑question">Brauche ich einen Elektriker für die Installation?</h3>
+            <div class="faq‑arrow"></div>
+          </div>
+          <div class="faq‑answer‑wrap">
+            <div class="faq‑answer">
+              Nein. Die VENUS E Serie ist Plug & Play – die Installation nach Anleitung dauert ca. 30 Minuten. Einige Modelle werden einfach in die Steckdose gesteckt.
+            </div>
+          </div>
+        </div>
+    
+        <div class="faq‑item">
+          <div class="faq‑question‑wrap">
+            <h3 class="faq‑question">Funktioniert es auch ohne Photovoltaik?</h3>
+            <div class="faq‑arrow"></div>
+          </div>
+          <div class="faq‑answer‑wrap">
+            <div class="faq‑answer">
+              Ja. Ohne PV laden Sie nachts zu günstigen Tarifen und entladen tagsüber zu hohen Preisen – effektive Arbitrage.
+            </div>
+          </div>
+        </div>
+    
+        <div class="faq‑item">
+          <div class="faq‑question‑wrap">
+            <h3 class="faq‑question">Wie lange hält die Batterie?</h3>
+            <div class="faq‑arrow"></div>
+          </div>
+          <div class="faq‑answer‑wrap">
+            <div class="faq‑answer">
+              LiFePO₄‑Zellen automotiver Qualität, über 6.000 Zyklen. MARSTEK bietet 10 Jahre Garantie.
+            </div>
+          </div>
+        </div>
+    
+        <div class="faq‑item">
+          <div class="faq‑question‑wrap">
+            <h3 class="faq‑question">Was ist VPP und wieviel verdiene ich?</h3>
+            <div class="faq‑arrow"></div>
+          </div>
+          <div class="faq‑answer‑wrap">
+            <div class="faq‑answer">
+              Ein Virtual Power Plant (VPP) vernetzt Ihren Speicher für Netzdienstleistungen und Preisarbitrage. Die Einnahmen hängen von Strompreis und Regulation ab.
+            </div>
+          </div>
+        </div>
+    
+        <div class="faq‑item">
+          <div class="faq‑question‑wrap">
+            <h3 class="faq‑question">Welche Länder werden unterstützt?</h3>
+            <div class="faq‑arrow"></div>
+          </div>
+          <div class="faq‑answer‑wrap">
+            <div class="faq‑answer">
+              MARSTEK ist in Europa, Nordamerika, Australien und Asien verfügbar – mit mehrspra, 添加一个可以调节容器与上下模块间距的设置，再添加一个可以调节容器内与上下边距的设置，再添加一个可以自由调节容器左右宽度的设置，还有每个问题框只有点击右边的向下展开按钮才能展开，点击其他地方是不能展开的, 增加一个可以调节标题字体粗细的设置，最右侧的展开按钮改成向下的大于号样式, 增加一个调节右侧展开大于号向下按钮粗细的设置
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-faq-module-{{ ai_gen_id }} {
+    width: 100%;
+    margin: {{ block.settings.module_top_margin }}px auto {{ block.settings.module_bottom_margin }}px;
+    display: block;
+  }
+
+  .ai-faq-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.container_max_width }}px;
+    padding: {{ block.settings.container_padding_y }}px {{ block.settings.container_padding_x }}px;
+    margin: 0 auto;
+  }
+
+  .ai-faq-main-title-{{ ai_gen_id }} {
+    font-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
+    font-weight: {{ block.settings.title_font.weight }};
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: {{ block.settings.title_weight }};
+    color: {{ block.settings.title_color }};
+    margin: 0 0 {{ block.settings.title_bottom_gap }}px;
+  }
+
+  .ai-faq-item-{{ ai_gen_id }} {
+    background: {{ block.settings.item_bg_color }};
+    border-radius: {{ block.settings.item_border_radius }}px;
+    margin-bottom: {{ block.settings.item_gap }}px;
+    overflow: hidden;
+  }
+
+  .ai-faq-question-wrap-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: {{ block.settings.item_padding_y }}px {{ block.settings.item_padding_x }}px;
+    cursor: pointer;
+  }
+
+  .ai-faq-question-{{ ai_gen_id }} {
+    font-family: {{ block.settings.question_font.family }}, {{ block.settings.question_font.fallback_families }};
+    font-weight: {{ block.settings.question_font.weight }};
+    font-size: {{ block.settings.question_font_size }}px;
+    font-weight: {{ block.settings.question_font_weight }};
+    color: {{ block.settings.question_color }};
+    margin: 0;
+    flex: 1;
+    pointer-events: none;
+  }
+
+  .ai-faq-arrow-{{ ai_gen_id }} {
+    width: {{ block.settings.arrow_size }}px;
+    height: {{ block.settings.arrow_size }}px;
+    position: relative;
+    flex-shrink: 0;
+    margin-left: 16px;
+    transition: transform 0.25s ease;
+  }
+
+  .ai-faq-arrow-{{ ai_gen_id }}::before,
+  .ai-faq-arrow-{{ ai_gen_id }}::after {
+    content: "";
+    position: absolute;
+    background-color: {{ block.settings.arrow_color }};
+    width: {{ block.settings.arrow_thickness }}px;
+    height: calc({{ block.settings.arrow_size }}px * 0.5);
+    top: 50%;
+    left: 50%;
+  }
+
+  .ai-faq-arrow-{{ ai_gen_id }}::before {
+    transform: translate(-100%, -50%) rotate(45deg);
+    transform-origin: bottom right;
+  }
+
+  .ai-faq-arrow-{{ ai_gen_id }}::after {
+    transform: translate(0%, -50%) rotate(-45deg);
+    transform-origin: bottom left;
+  }
+
+  .ai-faq-item-{{ ai_gen_id }}.active .ai-faq-arrow-{{ ai_gen_id }} {
+    transform: rotate(180deg);
+  }
+
+  .ai-faq-answer-wrap-{{ ai_gen_id }} {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+
+  .ai-faq-answer-{{ ai_gen_id }} {
+    padding: 0 {{ block.settings.item_padding_x }}px {{ block.settings.item_padding_y }}px;
+    font-family: {{ block.settings.answer_font.family }}, {{ block.settings.answer_font.fallback_families }};
+    font-weight: {{ block.settings.answer_font.weight }};
+    font-size: {{ block.settings.answer_font_size }}px;
+    color: {{ block.settings.answer_color }};
+    line-height: 1.65;
+  }
+
+  @media (max-width: 768px) {
+    .ai-faq-main-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.8);
+    }
+    .ai-faq-question-wrap-{{ ai_gen_id }} {
+      padding: {{ block.settings.item_padding_y | times: 0.75 }}px {{ block.settings.item_padding_x | times: 0.8 }}px;
+    }
+    .ai-faq-answer-{{ ai_gen_id }} {
+      padding: 0 {{ block.settings.item_padding_x | times: 0.8 }}px {{ block.settings.item_padding_y | times: 0.75 }}px;
+    }
+  }
+{% endstyle %}
+
+<faq-accordion-{{ ai_gen_id }} id="pdp-faq" class="ai-faq-module-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-faq-container-{{ ai_gen_id }}">
+    {% if block.settings.title != blank %}
+      <h2 class="ai-faq-main-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+    {% endif %}
+
+    {% for i in (1..10) %}
+      {% assign question_key = 'question_' | append: i %}
+      {% assign answer_key = 'answer_' | append: i %}
+      {% assign question = block.settings[question_key] %}
+      {% assign answer = block.settings[answer_key] %}
+
+      {% if question != blank %}
+        <div class="ai-faq-item-{{ ai_gen_id }}" data-faq-item>
+          <div class="ai-faq-question-wrap-{{ ai_gen_id }}" data-faq-trigger>
+            <h3 class="ai-faq-question-{{ ai_gen_id }}">{{ question }}</h3>
+            <div class="ai-faq-arrow-{{ ai_gen_id }}"></div>
+          </div>
+          <div class="ai-faq-answer-wrap-{{ ai_gen_id }}" data-faq-answer>
+            <div class="ai-faq-answer-{{ ai_gen_id }}">
+              {{ answer }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</faq-accordion-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FaqAccordion{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.items = this.querySelectorAll('[data-faq-item]');
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.items.forEach((item) => {
+          const trigger = item.querySelector('[data-faq-trigger]');
+          const answer = item.querySelector('[data-faq-answer]');
+
+          trigger.addEventListener('click', (e) => {
+            const isActive = item.classList.contains('active');
+
+            this.items.forEach((otherItem) => {
+              if (otherItem !== item) {
+                otherItem.classList.remove('active');
+                const otherAnswer = otherItem.querySelector('[data-faq-answer]');
+                otherAnswer.style.maxHeight = '0';
+              }
+            });
+
+            if (isActive) {
+              item.classList.remove('active');
+              answer.style.maxHeight = '0';
+            } else {
+              item.classList.add('active');
+              answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+          });
+        });
+      }
+    }
+
+    customElements.define('faq-accordion-{{ ai_gen_id }}', FaqAccordion{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "FAQ accordion",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "module_top_margin",
+      "label": "Top margin",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "module_bottom_margin",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "container_max_width",
+      "label": "Container max width",
+      "min": 600,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1120
+    },
+    {
+      "type": "range",
+      "id": "container_padding_x",
+      "label": "Container left/right padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "container_padding_y",
+      "label": "Container top/bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "FAQ"
+    },
+    {
+      "type": "font_picker",
+      "id": "title_font",
+      "label": "Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "title_weight",
+      "label": "Weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "title_bottom_gap",
+      "label": "Bottom spacing",
+      "min": 10,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "FAQ items"
+    },
+    {
+      "type": "color",
+      "id": "item_bg_color",
+      "label": "Background color",
+      "default": "#f7f9fb"
+    },
+    {
+      "type": "range",
+      "id": "item_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "label": "Gap between items",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "item_padding_x",
+      "label": "Left/right padding",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "item_padding_y",
+      "label": "Top/bottom padding",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Question"
+    },
+    {
+      "type": "font_picker",
+      "id": "question_font",
+      "label": "Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "question_font_size",
+      "label": "Size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "question_font_weight",
+      "label": "Weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "color",
+      "id": "question_color",
+      "label": "Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "header",
+      "content": "Answer"
+    },
+    {
+      "type": "font_picker",
+      "id": "answer_font",
+      "label": "Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "answer_font_size",
+      "label": "Size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "answer_color",
+      "label": "Color",
+      "default": "#546474"
+    },
+    {
+      "type": "header",
+      "content": "Arrow icon"
+    },
+    {
+      "type": "range",
+      "id": "arrow_size",
+      "label": "Size",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "arrow_thickness",
+      "label": "Thickness",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "header",
+      "content": "Question 1"
+    },
+    {
+      "type": "text",
+      "id": "question_1",
+      "label": "Question"
+    },
+    {
+      "type": "richtext",
+      "id": "answer_1",
+      "label": "Answer"
+    },
+    {
+      "type": "header",
+      "content": "Question 2"
+    },
+    {
+      "type": "text",
+      "id": "question_2",
+      "label": "Question"
+    },
+    {
+      "type": "richtext",
+      "id": "answer_2",
+      "label": "Answer"
+    },
+    {
+      "type": "header",
+      "content": "Question 3"
+    },
+    {
+      "type": "text",
+      "id": "question_3",
+      "label": "Question"
+    },
+    {
+      "type": "richtext",
+      "id": "answer_3",
+      "label": "Answer"
+    },
+    {
+      "type": "header",
+      "content": "Question 4"
+    },
+    {
+      "type": "text",
+      "id": "question_4",
+      "label": "Question"
+    },
+    {
+      "type": "richtext",
+      "id": "answer_4",
+      "label": "Answer"
+    },
+    {
+      "type": "header",
+      "content": "Question 5"
+    },
+    {
+      "type": "text",
+      "id": "question_5",
+      "label": "Question"
+    },
+    {
+      "type": "richtext",
+      "id": "answer_5",
+      "label": "Answer"
+    },
+    {
+      "type": "header",
+      "content": "Question 6"
+    },
+    {
+      "type": "text",
+      "id": "question_6",
+      "label": "Question"
+    },
+    {
+      "type": "richtext",
+      "id": "answer_6",
+      "label": "Answer"
+    },
+    {
+      "type": "header",
+      "content": "Question 7"
+    },
+    {
+      "type": "text",
+      "id": "question_7",
+      "label": "Question"
+    },
+    {
+      "type": "richtext",
+      "id": "answer_7",
+      "label": "Answer"
+    },
+    {
+      "type": "header",
+      "content": "Question 8"
+    },
+    {
+      "type": "text",
+      "id": "question_8",
+      "label": "Question"
+    },
+    {
+      "type": "richtext",
+      "id": "answer_8",
+      "label": "Answer"
+    },
+    {
+      "type": "header",
+      "content": "Question 9"
+    },
+    {
+      "type": "text",
+      "id": "question_9",
+      "label": "Question"
+    },
+    {
+      "type": "richtext",
+      "id": "answer_9",
+      "label": "Answer"
+    },
+    {
+      "type": "header",
+      "content": "Question 10"
+    },
+    {
+      "type": "text",
+      "id": "question_10",
+      "label": "Question"
+    },
+    {
+      "type": "richtext",
+      "id": "answer_10",
+      "label": "Answer"
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ accordion"
+    }
+  ]
+}
+{% endschema %}

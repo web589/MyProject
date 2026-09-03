@@ -1,0 +1,639 @@
+{% doc %}
+  Technical specifications rendered from the current product's whitelisted
+  Shopify Product Metafields. Empty fields and empty groups are omitted.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-tech-specs-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    margin: {{ block.settings.module_top_margin }}px auto {{ block.settings.module_bottom_margin }}px;
+  }
+
+  .ai-tech-specs-{{ ai_gen_id }} [hidden] {
+    display: none !important;
+  }
+
+  .ai-tech-specs-inner-{{ ai_gen_id }} {
+    max-width: {{ block.settings.module_max_width }}px;
+    margin: 0 auto;
+    padding: {{ block.settings.module_padding_y }}px {{ block.settings.module_padding_x }}px;
+  }
+
+  .ai-tech-specs-heading-{{ ai_gen_id }} {
+    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+    font-weight: {{ block.settings.heading_font_weight }};
+    font-size: {{ block.settings.heading_font_size }}px;
+    color: {{ block.settings.heading_color }};
+    text-align: {{ block.settings.heading_align }};
+    transform: translateX({{ block.settings.heading_offset_x }}px);
+    margin: 0 0 {{ block.settings.heading_bottom_gap }}px;
+    line-height: 1.2;
+  }
+
+  .ai-tech-specs-category-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.category_gap }}px;
+    padding: {{ block.settings.divider_top_gap }}px 0 {{ block.settings.divider_bottom_gap }}px;
+    border-bottom: 1px solid {{ block.settings.divider_color }};
+  }
+
+  .ai-tech-specs-category-{{ ai_gen_id }}:first-of-type {
+    padding-top: 0;
+  }
+
+  .ai-tech-specs-category-{{ ai_gen_id }}:last-of-type {
+    border-bottom: none;
+  }
+
+  .ai-tech-specs-sub-title-{{ ai_gen_id }} {
+    width: {{ block.settings.sub_title_width }}px;
+    flex-shrink: 0;
+    font-family: {{ block.settings.sub_title_font.family }}, {{ block.settings.sub_title_font.fallback_families }};
+    font-weight: {{ block.settings.sub_title_font_weight }};
+    font-size: {{ block.settings.sub_title_font_size }}px;
+    color: {{ block.settings.sub_title_color }};
+    margin: 0;
+  }
+
+  .ai-tech-specs-params-grid-{{ ai_gen_id }} {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: {{ block.settings.param_columns_gap }}px;
+    row-gap: {{ block.settings.param_row_gap }}px;
+  }
+
+  .ai-tech-specs-param-item-{{ ai_gen_id }} {
+    text-align: left;
+  }
+
+  .ai-tech-specs-param-label-{{ ai_gen_id }} {
+    font-family: {{ block.settings.param_label_font.family }}, {{ block.settings.param_label_font.fallback_families }};
+    font-weight: {{ block.settings.param_label_font_weight }};
+    font-size: {{ block.settings.param_label_font_size }}px;
+    color: {{ block.settings.param_label_color }};
+    margin: 0 0 {{ block.settings.label_value_gap }}px;
+  }
+
+  .ai-tech-specs-param-value-{{ ai_gen_id }} {
+    font-family: {{ block.settings.param_value_font.family }}, {{ block.settings.param_value_font.fallback_families }};
+    font-weight: {{ block.settings.param_value_font_weight }};
+    font-size: {{ block.settings.param_value_font_size }}px;
+    color: {{ block.settings.param_value_color }};
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-tech-specs-category-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ai-tech-specs-sub-title-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-tech-specs-params-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-tech-specs-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_font_size | times: 0.7 }}px;
+    }
+  }
+{% endstyle %}
+
+<div id="pdp-specifications" class="ai-tech-specs-{{ ai_gen_id }}" data-tech-specs-root="{{ ai_gen_id }}" data-initial-variant-id="{{ product.selected_or_first_available_variant.id }}" {{ block.shopify_attributes }}>
+  <div class="ai-tech-specs-inner-{{ ai_gen_id }}">
+    {% liquid
+      assign technical_heading = blank
+      if block.settings.content_source == 'theme_editor'
+        assign technical_heading = block.settings.heading_text
+      else
+        assign pdp_content_candidate = product.metafields.custom.pdp_content.value
+        if pdp_content_candidate != blank
+          assign pdp_content_owner = pdp_content_candidate.product.value
+          assign pdp_content_is_for_product = false
+          if pdp_content_owner != blank
+            if pdp_content_owner.handle == product.handle
+              assign pdp_content_is_for_product = true
+            endif
+          elsif pdp_content_candidate.system.handle == product.handle
+            assign pdp_content_is_for_product = true
+          endif
+          if pdp_content_is_for_product
+            assign technical_heading = pdp_content_candidate.technical_title.value
+          endif
+        endif
+        if technical_heading == blank
+          assign technical_product_title = product.title | strip
+          assign technical_product_type = product.type | downcase
+          assign technical_product_handle = product.handle | downcase
+          if technical_product_type contains 'smart meter' or technical_product_handle contains 'ct002' or technical_product_handle contains 'ct003'
+            assign technical_heading = 'Technische Spezifikationen des ' | append: technical_product_title
+          else
+            assign technical_heading = 'Technische Daten des ' | append: technical_product_title
+          endif
+        endif
+      endif
+    %}
+    {% if technical_heading != blank %}
+      <h2 class="ai-tech-specs-heading-{{ ai_gen_id }}">{{ technical_heading }}</h2>
+    {% endif %}
+
+    {% capture specification_whitelist %}{% render 'product-spec-whitelist', spec_product: product %}{% endcapture %}
+    {% assign specification_groups = specification_whitelist | strip | split: '###' %}
+
+    {%- comment -%}
+      A source token in the whitelist keeps the Variant/Product decision in
+      the whitelist instead of hard-coding a capacity key in this block.
+    {%- endcomment -%}
+    {% assign variant_capacity_keys = blank %}
+    {% for specification_group in specification_groups %}
+      {% assign specification_group_parts = specification_group | split: '@@' %}
+      {% assign specification_rows = specification_group_parts[1] | split: '||' %}
+      {% for specification_row in specification_rows %}
+        {% assign specification_parts = specification_row | split: '::' %}
+        {% if specification_parts.size > 2 and specification_parts[1] == 'variant_if_present' %}
+          {% assign variant_capacity_keys = specification_parts[2] %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+
+    {% assign has_variant_capacity = false %}
+    {% capture variant_capacity_templates %}
+      {% if variant_capacity_keys != blank %}
+        {% for specification_variant in product.variants %}
+          {% capture variant_capacity_value %}{% render 'product-spec-value', spec_product: specification_variant, spec_keys: variant_capacity_keys %}{% endcapture %}
+          {% assign variant_capacity_value = variant_capacity_value | strip %}
+          {% if variant_capacity_value != blank %}
+            {% assign has_variant_capacity = true %}
+            <template data-tech-spec-variant-id="{{ specification_variant.id }}">{{ variant_capacity_value }}</template>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endcapture %}
+
+    {% if has_variant_capacity %}
+      <div class="ai-tech-specs-variant-values-{{ ai_gen_id }}" hidden aria-hidden="true">
+        {{ variant_capacity_templates }}
+      </div>
+    {% endif %}
+
+    {% for specification_group in specification_groups %}
+      {% assign specification_group_parts = specification_group | split: '@@' %}
+      {% assign category_title = specification_group_parts[0] %}
+      {% assign specification_rows = specification_group_parts[1] | split: '||' %}
+      {% assign specification_has_visible_row = false %}
+      {% assign specification_has_dynamic_row = false %}
+      {% capture specification_markup %}
+        {% for specification_row in specification_rows %}
+          {% assign specification_parts = specification_row | split: '::' %}
+          {% assign specification_label = specification_parts[0] %}
+          {% assign specification_source = 'product' %}
+          {% assign specification_keys = specification_parts[1] %}
+          {% if specification_parts.size > 2 %}
+            {% assign specification_source = specification_parts[1] %}
+            {% assign specification_keys = specification_parts[2] %}
+          {% endif %}
+          {% assign specification_value_product = product %}
+          {% assign specification_is_variant = false %}
+          {% if specification_source == 'variant_if_present' and has_variant_capacity %}
+            {% assign specification_value_product = product.selected_or_first_available_variant %}
+            {% assign specification_is_variant = true %}
+            {% assign specification_has_dynamic_row = true %}
+          {% endif %}
+          {% capture specification_value %}{% render 'product-spec-value', spec_product: specification_value_product, spec_keys: specification_keys %}{% endcapture %}
+          {% assign specification_value = specification_value | strip %}
+          {% assign specification_row_has_value = false %}
+          {% if specification_value != blank %}
+            {% assign specification_row_has_value = true %}
+            {% assign specification_has_visible_row = true %}
+          {% endif %}
+          {% if specification_is_variant or specification_row_has_value %}
+            <div class="ai-tech-specs-param-item-{{ ai_gen_id }}"{% if specification_is_variant %} data-tech-spec-variant-capacity-item{% endif %}{% unless specification_row_has_value %} hidden{% endunless %}>
+              <p class="ai-tech-specs-param-label-{{ ai_gen_id }}">{{ specification_label }}</p>
+              <p class="ai-tech-specs-param-value-{{ ai_gen_id }}"{% if specification_is_variant %} data-tech-spec-variant-capacity-value{% endif %} data-tech-spec-value>{{ specification_value }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endcapture %}
+
+      {% assign specification_markup_clean = specification_markup | strip %}
+      {% if specification_markup_clean != blank %}
+        <div class="ai-tech-specs-category-{{ ai_gen_id }}"{% if specification_has_dynamic_row %} data-tech-spec-category{% unless specification_has_visible_row %} hidden{% endunless %}{% endif %}>
+          <h3 class="ai-tech-specs-sub-title-{{ ai_gen_id }}">{{ category_title }}</h3>
+          <div class="ai-tech-specs-params-grid-{{ ai_gen_id }}">
+            {{ specification_markup }}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  (() => {
+    const roots = document.querySelectorAll('[data-tech-specs-root="{{ ai_gen_id }}"]');
+    if (!roots.length) return;
+
+    const decodeHtmlEntities = (value) => {
+      const parser = document.createElement('textarea');
+      parser.innerHTML = value;
+      return parser.value;
+    };
+
+    const refreshCategoryVisibility = (root) => {
+      root.querySelectorAll('[data-tech-spec-category]').forEach((category) => {
+        const hasVisibleItem = Array.from(category.querySelectorAll('[class*="ai-tech-specs-param-item-"]'))
+          .some((item) => !item.hidden);
+        category.hidden = !hasVisibleItem;
+      });
+    };
+
+    const updateVariantCapacity = (root, variantId) => {
+      const item = root.querySelector('[data-tech-spec-variant-capacity-item]');
+      if (!item) return;
+
+      const valueElement = item.querySelector('[data-tech-spec-variant-capacity-value]');
+      const template = root.querySelector(`template[data-tech-spec-variant-id="${variantId}"]`);
+      const value = template ? decodeHtmlEntities(template.content.textContent.trim()) : '';
+
+      if (value) {
+        valueElement.textContent = value;
+        item.hidden = false;
+      } else {
+        valueElement.textContent = '';
+        item.hidden = true;
+      }
+
+      refreshCategoryVisibility(root);
+    };
+
+    roots.forEach((root) => {
+      root.querySelectorAll('[data-tech-spec-value]').forEach((valueElement) => {
+        valueElement.textContent = decodeHtmlEntities(valueElement.textContent);
+      });
+
+      updateVariantCapacity(root, root.dataset.initialVariantId);
+    });
+
+    document.addEventListener('variant:change', (event) => {
+      const variant = event.detail && event.detail.variant;
+      if (!variant || !variant.id) return;
+      roots.forEach((root) => updateVariantCapacity(root, variant.id));
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Technical specifications",
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_source",
+      "label": "内容来源",
+      "options": [
+        { "value": "theme_editor", "label": "右侧 Theme Editor（默认）" },
+        { "value": "pdp_content", "label": "PDP 后台内容（备份/旧模式）" }
+      ],
+      "default": "theme_editor",
+      "info": "选择右侧 Theme Editor 后，技术区标题只读取当前模板的标题字段；规格数值仍从产品规格字段读取。"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "module_max_width",
+      "label": "Maximum width",
+      "min": 600,
+      "max": 1600,
+      "step": 10,
+      "unit": "px",
+      "default": 1280
+    },
+    {
+      "type": "range",
+      "id": "module_top_margin",
+      "label": "Top margin",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "module_bottom_margin",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "module_padding_y",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "module_padding_x",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Main heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading text",
+      "default": "Technische Daten"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Font",
+      "default": "manrope_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Font size",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_font_weight",
+      "label": "Font weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#111111"
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "heading_offset_x",
+      "label": "Horizontal offset",
+      "min": -50,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_bottom_gap",
+      "label": "Bottom spacing",
+      "min": 16,
+      "max": 96,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Category layout"
+    },
+    {
+      "type": "range",
+      "id": "category_gap",
+      "label": "Title to params gap",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "param_columns_gap",
+      "label": "Columns gap",
+      "min": 16,
+      "max": 96,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "param_row_gap",
+      "label": "Row gap",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "header",
+      "content": "Category title"
+    },
+    {
+      "type": "font_picker",
+      "id": "sub_title_font",
+      "label": "Font",
+      "default": "manrope_n4"
+    },
+    {
+      "type": "range",
+      "id": "sub_title_font_size",
+      "label": "Font size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "sub_title_font_weight",
+      "label": "Font weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "color",
+      "id": "sub_title_color",
+      "label": "Color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "sub_title_width",
+      "label": "Width",
+      "min": 100,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 180
+    },
+    {
+      "type": "header",
+      "content": "Parameter label"
+    },
+    {
+      "type": "font_picker",
+      "id": "param_label_font",
+      "label": "Font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "param_label_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "param_label_font_weight",
+      "label": "Font weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 400
+    },
+    {
+      "type": "color",
+      "id": "param_label_color",
+      "label": "Color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "label_value_gap",
+      "label": "Label to value gap",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Parameter value"
+    },
+    {
+      "type": "font_picker",
+      "id": "param_value_font",
+      "label": "Font",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "param_value_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "param_value_font_weight",
+      "label": "Font weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "default": 500
+    },
+    {
+      "type": "color",
+      "id": "param_value_color",
+      "label": "Color",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Divider"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Color",
+      "default": "#e5e7eb"
+    },
+    {
+      "type": "range",
+      "id": "divider_top_gap",
+      "label": "Top spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "divider_bottom_gap",
+      "label": "Bottom spacing",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Technical specifications"
+    }
+  ]
+}
+{% endschema %}

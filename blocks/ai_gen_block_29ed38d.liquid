@@ -1,0 +1,1283 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评价卡片轮播+悬停效果</title>
+    <!-- 引入 Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <style>
+      /* 基础重置 */
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #f4f5f7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+    
+      /* 模块容器 */
+      .testimonial-section {
+        width: 100%;
+        max-width: 1160px;
+        padding: 40px 20px;
+        position: relative;
+      }
+    
+      .testimonial-section h2 {
+        font-size: 28px;
+        color: #1a1a1a;
+        margin-bottom: 30px;
+        font-weight: 600;
+      }
+    
+      /* --- Swiper 自定义样式 --- */
+      .swiper {
+        width: 100%;
+        padding: 10px 0 20px 0; 
+      }
+    
+      .swiper-slide {
+        border-radius: 16px;
+        overflow: hidden;
+      }
+    
+      /* 单个卡片容器 */
+      .testimonial-card {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        cursor: pointer;
+        background-color: #eaeef2; 
+      }
+    
+      /* 背景图片 */
+      .card-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+      }
+    
+      /* 深色遮罩层 - 默认为透明 */
+      .card-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(23, 34, 58, 0.75); 
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 1;
+      }
+    
+      /* 文字内容层 - 默认为透明 */
+      .card-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.95);
+        width: 85%;
+        text-align: center;
+        color: #ffffff;
+        z-index: 2;
+        opacity: 0;
+        transition: all 0.4s ease;
+      }
+    
+      /* ===== 核心交互：鼠标悬停效果 ===== */
+      .testimonial-card:hover .card-overlay { opacity: 1; }
+      .testimonial-card:hover .card-content { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      .testimonial-card:hover .card-bg { transform: scale(1.08); }
+    
+      /* 内部文字样式 */
+      .stars { color: #f39c12; font-size: 20px; letter-spacing: 4px; margin-bottom: 12px; }
+      .card-title { font-size: 20px; font-weight: 600; margin-bottom: 15px; letter-spacing: 0.5px; }
+      .card-desc { font-size: 14px; line-height: 1.6; margin-bottom: 25px; font-weight: 300; opacity: 0.9; }
+      .card-author { font-size: 14px; font-weight: 400; display: block; }
+    
+      /* ===== 左右切换按钮 ===== */
+      .swiper-button-next, .swiper-button-prev {
+        width: 44px;
+        height: 44px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: all 0.2s ease;
+      }
+      .swiper-button-next:after, .swiper-button-prev:after {
+        font-size: 20px !important;
+        font-weight: bold;
+        color: #1a1a1a;
+      }
+      .swiper-button-next:hover, .swiper-button-prev:hover {
+        background-color: #f0f0f0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+      
+      .swiper-button-prev { left: -10px; }
+      .swiper-button-next { right: -10px; }
+    
+      /* 移动端适配 */
+      @media (max-width: 768px) {
+        .testimonial-card { height: 320px; }
+        .swiper-button-next, .swiper-button-prev { display: none; }
+      }
+    </style>
+    </head>
+    <body>
+    
+    <div class="testimonial-section">
+      <h2>Echte Stimmen aus aller Welt</h2>
+      
+      <!-- Swiper 主容器 -->
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          
+          <!-- ========= 评价卡片 1 ========= -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <img class="card-bg" src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=800" alt="背景图">
+              <div class="card-overlay"></div>
+              <div class="card-content">
+                <div class="stars">★★★★★</div>
+                <h3 class="card-title">Mehr als zufrieden</h3>
+                <p class="card-desc">Mit dem VENUS E konnte ich meinen Stromverbrauch um fast 60 % reduzieren. Die Investition hat sich bereits im ersten Jahr amortisiert.</p>
+                <span class="card-author">— Markus S., Deutschland</span>
+              </div>
+            </div>
+          </div>
+    
+          <!-- ========= 评价卡片 2 ========= -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <img class="card-bg" src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=800" alt="背景图">
+              <div class="card-overlay"></div>
+              <div class="card-content">
+                <div class="stars">★★★★★</div>
+                <h3 class="card-title">Mehr als zufrieden</h3>
+                <p class="card-desc">Mit dem VENUS E konnte ich meinen Stromverbrauch um fast 60 % reduzieren. Die Investition hat sich bereits im ersten Jahr amortisiert.</p>
+                <span class="card-author">— Markus S., Deutschland</span>
+              </div>
+            </div>
+          </div>
+    
+          <!-- ========= 评价卡片 3 ========= -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <img class="card-bg" src="https://images.u, Testimonial要10个
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-testimonial-section-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding }}px 20px;
+    background-color: {{ block.settings.background_color }};
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .ai-testimonial-container-{{ ai_gen_id }} {
+    width: min({{ block.settings.desktop_width_percent }}%, {{ block.settings.content_max_width }}px);
+    max-width: {{ block.settings.content_max_width }}px;
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .ai-testimonial-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: {{ block.settings.heading_alignment }};
+  }
+
+  .ai-testimonial-carousel-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    --ai-testimonial-columns-{{ ai_gen_id }}: {{ block.settings.slides_per_view }};
+  }
+
+  .ai-testimonial-track-{{ ai_gen_id }} {
+    display: flex;
+    transition: transform 0.5s ease;
+    gap: {{ block.settings.card_gap }}px;
+  }
+
+  .ai-testimonial-slide-{{ ai_gen_id }} {
+    flex: 0 0 calc((100% - {{ block.settings.card_gap }}px * (var(--ai-testimonial-columns-{{ ai_gen_id }}) - 1)) / var(--ai-testimonial-columns-{{ ai_gen_id }}));
+    max-width: calc((100% - {{ block.settings.card_gap }}px * (var(--ai-testimonial-columns-{{ ai_gen_id }}) - 1)) / var(--ai-testimonial-columns-{{ ai_gen_id }}));
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+  }
+
+  .ai-testimonial-card-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: {{ block.settings.card_height }}px;
+    cursor: pointer;
+    background-color: {{ block.settings.card_bg_color }};
+    overflow: hidden;
+  }
+
+  .ai-card-bg-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .ai-card-bg-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.card_bg_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-card-bg-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+    opacity: 0.3;
+  }
+
+  .ai-card-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: {{ block.settings.overlay_color }};
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+  }
+
+  .ai-card-content-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: 85%;
+    text-align: center;
+    color: {{ block.settings.text_color }};
+    z-index: 2;
+    opacity: 0;
+    transition: all 0.4s ease;
+  }
+
+  .ai-testimonial-card-{{ ai_gen_id }}:hover .ai-card-overlay-{{ ai_gen_id }} {
+    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-testimonial-card-{{ ai_gen_id }}:hover .ai-card-content-{{ ai_gen_id }} {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .ai-testimonial-card-{{ ai_gen_id }}:hover .ai-card-bg-{{ ai_gen_id }} {
+    transform: scale({{ block.settings.image_zoom_scale | divided_by: 100.0 }});
+  }
+
+  .ai-stars-{{ ai_gen_id }} {
+    color: {{ block.settings.star_color }};
+    font-size: {{ block.settings.star_size }}px;
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+  }
+
+  .ai-card-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-card-desc-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-weight: 300;
+    opacity: 0.9;
+  }
+
+  .ai-card-author-{{ ai_gen_id }} {
+    font-size: {{ block.settings.author_size }}px;
+    font-weight: 400;
+    display: block;
+  }
+
+  .ai-nav-button-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: {{ block.settings.nav_button_size }}px;
+    height: {{ block.settings.nav_button_size }}px;
+    background-color: {{ block.settings.nav_button_bg }};
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+  }
+
+  .ai-nav-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.nav_button_hover_bg }};
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-nav-button-{{ ai_gen_id }} svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: {{ block.settings.nav_button_color }};
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ai-nav-prev-{{ ai_gen_id }} {
+    left: -10px;
+  }
+
+  .ai-nav-next-{{ ai_gen_id }} {
+    right: -10px;
+  }
+
+  .ai-nav-button-{{ ai_gen_id }}:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-testimonial-carousel-{{ ai_gen_id }} {
+      --ai-testimonial-columns-{{ ai_gen_id }}: 2;
+    }
+
+    .ai-testimonial-slide-{{ ai_gen_id }} {
+      flex-basis: calc((100% - {{ block.settings.card_gap }}px) / 2);
+      max-width: calc((100% - {{ block.settings.card_gap }}px) / 2);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-testimonial-container-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-testimonial-carousel-{{ ai_gen_id }} {
+      --ai-testimonial-columns-{{ ai_gen_id }}: 1;
+    }
+
+    .ai-testimonial-slide-{{ ai_gen_id }} {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+
+    .ai-testimonial-card-{{ ai_gen_id }} {
+      height: {{ block.settings.card_height | times: 0.8 }}px;
+    }
+
+    .ai-nav-button-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-testimonial-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.8 }}px;
+    }
+  }
+{% endstyle %}
+
+{% liquid
+  assign pdp_shared_content = shop.metaobjects.pdp_shared_content['global']
+  assign shared_testimonial_heading = pdp_shared_content.testimonial_title.value
+  assign shared_testimonials = pdp_shared_content.testimonials.value
+  assign use_shared_testimonials = false
+  if shared_testimonials != blank
+    assign use_shared_testimonials = true
+  endif
+  assign show_testimonial_module = true
+%}
+
+{% if show_testimonial_module %}
+<testimonial-carousel-{{ ai_gen_id }}
+  class="ai-testimonial-section-{{ ai_gen_id }}"
+  data-slides-per-view="{{ block.settings.slides_per_view }}"
+  data-autoplay="{{ block.settings.autoplay }}"
+  data-autoplay-delay="{{ block.settings.autoplay_delay }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-testimonial-container-{{ ai_gen_id }}">
+  {% assign testimonial_heading = shared_testimonial_heading | default: block.settings.heading %}
+  {% if testimonial_heading != blank %}
+    <h2 class="ai-testimonial-heading-{{ ai_gen_id }}">{{ testimonial_heading }}</h2>
+  {% endif %}
+
+  <div class="ai-testimonial-carousel-{{ ai_gen_id }}">
+    <div class="ai-testimonial-track-{{ ai_gen_id }}">
+      {% if use_shared_testimonials %}
+        {% for shared_testimonial in shared_testimonials limit: 10 %}
+          {% liquid
+            assign testimonial_image = shared_testimonial.image.value
+            assign testimonial_title = shared_testimonial.title.value
+            assign testimonial_description = shared_testimonial.description.value
+            assign testimonial_author = shared_testimonial.author.value
+            assign testimonial_rating = shared_testimonial.rating.value | default: 5
+            assign testimonial_image_class = 'ai-card-bg-' | append: ai_gen_id
+          %}
+          {% if testimonial_image != blank or testimonial_title != blank or testimonial_description != blank %}
+            <div class="ai-testimonial-slide-{{ ai_gen_id }}">
+              <div class="ai-testimonial-card-{{ ai_gen_id }}">
+                {% if testimonial_image != blank %}{{ testimonial_image | image_url: width: 1200 | image_tag: class: testimonial_image_class, loading: 'lazy', widths: '480, 800, 1200', sizes: '(max-width: 749px) 100vw, 33vw', alt: testimonial_title }}{% endif %}
+                <div class="ai-card-overlay-{{ ai_gen_id }}"></div>
+                <div class="ai-card-content-{{ ai_gen_id }}">
+                  {% if testimonial_rating > 0 %}<div class="ai-stars-{{ ai_gen_id }}">{% for star in (1..testimonial_rating) %}★{% endfor %}</div>{% endif %}
+                  {% if testimonial_title != blank %}<h3 class="ai-card-title-{{ ai_gen_id }}">{{ testimonial_title }}</h3>{% endif %}
+                  {% if testimonial_description != blank %}<p class="ai-card-desc-{{ ai_gen_id }}">{{ testimonial_description }}</p>{% endif %}
+                  {% if testimonial_author != blank %}<span class="ai-card-author-{{ ai_gen_id }}">— {{ testimonial_author }}</span>{% endif %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+      {% for i in (1..10) %}
+        {% liquid
+          assign image_key = 'testimonial_' | append: i | append: '_image'
+          assign title_key = 'testimonial_' | append: i | append: '_title'
+          assign description_key = 'testimonial_' | append: i | append: '_description'
+          assign author_key = 'testimonial_' | append: i | append: '_author'
+          assign rating_key = 'testimonial_' | append: i | append: '_rating'
+
+          assign testimonial_image = block.settings[image_key]
+          assign testimonial_title = block.settings[title_key]
+          assign testimonial_description = block.settings[description_key]
+          assign testimonial_author = block.settings[author_key]
+          assign testimonial_rating = block.settings[rating_key]
+        %}
+
+        {% if testimonial_title != blank or testimonial_description != blank %}
+          <div class="ai-testimonial-slide-{{ ai_gen_id }}">
+            <div class="ai-testimonial-card-{{ ai_gen_id }}">
+              {% if testimonial_image %}
+                <img
+                  class="ai-card-bg-{{ ai_gen_id }}"
+                  src="{{ testimonial_image | image_url: width: 800 }}"
+                  alt="{{ testimonial_image.alt | escape }}"
+                  loading="lazy"
+                  width="800"
+                  height="600"
+                >
+              {% else %}
+                <div class="ai-card-bg-placeholder-{{ ai_gen_id }}">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+
+              <div class="ai-card-overlay-{{ ai_gen_id }}"></div>
+
+              <div class="ai-card-content-{{ ai_gen_id }}">
+                {% if testimonial_rating > 0 %}
+                  <div class="ai-stars-{{ ai_gen_id }}">
+                    {% for star in (1..testimonial_rating) %}★{% endfor %}
+                  </div>
+                {% endif %}
+
+                {% if testimonial_title != blank %}
+                  <h3 class="ai-card-title-{{ ai_gen_id }}">{{ testimonial_title }}</h3>
+                {% endif %}
+
+                {% if testimonial_description != blank %}
+                  <p class="ai-card-desc-{{ ai_gen_id }}">{{ testimonial_description }}</p>
+                {% endif %}
+
+                {% if testimonial_author != blank %}
+                  <span class="ai-card-author-{{ ai_gen_id }}">— {{ testimonial_author }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+      {% endif %}
+    </div>
+
+    <button
+      class="ai-nav-button-{{ ai_gen_id }} ai-nav-prev-{{ ai_gen_id }}"
+      aria-label="Previous testimonial"
+      data-nav="prev"
+    >
+      <svg viewBox="0 0 24 24">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <button
+      class="ai-nav-button-{{ ai_gen_id }} ai-nav-next-{{ ai_gen_id }}"
+      aria-label="Next testimonial"
+      data-nav="next"
+    >
+      <svg viewBox="0 0 24 24">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+  </div>
+</testimonial-carousel-{{ ai_gen_id }}>
+{% endif %}
+
+<script>
+  (function() {
+    class TestimonialCarousel{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentIndex = 0;
+        this.autoplayTimer = null;
+      }
+
+      connectedCallback() {
+        this.carousel = this.querySelector('.ai-testimonial-carousel-{{ ai_gen_id }}');
+        this.track = this.querySelector('.ai-testimonial-track-{{ ai_gen_id }}');
+        this.slides = this.querySelectorAll('.ai-testimonial-slide-{{ ai_gen_id }}');
+        this.prevButton = this.querySelector('[data-nav="prev"]');
+        this.nextButton = this.querySelector('[data-nav="next"]');
+        this.defaultSlidesPerView = parseInt(this.dataset.slidesPerView) || 3;
+        this.slidesPerView = this.defaultSlidesPerView;
+        this.autoplay = this.dataset.autoplay === 'true';
+        this.autoplayDelay = parseInt(this.dataset.autoplayDelay) || 5000;
+        this.handleResize = () => this.updateSlidesPerView();
+
+        this.setupEventListeners();
+        this.updateButtons();
+        this.updateSlidesPerView();
+
+        if (this.autoplay) {
+          this.startAutoplay();
+        }
+
+        window.addEventListener('resize', this.handleResize);
+      }
+
+      updateSlidesPerView() {
+        const width = this.carousel ? this.carousel.offsetWidth : this.offsetWidth;
+        if (width <= 749) {
+          this.slidesPerView = 1;
+        } else if (width <= 989) {
+          this.slidesPerView = 2;
+        } else {
+          this.slidesPerView = this.defaultSlidesPerView;
+        }
+        const maxIndex = Math.max(this.slides.length - this.slidesPerView, 0);
+        this.currentIndex = Math.min(this.currentIndex, maxIndex);
+        this.updateSlidePosition();
+      }
+
+      setupEventListeners() {
+        this.prevButton.addEventListener('click', () => this.prev());
+        this.nextButton.addEventListener('click', () => this.next());
+
+        this.addEventListener('mouseenter', () => this.stopAutoplay());
+        this.addEventListener('mouseleave', () => {
+          if (this.autoplay) {
+            this.startAutoplay();
+          }
+        });
+      }
+
+      prev() {
+        if (this.currentIndex > 0) {
+          this.currentIndex--;
+          this.updateSlidePosition();
+        }
+      }
+
+      next() {
+        const maxIndex = this.slides.length - this.slidesPerView;
+        if (this.currentIndex < maxIndex) {
+          this.currentIndex++;
+          this.updateSlidePosition();
+        } else if (this.autoplay) {
+          this.currentIndex = 0;
+          this.updateSlidePosition();
+        }
+      }
+
+      updateSlidePosition() {
+        if (!this.slides.length || !this.track) return;
+        const slideWidth = this.slides[0].getBoundingClientRect().width;
+        const gap = parseInt(getComputedStyle(this.track).gap) || 0;
+        const offset = -(this.currentIndex * (slideWidth + gap));
+        this.track.style.transform = `translateX(${offset}px)`;
+        this.updateButtons();
+      }
+
+      updateButtons() {
+        const maxIndex = Math.max(this.slides.length - this.slidesPerView, 0);
+        this.prevButton.disabled = this.currentIndex === 0;
+        this.nextButton.disabled = this.currentIndex >= maxIndex;
+      }
+
+      startAutoplay() {
+        this.stopAutoplay();
+        this.autoplayTimer = setInterval(() => {
+          const maxIndex = Math.max(this.slides.length - this.slidesPerView, 0);
+          if (this.currentIndex >= maxIndex) {
+            this.currentIndex = 0;
+          } else {
+            this.currentIndex++;
+          }
+          this.updateSlidePosition();
+        }, this.autoplayDelay);
+      }
+
+      stopAutoplay() {
+        if (this.autoplayTimer) {
+          clearInterval(this.autoplayTimer);
+          this.autoplayTimer = null;
+        }
+      }
+
+      disconnectedCallback() {
+        this.stopAutoplay();
+        window.removeEventListener('resize', this.handleResize);
+      }
+    }
+
+    customElements.define('testimonial-carousel-{{ ai_gen_id }}', TestimonialCarousel{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Testimonial carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Echte Stimmen aus aller Welt"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content maximum width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Carousel"
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view",
+      "label": "Slides per view",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card gap",
+      "min": 0,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "label": "Autoplay delay",
+      "min": 2000,
+      "max": 9000,
+      "step": 500,
+      "unit": "ms",
+      "default": 5000
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "label": "Card height",
+      "min": 250,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background",
+      "default": "#eaeef2"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#17223a"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 75
+    },
+    {
+      "type": "range",
+      "id": "image_zoom_scale",
+      "label": "Image zoom scale",
+      "min": 100,
+      "max": 120,
+      "step": 2,
+      "unit": "%",
+      "default": 108
+    },
+    {
+      "type": "header",
+      "content": "Text style"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#f39c12"
+    },
+    {
+      "type": "range",
+      "id": "star_size",
+      "label": "Star size",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 14,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "author_size",
+      "label": "Author size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "range",
+      "id": "nav_button_size",
+      "label": "Button size",
+      "min": 30,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "color",
+      "id": "nav_button_bg",
+      "label": "Button background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_hover_bg",
+      "label": "Button hover background",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_color",
+      "label": "Button icon color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_1_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "testimonial_1_title",
+      "label": "Title",
+      "default": "Mehr als zufrieden"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_1_description",
+      "label": "Description",
+      "default": "Mit dem VENUS E konnte ich meinen Stromverbrauch um fast 60 % reduzieren. Die Investition hat sich bereits im ersten Jahr amortisiert."
+    },
+    {
+      "type": "text",
+      "id": "testimonial_1_author",
+      "label": "Author",
+      "default": "Markus S., Deutschland"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_2_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "testimonial_2_title",
+      "label": "Title",
+      "default": "Perfekte Lösung"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_2_description",
+      "label": "Description",
+      "default": "Die Installation war einfach und der Kundenservice hervorragend. Kann ich nur weiterempfehlen!"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_2_author",
+      "label": "Author",
+      "default": "Anna M., Österreich"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_3_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "testimonial_3_title",
+      "label": "Title",
+      "default": "Ausgezeichnete Qualität"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_3_description",
+      "label": "Description",
+      "default": "Hochwertige Verarbeitung und exzellente Leistung. Genau das, was ich gesucht habe."
+    },
+    {
+      "type": "text",
+      "id": "testimonial_3_author",
+      "label": "Author",
+      "default": "Thomas K., Schweiz"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_4_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "testimonial_4_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_4_description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_4_author",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_5_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "testimonial_5_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_5_description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_5_author",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_6_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "testimonial_6_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_6_description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_6_author",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial 7"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_7_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_7_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "testimonial_7_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_7_description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_7_author",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial 8"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_8_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_8_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "testimonial_8_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_8_description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_8_author",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial 9"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_9_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_9_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "testimonial_9_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_9_description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_9_author",
+      "label": "Author"
+    },
+    {
+      "type": "header",
+      "content": "Testimonial 10"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_10_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_10_rating",
+      "label": "Rating",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "testimonial_10_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_10_description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_10_author",
+      "label": "Author"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonial carousel"
+    }
+  ]
+}
+{% endschema %}

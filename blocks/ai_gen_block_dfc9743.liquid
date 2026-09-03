@@ -1,0 +1,1075 @@
+{% doc %}
+  @prompt
+    <style>
+    /* 独立隔离样式，避免和主题冲突 */
+    .static-blog-carousel {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      font-family: Assistant, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    .blog-header {
+      margin-bottom: 42px;
+    }
+    .blog-header h2 {
+      font-size: 38px;
+      font-weight: 700;
+      color: #121212;
+      margin: 0 0 14px;
+      line-height: 1.2;
+    }
+    .blog-header p {
+      font-size: 16px;
+      color: #585858;
+      line-height: 1.65;
+      max-width: 980px;
+      margin: 0;
+    }
+    
+    /* 左右加宽内边距，给向内靠的箭头留出空间 */
+    .blog-slider-wrapper {
+      overflow: hidden;
+      position: relative;
+      padding: 0 75px;
+    }
+    
+    /* 桌面3列布局，一页只展示3张 */
+    .blog-cards-wrap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    
+    .blog-card-item {
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+    .blog-card-item:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.11);
+    }
+    
+    .blog-card-img-box {
+      width: 100%;
+      height: 210px;
+      background: #f5f7fa;
+    }
+    .blog-card-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.32s ease;
+    }
+    .blog-card-item:hover .blog-card-img-box img {
+      transform: scale(1.05);
+    }
+    
+    .blog-card-content {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .blog-card-content h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111111;
+      min-height: 76px;
+      margin: 0 0 14px;
+      line-height: 1.42;
+    }
+    .blog-card-content .excerpt {
+      font-size: 15px;
+      color: #636363;
+      line-height: 1.6;
+      margin: 0 0 26px;
+      flex-grow: 1;
+    }
+    
+    /* 阅读按钮样式 */
+    .blog-read-btn {
+      display: inline-block;
+      width: fit-content;
+      padding: 12px 28px;
+      background-color: #00c752;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 9px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.26s ease;
+      box-shadow: none !important;
+      border: 0;
+      cursor: pointer;
+    }
+    .blog-read-btn:hover {
+      background-color: #00ad46;
+      box-shadow: 0 0 10px rgba(0, 199, 82, 0.52), 0 0 20px rgba(0, 199, 82, 0.26);
+      transform: translateY(-2px);
+    }
+    
+    /* 翻页箭头：向内靠拢18px，视觉居中，层级拉满 */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      color: #111111;
+      cursor: pointer;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.22s ease;
+      padding: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .carousel-arrow.prev {
+      left: 18px;
+    }
+    .carousel-arrow.next {
+      right: 18px;
+    }
+    .carousel-arrow:hover {
+      background: #00c752;
+      border-color: #00c752;
+      color: #ffffff;
+    }
+    .carousel-arrow:disabled {
+      opacity: 0.35;
+      pointer-events: none !important;
+      cursor: default;
+    }
+    .carousel-arrow svg {
+      width: 24px;
+      height: 24px;
+      stroke-width: 2.4;
+    }
+    
+    /* 平板适配 2列 */
+    @media screen and (max-width: 1024px) {
+      .blog-slider-wrapper {
+        padding: 0 65px;
+      }
+      .blog-cards-wrap {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .carousel-arrow {
+        width: 44px;
+        height: 44px;
+      }
+      .carousel-arrow.prev {
+        left: 15px;
+      }
+      .carousel-arrow.next {
+        right: 15px;
+      }
+    }
+    
+    /* 手机适配 1列，箭头放底部居中 */
+    @media screen and (max-width: 640px) {
+      .blog-slider-wrapper {
+        padding: 0;
+      }
+      .blog-cards-wrap {
+        grid-template-columns: 1fr;
+      }
+      .blog-card-img-box {
+        height: 170px;
+      }
+      .blog-read-btn {
+        width: 100%;
+        text-align: center;
+      }
+      .carousel-arrow {
+        width: 40px;
+        height: 40px;
+        top: auto;
+        bottom: -65px;
+        transform: none;
+      }
+      .carousel-arrow.prev {
+        left: calc(50% - 50px);
+      }
+      .carousel-arrow.next {
+        right: calc(50% - 50px);
+      }
+    }
+    </style>
+    
+    <div class="static-blog-carousel">
+      <!-- 模块标题区域 -->
+      <div class="blog-header">
+        <h2>Blog / Inhaltsmarketing Eingang</h2>
+        <p>Hier werden ausgewählte Ratgeber, Produktkaufberatungen und aktuelle Gesetzesauswertungen rund um Balkonkraftwerke und Hausbatterien angezeigt.</p>
+      </div>
+    
+      <div class="blog-slider-wrapper">
+        <!-- 左翻页按钮 -->
+        <button class="carousel-arrow prev" id="blogPrevBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+    
+        <!-- 仅6篇文章卡片，共2页，每页3篇 -->
+        <div class="blog-cards-wrap" id="allBlogCardsBox">
+    
+          <!-- 第1篇 -->
+          <div class="blog-card-item">
+            <div class="blog-card-img-box">
+              <img src="BILD_URL_01" alt="Balkonkraftwerk Einstieg">
+            </div>
+            <div class="blog-card-content">
+              <h3>Was genau ist ein Balkonkraftwerk? Dein Einstieg in die eigene Solarenergie</h3>
+              <p class="excerpt">Erfahre, wie Plug&Play Solaranlagen funktionieren, für wen sie geeignet sind und warum sie sich 2026 lohnen.</p>
+              <a href="/blogs/news/artikel-01" class="blog-read-btn">Weiterlesen</a>
+            </div>
+          </div>
+    
+    , 每个文章卡片都要单独的编辑图片标题文字的选项。Heading和Description添加左右平移的选项, 每个文章卡片的Title、Excerpt添加调整上下距离的选项和调整最大宽度的选项
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-blog-carousel-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px 20px;
+    position: relative;
+    font-family: {{ block.settings.font_family.family }}, {{ block.settings.font_family.fallback_families }};
+    display: block;
+  }
+
+  .ai-blog-header-{{ ai_gen_id }} {
+    margin-bottom: 42px;
+    text-align: {{ block.settings.header_alignment }};
+  }
+
+  .ai-blog-header-{{ ai_gen_id }} h2 {
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 14px;
+    line-height: 1.2;
+  }
+
+  .ai-blog-header-{{ ai_gen_id }} p {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.description_color }};
+    line-height: 1.65;
+    max-width: 980px;
+    margin: 0 {% if block.settings.header_alignment == 'center' %}auto{% elsif block.settings.header_alignment == 'right' %}0 0 auto{% else %}0{% endif %};
+  }
+
+  .ai-blog-slider-wrapper-{{ ai_gen_id }} {
+    overflow: hidden;
+    position: relative;
+    padding: 0 75px;
+  }
+
+  .ai-blog-cards-wrap-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.card_gap }}px;
+    transition: transform 0.4s ease;
+  }
+
+  .ai-blog-card-item-{{ ai_gen_id }} {
+    background: {{ block.settings.card_bg_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+  }
+
+  .ai-blog-card-item-{{ ai_gen_id }}:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.11);
+  }
+
+  .ai-blog-card-img-box-{{ ai_gen_id }} {
+    width: 100%;
+    height: {{ block.settings.image_height }}px;
+    background: #f5f7fa;
+    overflow: hidden;
+  }
+
+  .ai-blog-card-img-box-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.32s ease;
+  }
+
+  .ai-blog-card-item-{{ ai_gen_id }}:hover .ai-blog-card-img-box-{{ ai_gen_id }} img {
+    transform: scale(1.05);
+  }
+
+  .ai-blog-card-content-{{ ai_gen_id }} {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ai-blog-card-content-{{ ai_gen_id }} h3 {
+    font-size: {{ block.settings.card_title_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.card_title_color }};
+    margin: 0 0 {{ block.settings.card_title_spacing }}px;
+    line-height: 1.42;
+    max-width: {{ block.settings.card_title_max_width }}%;
+  }
+
+  .ai-blog-card-content-{{ ai_gen_id }} .excerpt {
+    font-size: {{ block.settings.card_excerpt_size }}px;
+    color: {{ block.settings.card_excerpt_color }};
+    line-height: 1.6;
+    margin: 0 0 {{ block.settings.card_excerpt_spacing }}px;
+    flex-grow: 1;
+    max-width: {{ block.settings.card_excerpt_max_width }}%;
+  }
+
+  .ai-blog-read-btn-{{ ai_gen_id }} {
+    display: inline-block;
+    width: fit-content;
+    padding: 12px 28px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.26s ease;
+    box-shadow: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .ai-blog-read-btn-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg_color }};
+    {% if block.settings.button_hover_glow %}
+      box-shadow: 0 0 10px {{ block.settings.button_bg_color | color_modify: 'alpha', 0.52 }}, 
+                  0 0 20px {{ block.settings.button_bg_color | color_modify: 'alpha', 0.26 }};
+    {% endif %}
+    transform: translateY(-2px);
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid {{ block.settings.arrow_border_color }};
+    background: {{ block.settings.arrow_bg_color }};
+    color: {{ block.settings.arrow_icon_color }};
+    cursor: pointer;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.22s ease;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }}.prev {
+    left: 18px;
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }}.next {
+    right: 18px;
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }}:hover {
+    background: {{ block.settings.arrow_hover_bg_color }};
+    border-color: {{ block.settings.arrow_hover_bg_color }};
+    color: {{ block.settings.arrow_hover_icon_color }};
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }}:disabled {
+    opacity: 0.35;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .ai-carousel-arrow-{{ ai_gen_id }} svg {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2.4;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .ai-blog-slider-wrapper-{{ ai_gen_id }} {
+      padding: 0 65px;
+    }
+    .ai-blog-cards-wrap-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }} {
+      width: 44px;
+      height: 44px;
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }}.prev {
+      left: 15px;
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }}.next {
+      right: 15px;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .ai-blog-slider-wrapper-{{ ai_gen_id }} {
+      padding: 0;
+    }
+    .ai-blog-cards-wrap-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+    .ai-blog-card-img-box-{{ ai_gen_id }} {
+      height: 170px;
+    }
+    .ai-blog-read-btn-{{ ai_gen_id }} {
+      width: 100%;
+      text-align: center;
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }} {
+      width: 40px;
+      height: 40px;
+      top: auto;
+      bottom: -65px;
+      transform: none;
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }}.prev {
+      left: calc(50% - 50px);
+    }
+    .ai-carousel-arrow-{{ ai_gen_id }}.next {
+      right: calc(50% - 50px);
+    }
+  }
+{% endstyle %}
+
+<blog-carousel-{{ ai_gen_id }} class="ai-blog-carousel-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.heading != blank or block.settings.description != blank %}
+    <div class="ai-blog-header-{{ ai_gen_id }}">
+      {% if block.settings.heading != blank %}
+        <h2>{{ block.settings.heading }}</h2>
+      {% endif %}
+      {% if block.settings.description != blank %}
+        <p>{{ block.settings.description }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="ai-blog-slider-wrapper-{{ ai_gen_id }}">
+    <button class="ai-carousel-arrow-{{ ai_gen_id }} prev" aria-label="Previous articles">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <div class="ai-blog-cards-wrap-{{ ai_gen_id }}" data-carousel-track>
+      {% for i in (1..6) %}
+        {% assign card_image_key = 'card_' | append: i | append: '_image' %}
+        {% assign card_title_key = 'card_' | append: i | append: '_title' %}
+        {% assign card_excerpt_key = 'card_' | append: i | append: '_excerpt' %}
+        {% assign card_link_key = 'card_' | append: i | append: '_link' %}
+        
+        {% assign card_image = block.settings[card_image_key] %}
+        {% assign card_title = block.settings[card_title_key] %}
+        {% assign card_excerpt = block.settings[card_excerpt_key] %}
+        {% assign card_link = block.settings[card_link_key] %}
+
+        <div class="ai-blog-card-item-{{ ai_gen_id }}">
+          <div class="ai-blog-card-img-box-{{ ai_gen_id }}">
+            {% if card_image %}
+              <img
+                src="{{ card_image | image_url: width: 600 }}"
+                alt="{{ card_image.alt | escape }}"
+                loading="lazy"
+                width="600"
+                height="{{ block.settings.image_height }}"
+              >
+            {% else %}
+              {{ 'image' | placeholder_svg_tag }}
+            {% endif %}
+          </div>
+          <div class="ai-blog-card-content-{{ ai_gen_id }}">
+            <h3>{{ card_title }}</h3>
+            <p class="excerpt">{{ card_excerpt }}</p>
+            <a href="{{ card_link }}" class="ai-blog-read-btn-{{ ai_gen_id }}">
+              {{ block.settings.button_text }}
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <button class="ai-carousel-arrow-{{ ai_gen_id }} next" aria-label="Next articles">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</blog-carousel-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class BlogCarousel{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentPage = 0;
+        this.itemsPerPage = {{ block.settings.columns_desktop }};
+      }
+
+      connectedCallback() {
+        this.track = this.querySelector('[data-carousel-track]');
+        this.prevBtn = this.querySelector('.ai-carousel-arrow-{{ ai_gen_id }}.prev');
+        this.nextBtn = this.querySelector('.ai-carousel-arrow-{{ ai_gen_id }}.next');
+        this.cards = this.querySelectorAll('.ai-blog-card-item-{{ ai_gen_id }}');
+        this.totalPages = Math.ceil(this.cards.length / this.itemsPerPage);
+
+        this.setupEventListeners();
+        this.updateButtons();
+        this.handleResize();
+      }
+
+      setupEventListeners() {
+        this.prevBtn.addEventListener('click', () => this.goToPrevPage());
+        this.nextBtn.addEventListener('click', () => this.goToNextPage());
+        window.addEventListener('resize', () => this.handleResize());
+      }
+
+      handleResize() {
+        const width = window.innerWidth;
+        if (width <= 640) {
+          this.itemsPerPage = 1;
+        } else if (width <= 1024) {
+          this.itemsPerPage = 2;
+        } else {
+          this.itemsPerPage = {{ block.settings.columns_desktop }};
+        }
+        this.totalPages = Math.ceil(this.cards.length / this.itemsPerPage);
+        if (this.currentPage >= this.totalPages) {
+          this.currentPage = this.totalPages - 1;
+        }
+        this.updateCarousel();
+      }
+
+      goToPrevPage() {
+        if (this.currentPage > 0) {
+          this.currentPage--;
+          this.updateCarousel();
+        }
+      }
+
+      goToNextPage() {
+        if (this.currentPage < this.totalPages - 1) {
+          this.currentPage++;
+          this.updateCarousel();
+        }
+      }
+
+      updateCarousel() {
+        this.cards.forEach((card, index) => {
+          const startIndex = this.currentPage * this.itemsPerPage;
+          const endIndex = startIndex + this.itemsPerPage;
+          if (index >= startIndex && index < endIndex) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        this.updateButtons();
+      }
+
+      updateButtons() {
+        this.prevBtn.disabled = this.currentPage === 0;
+        this.nextBtn.disabled = this.currentPage >= this.totalPages - 1;
+      }
+    }
+
+    customElements.define('blog-carousel-{{ ai_gen_id }}', BlogCarousel{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Blog carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Blog / Inhaltsmarketing Eingang"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "Hier werden ausgewählte Ratgeber, Produktkaufberatungen und aktuelle Gesetzesauswertungen rund um Balkonkraftwerke und Hausbatterien angezeigt."
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Title",
+      "default": "Was genau ist ein Balkonkraftwerk?"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_excerpt",
+      "label": "Excerpt",
+      "default": "Erfahre, wie Plug&Play Solaranlagen funktionieren, für wen sie geeignet sind und warum sie sich 2026 lohnen."
+    },
+    {
+      "type": "url",
+      "id": "card_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Title",
+      "default": "Balkonkraftwerk Installation"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_excerpt",
+      "label": "Excerpt",
+      "default": "Schritt-für-Schritt Anleitung zur Installation deines Balkonkraftwerks."
+    },
+    {
+      "type": "url",
+      "id": "card_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Title",
+      "default": "Gesetzliche Regelungen 2026"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_excerpt",
+      "label": "Excerpt",
+      "default": "Aktuelle Gesetzesänderungen und was sie für dich bedeuten."
+    },
+    {
+      "type": "url",
+      "id": "card_3_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_4_title",
+      "label": "Title",
+      "default": "Hausbatterie Kaufberatung"
+    },
+    {
+      "type": "textarea",
+      "id": "card_4_excerpt",
+      "label": "Excerpt",
+      "default": "Worauf du beim Kauf einer Hausbatterie achten solltest."
+    },
+    {
+      "type": "url",
+      "id": "card_4_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_5_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_5_title",
+      "label": "Title",
+      "default": "Energiekosten senken"
+    },
+    {
+      "type": "textarea",
+      "id": "card_5_excerpt",
+      "label": "Excerpt",
+      "default": "Wie du mit Solarenergie deine Stromrechnung reduzierst."
+    },
+    {
+      "type": "url",
+      "id": "card_5_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Card 6"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_6_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "card_6_title",
+      "label": "Title",
+      "default": "PV-T Module erklärt"
+    },
+    {
+      "type": "textarea",
+      "id": "card_6_excerpt",
+      "label": "Excerpt",
+      "default": "Die Vorteile von integrierten PV-T Modulen für dein Zuhause."
+    },
+    {
+      "type": "url",
+      "id": "card_6_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card spacing",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Image height",
+      "min": 150,
+      "max": 350,
+      "step": 10,
+      "unit": "px",
+      "default": 210
+    },
+    {
+      "type": "header",
+      "content": "Heading style"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#585858"
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "label": "Title size",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Title color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "card_title_spacing",
+      "label": "Title bottom spacing",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "card_title_max_width",
+      "label": "Title max width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "card_excerpt_size",
+      "label": "Excerpt size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "card_excerpt_color",
+      "label": "Excerpt color",
+      "default": "#636363"
+    },
+    {
+      "type": "range",
+      "id": "card_excerpt_spacing",
+      "label": "Excerpt bottom spacing",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "card_excerpt_max_width",
+      "label": "Excerpt max width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Weiterlesen"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background",
+      "default": "#00c752"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Hover background",
+      "default": "#00ad46"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_hover_glow",
+      "label": "Enable hover glow effect",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 9
+    },
+    {
+      "type": "header",
+      "content": "Arrow style"
+    },
+    {
+      "type": "color",
+      "id": "arrow_bg_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "arrow_border_color",
+      "label": "Border color",
+      "default": "#e5e7eb"
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Icon color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_bg_color",
+      "label": "Hover background",
+      "default": "#00c752"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_icon_color",
+      "label": "Hover icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font",
+      "default": "assistant_n4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog carousel"
+    }
+  ]
+}
+{% endschema %}

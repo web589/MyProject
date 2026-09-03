@@ -1,0 +1,987 @@
+{% doc %}
+  @prompt
+    {% comment %}
+    Newsletter Signup Block
+    Visual: blue background, centered icon, title, description, email input and button
+    {% endcomment %}
+    
+    {% schema %}
+    {
+      "name": "Newsletter signup",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title_text",
+          "label": "Title",
+          "default": "MARSTEK Newsletter"
+        },
+        {
+          "type": "textarea",
+          "id": "desc_text",
+          "label": "Description",
+          "default": "Neuheiten, VPP-Updates und Spartipps – einmal im Monat, jederzeit kündbar."
+        },
+        {
+          "type": "text",
+          "id": "input_placeholder",
+          "label": "Email placeholder",
+          "default": "E-Mail-Adresse eingeben"
+        },
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "Button text",
+          "default": "Abonnieren"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icon",
+          "label": "Show icon",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background color",
+          "default": "#00C6FF"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "label": "Top padding",
+          "min": 20,
+          "max": 200,
+          "step": 5,
+          "default": 90
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "label": "Bottom padding",
+          "min": 20,
+          "max": 200,
+          "step": 5,
+          "default": 90
+        }
+      ]
+    }
+    {% endschema %}
+    
+    <style>
+    .newsletter-section {
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    
+    .newsletter-inner {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    
+    .newsletter-icon {
+      color: #ffffff;
+      font-size: 40px;
+      margin: 0 0 24px;
+    }
+    
+    .newsletter-title {
+      color: #ffffff;
+      font-size: 48px;
+      font-weight: 700;
+      margin: 0 0 24px;
+      line-height: 1.2;
+    }
+    
+    .newsletter-desc {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 0 0 32px;
+    }
+    
+    .newsletter-form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .newsletter-input {
+      min-width: 320px;
+      padding: 16px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #ffffff !important;
+      color: #111111;
+      outline: none;
+    }
+    
+    .newsletter-button {
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #111111;
+      cursor: pointer;
+    }
+    
+    .newsletter-button:hover {
+      background-color: #f5f5f5;
+    }
+    
+    @media (max-width: 640px) {
+      .newsletter-title {
+        font-size: 36px;
+      }
+    
+      .newsletter-input {
+        width: 100%;
+        min-width: auto;
+      }
+    
+      .newsletter-button {
+        width: 100%;
+      }
+    }
+    </style>
+    
+    <div class="newsletter-section" style="
+      background-color: {{ settings.bg_color }};
+      padding-top: {{ settings.padding_top }}px;
+      padding-bottom: {{ settings.padding_bottom }}px;
+    ">
+      <div class="newsletter-inner">
+    
+        {% if settings.show_icon %}
+          <div class="newsletter-icon">✉</div>
+        {% endif %}
+    
+        <h2 class="newsletter-title">{{ settings.title_text }}</h2>
+    
+        <p class="newsletter-desc">{{ settings.desc_text }}</p>
+    
+        <div class="newsletter-form">
+          <input
+            type="email"
+            name="email"
+            class="newsletter-input"
+            placeholder="{{ settings.input_placeholder }}"
+            required
+          >
+          <button type="button" class="newsletter-button">{{ settings.btn_label }}</button>
+        </div>
+    
+      </div>
+    </div>, 在Email placeholder和Button底下添加“Ich stimme den Nutzungsbedingungen und der Datenschutzerklärung zu.”的选项，前面有个小方格可供勾选，勾选了之后才能点击按钮, “Ich stimme den Nutzungsbedingungen und der Datenschutzerklärung zu.”字体添加大小调节选项。“Email placeholder”的框添加宽度调节选项, Consent text添加文本宽度调节选项，添加文本字体大小调节选项, Consent text调节字体大小没反应，优化一下。Consent text要点击能链接。, 卡片背景色要渐变色，#0099FC-#00B8FF
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign newsletter_form_id = 'newsletter-form-' | append: ai_gen_id %}
+{% assign newsletter_anchor_id = 'newsletter-' | append: ai_gen_id %}
+{% assign newsletter_return_to = request.path | append: '?newsletter_success=' | append: ai_gen_id | append: '#' | append: newsletter_anchor_id %}
+
+{% style %}
+  .ai-newsletter-section-{{ ai_gen_id }} {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    display: block;
+  }
+
+  .ai-newsletter-inner-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  .ai-newsletter-icon-{{ ai_gen_id }} {
+    color: #ffffff;
+    font-size: 40px;
+    margin: 0 0 24px;
+  }
+
+  .ai-newsletter-title-{{ ai_gen_id }} {
+    color: #ffffff;
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: 800;
+    margin: 0 0 24px;
+    line-height: 1.2;
+  }
+
+  .ai-newsletter-desc-{{ ai_gen_id }} {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: {{ block.settings.desc_font_size }}px;
+    line-height: 1.6;
+    margin: 0 0 32px;
+  }
+
+  .ai-newsletter-form-wrapper-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ai-newsletter-form-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: nowrap;
+    width: {{ block.settings.input_width }}%;
+    max-width: 100%;
+  }
+
+  .ai-newsletter-input-{{ ai_gen_id }} {
+    width: auto;
+    flex: 1 1 auto;
+    max-width: 100%;
+    min-width: 200px;
+    padding: 16px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #0A1628;
+    outline: none;
+  }
+
+  .ai-newsletter-button-{{ ai_gen_id }} {
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 900;
+    border: none;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #0A1628;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .ai-newsletter-button-{{ ai_gen_id }}:hover:not(:disabled) {
+    background-color: #f5f5f5;
+  }
+
+  .ai-newsletter-button-{{ ai_gen_id }}:disabled {
+    background-color: #ffffff;
+    color: #0A1628;
+    opacity: 1;
+    cursor: not-allowed;
+  }
+
+  .ai-newsletter-consent-{{ ai_gen_id }} {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: {{ block.settings.consent_width }}%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .ai-newsletter-checkbox-{{ ai_gen_id }} {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: #ffffff;
+  }
+
+  .ai-newsletter-consent-label-{{ ai_gen_id }} {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: {{ block.settings.consent_font_size }}px;
+    line-height: 1.5;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .ai-newsletter-consent-label-{{ ai_gen_id }} p {
+    margin: 0;
+    font-size: {{ block.settings.consent_font_size }}px;
+  }
+
+  .ai-newsletter-consent-label-{{ ai_gen_id }} a {
+    color: #ffffff;
+    text-decoration: underline;
+    font-size: {{ block.settings.consent_font_size }}px;
+  }
+
+  .ai-newsletter-consent-label-{{ ai_gen_id }} a:hover {
+    text-decoration: none;
+  }
+
+  .ai-newsletter-success-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  .ai-newsletter-error-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  .ai-newsletter-modal-{{ ai_gen_id }} {
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(10, 22, 40, 0.55);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+  }
+
+  .ai-newsletter-modal-{{ ai_gen_id }}.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .ai-newsletter-dialog-{{ ai_gen_id }} {
+    position: relative;
+    width: min(420px, 100%);
+    padding: 26px 24px 22px;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #0a1628;
+    box-shadow: 0 18px 60px rgba(10, 22, 40, 0.28);
+    text-align: center;
+    transform: translateY(14px) scale(0.98);
+    transition: transform 0.2s ease;
+  }
+
+  .ai-newsletter-modal-{{ ai_gen_id }}.is-visible .ai-newsletter-dialog-{{ ai_gen_id }} {
+    transform: translateY(0) scale(1);
+  }
+
+  .ai-newsletter-modal-title-{{ ai_gen_id }} {
+    margin: 0 30px 14px;
+    font-size: 20px;
+    line-height: 1.3;
+    text-align: left;
+  }
+
+  .ai-newsletter-modal-close-{{ ai_gen_id }} {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #596b82;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .ai-newsletter-modal-icon-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: #e1f7ed;
+    color: #079455;
+  }
+
+  .ai-newsletter-modal-icon-{{ ai_gen_id }} svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .ai-newsletter-modal-icon-{{ ai_gen_id }} .ai-newsletter-icon-error {
+    display: none;
+  }
+
+  .ai-newsletter-modal-{{ ai_gen_id }}[data-state="error"] .ai-newsletter-modal-icon-{{ ai_gen_id }} {
+    background: #fde8e8;
+    color: #d92d20;
+  }
+
+  .ai-newsletter-modal-{{ ai_gen_id }}[data-state="error"] .ai-newsletter-icon-success {
+    display: none;
+  }
+
+  .ai-newsletter-modal-{{ ai_gen_id }}[data-state="error"] .ai-newsletter-icon-error {
+    display: block;
+  }
+
+  .ai-newsletter-modal-message-{{ ai_gen_id }} {
+    margin: 0 0 18px;
+    color: #596b82;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .ai-newsletter-modal-button-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 6px;
+    background: #0099fc;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .ai-newsletter-modal-button-{{ ai_gen_id }}:hover {
+    background: #007fd6;
+    color: #ffffff;
+    transform: translateY(-1px);
+  }
+
+  .ai-newsletter-modal-note-{{ ai_gen_id }} {
+    margin-top: 10px;
+    color: #8a97a6;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .ai-newsletter-modal-note-{{ ai_gen_id }} p {
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-newsletter-modal-{{ ai_gen_id }},
+    .ai-newsletter-dialog-{{ ai_gen_id }},
+    .ai-newsletter-modal-button-{{ ai_gen_id }} {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ai-newsletter-title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_font_size }}px * 0.75);
+    }
+
+    .ai-newsletter-input-{{ ai_gen_id }} {
+      width: 100%;
+      min-width: auto;
+    }
+
+    .ai-newsletter-form-{{ ai_gen_id }} {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .ai-newsletter-button-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-newsletter-consent-{{ ai_gen_id }} {
+      width: 100%;
+    }
+  }
+{% endstyle %}
+
+<newsletter-signup-{{ ai_gen_id }}
+  id="{{ newsletter_anchor_id }}"
+  class="ai-newsletter-section-{{ ai_gen_id }}"
+  style="
+    background: linear-gradient(135deg, {{ block.settings.gradient_color_start }} 0%, {{ block.settings.gradient_color_end }} 100%);
+    padding-top: {{ block.settings.padding_top }}px;
+    padding-bottom: {{ block.settings.padding_bottom }}px;
+  "
+  {{ block.shopify_attributes }}
+  data-empty-email-message="{{ block.settings.empty_email_message | escape }}"
+  data-invalid-email-message="{{ block.settings.invalid_email_message | escape }}"
+  data-consent-error-message="{{ block.settings.consent_error_message | escape }}"
+  data-success-message="{{ block.settings.success_message | strip_html | escape }}"
+  data-success-title="{{ block.settings.success_title | escape }}"
+  data-error-title="{{ block.settings.error_title | escape }}"
+  data-newsletter-instance="{{ ai_gen_id }}"
+>
+  <div class="ai-newsletter-inner-{{ ai_gen_id }}">
+    {% if block.settings.show_icon %}
+      <div class="ai-newsletter-icon-{{ ai_gen_id }}">✉</div>
+    {% endif %}
+
+    <h2 class="ai-newsletter-title-{{ ai_gen_id }}">{{ block.settings.title_text }}</h2>
+
+    <p class="ai-newsletter-desc-{{ ai_gen_id }}">{{ block.settings.desc_text }}</p>
+
+    {%- form 'customer',
+      id: newsletter_form_id,
+      class: 'ai-newsletter-native-form',
+      return_to: newsletter_return_to,
+      data-shopify-captcha: 'true'
+    -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <input type="hidden" name="contact[context]" value="{{ newsletter_anchor_id }}">
+      
+      <div class="ai-newsletter-form-wrapper-{{ ai_gen_id }}">
+        <div class="ai-newsletter-form-{{ ai_gen_id }}">
+          <input
+            type="email"
+            name="contact[email]"
+            class="ai-newsletter-input-{{ ai_gen_id }}"
+            placeholder="{{ block.settings.input_placeholder }}"
+            value="{{ form.email }}"
+            aria-required="true"
+            autocorrect="off"
+            autocapitalize="off"
+            autocomplete="email"
+            {% if form.errors %}
+              aria-invalid="true"
+              aria-describedby="ai-newsletter-error-{{ ai_gen_id }}"
+            {% endif %}
+            {% if form.posted_successfully? %}
+              aria-describedby="ai-newsletter-success-{{ ai_gen_id }}"
+            {% endif %}
+            required
+          >
+          <button
+            type="submit"
+            class="ai-newsletter-button-{{ ai_gen_id }}"
+            data-submit-button
+          >
+            {{ block.settings.btn_label }}
+          </button>
+        </div>
+
+        <div class="ai-newsletter-consent-{{ ai_gen_id }}">
+          <input
+            type="checkbox"
+            id="ai-newsletter-consent-checkbox-{{ ai_gen_id }}"
+            class="ai-newsletter-checkbox-{{ ai_gen_id }}"
+            data-consent-checkbox
+            required
+          >
+          <label
+            for="ai-newsletter-consent-checkbox-{{ ai_gen_id }}"
+            class="ai-newsletter-consent-label-{{ ai_gen_id }}"
+          >
+            {{ block.settings.consent_text }}
+          </label>
+        </div>
+
+        {%- if form.errors -%}
+          <div
+            id="ai-newsletter-error-{{ ai_gen_id }}"
+            class="ai-newsletter-error-{{ ai_gen_id }}"
+          >
+            <span>{{ form.errors.messages.email }}</span>
+          </div>
+        {%- endif -%}
+
+        {%- if form.posted_successfully? -%}
+          <div
+            id="ai-newsletter-success-{{ ai_gen_id }}"
+            class="ai-newsletter-success-{{ ai_gen_id }}"
+          >
+            <span>{{ block.settings.success_message }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endform -%}
+  </div>
+
+  <div
+    class="ai-newsletter-modal-{{ ai_gen_id }}"
+    data-newsletter-modal
+    data-state="success"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="ai-newsletter-modal-title-{{ ai_gen_id }}"
+  >
+    <div class="ai-newsletter-dialog-{{ ai_gen_id }}" data-newsletter-dialog>
+      <button
+        type="button"
+        class="ai-newsletter-modal-close-{{ ai_gen_id }}"
+        data-newsletter-modal-close
+        aria-label="{{ block.settings.modal_close_label | escape }}"
+      >×</button>
+      <h3 id="ai-newsletter-modal-title-{{ ai_gen_id }}" class="ai-newsletter-modal-title-{{ ai_gen_id }}" data-newsletter-modal-title></h3>
+      <div class="ai-newsletter-modal-icon-{{ ai_gen_id }}" aria-hidden="true">
+        <svg class="ai-newsletter-icon-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
+        <svg class="ai-newsletter-icon-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </div>
+      <p class="ai-newsletter-modal-message-{{ ai_gen_id }}" data-newsletter-modal-message></p>
+      {% if block.settings.modal_button_link != blank %}
+        <a class="ai-newsletter-modal-button-{{ ai_gen_id }}" href="{{ block.settings.modal_button_link }}" data-newsletter-modal-button>
+          {{ block.settings.modal_button_label }}
+        </a>
+      {% else %}
+        <button type="button" class="ai-newsletter-modal-button-{{ ai_gen_id }}" data-newsletter-modal-close data-newsletter-modal-button>
+          {{ block.settings.modal_button_label }}
+        </button>
+      {% endif %}
+      {% if block.settings.modal_note != blank %}
+        <div class="ai-newsletter-modal-note-{{ ai_gen_id }}">{{ block.settings.modal_note }}</div>
+      {% endif %}
+    </div>
+  </div>
+</newsletter-signup-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class NewsletterSignup{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.form = this.querySelector('form');
+        this.emailInput = this.querySelector('.ai-newsletter-input-{{ ai_gen_id }}');
+        this.consentCheckbox = this.querySelector('[data-consent-checkbox]');
+        this.submitButton = this.querySelector('[data-submit-button]');
+        this.modal = this.querySelector('[data-newsletter-modal]');
+        this.dialog = this.querySelector('[data-newsletter-dialog]');
+        this.modalTitle = this.querySelector('[data-newsletter-modal-title]');
+        this.modalMessage = this.querySelector('[data-newsletter-modal-message]');
+        this.modalCloseButtons = this.querySelectorAll('[data-newsletter-modal-close]');
+
+        if (this.form && this.emailInput) {
+          this.form.noValidate = true;
+          this.form.addEventListener('submit', (event) => this.validateForm(event), true);
+        }
+
+        if (this.submitButton) {
+          this.submitButton.addEventListener('click', (event) => this.validateForm(event), true);
+        }
+
+        this.modalCloseButtons.forEach((button) => {
+          button.addEventListener('click', () => this.hideModal());
+        });
+
+        if (this.modal) {
+          this.modal.addEventListener('click', (event) => {
+            if (event.target === this.modal) this.hideModal();
+          });
+        }
+
+        this.handleEscape = (event) => {
+          if (event.key === 'Escape' && this.modal && this.modal.classList.contains('is-visible')) {
+            this.hideModal();
+          }
+        };
+        document.addEventListener('keydown', this.handleEscape);
+
+        const serverSuccess = this.querySelector('.ai-newsletter-success-{{ ai_gen_id }}');
+        const url = new URL(window.location.href);
+        const successFromRedirect = url.searchParams.get('newsletter_success') === this.dataset.newsletterInstance;
+        if (serverSuccess || successFromRedirect) {
+          this.showModal(this.dataset.successMessage, 'success');
+          if (successFromRedirect) {
+            url.searchParams.delete('newsletter_success');
+            window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+          }
+        } else {
+          const serverError = this.querySelector('.ai-newsletter-error-{{ ai_gen_id }}');
+          if (serverError) this.showModal(serverError.textContent.trim(), 'error');
+        }
+      }
+
+      disconnectedCallback() {
+        document.removeEventListener('keydown', this.handleEscape);
+      }
+
+      validateForm(event) {
+        const email = this.emailInput.value.trim();
+
+        if (!email) {
+          this.stopSubmission(event);
+          this.showModal(this.dataset.emptyEmailMessage, 'error');
+          this.emailInput.focus();
+          return false;
+        }
+
+        if (!this.emailInput.validity.valid) {
+          this.stopSubmission(event);
+          this.showModal(this.dataset.invalidEmailMessage, 'error');
+          this.emailInput.focus();
+          return false;
+        }
+
+        if (this.consentCheckbox && !this.consentCheckbox.checked) {
+          this.stopSubmission(event);
+          this.showModal(this.dataset.consentErrorMessage, 'error');
+          this.consentCheckbox.focus();
+          return false;
+        }
+
+        return true;
+      }
+
+      stopSubmission(event) {
+        if (!event) return;
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+      }
+
+      showModal(message, state) {
+        if (!this.modal || !this.modalTitle || !this.modalMessage || !message) return;
+        this.lastFocusedElement = document.activeElement;
+        this.modal.dataset.state = state;
+        this.modalTitle.textContent = state === 'success' ? this.dataset.successTitle : this.dataset.errorTitle;
+        this.modalMessage.textContent = message;
+        this.modal.classList.add('is-visible');
+        this.modal.setAttribute('aria-hidden', 'false');
+        this.previousBodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        const closeButton = this.modal.querySelector('[data-newsletter-modal-close]');
+        if (closeButton) closeButton.focus();
+      }
+
+      hideModal() {
+        if (!this.modal) return;
+        this.modal.classList.remove('is-visible');
+        this.modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = this.previousBodyOverflow || '';
+        if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === 'function') {
+          this.lastFocusedElement.focus();
+        }
+      }
+    }
+
+    if (!customElements.get('newsletter-signup-{{ ai_gen_id }}')) {
+      customElements.define('newsletter-signup-{{ ai_gen_id }}', NewsletterSignup{{ ai_gen_id }});
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Newsletter signup",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title_text",
+      "label": "Title",
+      "default": "MARSTEK Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "desc_text",
+      "label": "Description",
+      "default": "Neuheiten, VPP-Updates und Spartipps – einmal im Monat, jederzeit kündbar."
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "label": "Email placeholder",
+      "default": "E-Mail-Adresse eingeben"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button text",
+      "default": "Abonnieren"
+    },
+    {
+      "type": "richtext",
+      "id": "consent_text",
+      "label": "Consent text",
+      "info": "Use links in the text editor to add clickable links",
+      "default": "<p>Ich stimme den <a href=\"/pages/terms\" target=\"_blank\">Nutzungsbedingungen</a> und der <a href=\"/pages/privacy\" target=\"_blank\">Datenschutzerklärung</a> zu.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "<p>Vielen Dank! Wir haben deine Anmeldung erhalten.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Result modal"
+    },
+    {
+      "type": "text",
+      "id": "success_title",
+      "label": "Success title",
+      "default": "Anmeldung erfolgreich"
+    },
+    {
+      "type": "text",
+      "id": "error_title",
+      "label": "Error title",
+      "default": "Eingabe prüfen"
+    },
+    {
+      "type": "text",
+      "id": "empty_email_message",
+      "label": "Empty email error",
+      "default": "Bitte gib deine E-Mail-Adresse ein."
+    },
+    {
+      "type": "text",
+      "id": "invalid_email_message",
+      "label": "Invalid email error",
+      "default": "Bitte gib eine gültige E-Mail-Adresse ein."
+    },
+    {
+      "type": "text",
+      "id": "consent_error_message",
+      "label": "Consent error",
+      "default": "Bitte bestätige deine Einwilligung."
+    },
+    {
+      "type": "text",
+      "id": "modal_button_label",
+      "label": "Modal button text",
+      "default": "Zurück zum Shop"
+    },
+    {
+      "type": "url",
+      "id": "modal_button_link",
+      "label": "Modal button link"
+    },
+    {
+      "type": "text",
+      "id": "modal_close_label",
+      "label": "Close button accessibility label",
+      "default": "Schließen"
+    },
+    {
+      "type": "richtext",
+      "id": "modal_note",
+      "label": "Modal note",
+      "default": "<p>Mit dem Absenden akzeptierst du unsere Datenschutzerklärung.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "desc_font_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "consent_font_size",
+      "label": "Consent text size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "input_width",
+      "label": "Email input width",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "consent_width",
+      "label": "Consent text width",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 70
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Show icon",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_start",
+      "label": "Gradient start color",
+      "default": "#0099FC"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_end",
+      "label": "Gradient end color",
+      "default": "#00B8FF"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 20,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 20,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter signup"
+    }
+  ]
+}
+{% endschema %}

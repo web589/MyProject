@@ -1,0 +1,1086 @@
+{% doc %}
+  @prompt
+    <style>
+    /* ========== 全局可调节变量 ========== */
+    :root {
+      --bg-dark: #0A1628;
+      --accent-green: #00E676;
+      --text-primary: #FFFFFF;
+      --text-muted: #94A3B8;
+      --radius-btn: 4px;
+      --radius-pill: 20px;
+      --font-heading: 'Manrope', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    
+      --content-max-width: 1200px;
+      --side-padding: 0; /* 侧边距最小0，整体贴近左侧 */
+      --badge-max-width: 320px;
+      --heading-max-width: 8000; /* Heading最大宽度改为8000 */
+      --desc-max-width: 480px;
+      --btns-wrap-max-width: 500px;
+      --footer-note-max-width: 400px;
+    
+      --award-section-top-gap: 60px;
+      --award-card-radius: 8px;
+      --award-card-height: 100px;
+      --award-card-gap: 16px;
+      --award-wrap-max-width: 650px;
+      --award-bg-color: #142238;
+    
+      --badge-dot-breathe-speed: 4s;
+      /* 渐变透明度可控变量 */
+      --gradient-start-opacity: 0.98;
+      --gradient-mid-opacity: 0.75;
+      --gradient-end-opacity: 0.1;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=Inter:wght@400;500;600&display=swap');
+    
+    @keyframes badge-dot-breathe {
+      0% {
+        opacity: 0.25;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.25;
+      }
+    }
+    
+    .btn-primary {
+      padding: 16px 32px;
+      background-color: var(--accent-green);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: var(--radius-btn);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      filter: brightness(0.9);
+      transform: translateY(-2px);
+    }
+    
+    .btn-outline {
+      padding: 16px 32px;
+      background: transparent;
+      color: var(--text-primary);
+      border: 2px solid var(--text-primary);
+      border-radius: var(--radius-btn);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-block;
+    }
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .venus-e-static-hero {
+      width: 100%;
+      min-height: 88vh;
+      background-color: var(--bg-dark);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    
+    .hero-bg-image {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover; /* 背景图铺满整个区块 */
+      background-position: right center;
+      background-repeat: no-repeat;
+      background-image: url('粘贴产品大图链接');
+    }
+    
+    .hero-gradient-overlay {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+        rgba(10,22,40,var(--gradient-start-opacity)) 0%,
+        rgba(10,22,40,var(--gradient-mid-opacity)) 55%,
+        rgba(10,22,40,var(--gradient-end-opacity)) 80%);
+    }
+    
+    .hero-content-wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: var(--content-max-width);
+      margin: 0 auto;
+      padding: 0 var(--side-padding);
+      /* 关键：内容整体靠左，而不是居中 */
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    
+    .hero-text-block {
+      width: 100%;
+      max-width: 520px;
+      text-align: left;
+      /* 防止某些编辑器把内容块自动拉到中间 */
+      margin-left: 0 !important;
+      margin-right: auto !important;
+    }
+    
+    /* 顶部标签：左对齐 + 小圆点独立渲染 */
+    .hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 28px;
+      max-width: var(--badge-max-width);
+      text-align: left;
+    }
+    
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      min-width: 8px;
+      min-height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent-green);
+      animation: badge-dot-breathe var(--badge-dot-breathe-speed) ease-in-out infinite;
+      /* 强制显示，避免编辑器隐藏伪元素 */
+      display: block !important;
+      opacity: 1 !important;
+    }
+    
+    .hero-main-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text-primary);
+      margin: 0 0 24px 0;
+      max-width: var(--heading-max-width);
+      text-align: left;
+      white-space: pre-line !important;
+      word-break: keep-all !important;
+      overflow-wrap: normal !important;
+    }
+    
+    .hero-desc-paragraph {
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin: 0 0 36px 0;
+      max-width: var(--desc-max-width);
+      text-align: left;
+    }
+    
+    .hero-button-group {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      max-width: var(--btns-wrap-max-width);
+      justify-content: flex-start;
+    }
+    
+    .hero-footer-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: var(--footer-note-max-width);
+      justify-content: flex-start;
+    }
+    .hero-footer-note .check-icon {
+      width: 16px;
+      height: 16px;
+      fill: var(--accent-green);
+    }
+    
+    .awards-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--award-card-gap);
+      margin-top: var(--award-section-top-gap);
+      max-width: var(--awar, 除了背景图，整体往左侧移，靠近左侧, Heading的Max width改成8000, Max width调整成20000, Heading不规定最大宽度，换行按照我在文本框里的换行来换, Heading最大宽度限定为20000
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-hero-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    min-height: {{ block.settings.min_height }}vh;
+    background-color: {{ block.settings.bg_color }};
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-hero-inner-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: {{ block.settings.min_height }}vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .ai-hero-bg-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: {{ block.settings.image_position }};
+    background-repeat: no-repeat;
+    z-index: 1;
+  }
+
+  .ai-hero-bg-image-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: {{ block.settings.image_position }};
+  }
+
+  .ai-hero-gradient-{{ ai_gen_id }} {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      {{ block.settings.bg_color | color_modify: 'alpha', block.settings.gradient_start_opacity }} 0%,
+      {{ block.settings.bg_color | color_modify: 'alpha', block.settings.gradient_mid_opacity }} 55%,
+      {{ block.settings.bg_color | color_modify: 'alpha', block.settings.gradient_end_opacity }} 80%
+    );
+    z-index: 2;
+  }
+
+  .ai-hero-content-wrap-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: {{ block.settings.content_max_width }}px;
+    margin: 0;
+    margin-left: {{ block.settings.content_left_offset }}px;
+    padding: 60px {{ block.settings.side_padding }}px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .ai-hero-text-block-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: {{ block.settings.text_block_max_width }}px;
+    text-align: left;
+  }
+
+  .ai-hero-badge-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    border: 1px solid {{ block.settings.accent_color }};
+    color: {{ block.settings.accent_color }};
+    font-size: {{ block.settings.badge_font_size }}px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: {{ block.settings.badge_border_radius }}px;
+    margin-bottom: 28px;
+    max-width: {{ block.settings.badge_max_width }}px;
+  }
+
+  .ai-hero-badge-dot-{{ ai_gen_id }} {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 50%;
+    background-color: {{ block.settings.accent_color }};
+    animation: ai-hero-badge-breathe-{{ ai_gen_id }} {{ block.settings.badge_animation_speed }}s ease-in-out infinite;
+  }
+
+  @keyframes ai-hero-badge-breathe-{{ ai_gen_id }} {
+    0%, 100% {
+      opacity: 0.25;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .ai-hero-heading-{{ ai_gen_id }} {
+    font-size: clamp({{ block.settings.heading_min_size }}px, 6vw, {{ block.settings.heading_max_size }}px);
+    font-weight: 700;
+    line-height: {{ block.settings.heading_line_height }};
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 24px 0;
+    max-width: {{ block.settings.heading_max_width }}px;
+    white-space: pre-line;
+    word-break: keep-all;
+  }
+
+  .ai-hero-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_font_size }}px;
+    line-height: {{ block.settings.description_line_height }};
+    color: {{ block.settings.description_color }};
+    margin: 0 0 36px 0;
+    max-width: {{ block.settings.description_max_width }}px;
+  }
+
+  .ai-hero-buttons-{{ ai_gen_id }} {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    max-width: {{ block.settings.buttons_max_width }}px;
+  }
+
+  .ai-hero-btn-primary-{{ ai_gen_id }} {
+    padding: 16px 32px;
+    background-color: {{ block.settings.primary_btn_bg }};
+    color: {{ block.settings.primary_btn_color }};
+    border: none;
+    border-radius: {{ block.settings.btn_border_radius }}px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+  }
+
+  .ai-hero-btn-primary-{{ ai_gen_id }}:hover {
+    filter: brightness(0.9);
+    transform: translateY(-2px);
+  }
+
+  .ai-hero-btn-outline-{{ ai_gen_id }} {
+    padding: 16px 32px;
+    background: transparent;
+    color: {{ block.settings.outline_btn_color }};
+    border: 2px solid {{ block.settings.outline_btn_border }};
+    border-radius: {{ block.settings.btn_border_radius }}px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+  }
+
+  .ai-hero-btn-outline-{{ ai_gen_id }}:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .ai-hero-footer-note-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: {{ block.settings.footer_note_font_size }}px;
+    color: {{ block.settings.description_color }};
+    max-width: {{ block.settings.footer_note_max_width }}px;
+  }
+
+  .ai-hero-check-icon-{{ ai_gen_id }} {
+    width: 16px;
+    height: 16px;
+    fill: {{ block.settings.accent_color }};
+    flex-shrink: 0;
+  }
+
+  .ai-hero-awards-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.awards_columns }}, 1fr);
+    gap: {{ block.settings.awards_gap }}px;
+    margin-top: {{ block.settings.awards_top_gap }}px;
+    max-width: {{ block.settings.awards_max_width }}px;
+  }
+
+  .ai-hero-award-card-{{ ai_gen_id }} {
+    background-color: {{ block.settings.award_bg_color }};
+    border-radius: {{ block.settings.award_border_radius }}px;
+    height: {{ block.settings.award_height }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .ai-hero-award-card-{{ ai_gen_id }} img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-hero-content-wrap-{{ ai_gen_id }} {
+      padding: 40px 20px;
+      margin-left: 0;
+    }
+
+    .ai-hero-awards-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-hero-inner-{{ ai_gen_id }} {
+      min-height: {{ block.settings.mobile_min_height }}vh;
+    }
+
+    .ai-hero-buttons-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .ai-hero-btn-primary-{{ ai_gen_id }},
+    .ai-hero-btn-outline-{{ ai_gen_id }} {
+      width: 100%;
+      text-align: center;
+    }
+  }
+{% endstyle %}
+
+<ai-hero-{{ ai_gen_id }} class="ai-hero-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-hero-inner-{{ ai_gen_id }}">
+    {% if block.settings.background_image %}
+      <div class="ai-hero-bg-image-{{ ai_gen_id }}">
+        <img
+          src="{{ block.settings.background_image | image_url: width: 2000 }}"
+          alt="{{ block.settings.background_image.alt | escape }}"
+          loading="lazy"
+          width="{{ block.settings.background_image.width }}"
+          height="{{ block.settings.background_image.height }}"
+        >
+      </div>
+    {% endif %}
+
+    <div class="ai-hero-gradient-{{ ai_gen_id }}"></div>
+
+    <div class="ai-hero-content-wrap-{{ ai_gen_id }}">
+      <div class="ai-hero-text-block-{{ ai_gen_id }}">
+        {% if block.settings.show_badge and block.settings.badge_text != blank %}
+          <div class="ai-hero-badge-{{ ai_gen_id }}">
+            <span class="ai-hero-badge-dot-{{ ai_gen_id }}"></span>
+            {{ block.settings.badge_text }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.heading != blank %}
+          <h1 class="ai-hero-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h1>
+        {% endif %}
+
+        {% if block.settings.description != blank %}
+          <div class="ai-hero-description-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+        {% endif %}
+
+        {% if block.settings.show_buttons %}
+          <div class="ai-hero-buttons-{{ ai_gen_id }}">
+            {% if block.settings.primary_btn_text != blank %}
+              <a
+                href="{{ block.settings.primary_btn_link }}"
+                class="ai-hero-btn-primary-{{ ai_gen_id }}"
+              >
+                {{ block.settings.primary_btn_text }}
+              </a>
+            {% endif %}
+
+            {% if block.settings.outline_btn_text != blank %}
+              <a
+                href="{{ block.settings.outline_btn_link }}"
+                class="ai-hero-btn-outline-{{ ai_gen_id }}"
+              >
+                {{ block.settings.outline_btn_text }}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if block.settings.show_footer_note and block.settings.footer_note_text != blank %}
+          <div class="ai-hero-footer-note-{{ ai_gen_id }}">
+            <svg class="ai-hero-check-icon-{{ ai_gen_id }}" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.5 3.5L6 11L2.5 7.5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            {{ block.settings.footer_note_text }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.show_awards %}
+          <div class="ai-hero-awards-{{ ai_gen_id }}">
+            {% for i in (1..4) %}
+              {% assign award_key = 'award_' | append: i %}
+              {% assign award_image = block.settings[award_key] %}
+              {% if award_image %}
+                <div class="ai-hero-award-card-{{ ai_gen_id }}">
+                  <img
+                    src="{{ award_image | image_url: width: 200 }}"
+                    alt="{{ award_image.alt | escape }}"
+                    loading="lazy"
+                    width="200"
+                    height="100"
+                  >
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</ai-hero-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class AiHero{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.adjustGradient();
+        window.addEventListener('resize', this.adjustGradient.bind(this));
+      }
+
+      adjustGradient() {
+        const gradient = this.querySelector('.ai-hero-gradient-{{ ai_gen_id }}');
+        if (gradient && window.innerWidth < 750) {
+          gradient.style.background = 'linear-gradient(180deg, rgba(10,22,40,0.6) 0%, rgba(10,22,40,0.9) 100%)';
+        }
+      }
+
+      disconnectedCallback() {
+        window.removeEventListener('resize', this.adjustGradient.bind(this));
+      }
+    }
+
+    customElements.define('ai-hero-{{ ai_gen_id }}', AiHero{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Premium hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Desktop min height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "mobile_min_height",
+      "label": "Mobile min height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content max width",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "content_left_offset",
+      "label": "Content left offset",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "text_block_max_width",
+      "label": "Text block max width",
+      "min": 400,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left center", "label": "Left" },
+        { "value": "center center", "label": "Center" },
+        { "value": "right center", "label": "Right" }
+      ],
+      "default": "right center"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#0A1628"
+    },
+    {
+      "type": "range",
+      "id": "gradient_start_opacity",
+      "label": "Gradient start opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "gradient_mid_opacity",
+      "label": "Gradient mid opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.8
+    },
+    {
+      "type": "range",
+      "id": "gradient_end_opacity",
+      "label": "Gradient end opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.1
+    },
+    {
+      "type": "header",
+      "content": "Badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "New Launch"
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "badge_max_width",
+      "label": "Max width",
+      "min": 200,
+      "max": 500,
+      "step": 20,
+      "unit": "px",
+      "default": 320
+    },
+    {
+      "type": "range",
+      "id": "badge_animation_speed",
+      "label": "Animation speed",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "s",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Premium Energy Solutions for Modern Homes"
+    },
+    {
+      "type": "range",
+      "id": "heading_min_size",
+      "label": "Min font size",
+      "min": 24,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_max_size",
+      "label": "Max font size",
+      "min": 48,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "heading_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.3
+    },
+    {
+      "type": "range",
+      "id": "heading_max_width",
+      "label": "Max width",
+      "min": 400,
+      "max": 2000,
+      "step": 100,
+      "unit": "px",
+      "default": 2000
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Transform your home with cutting-edge solar technology. Easy installation, maximum efficiency.</p>"
+    },
+    {
+      "type": "range",
+      "id": "description_font_size",
+      "label": "Font size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "description_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.7
+    },
+    {
+      "type": "range",
+      "id": "description_max_width",
+      "label": "Max width",
+      "min": 300,
+      "max": 700,
+      "step": 20,
+      "unit": "px",
+      "default": 480
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Color",
+      "default": "#94A3B8"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buttons",
+      "label": "Show buttons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "primary_btn_text",
+      "label": "Primary button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "primary_btn_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "color",
+      "id": "primary_btn_bg",
+      "label": "Primary button background",
+      "default": "#00E676"
+    },
+    {
+      "type": "color",
+      "id": "primary_btn_color",
+      "label": "Primary button text color",
+      "default": "#0A1628"
+    },
+    {
+      "type": "text",
+      "id": "outline_btn_text",
+      "label": "Outline button text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "outline_btn_link",
+      "label": "Outline button link"
+    },
+    {
+      "type": "color",
+      "id": "outline_btn_color",
+      "label": "Outline button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "outline_btn_border",
+      "label": "Outline button border",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "btn_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "buttons_max_width",
+      "label": "Buttons max width",
+      "min": 300,
+      "max": 700,
+      "step": 20,
+      "unit": "px",
+      "default": 500
+    },
+    {
+      "type": "header",
+      "content": "Footer note"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_footer_note",
+      "label": "Show footer note",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "footer_note_text",
+      "label": "Footer note text",
+      "default": "Free shipping on orders over €100"
+    },
+    {
+      "type": "range",
+      "id": "footer_note_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "footer_note_max_width",
+      "label": "Max width",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Awards"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_awards",
+      "label": "Show awards",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "awards_columns",
+      "label": "Columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "awards_gap",
+      "label": "Gap",
+      "min": 8,
+      "max": 32,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "awards_top_gap",
+      "label": "Top gap",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "awards_max_width",
+      "label": "Max width",
+      "min": 400,
+      "max": 900,
+      "step": 50,
+      "unit": "px",
+      "default": 650
+    },
+    {
+      "type": "color",
+      "id": "award_bg_color",
+      "label": "Award background",
+      "default": "#142238"
+    },
+    {
+      "type": "range",
+      "id": "award_border_radius",
+      "label": "Award border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "award_height",
+      "label": "Award height",
+      "min": 60,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "image_picker",
+      "id": "award_1",
+      "label": "Award 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "award_2",
+      "label": "Award 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "award_3",
+      "label": "Award 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "award_4",
+      "label": "Award 4"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#00E676"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Premium hero"
+    }
+  ]
+}
+{% endschema %}

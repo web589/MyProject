@@ -1,0 +1,474 @@
+{% liquid
+  assign is_product_page = false
+  assign is_product_faq = false
+  assign faq_title = section.settings.title
+  assign faq_subtitle = section.settings.subtitle
+  assign faq_items = section.blocks
+  assign faq_schema_items = section.blocks | where: 'type', 'question'
+  assign should_render_faq = false
+  assign use_theme_editor_content = false
+  if section.settings.content_source == 'theme_editor'
+    assign use_theme_editor_content = true
+  endif
+  if request.page_type == 'product' and product != blank
+    assign is_product_page = true
+    if use_theme_editor_content == false
+      assign pdp_content_candidate = product.metafields.custom.pdp_content.value
+      if pdp_content_candidate != blank
+        assign pdp_content_owner = pdp_content_candidate.product.value
+        assign pdp_content_is_for_product = false
+        if pdp_content_owner != blank
+          if pdp_content_owner.handle == product.handle
+            assign pdp_content_is_for_product = true
+          endif
+        elsif pdp_content_candidate.system.handle == product.handle
+          assign pdp_content_is_for_product = true
+        endif
+        if pdp_content_is_for_product
+          assign is_product_faq = true
+          assign pdp_content = pdp_content_candidate
+          assign faq_title = pdp_content.faq_title.value
+          assign faq_subtitle = pdp_content.faq_subtitle.value
+          assign faq_items = pdp_content.faqs.value
+          assign faq_schema_items = faq_items
+        endif
+      endif
+    endif
+  endif
+  if is_product_page == false or use_theme_editor_content
+    assign should_render_faq = true
+  elsif is_product_faq == true
+    if faq_title != blank or faq_subtitle != blank or faq_items != blank
+      assign should_render_faq = true
+    endif
+  endif
+%}
+
+{% if should_render_faq %}
+{%- if section.settings.divider -%}<div class="section--divider">{%- endif -%}
+
+<style>
+  #shopify-section-{{ section.id }} .page-width--narrow {
+    max-width: 1200px;
+  }
+
+  #shopify-section-{{ section.id }} .faq-section-header {
+    margin: 0 0 40px;
+    text-align: left;
+  }
+
+  #shopify-section-{{ section.id }} .faq-section-title {
+    margin: 0;
+    color: #242424;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-section-subtitle {
+    max-width: 760px;
+    margin: 12px 0 0;
+    color: #596b82;
+    font-size: 16px;
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-view-all {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+
+  #shopify-section-{{ section.id }} .faq-view-all__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0099fe;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  #shopify-section-{{ section.id }} .faq-view-all__link:hover {
+    color: #007dcc;
+  }
+
+  #shopify-section-{{ section.id }} .faq-view-all__arrow {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .faq-view-all__link:hover .faq-view-all__arrow,
+  #shopify-section-{{ section.id }} .faq-view-all__link:focus-visible .faq-view-all__arrow {
+    transform: translateX(3px);
+  }
+
+  #shopify-section-{{ section.id }} .faq-item {
+    background: #f5f7f9;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger {
+    min-height: 84px;
+    padding: 24px 64px 24px 24px;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.35;
+    color: #000000;
+  }
+
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger__icon {
+    inset-inline-end: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .rte.collapsible-content__inner--faq {
+    padding: 0 24px 28px;
+    color: #2f3f5b;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  @media only screen and (max-width: 640px) {
+    #shopify-section-{{ section.id }} .faq-section-header {
+      margin-bottom: 28px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-section-title {
+      font-size: 28px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-section-subtitle {
+      font-size: 15px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-item .collapsible-trigger {
+      min-height: 68px;
+      padding: 18px 52px 18px 18px;
+      font-size: 16px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-item .collapsible-trigger__icon {
+      inset-inline-end: 18px;
+    }
+
+    #shopify-section-{{ section.id }} .rte.collapsible-content__inner--faq {
+      padding: 0 18px 22px;
+      font-size: 15px;
+    }
+  }
+</style>
+
+<div{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handle }}"{% endif %} class="page-width page-width--narrow">
+  {%- if faq_title != blank or faq_subtitle != blank -%}
+    <header class="faq-section-header">
+      {%- if faq_title != blank -%}
+        <h2 class="faq-section-title">
+          {{ faq_title | escape }}
+        </h2>
+      {%- endif -%}
+      {%- if faq_subtitle != blank -%}
+        <div class="faq-section-subtitle rte">
+          {{ faq_subtitle }}
+        </div>
+      {%- endif -%}
+    </header>
+  {%- endif -%}
+
+  {%- if faq_items != blank -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {%- assign faq_entity_count = 0 -%}
+          {%- for faq_item in faq_schema_items -%}
+            {% liquid
+              if is_product_faq
+                assign faq_question = faq_item.question.value
+                assign faq_answer = faq_item.answer.value
+              else
+                assign faq_question = faq_item.settings.title
+                assign faq_answer = faq_item.settings.text
+              endif
+            %}
+            {%- if faq_question != blank and faq_answer != blank -%}
+            {%- if faq_entity_count > 0 -%},{%- endif -%}
+            {
+              "@type": "Question",
+              "name": {{ faq_question | json }},
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": {{ faq_answer | json }}
+              }
+            }
+            {%- assign faq_entity_count = faq_entity_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        ]
+      }
+    </script>
+    {%- for faq_item in faq_items -%}
+      {% liquid
+        assign should_render_faq_item = true
+        if is_product_faq
+          assign faq_question = faq_item.question.value
+          assign faq_answer = faq_item.answer.value
+          assign faq_item_id = faq_item.system.handle | default: forloop.index
+        else
+          assign faq_question = faq_item.settings.title
+          assign faq_answer = faq_item.settings.text
+          assign faq_item_id = faq_item.id
+          if faq_item.type == 'question'
+            if faq_question == blank or faq_answer == blank
+              assign should_render_faq_item = false
+            endif
+          endif
+        endif
+      %}
+      {% if should_render_faq_item %}
+        <div {% unless is_product_faq %}{{ faq_item.shopify_attributes }}{% endunless %}>
+        {% if is_product_faq %}
+          {% if faq_question != blank and faq_answer != blank %}
+            <div class="faq-item">
+              <button type="button" class="collapsible-trigger collapsible-trigger--inline collapsible-trigger--icon-right collapsible--auto-height text-left" aria-controls="FAQ-content-{{ faq_item_id }}">
+                <span>{{ faq_question }}</span>
+                {%- render 'collapsible-icons-alt', no_circle: true -%}
+              </button>
+              <div id="FAQ-content-{{ faq_item_id }}" class="collapsible-content collapsible-content--all">
+                <div class="collapsible-content__inner collapsible-content__inner--faq rte">{{ faq_answer }}</div>
+              </div>
+            </div>
+          {% endif %}
+        {% else %}
+        {% case faq_item.type %}
+          {% when 'rich-text' %}
+            <div class="index-section index-section--faq">
+              <div class="text-{{ faq_item.settings.align_text }}">
+                {%- if faq_item.settings.title != blank -%}
+                  <p class="h2">
+                    {{ faq_item.settings.title | escape }}
+                  </p>
+                {%- endif -%}
+                {%- if faq_item.settings.text != blank -%}
+                  <div class="rte">
+                    {%- if faq_item.settings.enlarge_text %}<div class="enlarge-text">{% endif -%}
+                    {{ faq_item.settings.text }}
+                    {%- if faq_item.settings.enlarge_text %}</div>{% endif -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+
+          {% when 'question' %}
+            <div class="faq-item">
+              <button
+                type="button"
+                class="collapsible-trigger collapsible-trigger--inline collapsible-trigger--icon-right collapsible--auto-height text-left"
+                aria-controls="FAQ-content-{{ faq_item.id }}"
+              >
+                <span>{{ faq_item.settings.title }}</span>
+                {%- render 'collapsible-icons-alt', no_circle: true -%}
+              </button>
+              <div id="FAQ-content-{{ faq_item.id }}" class="collapsible-content collapsible-content--all">
+                <div class="collapsible-content__inner collapsible-content__inner--faq rte">
+                  {{ faq_item.settings.text }}
+                </div>
+              </div>
+            </div>
+        {% endcase %}
+        {% endif %}
+        </div>
+      {% endif %}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- if section.settings.view_all_text != blank and section.settings.view_all_link != blank -%}
+    <div class="faq-view-all">
+      <a class="faq-view-all__link" href="{{ section.settings.view_all_link }}">
+        {{ section.settings.view_all_text | escape }}
+        <svg class="faq-view-all__arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  {%- endif -%}
+
+  {%- if faq_items == blank and is_product_faq == false -%}
+    <div class="placeholder-noblocks">
+      {{ 'home_page.onboarding.no_content' | t }}
+    </div>
+  {%- endif -%}
+</div>
+
+{%- if section.settings.divider -%}</div>{%- endif -%}
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.faq.name",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_source",
+      "label": "内容来源",
+      "options": [
+        {
+          "value": "theme_editor",
+          "label": "右侧 Theme Editor（默认）"
+        },
+        {
+          "value": "pdp_content",
+          "label": "PDP 后台内容（备份/旧模式）"
+        }
+      ],
+      "default": "theme_editor",
+      "info": "选择右侧 Theme Editor 后，标题、说明和 FAQ 问答只读取当前模板的下方设置。"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.faq.settings.title.label",
+      "default": "FAQs"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all text",
+      "default": "Alle Fragen ansehen"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:common.heading_size.label",
+      "default": "h2",
+      "options": [
+        {
+          "value": "h3",
+          "label": "t:common.heading_size.options.small.label"
+        },
+        {
+          "value": "h2",
+          "label": "t:common.heading_size.options.medium.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:common.heading_size.options.large.label"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "rich-text",
+      "name": "t:sections.faq.blocks.rich_text.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.faq.blocks.rich_text.settings.title.label",
+          "default": "Rich text"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:sections.faq.blocks.rich_text.settings.text.label",
+          "default": "<p>Use this section for any descriptive text you need to fill out your pages or to add introductory headings between other blocks.</p>"
+        },
+        {
+          "type": "select",
+          "id": "align_text",
+          "label": "t:sections.faq.blocks.rich_text.settings.align_text.label",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.faq.blocks.rich_text.settings.align_text.options.left.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.faq.blocks.rich_text.settings.align_text.options.center.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.faq.blocks.rich_text.settings.align_text.options.right.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "t:sections.faq.blocks.question.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.faq.blocks.question.settings.title.label",
+          "default": "How long does shipping take?"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:sections.faq.blocks.question.settings.text.label",
+          "default": "<p>Orders are typically processed within 1–2 business days. Delivery times vary by location, but most orders arrive within 3–7 business days. You’ll receive tracking details once your order ships.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.faq.presets.faq.name",
+      "category": "t:sections.categories.info_trust",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "title": "How long does shipping take?",
+            "text": "<p>Orders are typically processed within 1–2 business days. Delivery times vary by location, but most orders arrive within 3–7 business days. You’ll receive tracking details once your order ships.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "title": "What is your return policy?",
+            "text": "<p>We accept returns within 30 days of delivery on unused items in original condition. To start a return, contact our support team and we’ll guide you through the process.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "title": "Can I change or cancel my order?",
+            "text": "<p>If your order hasn’t shipped yet, we’ll do our best to accommodate changes or cancellations. Reach out to our support team as soon as possible for assistance.</p>"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["footer", "header", "custom.popups"]
+  }
+}
+{% endschema %}

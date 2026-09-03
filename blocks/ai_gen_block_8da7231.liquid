@@ -1,0 +1,1048 @@
+{% doc %}
+  @prompt
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Finden Sie Ihr VENUS E</title>
+      <style>
+        /* ===== 整体区块 ===== */
+        .comparison-section {
+          max-width: 1280px;
+          margin: 0 auto 60px;
+          padding: 0 20px;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+    
+        .comparison-section .section-title {
+          font-size: 38px;
+          font-weight: 700;
+          color: #0A1628;
+          margin-bottom: 32px;
+          letter-spacing: -0.5px;
+        }
+        .comparison-section .section-title span {
+          color: #0099FC;
+        }
+    
+        /* ===== 表格容器 ===== */
+        .comparison-table-wrapper {
+          overflow-x: auto;
+          border-radius: 20px;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+          border: 1px solid #E2E8F0;
+          background: #FFFFFF;
+        }
+    
+        /* ===== 表格 ===== */
+        .comparison-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 15px;
+          min-width: 600px;
+        }
+    
+        /* 表头：品牌主色 #0099FC + 白色文字 */
+        .comparison-table thead {
+          background: #0099FC;
+        }
+        .comparison-table th {
+          padding: 16px 20px;
+          text-align: left;
+          font-weight: 700;
+          color: #FFFFFF;
+          font-size: 16px;
+          border-bottom: none;
+        }
+        .comparison-table th:first-child {
+          border-radius: 20px 0 0 0;
+        }
+        .comparison-table th:last-child {
+          border-radius: 0 20px 0 0;
+        }
+    
+        /* 行分隔线 */
+        .comparison-table td {
+          padding: 14px 20px;
+          border-bottom: 1px solid #E2E8F0;
+          color: #242424;
+          vertical-align: middle;
+        }
+    
+        /* 最后一行的底部边框去掉 */
+        .comparison-table tbody tr:last-child td {
+          border-bottom: none;
+        }
+    
+        /* 第一列（规格名）加粗，深蓝色 */
+        .comparison-table td:first-child {
+          font-weight: 600;
+          color: #0369A1;
+        }
+    
+        /* 行悬停浅蓝色背景 */
+        .comparison-table tbody tr:hover {
+          background: #E0F7FF;
+        }
+    
+        /* 特殊值标记 */
+        .comparison-table .check-yes {
+          color: #0099FC;
+          font-weight: 700;
+        }
+        .comparison-table .check-optional {
+          color: #FF8C00;
+          font-weight: 600;
+        }
+        .comparison-table .check-no {
+          color: #999;
+        }
+    
+        /* 产品列（第2～5列）可加粗突出 */
+        .comparison-table td:not(:first-child) {
+          font-weight: 500;
+        }
+    
+        /* 移动端适配 */
+        @media (max-width: 640px) {
+          .comparison-section .section-title {
+            font-size: 26px;
+          }
+          .comparison-table {
+            font-size: 13px;
+            min-width: 480px;
+          }
+          .comparison-table th,
+          .comparison-table td {
+            padding: 10px 14px;
+          }
+        }
+    
+        @media (max-width: 480px) {
+          .comparison-table {
+            font-size: 12px;
+            min-width: 380px;
+          }
+          .comparison-table th,
+          .comparison-table td {
+            padding: 8px 10px;
+          }
+        }
+      </style>
+    </head>
+    <body>
+    
+      <!-- ============================================ -->
+      <!-- 板块：Finden Sie Ihr VENUS E                 -->
+      <!-- ============================================ -->
+      <section class="comparison-section">
+        <h2 class="section-title">Finden Sie Ihr <span>VENUS E</span></h2>
+    
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Spezifikation</th>
+                <th>VENUS E Mini</th>
+                <th>VENUS E 3.0</th>
+                <th>VENUS E 4.0</th>
+                <th>VENUS E MAX</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Kapazität</td>
+                <td>2 kWh</td>
+                <td>5.12 kWh</td>
+                <td>5 kWh</td>
+                <td>10 kWh</td>
+              </tr>
+              <tr>
+                <td>Leistung</td>
+                <td>1.5 kW</td>
+                <td>2.5 kW</td>
+                <td>3 kW</td>
+                <td>3.6 kW</td>
+              </tr>
+              <tr>
+                <td>EPS Umschaltung</td>
+                <td>&lt;15 ms</td>
+                <td>&lt;15 ms</td>
+                <td>&lt;10 ms</td>
+                <td>&lt;10 ms</td>
+              </tr>
+              <tr>
+                <td>VPP</td>
+                <td><span class="check-no">—</span></td>
+                <td><span class="check-optional">Optional</span></td>
+                <td><span class="check-yes">Ja</span></td>
+                <td><span class="check-yes">Ja</span></td>
+              </tr>
+              <tr>
+                <td>Max. Erweiterung</td>
+                <td>2 kWh</td>
+                <td>20 kWh</td>
+                <td>30 kWh</td>
+                <td>30 kWh</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    
+    </body>
+    </html>
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-comparison-section-{{ ai_gen_id }} {
+    display: block;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto {{ block.settings.bottom_margin }}px;
+    padding: 0 20px;
+    width: {{ block.settings.desktop_width_percent }}%;
+  }
+
+  .ai-comparison-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+    margin-bottom: {{ block.settings.title_margin }}px;
+    letter-spacing: -0.5px;
+    text-align: {{ block.settings.title_alignment }};
+  }
+
+  .ai-comparison-title-{{ ai_gen_id }} .ai-comparison-highlight-{{ ai_gen_id }} {
+    color: {{ block.settings.highlight_color }};
+  }
+
+  .ai-comparison-table-wrapper-{{ ai_gen_id }} {
+    overflow-x: auto;
+    border-radius: {{ block.settings.border_radius }}px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    border: 1px solid {{ block.settings.border_color }};
+    background: {{ block.settings.table_background }};
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: {{ block.settings.table_font_size }}px;
+    min-width: 600px;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} thead {
+    background: {{ block.settings.header_background }};
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} th {
+    padding: {{ block.settings.cell_padding }}px {{ block.settings.cell_padding | times: 1.25 }}px;
+    text-align: left;
+    font-weight: 700;
+    color: {{ block.settings.header_text_color }};
+    font-size: {{ block.settings.header_font_size }}px;
+    border-bottom: none;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} th:first-child {
+    border-radius: {{ block.settings.border_radius }}px 0 0 0;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} th:last-child {
+    border-radius: 0 {{ block.settings.border_radius }}px 0 0;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} td {
+    padding: {{ block.settings.cell_padding | times: 0.875 }}px {{ block.settings.cell_padding | times: 1.25 }}px;
+    border-bottom: 1px solid {{ block.settings.row_border_color }};
+    color: {{ block.settings.cell_text_color }};
+    vertical-align: middle;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .ai-comparison-table-{{ ai_gen_id }} td:first-child {
+    font-weight: 600;
+    color: {{ block.settings.spec_label_color }};
+  }
+
+  {% if block.settings.enable_row_hover %}
+    .ai-comparison-table-{{ ai_gen_id }} tbody tr:hover {
+      background: {{ block.settings.row_hover_color }};
+    }
+  {% endif %}
+
+  .ai-comparison-table-{{ ai_gen_id }} td:not(:first-child) {
+    font-weight: 500;
+  }
+
+  .ai-comparison-check-yes-{{ ai_gen_id }} {
+    color: {{ block.settings.check_yes_color }};
+    font-weight: 700;
+  }
+
+  .ai-comparison-check-optional-{{ ai_gen_id }} {
+    color: {{ block.settings.check_optional_color }};
+    font-weight: 600;
+  }
+
+  .ai-comparison-check-no-{{ ai_gen_id }} {
+    color: {{ block.settings.check_no_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-comparison-section-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-comparison-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.68 }}px;
+    }
+
+    .ai-comparison-table-{{ ai_gen_id }} {
+      font-size: {{ block.settings.table_font_size | times: 0.87 }}px;
+      min-width: 480px;
+    }
+
+    .ai-comparison-table-{{ ai_gen_id }} th,
+    .ai-comparison-table-{{ ai_gen_id }} td {
+      padding: {{ block.settings.cell_padding | times: 0.625 }}px {{ block.settings.cell_padding | times: 0.875 }}px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .ai-comparison-table-{{ ai_gen_id }} {
+      font-size: {{ block.settings.table_font_size | times: 0.8 }}px;
+      min-width: 380px;
+    }
+
+    .ai-comparison-table-{{ ai_gen_id }} th,
+    .ai-comparison-table-{{ ai_gen_id }} td {
+      padding: {{ block.settings.cell_padding | times: 0.5 }}px {{ block.settings.cell_padding | times: 0.625 }}px;
+    }
+  }
+{% endstyle %}
+
+<product-comparison-{{ ai_gen_id }}
+  class="ai-comparison-section-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.title != blank %}
+    <h2 class="ai-comparison-title-{{ ai_gen_id }}">
+      {{ block.settings.title }}
+    </h2>
+  {% endif %}
+
+  <div class="ai-comparison-table-wrapper-{{ ai_gen_id }}">
+    <table class="ai-comparison-table-{{ ai_gen_id }}">
+      <thead>
+        <tr>
+          <th>{{ block.settings.header_spec }}</th>
+          <th>{{ block.settings.header_product_1 }}</th>
+          <th>{{ block.settings.header_product_2 }}</th>
+          <th>{{ block.settings.header_product_3 }}</th>
+          <th>{{ block.settings.header_product_4 }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in (1..10) %}
+          {% liquid
+            assign row_enabled_key = 'row_' | append: i | append: '_enabled'
+            assign row_spec_key = 'row_' | append: i | append: '_spec'
+            assign row_p1_key = 'row_' | append: i | append: '_product_1'
+            assign row_p2_key = 'row_' | append: i | append: '_product_2'
+            assign row_p3_key = 'row_' | append: i | append: '_product_3'
+            assign row_p4_key = 'row_' | append: i | append: '_product_4'
+
+            assign row_enabled = block.settings[row_enabled_key]
+            assign row_spec = block.settings[row_spec_key]
+            assign row_p1 = block.settings[row_p1_key]
+            assign row_p2 = block.settings[row_p2_key]
+            assign row_p3 = block.settings[row_p3_key]
+            assign row_p4 = block.settings[row_p4_key]
+          %}
+
+          {% if row_enabled %}
+            <tr>
+              <td>{{ row_spec }}</td>
+              <td>{{ row_p1 }}</td>
+              <td>{{ row_p2 }}</td>
+              <td>{{ row_p3 }}</td>
+              <td>{{ row_p4 }}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</product-comparison-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductComparison{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.applySpecialFormatting();
+      }
+
+      applySpecialFormatting() {
+        const cells = this.querySelectorAll('.ai-comparison-table-{{ ai_gen_id }} td:not(:first-child)');
+        
+        cells.forEach(cell => {
+          const text = cell.textContent.trim();
+          const lowerText = text.toLowerCase();
+          
+          if (lowerText === 'ja' || lowerText === 'yes' || lowerText === '✓') {
+            cell.innerHTML = '<span class="ai-comparison-check-yes-{{ ai_gen_id }}">' + text + '</span>';
+          } else if (lowerText === 'optional' || lowerText.includes('optional')) {
+            cell.innerHTML = '<span class="ai-comparison-check-optional-{{ ai_gen_id }}">' + text + '</span>';
+          } else if (lowerText === '—' || lowerText === '-' || lowerText === 'nein' || lowerText === 'no') {
+            cell.innerHTML = '<span class="ai-comparison-check-no-{{ ai_gen_id }}">' + text + '</span>';
+          }
+        });
+      }
+    }
+
+    customElements.define('product-comparison-{{ ai_gen_id }}', ProductComparison{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product comparison table",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "<p>Finden Sie Ihr <span>VENUS E</span></p>"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Title alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "title_margin",
+      "label": "Title bottom margin",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#0A1628"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlight color",
+      "default": "#0099FC"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 800,
+      "max": 1600,
+      "step": 40,
+      "unit": "px",
+      "default": 1280
+    },
+    {
+      "type": "range",
+      "id": "bottom_margin",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Table style"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "table_background",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#E2E8F0"
+    },
+    {
+      "type": "range",
+      "id": "table_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "cell_padding",
+      "label": "Cell padding",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Table header"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "header_spec",
+      "label": "Specification column",
+      "default": "Spezifikation"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "header_product_1",
+      "label": "Product 1",
+      "default": "VENUS E Mini"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "header_product_2",
+      "label": "Product 2",
+      "default": "VENUS E 3.0"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "header_product_3",
+      "label": "Product 3",
+      "default": "VENUS E 4.0"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "header_product_4",
+      "label": "Product 4",
+      "default": "VENUS E MAX"
+    },
+    {
+      "type": "color",
+      "id": "header_background",
+      "label": "Background",
+      "default": "#0099FC"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "header_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Table cells"
+    },
+    {
+      "type": "color",
+      "id": "cell_text_color",
+      "label": "Text color",
+      "default": "#242424"
+    },
+    {
+      "type": "color",
+      "id": "spec_label_color",
+      "label": "Specification label color",
+      "default": "#0369A1"
+    },
+    {
+      "type": "color",
+      "id": "row_border_color",
+      "label": "Row border color",
+      "default": "#E2E8F0"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_row_hover",
+      "label": "Enable row hover effect",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "row_hover_color",
+      "label": "Row hover color",
+      "default": "#E0F7FF"
+    },
+    {
+      "type": "header",
+      "content": "Special values"
+    },
+    {
+      "type": "color",
+      "id": "check_yes_color",
+      "label": "Yes/Ja color",
+      "default": "#0099FC"
+    },
+    {
+      "type": "color",
+      "id": "check_optional_color",
+      "label": "Optional color",
+      "default": "#FF8C00"
+    },
+    {
+      "type": "color",
+      "id": "check_no_color",
+      "label": "No/— color",
+      "default": "#999999"
+    },
+    {
+      "type": "header",
+      "content": "Row 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "row_1_enabled",
+      "label": "Enable row 1",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_1_spec",
+      "label": "Specification",
+      "default": "Kapazität"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_1_product_1",
+      "label": "Product 1 value",
+      "default": "2 kWh"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_1_product_2",
+      "label": "Product 2 value",
+      "default": "5.12 kWh"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_1_product_3",
+      "label": "Product 3 value",
+      "default": "5 kWh"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_1_product_4",
+      "label": "Product 4 value",
+      "default": "10 kWh"
+    },
+    {
+      "type": "header",
+      "content": "Row 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "row_2_enabled",
+      "label": "Enable row 2",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_2_spec",
+      "label": "Specification",
+      "default": "Leistung"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_2_product_1",
+      "label": "Product 1 value",
+      "default": "1.5 kW"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_2_product_2",
+      "label": "Product 2 value",
+      "default": "2.5 kW"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_2_product_3",
+      "label": "Product 3 value",
+      "default": "3 kW"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_2_product_4",
+      "label": "Product 4 value",
+      "default": "3.6 kW"
+    },
+    {
+      "type": "header",
+      "content": "Row 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "row_3_enabled",
+      "label": "Enable row 3",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_3_spec",
+      "label": "Specification",
+      "default": "EPS Umschaltung"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_3_product_1",
+      "label": "Product 1 value",
+      "default": "&lt;15 ms"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_3_product_2",
+      "label": "Product 2 value",
+      "default": "&lt;15 ms"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_3_product_3",
+      "label": "Product 3 value",
+      "default": "&lt;10 ms"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_3_product_4",
+      "label": "Product 4 value",
+      "default": "&lt;10 ms"
+    },
+    {
+      "type": "header",
+      "content": "Row 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "row_4_enabled",
+      "label": "Enable row 4",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_4_spec",
+      "label": "Specification",
+      "default": "VPP"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_4_product_1",
+      "label": "Product 1 value",
+      "default": "—"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_4_product_2",
+      "label": "Product 2 value",
+      "default": "Optional"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_4_product_3",
+      "label": "Product 3 value",
+      "default": "Ja"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_4_product_4",
+      "label": "Product 4 value",
+      "default": "Ja"
+    },
+    {
+      "type": "header",
+      "content": "Row 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "row_5_enabled",
+      "label": "Enable row 5",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_5_spec",
+      "label": "Specification",
+      "default": "Max. Erweiterung"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_5_product_1",
+      "label": "Product 1 value",
+      "default": "2 kWh"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_5_product_2",
+      "label": "Product 2 value",
+      "default": "20 kWh"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_5_product_3",
+      "label": "Product 3 value",
+      "default": "30 kWh"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_5_product_4",
+      "label": "Product 4 value",
+      "default": "30 kWh"
+    },
+    {
+      "type": "header",
+      "content": "Row 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "row_6_enabled",
+      "label": "Enable row 6",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_6_spec",
+      "label": "Specification"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_6_product_1",
+      "label": "Product 1 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_6_product_2",
+      "label": "Product 2 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_6_product_3",
+      "label": "Product 3 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_6_product_4",
+      "label": "Product 4 value"
+    },
+    {
+      "type": "header",
+      "content": "Row 7"
+    },
+    {
+      "type": "checkbox",
+      "id": "row_7_enabled",
+      "label": "Enable row 7",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_7_spec",
+      "label": "Specification"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_7_product_1",
+      "label": "Product 1 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_7_product_2",
+      "label": "Product 2 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_7_product_3",
+      "label": "Product 3 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_7_product_4",
+      "label": "Product 4 value"
+    },
+    {
+      "type": "header",
+      "content": "Row 8"
+    },
+    {
+      "type": "checkbox",
+      "id": "row_8_enabled",
+      "label": "Enable row 8",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_8_spec",
+      "label": "Specification"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_8_product_1",
+      "label": "Product 1 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_8_product_2",
+      "label": "Product 2 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_8_product_3",
+      "label": "Product 3 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_8_product_4",
+      "label": "Product 4 value"
+    },
+    {
+      "type": "header",
+      "content": "Row 9"
+    },
+    {
+      "type": "checkbox",
+      "id": "row_9_enabled",
+      "label": "Enable row 9",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_9_spec",
+      "label": "Specification"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_9_product_1",
+      "label": "Product 1 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_9_product_2",
+      "label": "Product 2 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_9_product_3",
+      "label": "Product 3 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_9_product_4",
+      "label": "Product 4 value"
+    },
+    {
+      "type": "header",
+      "content": "Row 10"
+    },
+    {
+      "type": "checkbox",
+      "id": "row_10_enabled",
+      "label": "Enable row 10",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_10_spec",
+      "label": "Specification"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_10_product_1",
+      "label": "Product 1 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_10_product_2",
+      "label": "Product 2 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_10_product_3",
+      "label": "Product 3 value"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "row_10_product_4",
+      "label": "Product 4 value"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product comparison table"
+    }
+  ]
+}
+{% endschema %}

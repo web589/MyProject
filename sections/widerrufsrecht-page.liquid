@@ -1,0 +1,96 @@
+{%- liquid
+  assign withdrawal_content = page.content
+  assign withdrawal_title = page.title | default: section.settings.title
+
+  assign withdrawal_instance_id = 'section-' | append: section.id
+-%}
+
+{%- render 'withdrawal-policy-page',
+  content: withdrawal_content,
+  title: withdrawal_title,
+  nav_title: section.settings.nav_title,
+  show_navigation: section.settings.show_navigation,
+  max_width: section.settings.max_width,
+  nav_width: section.settings.nav_width,
+  column_gap: section.settings.column_gap,
+  section_gap: section.settings.section_gap,
+  accent_color: section.settings.accent_color,
+  instance_id: withdrawal_instance_id
+-%}
+
+{% schema %}
+{
+  "name": "Widerrufsrecht page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page title",
+      "default": "Widerrufsrecht"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show contents navigation",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "nav_title",
+      "label": "Navigation title",
+      "default": "INHALT"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Content width",
+      "min": 800,
+      "max": 1400,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "nav_width",
+      "label": "Navigation width",
+      "min": 180,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 220
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Column gap",
+      "min": 20,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_gap",
+      "label": "Section gap",
+      "min": 20,
+      "max": 72,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Active link color",
+      "default": "#0099fc"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Widerrufsrecht page"
+    }
+  ]
+}
+{% endschema %}

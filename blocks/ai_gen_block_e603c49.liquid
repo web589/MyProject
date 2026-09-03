@@ -1,0 +1,1210 @@
+{% doc %}
+  @prompt
+    <style>
+    /* ========== 全局可调节变量 ========== */
+    :root {
+      --bg-dark: #0A1628;
+      --accent-green: #00E676;
+      --text-primary: #FFFFFF;
+      --text-muted: #94A3B8;
+      --radius-btn: 4px;
+      --radius-pill: 20px;
+      --font-heading: 'Manrope', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    
+      --content-max-width: 1200px;
+      --side-padding: 120px;
+    
+      --badge-max-width: 320px;
+      --heading-max-width: 520px;
+      --desc-max-width: 480px;
+      --btns-wrap-max-width: 500px;
+      --footer-note-max-width: 400px;
+    
+      --award-section-top-gap: 60px;
+      --award-card-radius: 8px;
+      --award-card-height: 100px;
+      --award-card-gap: 16px;
+      --award-wrap-max-width: 650px;
+      --award-bg-color: #142238;
+    
+      --badge-dot-breathe-speed: 4s;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=Inter:wght@400;500;600&display=swap');
+    
+    @keyframes badge-dot-breathe {
+      0% {
+        opacity: 0.25;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.25;
+      }
+    }
+    
+    .btn-primary {
+      padding: 16px 32px;
+      background-color: var(--accent-green);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: var(--radius-btn);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      filter: brightness(0.9);
+      transform: translateY(-2px);
+    }
+    
+    .btn-outline {
+      padding: 16px 32px;
+      background: transparent;
+      color: var(--text-primary);
+      border: 2px solid var(--text-primary);
+      border-radius: var(--radius-btn);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-block;
+    }
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .venus-e-static-hero {
+      width: 100%;
+      min-height: 88vh;
+      background-color: var(--bg-dark);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    
+    .hero-bg-image {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60%;
+      height: 100%;
+      background-image: url('粘贴产品大图链接');
+      background-size: contain;
+      background-position: right center;
+      background-repeat: no-repeat;
+    }
+    
+    .hero-gradient-overlay {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(10,22,40,0.98) 0%, rgba(10,22,40,0.75) 55%, rgba(10,22,40,0.1) 80%);
+    }
+    
+    .hero-content-wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: var(--content-max-width);
+      margin: 0 auto;
+      padding: 0 var(--side-padding);
+    
+      /* 关键：内容整体靠左，而不是居中 */
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    
+    .hero-text-block {
+      width: 100%;
+      max-width: 520px;
+      text-align: left;
+    
+      /* 防止某些编辑器把内容块自动拉到中间 */
+      margin-left: 0 !important;
+      margin-right: auto !important;
+    }
+    
+    /* 顶部标签：左对齐 + 小圆点独立渲染 */
+    .hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 28px;
+      max-width: var(--badge-max-width);
+      text-align: left;
+    }
+    
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      min-width: 8px;
+      min-height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent-green);
+      animation: badge-dot-breathe var(--badge-dot-breathe-speed) ease-in-out infinite;
+    
+      /* 强制显示，避免编辑器隐藏伪元素 */
+      display: block !important;
+      opacity: 1 !important;
+    }
+    
+    .hero-main-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text-primary);
+      margin: 0 0 24px 0;
+      max-width: var(--heading-max-width);
+      text-align: left;
+    
+      white-space: pre-line !important;
+      word-break: keep-all !important;
+      overflow-wrap: normal !important;
+    }
+    
+    .hero-desc-paragraph {
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin: 0 0 36px 0;
+      max-width: var(--desc-max-width);
+      text-align: left;
+    }
+    
+    .hero-button-group {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      max-width: var(--btns-wrap-max-width);
+      justify-content: flex-start;
+    }
+    
+    .hero-footer-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: var(--footer-note-max-width);
+      justify-content: flex-start;
+    }
+    .hero-footer-note .check-icon {
+      width: 16px;
+      height: 16px;
+      fill: var(--accent-green);
+    }
+    
+    .awards-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--award-card-gap);
+      margin-top: var(--award-section-top-gap);
+      max-width: var(--award-wrap-max-width);
+      justify-content: flex-start;
+    }
+    .award-card {
+      background-color: var(--award-bg-color);
+      border-radius: var(--award-card-radius);
+      height: var(--award-card-height);
+      display: flex;
+      align-items: center;
+      justify-content: c, Side padding最小值设置为0, 除了背景图，整体向左移，贴近左侧, Background image要布满整个区块, 添加Gradient透明度调节选项，最小值为0.Gradient midpoint和Gradient endpoint最小值都设置为0
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-hero-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    min-height: {{ block.settings.min_height }}vh;
+    background-color: {{ block.settings.bg_color }};
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-hero-inner-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    min-height: {{ block.settings.min_height }}vh;
+    position: relative;
+  }
+
+  .ai-hero-bg-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+  }
+
+  .ai-hero-gradient-{{ ai_gen_id }} {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    {% assign gradient_start_opacity = block.settings.gradient_start_opacity | divided_by: 100.0 %}
+    {% assign gradient_mid_opacity = block.settings.gradient_mid_opacity | divided_by: 100.0 %}
+    {% assign gradient_end_opacity = block.settings.gradient_end_opacity | divided_by: 100.0 %}
+    background: linear-gradient(
+      90deg,
+      {{ block.settings.bg_color | color_modify: 'alpha', gradient_start_opacity }} {{ block.settings.gradient_start }}%,
+      {{ block.settings.bg_color | color_modify: 'alpha', gradient_mid_opacity }} {{ block.settings.gradient_mid }}%,
+      {{ block.settings.bg_color | color_modify: 'alpha', gradient_end_opacity }} {{ block.settings.gradient_end }}%
+    );
+    z-index: 2;
+  }
+
+  .ai-hero-content-wrap-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    padding-left: {{ block.settings.side_padding }}px;
+    padding-right: {{ block.settings.side_padding }}px;
+  }
+
+  .ai-hero-text-block-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: {{ block.settings.text_block_max_width }}px;
+    text-align: left;
+  }
+
+  .ai-hero-badge-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    border: 1px solid {{ block.settings.accent_color }};
+    color: {{ block.settings.accent_color }};
+    font-size: {{ block.settings.badge_font_size }}px;
+    font-weight: 500;
+    padding: {{ block.settings.badge_padding_y }}px {{ block.settings.badge_padding_x }}px;
+    border-radius: {{ block.settings.badge_radius }}px;
+    margin-bottom: {{ block.settings.badge_margin_bottom }}px;
+    max-width: {{ block.settings.badge_max_width }}px;
+    text-align: left;
+  }
+
+  .ai-hero-badge-dot-{{ ai_gen_id }} {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 50%;
+    background-color: {{ block.settings.accent_color }};
+    display: block;
+    animation: ai-badge-breathe-{{ ai_gen_id }} {{ block.settings.dot_animation_speed }}s ease-in-out infinite;
+  }
+
+  @keyframes ai-badge-breathe-{{ ai_gen_id }} {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 1; }
+  }
+
+  .ai-hero-heading-{{ ai_gen_id }} {
+    font-size: clamp({{ block.settings.heading_min_size }}px, 6vw, {{ block.settings.heading_max_size }}px);
+    font-weight: 700;
+    line-height: {{ block.settings.heading_line_height }};
+    color: {{ block.settings.text_color }};
+    margin: 0 0 {{ block.settings.heading_margin_bottom }}px 0;
+    max-width: {{ block.settings.heading_max_width }}px;
+    text-align: left;
+    white-space: pre-line;
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+
+  .ai-hero-desc-{{ ai_gen_id }} {
+    font-size: {{ block.settings.desc_font_size }}px;
+    line-height: {{ block.settings.desc_line_height }};
+    color: {{ block.settings.desc_color }};
+    margin: 0 0 {{ block.settings.desc_margin_bottom }}px 0;
+    max-width: {{ block.settings.desc_max_width }}px;
+    text-align: left;
+  }
+
+  .ai-hero-buttons-{{ ai_gen_id }} {
+    display: flex;
+    gap: {{ block.settings.button_gap }}px;
+    flex-wrap: wrap;
+    margin-bottom: {{ block.settings.buttons_margin_btm }}px;
+    max-width: {{ block.settings.buttons_max_width }}px;
+    justify-content: flex-start;
+  }
+
+  .ai-hero-btn-primary-{{ ai_gen_id }} {
+    padding: {{ block.settings.btn_padding_y }}px {{ block.settings.btn_padding_x }}px;
+    background-color: {{ block.settings.btn_primary_bg }};
+    color: {{ block.settings.btn_primary_color }};
+    border: none;
+    border-radius: {{ block.settings.btn_radius }}px;
+    font-weight: 600;
+    font-size: {{ block.settings.btn_font_size }}px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+  }
+
+  .ai-hero-btn-primary-{{ ai_gen_id }}:hover {
+    filter: brightness(0.9);
+    transform: translateY(-2px);
+  }
+
+  .ai-hero-btn-outline-{{ ai_gen_id }} {
+    padding: {{ block.settings.btn_padding_y }}px {{ block.settings.btn_padding_x }}px;
+    background: transparent;
+    color: {{ block.settings.btn_outline_color }};
+    border: 2px solid {{ block.settings.btn_outline_border }};
+    border-radius: {{ block.settings.btn_radius }}px;
+    font-weight: 600;
+    font-size: {{ block.settings.btn_font_size }}px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+  }
+
+  .ai-hero-btn-outline-{{ ai_gen_id }}:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .ai-hero-footer-note-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: {{ block.settings.footer_font_size }}px;
+    color: {{ block.settings.desc_color }};
+    max-width: {{ block.settings.footer_max_width }}px;
+    justify-content: flex-start;
+  }
+
+  .ai-hero-check-icon-{{ ai_gen_id }} {
+    width: 16px;
+    height: 16px;
+    fill: {{ block.settings.accent_color }};
+    flex-shrink: 0;
+  }
+
+  .ai-hero-awards-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.awards_columns }}, 1fr);
+    gap: {{ block.settings.awards_gap }}px;
+    margin-top: {{ block.settings.awards_top_gap }}px;
+    max-width: {{ block.settings.awards_max_width }}px;
+    justify-content: flex-start;
+  }
+
+  .ai-hero-award-card-{{ ai_gen_id }} {
+    background-color: {{ block.settings.award_bg_color }};
+    border-radius: {{ block.settings.award_radius }}px;
+    height: {{ block.settings.award_height }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .ai-hero-award-card-{{ ai_gen_id }} img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-hero-award-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: {{ block.settings.desc_color }};
+    font-size: 12px;
+    opacity: 0.5;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-hero-content-wrap-{{ ai_gen_id }} {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+
+    .ai-hero-bg-image-{{ ai_gen_id }} {
+      opacity: 0.5;
+    }
+
+    .ai-hero-awards-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-hero-{{ ai_gen_id }} {
+      min-height: auto;
+    }
+
+    .ai-hero-inner-{{ ai_gen_id }} {
+      min-height: auto;
+      padding: 60px 0;
+    }
+
+    .ai-hero-content-wrap-{{ ai_gen_id }} {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .ai-hero-bg-image-{{ ai_gen_id }} {
+      opacity: 0.3;
+    }
+
+    .ai-hero-buttons-{{ ai_gen_id }} {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .ai-hero-btn-primary-{{ ai_gen_id }},
+    .ai-hero-btn-outline-{{ ai_gen_id }} {
+      width: 100%;
+      text-align: center;
+    }
+
+    .ai-hero-awards-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstyle %}
+
+<ai-hero-{{ ai_gen_id }} class="ai-hero-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-hero-inner-{{ ai_gen_id }}">
+    {% if block.settings.hero_image %}
+      <div
+        class="ai-hero-bg-image-{{ ai_gen_id }}"
+        style="background-image: url('{{ block.settings.hero_image | image_url: width: 2000 }}');"
+      ></div>
+    {% endif %}
+
+    <div class="ai-hero-gradient-{{ ai_gen_id }}"></div>
+
+    <div class="ai-hero-content-wrap-{{ ai_gen_id }}">
+      <div class="ai-hero-text-block-{{ ai_gen_id }}">
+        {% if block.settings.show_badge and block.settings.badge_text != blank %}
+          <div class="ai-hero-badge-{{ ai_gen_id }}">
+            {% if block.settings.show_badge_dot %}
+              <span class="ai-hero-badge-dot-{{ ai_gen_id }}"></span>
+            {% endif %}
+            {{ block.settings.badge_text }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.heading != blank %}
+          <h1 class="ai-hero-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h1>
+        {% endif %}
+
+        {% if block.settings.description != blank %}
+          <div class="ai-hero-desc-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+        {% endif %}
+
+        {% if block.settings.show_buttons %}
+          <div class="ai-hero-buttons-{{ ai_gen_id }}">
+            {% if block.settings.btn_primary_label != blank %}
+              <a
+                href="{{ block.settings.btn_primary_link }}"
+                class="ai-hero-btn-primary-{{ ai_gen_id }}"
+              >
+                {{ block.settings.btn_primary_label }}
+              </a>
+            {% endif %}
+
+            {% if block.settings.btn_outline_label != blank %}
+              <a
+                href="{{ block.settings.btn_outline_link }}"
+                class="ai-hero-btn-outline-{{ ai_gen_id }}"
+              >
+                {{ block.settings.btn_outline_label }}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if block.settings.show_footer_note and block.settings.footer_note != blank %}
+          <div class="ai-hero-footer-note-{{ ai_gen_id }}">
+            <svg class="ai-hero-check-icon-{{ ai_gen_id }}" viewBox="0 0 16 16">
+              <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+            {{ block.settings.footer_note }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.show_awards %}
+          <div class="ai-hero-awards-{{ ai_gen_id }}">
+            {% for i in (1..4) %}
+              {% assign award_key = 'award_' | append: i %}
+              {% assign award_image = block.settings[award_key] %}
+              <div class="ai-hero-award-card-{{ ai_gen_id }}">
+                {% if award_image %}
+                  <img
+                    src="{{ award_image | image_url: width: 200 }}"
+                    alt="{{ award_image.alt | escape }}"
+                    loading="lazy"
+                    width="200"
+                    height="100"
+                  >
+                {% else %}
+                  <div class="ai-hero-award-placeholder-{{ ai_gen_id }}">Award {{ i }}</div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</ai-hero-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class AiHero{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+    }
+
+    customElements.define('ai-hero-{{ ai_gen_id }}', AiHero{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Premium hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Minimum height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 85
+    },
+    {
+      "type": "range",
+      "id": "side_padding",
+      "label": "Side padding",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "text_block_max_width",
+      "label": "Text block max width",
+      "min": 400,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#0A1628"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Heading",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "desc_color",
+      "label": "Description",
+      "default": "#94A3B8"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#00E676"
+    },
+    {
+      "type": "header",
+      "content": "Background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "gradient_start",
+      "label": "Gradient start point",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "gradient_start_opacity",
+      "label": "Start opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "gradient_mid",
+      "label": "Gradient midpoint",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "range",
+      "id": "gradient_mid_opacity",
+      "label": "Mid opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 75
+    },
+    {
+      "type": "range",
+      "id": "gradient_end",
+      "label": "Gradient endpoint",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "gradient_end_opacity",
+      "label": "End opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "New Product Launch"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge_dot",
+      "label": "Show animated dot",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "badge_padding_y",
+      "label": "Vertical padding",
+      "min": 4,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "badge_padding_x",
+      "label": "Horizontal padding",
+      "min": 10,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "badge_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "badge_max_width",
+      "label": "Max width",
+      "min": 200,
+      "max": 400,
+      "step": 20,
+      "unit": "px",
+      "default": 320
+    },
+    {
+      "type": "range",
+      "id": "badge_margin_bottom",
+      "label": "Bottom margin",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "dot_animation_speed",
+      "label": "Dot animation speed",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "s",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Revolutionary Energy Solution for Modern Homes"
+    },
+    {
+      "type": "range",
+      "id": "heading_min_size",
+      "label": "Min font size",
+      "min": 24,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_max_size",
+      "label": "Max font size",
+      "min": 48,
+      "max": 96,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "heading_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.3
+    },
+    {
+      "type": "range",
+      "id": "heading_max_width",
+      "label": "Max width",
+      "min": 400,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 520
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "label": "Bottom margin",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Experience the future of sustainable living with our cutting-edge balcony PV systems and integrated energy storage solutions."
+    },
+    {
+      "type": "range",
+      "id": "desc_font_size",
+      "label": "Font size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "desc_line_height",
+      "label": "Line height",
+      "min": 1.2,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.7
+    },
+    {
+      "type": "range",
+      "id": "desc_max_width",
+      "label": "Max width",
+      "min": 300,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 480
+    },
+    {
+      "type": "range",
+      "id": "desc_margin_bottom",
+      "label": "Bottom margin",
+      "min": 20,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buttons",
+      "label": "Show buttons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "btn_primary_label",
+      "label": "Primary button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "btn_primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "btn_outline_label",
+      "label": "Outline button text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "btn_outline_link",
+      "label": "Outline button link"
+    },
+    {
+      "type": "range",
+      "id": "btn_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_y",
+      "label": "Vertical padding",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "btn_padding_x",
+      "label": "Horizontal padding",
+      "min": 16,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "btn_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "button_gap",
+      "label": "Gap between buttons",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "buttons_max_width",
+      "label": "Max width",
+      "min": 300,
+      "max": 700,
+      "step": 20,
+      "unit": "px",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "buttons_margin_btm",
+      "label": "Bottom margin",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_bg",
+      "label": "Primary background",
+      "default": "#00E676"
+    },
+    {
+      "type": "color",
+      "id": "btn_primary_color",
+      "label": "Primary text",
+      "default": "#0A1628"
+    },
+    {
+      "type": "color",
+      "id": "btn_outline_color",
+      "label": "Outline text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "btn_outline_border",
+      "label": "Outline border",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Footer note"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_footer_note",
+      "label": "Show footer note",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "footer_note",
+      "label": "Footer note text",
+      "default": "Free shipping on all orders"
+    },
+    {
+      "type": "range",
+      "id": "footer_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "footer_max_width",
+      "label": "Max width",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Awards"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_awards",
+      "label": "Show awards",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "award_1",
+      "label": "Award 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "award_2",
+      "label": "Award 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "award_3",
+      "label": "Award 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "award_4",
+      "label": "Award 4"
+    },
+    {
+      "type": "range",
+      "id": "awards_columns",
+      "label": "Columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "awards_gap",
+      "label": "Gap",
+      "min": 8,
+      "max": 32,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "awards_top_gap",
+      "label": "Top gap",
+      "min": 30,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "awards_max_width",
+      "label": "Max width",
+      "min": 400,
+      "max": 900,
+      "step": 50,
+      "unit": "px",
+      "default": 650
+    },
+    {
+      "type": "range",
+      "id": "award_height",
+      "label": "Card height",
+      "min": 60,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "award_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "award_bg_color",
+      "label": "Card background",
+      "default": "#142238"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Premium hero"
+    }
+  ]
+}
+{% endschema %}
