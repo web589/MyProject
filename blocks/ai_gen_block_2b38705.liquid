@@ -1895,8 +1895,11 @@
           throw new Error(`„${option.title}“ ist derzeit nicht verfügbar.`);
         }
 
-        const usesSharedInventory = index === 0 && this.enforceSharedInventory;
         const isNativeBundleParent = index === 0 && this.useNativeBundleCartValidation;
+        // Native Shopify Bundles own the parent variant and resolve component
+        // inventory in Cart Transform. If both switches are accidentally enabled,
+        // the native Bundle path must take precedence over the legacy shared source.
+        const usesSharedInventory = index === 0 && this.enforceSharedInventory && !isNativeBundleParent;
         const packSize = usesSharedInventory ? Math.max(1, Number(option.packSize) || 1) : 1;
         const cartQuantity = requestedQuantity * packSize;
         const cartVariantId = usesSharedInventory ? this.sharedInventory.variantId : option.variantId;
@@ -1909,7 +1912,10 @@
           && inventoryQuantity !== ''
           && Number.isFinite(Number(inventoryQuantity));
         const availableQuantity = Number(inventoryQuantity);
-        if (inventoryIsLimited && Number.isFinite(availableQuantity) && cartQuantity > Math.max(0, availableQuantity)) {
+        // A native Bundle's parent inventory can be stale or unavailable in the
+        // Storefront product JSON even when its components can be purchased.
+        // Let cart/add.js perform the authoritative component-level check.
+        if (!isNativeBundleParent && inventoryIsLimited && Number.isFinite(availableQuantity) && cartQuantity > Math.max(0, availableQuantity)) {
           throw new Error(this.inventoryErrorText);
         }
 
