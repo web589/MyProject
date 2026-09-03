@@ -217,6 +217,17 @@
     font-weight: 700;
     letter-spacing: -0.5px;
     color: {{ block.settings.title_color }};
+    margin: 0{% if block.settings.subtitle != blank %} 0 8px{% endif %};
+  }
+
+  .ai-carousel-subtitle-{{ ai_gen_id }} {
+    margin: 0;
+    color: #596b82;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .ai-carousel-subtitle-{{ ai_gen_id }} p {
     margin: 0;
   }
 
@@ -619,6 +630,10 @@
     display: flex;
   }
 
+  html.ai-preorder-open {
+    overflow: hidden;
+  }
+
   .ai-preorder-dialog-{{ ai_gen_id }} {
     background: #ffffff;
     border-radius: 12px;
@@ -859,6 +874,9 @@
     {% if carousel_title != blank %}
       <div class="ai-carousel-header-{{ ai_gen_id }}">
         <h1 class="ai-carousel-title-{{ ai_gen_id }}">{{ carousel_title }}</h1>
+        {% if block.settings.subtitle != blank %}
+          <div class="ai-carousel-subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
+        {% endif %}
       </div>
     {% endif %}
 
@@ -935,6 +953,7 @@
       class="ai-preorder-modal-{{ ai_gen_id }}"
       data-preorder-modal
       data-server-state="{% if form.posted_successfully? %}success{% elsif form.errors %}error{% else %}initial{% endif %}"
+      aria-hidden="true"
       role="dialog"
       aria-modal="true"
       aria-labelledby="ai-preorder-title-{{ ai_gen_id }}"
@@ -943,13 +962,17 @@
         <button type="button" class="ai-preorder-close-{{ ai_gen_id }}" data-preorder-close aria-label="{{ block.settings.modal_close_label | escape }}">×</button>
         <input type="hidden" name="contact[tags]" value="newsletter, preorder" data-preorder-tags>
 
-        <div class="ai-preorder-fields-{{ ai_gen_id }}" data-preorder-fields{% if form.posted_successfully? %} hidden{% endif %}>
+        <div class="ai-preorder-fields-{{ ai_gen_id }}" data-preorder-fields>
           <h2 class="ai-preorder-title-{{ ai_gen_id }}" id="ai-preorder-title-{{ ai_gen_id }}">
             {{ block.settings.modal_title_prefix | escape }}
             <span data-preorder-product-title></span>
             {{ block.settings.modal_title_suffix | escape }}
           </h2>
-          <div class="ai-preorder-text-{{ ai_gen_id }}">{{ block.settings.modal_text }}</div>
+          <p class="ai-preorder-text-{{ ai_gen_id }}">
+            {{ block.settings.modal_description_prefix | default: 'Hinterlege deine E-Mail-Adresse, dann benachrichtigen wir dich, sobald' | escape }}
+            <span data-preorder-product-title></span>
+            {{ block.settings.modal_description_suffix | default: 'verfügbar ist.' | escape }}
+          </p>
           <input
             class="ai-preorder-input-{{ ai_gen_id }}"
             type="email"
@@ -965,11 +988,11 @@
           <p class="ai-preorder-status-{{ ai_gen_id }}" data-preorder-status data-state="{% if form.errors %}error{% else %}initial{% endif %}" role="status" aria-live="polite">
             {% if form.errors %}{{ block.settings.modal_error_text }}{% endif %}
           </p>
-          <button class="ai-preorder-submit-{{ ai_gen_id }}" type="button" data-preorder-submit>{{ block.settings.modal_submit_label }}</button>
+          <button class="ai-preorder-submit-{{ ai_gen_id }}" type="submit" data-preorder-submit>{{ block.settings.modal_submit_label }}</button>
           <div class="ai-preorder-note-{{ ai_gen_id }}">{{ block.settings.modal_note }}</div>
         </div>
 
-        <div class="ai-preorder-success-{{ ai_gen_id }}" data-preorder-success{% unless form.posted_successfully? %} hidden{% endunless %}>
+        <div class="ai-preorder-success-{{ ai_gen_id }}" data-preorder-success hidden>
           <span class="ai-preorder-success-icon-{{ ai_gen_id }}" aria-hidden="true">✓</span>
           <h2 class="ai-preorder-title-{{ ai_gen_id }}">{{ block.settings.modal_success_title }}</h2>
           <p class="ai-preorder-text-{{ ai_gen_id }}">
@@ -1024,7 +1047,9 @@
         this.modalProductTitles = this.querySelectorAll('[data-preorder-product-title]');
         this.modalFields = this.querySelector('[data-preorder-fields]');
         this.modalSuccess = this.querySelector('[data-preorder-success]');
-        this.modalStorageKey = 'venus-preorder-{{ ai_gen_id }}';
+        this.modalTrigger = null;
+        this.modalScrollPosition = null;
+        this.bodyLockStyles = null;
         this.modalSubmitting = false;
 
         this.modalTriggers.forEach((trigger) => trigger.addEventListener('click', () => this.openModal(trigger)));
@@ -1037,34 +1062,31 @@
         });
         if (this.modalForm) {
           this.modalForm.noValidate = true;
-          this.modalForm.addEventListener('submit', (event) => this.submitModal(event));
-        }
-        this.modalSubmit?.addEventListener('click', () => {
-          this.modalForm?.requestSubmit();
-        });
-        if (this.modal.dataset.serverState !== 'initial') {
-          this.restoreModalProduct();
-          this.openModal();
+          // Capture and cancel the native submit before any other listener can navigate.
+          this.modalForm.addEventListener('submit', (event) => this.submitModal(event), { capture: true });
         }
       }
 
       validateModalSubmission(event) {
         const email = this.modalEmail?.value.trim() || '';
-        if (email && this.modalEmail.validity.valid) return true;
+        if (email && this.modalEmail?.checkValidity()) {
+          this.modalEmail.value = email;
+          return true;
+        }
         event?.preventDefault();
         if (this.modalStatus) {
           this.modalStatus.textContent = this.dataset.modalInvalidEmail || '';
           this.modalStatus.dataset.state = 'error';
         }
-        this.modalEmail?.focus();
+        this.modalEmail?.focus({ preventScroll: true });
         return false;
       }
 
       async submitModal(event) {
         event.preventDefault();
-        if (this.modalSubmitting || !this.validateModalSubmission()) return;
+        event.stopImmediatePropagation();
+        if (this.modalSubmitting || !this.validateModalSubmission(event)) return;
 
-        const scrollPosition = { x: window.scrollX, y: window.scrollY };
         this.modalSubmitting = true;
         if (this.modalSubmit) {
           this.modalSubmit.disabled = true;
@@ -1080,6 +1102,7 @@
             method: 'POST',
             body: new FormData(this.modalForm),
             credentials: 'same-origin',
+            redirect: 'follow',
             headers: { Accept: 'text/html' }
           });
           const responseHtml = await response.text();
@@ -1104,7 +1127,7 @@
             this.modalSubmit.disabled = false;
             this.modalSubmit.removeAttribute('aria-busy');
           }
-          requestAnimationFrame(() => window.scrollTo(scrollPosition.x, scrollPosition.y));
+          this.restoreScrollPosition();
         }
       }
 
@@ -1112,7 +1135,7 @@
         if (this.modalFields) this.modalFields.hidden = true;
         if (this.modalSuccess) this.modalSuccess.hidden = false;
         this.modal?.classList.add('is-open');
-        document.documentElement.classList.add('js-drawer-open');
+        this.modal?.setAttribute('aria-hidden', 'false');
         const closeButton = this.modalSuccess?.querySelector('[data-preorder-close]');
         closeButton?.focus({ preventScroll: true });
       }
@@ -1124,11 +1147,6 @@
           id: trigger.dataset.productId?.trim() || ''
         };
         this.applyModalProduct(product);
-        try {
-          window.sessionStorage.setItem(this.modalStorageKey, JSON.stringify(product));
-        } catch (error) {
-          // The tags still preserve the source when browser storage is unavailable.
-        }
       }
 
       applyModalProduct(product) {
@@ -1144,27 +1162,69 @@
         }
       }
 
-      restoreModalProduct() {
-        try {
-          const savedProduct = JSON.parse(window.sessionStorage.getItem(this.modalStorageKey) || 'null');
-          this.applyModalProduct(savedProduct);
-        } catch (error) {
-          // Keep the server response usable even if stored data cannot be read.
+      resetModalState() {
+        if (this.modalFields) this.modalFields.hidden = false;
+        if (this.modalSuccess) this.modalSuccess.hidden = true;
+        if (this.modalStatus) {
+          this.modalStatus.textContent = '';
+          this.modalStatus.dataset.state = 'initial';
         }
+        if (this.modalEmail) this.modalEmail.value = '';
       }
 
       openModal(trigger) {
         if (!this.modal) return;
-        if (trigger) this.setModalProduct(trigger);
+        if (!this.modal.classList.contains('is-open')) this.lockBodyScroll();
+        if (trigger) {
+          this.modalTrigger = trigger;
+          this.resetModalState();
+          this.setModalProduct(trigger);
+        }
         this.modal.classList.add('is-open');
-        document.documentElement.classList.add('js-drawer-open');
-        window.setTimeout(() => this.modalEmail?.focus(), 50);
+        this.modal.setAttribute('aria-hidden', 'false');
+        window.setTimeout(() => this.modalEmail?.focus({ preventScroll: true }), 50);
       }
 
       closeModal() {
         if (!this.modal) return;
         this.modal.classList.remove('is-open');
-        document.documentElement.classList.remove('js-drawer-open');
+        this.modal.setAttribute('aria-hidden', 'true');
+        const returnFocus = this.modalTrigger;
+        this.modalTrigger = null;
+        this.unlockBodyScroll();
+        if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+      }
+
+      lockBodyScroll() {
+        if (this.modalScrollPosition) return;
+        this.modalScrollPosition = { x: window.scrollX, y: window.scrollY };
+        this.bodyLockStyles = {
+          position: document.body.style.position,
+          top: document.body.style.top,
+          width: document.body.style.width
+        };
+        document.documentElement.classList.add('ai-preorder-open');
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${this.modalScrollPosition.y}px`;
+        document.body.style.width = '100%';
+      }
+
+      restoreScrollPosition() {
+        if (!this.modalScrollPosition) return;
+        window.scrollTo(this.modalScrollPosition.x, this.modalScrollPosition.y);
+      }
+
+      unlockBodyScroll() {
+        if (!this.modalScrollPosition || !this.bodyLockStyles) return;
+        const scrollPosition = this.modalScrollPosition;
+        const bodyLockStyles = this.bodyLockStyles;
+        document.documentElement.classList.remove('ai-preorder-open');
+        document.body.style.position = bodyLockStyles.position;
+        document.body.style.top = bodyLockStyles.top;
+        document.body.style.width = bodyLockStyles.width;
+        this.modalScrollPosition = null;
+        this.bodyLockStyles = null;
+        window.scrollTo(scrollPosition.x, scrollPosition.y);
       }
 
       setupProductActions() {
@@ -1295,6 +1355,11 @@
       "id": "title",
       "label": "Title",
       "default": "<p>VENUS E Familie</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle"
     },
     {
       "type": "range",
@@ -1659,10 +1724,16 @@
       "default": "verfügbar ist"
     },
     {
-      "type": "richtext",
-      "id": "modal_text",
-      "label": "Description",
-      "default": "<p>Hinterlege deine E-Mail-Adresse, dann benachrichtigen wir dich, sobald das Produkt erhältlich ist.</p>"
+      "type": "text",
+      "id": "modal_description_prefix",
+      "label": "Description before product name",
+      "default": "Hinterlege deine E-Mail-Adresse, dann benachrichtigen wir dich, sobald"
+    },
+    {
+      "type": "text",
+      "id": "modal_description_suffix",
+      "label": "Description after product name",
+      "default": "verfügbar ist."
     },
     {
       "type": "text",
@@ -1674,7 +1745,7 @@
       "type": "text",
       "id": "modal_submit_label",
       "label": "Submit button",
-      "default": "Per E-Mail vormerken"
+      "default": "Jetzt vormerken"
     },
     {
       "type": "richtext",

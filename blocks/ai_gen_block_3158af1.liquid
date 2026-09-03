@@ -210,8 +210,20 @@
     font-size: {{ block.settings.title_size }}px;
     font-weight: 700;
     color: {{ block.settings.title_color }};
-    margin-bottom: {{ block.settings.title_margin }}px;
+    margin-bottom: {% if block.settings.section_subtitle != blank %}8{% else %}{{ block.settings.title_margin }}{% endif %}px;
     letter-spacing: -0.5px;
+  }
+
+  .ai-scenario-subtitle-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.title_margin | minus: 8 }}px;
+    color: #596b82;
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 800px;
+  }
+
+  .ai-scenario-subtitle-{{ ai_gen_id }} p {
+    margin: 0;
   }
 
   .ai-scenario-title-{{ ai_gen_id }} .ai-scenario-title-highlight-{{ ai_gen_id }} {
@@ -396,6 +408,12 @@
     </h2>
   {% endif %}
 
+  {% if block.settings.section_subtitle != blank %}
+    <div class="ai-scenario-subtitle-{{ ai_gen_id }} rte">
+      {{ block.settings.section_subtitle }}
+    </div>
+  {% endif %}
+
   <div class="ai-scenario-grid-{{ ai_gen_id }}">
     {% for i in (1..3) %}
       {% liquid
@@ -485,6 +503,11 @@
       "id": "section_title",
       "label": "Title",
       "default": "Verschiedene Einsatzszenarien"
+    },
+    {
+      "type": "richtext",
+      "id": "section_subtitle",
+      "label": "Subtitle"
     },
     {
       "type": "text",

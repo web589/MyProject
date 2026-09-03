@@ -168,8 +168,20 @@
     font-size: {{ block.settings.title_size }}px;
     font-weight: 700;
     color: {{ block.settings.title_color }};
-    margin-bottom: {{ block.settings.title_spacing }}px;
+    margin-bottom: {% if block.settings.subtitle != blank %}8{% else %}{{ block.settings.title_spacing }}{% endif %}px;
     text-align: {{ block.settings.title_alignment }};
+  }
+
+  .ai-media-scroll__subtitle-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.title_spacing | minus: 8 }}px;
+    color: #596b82;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: {{ block.settings.title_alignment }};
+  }
+
+  .ai-media-scroll__subtitle-{{ ai_gen_id }} p {
+    margin: 0;
   }
 
   .ai-media-scroll__container-{{ ai_gen_id }} {
@@ -304,6 +316,9 @@
     {% if block.settings.title != blank %}
       <h2 class="ai-media-scroll__title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
     {% endif %}
+    {% if block.settings.subtitle != blank %}
+      <div class="ai-media-scroll__subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
+    {% endif %}
 
     <div class="ai-media-scroll__container-{{ ai_gen_id }}">
       <div class="ai-media-scroll__track-{{ ai_gen_id }}" data-media-scroll-track>
@@ -384,6 +399,11 @@
       "id": "title",
       "label": "Title",
       "default": "In den Medien"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle"
     },
     {
       "type": "range",

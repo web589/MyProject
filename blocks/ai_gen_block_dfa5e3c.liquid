@@ -233,14 +233,30 @@
   .ai-custom-blog-header-{{ ai_gen_id }} {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: {% if block.settings.subtitle != blank %}flex-start{% else %}center{% endif %};
     margin-bottom: 32px;
+  }
+
+  .ai-custom-blog-heading-group-{{ ai_gen_id }} {
+    min-width: 0;
   }
 
   .ai-custom-blog-title-{{ ai_gen_id }} {
     font-size: clamp(1.5rem, 2.5vw, {{ block.settings.heading_size }}px);
     font-weight: 700;
     color: {{ block.settings.heading_color }};
+    margin: 0;
+  }
+
+  .ai-custom-blog-subtitle-{{ ai_gen_id }} {
+    margin: 8px 0 0;
+    color: #596b82;
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 760px;
+  }
+
+  .ai-custom-blog-subtitle-{{ ai_gen_id }} p {
     margin: 0;
   }
 
@@ -419,7 +435,7 @@
 
   @media screen and (max-width: 640px) {
     .ai-custom-blog-header-{{ ai_gen_id }} {
-      align-items: flex-end;
+      align-items: {% if block.settings.subtitle != blank %}flex-start{% else %}flex-end{% endif %};
       gap: 12px;
     }
 
@@ -436,9 +452,14 @@
 
 <custom-blog-section-{{ ai_gen_id }} class="ai-custom-blog-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
   <div class="ai-custom-blog-header-{{ ai_gen_id }}">
-    {% if block.settings.heading != blank %}
-      <h2 class="ai-custom-blog-title-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
-    {% endif %}
+    <div class="ai-custom-blog-heading-group-{{ ai_gen_id }}">
+      {% if block.settings.heading != blank %}
+        <h2 class="ai-custom-blog-title-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+      {% endif %}
+      {% if block.settings.subtitle != blank %}
+        <div class="ai-custom-blog-subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
+      {% endif %}
+    </div>
     {% if block.settings.show_view_all and view_all_url != blank %}
       <a href="{{ view_all_url }}" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
         {{ block.settings.view_all_text | escape }}
@@ -540,6 +561,11 @@
       "id": "heading",
       "label": "Heading",
       "default": "Blog / Inhaltsmarketing Eingang"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle"
     },
     {
       "type": "checkbox",
