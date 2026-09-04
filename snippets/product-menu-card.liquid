@@ -26,7 +26,15 @@
       assign card_specs = blank
     endif
 
-    assign product_image = block.settings.image | default: card_variant.featured_image | default: product.featured_image
+    assign product_image_override = block.settings.image
+    if quantity == 1 and block.settings.image_1 != blank
+      assign product_image_override = block.settings.image_1
+    elsif quantity == 2 and block.settings.image_2 != blank
+      assign product_image_override = block.settings.image_2
+    elsif quantity == 3 and block.settings.image_3 != blank
+      assign product_image_override = block.settings.image_3
+    endif
+    assign product_image = product_image_override | default: card_variant.featured_image | default: product.featured_image
     assign product_link = block.settings.link
     if product_link == blank
       assign product_link = product.url | append: '?variant=' | append: card_variant.id
@@ -35,6 +43,11 @@
     assign product_description = block.settings.description
     if product_description == blank
       assign product_description = product.description | strip_html | truncatewords: 18
+    endif
+
+    assign badge_tone = block.settings.badge_color | default: 'blue'
+    if badge_tone != 'orange'
+      assign badge_tone = 'blue'
     endif
 
     assign quantity_label = quantity | default: 1 | append: '×'
@@ -50,8 +63,7 @@
     <div class="mega-menu-products__card-media">
       {%- if block.settings.badge != blank -%}
         <span
-          class="mega-menu-products__badge"
-          style="--mega-menu-product-badge-color: {{ block.settings.badge_color | default: '#00c6ff' | escape }};"
+          class="mega-menu-products__badge mega-menu-products__badge--{{ badge_tone }}"
         >
           {{ block.settings.badge | escape }}
         </span>

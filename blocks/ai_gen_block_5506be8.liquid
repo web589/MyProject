@@ -148,10 +148,7 @@
 
 {% style %}
   .ai-media-scroll-{{ ai_gen_id }} {
-    --media-item-width: {{ block.settings.item_width }}px;
-    --media-item-height: {{ block.settings.item_height }}px;
-    --media-item-min-width: 104px;
-    --media-responsive-item-width: var(--media-item-width);
+    --media-carousel-gap: {{ block.settings.item_gap }}px;
     display: block;
     width: {{ block.settings.desktop_width_percent }}%;
     max-width: 100%;
@@ -190,70 +187,55 @@
     overflow: hidden;
     -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
     mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    padding: 10px 0;
+    padding: 14px 0;
   }
 
   .ai-media-scroll__track-{{ ai_gen_id }} {
     display: flex;
-    gap: {{ block.settings.item_gap }}px;
+    align-items: center;
+    gap: var(--media-carousel-gap);
     width: max-content;
-    animation: ai-media-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
-  }
-
-  .ai-media-scroll__track-{{ ai_gen_id }}:hover {
-    animation-play-state: paused;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
   }
 
   .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item {
     flex: 0 0 auto;
-    width: clamp(var(--media-item-min-width), var(--media-responsive-item-width), var(--media-item-width));
-    height: var(--media-item-height);
+    width: max-content;
+    max-width: 100%;
+    min-width: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: {{ block.settings.item_bg_color }};
     color: {{ block.settings.item_text_color }};
-    border-radius: {{ block.settings.item_border_radius }}px;
     font-size: {{ block.settings.item_font_size }}px;
     font-weight: 500;
-    transition: all 0.2s ease;
+    line-height: 1.2;
     cursor: default;
-    padding: 10px 16px;
     text-align: center;
     box-sizing: border-box;
-    overflow: hidden;
-  }
-
-  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item--has-image {
-    width: clamp(
-      var(--media-item-min-width),
-      calc(var(--media-item-height) * var(--media-logo-aspect-ratio, 2.5)),
-      var(--media-responsive-item-width)
-    );
-    z-index: 0;
-  }
-
-  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item:hover {
-    background-color: {{ block.settings.item_hover_bg_color }};
-    color: {{ block.settings.item_hover_text_color }};
+    transition: transform 0.25s ease;
   }
 
   .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
     min-width: 0;
     color: inherit;
     text-decoration: none;
+  }
+
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item:not(.ai-media-scroll__item--has-image) .ai-media-scroll__item-link {
+    padding: 8px 12px;
   }
 
   .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item-image {
     display: block;
     width: auto;
     height: auto;
-    max-width: 100%;
+    max-width: min(100%, calc(100vw - 32px));
     max-height: 100%;
     object-fit: contain;
     object-position: center;
@@ -262,7 +244,8 @@
     transition: transform 0.25s ease;
   }
 
-  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item--has-image:hover {
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item:hover,
+  .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item:focus-within {
     z-index: 1;
   }
 
@@ -271,20 +254,8 @@
     transform: scale(1.08);
   }
 
-  @keyframes ai-media-scroll-{{ ai_gen_id }} {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-
   @media screen and (max-width: 768px) {
     .ai-media-scroll-{{ ai_gen_id }} {
-      --media-item-width: {{ block.settings.item_width | times: 0.8 }}px;
-      --media-item-height: {{ block.settings.item_height | times: 0.8 }}px;
-      --media-item-min-width: 88px;
       padding-left: 16px;
       padding-right: 16px;
     }
@@ -295,18 +266,17 @@
     }
 
     .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item {
-      width: clamp(var(--media-item-min-width), var(--media-responsive-item-width), var(--media-item-width));
-      height: var(--media-item-height);
       font-size: {{ block.settings.item_font_size | times: 0.9 }}px;
-      padding: 8px 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-media-scroll__track-{{ ai_gen_id }} {
+      transition: none;
     }
 
-    .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item--has-image {
-      width: clamp(
-        var(--media-item-min-width),
-        calc(var(--media-item-height) * var(--media-logo-aspect-ratio, 2.5)),
-        var(--media-responsive-item-width)
-      );
+    .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item-image {
+      transition: none;
     }
   }
 {% endstyle %}
@@ -320,7 +290,11 @@
       <div class="ai-media-scroll__subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
     {% endif %}
 
-    <div class="ai-media-scroll__container-{{ ai_gen_id }}">
+    <div
+      class="ai-media-scroll__container-{{ ai_gen_id }}"
+      data-media-scroll-container
+      {% if block.settings.title != blank %}aria-label="{{ block.settings.title | strip_html | escape }}"{% endif %}
+    >
       <div class="ai-media-scroll__track-{{ ai_gen_id }}" data-media-scroll-track>
         {% content_for 'blocks' %}
       </div>
@@ -333,55 +307,187 @@
     class MediaScroll{{ ai_gen_id }} extends HTMLElement {
       constructor() {
         super();
+        this.currentIndex = 0;
+        this.isPaused = false;
+        this.isItemHovered = false;
+        this.isItemFocused = false;
+        this.autoplayTimer = null;
+        this.handleResize = this.updateLayout.bind(this);
+        this.handleTransitionEnd = this.onTransitionEnd.bind(this);
+        this.handleImageLoad = this.updateLayout.bind(this);
+        this.handleItemEnter = this.pauseForItem.bind(this);
+        this.handleItemLeave = this.resumeFromItem.bind(this);
+        this.handleItemFocusIn = this.pauseForFocus.bind(this);
+        this.handleItemFocusOut = this.resumeFromFocus.bind(this);
       }
 
       connectedCallback() {
+        if (this.initialized) return;
+
         this.track = this.querySelector('[data-media-scroll-track]');
-        if (!this.track || this.track.dataset.cloned === 'true') return;
+        this.container = this.querySelector('[data-media-scroll-container]');
+        if (!this.track || !this.container) return;
 
-        const items = Array.from(this.track.querySelectorAll('[data-media-logo-item]'));
-        this.originalItemCount = items.length;
-        this.container = this.querySelector('.ai-media-scroll__container-{{ ai_gen_id }}');
-        this.updateResponsiveItemWidth();
-        items.forEach((item) => {
-          const clone = item.cloneNode(true);
-          clone.setAttribute('aria-hidden', 'true');
-          clone.removeAttribute('data-shopify-editor-block');
-          clone.querySelectorAll('a, button, input').forEach((element) => element.setAttribute('tabindex', '-1'));
-          this.track.appendChild(clone);
-        });
-        this.track.dataset.cloned = 'true';
+        this.items = Array.from(this.track.children).filter((item) => item.hasAttribute('data-media-logo-item'));
+        this.originalItemCount = this.items.length;
+        if (!this.originalItemCount) return;
 
-        if (items.length < 2) this.track.style.animation = 'none';
+        this.initialized = true;
 
-        if ('ResizeObserver' in window && this.container) {
-          this.resizeObserver = new ResizeObserver(() => this.updateResponsiveItemWidth());
-          this.resizeObserver.observe(this.container);
+        if (this.originalItemCount > 1) {
+          this.clone = this.items[0].cloneNode(true);
+          this.clone.setAttribute('aria-hidden', 'true');
+          this.clone.removeAttribute('data-shopify-editor-block');
+          this.clone.querySelectorAll('a, button, input').forEach((element) => element.setAttribute('tabindex', '-1'));
+          this.track.appendChild(this.clone);
         } else {
-          this.handleResize = () => this.updateResponsiveItemWidth();
+          this.clone = null;
+        }
+
+        this.allItems = this.clone ? this.items.concat(this.clone) : this.items;
+        this.allItems.forEach((item) => {
+          item.addEventListener('mouseenter', this.handleItemEnter);
+          item.addEventListener('mouseleave', this.handleItemLeave);
+          item.addEventListener('focusin', this.handleItemFocusIn);
+          item.addEventListener('focusout', this.handleItemFocusOut);
+          item.querySelectorAll('img').forEach((image) => {
+            if (!image.complete) image.addEventListener('load', this.handleImageLoad);
+          });
+        });
+
+        this.track.addEventListener('transitionend', this.handleTransitionEnd);
+        this.updateLayout();
+
+        if ('ResizeObserver' in window) {
+          this.resizeObserver = new ResizeObserver(this.handleResize);
+          this.resizeObserver.observe(this.container);
+          this.resizeObserver.observe(this.track);
+        } else {
           window.addEventListener('resize', this.handleResize, { passive: true });
         }
+
+        this.startAutoplay();
       }
 
       disconnectedCallback() {
+        this.stopAutoplay();
+        if (!this.initialized) return;
+
         if (this.resizeObserver) this.resizeObserver.disconnect();
-        if (this.handleResize) window.removeEventListener('resize', this.handleResize);
+        window.removeEventListener('resize', this.handleResize);
+        if (this.track) this.track.removeEventListener('transitionend', this.handleTransitionEnd);
+        if (this.allItems) {
+          this.allItems.forEach((item) => {
+            item.removeEventListener('mouseenter', this.handleItemEnter);
+            item.removeEventListener('mouseleave', this.handleItemLeave);
+            item.removeEventListener('focusin', this.handleItemFocusIn);
+            item.removeEventListener('focusout', this.handleItemFocusOut);
+            item.querySelectorAll('img').forEach((image) => image.removeEventListener('load', this.handleImageLoad));
+          });
+        }
       }
 
-      updateResponsiveItemWidth() {
+      updateLayout() {
         if (!this.container || !this.track || !this.originalItemCount) return;
-        const styles = getComputedStyle(this);
-        const minimumWidth = parseFloat(styles.getPropertyValue('--media-item-min-width')) || 88;
-        const maximumWidth = parseFloat(styles.getPropertyValue('--media-item-width')) || 160;
+
+        const transition = this.track.style.transition;
+        this.track.style.transition = 'none';
         const gap = parseFloat(getComputedStyle(this.track).columnGap) || 0;
-        const availableWidth = this.container.clientWidth - gap * Math.max(0, this.originalItemCount - 1);
-        const fittedWidth = availableWidth / this.originalItemCount;
-        const responsiveWidth = Math.max(minimumWidth, Math.min(maximumWidth, fittedWidth));
-        this.style.setProperty('--media-responsive-item-width', `${responsiveWidth}px`);
+        const originalWidth = this.items.reduce((total, item) => total + item.getBoundingClientRect().width, 0) + gap * Math.max(0, this.originalItemCount - 1);
+        this.canSlide = this.originalItemCount > 1 && originalWidth > this.container.clientWidth + 1;
+
+        if (!this.canSlide) {
+          this.currentIndex = 0;
+          this.stopAutoplay();
+          this.track.style.transform = 'translate3d(0, 0, 0)';
+        } else {
+          this.goTo(this.currentIndex, false);
+          this.startAutoplay();
+        }
+
+        window.requestAnimationFrame(() => {
+          if (this.track) this.track.style.transition = transition;
+        });
+      }
+
+      getTargetOffset(index) {
+        const maxOffset = Math.max(0, this.track.scrollWidth - this.container.clientWidth);
+        const item = this.allItems[index];
+        return item ? Math.min(item.offsetLeft, maxOffset) : 0;
+      }
+
+      goTo(index, animate) {
+        if (!this.track || !this.canSlide) return;
+        this.currentIndex = index;
+        this.track.style.transition = animate ? '' : 'none';
+        this.track.style.transform = `translate3d(-${this.getTargetOffset(index)}px, 0, 0)`;
+
+        if (!animate) {
+          window.requestAnimationFrame(() => {
+            if (this.track) this.track.style.transition = '';
+          });
+        }
+      }
+
+      next() {
+        if (!this.canSlide || this.isPaused) return;
+        this.goTo(this.currentIndex + 1, true);
+      }
+
+      onTransitionEnd(event) {
+        if (event.propertyName !== 'transform' || this.currentIndex !== this.originalItemCount) return;
+        this.goTo(0, false);
+      }
+
+      startAutoplay() {
+        if (this.autoplayTimer || !this.canSlide || this.isPaused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const cycleDuration = Math.max(12000, Number({{ block.settings.scroll_speed | default: 40 }}) * 1000);
+        const delay = Math.max(3000, cycleDuration / this.originalItemCount);
+        this.autoplayTimer = window.setTimeout(() => {
+          this.autoplayTimer = null;
+          this.next();
+          this.startAutoplay();
+        }, delay);
+      }
+
+      stopAutoplay() {
+        if (this.autoplayTimer) window.clearTimeout(this.autoplayTimer);
+        this.autoplayTimer = null;
+      }
+
+      pauseForItem() {
+        this.isItemHovered = true;
+        this.isPaused = true;
+        this.stopAutoplay();
+      }
+
+      resumeFromItem() {
+        this.isItemHovered = false;
+        this.resumeIfClear();
+      }
+
+      pauseForFocus() {
+        this.isItemFocused = true;
+        this.isPaused = true;
+        this.stopAutoplay();
+      }
+
+      resumeFromFocus(event) {
+        if (event.relatedTarget && event.currentTarget.contains(event.relatedTarget)) return;
+        this.isItemFocused = false;
+        this.resumeIfClear();
+      }
+
+      resumeIfClear() {
+        if (this.isItemHovered || this.isItemFocused) return;
+        this.isPaused = false;
+        this.startAutoplay();
       }
     }
 
-    customElements.define('media-scroll-{{ ai_gen_id }}', MediaScroll{{ ai_gen_id }});
+    if (!customElements.get('media-scroll-{{ ai_gen_id }}')) {
+      customElements.define('media-scroll-{{ ai_gen_id }}', MediaScroll{{ ai_gen_id }});
+    }
   })();
 </script>
 
@@ -457,26 +563,6 @@
     },
     {
       "type": "range",
-      "id": "item_width",
-      "label": "Item width",
-      "min": 100,
-      "max": 250,
-      "step": 10,
-      "unit": "px",
-      "default": 160
-    },
-    {
-      "type": "range",
-      "id": "item_height",
-      "label": "Item height",
-      "min": 40,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "default": 56
-    },
-    {
-      "type": "range",
       "id": "item_gap",
       "label": "Gap between items",
       "min": 10,
@@ -496,38 +582,10 @@
       "default": 15
     },
     {
-      "type": "range",
-      "id": "item_border_radius",
-      "label": "Border radius",
-      "min": 0,
-      "max": 30,
-      "step": 2,
-      "unit": "px",
-      "default": 12
-    },
-    {
-      "type": "color",
-      "id": "item_bg_color",
-      "label": "Background color",
-      "default": "#cdd7e4"
-    },
-    {
       "type": "color",
       "id": "item_text_color",
       "label": "Text color",
       "default": "#475569"
-    },
-    {
-      "type": "color",
-      "id": "item_hover_bg_color",
-      "label": "Hover background color",
-      "default": "#bfcde0"
-    },
-    {
-      "type": "color",
-      "id": "item_hover_text_color",
-      "label": "Hover text color",
-      "default": "#1e293b"
     },
     {
       "type": "header",
@@ -536,11 +594,12 @@
     {
       "type": "range",
       "id": "scroll_speed",
-      "label": "Scroll speed",
+      "label": "Carousel cycle duration",
       "min": 20,
       "max": 80,
       "step": 5,
       "unit": "s",
+      "info": "Approximate time for one complete carousel cycle.",
       "default": 40
     },
     {

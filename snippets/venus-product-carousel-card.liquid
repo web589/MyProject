@@ -37,15 +37,14 @@
       endif
     endif
   endif
-  assign card_badge = badge_override | default: carousel_product.metafields.custom.carousel_badge.value
-  assign card_badge_tone = 'new'
-  if card_badge == blank and card_variant.compare_at_price > card_variant.price
-    assign card_saving = card_variant.compare_at_price | minus: card_variant.price
-    assign card_saving_money = card_saving | money_without_currency
-    assign card_badge = '-' | append: card_saving_money | append: '€'
-    assign card_badge_tone = 'discount'
-  elsif card_badge contains '-' or card_badge contains '€'
-    assign card_badge_tone = 'discount'
+  if badge_editor_enabled
+    assign card_badge = badge_override
+  else
+    assign card_badge = badge_override | default: carousel_product.metafields.custom.carousel_badge.value
+  endif
+  assign card_badge_tone = badge_color_override | default: 'blue'
+  if card_badge_tone != 'orange'
+    assign card_badge_tone = 'blue'
   endif
   assign primary_url = carousel_product.metafields.custom.carousel_primary_link.value | default: carousel_product.url
   assign secondary_url = carousel_product.metafields.custom.carousel_secondary_link.value | default: carousel_product.url

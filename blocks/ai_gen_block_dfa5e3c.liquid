@@ -223,7 +223,7 @@
 {% style %}
   .ai-custom-blog-section-{{ ai_gen_id }} {
     display: block;
-    max-width: 1100px;
+    max-width: 1280px;
     margin: 0 auto;
     padding: {{ block.settings.section_padding_top }}px 20px {{ block.settings.section_padding_bottom }}px;
     background-color: {{ block.settings.background_color }};
@@ -290,6 +290,7 @@
     display: grid;
     grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
     gap: {{ block.settings.grid_gap }}px;
+    align-items: start;
   }
 
   .ai-custom-blog-card-{{ ai_gen_id }} {
@@ -346,8 +347,18 @@
     opacity: 0.3;
   }
 
+  .ai-custom-blog-card-source-{{ ai_gen_id }} {
+    padding: 10px {{ block.settings.card_padding }}px 0;
+    color: {{ block.settings.tag_color }};
+    font-size: {{ block.settings.tag_size }}px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
   .ai-custom-blog-card-content-{{ ai_gen_id }} {
-    padding: {{ block.settings.card_padding }}px;
+    padding: 8px {{ block.settings.card_padding }}px {{ block.settings.card_padding }}px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -446,9 +457,32 @@
 {% endstyle %}
 
 {% liquid
-  assign selected_blog = blogs[block.settings.blog]
+  assign blog_one = blogs[block.settings.blog_1]
+  assign blog_two = blogs[block.settings.blog_2]
+  assign blog_three = blogs[block.settings.blog_3]
   assign post_limit = block.settings.post_limit | default: 4
   assign article_count = 0
+
+  if blog_one != blank
+    assign all_articles = blog_one.articles
+    if blog_two != blank and blog_two != blog_one
+      assign all_articles = all_articles | concat: blog_two.articles
+    endif
+    if blog_three != blank and blog_three != blog_one and blog_three != blog_two
+      assign all_articles = all_articles | concat: blog_three.articles
+    endif
+  elsif blog_two != blank
+    assign all_articles = blog_two.articles
+    if blog_three != blank and blog_three != blog_two
+      assign all_articles = all_articles | concat: blog_three.articles
+    endif
+  elsif blog_three != blank
+    assign all_articles = blog_three.articles
+  endif
+
+  if all_articles != blank
+    assign all_articles = all_articles | sort: 'updated_at' | reverse
+  endif
 %}
 
 <custom-blog-section-{{ ai_gen_id }} class="ai-custom-blog-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
@@ -461,8 +495,8 @@
         <div class="ai-custom-blog-subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
       {% endif %}
     </div>
-    {% if block.settings.show_view_all and selected_blog != blank %}
-      <a href="{{ selected_blog.url }}" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
+    {% if block.settings.show_view_all %}
+      <a href="{{ routes.search_url }}?q=&type=article" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
         {{ block.settings.view_all_text | escape }}
         <svg class="ai-custom-blog-arrow-{{ ai_gen_id }}" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -472,10 +506,13 @@
   </div>
 
   <div class="ai-custom-blog-grid-{{ ai_gen_id }}">
-    {% if selected_blog != blank %}
-      {% for article in selected_blog.articles limit: post_limit %}
+    {% if all_articles != blank %}
+      {% for article in all_articles limit: post_limit %}
         {% liquid
           assign article_count = article_count | plus: 1
+          assign article_blog_handle = article.url | split: '/blogs/' | last | split: '/' | first
+          assign article_blog = blogs[article_blog_handle]
+          assign article_blog_title = article_blog.title | default: article_blog_handle
           assign article_tag = article.tags | first
           assign article_excerpt = article.excerpt_or_content | strip_html | truncatewords: 24
         %}
@@ -498,6 +535,12 @@
               </div>
             {% endif %}
           </div>
+
+          {% if article_blog_title != blank %}
+            <div class="ai-custom-blog-card-source-{{ ai_gen_id }}">
+              {{ article_blog_title | escape }}
+            </div>
+          {% endif %}
 
           <div class="ai-custom-blog-card-content-{{ ai_gen_id }}">
             {% if block.settings.show_article_badge and article_tag != blank %}
@@ -529,11 +572,7 @@
 
     {% if article_count == 0 %}
       <div class="ai-custom-blog-empty-state-{{ ai_gen_id }}">
-        {% if selected_blog == blank %}
-          Bitte wählen Sie im Theme-Editor einen Blog aus.
-        {% else %}
-          Keine Blogartikel verfügbar.
-        {% endif %}
+        Keine Blogartikel verfügbar.
       </div>
     {% endif %}
   </div>
@@ -560,9 +599,23 @@
       "label": "Subtitle"
     },
     {
+      "type": "header",
+      "content": "Blog sources to combine"
+    },
+    {
       "type": "blog",
-      "id": "blog",
-      "label": "Blog source"
+      "id": "blog_1",
+      "label": "Included blog 1"
+    },
+    {
+      "type": "blog",
+      "id": "blog_2",
+      "label": "Included blog 2"
+    },
+    {
+      "type": "blog",
+      "id": "blog_3",
+      "label": "Included blog 3"
     },
     {
       "type": "range",
@@ -862,7 +915,13 @@
   ],
   "presets": [
     {
-      "name": "Blog posts"
+      "name": "Blog posts",
+      "settings": {
+        "blog_1": "news",
+        "blog_2": "solarspeicher",
+        "blog_3": "333",
+        "post_limit": 4
+      }
     }
   ]
 }

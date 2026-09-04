@@ -10,6 +10,13 @@
       break
     endif
   endfor
+  assign configured_product_count = 0
+  for product_index in (1..6)
+    assign product_key = 'product_' | append: product_index
+    if block.settings[product_key] != blank
+      assign configured_product_count = configured_product_count | plus: 1
+    endif
+  endfor
 %}
 
 {% style %}
@@ -116,7 +123,11 @@
     top: 0;
   }
 
-  .venus-category-panel-{{ category_id }} .ai-product-badge--discount {
+  .venus-category-panel-{{ category_id }} .ai-product-badge--blue {
+    background: #8bd5ff;
+  }
+
+  .venus-category-panel-{{ category_id }} .ai-product-badge--orange {
     background: #ff6b13;
   }
 
@@ -299,7 +310,7 @@
       </button>
 
       <div class="venus-category-track" data-carousel-track>
-        {% if shared_category_collection != blank %}
+        {% if shared_category_collection != blank and configured_product_count == 0 %}
           {% for selected_product in shared_category_collection.products limit: 6 %}
             {% render 'venus-product-carousel-card',
               carousel_product: selected_product,
@@ -312,13 +323,17 @@
           {% liquid
             assign product_key = 'product_' | append: product_index
             assign badge_key = 'badge_' | append: product_index
+            assign badge_color_key = 'badge_color_' | append: product_index
             assign selected_product = block.settings[product_key]
             assign badge_override = block.settings[badge_key]
+            assign badge_color_override = block.settings[badge_color_key]
           %}
           {% if selected_product != blank %}
             {% render 'venus-product-carousel-card',
               carousel_product: selected_product,
               badge_override: badge_override,
+              badge_color_override: badge_color_override,
+              badge_editor_enabled: true,
               carousel_settings: block.settings,
               carousel_id: category_id
             %}
@@ -356,7 +371,24 @@
     {
       "type": "text",
       "id": "badge_1",
-      "label": "Product 1 badge"
+      "label": "Product 1 badge",
+      "info": "Leave blank to hide the badge."
+    },
+    {
+      "type": "select",
+      "id": "badge_color_1",
+      "label": "Product 1 badge color",
+      "default": "blue",
+      "options": [
+        {
+          "value": "blue",
+          "label": "Blue"
+        },
+        {
+          "value": "orange",
+          "label": "Orange"
+        }
+      ]
     },
     {
       "type": "product",
@@ -366,7 +398,24 @@
     {
       "type": "text",
       "id": "badge_2",
-      "label": "Product 2 badge"
+      "label": "Product 2 badge",
+      "info": "Leave blank to hide the badge."
+    },
+    {
+      "type": "select",
+      "id": "badge_color_2",
+      "label": "Product 2 badge color",
+      "default": "blue",
+      "options": [
+        {
+          "value": "blue",
+          "label": "Blue"
+        },
+        {
+          "value": "orange",
+          "label": "Orange"
+        }
+      ]
     },
     {
       "type": "product",
@@ -376,7 +425,24 @@
     {
       "type": "text",
       "id": "badge_3",
-      "label": "Product 3 badge"
+      "label": "Product 3 badge",
+      "info": "Leave blank to hide the badge."
+    },
+    {
+      "type": "select",
+      "id": "badge_color_3",
+      "label": "Product 3 badge color",
+      "default": "blue",
+      "options": [
+        {
+          "value": "blue",
+          "label": "Blue"
+        },
+        {
+          "value": "orange",
+          "label": "Orange"
+        }
+      ]
     },
     {
       "type": "product",
@@ -386,7 +452,24 @@
     {
       "type": "text",
       "id": "badge_4",
-      "label": "Product 4 badge"
+      "label": "Product 4 badge",
+      "info": "Leave blank to hide the badge."
+    },
+    {
+      "type": "select",
+      "id": "badge_color_4",
+      "label": "Product 4 badge color",
+      "default": "blue",
+      "options": [
+        {
+          "value": "blue",
+          "label": "Blue"
+        },
+        {
+          "value": "orange",
+          "label": "Orange"
+        }
+      ]
     },
     {
       "type": "product",
@@ -396,7 +479,24 @@
     {
       "type": "text",
       "id": "badge_5",
-      "label": "Product 5 badge"
+      "label": "Product 5 badge",
+      "info": "Leave blank to hide the badge."
+    },
+    {
+      "type": "select",
+      "id": "badge_color_5",
+      "label": "Product 5 badge color",
+      "default": "blue",
+      "options": [
+        {
+          "value": "blue",
+          "label": "Blue"
+        },
+        {
+          "value": "orange",
+          "label": "Orange"
+        }
+      ]
     },
     {
       "type": "product",
@@ -406,7 +506,24 @@
     {
       "type": "text",
       "id": "badge_6",
-      "label": "Product 6 badge"
+      "label": "Product 6 badge",
+      "info": "Leave blank to hide the badge."
+    },
+    {
+      "type": "select",
+      "id": "badge_color_6",
+      "label": "Product 6 badge color",
+      "default": "blue",
+      "options": [
+        {
+          "value": "blue",
+          "label": "Blue"
+        },
+        {
+          "value": "orange",
+          "label": "Orange"
+        }
+      ]
     },
     {
       "type": "header",

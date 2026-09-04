@@ -1,12 +1,10 @@
 {% liquid
   assign logo_alt = block.settings.alt_text | default: block.settings.fallback_label
-  assign logo_width = block.settings.image.width | default: 320
 %}
 
 <div
   class="ai-media-scroll__item{% if block.settings.image != blank %} ai-media-scroll__item--has-image{% endif %}"
   data-media-logo-item
-  {% if block.settings.image != blank %}style="--media-logo-aspect-ratio: {{ block.settings.image.aspect_ratio | default: 2.5 }};"{% endif %}
   {{ block.shopify_attributes }}
 >
   {% if block.settings.link != blank %}
@@ -18,13 +16,12 @@
     {% if block.settings.image != blank %}
       {{
         block.settings.image
-        | image_url: width: 640
+        | image_url: width: block.settings.image.width
         | image_tag:
           class: 'ai-media-scroll__item-image',
           loading: 'lazy',
-          widths: '160, 240, 320, 480, 640',
-          sizes: '(max-width: 768px) 38vw, 14vw',
-          width: logo_width,
+          widths: '200, 320, 480, 640, 800, 1200',
+          sizes: '(max-width: 768px) 70vw, 25vw',
           alt: logo_alt
       }}
     {% elsif block.settings.fallback_label != blank %}
@@ -64,9 +61,10 @@
       "default": "Media logo"
     },
     {
-      "type": "url",
+      "type": "text",
       "id": "link",
-      "label": "Link"
+      "label": "Link",
+      "info": "Enter an internal path or a complete external URL, such as https://example.com. Leave blank to disable clicking."
     },
     {
       "type": "checkbox",
