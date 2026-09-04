@@ -446,8 +446,9 @@
 {% endstyle %}
 
 {% liquid
-  assign view_all_url = block.settings.view_all_link
-  assign enabled_cards = 0
+  assign selected_blog = blogs[block.settings.blog]
+  assign post_limit = block.settings.post_limit | default: 4
+  assign article_count = 0
 %}
 
 <custom-blog-section-{{ ai_gen_id }} class="ai-custom-blog-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
@@ -460,8 +461,8 @@
         <div class="ai-custom-blog-subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
       {% endif %}
     </div>
-    {% if block.settings.show_view_all and view_all_url != blank %}
-      <a href="{{ view_all_url }}" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
+    {% if block.settings.show_view_all and selected_blog != blank %}
+      <a href="{{ selected_blog.url }}" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
         {{ block.settings.view_all_text | escape }}
         <svg class="ai-custom-blog-arrow-{{ ai_gen_id }}" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -471,31 +472,22 @@
   </div>
 
   <div class="ai-custom-blog-grid-{{ ai_gen_id }}">
-    {% for card_index in (1..4) %}
-      {% liquid
-        assign enabled_key = 'card_' | append: card_index | append: '_enabled'
-        assign image_key = 'card_' | append: card_index | append: '_image'
-        assign tag_key = 'card_' | append: card_index | append: '_tag'
-        assign title_key = 'card_' | append: card_index | append: '_title'
-        assign excerpt_key = 'card_' | append: card_index | append: '_excerpt'
-        assign link_key = 'card_' | append: card_index | append: '_link'
-        assign card_image = block.settings[image_key]
-        assign card_tag = block.settings[tag_key]
-        assign card_title = block.settings[title_key]
-        assign card_excerpt = block.settings[excerpt_key]
-        assign card_link = block.settings[link_key]
-      %}
+    {% if selected_blog != blank %}
+      {% for article in selected_blog.articles limit: post_limit %}
+        {% liquid
+          assign article_count = article_count | plus: 1
+          assign article_tag = article.tags | first
+          assign article_excerpt = article.excerpt_or_content | strip_html | truncatewords: 24
+        %}
 
-      {% if block.settings[enabled_key] %}
-        {% assign enabled_cards = enabled_cards | plus: 1 %}
         <article
           class="ai-custom-blog-card-{{ ai_gen_id }}"
         >
           <div class="ai-custom-blog-card-image-{{ ai_gen_id }}">
-            {% if card_image != blank %}
+            {% if article.image != blank %}
               <img
-                src="{{ card_image | image_url: width: 800 }}"
-                alt="{{ card_image.alt | default: card_title | escape }}"
+                src="{{ article.image | image_url: width: 800 }}"
+                alt="{{ article.image.alt | default: article.title | escape }}"
                 loading="lazy"
                 width="800"
                 height="{{ 800 | times: block.settings.image_aspect_ratio | divided_by: 100 }}"
@@ -508,26 +500,22 @@
           </div>
 
           <div class="ai-custom-blog-card-content-{{ ai_gen_id }}">
-            {% if block.settings.show_article_badge and card_tag != blank %}
+            {% if block.settings.show_article_badge and article_tag != blank %}
               <span class="ai-custom-blog-card-tag-{{ ai_gen_id }}">
-                {{ card_tag | escape }}
+                {{ article_tag | escape }}
               </span>
             {% endif %}
 
             <h3 class="ai-custom-blog-card-title-{{ ai_gen_id }}">
-              {% if card_link != blank %}
-                <a href="{{ card_link }}">{{ card_title | escape }}</a>
-              {% else %}
-                {{ card_title | escape }}
-              {% endif %}
+              <a href="{{ article.url }}">{{ article.title | escape }}</a>
             </h3>
 
             <div class="ai-custom-blog-card-excerpt-{{ ai_gen_id }}">
-              {{ card_excerpt | escape | newline_to_br }}
+              {{ article_excerpt | escape | newline_to_br }}
             </div>
 
-            {% if block.settings.show_read_more and card_link != blank %}
-              <a href="{{ card_link }}" class="ai-custom-blog-card-link-{{ ai_gen_id }}">
+            {% if block.settings.show_read_more %}
+              <a href="{{ article.url }}" class="ai-custom-blog-card-link-{{ ai_gen_id }}">
                 {{ block.settings.read_more_text | escape }}
                 <svg class="ai-custom-blog-arrow-{{ ai_gen_id }}" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                   <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -536,12 +524,16 @@
             {% endif %}
           </div>
         </article>
-      {% endif %}
-    {% endfor %}
+      {% endfor %}
+    {% endif %}
 
-    {% if enabled_cards == 0 %}
+    {% if article_count == 0 %}
       <div class="ai-custom-blog-empty-state-{{ ai_gen_id }}">
-        Bitte aktivieren Sie im Theme-Editor mindestens eine Karte.
+        {% if selected_blog == blank %}
+          Bitte wählen Sie im Theme-Editor einen Blog aus.
+        {% else %}
+          Keine Blogartikel verfügbar.
+        {% endif %}
       </div>
     {% endif %}
   </div>
@@ -549,7 +541,7 @@
 
 {% schema %}
 {
-  "name": "Custom blog cards",
+  "name": "Blog posts",
   "tag": null,
   "settings": [
     {
@@ -568,15 +560,24 @@
       "label": "Subtitle"
     },
     {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog source"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "label": "Number of articles",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
       "type": "checkbox",
       "id": "show_view_all",
       "label": "Show view all link",
       "default": true
-    },
-    {
-      "type": "url",
-      "id": "view_all_link",
-      "label": "View all link"
     },
     {
       "type": "inline_richtext",
@@ -586,165 +587,13 @@
     },
     {
       "type": "header",
-      "content": "Card 1"
-    },
-    {
-      "type": "checkbox",
-      "id": "card_1_enabled",
-      "label": "Enable card 1",
-      "default": true
-    },
-    {
-      "type": "image_picker",
-      "id": "card_1_image",
-      "label": "Image"
-    },
-    {
-      "type": "text",
-      "id": "card_1_tag",
-      "label": "Tag",
-      "default": "Batterie?"
-    },
-    {
-      "type": "text",
-      "id": "card_1_title",
-      "label": "Title",
-      "default": "Was ist eine Plug & Play Batterie?"
-    },
-    {
-      "type": "textarea",
-      "id": "card_1_excerpt",
-      "label": "Excerpt",
-      "default": "Steckerfertige Speicher für Ihr Balkonkraftwerk. Einfach anschließen, Energie speichern und später nutzen."
-    },
-    {
-      "type": "url",
-      "id": "card_1_link",
-      "label": "Link"
-    },
-    {
-      "type": "header",
-      "content": "Card 2"
-    },
-    {
-      "type": "checkbox",
-      "id": "card_2_enabled",
-      "label": "Enable card 2",
-      "default": true
-    },
-    {
-      "type": "image_picker",
-      "id": "card_2_image",
-      "label": "Image"
-    },
-    {
-      "type": "text",
-      "id": "card_2_tag",
-      "label": "Tag",
-      "default": "Speicher"
-    },
-    {
-      "type": "text",
-      "id": "card_2_title",
-      "label": "Title",
-      "default": "Balkonkraftwerk mit Speicher"
-    },
-    {
-      "type": "textarea",
-      "id": "card_2_excerpt",
-      "label": "Excerpt",
-      "default": "Lohnt sich ein Batteriespeicher für Ihr Balkonkraftwerk? Wir zeigen Ihnen die Vorteile."
-    },
-    {
-      "type": "url",
-      "id": "card_2_link",
-      "label": "Link"
-    },
-    {
-      "type": "header",
-      "content": "Card 3"
-    },
-    {
-      "type": "checkbox",
-      "id": "card_3_enabled",
-      "label": "Enable card 3",
-      "default": true
-    },
-    {
-      "type": "image_picker",
-      "id": "card_3_image",
-      "label": "Image"
-    },
-    {
-      "type": "text",
-      "id": "card_3_tag",
-      "label": "Tag",
-      "default": "Heimspeicher"
-    },
-    {
-      "type": "text",
-      "id": "card_3_title",
-      "label": "Title",
-      "default": "Förderungen für Heimspeicher"
-    },
-    {
-      "type": "textarea",
-      "id": "card_3_excerpt",
-      "label": "Excerpt",
-      "default": "Übersicht zu Zuschüssen, Steuervorteilen und aktuellen Förderprogrammen in Deutschland."
-    },
-    {
-      "type": "url",
-      "id": "card_3_link",
-      "label": "Link"
-    },
-    {
-      "type": "header",
-      "content": "Card 4"
-    },
-    {
-      "type": "checkbox",
-      "id": "card_4_enabled",
-      "label": "Enable card 4",
-      "default": true
-    },
-    {
-      "type": "image_picker",
-      "id": "card_4_image",
-      "label": "Image"
-    },
-    {
-      "type": "text",
-      "id": "card_4_tag",
-      "label": "Tag",
-      "default": "Vergleich"
-    },
-    {
-      "type": "text",
-      "id": "card_4_title",
-      "label": "Title",
-      "default": "VENUS Evs. Konkurrenz"
-    },
-    {
-      "type": "textarea",
-      "id": "card_4_excerpt",
-      "label": "Excerpt",
-      "default": "Vergleich von Kapazität, Leistung, Design und Preis-Leistung bei beliebten Heimspeichern."
-    },
-    {
-      "type": "url",
-      "id": "card_4_link",
-      "label": "Link"
-    },
-    {
-      "type": "header",
       "content": "Read more link"
     },
     {
       "type": "checkbox",
       "id": "show_article_badge",
       "label": "Show card tags",
-      "info": "Displays the tag configured for each enabled card.",
+      "info": "Displays the first tag assigned to each article.",
       "default": true
     },
     {
@@ -1013,7 +862,7 @@
   ],
   "presets": [
     {
-      "name": "Custom blog cards"
+      "name": "Blog posts"
     }
   ]
 }

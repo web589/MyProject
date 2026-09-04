@@ -7,13 +7,13 @@
   endunless
 -%}
 
-<ul
-  class="site-nav site-navigation small--hide"
->
+<ul class="site-nav site-navigation small--hide">
   {%- for link in main_menu.links limit: limit offset: offset -%}
     {%- liquid
       assign mega_menu_block = nil
       assign link_handle = link.title | handleize
+      assign product_block_count = 0
+
       for block in section.blocks
         if block.type == 'mega_menu'
           assign block_trigger = block.settings.menu_item | handleize
@@ -24,12 +24,25 @@
         endif
       endfor
 
+      for block in section.blocks
+        if block.type == 'mega_menu_product'
+          assign product_menu_handle = block.settings.menu_handle | handleize
+          if product_menu_handle == link_handle and block.settings.product != blank
+            assign product_block_count = product_block_count | plus: 1
+          endif
+        endif
+      endfor
+
       assign has_dropdown = false
       assign is_megamenu = false
+      assign has_product_menu = false
       if link.links != blank
         assign has_dropdown = true
         if mega_menu_block != nil
           assign is_megamenu = true
+        endif
+        if is_megamenu and product_block_count > 0
+          assign has_product_menu = true
         endif
       endif
 
@@ -58,137 +71,148 @@
       {% else %}
         <a
           href="{{ link.url }}"
-          class="site-nav__link site-nav__link--underline{% if has_dropdown %} site-nav__link--has-dropdown{% endif %}"
+          class="site-nav__link site-nav__link--underline"
         >
           {{ link.title }}
         </a>
       {% endif %}
 
-        {%- if is_megamenu -%}
-          {%- liquid
-            assign any_column_has_image = false
-            if show_images
-              for childlink in link.links
-                if childlink.url contains '/collections/'
-                  if collections[childlink.object.handle].image != blank
-                    assign any_column_has_image = true
-                    break
-                  endif
-                endif
-              endfor
-            endif
-          -%}
-
-          {%- liquid
-            assign has_mega_products = false
-            if mega_menu_block.settings.mega_product_1 != blank or mega_menu_block.settings.mega_product_2 != blank or mega_menu_block.settings.mega_product_3 != blank or mega_menu_block.settings.mega_product_4 != blank
-              assign has_mega_products = true
-            endif
-          -%}
-          <div class="site-nav__dropdown megamenu text-left"{% if has_mega_products %} data-venus-variant-megamenu{% endif %}>
-            <div class="page-width">
-              <div class="megamenu__inner{% if center_content %} megamenu__inner--center{% endif %}{% if has_mega_products %} megamenu__inner--dynamic-products{% endif %}">
-
-                {%- if mega_menu_block != nil -%}
-                  {%- liquid
-                    assign promo1_has_content = false
-                    if mega_menu_block.settings.promo1_image
-                      assign promo1_has_content = true
-                    elsif mega_menu_block.settings.promo1_heading != blank
-                      assign promo1_has_content = true
-                    elsif mega_menu_block.settings.promo1_text != blank
-                      assign promo1_has_content = true
-                    endif
-                    assign promo2_has_content = false
-                    if mega_menu_block.settings.promo2_image
-                      assign promo2_has_content = true
-                    elsif mega_menu_block.settings.promo2_heading != blank
-                      assign promo2_has_content = true
-                    elsif mega_menu_block.settings.promo2_text != blank
-                      assign promo2_has_content = true
-                    endif
-                    if has_mega_products
-                      assign promo1_has_content = false
-                      assign promo2_has_content = false
-                    endif
-                    assign promo1_before = false
-                    if promo1_has_content
-                      if mega_menu_block.settings.promo1_position == 'before'
-                        assign promo1_before = true
+      {%- if has_product_menu -%}
+        <div class="site-nav__dropdown megamenu mega-menu-products text-left">
+          <div class="page-width">
+            <div class="mega-menu-products__inner">
+              <nav class="mega-menu-products__categories" aria-label="{{ mega_menu_block.settings.mega_menu_heading | default: link.title | escape }}">
+                <p class="mega-menu-products__heading">
+                  {{ mega_menu_block.settings.mega_menu_heading | default: link.title | escape }}
+                </p>
+                <ul class="mega-menu-products__category-list">
+                  {%- for childlink in link.links -%}
+                    {%- liquid
+                      assign childlink_url = childlink.url
+                      assign childlink_title_handle = childlink.title | handleize
+                      if childlink_title_handle == 'venus-e-mini'
+                        assign childlink_url = '/products/venus-e-mini'
                       endif
-                    endif
-                    assign promo2_before = false
-                    if promo2_has_content
-                      if mega_menu_block.settings.promo2_position == 'before'
-                        assign promo2_before = true
+                      if childlink.title == 'Garantie & Rückgabe'
+                        assign childlink_url = '/pages/garantie-ruckgabe?view=widerrufsrecht'
                       endif
-                    endif
-                    assign promo1_after = false
-                    if promo1_has_content
-                      if mega_menu_block.settings.promo1_position == 'after'
-                        assign promo1_after = true
-                      endif
-                    endif
-                    assign promo2_after = false
-                    if promo2_has_content
-                      if mega_menu_block.settings.promo2_position == 'after'
-                        assign promo2_after = true
-                      endif
-                    endif
-                  -%}
-                  {%- if promo1_before or promo2_before -%}
-                    <div class="megamenu__promos megamenu__promos--before appear-animation appear-delay-1">
-                      {%- if promo1_before -%}
-                        {%- render 'mega-menu-promo-tile', block: mega_menu_block, promo_num: '1' -%}
+                    -%}
+                    <li class="mega-menu-products__category-item{% if childlink.active or childlink.child_active %} is-active{% endif %}">
+                      <a href="{{ childlink_url }}" class="mega-menu-products__category-link"{% if childlink.active %} aria-current="page"{% endif %}>
+                        <span>{{ childlink.title | escape }}</span>
+                        <span class="mega-menu-products__category-arrow" aria-hidden="true">›</span>
+                      </a>
+                      {%- if childlink.links != blank -%}
+                        <ul class="mega-menu-products__subcategory-list">
+                          {%- for grandchildlink in childlink.links -%}
+                            <li>
+                              <a href="{{ grandchildlink.url }}" class="mega-menu-products__subcategory-link"{% if grandchildlink.active %} aria-current="page"{% endif %}>
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
                       {%- endif -%}
-                      {%- if promo2_before -%}
-                        {%- render 'mega-menu-promo-tile', block: mega_menu_block, promo_num: '2' -%}
-                      {%- endif -%}
-                    </div>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </nav>
+
+              <div class="mega-menu-products__cards" role="list">
+                {%- for product_block in section.blocks -%}
+                  {%- if product_block.type == 'mega_menu_product' -%}
+                    {%- assign product_menu_handle = product_block.settings.menu_handle | handleize -%}
+                    {%- if product_menu_handle == link_handle and product_block.settings.product != blank -%}
+                      <div role="listitem">
+                        {%- render 'product-menu-card', block: product_block -%}
+                      </div>
+                    {%- endif -%}
                   {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      {%- elsif is_megamenu -%}
+        {%- liquid
+          assign any_column_has_image = false
+          if show_images
+            for childlink in link.links
+              if childlink.url contains '/collections/'
+                if collections[childlink.object.handle].image != blank
+                  assign any_column_has_image = true
+                  break
+                endif
+              endif
+            endfor
+          endif
+        -%}
+        <div class="site-nav__dropdown megamenu text-left">
+          <div class="page-width">
+            <div class="megamenu__inner{% if center_content %} megamenu__inner--center{% endif %}">
+              {%- if mega_menu_block != nil -%}
+                {%- liquid
+                  assign promo1_has_content = false
+                  if mega_menu_block.settings.promo1_image
+                    assign promo1_has_content = true
+                  elsif mega_menu_block.settings.promo1_heading != blank
+                    assign promo1_has_content = true
+                  elsif mega_menu_block.settings.promo1_text != blank
+                    assign promo1_has_content = true
+                  endif
+                  assign promo2_has_content = false
+                  if mega_menu_block.settings.promo2_image
+                    assign promo2_has_content = true
+                  elsif mega_menu_block.settings.promo2_heading != blank
+                    assign promo2_has_content = true
+                  elsif mega_menu_block.settings.promo2_text != blank
+                    assign promo2_has_content = true
+                  endif
+                  assign promo1_before = false
+                  if promo1_has_content and mega_menu_block.settings.promo1_position == 'before'
+                    assign promo1_before = true
+                  endif
+                  assign promo2_before = false
+                  if promo2_has_content and mega_menu_block.settings.promo2_position == 'before'
+                    assign promo2_before = true
+                  endif
+                  assign promo1_after = false
+                  if promo1_has_content and mega_menu_block.settings.promo1_position == 'after'
+                    assign promo1_after = true
+                  endif
+                  assign promo2_after = false
+                  if promo2_has_content and mega_menu_block.settings.promo2_position == 'after'
+                    assign promo2_after = true
+                  endif
+                -%}
+                {%- if promo1_before or promo2_before -%}
+                  <div class="megamenu__promos megamenu__promos--before appear-animation appear-delay-1">
+                    {%- if promo1_before -%}
+                      {%- render 'mega-menu-promo-tile', block: mega_menu_block, promo_num: '1' -%}
+                    {%- endif -%}
+                    {%- if promo2_before -%}
+                      {%- render 'mega-menu-promo-tile', block: mega_menu_block, promo_num: '2' -%}
+                    {%- endif -%}
+                  </div>
                 {%- endif -%}
+              {%- endif -%}
 
-                <div class="megamenu__nav{% if center_content %} megamenu__nav--center{% endif %}">
-                  {%- assign previous_column_type = '' -%}
-                  {%- assign animation_column = 1 -%}
-                  <div class="megamenu__column appear-animation appear-delay-{{ animation_column }}">
-                    {%- assign animation_column = animation_column | plus: 1 -%}
-
-                    {%- for childlink in link.links -%}
-                      {%- liquid
-                        assign childlink_url = childlink.url
-                        assign childlink_title_handle = childlink.title | handleize
-                        assign mega_model_key = ''
-                        if childlink_title_handle contains 'venus-e-mini'
-                          assign childlink_url = '/products/venus-e-mini'
-                          assign mega_model_key = 'mini'
-                        elsif childlink_title_handle contains 'venus-e-3'
-                          assign mega_model_key = '3-0'
-                        elsif childlink_title_handle contains 'venus-e-4'
-                          assign mega_model_key = '4-0'
-                        elsif childlink_title_handle contains 'venus-e-max'
-                          assign mega_model_key = 'max'
-                        endif
-                        if childlink.title == 'Garantie & Rückgabe'
-                          assign childlink_url = '/pages/garantie-ruckgabe?view=widerrufsrecht'
-                        endif
-
-                        assign create_new_column = false
-                        if childlink.levels > 0 and forloop.index != 1
-                          assign create_new_column = true
-                        endif
-                        if childlink.levels == 0 and previous_column_type == 'full'
-                          assign create_new_column = true
-                        endif
-                      -%}
-
-                      {%- if create_new_column -%}
-                        </div><div class="megamenu__column appear-animation appear-delay-{{ animation_column }}">
-                        {%- assign animation_column = animation_column | plus: 1 -%}
-                      {%- endif -%}
-
+              {%- assign animation_column = 1 -%}
+              <div class="megamenu__nav{% if center_content %} megamenu__nav--center{% endif %}">
+                  {%- for childlink in link.links -%}
+                    {%- liquid
+                      assign childlink_url = childlink.url
+                      assign childlink_title_handle = childlink.title | handleize
+                      if childlink_title_handle contains 'venus-e-mini'
+                        assign childlink_url = '/products/venus-e-mini'
+                      endif
+                      if childlink.title == 'Garantie & Rückgabe'
+                        assign childlink_url = '/pages/garantie-ruckgabe?view=widerrufsrecht'
+                      endif
+                    -%}
+                    <div class="megamenu__column appear-animation appear-delay-{{ animation_column }}">
                       {%- if show_images and childlink.url contains '/collections/' and collections[childlink.object.handle].image != blank -%}
-                        <a href="{{ childlink.url }}" tabindex="-1" aria-hidden="true">
+                        <a href="{{ childlink_url }}" tabindex="-1" aria-hidden="true">
                           <div class="megamenu__column-image svg-mask svg-mask--{{ image_aspect_ratio }}">
                             {%- render 'image-element',
                               img: collections[childlink.object.handle].image,
@@ -204,202 +228,80 @@
                       {%- endif -%}
 
                       <div class="h5">
-                        <a
-                          href="{{ childlink_url }}"
-                          class="site-nav__dropdown-link site-nav__dropdown-link--top-level{% if mega_model_key == 'mini' %} is-active{% endif %}"
-                          {% if mega_model_key != blank %}data-mega-model="{{ mega_model_key }}" aria-controls="mega-model-{{ mega_menu_block.id }}-{{ mega_model_key }}" aria-expanded="{% if mega_model_key == 'mini' %}true{% else %}false{% endif %}"{% endif %}
-                          {% if childlink_title_handle == 'venus-e-mini' %}data-merged-product-link="venus-e-mini"{% endif %}
-                        >{{ childlink.title }}</a>
+                        <a href="{{ childlink_url }}" class="site-nav__dropdown-link site-nav__dropdown-link--top-level">
+                          {{ childlink.title | escape }}
+                        </a>
                       </div>
-
-                      {%- liquid
-                        if childlink.levels > 0
-                          assign previous_column_type = 'full'
-                        else
-                          assign previous_column_type = 'single'
-                        endif
-                      -%}
 
                       {%- for grandchildlink in childlink.links -%}
                         <div>
                           <a href="{{ grandchildlink.url }}" class="site-nav__dropdown-link">
-                            {{grandchildlink.title}}
+                            {{ grandchildlink.title | escape }}
                           </a>
                         </div>
                       {%- endfor -%}
-                    {%- endfor -%}
-                  </div>
-                </div>
-
-                {%- if mega_menu_block != nil -%}
-                  <div class="megamenu__promos megamenu__promos--after appear-animation appear-delay-2" data-dynamic-products>
-                    {%- for mega_product_index in (1..4) -%}
-                      {%- assign mega_product_key = 'mega_product_' | append: mega_product_index -%}
-                      {%- assign mega_product = mega_menu_block.settings[mega_product_key] -%}
-                      {%- if mega_product == blank -%}
-                        {%- case mega_product_index -%}
-                          {%- when 1 -%}{%- assign mega_product = all_products['venus-e-mini'] -%}
-                          {%- when 2 -%}{%- assign mega_product = all_products['venus-e-3'] -%}
-                          {%- when 3 -%}{%- assign mega_product = all_products['venus-e-4'] -%}
-                          {%- when 4 -%}{%- assign mega_product = all_products['venus-e-max'] -%}
-                        {%- endcase -%}
-                      {%- endif -%}
-                      {%- if mega_product != blank -%}
-                        {%- case mega_product_index -%}
-                          {%- when 1 -%}{%- assign mega_model_key = 'mini' -%}
-                          {%- when 2 -%}{%- assign mega_model_key = '3-0' -%}
-                          {%- when 3 -%}{%- assign mega_model_key = '4-0' -%}
-                          {%- when 4 -%}{%- assign mega_model_key = 'max' -%}
-                        {%- endcase -%}
-                        <div
-                          id="mega-model-{{ mega_menu_block.id }}-{{ mega_model_key }}"
-                          data-mega-model-panel="{{ mega_model_key }}"
-                          {% unless mega_product_index == 1 %}hidden{% endunless %}
-                        >
-                          {%- for mega_variant in mega_product.variants limit: 3 -%}
-                            {%- render 'venus-mega-menu-product-card',
-                              mega_product: mega_product,
-                              mega_variant: mega_variant,
-                              mega_quantity: forloop.index
-                            -%}
-                          {%- endfor -%}
-                        </div>
-                      {%- endif -%}
-                    {%- endfor -%}
-                  </div>
-                {%- endif -%}
-
-                {%- if mega_menu_block != nil -%}
-                  {%- if promo1_after or promo2_after -%}
-                    <div class="megamenu__promos megamenu__promos--after appear-animation appear-delay-1">
-                      {%- if promo1_after -%}
-                        {%- render 'mega-menu-promo-tile', block: mega_menu_block, promo_num: '1' -%}
-                      {%- endif -%}
-                      {%- if promo2_after -%}
-                        {%- render 'mega-menu-promo-tile', block: mega_menu_block, promo_num: '2' -%}
-                      {%- endif -%}
                     </div>
-                  {%- endif -%}
-                {%- endif -%}
-
+                    {%- assign animation_column = animation_column | plus: 1 -%}
+                  {%- endfor -%}
               </div>
+
+              {%- if mega_menu_block != nil -%}
+                {%- if promo1_after or promo2_after -%}
+                  <div class="megamenu__promos megamenu__promos--after appear-animation appear-delay-1">
+                    {%- if promo1_after -%}
+                      {%- render 'mega-menu-promo-tile', block: mega_menu_block, promo_num: '1' -%}
+                    {%- endif -%}
+                    {%- if promo2_after -%}
+                      {%- render 'mega-menu-promo-tile', block: mega_menu_block, promo_num: '2' -%}
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
             </div>
           </div>
-        {%- elsif has_dropdown -%}
-          <ul class="site-nav__dropdown text-left">
-            {%- for childlink in link.links -%}
-              {%- liquid
-                assign has_sub_dropdown = false
-                assign childlink_url = childlink.url
-                assign childlink_title_handle = childlink.title | handleize
-                if childlink_title_handle == 'venus-e-mini'
-                  assign childlink_url = '/products/venus-e-mini'
-                endif
-                if childlink.title == 'Garantie & Rückgabe'
-                  assign childlink_url = '/pages/garantie-ruckgabe?view=widerrufsrecht'
-                endif
+        </div>
+      {%- elsif has_dropdown -%}
+        <ul class="site-nav__dropdown text-left">
+          {%- for childlink in link.links -%}
+            {%- liquid
+              assign has_sub_dropdown = false
+              assign childlink_url = childlink.url
+              assign childlink_title_handle = childlink.title | handleize
+              if childlink_title_handle == 'venus-e-mini'
+                assign childlink_url = '/products/venus-e-mini'
+              endif
+              if childlink.title == 'Garantie & Rückgabe'
+                assign childlink_url = '/pages/garantie-ruckgabe?view=widerrufsrecht'
+              endif
 
-                if childlink.links != blank
-                  assign has_sub_dropdown = true
-                endif
-              -%}
+              if childlink.links != blank
+                assign has_sub_dropdown = true
+              endif
+            -%}
 
-              <li class="{% if has_sub_dropdown %} site-nav__deep-dropdown-trigger{% endif %}">
-                <a href="{{ childlink_url }}" class="site-nav__dropdown-link site-nav__dropdown-link--second-level{% if has_sub_dropdown %} site-nav__dropdown-link--has-children{% endif %}"{% if childlink_title_handle == 'venus-e-mini' %} data-merged-product-link="venus-e-mini"{% endif %}>
-                  {{ childlink.title | escape }}
-                  {%- if has_sub_dropdown -%}
-                    <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--wide icon-chevron-down" viewBox="0 0 28 16"><path d="m1.57 1.59 12.76 12.77L27.1 1.59" stroke-width="2" stroke="#000" fill="none"/></svg>
-                  {%- endif -%}
-                </a>
+            <li class="{% if has_sub_dropdown %}site-nav__deep-dropdown-trigger{% endif %}">
+              <a href="{{ childlink_url }}" class="site-nav__dropdown-link site-nav__dropdown-link--second-level{% if has_sub_dropdown %} site-nav__dropdown-link--has-children{% endif %}">
+                {{ childlink.title | escape }}
                 {%- if has_sub_dropdown -%}
-                  <ul class="site-nav__deep-dropdown">
-                    {%- for grandchildlink in childlink.links -%}
-                      <li>
-                        <a href="{{ grandchildlink.url }}" class="site-nav__dropdown-link">{{ grandchildlink.title | escape }}</a>
-                      </li>
-                    {%- endfor -%}
-                  </ul>
+                  <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--wide icon-chevron-down" viewBox="0 0 28 16"><path d="m1.57 1.59 12.76 12.77L27.1 1.59" stroke-width="2" stroke="#000" fill="none"/></svg>
                 {%- endif -%}
-              </li>
-            {%- endfor -%}
-          </ul>
-        {%- endif -%}
+              </a>
+              {%- if has_sub_dropdown -%}
+                <ul class="site-nav__deep-dropdown">
+                  {%- for grandchildlink in childlink.links -%}
+                    <li>
+                      <a href="{{ grandchildlink.url }}" class="site-nav__dropdown-link">{{ grandchildlink.title | escape }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
       {% if is_megamenu or has_dropdown %}
         </details>
       {% endif %}
     </li>
   {%- endfor -%}
 </ul>
-
-<script>
-  (() => {
-    const initializeVariantMegaMenus = () => {
-      document.querySelectorAll('[data-venus-variant-megamenu]:not([data-variant-menu-ready])').forEach((menu) => {
-        menu.dataset.variantMenuReady = 'true';
-        const menuLinks = Array.from(menu.querySelectorAll('.site-nav__dropdown-link--top-level'));
-        const modelFromLabel = (label) => {
-          const normalized = label.toLowerCase().replace(/,/g, '.').replace(/\s+/g, ' ').trim();
-          if (normalized.includes('venus e mini')) return 'mini';
-          if (/venus e(?: gen)? 3(?:\.0)?\b/.test(normalized)) return '3-0';
-          if (/venus e 4(?:\.0)?\b/.test(normalized)) return '4-0';
-          if (normalized.includes('venus e max')) return 'max';
-          return '';
-        };
-        menuLinks.forEach((link) => {
-          if (!link.dataset.megaModel) link.dataset.megaModel = modelFromLabel(link.textContent);
-        });
-        const triggers = menuLinks.filter((link) => link.dataset.megaModel);
-        const panels = Array.from(menu.querySelectorAll('[data-mega-model-panel]'));
-        const menuInner = menu.querySelector('.megamenu__inner--dynamic-products');
-        const menuDetails = menu.closest('.site-nav__details');
-        const menuSummary = menuDetails?.querySelector(':scope > summary');
-
-        const alignMenuColumns = () => {
-          if (!menuInner || !menuSummary) return;
-          const offset = Math.max(0, menuSummary.getBoundingClientRect().left - menuInner.getBoundingClientRect().left);
-          menuInner.style.setProperty('--mega-menu-nav-offset', `${Math.round(offset)}px`);
-        };
-
-        const activateModel = (model) => {
-          const matchingPanel = panels.find((panel) => panel.dataset.megaModelPanel === model);
-          if (!matchingPanel) return;
-
-          triggers.forEach((trigger) => {
-            const active = trigger.dataset.megaModel === model;
-            trigger.classList.toggle('is-active', active);
-            trigger.setAttribute('aria-expanded', active ? 'true' : 'false');
-          });
-          panels.forEach((panel) => {
-            panel.hidden = panel !== matchingPanel;
-          });
-        };
-
-        triggers.forEach((trigger) => {
-          trigger.addEventListener('mouseenter', () => activateModel(trigger.dataset.megaModel));
-          trigger.addEventListener('focus', () => activateModel(trigger.dataset.megaModel));
-          trigger.addEventListener('click', (event) => {
-            event.preventDefault();
-            activateModel(trigger.dataset.megaModel);
-          });
-        });
-
-        alignMenuColumns();
-        menuDetails?.addEventListener('toggle', () => {
-          if (menuDetails.open) {
-            requestAnimationFrame(() => requestAnimationFrame(alignMenuColumns));
-          }
-        });
-        window.addEventListener('resize', alignMenuColumns, { passive: true });
-        document.fonts?.ready.then(alignMenuColumns);
-        if ('ResizeObserver' in window && menuSummary) {
-          const alignmentObserver = new ResizeObserver(alignMenuColumns);
-          alignmentObserver.observe(menuSummary);
-          alignmentObserver.observe(menuInner);
-        }
-      });
-    };
-
-    initializeVariantMegaMenus();
-    document.addEventListener('shopify:section:load', initializeVariantMegaMenus);
-  })();
-</script>

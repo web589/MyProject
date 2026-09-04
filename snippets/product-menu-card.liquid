@@ -1,0 +1,49 @@
+{% liquid
+  assign product = block.settings.product
+  if product != blank
+    assign product_image = block.settings.image | default: product.featured_image
+    assign product_title = block.settings.product_title | default: product.title
+    assign product_link = block.settings.link | default: product.url
+    assign product_description = block.settings.description
+    if product_description == blank
+      assign product_description = product.description | strip_html | truncatewords: 18
+    endif
+  endif
+%}
+
+{%- if product != blank -%}
+  <a
+    class="mega-menu-products__card"
+    href="{{ product_link | escape }}"
+    aria-label="{{ product_title | escape }}"
+  >
+    <div class="mega-menu-products__card-media">
+      {%- if block.settings.badge != blank -%}
+        <span
+          class="mega-menu-products__badge"
+          style="--mega-menu-product-badge-color: {{ block.settings.badge_color | default: '#00c6ff' | escape }};"
+        >
+          {{ block.settings.badge | escape }}
+        </span>
+      {%- endif -%}
+      {%- if product_image != blank -%}
+        {%- render 'image-element',
+          img: product_image,
+          widths: '300, 500, 700',
+          sizeVariable: '25vw',
+          alt: product_title,
+          classes: 'mega-menu-products__card-image',
+          loading: 'lazy',
+        -%}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'mega-menu-products__card-image' }}
+      {%- endif -%}
+    </div>
+    <div class="mega-menu-products__card-content">
+      <h3 class="mega-menu-products__card-title">{{ product_title | escape }}</h3>
+      {%- if product_description != blank -%}
+        <p class="mega-menu-products__card-description">{{ product_description | escape | newline_to_br }}</p>
+      {%- endif -%}
+    </div>
+  </a>
+{%- endif -%}

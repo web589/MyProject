@@ -950,7 +950,7 @@
     </div>
   </div>
 
-  {%- form 'customer', return_to: preorder_return_to, class: 'ai-preorder-native-form' -%}
+  {%- form 'customer', return_to: preorder_return_to, class: 'ai-preorder-native-form', data-shopify-captcha: 'true' -%}
     <div
       class="ai-preorder-modal-{{ ai_gen_id }}"
       data-preorder-modal
@@ -1100,6 +1100,7 @@
         }
 
         try {
+          await this.prepareCaptcha();
           const response = await fetch(this.modalForm.action, {
             method: 'POST',
             body: new FormData(this.modalForm),
@@ -1133,6 +1134,33 @@
           }
           this.restoreScrollPosition();
         }
+      }
+
+      prepareCaptcha() {
+        const protect = window.Shopify?.captcha?.protect;
+        if (typeof protect !== 'function') return Promise.resolve();
+
+        return new Promise((resolve, reject) => {
+          let settled = false;
+          const timeoutId = window.setTimeout(() => {
+            if (settled) return;
+            settled = true;
+            reject(new Error('Die Anmeldung konnte nicht überprüft werden. Bitte versuche es erneut.'));
+          }, 15000);
+          const finish = (error) => {
+            if (settled) return;
+            settled = true;
+            window.clearTimeout(timeoutId);
+            if (error) reject(error);
+            else resolve();
+          };
+
+          try {
+            protect(this.modalForm, () => finish());
+          } catch (error) {
+            finish(error);
+          }
+        });
       }
 
       showModalSuccess() {

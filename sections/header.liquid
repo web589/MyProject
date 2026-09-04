@@ -47,6 +47,7 @@
   logo_alignment: logo_alignment
 -%}
 {%- render 'cart-drawer' -%}
+{{ 'mega-menu-products.css' | asset_url | stylesheet_tag }}
 
 <style>
   .site-nav__link,
@@ -134,139 +135,6 @@
       width: 16px;
     }
 
-    .megamenu__inner--dynamic-products {
-      box-sizing: border-box;
-      display: grid;
-      gap: 48px;
-      grid-template-columns: minmax(210px, 240px) minmax(0, 1fr);
-      padding-left: var(--mega-menu-nav-offset, 0px);
-    }
-
-    .megamenu__inner--dynamic-products .megamenu__nav {
-      display: block;
-    }
-
-    .megamenu__inner--dynamic-products .megamenu__column {
-      max-width: none;
-    }
-
-    .megamenu__inner--dynamic-products .megamenu__nav .h5 {
-      font-family: var(--typeBasePrimary), var(--typeBaseFallback);
-      font-size: {{ settings.type_navigation_size }}px;
-      font-weight: 400;
-      letter-spacing: var(--typeBaseSpacing);
-      line-height: 1.45;
-      margin-bottom: 4px;
-      text-transform: none;
-    }
-
-    .megamenu__inner--dynamic-products [data-dynamic-products] {
-      display: grid;
-      flex: none;
-      gap: 24px;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      overflow: visible;
-    }
-
-    .megamenu__inner--dynamic-products [data-mega-model-panel] {
-      display: contents;
-    }
-
-    .megamenu__inner--dynamic-products [data-mega-model-panel][hidden] {
-      display: none;
-    }
-
-    .megamenu__inner--dynamic-products [data-mega-model] {
-      border-radius: 3px;
-      transition: color 0.15s ease, background-color 0.15s ease;
-    }
-
-    .megamenu__inner--dynamic-products [data-mega-model].is-active {
-      background: rgba(0, 153, 252, 0.08);
-      color: #0099fc;
-    }
-
-    .megamenu__inner--dynamic-products .venus-megamenu-product {
-      align-content: start;
-      display: grid;
-      grid-template-rows: 160px auto;
-      min-width: 0;
-    }
-
-    .megamenu__inner--dynamic-products .venus-megamenu-product__media {
-      height: 160px;
-    }
-
-    .megamenu__inner--dynamic-products .megamenu__promo-content {
-      display: grid;
-      font-family: var(--typeBasePrimary), var(--typeBaseFallback);
-      grid-template-rows: 42px 24px auto;
-      letter-spacing: var(--typeBaseSpacing);
-      padding: 0;
-    }
-
-    .megamenu__inner--dynamic-products .venus-megamenu-product__title {
-      align-self: start;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: inherit;
-      line-height: 1.4;
-      margin-bottom: 4px;
-      text-transform: none;
-    }
-
-    .megamenu__inner--dynamic-products .venus-megamenu-product__specs {
-      align-self: start;
-      color: var(--colorTextBody);
-      font-size: 13px;
-      line-height: 1.45;
-      margin-bottom: 5px;
-      opacity: 0.7;
-    }
-
-    .megamenu__inner--dynamic-products .venus-megamenu-product__price {
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.4;
-      margin-bottom: 0;
-    }
-  }
-
-  .venus-megamenu-product__media {
-    align-items: center;
-    background: var(--colorBodyDim);
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 12px;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-  }
-
-  .venus-megamenu-product__media image-element {
-    display: block;
-    height: 100%;
-    position: static;
-    width: 100%;
-  }
-
-  .venus-megamenu-product__media .venus-megamenu-product__image,
-  .venus-megamenu-product__media svg {
-    display: block;
-    height: 100% !important;
-    object-fit: contain !important;
-    object-position: center !important;
-    position: static !important;
-    width: 100% !important;
-  }
-
-  @media only screen and (max-width: 1100px) {
-    .venus-megamenu-product__media {
-      height: clamp(120px, 35vw, 160px);
-    }
-  }
   {% if settings.type_navigation_capitalize %}
     .site-nav__link,
     .site-header--heading-style .site-nav__link,
@@ -626,45 +494,23 @@
             }
           ]
         },
-        {
-          "type": "checkbox",
-          "id": "center_content",
-          "label": "t:sections.header.blocks.mega_menu.settings.center_content.label",
-          "default": false,
-          "info": "t:sections.header.blocks.mega_menu.settings.center_content.info"
-        },
-        {
-          "type": "header",
-          "content": "Shopify products"
-        },
-        {
-          "type": "paragraph",
-          "content": "Select Mini, 3.0, 4.0 and Max in order. Hovering or clicking the matching menu item shows the first three Shopify variants. Images, variant names, prices and variant links are loaded from Shopify."
-        },
-        {
-          "type": "product",
-          "id": "mega_product_1",
-          "label": "VENUS E Mini"
-        },
-        {
-          "type": "product",
-          "id": "mega_product_2",
-          "label": "VENUS E 3.0"
-        },
-        {
-          "type": "product",
-          "id": "mega_product_3",
-          "label": "VENUS E 4.0"
-        },
-        {
-          "type": "product",
-          "id": "mega_product_4",
-          "label": "VENUS E Max"
-        },
-        {
-          "type": "header",
-          "content": "t:sections.header.blocks.mega_menu.settings.header_promotions"
-        },
+      {
+        "type": "checkbox",
+        "id": "center_content",
+        "label": "t:sections.header.blocks.mega_menu.settings.center_content.label",
+        "default": false,
+        "info": "t:sections.header.blocks.mega_menu.settings.center_content.info"
+      },
+      {
+        "type": "text",
+        "id": "mega_menu_heading",
+        "label": "Mega Menu category heading",
+        "info": "Heading shown above the left-side category navigation. Leave blank to use the top-level menu title."
+      },
+      {
+        "type": "header",
+        "content": "t:sections.header.blocks.mega_menu.settings.header_promotions"
+      },
         {
           "type": "select",
           "id": "promo_text_alignment",
@@ -834,6 +680,60 @@
             }
           ],
           "info": "t:sections.header.blocks.mega_menu.settings.promo_position.info"
+        }
+      ]
+    },
+    {
+      "type": "mega_menu_product",
+      "name": "Mega menu product",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_handle",
+          "label": "Top-level menu handle",
+          "default": "balkonkraftwerk",
+          "info": "Products are shown when this handle matches a top-level menu item, for example: balkonkraftwerk."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override",
+          "info": "Leave blank to use the selected product's featured image."
+        },
+        {
+          "type": "text",
+          "id": "product_title",
+          "label": "Product title override",
+          "info": "Leave blank to use the selected product title."
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge"
+        },
+        {
+          "type": "color",
+          "id": "badge_color",
+          "label": "Badge color",
+          "default": "#00c6ff"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description override",
+          "info": "Leave blank to use a shortened version of the selected product description."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link override",
+          "info": "Leave blank to link to the selected product."
         }
       ]
     }
