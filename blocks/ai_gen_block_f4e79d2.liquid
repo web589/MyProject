@@ -186,6 +186,15 @@
     border-radius: {{ block.settings.card_border_radius }}px;
     overflow: hidden;
     flex-shrink: 0;
+    isolation: isolate;
+    background: #111827;
+    box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 420ms ease;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.18);
   }
 
   .ai-feature-card-{{ ai_gen_id }} img {
@@ -193,6 +202,12 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    transform: scale(1.001);
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}:hover img {
+    transform: scale(1.06);
   }
 
   .ai-feature-card-placeholder-{{ ai_gen_id }} {
@@ -215,25 +230,52 @@
     position: absolute;
     left: 0;
     right: 0;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, {{ block.settings.overlay_opacity }}), transparent);
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, {{ block.settings.overlay_opacity }}) 0%,
+      rgba(0, 0, 0, {{ block.settings.overlay_opacity | times: 0.45 }}) 52%,
+      transparent 100%
+    );
     pointer-events: none;
+    opacity: 0.9;
+    transition: opacity 420ms ease;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}:hover .ai-feature-card-overlay-{{ ai_gen_id }} {
+    opacity: 1;
   }
 
   .ai-feature-card-text-{{ ai_gen_id }} {
     position: absolute;
     color: #ffffff;
     z-index: 1;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    padding-top: 24px;
+    padding-bottom: max(24px, {{ block.settings.card_1_text_bottom }}px);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}:hover .ai-feature-card-text-{{ ai_gen_id }} {
+    transform: translateY(-3px);
   }
 
   .ai-feature-card-title-{{ ai_gen_id }} {
     font-size: {{ block.settings.card_title_font_size }}px;
     font-weight: 600;
     margin: 0 0 8px;
+    line-height: 1.15;
   }
 
   .ai-feature-card-desc-{{ ai_gen_id }} {
     font-size: {{ block.settings.card_desc_font_size }}px;
     margin: 0;
+    line-height: 1.45;
   }
 
   .ai-feature-card-{{ ai_gen_id }}--1 {
@@ -247,10 +289,9 @@
   }
 
   .ai-feature-card-{{ ai_gen_id }}--1 .ai-feature-card-text-{{ ai_gen_id }} {
-    top: {{ block.settings.card_1_text_top }}px;
     left: {{ block.settings.card_1_text_left }}px;
     right: {{ block.settings.card_1_text_right }}px;
-    bottom: {{ block.settings.card_1_text_bottom }}px;
+    padding-top: {{ block.settings.card_1_text_top }}px;
     text-align: {{ block.settings.card_1_text_align }};
   }
 
@@ -265,10 +306,10 @@
   }
 
   .ai-feature-card-{{ ai_gen_id }}--2 .ai-feature-card-text-{{ ai_gen_id }} {
-    top: {{ block.settings.card_2_text_top }}px;
     left: {{ block.settings.card_2_text_left }}px;
     right: {{ block.settings.card_2_text_right }}px;
-    bottom: {{ block.settings.card_2_text_bottom }}px;
+    padding-top: {{ block.settings.card_2_text_top }}px;
+    padding-bottom: max(24px, {{ block.settings.card_2_text_bottom }}px);
     text-align: {{ block.settings.card_2_text_align }};
   }
 
@@ -283,10 +324,10 @@
   }
 
   .ai-feature-card-{{ ai_gen_id }}--3 .ai-feature-card-text-{{ ai_gen_id }} {
-    top: {{ block.settings.card_3_text_top }}px;
     left: {{ block.settings.card_3_text_left }}px;
     right: {{ block.settings.card_3_text_right }}px;
-    bottom: {{ block.settings.card_3_text_bottom }}px;
+    padding-top: {{ block.settings.card_3_text_top }}px;
+    padding-bottom: max(24px, {{ block.settings.card_3_text_bottom }}px);
     text-align: {{ block.settings.card_3_text_align }};
   }
 
@@ -301,10 +342,10 @@
   }
 
   .ai-feature-card-{{ ai_gen_id }}--4 .ai-feature-card-text-{{ ai_gen_id }} {
-    top: {{ block.settings.card_4_text_top }}px;
     left: {{ block.settings.card_4_text_left }}px;
     right: {{ block.settings.card_4_text_right }}px;
-    bottom: {{ block.settings.card_4_text_bottom }}px;
+    padding-top: {{ block.settings.card_4_text_top }}px;
+    padding-bottom: max(24px, {{ block.settings.card_4_text_bottom }}px);
     text-align: {{ block.settings.card_4_text_align }};
   }
 
@@ -319,10 +360,10 @@
   }
 
   .ai-feature-card-{{ ai_gen_id }}--5 .ai-feature-card-text-{{ ai_gen_id }} {
-    top: {{ block.settings.card_5_text_top }}px;
     left: {{ block.settings.card_5_text_left }}px;
     right: {{ block.settings.card_5_text_right }}px;
-    bottom: {{ block.settings.card_5_text_bottom }}px;
+    padding-top: {{ block.settings.card_5_text_top }}px;
+    padding-bottom: max(24px, {{ block.settings.card_5_text_bottom }}px);
     text-align: {{ block.settings.card_5_text_align }};
   }
 
@@ -337,10 +378,10 @@
   }
 
   .ai-feature-card-{{ ai_gen_id }}--6 .ai-feature-card-text-{{ ai_gen_id }} {
-    top: {{ block.settings.card_6_text_top }}px;
     left: {{ block.settings.card_6_text_left }}px;
     right: {{ block.settings.card_6_text_right }}px;
-    bottom: {{ block.settings.card_6_text_bottom }}px;
+    padding-top: {{ block.settings.card_6_text_top }}px;
+    padding-bottom: max(24px, {{ block.settings.card_6_text_bottom }}px);
     text-align: {{ block.settings.card_6_text_align }};
   }
 
@@ -355,14 +396,18 @@
   }
 
   .ai-feature-card-{{ ai_gen_id }}--7 .ai-feature-card-text-{{ ai_gen_id }} {
-    top: {{ block.settings.card_7_text_top }}px;
     left: {{ block.settings.card_7_text_left }}px;
     right: {{ block.settings.card_7_text_right }}px;
-    bottom: {{ block.settings.card_7_text_bottom }}px;
+    padding-top: {{ block.settings.card_7_text_top }}px;
+    padding-bottom: max(24px, {{ block.settings.card_7_text_bottom }}px);
     text-align: {{ block.settings.card_7_text_align }};
   }
 
   @media (max-width: 768px) {
+    .ai-feature-cards-container-{{ ai_gen_id }} {
+      width: calc(100% - 32px);
+    }
+
     .ai-feature-cards-grid-{{ ai_gen_id }} {
       flex-direction: column;
       align-items: center;
@@ -377,6 +422,39 @@
     .ai-feature-card-{{ ai_gen_id }}--7 {
       width: 100%;
       max-width: 100%;
+    }
+
+    .ai-feature-card-{{ ai_gen_id }} .ai-feature-card-text-{{ ai_gen_id }} {
+      left: 20px;
+      right: 20px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    .ai-feature-card-title-{{ ai_gen_id }} {
+      font-size: clamp(20px, 5vw, {{ block.settings.card_title_font_size }}px);
+    }
+
+    .ai-feature-card-desc-{{ ai_gen_id }} {
+      font-size: clamp(15px, 4vw, {{ block.settings.card_desc_font_size }}px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-feature-card-{{ ai_gen_id }},
+    .ai-feature-card-{{ ai_gen_id }} img,
+    .ai-feature-card-{{ ai_gen_id }} .ai-feature-card-overlay-{{ ai_gen_id }},
+    .ai-feature-card-{{ ai_gen_id }} .ai-feature-card-text-{{ ai_gen_id }} {
+      transition: none;
+    }
+
+    .ai-feature-card-{{ ai_gen_id }}:hover {
+      transform: none;
+    }
+
+    .ai-feature-card-{{ ai_gen_id }}:hover img,
+    .ai-feature-card-{{ ai_gen_id }}:hover .ai-feature-card-text-{{ ai_gen_id }} {
+      transform: none;
     }
   }
 {% endstyle %}
@@ -768,7 +846,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 0
+      "default": 40
     },
     {
       "type": "range",
@@ -778,7 +856,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 50
+      "default": 60
     },
     {
       "type": "range",
@@ -818,7 +896,7 @@
       "max": 300,
       "step": 3,
       "unit": "px",
-      "default": 0
+      "default": 24
     },
     {
       "type": "header",
@@ -889,7 +967,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 0
+      "default": 40
     },
     {
       "type": "range",
@@ -899,7 +977,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 50
+      "default": 60
     },
     {
       "type": "range",
@@ -939,7 +1017,7 @@
       "max": 300,
       "step": 3,
       "unit": "px",
-      "default": 0
+      "default": 24
     },
     {
       "type": "header",
@@ -1010,7 +1088,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 0
+      "default": 40
     },
     {
       "type": "range",
@@ -1020,7 +1098,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 50
+      "default": 60
     },
     {
       "type": "range",
@@ -1060,7 +1138,7 @@
       "max": 300,
       "step": 3,
       "unit": "px",
-      "default": 0
+      "default": 24
     },
     {
       "type": "header",
@@ -1131,7 +1209,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 0
+      "default": 40
     },
     {
       "type": "range",
@@ -1141,7 +1219,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 50
+      "default": 60
     },
     {
       "type": "range",
@@ -1181,7 +1259,7 @@
       "max": 300,
       "step": 3,
       "unit": "px",
-      "default": 0
+      "default": 24
     },
     {
       "type": "header",
@@ -1252,7 +1330,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 0
+      "default": 40
     },
     {
       "type": "range",
@@ -1262,7 +1340,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 50
+      "default": 60
     },
     {
       "type": "range",
@@ -1302,7 +1380,7 @@
       "max": 300,
       "step": 3,
       "unit": "px",
-      "default": 0
+      "default": 24
     },
     {
       "type": "header",
@@ -1373,7 +1451,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 0
+      "default": 40
     },
     {
       "type": "range",
@@ -1383,7 +1461,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 50
+      "default": 60
     },
     {
       "type": "range",
@@ -1423,7 +1501,7 @@
       "max": 300,
       "step": 3,
       "unit": "px",
-      "default": 0
+      "default": 24
     },
     {
       "type": "header",
@@ -1494,7 +1572,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 0
+      "default": 40
     },
     {
       "type": "range",
@@ -1504,7 +1582,7 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 50
+      "default": 60
     },
     {
       "type": "range",
@@ -1544,7 +1622,7 @@
       "max": 300,
       "step": 3,
       "unit": "px",
-      "default": 0
+      "default": 24
     }
   ],
   "presets": [
