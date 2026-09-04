@@ -40,7 +40,22 @@
       assign product_link = product.url | append: '?variant=' | append: card_variant.id
     endif
 
+    assign has_card_description_override = false
+    if block.settings.description_1 != blank or block.settings.description_2 != blank or block.settings.description_3 != blank
+      assign has_card_description_override = true
+    endif
+
     assign product_description = block.settings.description
+    if has_card_description_override
+      assign product_description = blank
+      if quantity == 1
+        assign product_description = block.settings.description_1
+      elsif quantity == 2
+        assign product_description = block.settings.description_2
+      elsif quantity == 3
+        assign product_description = block.settings.description_3
+      endif
+    endif
     if product_description == blank
       assign product_description = product.description | strip_html | truncatewords: 18
     endif
