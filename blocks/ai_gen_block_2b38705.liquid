@@ -1157,7 +1157,7 @@
             <span data-bundle-button-label>{{ block.settings.btn_text }}</span>
           </button>
           <button type="button" class="pdp-checkout-btn-{{ ai_gen_id }} pdp-checkout-btn-buy-{{ ai_gen_id }}" data-bundle-buy-now data-bundle-action="buy-now" data-loading-text="{{ block.settings.loading_text | escape }}">
-            <span data-bundle-button-label>{% if bundle_is_de_vat_candidate %}Lieferland und MwSt.-Status bestätigen{% else %}{{ block.settings.buy_now_text }}{% endif %}</span>
+            <span data-bundle-button-label>{{ block.settings.buy_now_text }}</span>
           </button>
         </div>
         <div class="pdp-cart-status-{{ ai_gen_id }}" data-cart-status role="status" aria-live="polite"></div>

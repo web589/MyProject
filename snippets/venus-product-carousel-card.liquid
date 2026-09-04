@@ -67,12 +67,6 @@
       endif
     endfor
   endif
-  if card_is_de_vat_candidate and primary_action == 'buy_now'
-    assign primary_label = 'Lieferland und MwSt.-Status bestätigen'
-  endif
-  if card_is_de_vat_candidate and secondary_action == 'buy_now'
-    assign secondary_label = 'Lieferland und MwSt.-Status bestätigen'
-  endif
   assign preorder_enabled = carousel_product.metafields.custom.preorder_enabled.value
   assign product_has_inventory = false
   for product_variant in carousel_product.variants
