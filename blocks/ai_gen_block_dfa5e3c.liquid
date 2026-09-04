@@ -290,7 +290,7 @@
     display: grid;
     grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
     gap: {{ block.settings.grid_gap }}px;
-    align-items: start;
+    align-items: stretch;
   }
 
   .ai-custom-blog-card-{{ ai_gen_id }} {
@@ -299,6 +299,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    height: 100%;
     border: 1px solid #dfe6ee;
     box-shadow: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;

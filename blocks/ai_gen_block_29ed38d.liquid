@@ -192,7 +192,7 @@
     width: min({{ block.settings.desktop_width_percent }}%, {{ block.settings.content_max_width }}px);
     max-width: {{ block.settings.content_max_width }}px;
     margin: 0 auto;
-    padding: 0;
+    padding: 0 20px;
     box-sizing: border-box;
   }
 
@@ -402,6 +402,7 @@
   @media screen and (max-width: 749px) {
     .ai-testimonial-container-{{ ai_gen_id }} {
       width: 100%;
+      padding: 0;
     }
 
     .ai-testimonial-carousel-{{ ai_gen_id }} {
@@ -765,7 +766,7 @@
       "max": 1600,
       "step": 100,
       "unit": "px",
-      "default": 1400
+      "default": 1600
     },
     {
       "type": "color",
