@@ -552,6 +552,18 @@
         this.resumeMarquee = () => {
           if (this.track) this.track.classList.remove('is-paused');
         };
+        this.handleCardMouseOver = (event) => {
+          const target = event.target;
+          const card = target && target.closest ? target.closest('.ai-testimonial-card-{{ ai_gen_id }}') : null;
+          if (!card || !this.carousel.contains(card)) return;
+          if (!event.relatedTarget || !card.contains(event.relatedTarget)) this.pauseMarquee();
+        };
+        this.handleCardMouseOut = (event) => {
+          const target = event.target;
+          const card = target && target.closest ? target.closest('.ai-testimonial-card-{{ ai_gen_id }}') : null;
+          if (!card || !this.carousel.contains(card)) return;
+          if (!event.relatedTarget || !card.contains(event.relatedTarget)) this.resumeMarquee();
+        };
         this.handleFocusOut = (event) => {
           if (!event.relatedTarget || !this.contains(event.relatedTarget)) this.resumeMarquee();
         };
@@ -574,8 +586,8 @@
         this.initialized = true;
         this.groups = [this.group];
         this.updateMarquee();
-        this.addEventListener('mouseenter', this.pauseMarquee);
-        this.addEventListener('mouseleave', this.resumeMarquee);
+        this.carousel.addEventListener('mouseover', this.handleCardMouseOver);
+        this.carousel.addEventListener('mouseout', this.handleCardMouseOut);
         this.addEventListener('focusin', this.pauseMarquee);
         this.addEventListener('focusout', this.handleFocusOut);
 
@@ -618,8 +630,8 @@
 
         if (this.resizeObserver) this.resizeObserver.disconnect();
         window.removeEventListener('resize', this.handleResize);
-        this.removeEventListener('mouseenter', this.pauseMarquee);
-        this.removeEventListener('mouseleave', this.resumeMarquee);
+        this.carousel.removeEventListener('mouseover', this.handleCardMouseOver);
+        this.carousel.removeEventListener('mouseout', this.handleCardMouseOut);
         this.removeEventListener('focusin', this.pauseMarquee);
         this.removeEventListener('focusout', this.handleFocusOut);
         this.groups.slice(1).forEach((group) => group.remove());
