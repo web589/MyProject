@@ -15,6 +15,11 @@
   {%- if cart.item_count > 0 -%}
     {%- liquid
       assign has_de_vat_candidate = false
+      assign selected_delivery_country = cart.attributes['Lieferland ISO'] | default: localization.country.iso_code
+      unless selected_delivery_country == 'DE' or selected_delivery_country == 'NL' or selected_delivery_country == 'BE'
+        assign selected_delivery_country = 'DE'
+      endunless
+      assign selected_delivery_postcode = cart.attributes['Lieferland PLZ']
       for item in cart.items
         assign item_de_vat_eligible = item.product.metafields.custom.de_zero_vat_eligible.value
         if item_de_vat_eligible == true or item.product.tags contains 'DE-0-VAT-PV' or item.product.tags contains 'DE 0% MwSt. PV' or item.variant.metafields.custom.de_zero_vat_variant.value != blank or item.variant.metafields.custom.de_standard_vat_variant.value != blank
@@ -58,6 +63,17 @@
             <div data-subtotal>{{ cart.total_price | money }}</div>
           </div>
 
+          <div class="cart__item-sub cart__item-row">
+            <div>Versandkosten</div>
+            <div data-cart-summary-shipping>Wird berechnet …</div>
+          </div>
+
+          {%- render 'cart-shipping-estimator',
+            selected_country: selected_delivery_country,
+            selected_postcode: selected_delivery_postcode,
+            localization_form_id: 'CartPageLocalizationForm'
+          -%}
+
           {% if settings.cart_terms_conditions_enable %}
             <div class="cart__item-row cart__terms">
               <input type="checkbox" id="CartTerms" class="cart__terms-checkbox">
@@ -96,6 +112,10 @@
         </div>
       </div>
     </form>
+
+    {%- form 'localization', id: 'CartPageLocalizationForm', class: 'visually-hidden', data-cart-localization-form: '' -%}
+      <input type="hidden" name="country_code" value="{{ selected_delivery_country }}" data-cart-localization-country>
+    {%- endform -%}
   {%- endif -%}
 </div>
 

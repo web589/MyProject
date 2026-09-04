@@ -982,6 +982,7 @@
           this.handlePostcodeToggle = this.handlePostcodeToggle.bind(this);
           this.handleVatChange = this.handleVatChange.bind(this);
           this.handleCartChanged = this.handleCartChanged.bind(this);
+          this.handleExternalContextChange = this.handleExternalContextChange.bind(this);
           this.handleCheckout = this.handleCheckout.bind(this);
 
           this.countryButtons.forEach(button => button.addEventListener('click', this.handleCountryClick));
@@ -993,6 +994,7 @@
           this.vatConfirm.addEventListener('change', this.handleVatChange);
           document.addEventListener('cart:updated', this.handleCartChanged);
           document.addEventListener('ajaxProduct:added', this.handleCartChanged);
+          document.addEventListener('cart:delivery-context-updated', this.handleExternalContextChange);
           this.form.addEventListener('submit', this.handleCheckout, true);
           if (this.productsContainer) {
             this.productsObserver = new MutationObserver(this.handleCartChanged);
@@ -1015,6 +1017,7 @@
           this.vatConfirm && this.vatConfirm.removeEventListener('change', this.handleVatChange);
           document.removeEventListener('cart:updated', this.handleCartChanged);
           document.removeEventListener('ajaxProduct:added', this.handleCartChanged);
+          document.removeEventListener('cart:delivery-context-updated', this.handleExternalContextChange);
           this.form && this.form.removeEventListener('submit', this.handleCheckout, true);
           this.productsObserver && this.productsObserver.disconnect();
           if (this.shippingInputTimer) window.clearTimeout(this.shippingInputTimer);
@@ -1051,6 +1054,11 @@
 
         handleCartChanged() {
           window.setTimeout(() => this.refreshForCartChange(), 450);
+        }
+
+        handleExternalContextChange(event) {
+          if (event.detail && event.detail.source === this) return;
+          this.loadCartContext();
         }
 
         refreshForCartChange() {
@@ -1258,6 +1266,7 @@
             const cart = await response.json();
             if (!response.ok) throw new Error(cart.description || cart.message || 'Auswahl konnte nicht gespeichert werden.');
             this.cartCurrency = cart.currency || this.cartCurrency;
+            document.dispatchEvent(new CustomEvent('cart:delivery-context-updated', { detail: { source: this } }));
             return cart;
           });
 
@@ -1400,15 +1409,6 @@
           }
         }
 
-        buildShippingQuery() {
-          const params = new URLSearchParams();
-          params.set('shipping_address[country]', this.shippingCountryNames[this.selectedCountry] || this.selectedCountry);
-          const postcode = this.postcodeInput.value.trim();
-          if (postcode) params.set('shipping_address[zip]', postcode);
-          params.set('shipping_address[province]', '');
-          return params.toString();
-        }
-
         async loadShippingRates() {
           const requestId = ++this.shippingRequestId;
           if (!this.drawer.querySelector('[data-products] .cart__item')) {
@@ -1420,62 +1420,24 @@
           this.setShippingMessage('Shopify Versandkosten werden geladen …', false);
           this.setShippingSummary('Wird berechnet …', true);
           this.postcodeToggle.hidden = true;
-          const query = this.buildShippingQuery();
 
           try {
-            const prepareResponse = await fetch(`${this.rootUrl}cart/prepare_shipping_rates.json?${query}`, {
-              method: 'POST',
-              credentials: 'same-origin',
-              cache: 'no-store',
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-              }
+            const result = await this.getShippingRates({
+              rootUrl: this.rootUrl,
+              countryCode: this.selectedCountry,
+              postcode: this.postcodeInput.value,
+              currency: this.cartCurrency
             });
-            if (!prepareResponse.ok) {
-              const prepareError = await this.readJsonSafely(prepareResponse);
-              const error = new Error(this.shippingErrorMessage(prepareError));
-              error.needsPostcode = this.shippingNeedsPostcode(prepareError);
-              throw error;
-            }
-
-            let shippingData = null;
-            for (let attempt = 0; attempt < 8; attempt += 1) {
-              await new Promise(resolve => window.setTimeout(resolve, 350 + attempt * 120));
-              if (requestId !== this.shippingRequestId) return;
-              const ratesResponse = await fetch(`${this.rootUrl}cart/async_shipping_rates.json?${query}`, {
-                credentials: 'same-origin',
-                cache: 'no-store',
-                headers: {
-                  Accept: 'application/json',
-                  'X-Requested-With': 'XMLHttpRequest'
-                }
-              });
-              if (!ratesResponse.ok) {
-                const ratesError = await this.readJsonSafely(ratesResponse);
-                const error = new Error(this.shippingErrorMessage(ratesError));
-                error.needsPostcode = this.shippingNeedsPostcode(ratesError);
-                throw error;
-              }
-              shippingData = await this.readJsonSafely(ratesResponse);
-              if (shippingData && Array.isArray(shippingData.shipping_rates)) break;
-            }
-
             if (requestId !== this.shippingRequestId) return;
-            const rates = shippingData && Array.isArray(shippingData.shipping_rates) ? shippingData.shipping_rates : null;
-            if (!rates) throw new Error('Die Versandkostenberechnung dauert zu lange. Bitte erneut versuchen.');
-            if (!rates.length) {
-              throw new Error('Für dieses Lieferland ist aktuell keine Versandrate verfügbar.');
-            }
 
-            rates.sort((a, b) => Number(a.price) - Number(b.price));
-            const cheapest = rates[0];
-            const formattedPrice = this.formatShippingPrice(cheapest.price, cheapest.currency || this.cartCurrency);
-            const extraRates = rates.length > 1 ? ` · ${rates.length - 1} weitere Rate${rates.length > 2 ? 'n' : ''} im Checkout` : '';
+            const cheapest = result.rates[0];
+            const formattedPrice = result.formattedPrice;
+            const extraRates = result.rates.length > 1
+              ? ` · ${result.rates.length - 1} weitere Rate${result.rates.length > 2 ? 'n' : ''} im Checkout`
+              : '';
             const rateName = cheapest.presentment_name || cheapest.name || cheapest.code || 'Versand';
             this.setShippingMessage(`${rateName}: ${formattedPrice}${extraRates}`, false);
-            this.setShippingSummary(`${rates.length > 1 ? 'ab ' : ''}${formattedPrice}`, false);
+            this.setShippingSummary(`${result.rates.length > 1 ? 'ab ' : ''}${formattedPrice}`, false);
             this.postcodeRow.hidden = true;
             this.postcodeToggle.hidden = true;
           } catch (error) {
@@ -1487,35 +1449,24 @@
             } else {
               this.setShippingMessage(error.message || 'Versandkosten konnten nicht geladen werden.', true);
             }
-            this.setShippingSummary('Im Checkout', false);
+            this.setShippingSummary('Im Checkout berechnet', false);
           }
         }
 
-        async readJsonSafely(response) {
-          const text = await response.text();
-          if (!text) return null;
-          try { return JSON.parse(text); } catch (error) { return null; }
-        }
-
-        shippingErrorMessage(payload) {
-          const message = payload && (payload.description || payload.message || payload.error);
-          if (Array.isArray(message) && message.length) return message.join(' ');
-          if (typeof message === 'string' && message.trim()) return message;
-          if (payload && payload.zip) return 'Bitte eine gültige Postleitzahl eingeben.';
-          return 'Versandkosten konnten nicht geladen werden. Bitte Postleitzahl prüfen.';
-        }
-
-        shippingNeedsPostcode(payload) {
-          if (payload && (payload.zip || payload.postal_code)) return true;
-          const raw = JSON.stringify(payload || '').toLowerCase();
-          return /zip|postal|postleitzahl|plz/.test(raw);
-        }
-
-        formatShippingPrice(price, currency) {
-          const amount = Number(price);
-          if (!Number.isFinite(amount)) return String(price || '');
-          if (amount === 0) return 'Kostenlos';
-          return amount.toLocaleString('de-DE', { style: 'currency', currency: currency || 'EUR' });
+        async getShippingRates(options) {
+          if (!window.CartShippingRates) {
+            await new Promise(resolve => {
+              const onReady = () => {
+                window.clearTimeout(timeout);
+                window.removeEventListener('cart:shipping-rates-ready', onReady);
+                resolve();
+              };
+              const timeout = window.setTimeout(onReady, 2000);
+              window.addEventListener('cart:shipping-rates-ready', onReady);
+            });
+          }
+          if (!window.CartShippingRates) throw new Error('Versandkosten konnten nicht geladen werden.');
+          return window.CartShippingRates.getRates(options);
         }
 
         setShippingMessage(message, isError) {

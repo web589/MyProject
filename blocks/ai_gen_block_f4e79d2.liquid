@@ -197,6 +197,11 @@
     box-shadow: 0 16px 34px rgba(15, 23, 42, 0.18);
   }
 
+  .ai-feature-card-{{ ai_gen_id }}:focus-visible {
+    outline: 3px solid rgba(0, 198, 255, 0.9);
+    outline-offset: 4px;
+  }
+
   .ai-feature-card-{{ ai_gen_id }} img {
     width: 100%;
     height: 100%;
@@ -268,8 +273,28 @@
   .ai-feature-card-title-{{ ai_gen_id }} {
     font-size: {{ block.settings.card_title_font_size }}px;
     font-weight: 600;
-    margin: 0 0 8px;
+    margin: 0;
     line-height: 1.15;
+  }
+
+  .ai-feature-card-desc-wrap-{{ ai_gen_id }} {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(18px);
+    margin-top: 0;
+    transition: max-height 350ms ease, margin-top 350ms ease, opacity 250ms ease, transform 350ms ease, visibility 0s linear 350ms;
+  }
+
+  .ai-feature-card-{{ ai_gen_id }}:hover .ai-feature-card-desc-wrap-{{ ai_gen_id }},
+  .ai-feature-card-{{ ai_gen_id }}:focus-visible .ai-feature-card-desc-wrap-{{ ai_gen_id }} {
+    max-height: 300px;
+    margin-top: 8px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
   }
 
   .ai-feature-card-desc-{{ ai_gen_id }} {
@@ -438,13 +463,23 @@
     .ai-feature-card-desc-{{ ai_gen_id }} {
       font-size: clamp(15px, 4vw, {{ block.settings.card_desc_font_size }}px);
     }
+
+    .ai-feature-card-desc-wrap-{{ ai_gen_id }} {
+      max-height: 300px;
+      margin-top: 8px;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .ai-feature-card-{{ ai_gen_id }},
     .ai-feature-card-{{ ai_gen_id }} img,
     .ai-feature-card-{{ ai_gen_id }} .ai-feature-card-overlay-{{ ai_gen_id }},
-    .ai-feature-card-{{ ai_gen_id }} .ai-feature-card-text-{{ ai_gen_id }} {
+    .ai-feature-card-{{ ai_gen_id }} .ai-feature-card-text-{{ ai_gen_id }},
+    .ai-feature-card-desc-wrap-{{ ai_gen_id }} {
       transition: none;
     }
 
@@ -515,12 +550,12 @@
             assign feature_description = block.settings[description_key]
           %}
           {% if feature_image != blank or feature_title != blank or feature_description != blank %}
-            <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}">
+            <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}"{% if feature_description != blank %} tabindex="0"{% endif %}>
               {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 50vw', alt: feature_title }}{% else %}<div class="ai-feature-card-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>{% endif %}
               <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
               <div class="ai-feature-card-text-{{ ai_gen_id }}">
                 {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
-                {% if feature_description != blank %}<div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div>{% endif %}
+                {% if feature_description != blank %}<div class="ai-feature-card-desc-wrap-{{ ai_gen_id }}"><div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div></div>{% endif %}
               </div>
             </div>
           {% endif %}
@@ -533,12 +568,12 @@
         assign feature_description = pdp_feature.description.value
       %}
       {% if feature_image != blank or feature_title != blank or feature_description != blank %}
-      <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ forloop.index }}">
+      <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ forloop.index }}"{% if feature_description != blank %} tabindex="0"{% endif %}>
         {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 50vw', alt: feature_title }}{% endif %}
         <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
         <div class="ai-feature-card-text-{{ ai_gen_id }}">
           {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
-          {% if feature_description != blank %}<div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div>{% endif %}
+          {% if feature_description != blank %}<div class="ai-feature-card-desc-wrap-{{ ai_gen_id }}"><div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div></div>{% endif %}
         </div>
       </div>
       {% endif %}
@@ -558,12 +593,12 @@
             assign feature_description = block.settings[description_key]
           %}
           {% if feature_image != blank or feature_title != blank or feature_description != blank %}
-            <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}">
+            <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}"{% if feature_description != blank %} tabindex="0"{% endif %}>
               {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 33vw', alt: feature_title }}{% else %}<div class="ai-feature-card-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>{% endif %}
               <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
               <div class="ai-feature-card-text-{{ ai_gen_id }}">
                 {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
-                {% if feature_description != blank %}<div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div>{% endif %}
+                {% if feature_description != blank %}<div class="ai-feature-card-desc-wrap-{{ ai_gen_id }}"><div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div></div>{% endif %}
               </div>
             </div>
           {% endif %}
@@ -577,12 +612,12 @@
           assign feature_index = forloop.index | plus: 4
         %}
         {% if feature_image != blank or feature_title != blank or feature_description != blank %}
-          <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}">
+          <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}"{% if feature_description != blank %} tabindex="0"{% endif %}>
             {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 33vw', alt: feature_title }}{% endif %}
             <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
             <div class="ai-feature-card-text-{{ ai_gen_id }}">
               {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
-              {% if feature_description != blank %}<div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div>{% endif %}
+              {% if feature_description != blank %}<div class="ai-feature-card-desc-wrap-{{ ai_gen_id }}"><div class="ai-feature-card-desc-{{ ai_gen_id }}">{{ feature_description | escape }}</div></div>{% endif %}
             </div>
           </div>
         {% endif %}
