@@ -178,7 +178,7 @@
     }
 
     #CartDrawer .cart-drawer-benefits li::before {
-      content: '鉁?;
+      content: '✓';
       margin-right: 5px;
     }
 
@@ -668,7 +668,7 @@
             assign selected_delivery_postcode = cart.attributes['Lieferland PLZ']
             assign selected_vat_status = cart.attributes['DE 0% MwSt. Status']
             assign selected_vat_confirmed = false
-            if cart.attributes['DE 0% MwSt. Best盲tigung'] == 'Best盲tigt'
+            if cart.attributes['DE 0% MwSt. Bestätigung'] == 'Bestätigt'
               assign selected_vat_confirmed = true
             endif
           %}
@@ -677,7 +677,7 @@
             data-fallback-handles="{{ settings.cart_recommendation_product_1.handle }},{{ settings.cart_recommendation_product_2.handle }}"
           >
             <div class="cart-drawer-recommendations" data-cart-recommendations hidden>
-              <p class="cart-drawer-recommendations-title">F眉r dich empfohlen</p>
+              <p class="cart-drawer-recommendations-title">Für dich empfohlen</p>
               <div class="cart-drawer-recommendations-grid" data-cart-recommendations-grid></div>
             </div>
 
@@ -691,12 +691,12 @@
               data-localization-form-id="CartDrawerLocalizationForm"
             >
               <p class="cart-delivery-heading">Land / Region</p>
-              <div class="cart-country-options" role="group" aria-label="Lieferland w盲hlen">
+              <div class="cart-country-options" role="group" aria-label="Lieferland wählen">
                 <button type="button" class="cart-country-option" data-delivery-country="DE" aria-pressed="{% if selected_delivery_country == 'DE' %}true{% else %}false{% endif %}">Deutschland</button>
                 <button type="button" class="cart-country-option" data-delivery-country="NL" aria-pressed="{% if selected_delivery_country == 'NL' %}true{% else %}false{% endif %}">Niederlande</button>
                 <button type="button" class="cart-country-option" data-delivery-country="BE" aria-pressed="{% if selected_delivery_country == 'BE' %}true{% else %}false{% endif %}">Belgien</button>
               </div>
-              <p class="cart-country-note">0 % MwSt. ist ausschlie脽lich f眉r berechtigte Lieferungen nach Deutschland verf眉gbar.</p>
+              <p class="cart-country-note">0 % MwSt. ist ausschließlich für berechtigte Lieferungen nach Deutschland verfügbar.</p>
 
               <div class="cart-postcode-row" data-postcode-row hidden>
                 <label class="visually-hidden" for="CartDeliveryPostcode">Postleitzahl</label>
@@ -706,32 +706,32 @@
 
               <div class="cart-shipping-estimate" data-shipping-estimate role="status" aria-live="polite">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h11v10H3V6Zm11 4h3l4 4v2h-7v-6ZM7 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-                <span data-shipping-message>Shopify Versandkosten werden geladen 鈥?/span>
-                <button type="button" class="cart-postcode-toggle" data-postcode-toggle hidden>PLZ f眉r genaue Berechnung eingeben</button>
+                <span data-shipping-message>Shopify Versandkosten werden geladen …</span>
+                <button type="button" class="cart-postcode-toggle" data-postcode-toggle hidden>PLZ für genaue Berechnung eingeben</button>
               </div>
 
               <section class="cart-vat-qualification" data-vat-qualification hidden>
-                <h3 class="cart-vat-title">MwSt.-Befreiung (0 %) best盲tigen</h3>
-                <p class="cart-vat-copy">Der Nullsteuersatz nach 搂 12 Abs. 3 UStG gilt nur, wenn die gesetzlichen Voraussetzungen tats盲chlich erf眉llt sind.</p>
+                <h3 class="cart-vat-title">MwSt.-Befreiung (0 %) bestätigen</h3>
+                <p class="cart-vat-copy">Der Nullsteuersatz nach § 12 Abs. 3 UStG gilt nur, wenn die gesetzlichen Voraussetzungen tatsächlich erfüllt sind.</p>
                 <details class="cart-vat-conditions">
                   <summary>Voraussetzungen anzeigen</summary>
                   <ul>
-                    <li>Lieferung und beg眉nstigte Verwendung erfolgen in Deutschland.</li>
-                    <li>Du bist Betreiber der Photovoltaikanlage; sie wird auf oder in der N盲he einer Privatwohnung oder eines anderen beg眉nstigten Geb盲udes installiert. Bei h枚chstens 30 kWp laut Marktstammdatenregister gilt die gesetzliche Vereinfachungsregel.</li>
-                    <li>Ein Stromspeicher wird f眉r eine Photovoltaikanlage verwendet, die diese Voraussetzungen erf眉llt.</li>
+                    <li>Lieferung und begünstigte Verwendung erfolgen in Deutschland.</li>
+                    <li>Du bist Betreiber der Photovoltaikanlage; sie wird auf oder in der Nähe einer Privatwohnung oder eines anderen begünstigten Gebäudes installiert. Bei höchstens 30 kWp laut Marktstammdatenregister gilt die gesetzliche Vereinfachungsregel.</li>
+                    <li>Ein Stromspeicher wird für eine Photovoltaikanlage verwendet, die diese Voraussetzungen erfüllt.</li>
                   </ul>
                 </details>
                 <label class="cart-vat-choice">
-                  <input type="radio" name="cart-vat-choice" value="eligible" data-vat-choice{% if selected_vat_status == 'Voraussetzungen erf眉llt' %} checked{% endif %}>
+                  <input type="radio" name="cart-vat-choice" value="eligible" data-vat-choice{% if selected_vat_status == 'Voraussetzungen erfüllt' %} checked{% endif %}>
                   <span>Ja, 0 % MwSt. (Privat-PV)</span>
                 </label>
                 <label class="cart-vat-choice">
-                  <input type="radio" name="cart-vat-choice" value="regular" data-vat-choice{% if selected_vat_status == 'Voraussetzungen nicht erf眉llt' %} checked{% endif %}>
-                  <span>Nein, regul盲rer MwSt.-Satz</span>
+                  <input type="radio" name="cart-vat-choice" value="regular" data-vat-choice{% if selected_vat_status == 'Voraussetzungen nicht erfüllt' %} checked{% endif %}>
+                  <span>Nein, regulärer MwSt.-Satz</span>
                 </label>
-                <label class="cart-vat-confirm" data-vat-confirm-wrap{% unless selected_vat_status == 'Voraussetzungen erf眉llt' %} hidden{% endunless %}>
+                <label class="cart-vat-confirm" data-vat-confirm-wrap{% unless selected_vat_status == 'Voraussetzungen erfüllt' %} hidden{% endunless %}>
                   <input type="checkbox" data-vat-confirm{% if selected_vat_confirmed %} checked{% endif %}>
-                  <span>Ich best盲tige wahrheitsgem盲脽, dass die oben genannten Voraussetzungen f眉r den Nullsteuersatz erf眉llt sind und ich die Ware entsprechend verwenden werde.</span>
+                  <span>Ich bestätige wahrheitsgemäß, dass die oben genannten Voraussetzungen für den Nullsteuersatz erfüllt sind und ich die Ware entsprechend verwenden werde.</span>
                 </label>
               </section>
 
@@ -739,16 +739,16 @@
               <input type="hidden" name="attributes[Lieferland ISO]" value="{{ selected_delivery_country }}" data-delivery-country-code>
               <input type="hidden" name="attributes[Lieferland PLZ]" value="{{ selected_delivery_postcode | escape }}" data-delivery-postcode-attribute>
               <input type="hidden" name="attributes[DE 0% MwSt. Status]" value="{{ selected_vat_status | escape }}" data-vat-status-attribute>
-              <input type="hidden" name="attributes[DE 0% MwSt. Best盲tigung]" value="{% if selected_vat_confirmed %}Best盲tigt{% endif %}" data-vat-confirm-attribute>
+              <input type="hidden" name="attributes[DE 0% MwSt. Bestätigung]" value="{% if selected_vat_confirmed %}Bestätigt{% endif %}" data-vat-confirm-attribute>
               <input type="hidden" name="attributes[DE 0% MwSt. Lieferland]" value="{% if selected_delivery_country == 'DE' %}Deutschland{% endif %}" data-vat-country-attribute>
-              <input type="hidden" name="attributes[DE 0% MwSt. Erkl盲rungsversion]" value="{% if selected_vat_confirmed %}DE-UStG-12-3-v1{% endif %}">
+              <input type="hidden" name="attributes[DE 0% MwSt. Erklärungsversion]" value="{% if selected_vat_confirmed %}DE-UStG-12-3-v1{% endif %}">
               <p class="cart-delivery-status" data-delivery-status role="alert"></p>
             </cart-delivery-context>
 
             <ul class="cart-drawer-benefits" aria-label="Einkaufsvorteile">
               <li>30 Tage Preisgarantie</li>
               <li>Sicherer Versand</li>
-              <li>Kostenlose R眉ckgabe</li>
+              <li>Kostenlose Rückgabe</li>
             </ul>
 
             <div class="cart-drawer-discount">
@@ -762,11 +762,11 @@
           <div class="cart-drawer-summary" data-cart-summary>
             <div class="cart-drawer-summary-row">
               <span>Zwischensumme</span>
-              <span class="cart-drawer-summary-value" data-cart-summary-subtotal>{{ cart.original_total_price | money_without_currency }} 鈧?/span>
+              <span class="cart-drawer-summary-value" data-cart-summary-subtotal>{{ cart.original_total_price | money_without_currency }} €</span>
             </div>
             <div class="cart-drawer-summary-row">
               <span>Versandkosten</span>
-              <span class="cart-drawer-summary-value cart-drawer-summary-shipping is-loading" data-cart-summary-shipping>Wird berechnet 鈥?/span>
+              <span class="cart-drawer-summary-value cart-drawer-summary-shipping is-loading" data-cart-summary-shipping>Wird berechnet …</span>
             </div>
             <div class="cart-drawer-summary-row">
               <span>MwSt.</span>
@@ -774,14 +774,14 @@
             </div>
             <div class="cart-drawer-summary-row">
               <span>Rabatt</span>
-              <span class="cart-drawer-summary-value" data-cart-summary-discount>鈭抺{ cart.total_discount | money_without_currency }} 鈧?/span>
+              <span class="cart-drawer-summary-value" data-cart-summary-discount>−{{ cart.total_discount | money_without_currency }} €</span>
             </div>
             <div class="cart-drawer-summary-divider" aria-hidden="true"></div>
             <div class="cart-drawer-summary-row cart-drawer-summary-total">
               <span>Warenkorb gesamt</span>
-              <span class="cart-drawer-summary-value" data-subtotal>{{ cart.total_price | money_without_currency }} 鈧?/span>
+              <span class="cart-drawer-summary-value" data-subtotal>{{ cart.total_price | money_without_currency }} €</span>
             </div>
-            <p class="cart-drawer-summary-note">Versand und MwSt. werden anhand der Lieferadresse im Shopify Checkout abschlie脽end berechnet.</p>
+            <p class="cart-drawer-summary-note">Versand und MwSt. werden anhand der Lieferadresse im Shopify Checkout abschließend berechnet.</p>
           </div>
 
           {% if settings.cart_terms_conditions_enable %}
@@ -833,7 +833,7 @@
             const contentType = response.headers && response.headers.get('content-type') || '';
             const isHtml = /html/i.test(contentType) || /^\s*</.test(text || '');
             const message = isHtml
-              ? 'Die Shopify-Warenkorbverbindung wird gerade gepr眉ft. Bitte lade die Seite neu und versuche es erneut.'
+              ? 'Die Shopify-Warenkorbverbindung wird gerade geprüft. Bitte lade die Seite neu und versuche es erneut.'
               : (fallbackMessage || 'Die Warenkorbanfrage konnte nicht verarbeitet werden. Bitte lade die Seite neu und versuche es erneut.');
             const responseError = new Error(message);
             responseError.description = message;
@@ -848,7 +848,7 @@
           return JSON.parse(text);
         } catch (error) {
           const message = /^\s*</.test(String(text || ''))
-            ? 'Die Shopify-Warenkorbverbindung wird gerade gepr眉ft. Bitte lade die Seite neu und versuche es erneut.'
+            ? 'Die Shopify-Warenkorbverbindung wird gerade geprüft. Bitte lade die Seite neu und versuche es erneut.'
             : (fallbackMessage || 'Die Warenkorbanfrage konnte nicht verarbeitet werden. Bitte lade die Seite neu und versuche es erneut.');
           const responseError = new Error(message);
           responseError.description = message;
@@ -919,8 +919,8 @@
         try {
           const root = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
           const response = await fetch(`${root}cart.js`, { headers: { Accept: 'application/json' } });
-          const cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorb konnte nicht gepr眉ft werden.');
-          if (!response.ok) throw new Error(cart.description || cart.message || 'Der Warenkorb konnte nicht gepr眉ft werden.');
+          const cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorb konnte nicht geprüft werden.');
+          if (!response.ok) throw new Error(cart.description || cart.message || 'Der Warenkorb konnte nicht geprüft werden.');
 
           const limits = new Map();
           drawer.querySelectorAll('[data-venus-shared-variant-id]').forEach(item => {
@@ -929,7 +929,7 @@
             if (!variantId || !Number.isFinite(limit)) return;
             limits.set(variantId, {
               limit: Math.max(0, limit),
-              message: item.dataset.venusInventoryMessage || 'Nicht gen眉gend gemeinsamer Lagerbestand verf眉gbar. Bitte reduziere die gew盲hlte Menge.'
+              message: item.dataset.venusInventoryMessage || 'Nicht genügend gemeinsamer Lagerbestand verfügbar. Bitte reduziere die gewählte Menge.'
             });
           });
 
@@ -953,7 +953,7 @@
           submitter.disabled = false;
           form.requestSubmit(submitter);
         } catch (error) {
-          inventoryStatus.textContent = error.message || 'Der Warenkorb konnte nicht gepr眉ft werden.';
+          inventoryStatus.textContent = error.message || 'Der Warenkorb konnte nicht geprüft werden.';
           inventoryStatus.hidden = false;
         } finally {
           form.dataset.inventoryChecking = 'false';
@@ -1074,17 +1074,17 @@
             if (this.selectedCountry !== this.marketCountry) this.syncLocalization(this.selectedCountry);
             this.refreshForCartChange();
           } catch (error) {
-            this.setStatus('Der Warenkorbkontext konnte nicht vollst盲ndig geladen werden.');
+            this.setStatus('Der Warenkorbkontext konnte nicht vollständig geladen werden.');
           }
         }
 
         applySavedVatState(attributes) {
           const status = attributes['DE 0% MwSt. Status'] || '';
           this.vatChoices.forEach(input => {
-            input.checked = (input.value === 'eligible' && status === 'Voraussetzungen erf眉llt')
-              || (input.value === 'regular' && status === 'Voraussetzungen nicht erf眉llt');
+            input.checked = (input.value === 'eligible' && status === 'Voraussetzungen erfüllt')
+              || (input.value === 'regular' && status === 'Voraussetzungen nicht erfüllt');
           });
-          this.vatConfirm.checked = attributes['DE 0% MwSt. Best盲tigung'] === 'Best盲tigt';
+          this.vatConfirm.checked = attributes['DE 0% MwSt. Bestätigung'] === 'Bestätigt';
         }
 
         handleCartChanged() {
@@ -1250,13 +1250,13 @@
           if (!showQualification) {
             this.taxSummary.textContent = 'Im Checkout berechnet';
           } else if (choice === 'eligible' && this.vatConfirm.checked && !this.hasVatSwitchConfiguration) {
-            this.taxSummary.textContent = '0-%-Komponente fehlt 路 Checkout gesperrt';
+            this.taxSummary.textContent = '0-%-Komponente fehlt · Checkout gesperrt';
           } else if (choice === 'eligible' && this.vatConfirm.checked && this.allEligibleItemsUseMode('zero')) {
-            this.taxSummary.textContent = '0-%-Komponente aktiv 路 Checkout pr眉ft Lieferadresse';
+            this.taxSummary.textContent = '0-%-Komponente aktiv · Checkout prüft Lieferadresse';
           } else if (choice === 'eligible' && this.vatConfirm.checked) {
-            this.taxSummary.textContent = '0-%-Komponente wird vorbereitet 鈥?;
+            this.taxSummary.textContent = '0-%-Komponente wird vorbereitet …';
           } else if (choice === 'regular') {
-            this.taxSummary.textContent = 'Regul盲r 路 im Checkout berechnet';
+            this.taxSummary.textContent = 'Regulär · im Checkout berechnet';
           } else {
             this.taxSummary.textContent = 'Auswahl erforderlich';
           }
@@ -1268,11 +1268,11 @@
           const showQualification = this.shouldShowVatQualification();
           const choice = showQualification ? this.getVatChoice() : '';
           const vatStatus = choice === 'eligible'
-            ? 'Voraussetzungen erf眉llt'
+            ? 'Voraussetzungen erfüllt'
             : choice === 'regular'
-              ? 'Voraussetzungen nicht erf眉llt'
+              ? 'Voraussetzungen nicht erfüllt'
               : '';
-          const vatConfirmed = choice === 'eligible' && this.vatConfirm.checked ? 'Best盲tigt' : '';
+          const vatConfirmed = choice === 'eligible' && this.vatConfirm.checked ? 'Bestätigt' : '';
           const vatCountry = showQualification && choice ? 'Deutschland' : '';
 
           this.vatStatusAttribute.value = vatStatus;
@@ -1284,9 +1284,9 @@
             'Lieferland ISO': this.selectedCountry,
             'Lieferland PLZ': this.postcodeInput.value.trim(),
             'DE 0% MwSt. Status': vatStatus,
-            'DE 0% MwSt. Best盲tigung': vatConfirmed,
+            'DE 0% MwSt. Bestätigung': vatConfirmed,
             'DE 0% MwSt. Lieferland': vatCountry,
-            'DE 0% MwSt. Erkl盲rungsversion': vatConfirmed ? 'DE-UStG-12-3-v1' : ''
+            'DE 0% MwSt. Erklärungsversion': vatConfirmed ? 'DE-UStG-12-3-v1' : ''
           };
         }
 
@@ -1340,7 +1340,7 @@
             return !targetVariantId;
           });
           if (missingMapping) {
-            throw new Error('Die steuerliche Produktzuordnung ist noch nicht eingerichtet. Bitte 0-%- und Standard-Komponenten in den Varianten-Metafeldern verkn眉pfen.');
+            throw new Error('Die steuerliche Produktzuordnung ist noch nicht eingerichtet. Bitte 0-%- und Standard-Komponenten in den Varianten-Metafeldern verknüpfen.');
           }
 
           this.isSyncingVatMerchandise = true;
@@ -1374,7 +1374,7 @@
               });
               removals[line.key] = 0;
             });
-            if (missingLine) throw new Error('Der Warenkorb wurde ge盲ndert. Bitte pr眉fe die MwSt.-Auswahl erneut.');
+            if (missingLine) throw new Error('Der Warenkorb wurde geändert. Bitte prüfe die MwSt.-Auswahl erneut.');
             if (!additions.length) return;
 
             const addResponse = await fetch(`${this.rootUrl}cart/add.js`, {
@@ -1383,8 +1383,8 @@
               headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
               body: JSON.stringify({ items: additions })
             });
-            const addResult = await window.PVTaxCart.readJsonResponse(addResponse, 'Die steuerliche Produktvariante konnte nicht hinzugef眉gt werden.');
-            if (!addResponse.ok) throw new Error(addResult.description || addResult.message || 'Die steuerliche Produktvariante konnte nicht hinzugef眉gt werden.');
+            const addResult = await window.PVTaxCart.readJsonResponse(addResponse, 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.');
+            if (!addResponse.ok) throw new Error(addResult.description || addResult.message || 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.');
 
             const addedKeys = (addResult.items || [])
               .map(item => item.key)
@@ -1448,12 +1448,12 @@
           const requestId = ++this.shippingRequestId;
           if (!this.drawer.querySelector('[data-products] .cart__item')) {
             this.setShippingMessage('Lege zuerst ein Produkt in den Warenkorb.', false);
-            this.setShippingSummary('鈥?, false);
+            this.setShippingSummary('—', false);
             return;
           }
 
-          this.setShippingMessage('Shopify Versandkosten werden geladen 鈥?, false);
-          this.setShippingSummary('Wird berechnet 鈥?, true);
+          this.setShippingMessage('Shopify Versandkosten werden geladen …', false);
+          this.setShippingSummary('Wird berechnet …', true);
           this.postcodeToggle.hidden = true;
 
           try {
@@ -1468,7 +1468,7 @@
             const cheapest = result.rates[0];
             const formattedPrice = result.formattedPrice;
             const extraRates = result.rates.length > 1
-              ? ` 路 ${result.rates.length - 1} weitere Rate${result.rates.length > 2 ? 'n' : ''} im Checkout`
+              ? ` · ${result.rates.length - 1} weitere Rate${result.rates.length > 2 ? 'n' : ''} im Checkout`
               : '';
             const rateName = cheapest.presentment_name || cheapest.name || cheapest.code || 'Versand';
             this.setShippingMessage(`${rateName}: ${formattedPrice}${extraRates}`, false);
@@ -1480,7 +1480,7 @@
             if (error.needsPostcode && !this.postcodeInput.value.trim()) {
               this.postcodeRow.hidden = true;
               this.postcodeToggle.hidden = false;
-              this.setShippingMessage(`Versand nach ${this.countryNames[this.selectedCountry]} 路 bitte PLZ eingeben`, false);
+              this.setShippingMessage(`Versand nach ${this.countryNames[this.selectedCountry]} · bitte PLZ eingeben`, false);
             } else {
               this.setShippingMessage(error.message || 'Versandkosten konnten nicht geladen werden.', true);
             }
@@ -1521,9 +1521,9 @@
         validationMessage() {
           if (!this.shouldShowVatQualification()) return '';
           const choice = this.getVatChoice();
-          if (!choice) return 'Bitte w盲hle aus, ob du die Voraussetzungen f眉r 0 % MwSt. erf眉llst.';
-          if (choice === 'eligible' && !this.vatConfirm.checked) return 'Bitte best盲tige die Richtigkeit deiner Angaben f眉r 0 % MwSt.';
-          if (choice === 'eligible' && !this.hasVatSwitchConfiguration) return '0 % MwSt. ist f眉r mindestens einen Artikel technisch noch nicht eingerichtet. Bitte w盲hle den regul盲ren MwSt.-Satz oder kontaktiere uns.';
+          if (!choice) return 'Bitte wähle aus, ob du die Voraussetzungen für 0 % MwSt. erfüllst.';
+          if (choice === 'eligible' && !this.vatConfirm.checked) return 'Bitte bestätige die Richtigkeit deiner Angaben für 0 % MwSt.';
+          if (choice === 'eligible' && !this.hasVatSwitchConfiguration) return '0 % MwSt. ist für mindestens einen Artikel technisch noch nicht eingerichtet. Bitte wähle den regulären MwSt.-Satz oder kontaktiere uns.';
           return '';
         }
 
@@ -1613,21 +1613,21 @@
           }
 
           this.discountButton.disabled = true;
-          this.discountStatus.textContent = 'Rabattcode wird gepr眉ft 鈥?;
+          this.discountStatus.textContent = 'Rabattcode wird geprüft …';
           try {
             const response = await fetch(`${this.rootUrl}cart/update.js`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
               body: JSON.stringify({ discount: code })
             });
-            const cart = await window.PVTaxCart.readJsonResponse(response, 'Rabattcode konnte nicht gepr眉ft werden.');
-            if (!response.ok) throw new Error(cart.description || cart.message || 'Rabattcode konnte nicht gepr眉ft werden.');
+            const cart = await window.PVTaxCart.readJsonResponse(response, 'Rabattcode konnte nicht geprüft werden.');
+            if (!response.ok) throw new Error(cart.description || cart.message || 'Rabattcode konnte nicht geprüft werden.');
 
             const discountCodes = cart.discount_codes || [];
             const codeResult = discountCodes.find(item => String(item.code).toLowerCase() === code.toLowerCase());
             const appliedApplication = (cart.cart_level_discount_applications || []).some(item => String(item.title).toLowerCase() === code.toLowerCase());
             const applied = appliedApplication || (codeResult && codeResult.applicable !== false);
-            this.discountStatus.textContent = applied ? 'Rabattcode angewendet.' : 'Dieser Rabattcode ist nicht g眉ltig.';
+            this.discountStatus.textContent = applied ? 'Rabattcode angewendet.' : 'Dieser Rabattcode ist nicht gültig.';
             document.dispatchEvent(new CustomEvent('cart:build'));
           } catch (error) {
             this.discountStatus.textContent = error.message;
@@ -1717,7 +1717,7 @@
           add.type = 'button';
           add.className = 'cart-drawer-recommendation-add';
           add.textContent = '+';
-          add.setAttribute('aria-label', `${product.title} hinzuf眉gen`);
+          add.setAttribute('aria-label', `${product.title} hinzufügen`);
           add.disabled = variant.available === false;
           add.addEventListener('click', () => this.addRecommendation(add, variant.id));
 
@@ -1733,11 +1733,11 @@
               headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
               body: JSON.stringify({ items: [{ id: Number(variantId), quantity: 1 }] })
             });
-            const result = await window.PVTaxCart.readJsonResponse(response, 'Produkt konnte nicht hinzugef眉gt werden.');
+            const result = await window.PVTaxCart.readJsonResponse(response, 'Produkt konnte nicht hinzugefügt werden.');
             if (!response.ok) throw new Error(result.description || result.message);
             document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: result }));
           } catch (error) {
-            this.discountStatus.textContent = error.message || 'Produkt konnte nicht hinzugef眉gt werden.';
+            this.discountStatus.textContent = error.message || 'Produkt konnte nicht hinzugefügt werden.';
             button.disabled = false;
           }
         }
