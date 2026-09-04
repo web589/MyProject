@@ -368,7 +368,34 @@
     {%- sections 'popup-group' -%}
 
       <main class="main-content" id="MainContent">
-        {{ content_for_layout }}
+        {%- if request.path contains '/policies/' -%}
+          {%- assign current_policy = false -%}
+          {%- for store_policy in shop.policies -%}
+            {%- if request.path == store_policy.url or request.path contains store_policy.url -%}
+              {%- assign current_policy = store_policy -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if current_policy -%}
+            {%- render 'withdrawal-policy-page',
+              content: current_policy.body,
+              title: current_policy.title,
+              nav_title: 'INHALT',
+              show_navigation: true,
+              max_width: 1200,
+              nav_width: 220,
+              column_gap: 40,
+              section_gap: 40,
+              accent_color: '#0099fc',
+              instance_id: 'policy'
+            -%}
+          {%- else -%}
+            {{ content_for_layout }}
+          {%- endif -%}
+        {%- else -%}
+          {{ content_for_layout }}
+        {%- endif -%}
       </main>
 
     {%- sections 'footer-group' -%}
