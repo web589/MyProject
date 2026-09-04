@@ -219,7 +219,7 @@
     color: #596b82;
     font-size: 16px;
     line-height: 1.5;
-    max-width: 800px;
+    max-width: 100%;
   }
 
   .ai-scenario-subtitle-{{ ai_gen_id }} p {
@@ -401,7 +401,7 @@
   }
 {% endstyle %}
 
-<scenario-cards-{{ ai_gen_id }} class="ai-scenario-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<scenario-cards-{{ ai_gen_id }} class="ai-scenario-section-{{ ai_gen_id }}" data-scroll-reveal="off" {{ block.shopify_attributes }}>
   {% if block.settings.section_title != blank %}
     <h2 class="ai-scenario-title-{{ ai_gen_id }}">
       {{ block.settings.section_title }}

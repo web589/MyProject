@@ -220,19 +220,36 @@
   .ai-testimonial-carousel-{{ ai_gen_id }} {
     position: relative;
     overflow: hidden;
-    width: 100%;
+    width: 100vw;
+    max-width: none;
+    margin-left: 50%;
+    transform: translateX(-50%);
     --ai-testimonial-columns-{{ ai_gen_id }}: {{ block.settings.slides_per_view }};
   }
 
   .ai-testimonial-track-{{ ai_gen_id }} {
     display: flex;
-    transition: transform 0.5s ease;
+    gap: {{ block.settings.card_gap }}px;
+    width: max-content;
+    will-change: transform;
+    animation: ai-testimonial-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
+  }
+
+  .ai-testimonial-track-{{ ai_gen_id }}.is-paused,
+  .ai-testimonial-track-{{ ai_gen_id }}:hover {
+    animation-play-state: paused;
+  }
+
+  .ai-testimonial-group-{{ ai_gen_id }} {
+    display: flex;
+    align-items: stretch;
+    flex: 0 0 auto;
     gap: {{ block.settings.card_gap }}px;
   }
 
   .ai-testimonial-slide-{{ ai_gen_id }} {
-    flex: 0 0 calc((100% - {{ block.settings.card_gap }}px * (var(--ai-testimonial-columns-{{ ai_gen_id }}) - 1)) / var(--ai-testimonial-columns-{{ ai_gen_id }}));
-    max-width: calc((100% - {{ block.settings.card_gap }}px * (var(--ai-testimonial-columns-{{ ai_gen_id }}) - 1)) / var(--ai-testimonial-columns-{{ ai_gen_id }}));
+    flex: 0 0 calc((100vw - {{ block.settings.card_gap }}px * (var(--ai-testimonial-columns-{{ ai_gen_id }}) - 1)) / var(--ai-testimonial-columns-{{ ai_gen_id }}));
+    max-width: calc((100vw - {{ block.settings.card_gap }}px * (var(--ai-testimonial-columns-{{ ai_gen_id }}) - 1)) / var(--ai-testimonial-columns-{{ ai_gen_id }}));
     border-radius: {{ block.settings.card_border_radius }}px;
     overflow: hidden;
   }
@@ -342,50 +359,14 @@
     display: block;
   }
 
-  .ai-nav-button-{{ ai_gen_id }} {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: {{ block.settings.nav_button_size }}px;
-    height: {{ block.settings.nav_button_size }}px;
-    background-color: {{ block.settings.nav_button_bg }};
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.2s ease;
-  }
+  @keyframes ai-testimonial-scroll-{{ ai_gen_id }} {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
 
-  .ai-nav-button-{{ ai_gen_id }}:hover {
-    background-color: {{ block.settings.nav_button_hover_bg }};
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  .ai-nav-button-{{ ai_gen_id }} svg {
-    width: 20px;
-    height: 20px;
-    fill: none;
-    stroke: {{ block.settings.nav_button_color }};
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .ai-nav-prev-{{ ai_gen_id }} {
-    left: -10px;
-  }
-
-  .ai-nav-next-{{ ai_gen_id }} {
-    right: -10px;
-  }
-
-  .ai-nav-button-{{ ai_gen_id }}:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+    to {
+      transform: translate3d(calc(-1 * var(--ai-testimonial-distance, 50%)), 0, 0);
+    }
   }
 
   @media screen and (max-width: 989px) {
@@ -394,8 +375,8 @@
     }
 
     .ai-testimonial-slide-{{ ai_gen_id }} {
-      flex-basis: calc((100% - {{ block.settings.card_gap }}px) / 2);
-      max-width: calc((100% - {{ block.settings.card_gap }}px) / 2);
+      flex-basis: calc((100vw - {{ block.settings.card_gap }}px) / 2);
+      max-width: calc((100vw - {{ block.settings.card_gap }}px) / 2);
     }
   }
 
@@ -418,12 +399,19 @@
       height: {{ block.settings.card_height | times: 0.8 }}px;
     }
 
-    .ai-nav-button-{{ ai_gen_id }} {
-      display: none;
-    }
-
     .ai-testimonial-heading-{{ ai_gen_id }} {
       font-size: {{ block.settings.heading_size | times: 0.8 }}px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-testimonial-track-{{ ai_gen_id }} {
+      animation: none;
+      transform: none;
+    }
+
+    .ai-card-bg-{{ ai_gen_id }} {
+      transition: none;
     }
   }
 {% endstyle %}
@@ -445,8 +433,8 @@
 <testimonial-carousel-{{ ai_gen_id }}
   class="ai-testimonial-section-{{ ai_gen_id }}"
   data-slides-per-view="{{ block.settings.slides_per_view }}"
-  data-autoplay="{{ block.settings.autoplay }}"
-  data-autoplay-delay="{{ block.settings.autoplay_delay }}"
+  data-scroll-speed="{{ block.settings.scroll_speed }}"
+  data-scroll-reveal="off"
   {{ block.shopify_attributes }}
 >
   <div class="ai-testimonial-container-{{ ai_gen_id }}">
@@ -459,7 +447,8 @@
   {% endif %}
 
   <div class="ai-testimonial-carousel-{{ ai_gen_id }}">
-    <div class="ai-testimonial-track-{{ ai_gen_id }}">
+    <div class="ai-testimonial-track-{{ ai_gen_id }}" data-testimonial-scroll-track>
+      <div class="ai-testimonial-group-{{ ai_gen_id }}" data-testimonial-scroll-group>
       {% if use_shared_testimonials %}
         {% for shared_testimonial in shared_testimonials limit: 10 %}
           {% liquid
@@ -545,27 +534,8 @@
         {% endif %}
       {% endfor %}
       {% endif %}
+      </div>
     </div>
-
-    <button
-      class="ai-nav-button-{{ ai_gen_id }} ai-nav-prev-{{ ai_gen_id }}"
-      aria-label="Previous testimonial"
-      data-nav="prev"
-    >
-      <svg viewBox="0 0 24 24">
-        <polyline points="15 18 9 12 15 6"></polyline>
-      </svg>
-    </button>
-
-    <button
-      class="ai-nav-button-{{ ai_gen_id }} ai-nav-next-{{ ai_gen_id }}"
-      aria-label="Next testimonial"
-      data-nav="next"
-    >
-      <svg viewBox="0 0 24 24">
-        <polyline points="9 18 15 12 9 6"></polyline>
-      </svg>
-    </button>
   </div>
   </div>
 </testimonial-carousel-{{ ai_gen_id }}>
@@ -576,119 +546,94 @@
     class TestimonialCarousel{{ ai_gen_id }} extends HTMLElement {
       constructor() {
         super();
-        this.currentIndex = 0;
-        this.autoplayTimer = null;
+        this.initialized = false;
+        this.groups = [];
+        this.handleResize = this.updateMarquee.bind(this);
+        this.pauseMarquee = () => {
+          if (this.track) this.track.classList.add('is-paused');
+        };
+        this.resumeMarquee = () => {
+          if (this.track) this.track.classList.remove('is-paused');
+        };
+        this.handleFocusOut = (event) => {
+          if (!event.relatedTarget || !this.contains(event.relatedTarget)) this.resumeMarquee();
+        };
       }
 
       connectedCallback() {
+        if (this.initialized) return;
+
         this.carousel = this.querySelector('.ai-testimonial-carousel-{{ ai_gen_id }}');
         this.track = this.querySelector('.ai-testimonial-track-{{ ai_gen_id }}');
-        this.slides = this.querySelectorAll('.ai-testimonial-slide-{{ ai_gen_id }}');
-        this.prevButton = this.querySelector('[data-nav="prev"]');
-        this.nextButton = this.querySelector('[data-nav="next"]');
-        this.defaultSlidesPerView = parseInt(this.dataset.slidesPerView) || 4;
-        this.slidesPerView = this.defaultSlidesPerView;
-        this.autoplay = this.dataset.autoplay === 'true';
-        this.autoplayDelay = parseInt(this.dataset.autoplayDelay) || 5000;
-        this.handleResize = () => this.updateSlidesPerView();
+        this.group = this.querySelector('[data-testimonial-scroll-group]');
+        if (!this.carousel || !this.track || !this.group) return;
 
-        this.setupEventListeners();
-        this.updateButtons();
-        this.updateSlidesPerView();
-
-        if (this.autoplay) {
-          this.startAutoplay();
+        this.slides = Array.from(this.group.children).filter((slide) => slide.classList.contains('ai-testimonial-slide-{{ ai_gen_id }}'));
+        if (this.slides.length < 2) {
+          this.track.style.animation = 'none';
+          return;
         }
 
-        window.addEventListener('resize', this.handleResize);
-      }
+        this.initialized = true;
+        this.groups = [this.group];
+        this.updateMarquee();
+        this.addEventListener('mouseenter', this.pauseMarquee);
+        this.addEventListener('mouseleave', this.resumeMarquee);
+        this.addEventListener('focusin', this.pauseMarquee);
+        this.addEventListener('focusout', this.handleFocusOut);
 
-      updateSlidesPerView() {
-        const width = this.carousel ? this.carousel.offsetWidth : this.offsetWidth;
-        if (width <= 749) {
-          this.slidesPerView = 1;
-        } else if (width <= 989) {
-          this.slidesPerView = 2;
+        if ('ResizeObserver' in window) {
+          this.resizeObserver = new ResizeObserver(this.handleResize);
+          this.resizeObserver.observe(this.carousel);
+          this.resizeObserver.observe(this.group);
         } else {
-          this.slidesPerView = this.defaultSlidesPerView;
-        }
-        const maxIndex = Math.max(this.slides.length - this.slidesPerView, 0);
-        this.currentIndex = Math.min(this.currentIndex, maxIndex);
-        this.updateSlidePosition();
-      }
-
-      setupEventListeners() {
-        this.prevButton.addEventListener('click', () => this.prev());
-        this.nextButton.addEventListener('click', () => this.next());
-
-        this.addEventListener('mouseenter', () => this.stopAutoplay());
-        this.addEventListener('mouseleave', () => {
-          if (this.autoplay) {
-            this.startAutoplay();
-          }
-        });
-      }
-
-      prev() {
-        if (this.currentIndex > 0) {
-          this.currentIndex--;
-          this.updateSlidePosition();
+          window.addEventListener('resize', this.handleResize, { passive: true });
         }
       }
 
-      next() {
-        const maxIndex = this.slides.length - this.slidesPerView;
-        if (this.currentIndex < maxIndex) {
-          this.currentIndex++;
-          this.updateSlidePosition();
-        } else if (this.autoplay) {
-          this.currentIndex = 0;
-          this.updateSlidePosition();
+      createClone() {
+        const clone = this.group.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        clone.removeAttribute('data-shopify-editor-block');
+        clone.querySelectorAll('[data-shopify-editor-block]').forEach((element) => element.removeAttribute('data-shopify-editor-block'));
+        clone.querySelectorAll('a, button, input, textarea, select').forEach((element) => element.setAttribute('tabindex', '-1'));
+        this.track.appendChild(clone);
+        return clone;
+      }
+
+      updateMarquee() {
+        if (!this.carousel || !this.track || !this.group || !this.slides.length) return;
+
+        const groupWidth = this.group.getBoundingClientRect().width;
+        if (!groupWidth) return;
+
+        const gap = parseFloat(getComputedStyle(this.track).gap) || 0;
+        const requiredGroupCount = Math.max(2, Math.ceil(this.carousel.clientWidth / (groupWidth + gap)) + 1);
+        while (this.groups.length < requiredGroupCount) {
+          this.groups.push(this.createClone());
         }
-      }
 
-      updateSlidePosition() {
-        if (!this.slides.length || !this.track) return;
-        const slideWidth = this.slides[0].getBoundingClientRect().width;
-        const gap = parseInt(getComputedStyle(this.track).gap) || 0;
-        const offset = -(this.currentIndex * (slideWidth + gap));
-        this.track.style.transform = `translateX(${offset}px)`;
-        this.updateButtons();
-      }
-
-      updateButtons() {
-        const maxIndex = Math.max(this.slides.length - this.slidesPerView, 0);
-        this.prevButton.disabled = this.currentIndex === 0;
-        this.nextButton.disabled = this.currentIndex >= maxIndex;
-      }
-
-      startAutoplay() {
-        this.stopAutoplay();
-        this.autoplayTimer = setInterval(() => {
-          const maxIndex = Math.max(this.slides.length - this.slidesPerView, 0);
-          if (this.currentIndex >= maxIndex) {
-            this.currentIndex = 0;
-          } else {
-            this.currentIndex++;
-          }
-          this.updateSlidePosition();
-        }, this.autoplayDelay);
-      }
-
-      stopAutoplay() {
-        if (this.autoplayTimer) {
-          clearInterval(this.autoplayTimer);
-          this.autoplayTimer = null;
-        }
+        this.track.style.setProperty('--ai-testimonial-distance', `${groupWidth + gap}px`);
       }
 
       disconnectedCallback() {
-        this.stopAutoplay();
+        if (!this.initialized) return;
+
+        if (this.resizeObserver) this.resizeObserver.disconnect();
         window.removeEventListener('resize', this.handleResize);
+        this.removeEventListener('mouseenter', this.pauseMarquee);
+        this.removeEventListener('mouseleave', this.resumeMarquee);
+        this.removeEventListener('focusin', this.pauseMarquee);
+        this.removeEventListener('focusout', this.handleFocusOut);
+        this.groups.slice(1).forEach((group) => group.remove());
+        this.groups = [];
+        this.initialized = false;
       }
     }
 
-    customElements.define('testimonial-carousel-{{ ai_gen_id }}', TestimonialCarousel{{ ai_gen_id }});
+    if (!customElements.get('testimonial-carousel-{{ ai_gen_id }}')) {
+      customElements.define('testimonial-carousel-{{ ai_gen_id }}', TestimonialCarousel{{ ai_gen_id }});
+    }
   })();
 </script>
 
@@ -798,20 +743,15 @@
       "default": 20
     },
     {
-      "type": "checkbox",
-      "id": "autoplay",
-      "label": "Enable autoplay",
-      "default": true
-    },
-    {
       "type": "range",
-      "id": "autoplay_delay",
-      "label": "Autoplay delay",
-      "min": 2000,
-      "max": 9000,
-      "step": 500,
-      "unit": "ms",
-      "default": 5000
+      "id": "scroll_speed",
+      "label": "Scroll speed",
+      "info": "Time for one complete loop. Higher values scroll more slowly.",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "s",
+      "default": 40
     },
     {
       "type": "header",
@@ -925,38 +865,6 @@
       "step": 1,
       "unit": "px",
       "default": 14
-    },
-    {
-      "type": "header",
-      "content": "Navigation"
-    },
-    {
-      "type": "range",
-      "id": "nav_button_size",
-      "label": "Button size",
-      "min": 30,
-      "max": 60,
-      "step": 2,
-      "unit": "px",
-      "default": 44
-    },
-    {
-      "type": "color",
-      "id": "nav_button_bg",
-      "label": "Button background",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "nav_button_hover_bg",
-      "label": "Button hover background",
-      "default": "#f0f0f0"
-    },
-    {
-      "type": "color",
-      "id": "nav_button_color",
-      "label": "Button icon color",
-      "default": "#1a1a1a"
     },
     {
       "type": "header",

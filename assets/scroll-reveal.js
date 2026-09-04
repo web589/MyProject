@@ -212,6 +212,7 @@
   function registerHomeSection(section) {
     if (!section || initializedSections.has(section)) return;
     if (section.getAttribute('data-scroll-reveal') === 'off' || isCommerceTemplate()) return;
+    if (section.querySelector('[data-scroll-reveal="off"]')) return;
 
     initializedSections.add(section);
     section.setAttribute('data-scroll-reveal-section-ready', '');
