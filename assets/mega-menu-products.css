@@ -1,32 +1,31 @@
 @media only screen and (min-width: 769px) {
   .mega-menu-products {
-    color: var(--colorNavText);
+    --mega-menu-brand: #0099fe;
+    --mega-menu-brand-soft: #e8f5ff;
+    --mega-menu-bg: #ffffff;
+    --mega-menu-border: #e0e0e0;
+    --mega-menu-text-strong: #1a1a1a;
+    --mega-menu-text-body: #596b88;
+    --mega-menu-text-secondary: #868686;
+    background: var(--mega-menu-bg);
+    color: var(--mega-menu-text-body);
+    font-family: 'Inter', var(--typeBasePrimary), var(--typeBaseFallback), sans-serif;
   }
 
   .mega-menu-products__inner {
     align-items: stretch;
     box-sizing: border-box;
     display: grid;
-    gap: 32px;
-    grid-template-columns: minmax(190px, 230px) minmax(0, 1fr);
-    padding-bottom: 28px;
-    padding-top: 28px;
+    gap: 24px;
+    grid-template-columns: minmax(210px, 240px) minmax(0, 1fr);
+    padding-bottom: 32px;
+    padding-top: 24px;
   }
 
   .mega-menu-products__categories {
-    border-inline-end: 1px solid rgba(42, 55, 67, 0.14);
+    border-inline-end: 1px solid var(--mega-menu-border);
     min-width: 0;
     padding-inline-end: 24px;
-  }
-
-  .mega-menu-products__heading {
-    color: var(--colorNavText);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    line-height: 1.4;
-    margin: 0 0 12px;
-    text-transform: uppercase;
   }
 
   .mega-menu-products__category-list,
@@ -37,30 +36,33 @@
   }
 
   .mega-menu-products__category-item + .mega-menu-products__category-item {
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   .mega-menu-products__category-link {
     align-items: center;
-    border-radius: 2px;
-    color: inherit;
+    border-radius: 6px;
+    color: var(--mega-menu-text-body);
     display: flex;
-    font-size: 13px;
+    font-size: 14px;
     gap: 8px;
     justify-content: space-between;
-    line-height: 1.4;
-    padding: 7px 8px;
+    line-height: 1.35;
+    min-height: 36px;
+    padding: 8px 10px;
     text-decoration: none;
     transition: background-color 160ms ease, color 160ms ease;
   }
 
   .mega-menu-products__category-link:hover,
   .mega-menu-products__category-item.is-active > .mega-menu-products__category-link {
-    background-color: rgba(0, 198, 255, 0.12);
-    color: #008fc2;
+    background-color: var(--mega-menu-brand-soft);
+    color: var(--mega-menu-brand);
+    font-weight: 600;
   }
 
   .mega-menu-products__category-arrow {
+    color: var(--mega-menu-brand);
     flex: 0 0 auto;
     font-size: 18px;
     line-height: 1;
@@ -68,15 +70,15 @@
   }
 
   .mega-menu-products__subcategory-list {
-    margin: 0 8px 6px 16px;
+    margin: 2px 10px 8px 20px;
   }
 
   .mega-menu-products__subcategory-link {
-    color: inherit;
+    color: var(--mega-menu-text-secondary);
     display: block;
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.4;
-    padding: 3px 0;
+    padding: 4px 0;
     text-decoration: none;
   }
 
@@ -88,7 +90,7 @@
   .mega-menu-products__cards {
     align-items: stretch;
     display: grid;
-    gap: 20px;
+    gap: 12px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     min-width: 0;
   }
@@ -108,10 +110,10 @@
   }
 
   .mega-menu-products__card {
-    background: #fff;
+    background: var(--mega-menu-bg);
     border: 0;
     border-radius: 0;
-    color: var(--colorNavText);
+    color: var(--mega-menu-text-body);
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
@@ -122,25 +124,26 @@
   }
 
   .mega-menu-products__card:hover {
-    color: var(--colorNavText);
-    transform: translateY(-2px);
+    color: var(--mega-menu-text-body);
+    transform: translateY(-1px);
   }
 
   .mega-menu-products__card:focus-visible,
   .mega-menu-products__category-link:focus-visible,
   .mega-menu-products__subcategory-link:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 3px;
+    outline: 2px solid var(--mega-menu-brand);
+    outline-offset: 4px;
   }
 
   .mega-menu-products__card-media {
     align-items: center;
     aspect-ratio: 4 / 3;
-    background: #fff;
+    background: var(--mega-menu-bg);
     display: flex;
     justify-content: center;
     overflow: hidden;
     position: relative;
+    border-radius: 8px;
   }
 
   .mega-menu-products__card-media image-element,
@@ -157,20 +160,21 @@
 
   .mega-menu-products__badge {
     background: var(--mega-menu-product-badge-color, #00c6ff);
-    border-radius: 2px;
-    color: #0f1f3d;
-    font-size: 10px;
+    border-radius: 4px;
+    color: var(--mega-menu-text-strong);
+    font-family: 'Inter', var(--typeBasePrimary), var(--typeBaseFallback), sans-serif;
+    font-size: 11px;
     font-weight: 700;
-    left: 10px;
-    letter-spacing: 0.03em;
-    line-height: 1.2;
+    left: 8px;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
     max-width: calc(100% - 20px);
     overflow: hidden;
-    padding: 5px 7px;
+    padding: 4px 8px;
     position: absolute;
     text-overflow: ellipsis;
     text-transform: uppercase;
-    top: 10px;
+    top: 8px;
     white-space: nowrap;
     z-index: 1;
   }
@@ -179,24 +183,24 @@
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
-    gap: 5px;
-    padding: 12px 13px 14px;
+    gap: 6px;
+    padding: 12px 0 8px;
   }
 
   .mega-menu-products__card-title {
-    color: inherit;
-    font-size: 14px;
-    font-weight: 700;
+    color: var(--mega-menu-text-strong);
+    font-family: 'Manrope', var(--typeHeaderPrimary), var(--typeHeaderFallback), sans-serif;
+    font-size: 15px;
+    font-weight: 600;
     line-height: 1.35;
     margin: 0;
   }
 
   .mega-menu-products__card-description {
-    color: inherit;
+    color: var(--mega-menu-text-secondary);
     font-size: 12px;
     line-height: 1.45;
     margin: 0;
-    opacity: 0.68;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -204,17 +208,17 @@
   }
 
   .mega-menu-products__card-specs {
-    color: inherit;
+    color: var(--mega-menu-text-secondary);
     font-size: 12px;
     line-height: 1.4;
     margin: 0;
-    opacity: 0.68;
   }
 
   .mega-menu-products__card-price {
-    color: inherit;
-    font-size: 14px;
-    font-weight: 700;
+    color: var(--mega-menu-text-strong);
+    font-family: 'Manrope', var(--typeHeaderPrimary), var(--typeHeaderFallback), sans-serif;
+    font-size: 16px;
+    font-weight: 600;
     line-height: 1.35;
     margin: auto 0 0;
   }

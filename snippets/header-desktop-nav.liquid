@@ -103,10 +103,7 @@
         >
           <div class="page-width">
             <div class="mega-menu-products__inner">
-              <nav class="mega-menu-products__categories" aria-label="{{ mega_menu_block.settings.mega_menu_heading | default: link.title | escape }}">
-                <p class="mega-menu-products__heading">
-                  {{ mega_menu_block.settings.mega_menu_heading | default: link.title | escape }}
-                </p>
+              <nav class="mega-menu-products__categories" aria-label="{{ link.title | escape }}">
                 <ul class="mega-menu-products__category-list">
                   {%- for childlink in link.links -%}
                     {%- liquid
