@@ -822,6 +822,41 @@
     {%- endform -%}
   </div>
   <script>
+    window.PVTaxCart = window.PVTaxCart || {};
+    if (!window.PVTaxCart.readJsonResponse) {
+      window.PVTaxCart.readJsonResponse = function(response, fallbackMessage) {
+        return response.text().then(function(text) {
+          try {
+            if (!text || !text.trim()) throw new Error('empty response');
+            return JSON.parse(text);
+          } catch (error) {
+            const contentType = response.headers && response.headers.get('content-type') || '';
+            const isHtml = /html/i.test(contentType) || /^\s*</.test(text || '');
+            const message = isHtml
+              ? 'Die Shopify-Warenkorbverbindung wird gerade geprüft. Bitte lade die Seite neu und versuche es erneut.'
+              : (fallbackMessage || 'Die Warenkorbanfrage konnte nicht verarbeitet werden. Bitte lade die Seite neu und versuche es erneut.');
+            const responseError = new Error(message);
+            responseError.description = message;
+            responseError.status = response.status;
+            throw responseError;
+          }
+        });
+      };
+      window.PVTaxCart.parseJsonText = function(text, fallbackMessage) {
+        try {
+          if (!text || !String(text).trim()) throw new Error('empty response');
+          return JSON.parse(text);
+        } catch (error) {
+          const message = /^\s*</.test(String(text || ''))
+            ? 'Die Shopify-Warenkorbverbindung wird gerade geprüft. Bitte lade die Seite neu und versuche es erneut.'
+            : (fallbackMessage || 'Die Warenkorbanfrage konnte nicht verarbeitet werden. Bitte lade die Seite neu und versuche es erneut.');
+          const responseError = new Error(message);
+          responseError.description = message;
+          throw responseError;
+        }
+      };
+    }
+
     (function() {
       const drawer = document.getElementById('CartDrawer');
       if (!drawer) return;
@@ -845,7 +880,7 @@
 
           try {
             const response = await theme.cart.changeItem(key, 0);
-            const updatedCart = JSON.parse(response);
+            const updatedCart = window.PVTaxCart.parseJsonText(response, 'Der Warenkorb konnte nicht aktualisiert werden.');
 
             document.dispatchEvent(new CustomEvent('cart:build'));
             document.dispatchEvent(new CustomEvent('cart:updated', {
@@ -884,7 +919,7 @@
         try {
           const root = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
           const response = await fetch(`${root}cart.js`, { headers: { Accept: 'application/json' } });
-          const cart = await response.json();
+          const cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorb konnte nicht geprüft werden.');
           if (!response.ok) throw new Error(cart.description || cart.message || 'Der Warenkorb konnte nicht geprüft werden.');
 
           const limits = new Map();
@@ -1026,7 +1061,7 @@
         async loadCartContext() {
           try {
             const response = await fetch(`${this.rootUrl}cart.js`, { headers: { Accept: 'application/json' } });
-            const cart = await response.json();
+            const cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorbkontext konnte nicht geladen werden.');
             if (!response.ok) return;
             this.cartCurrency = cart.currency || 'EUR';
             const attributes = cart.attributes || {};
@@ -1263,7 +1298,7 @@
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
             body: JSON.stringify({ attributes })
           }).then(async response => {
-            const cart = await response.json();
+            const cart = await window.PVTaxCart.readJsonResponse(response, 'Auswahl konnte nicht gespeichert werden.');
             if (!response.ok) throw new Error(cart.description || cart.message || 'Auswahl konnte nicht gespeichert werden.');
             this.cartCurrency = cart.currency || this.cartCurrency;
             document.dispatchEvent(new CustomEvent('cart:delivery-context-updated', { detail: { source: this } }));
@@ -1311,7 +1346,7 @@
           this.isSyncingVatMerchandise = true;
           try {
             const cartResponse = await fetch(`${this.rootUrl}cart.js`, { headers: { Accept: 'application/json' } });
-            const cart = await cartResponse.json();
+            const cart = await window.PVTaxCart.readJsonResponse(cartResponse, 'Der Warenkorb konnte nicht geladen werden.');
             if (!cartResponse.ok) throw new Error(cart.description || cart.message || 'Der Warenkorb konnte nicht geladen werden.');
 
             const additions = [];
@@ -1348,7 +1383,7 @@
               headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
               body: JSON.stringify({ items: additions })
             });
-            const addResult = await addResponse.json();
+            const addResult = await window.PVTaxCart.readJsonResponse(addResponse, 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.');
             if (!addResponse.ok) throw new Error(addResult.description || addResult.message || 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.');
 
             const addedKeys = (addResult.items || [])
@@ -1361,7 +1396,7 @@
                 headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
                 body: JSON.stringify({ updates: removals })
               });
-              const updatedCart = await updateResponse.json();
+              const updatedCart = await window.PVTaxCart.readJsonResponse(updateResponse, 'Die bisherige Produktvariante konnte nicht entfernt werden.');
               if (!updateResponse.ok) throw new Error(updatedCart.description || updatedCart.message || 'Die bisherige Produktvariante konnte nicht entfernt werden.');
 
               if (rebuildCart) {
@@ -1585,7 +1620,7 @@
               headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
               body: JSON.stringify({ discount: code })
             });
-            const cart = await response.json();
+            const cart = await window.PVTaxCart.readJsonResponse(response, 'Rabattcode konnte nicht geprüft werden.');
             if (!response.ok) throw new Error(cart.description || cart.message || 'Rabattcode konnte nicht geprüft werden.');
 
             const discountCodes = cart.discount_codes || [];
@@ -1698,7 +1733,7 @@
               headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
               body: JSON.stringify({ items: [{ id: Number(variantId), quantity: 1 }] })
             });
-            const result = await response.json();
+            const result = await window.PVTaxCart.readJsonResponse(response, 'Produkt konnte nicht hinzugefügt werden.');
             if (!response.ok) throw new Error(result.description || result.message);
             document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: result }));
           } catch (error) {

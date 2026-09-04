@@ -88,6 +88,36 @@
       }
     }
 
+    async readJsonResponse(response, fallbackMessage) {
+      const text = await response.text();
+      let payload;
+
+      try {
+        if (!text || !text.trim()) throw new Error('empty response');
+        payload = JSON.parse(text);
+      } catch (error) {
+        const contentType = response.headers && response.headers.get('content-type') || '';
+        const isHtml = /html/i.test(contentType) || /^\s*</.test(text || '');
+        const message = isHtml
+          ? 'Die Shopify-Warenkorbverbindung wird gerade geprüft. Bitte lade die Seite neu und versuche es erneut.'
+          : (fallbackMessage || 'Die Warenkorbanfrage konnte nicht verarbeitet werden. Bitte lade die Seite neu und versuche es erneut.');
+        const responseError = new Error(message);
+        responseError.description = message;
+        responseError.status = response.status;
+        throw responseError;
+      }
+
+      if (!response.ok) {
+        const serverMessage = payload && (payload.description || payload.message || payload.error);
+        const responseError = new Error(serverMessage || fallbackMessage);
+        responseError.description = serverMessage || fallbackMessage;
+        responseError.status = response.status;
+        throw responseError;
+      }
+
+      return payload;
+    }
+
     async onSubmitHandler(evt) {
       evt.preventDefault();
 
@@ -98,7 +128,10 @@
       let cartBeforeSubmission;
       try {
         const cartResponse = await fetch(`${window.Shopify.routes.root}cart.js`);
-        cartBeforeSubmission = await cartResponse.json();
+        cartBeforeSubmission = await this.readJsonResponse(
+          cartResponse,
+          'Der Warenkorb konnte gerade nicht geladen werden. Bitte lade die Seite neu und versuche es erneut.'
+        );
       } catch (error) {
         console.error('Failed to get cart state before submission:', error);
         cartBeforeSubmission = null;
@@ -157,16 +190,18 @@
         } else {
           // No subscriber handled it, proceed with default behavior
           const response = await fetch(`${window.Shopify.routes.root}cart/add.js`, config);       
-          responseData = await response.json();
-
-          if (!response.ok) {
-            throw responseData;
-          }
+          responseData = await this.readJsonResponse(
+            response,
+            'Das Produkt konnte gerade nicht in den Warenkorb gelegt werden.'
+          );
         }
 
         // Get updated cart state after form submission
         const cartResponse = await fetch(`${window.Shopify.routes.root}cart.js`);
-        const cartAfterSubmission = await cartResponse.json();
+        const cartAfterSubmission = await this.readJsonResponse(
+          cartResponse,
+          'Der Warenkorb konnte gerade nicht aktualisiert werden. Bitte lade die Seite neu und versuche es erneut.'
+        );
 
         this.dispatchEvent(
           new CustomEvent('product-form:submit:success', {

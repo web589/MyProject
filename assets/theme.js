@@ -167,6 +167,31 @@ theme.recentlyViewed = {
         );
       });
       return arr.join('&');
+    },
+
+    // Shopify's cart endpoints can return an HTML connection-check page
+    // instead of JSON. Keep that response out of the product form UI.
+    readJsonResponse: function(response, fallbackMessage) {
+      return response.text().then(function(text) {
+        var payload;
+        try {
+          if (!text || !text.trim()) {
+            throw new Error('empty response');
+          }
+          payload = JSON.parse(text);
+        } catch (error) {
+          var contentType = response.headers && response.headers.get('content-type') || '';
+          var isHtml = /html/i.test(contentType) || /^\s*</.test(text || '');
+          var message = isHtml
+            ? 'Die Shopify-Warenkorbverbindung wird gerade geprüft. Bitte lade die Seite neu und versuche es erneut.'
+            : (fallbackMessage || 'Die Warenkorbanfrage konnte nicht verarbeitet werden. Bitte lade die Seite neu und versuche es erneut.');
+          var responseError = new Error(message);
+          responseError.description = message;
+          responseError.status = response.status;
+          throw responseError;
+        }
+        return payload;
+      });
     }
   };
   
@@ -1592,7 +1617,10 @@ theme.recentlyViewed = {
       return fetch(url, {
         credentials: 'same-origin',
         method: 'GET'
-      }).then(response => response.json());
+      }).then(response => theme.utils.readJsonResponse(
+        response,
+        'Der Warenkorb konnte gerade nicht geladen werden. Bitte lade die Seite neu und versuche es erneut.'
+      ));
     },
   
     getCartProductMarkup: function() {
@@ -2870,9 +2898,14 @@ theme.recentlyViewed = {
             'X-Requested-With': 'XMLHttpRequest'
           }
         })
-        .then(response => response.json())
-        .then(function(data) {
-          if (data.status === 422) {
+        .then(response => theme.utils.readJsonResponse(
+          response,
+          'Das Produkt konnte gerade nicht in den Warenkorb gelegt werden.'
+        ).then(data => ({ response: response, data: data })))
+        .then(function(result) {
+          var response = result.response;
+          var data = result.data;
+          if (!response.ok || data.status === 422) {
             this.error(data);
             document.dispatchEvent(new CustomEvent('ajaxProduct:added'));
           } else {
@@ -2888,6 +2921,11 @@ theme.recentlyViewed = {
             window.scrollTo(0, 0);
             location.reload();
           }
+        }.bind(this))
+        .catch(function(error) {
+          this.error(error);
+          status.loading = false;
+          this.addToCart.classList.remove('btn--loading');
         }.bind(this));
       },
   
@@ -2920,7 +2958,7 @@ theme.recentlyViewed = {
       },
   
       error: function(error) {
-        if (!error.description) {
+        if (!error || (!error.description && !error.message)) {
           console.warn(error);
           return;
         }
@@ -2936,7 +2974,7 @@ theme.recentlyViewed = {
         if (typeof error.description === 'object') {
           errorDiv.textContent = error.message;
         } else {
-          errorDiv.textContent = error.description;
+          errorDiv.textContent = error.description || error.message;
         }
   
         this.form.append(errorDiv);

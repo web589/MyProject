@@ -176,7 +176,7 @@
         return;
       }
 
-      this.showMessage(successMessageEvent.detail.message);
+      this.showMessage(successMessageEvent.detail.message, true);
     }
 
     handleError(e) { 
@@ -211,20 +211,27 @@
         return;
       }
 
-      this.showMessage(errorMessageEvent.detail.message);
+      this.showMessage(errorMessageEvent.detail.message, false);
     }
 
-    showMessage(message) {
+    showMessage(message, allowHtml = false) {
       // Clear existing error messages
       this.clearMessages();
       this.classList.remove('hide');
       
       // Use cached template content and replace <slot> with the error message
-      if (this.template) {
+      if (this.template && allowHtml) {
         const messageContent = this.template.replace('<slot></slot>', message);
         
         // Insert the error message content
         this.innerHTML = messageContent;
+      } else if (this.template) {
+        const safeTemplate = document.createElement('template');
+        safeTemplate.innerHTML = this.template;
+        const slot = safeTemplate.content.querySelector('slot');
+        if (slot) slot.replaceWith(document.createTextNode(String(message || '')));
+        this.innerHTML = '';
+        this.appendChild(safeTemplate.content.cloneNode(true));
       }
     }
 
