@@ -240,12 +240,7 @@
   .ai-testimonial-card-{{ ai_gen_id }} {
     position: relative;
     width: 100%;
-    {% if block.settings.image_sizing == 'custom' %}
-      height: {{ block.settings.card_height }}px;
-    {% else %}
-      height: auto;
-      aspect-ratio: var(--ai-testimonial-image-ratio-{{ ai_gen_id }}, 1);
-    {% endif %}
+    height: {{ block.settings.card_height }}px;
     cursor: pointer;
     background-color: {{ block.settings.card_bg_color }};
     overflow: hidden;
@@ -419,12 +414,7 @@
     }
 
     .ai-testimonial-card-{{ ai_gen_id }} {
-      {% if block.settings.image_sizing == 'custom' %}
-        height: {{ block.settings.card_height | times: 0.8 }}px;
-      {% else %}
-        height: auto;
-        aspect-ratio: var(--ai-testimonial-image-ratio-{{ ai_gen_id }}, 1);
-      {% endif %}
+      height: {{ block.settings.card_height | times: 0.8 }}px;
     }
 
     .ai-nav-button-{{ ai_gen_id }} {
@@ -478,11 +468,10 @@
             assign testimonial_author = shared_testimonial.author.value
             assign testimonial_rating = shared_testimonial.rating.value | default: 5
             assign testimonial_image_class = 'ai-card-bg-' | append: ai_gen_id
-            assign testimonial_image_ratio = testimonial_image.aspect_ratio | default: 1
           %}
           {% if testimonial_image != blank or testimonial_title != blank or testimonial_description != blank %}
             <div class="ai-testimonial-slide-{{ ai_gen_id }}">
-              <div class="ai-testimonial-card-{{ ai_gen_id }}" style="--ai-testimonial-image-ratio-{{ ai_gen_id }}: {{ testimonial_image_ratio }};">
+              <div class="ai-testimonial-card-{{ ai_gen_id }}">
                 {% if testimonial_image != blank %}{{ testimonial_image | image_url: width: 1200 | image_tag: class: testimonial_image_class, loading: 'lazy', widths: '480, 800, 1200', sizes: image_sizes, alt: testimonial_title }}{% endif %}
                 <div class="ai-card-overlay-{{ ai_gen_id }}"></div>
                 <div class="ai-card-content-{{ ai_gen_id }}">
@@ -509,12 +498,11 @@
           assign testimonial_description = block.settings[description_key]
           assign testimonial_author = block.settings[author_key]
           assign testimonial_rating = block.settings[rating_key]
-          assign testimonial_image_ratio = testimonial_image.aspect_ratio | default: 1
         %}
 
         {% if testimonial_title != blank or testimonial_description != blank %}
           <div class="ai-testimonial-slide-{{ ai_gen_id }}">
-            <div class="ai-testimonial-card-{{ ai_gen_id }}" style="--ai-testimonial-image-ratio-{{ ai_gen_id }}: {{ testimonial_image_ratio }};">
+            <div class="ai-testimonial-card-{{ ai_gen_id }}">
               {% if testimonial_image %}
                 <img
                   class="ai-card-bg-{{ ai_gen_id }}"
@@ -829,21 +817,10 @@
       "content": "Card style"
     },
     {
-      "type": "select",
-      "id": "image_sizing",
-      "label": "Image sizing",
-      "info": "Use the uploaded image ratio or set a shared custom height for all cards.",
-      "options": [
-        { "value": "natural", "label": "Natural image ratio" },
-        { "value": "custom", "label": "Custom height" }
-      ],
-      "default": "natural"
-    },
-    {
       "type": "range",
       "id": "card_height",
-      "label": "Custom image height",
-      "info": "Used when Image sizing is set to Custom height.",
+      "label": "Image height",
+      "info": "Adjust the image height for all testimonial cards.",
       "min": 250,
       "max": 600,
       "step": 10,
