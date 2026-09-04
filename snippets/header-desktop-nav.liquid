@@ -13,6 +13,7 @@
       assign mega_menu_block = nil
       assign link_handle = link.title | handleize
       assign product_block_count = 0
+      assign default_product_category = blank
 
       for block in section.blocks
         if block.type == 'mega_menu'
@@ -29,6 +30,23 @@
           assign product_menu_handle = block.settings.menu_handle | handleize
           if product_menu_handle == link_handle and block.settings.product != blank
             assign product_block_count = product_block_count | plus: 1
+            assign product_category_handle = block.settings.category_handle
+            if product_category_handle == blank
+              assign product_category_handle = block.settings.product.handle
+            endif
+            assign product_category_handle = product_category_handle | handleize
+            if product_category_handle contains 'venus-e-mini'
+              assign product_category_handle = 'venus-e-mini'
+            elsif product_category_handle contains 'venus-e-3'
+              assign product_category_handle = 'venus-e-3'
+            elsif product_category_handle contains 'venus-e-4'
+              assign product_category_handle = 'venus-e-4'
+            elsif product_category_handle contains 'venus-e-max'
+              assign product_category_handle = 'venus-e-max'
+            endif
+            if default_product_category == blank
+              assign default_product_category = product_category_handle
+            endif
           endif
         endif
       endfor
@@ -78,7 +96,11 @@
       {% endif %}
 
       {%- if has_product_menu -%}
-        <div class="site-nav__dropdown megamenu mega-menu-products text-left">
+        <div
+          class="site-nav__dropdown megamenu mega-menu-products text-left"
+          data-mega-menu-products
+          data-default-category="{{ default_product_category }}"
+        >
           <div class="page-width">
             <div class="mega-menu-products__inner">
               <nav class="mega-menu-products__categories" aria-label="{{ mega_menu_block.settings.mega_menu_heading | default: link.title | escape }}">
@@ -96,9 +118,50 @@
                       if childlink.title == 'Garantie & Rückgabe'
                         assign childlink_url = '/pages/garantie-ruckgabe?view=widerrufsrecht'
                       endif
+                      assign category_handle = childlink_title_handle
+                      if category_handle contains 'venus-e-mini'
+                        assign category_handle = 'venus-e-mini'
+                      elsif category_handle contains 'venus-e-3'
+                        assign category_handle = 'venus-e-3'
+                      elsif category_handle contains 'venus-e-4'
+                        assign category_handle = 'venus-e-4'
+                      elsif category_handle contains 'venus-e-max'
+                        assign category_handle = 'venus-e-max'
+                      endif
+                      assign has_product_category = false
+                      for product_block in section.blocks
+                        if product_block.type == 'mega_menu_product'
+                          assign product_menu_handle = product_block.settings.menu_handle | handleize
+                          if product_menu_handle == link_handle and product_block.settings.product != blank
+                            assign product_category_handle = product_block.settings.category_handle
+                            if product_category_handle == blank
+                              assign product_category_handle = product_block.settings.product.handle
+                            endif
+                            assign product_category_handle = product_category_handle | handleize
+                            if product_category_handle contains 'venus-e-mini'
+                              assign product_category_handle = 'venus-e-mini'
+                            elsif product_category_handle contains 'venus-e-3'
+                              assign product_category_handle = 'venus-e-3'
+                            elsif product_category_handle contains 'venus-e-4'
+                              assign product_category_handle = 'venus-e-4'
+                            elsif product_category_handle contains 'venus-e-max'
+                              assign product_category_handle = 'venus-e-max'
+                            endif
+                            if product_category_handle == category_handle
+                              assign has_product_category = true
+                              break
+                            endif
+                          endif
+                        endif
+                      endfor
                     -%}
-                    <li class="mega-menu-products__category-item{% if childlink.active or childlink.child_active %} is-active{% endif %}">
-                      <a href="{{ childlink_url }}" class="mega-menu-products__category-link"{% if childlink.active %} aria-current="page"{% endif %}>
+                    <li class="mega-menu-products__category-item{% if category_handle == default_product_category or childlink.active or childlink.child_active %} is-active{% endif %}" data-mega-menu-category-item="{{ category_handle }}">
+                      <a
+                        href="{{ childlink_url }}"
+                        class="mega-menu-products__category-link"
+                        {% if has_product_category %}data-mega-menu-category="{{ category_handle }}" aria-controls="mega-menu-products-{{ mega_menu_block.id }}-{{ category_handle }}" aria-expanded="{% if category_handle == default_product_category %}true{% else %}false{% endif %}"{% endif %}
+                        {% if childlink.active %}aria-current="page"{% endif %}
+                      >
                         <span>{{ childlink.title | escape }}</span>
                         <span class="mega-menu-products__category-arrow" aria-hidden="true">›</span>
                       </a>
@@ -118,13 +181,38 @@
                 </ul>
               </nav>
 
-              <div class="mega-menu-products__cards" role="list">
+              <div class="mega-menu-products__panels">
                 {%- for product_block in section.blocks -%}
                   {%- if product_block.type == 'mega_menu_product' -%}
                     {%- assign product_menu_handle = product_block.settings.menu_handle | handleize -%}
                     {%- if product_menu_handle == link_handle and product_block.settings.product != blank -%}
-                      <div role="listitem">
-                        {%- render 'product-menu-card', block: product_block -%}
+                      {%- assign product_category_handle = product_block.settings.category_handle -%}
+                      {%- if product_category_handle == blank -%}
+                        {%- assign product_category_handle = product_block.settings.product.handle -%}
+                      {%- endif -%}
+                      {%- assign product_category_handle = product_category_handle | handleize -%}
+                      {%- if product_category_handle contains 'venus-e-mini' -%}
+                        {%- assign product_category_handle = 'venus-e-mini' -%}
+                      {%- elsif product_category_handle contains 'venus-e-3' -%}
+                        {%- assign product_category_handle = 'venus-e-3' -%}
+                      {%- elsif product_category_handle contains 'venus-e-4' -%}
+                        {%- assign product_category_handle = 'venus-e-4' -%}
+                      {%- elsif product_category_handle contains 'venus-e-max' -%}
+                        {%- assign product_category_handle = 'venus-e-max' -%}
+                      {%- endif -%}
+                      <div
+                        id="mega-menu-products-{{ mega_menu_block.id }}-{{ product_category_handle }}"
+                        class="mega-menu-products__panel"
+                        data-mega-menu-category-panel="{{ product_category_handle }}"
+                        {% unless product_category_handle == default_product_category %}hidden{% endunless %}
+                      >
+                        <div class="mega-menu-products__cards" role="list">
+                          {%- for mega_variant in product_block.settings.product.variants limit: 3 -%}
+                            <div role="listitem">
+                              {%- render 'product-menu-card', block: product_block, variant: mega_variant, quantity: forloop.index -%}
+                            </div>
+                          {%- endfor -%}
+                        </div>
                       </div>
                     {%- endif -%}
                   {%- endif -%}
@@ -305,3 +393,65 @@
     </li>
   {%- endfor -%}
 </ul>
+
+<script>
+  (function () {
+    var initializeMegaMenuProductPanels = function () {
+      if (window.matchMedia && !window.matchMedia('(min-width: 769px)').matches) {
+        return;
+      }
+
+      document.querySelectorAll('[data-mega-menu-products]:not([data-mega-menu-ready])').forEach(function (menu) {
+        menu.setAttribute('data-mega-menu-ready', 'true');
+
+        var categoryLinks = menu.querySelectorAll('[data-mega-menu-category]');
+        var categoryItems = menu.querySelectorAll('[data-mega-menu-category-item]');
+        var panels = menu.querySelectorAll('[data-mega-menu-category-panel]');
+        var defaultCategory = menu.getAttribute('data-default-category');
+
+        var activateCategory = function (category) {
+          if (!category) {
+            return;
+          }
+
+          panels.forEach(function (panel) {
+            panel.hidden = panel.getAttribute('data-mega-menu-category-panel') !== category;
+          });
+
+          categoryLinks.forEach(function (link) {
+            var isActive = link.getAttribute('data-mega-menu-category') === category;
+            link.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+          });
+
+          categoryItems.forEach(function (item) {
+            item.classList.toggle('is-active', item.getAttribute('data-mega-menu-category-item') === category);
+          });
+        };
+
+        categoryLinks.forEach(function (link) {
+          var category = link.getAttribute('data-mega-menu-category');
+          link.addEventListener('mouseenter', function () {
+            activateCategory(category);
+          });
+          link.addEventListener('focus', function () {
+            activateCategory(category);
+          });
+        });
+
+        var details = menu.closest('details');
+        if (details) {
+          details.addEventListener('toggle', function () {
+            if (details.open) {
+              activateCategory(defaultCategory);
+            }
+          });
+        }
+
+        activateCategory(defaultCategory);
+      });
+    };
+
+    initializeMegaMenuProductPanels();
+    document.addEventListener('shopify:section:load', initializeMegaMenuProductPanels);
+  })();
+</script>

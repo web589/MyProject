@@ -56,8 +56,8 @@
 
   .mega-menu-products__category-link:hover,
   .mega-menu-products__category-item.is-active > .mega-menu-products__category-link {
-    background-color: var(--colorNavDim);
-    color: var(--colorNavText);
+    background-color: rgba(0, 198, 255, 0.12);
+    color: #008fc2;
   }
 
   .mega-menu-products__category-arrow {
@@ -91,6 +91,15 @@
     gap: 20px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     min-width: 0;
+  }
+
+  .mega-menu-products__panels,
+  .mega-menu-products__panel {
+    min-width: 0;
+  }
+
+  .mega-menu-products__panel[hidden] {
+    display: none !important;
   }
 
   .mega-menu-products__cards > [role='listitem'] {
@@ -190,11 +199,31 @@
     line-height: 1.45;
     margin: 0;
     opacity: 0.68;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .mega-menu-products__card-specs {
+    color: inherit;
+    font-size: 12px;
+    line-height: 1.4;
+    margin: 0;
+    opacity: 0.68;
+  }
+
+  .mega-menu-products__card-price {
+    color: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin: auto 0 0;
   }
 
   @media only screen and (min-width: 1101px) {
     .mega-menu-products__cards {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 

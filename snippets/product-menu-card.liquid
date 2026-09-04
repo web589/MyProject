@@ -1,21 +1,51 @@
-{% liquid
+{%- liquid
   assign product = block.settings.product
+
   if product != blank
-    assign product_image = block.settings.image | default: product.featured_image
-    assign product_title = block.settings.product_title | default: product.title
-    assign product_link = block.settings.link | default: product.url
+    assign card_variant = variant | default: product.selected_or_first_available_variant
+    assign card_title = block.settings.product_title | default: product.title
+    assign card_specs = card_variant.title
+
+    if block.settings.product_title == blank
+      if product.title contains ' – '
+        assign product_title_parts = product.title | split: ' – '
+        assign card_title = product_title_parts.first | strip
+        if card_specs == blank or card_specs == 'Default Title'
+          assign card_specs = product_title_parts | slice: 1, product_title_parts.size | join: ' – ' | strip
+        endif
+      elsif product.title contains ' - '
+        assign product_title_parts = product.title | split: ' - '
+        assign card_title = product_title_parts.first | strip
+        if card_specs == blank or card_specs == 'Default Title'
+          assign card_specs = product_title_parts | slice: 1, product_title_parts.size | join: ' - ' | strip
+        endif
+      endif
+    endif
+
+    if card_specs == 'Default Title'
+      assign card_specs = blank
+    endif
+
+    assign product_image = block.settings.image | default: card_variant.featured_image | default: product.featured_image
+    assign product_link = block.settings.link
+    if product_link == blank
+      assign product_link = product.url | append: '?variant=' | append: card_variant.id
+    endif
+
     assign product_description = block.settings.description
     if product_description == blank
       assign product_description = product.description | strip_html | truncatewords: 18
     endif
+
+    assign quantity_label = quantity | default: 1 | append: '×'
   endif
-%}
+-%}
 
 {%- if product != blank -%}
   <a
     class="mega-menu-products__card"
     href="{{ product_link | escape }}"
-    aria-label="{{ product_title | escape }}"
+    aria-label="{{ quantity_label }} {{ card_title | escape }}"
   >
     <div class="mega-menu-products__card-media">
       {%- if block.settings.badge != blank -%}
@@ -26,12 +56,13 @@
           {{ block.settings.badge | escape }}
         </span>
       {%- endif -%}
+
       {%- if product_image != blank -%}
         {%- render 'image-element',
           img: product_image,
           widths: '300, 500, 700',
           sizeVariable: '25vw',
-          alt: product_title,
+          alt: card_title,
           classes: 'mega-menu-products__card-image',
           loading: 'lazy',
         -%}
@@ -39,10 +70,17 @@
         {{ 'product-1' | placeholder_svg_tag: 'mega-menu-products__card-image' }}
       {%- endif -%}
     </div>
+
     <div class="mega-menu-products__card-content">
-      <h3 class="mega-menu-products__card-title">{{ product_title | escape }}</h3>
+      <h3 class="mega-menu-products__card-title">{{ quantity_label }} {{ card_title | escape }}</h3>
+      {%- if card_specs != blank -%}
+        <p class="mega-menu-products__card-specs">{{ card_specs | escape }}</p>
+      {%- endif -%}
       {%- if product_description != blank -%}
         <p class="mega-menu-products__card-description">{{ product_description | escape | newline_to_br }}</p>
+      {%- endif -%}
+      {%- if card_variant != blank and card_variant.price != blank -%}
+        <p class="mega-menu-products__card-price">{{ card_variant.price | money }}</p>
       {%- endif -%}
     </div>
   </a>
