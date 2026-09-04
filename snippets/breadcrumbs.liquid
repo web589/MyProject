@@ -1,4 +1,4 @@
-{% if settings.show_breadcrumbs %}
+{% if settings.show_breadcrumbs or template.name == 'article' %}
 
 {% unless template.name == 'index' or template.name == 'cart' %}
   <nav class="breadcrumb" role="navigation" aria-label="breadcrumbs">
@@ -60,9 +60,27 @@
 
     {% elsif template.name == 'article' %}
 
+      {%- assign article_blog = article.blog | default: blog -%}
+      {%- assign blog_center_menu = linklists['blog-center'] -%}
+      {%- assign blog_center_home_link = blank -%}
+      {%- if blog_center_menu != blank and blog_center_menu.links.size > 0 -%}
+        {%- assign blog_center_home_link = blog_center_menu.links | first -%}
+      {%- endif -%}
+
       <span class="breadcrumb__divider" aria-hidden="true">/</span>
-      {{ blog.title | link_to: blog.url }}
+      {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
+        <a href="{{ blog_center_home_link.url }}">{{ 'blogs.article.blog_center' | t }}</a>
+      {%- else -%}
+        <span>{{ 'blogs.article.blog_center' | t }}</span>
+      {%- endif -%}
+
+      {%- if article_blog != blank -%}
+        <span class="breadcrumb__divider" aria-hidden="true">/</span>
+        <a href="{{ article_blog.url }}">{{ article_blog.title | escape }}</a>
+      {%- endif -%}
+
       <span class="breadcrumb__divider" aria-hidden="true">/</span>
+      <span aria-current="page">{{ article.title | escape }}</span>
 
     {% elsif template.name == 'page' %}
 

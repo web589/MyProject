@@ -1,0 +1,151 @@
+{%- if product != blank -%}
+  {%- liquid
+    assign card_variant = product.selected_or_first_available_variant
+    assign card_image = card_variant.featured_image | default: product.featured_image
+    assign card_title = product.metafields.custom.carousel_title.value | default: product.title
+    assign card_subtitle = product.metafields.custom.carousel_subtitle.value
+    assign card_specs = product.metafields.custom.carousel_specs.value
+    assign card_cta_label = product.metafields.custom.carousel_primary_label.value
+    if card_cta_label == blank
+      assign card_cta_label = 'blogs.article.view_product' | t
+    endif
+  -%}
+
+  <article class="blog-article-product-card blog-article-product-card--{{ variant | default: 'compact' }}{% if card_image == blank %} blog-article-product-card--no-image{% endif %}">
+    {%- if card_image != blank -%}
+      <a class="blog-article-product-card__image" href="{{ product.url }}" aria-label="{{ card_title | escape }}">
+        {%- render 'image-element',
+          img: card_image,
+          sizes: '(min-width: 769px) 320px, 90vw',
+          widths: '240, 360, 540, 720',
+        -%}
+      </a>
+    {%- endif -%}
+
+    <div class="blog-article-product-card__content">
+      <h3 class="blog-article-product-card__title">
+        <a href="{{ product.url }}">{{ card_title | escape }}</a>
+      </h3>
+
+      {%- if card_subtitle != blank -%}
+        <p class="blog-article-product-card__subtitle">{{ card_subtitle | escape }}</p>
+      {%- endif -%}
+
+      {%- if card_specs != blank -%}
+        <p class="blog-article-product-card__specs">{{ card_specs | escape }}</p>
+      {%- endif -%}
+
+      {%- if card_variant != blank and card_variant.price != blank -%}
+        <div class="blog-article-product-card__price">
+          {{ card_variant.price | money }}
+          {%- if card_variant.compare_at_price > card_variant.price -%}
+            <s>{{ card_variant.compare_at_price | money }}</s>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <a class="blog-article-product-card__button" href="{{ product.url }}">
+        {{ card_cta_label | escape }}
+      </a>
+    </div>
+  </article>
+{%- endif -%}
+
+{% style %}
+  .blog-article-product-card {
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .blog-article-product-card__image {
+    align-items: center;
+    background: #f1f4f6;
+    display: flex;
+    justify-content: center;
+    min-height: 160px;
+    overflow: hidden;
+  }
+
+  .blog-article-product-card__image img {
+    display: block;
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+
+  .blog-article-product-card--cta {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+  }
+
+  .blog-article-product-card--cta.blog-article-product-card--no-image {
+    display: block;
+  }
+
+  .blog-article-product-card--cta .blog-article-product-card__image {
+    min-height: 100%;
+  }
+
+  .blog-article-product-card--compact .blog-article-product-card__image {
+    min-height: 140px;
+  }
+
+  .blog-article-product-card__content {
+    padding: 16px;
+  }
+
+  .blog-article-product-card__title {
+    font-size: 18px;
+    line-height: 1.25;
+    margin: 0 0 6px;
+  }
+
+  .blog-article-product-card__title a {
+    color: inherit;
+  }
+
+  .blog-article-product-card__subtitle,
+  .blog-article-product-card__specs {
+    color: #8a8f98;
+    font-size: 13px;
+    line-height: 1.35;
+    margin: 0 0 6px;
+  }
+
+  .blog-article-product-card__price {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 12px 0;
+  }
+
+  .blog-article-product-card__price s {
+    color: #8a8f98;
+    font-size: 12px;
+    font-weight: 400;
+    margin-left: 5px;
+  }
+
+  .blog-article-product-card__button {
+    background: #0099fc;
+    border-radius: 999px;
+    color: #fff;
+    display: block;
+    font-size: 13px;
+    padding: 11px 14px;
+    text-align: center;
+  }
+
+  .blog-article-product-card__button:hover,
+  .blog-article-product-card__button:focus-visible {
+    background: #007dcc;
+    color: #fff;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .blog-article-product-card--cta {
+      grid-template-columns: 96px minmax(0, 1fr);
+    }
+  }
+{% endstyle %}
