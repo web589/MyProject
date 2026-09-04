@@ -6036,25 +6036,41 @@ theme.recentlyViewed = {
       initMp4Video: function() {
         var mp4Video = 'Mp4Video-' + this.sectionId;
         var mp4Div = document.getElementById(mp4Video);
+        if (!mp4Div) return;
+
         var parent = mp4Div.closest(selectors.videoParent);
-  
-        if (mp4Div) {
-          parent.classList.add('loaded');
-  
+        var videoSrc = mp4Div.dataset.videoSrc;
+
+        if (!videoSrc) return;
+
+        var markLoaded = function() {
+          if (parent) {
+            parent.classList.add('loaded');
+          }
+        };
+
+        var playVideo = function() {
           if (theme.a11y.prefersReducedMotion()) return;
-  
-          var playPromise = document.querySelector('#' + mp4Video).play();
-  
+
+          var playPromise = mp4Div.play();
+
           // Edge does not return a promise (video still plays)
           if (playPromise !== undefined) {
             playPromise.then(function() {
                 // playback normal
               }).catch(function() {
                 mp4Div.setAttribute('controls', '');
-                parent.classList.add('video-interactable');
+                if (parent) {
+                  parent.classList.add('video-interactable');
+                }
               });
           }
-        }
+        };
+
+        mp4Div.addEventListener('loadeddata', markLoaded, { once: true });
+        mp4Div.addEventListener('loadeddata', playVideo, { once: true });
+        mp4Div.src = videoSrc;
+        mp4Div.load();
       },
   
       onUnload: function(evt) {

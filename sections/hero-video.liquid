@@ -43,12 +43,33 @@
       opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
     }
   {% endif %}
+
+  {% if section.settings.constrain_video_width %}
+    .hero--{{ section.id }}.hero--constrained {
+      width: calc(100% - 48px);
+      max-width: {{ section.settings.video_max_width | default: 1600 }}px;
+      height: auto;
+      aspect-ratio: {% case section.settings.video_aspect_ratio %}{% when '4-3' %}4 / 3{% when '1-1' %}1 / 1{% when '9-16' %}9 / 16{% else %}16 / 9{% endcase %};
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero--{{ section.id }}.hero--constrained .hero__media video {
+      object-fit: {{ section.settings.video_object_fit | default: 'contain' }};
+    }
+  {% endif %}
+
+  {% if section.settings.remove_media_overlay %}
+    .hero--{{ section.id }}.hero--no-media-overlay .hero__media:before {
+      content: none;
+    }
+  {% endif %}
 {%- endstyle -%}
 
 <div
   data-section-id="{{ section.id }}"
   data-section-type="video-section"
-  class="video-parent-section hero hero--{{ section.id }} hero--{{ section.settings.section_height }} hero--mobile--{{ section.settings.mobile_height }}"
+  class="video-parent-section hero hero--{{ section.id }} hero--{{ section.settings.section_height }} hero--mobile--{{ section.settings.mobile_height }}{% if section.settings.constrain_video_width %} hero--constrained{% endif %}{% if section.settings.remove_media_overlay %} hero--no-media-overlay{% endif %}"
   data-mobile-natural="false"
   data-aos="hero__animation">
 
@@ -90,8 +111,9 @@
           id="Mp4Video-{{ section.id }}"
           class="video-div"
           data-type="mp4"
-          src="{{ section.settings.video_url }}"
-          loop muted playsinline autoplay></video>
+          data-video-src="{{ section.settings.video_url | escape }}"
+          preload="none"
+          loop muted playsinline></video>
       {%- endif -%}
 
     </div>
@@ -236,6 +258,68 @@
       "label": "t:sections.hero-video.settings.video_url.label",
       "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
       "info": "t:sections.hero-video.settings.video_url.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "constrain_video_width",
+      "label": "Limit video width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "video_max_width",
+      "label": "Video maximum width",
+      "min": 800,
+      "max": 1600,
+      "step": 10,
+      "unit": "px",
+      "default": 1600
+    },
+    {
+      "type": "select",
+      "id": "video_object_fit",
+      "label": "Video fit",
+      "default": "cover",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "video_aspect_ratio",
+      "label": "Video aspect ratio",
+      "default": "16-9",
+      "options": [
+        {
+          "value": "16-9",
+          "label": "16:9"
+        },
+        {
+          "value": "4-3",
+          "label": "4:3"
+        },
+        {
+          "value": "1-1",
+          "label": "1:1"
+        },
+        {
+          "value": "9-16",
+          "label": "9:16"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_media_overlay",
+      "label": "Disable media overlay",
+      "default": false
     },
     {
       "type": "range",
