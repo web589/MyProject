@@ -771,11 +771,14 @@
         }
       }
 
-      prepareCaptcha() {
+      async prepareCaptcha() {
+        const form = this.form;
+        const getTokenValue = () => form?.querySelector('[name="h-captcha-response"]')?.value?.trim() || '';
         const protect = window.Shopify?.captcha?.protect;
-        if (typeof protect !== 'function') return Promise.resolve();
+        if (!form || typeof protect !== 'function') return;
+        if (getTokenValue()) return;
 
-        return new Promise((resolve, reject) => {
+        await new Promise((resolve, reject) => {
           let settled = false;
           const timeoutId = window.setTimeout(() => {
             if (settled) return;
@@ -791,11 +794,58 @@
           };
 
           try {
-            protect(this.form, () => finish());
+            protect.call(window.Shopify.captcha, form, () => finish());
           } catch (error) {
             finish(error);
           }
         });
+
+        // Shopify's callback means the form is wired, not that a token has
+        // already been generated. Invoke the wrapped submit method in a
+        // hidden iframe so hCaptcha can populate its response without
+        // navigating the storefront.
+        const wrappedSubmit = form.submit;
+        if (typeof wrappedSubmit !== 'function') {
+          if (getTokenValue()) return;
+          throw new Error('Die Anmeldung konnte nicht überprüft werden. Bitte versuche es erneut.');
+        }
+
+        const originalAction = form.getAttribute('action');
+        const originalTarget = form.getAttribute('target');
+        const iframeName = `ai-newsletter-captcha-${Date.now()}`;
+        const iframe = document.createElement('iframe');
+        iframe.name = iframeName;
+        iframe.title = '';
+        iframe.hidden = true;
+        iframe.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(iframe);
+        form.setAttribute('action', 'about:blank');
+        form.setAttribute('target', iframeName);
+
+        try {
+          wrappedSubmit.call(form);
+          await new Promise((resolve, reject) => {
+            const startedAt = Date.now();
+            const checkToken = () => {
+              if (getTokenValue()) {
+                resolve();
+                return;
+              }
+              if (Date.now() - startedAt >= 15000) {
+                reject(new Error('Die Anmeldung konnte nicht überprüft werden. Bitte versuche es erneut.'));
+                return;
+              }
+              window.setTimeout(checkToken, 50);
+            };
+            checkToken();
+          });
+        } finally {
+          if (originalAction === null) form.removeAttribute('action');
+          else form.setAttribute('action', originalAction);
+          if (originalTarget === null) form.removeAttribute('target');
+          else form.setAttribute('target', originalTarget);
+          iframe.remove();
+        }
       }
 
       stopSubmission(event) {
