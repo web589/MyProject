@@ -31,6 +31,10 @@
   if request.page_type == 'product'
     assign sticky_header = false
   endif
+  if request.page_type == 'article'
+    assign native_sticky_header = false
+    assign sticky_header = false
+  endif
   assign overlay_header = false
   if template_name == 'index' and section.settings.sticky_index
     assign overlay_header = true
