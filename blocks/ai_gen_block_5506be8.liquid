@@ -193,11 +193,22 @@
   .ai-media-scroll__track-{{ ai_gen_id }} {
     display: flex;
     align-items: center;
-    gap: var(--media-carousel-gap);
     width: max-content;
     transform: translate3d(0, 0, 0);
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: ai-media-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
     will-change: transform;
+  }
+
+  .ai-media-scroll__track-{{ ai_gen_id }}.is-paused,
+  .ai-media-scroll__track-{{ ai_gen_id }}:hover {
+    animation-play-state: paused;
+  }
+
+  .ai-media-scroll__group-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: var(--media-carousel-gap);
   }
 
   .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item {
@@ -233,7 +244,7 @@
 
   .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item-image {
     display: block;
-    width: auto;
+    width: var(--media-logo-width, auto);
     height: auto;
     max-width: min(100%, calc(100vw - 32px));
     max-height: 100%;
@@ -242,6 +253,16 @@
     transform: scale(1);
     transform-origin: center;
     transition: transform 0.25s ease;
+  }
+
+  @keyframes ai-media-scroll-{{ ai_gen_id }} {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+
+    to {
+      transform: translate3d(calc(-1 * var(--media-carousel-distance, 50%)), 0, 0);
+    }
   }
 
   .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item:hover,
@@ -272,7 +293,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .ai-media-scroll__track-{{ ai_gen_id }} {
-      transition: none;
+      animation: none;
     }
 
     .ai-media-scroll-{{ ai_gen_id }} .ai-media-scroll__item-image {
@@ -297,7 +318,9 @@
       {% if block.settings.title != blank %}aria-label="{{ block.settings.title | strip_html | escape }}"{% endif %}
     >
       <div class="ai-media-scroll__track-{{ ai_gen_id }}" data-media-scroll-track>
-        {% content_for 'blocks' %}
+        <div class="ai-media-scroll__group-{{ ai_gen_id }}" data-media-scroll-group>
+          {% content_for 'blocks' %}
+        </div>
       </div>
     </div>
   </div>
@@ -308,14 +331,13 @@
     class MediaScroll{{ ai_gen_id }} extends HTMLElement {
       constructor() {
         super();
-        this.currentIndex = 0;
-        this.isPaused = false;
+        this.initialized = false;
+        this.groups = [];
+        this.boundItems = [];
         this.isItemHovered = false;
         this.isItemFocused = false;
-        this.autoplayTimer = null;
-        this.handleResize = this.updateLayout.bind(this);
-        this.handleTransitionEnd = this.onTransitionEnd.bind(this);
-        this.handleImageLoad = this.updateLayout.bind(this);
+        this.handleResize = this.updateCarousel.bind(this);
+        this.handleImageLoad = this.updateCarousel.bind(this);
         this.handleItemEnter = this.pauseForItem.bind(this);
         this.handleItemLeave = this.resumeFromItem.bind(this);
         this.handleItemFocusIn = this.pauseForFocus.bind(this);
@@ -327,26 +349,55 @@
 
         this.track = this.querySelector('[data-media-scroll-track]');
         this.container = this.querySelector('[data-media-scroll-container]');
-        if (!this.track || !this.container) return;
+        this.group = this.querySelector('[data-media-scroll-group]');
+        if (!this.track || !this.container || !this.group) return;
 
-        this.items = Array.from(this.track.children).filter((item) => item.hasAttribute('data-media-logo-item'));
-        this.originalItemCount = this.items.length;
-        if (!this.originalItemCount) return;
+        this.items = Array.from(this.group.children).filter((item) => item.hasAttribute('data-media-logo-item'));
+        if (!this.items.length) return;
 
         this.initialized = true;
+        this.groups = [this.group];
+        this.bindGroup(this.group);
 
-        if (this.originalItemCount > 1) {
-          this.clone = this.items[0].cloneNode(true);
-          this.clone.setAttribute('aria-hidden', 'true');
-          this.clone.removeAttribute('data-shopify-editor-block');
-          this.clone.querySelectorAll('a, button, input').forEach((element) => element.setAttribute('tabindex', '-1'));
-          this.track.appendChild(this.clone);
+        this.updateCarousel();
+
+        if ('ResizeObserver' in window) {
+          this.resizeObserver = new ResizeObserver(this.handleResize);
+          this.resizeObserver.observe(this.container);
+          this.resizeObserver.observe(this.group);
         } else {
-          this.clone = null;
+          window.addEventListener('resize', this.handleResize, { passive: true });
         }
+      }
 
-        this.allItems = this.clone ? this.items.concat(this.clone) : this.items;
-        this.allItems.forEach((item) => {
+      disconnectedCallback() {
+        if (!this.initialized) return;
+
+        if (this.resizeObserver) this.resizeObserver.disconnect();
+        window.removeEventListener('resize', this.handleResize);
+        this.boundItems.forEach((item) => this.unbindItem(item));
+        this.groups.slice(1).forEach((group) => group.remove());
+        this.groups = [];
+        this.boundItems = [];
+        this.isItemHovered = false;
+        this.isItemFocused = false;
+        this.initialized = false;
+      }
+
+      createClone() {
+        const clone = this.group.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        clone.removeAttribute('data-shopify-editor-block');
+        clone.querySelectorAll('[data-shopify-editor-block]').forEach((element) => element.removeAttribute('data-shopify-editor-block'));
+        clone.querySelectorAll('a, button, input').forEach((element) => element.setAttribute('tabindex', '-1'));
+        this.track.appendChild(clone);
+        this.bindGroup(clone);
+        return clone;
+      }
+
+      bindGroup(group) {
+        const items = Array.from(group.children).filter((item) => item.hasAttribute('data-media-logo-item'));
+        items.forEach((item) => {
           item.addEventListener('mouseenter', this.handleItemEnter);
           item.addEventListener('mouseleave', this.handleItemLeave);
           item.addEventListener('focusin', this.handleItemFocusIn);
@@ -354,112 +405,41 @@
           item.querySelectorAll('img').forEach((image) => {
             if (!image.complete) image.addEventListener('load', this.handleImageLoad);
           });
-        });
-
-        this.track.addEventListener('transitionend', this.handleTransitionEnd);
-        this.updateLayout();
-
-        if ('ResizeObserver' in window) {
-          this.resizeObserver = new ResizeObserver(this.handleResize);
-          this.resizeObserver.observe(this.container);
-          this.resizeObserver.observe(this.track);
-        } else {
-          window.addEventListener('resize', this.handleResize, { passive: true });
-        }
-
-        this.startAutoplay();
-      }
-
-      disconnectedCallback() {
-        this.stopAutoplay();
-        if (!this.initialized) return;
-
-        if (this.resizeObserver) this.resizeObserver.disconnect();
-        window.removeEventListener('resize', this.handleResize);
-        if (this.track) this.track.removeEventListener('transitionend', this.handleTransitionEnd);
-        if (this.allItems) {
-          this.allItems.forEach((item) => {
-            item.removeEventListener('mouseenter', this.handleItemEnter);
-            item.removeEventListener('mouseleave', this.handleItemLeave);
-            item.removeEventListener('focusin', this.handleItemFocusIn);
-            item.removeEventListener('focusout', this.handleItemFocusOut);
-            item.querySelectorAll('img').forEach((image) => image.removeEventListener('load', this.handleImageLoad));
-          });
-        }
-      }
-
-      updateLayout() {
-        if (!this.container || !this.track || !this.originalItemCount) return;
-
-        const transition = this.track.style.transition;
-        this.track.style.transition = 'none';
-        const gap = parseFloat(getComputedStyle(this.track).columnGap) || 0;
-        const originalWidth = this.items.reduce((total, item) => total + item.getBoundingClientRect().width, 0) + gap * Math.max(0, this.originalItemCount - 1);
-        this.canSlide = this.originalItemCount > 1 && originalWidth > this.container.clientWidth + 1;
-
-        if (!this.canSlide) {
-          this.currentIndex = 0;
-          this.stopAutoplay();
-          this.track.style.transform = 'translate3d(0, 0, 0)';
-        } else {
-          this.goTo(this.currentIndex, false);
-          this.startAutoplay();
-        }
-
-        window.requestAnimationFrame(() => {
-          if (this.track) this.track.style.transition = transition;
+          this.boundItems.push(item);
         });
       }
 
-      getTargetOffset(index) {
-        const maxOffset = Math.max(0, this.track.scrollWidth - this.container.clientWidth);
-        const item = this.allItems[index];
-        return item ? Math.min(item.offsetLeft, maxOffset) : 0;
+      unbindItem(item) {
+        item.removeEventListener('mouseenter', this.handleItemEnter);
+        item.removeEventListener('mouseleave', this.handleItemLeave);
+        item.removeEventListener('focusin', this.handleItemFocusIn);
+        item.removeEventListener('focusout', this.handleItemFocusOut);
+        item.querySelectorAll('img').forEach((image) => image.removeEventListener('load', this.handleImageLoad));
       }
 
-      goTo(index, animate) {
-        if (!this.track || !this.canSlide) return;
-        this.currentIndex = index;
-        this.track.style.transition = animate ? '' : 'none';
-        this.track.style.transform = `translate3d(-${this.getTargetOffset(index)}px, 0, 0)`;
+      updateCarousel() {
+        if (!this.container || !this.track || !this.group || !this.items.length) return;
 
-        if (!animate) {
-          window.requestAnimationFrame(() => {
-            if (this.track) this.track.style.transition = '';
-          });
+        if (this.items.length < 2) {
+          this.track.style.animation = 'none';
+          return;
         }
-      }
 
-      next() {
-        if (!this.canSlide || this.isPaused) return;
-        this.goTo(this.currentIndex + 1, true);
-      }
+        const groupWidth = this.group.getBoundingClientRect().width;
+        if (!groupWidth) return;
 
-      onTransitionEnd(event) {
-        if (event.propertyName !== 'transform' || this.currentIndex !== this.originalItemCount) return;
-        this.goTo(0, false);
-      }
+        const requiredGroupCount = Math.max(2, Math.ceil(this.container.clientWidth / groupWidth) + 1);
+        while (this.groups.length < requiredGroupCount) {
+          this.groups.push(this.createClone());
+        }
 
-      startAutoplay() {
-        if (this.autoplayTimer || !this.canSlide || this.isPaused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const cycleDuration = Math.max(12000, Number({{ block.settings.scroll_speed | default: 40 }}) * 1000);
-        const delay = Math.max(3000, cycleDuration / this.originalItemCount);
-        this.autoplayTimer = window.setTimeout(() => {
-          this.autoplayTimer = null;
-          this.next();
-          this.startAutoplay();
-        }, delay);
-      }
-
-      stopAutoplay() {
-        if (this.autoplayTimer) window.clearTimeout(this.autoplayTimer);
-        this.autoplayTimer = null;
+        this.track.style.setProperty('--media-carousel-distance', `${groupWidth}px`);
+        if (this.track.style.animation === 'none') this.track.style.removeProperty('animation');
       }
 
       pauseForItem() {
         this.isItemHovered = true;
-        this.isPaused = true;
-        this.stopAutoplay();
+        if (this.track) this.track.classList.add('is-paused');
       }
 
       resumeFromItem() {
@@ -469,8 +449,7 @@
 
       pauseForFocus() {
         this.isItemFocused = true;
-        this.isPaused = true;
-        this.stopAutoplay();
+        if (this.track) this.track.classList.add('is-paused');
       }
 
       resumeFromFocus(event) {
@@ -481,8 +460,7 @@
 
       resumeIfClear() {
         if (this.isItemHovered || this.isItemFocused) return;
-        this.isPaused = false;
-        this.startAutoplay();
+        if (this.track) this.track.classList.remove('is-paused');
       }
     }
 

@@ -731,15 +731,89 @@
           "info": "Leave blank to use the selected product title."
         },
         {
+          "type": "header",
+          "content": "Per-card badges"
+        },
+        {
+          "type": "text",
+          "id": "badge_1",
+          "label": "1× badge",
+          "info": "Leave blank to hide the 1× card badge."
+        },
+        {
+          "type": "select",
+          "id": "badge_color_1",
+          "label": "1× badge color",
+          "default": "blue",
+          "options": [
+            {
+              "value": "blue",
+              "label": "Blue"
+            },
+            {
+              "value": "orange",
+              "label": "Orange"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "badge_2",
+          "label": "2× badge",
+          "info": "Leave blank to hide the 2× card badge."
+        },
+        {
+          "type": "select",
+          "id": "badge_color_2",
+          "label": "2× badge color",
+          "default": "blue",
+          "options": [
+            {
+              "value": "blue",
+              "label": "Blue"
+            },
+            {
+              "value": "orange",
+              "label": "Orange"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "badge_3",
+          "label": "3× badge",
+          "info": "Leave blank to hide the 3× card badge."
+        },
+        {
+          "type": "select",
+          "id": "badge_color_3",
+          "label": "3× badge color",
+          "default": "blue",
+          "options": [
+            {
+              "value": "blue",
+              "label": "Blue"
+            },
+            {
+              "value": "orange",
+              "label": "Orange"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Shared badge fallback"
+        },
+        {
           "type": "text",
           "id": "badge",
-          "label": "Badge",
-          "info": "Leave blank to hide the badge."
+          "label": "Shared badge fallback",
+          "info": "Used only when all three card-specific badges are blank."
         },
         {
           "type": "select",
           "id": "badge_color",
-          "label": "Badge color",
+          "label": "Shared badge fallback color",
           "default": "blue",
           "options": [
             {

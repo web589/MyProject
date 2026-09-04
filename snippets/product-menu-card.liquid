@@ -45,7 +45,27 @@
       assign product_description = product.description | strip_html | truncatewords: 18
     endif
 
+    assign has_card_badge_override = false
+    if block.settings.badge_1 != blank or block.settings.badge_2 != blank or block.settings.badge_3 != blank
+      assign has_card_badge_override = true
+    endif
+
+    assign card_badge = block.settings.badge
     assign badge_tone = block.settings.badge_color | default: 'blue'
+    if has_card_badge_override
+      assign card_badge = blank
+      if quantity == 1
+        assign card_badge = block.settings.badge_1
+        assign badge_tone = block.settings.badge_color_1 | default: 'blue'
+      elsif quantity == 2
+        assign card_badge = block.settings.badge_2
+        assign badge_tone = block.settings.badge_color_2 | default: 'blue'
+      elsif quantity == 3
+        assign card_badge = block.settings.badge_3
+        assign badge_tone = block.settings.badge_color_3 | default: 'blue'
+      endif
+    endif
+
     if badge_tone != 'orange'
       assign badge_tone = 'blue'
     endif
@@ -61,11 +81,11 @@
     aria-label="{{ quantity_label }} {{ card_title | escape }}"
   >
     <div class="mega-menu-products__card-media">
-      {%- if block.settings.badge != blank -%}
+      {%- if card_badge != blank -%}
         <span
           class="mega-menu-products__badge mega-menu-products__badge--{{ badge_tone }}"
         >
-          {{ block.settings.badge | escape }}
+          {{ card_badge | escape }}
         </span>
       {%- endif -%}
 

@@ -5,6 +5,7 @@
 <div
   class="ai-media-scroll__item{% if block.settings.image != blank %} ai-media-scroll__item--has-image{% endif %}"
   data-media-logo-item
+  {% if block.settings.image != blank %}style="--media-logo-width: {{ block.settings.image_width | default: 160 }}px;"{% endif %}
   {{ block.shopify_attributes }}
 >
   {% if block.settings.link != blank %}
@@ -48,6 +49,17 @@
       "type": "image_picker",
       "id": "image",
       "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Image width",
+      "min": 60,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 160,
+      "info": "Adjusts the display width. Height remains proportional to the uploaded image."
     },
     {
       "type": "text",
