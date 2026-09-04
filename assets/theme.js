@@ -7038,9 +7038,7 @@ theme.recentlyViewed = {
       initDrawers: function() {
         theme.NavDrawer = new theme.Drawers('NavDrawer', 'nav');
         if (theme.settings.cartType === 'drawer') {
-          if (!document.body.classList.contains('template-cart')) {
-            new theme.CartDrawer();
-          }
+          new theme.CartDrawer();
         }
   
         theme.collapsibles.init(document.getElementById('NavDrawer'));
