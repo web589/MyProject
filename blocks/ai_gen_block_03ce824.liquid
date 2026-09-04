@@ -870,11 +870,16 @@
 
       hideModal() {
         if (!this.modal) return;
+        const scrollPosition = this.modalScrollPosition;
         this.modal.classList.remove('is-visible');
         this.modal.setAttribute('aria-hidden', 'true');
         this.unlockBodyScroll();
         if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === 'function') {
           this.lastFocusedElement.focus({ preventScroll: true });
+        }
+        if (scrollPosition) {
+          window.scrollTo(scrollPosition.x, scrollPosition.y);
+          window.requestAnimationFrame(() => window.scrollTo(scrollPosition.x, scrollPosition.y));
         }
       }
 

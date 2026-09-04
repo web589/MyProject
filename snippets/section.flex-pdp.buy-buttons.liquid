@@ -22,6 +22,14 @@
       assign de_vat_candidate = true
     endif
   endif
+  if de_vat_candidate != true
+    for de_vat_variant in product.variants
+      if de_vat_variant.metafields.custom.de_zero_vat_variant.value != blank or de_vat_variant.metafields.custom.de_standard_vat_variant.value != blank
+        assign de_vat_candidate = true
+        break
+      endif
+    endfor
+  endif
   if de_vat_candidate == true
     assign enable_dynamic_checkout = false
   endif

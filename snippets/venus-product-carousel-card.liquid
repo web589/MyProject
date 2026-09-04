@@ -54,6 +54,25 @@
   assign secondary_action = carousel_product.metafields.custom.carousel_secondary_action.value | default: 'product'
   assign primary_label = carousel_product.metafields.custom.carousel_primary_label.value | default: carousel_settings.view_button_text
   assign secondary_label = carousel_product.metafields.custom.carousel_secondary_label.value | default: carousel_settings.details_button_text
+  assign card_is_de_vat_candidate = false
+  assign card_de_zero_vat_eligible = carousel_product.metafields.custom.de_zero_vat_eligible.value
+  if card_de_zero_vat_eligible == true or carousel_product.tags contains 'DE-0-VAT-PV' or carousel_product.tags contains 'DE 0% MwSt. PV'
+    assign card_is_de_vat_candidate = true
+  endif
+  if card_is_de_vat_candidate == false
+    for card_variant_candidate in carousel_product.variants
+      if card_variant_candidate.metafields.custom.de_zero_vat_variant.value != blank or card_variant_candidate.metafields.custom.de_standard_vat_variant.value != blank
+        assign card_is_de_vat_candidate = true
+        break
+      endif
+    endfor
+  endif
+  if card_is_de_vat_candidate and primary_action == 'buy_now'
+    assign primary_label = 'Lieferland und MwSt.-Status bestätigen'
+  endif
+  if card_is_de_vat_candidate and secondary_action == 'buy_now'
+    assign secondary_label = 'Lieferland und MwSt.-Status bestätigen'
+  endif
   assign preorder_enabled = carousel_product.metafields.custom.preorder_enabled.value
   assign product_has_inventory = false
   for product_variant in carousel_product.variants
@@ -76,7 +95,7 @@
   endif
 %}
 
-<article class="ai-product-card-{{ carousel_id }}" data-product-card>
+<article class="ai-product-card-{{ carousel_id }}" data-product-card data-de-vat-candidate="{{ card_is_de_vat_candidate }}">
   <div class="ai-product-image-{{ carousel_id }}" data-product-image>
     {% if card_image %}
       <img

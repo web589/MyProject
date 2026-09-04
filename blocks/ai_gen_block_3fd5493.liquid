@@ -1269,12 +1269,17 @@
 
       closeModal() {
         if (!this.modal) return;
+        const scrollPosition = this.modalScrollPosition;
         this.modal.classList.remove('is-open');
         this.modal.setAttribute('aria-hidden', 'true');
         const returnFocus = this.modalTrigger;
         this.modalTrigger = null;
         this.unlockBodyScroll();
         if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+        if (scrollPosition) {
+          window.scrollTo(scrollPosition.x, scrollPosition.y);
+          window.requestAnimationFrame(() => window.scrollTo(scrollPosition.x, scrollPosition.y));
+        }
       }
 
       lockBodyScroll() {
@@ -1320,6 +1325,8 @@
         if (!variantId || button.disabled) return;
         button.disabled = true;
         const root = window.Shopify?.routes?.root || '/';
+        const card = button.closest('[data-product-card]');
+        const requiresVatReview = card?.dataset.deVatCandidate === 'true';
         try {
           const response = await fetch(`${root}cart/add.js`, {
             method: 'POST',
@@ -1328,10 +1335,19 @@
           });
           const result = await response.json();
           if (!response.ok) throw new Error(result.description || result.message || 'Produkt konnte nicht hinzugefügt werden.');
-          if (button.dataset.productAction === 'buy_now') {
+          if (button.dataset.productAction === 'buy_now' && !requiresVatReview) {
             this.querySelector('[data-carousel-checkout-form]')?.requestSubmit();
           } else {
             document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: result }));
+            if (requiresVatReview) {
+              const cartType = window.theme?.settings?.cartType || 'drawer';
+              const cartDrawer = document.querySelector('#CartDrawer');
+              if (cartType === 'page' || !cartDrawer) {
+                window.location.assign(`${root}cart`);
+              } else {
+                document.dispatchEvent(new CustomEvent('cart:open'));
+              }
+            }
           }
         } catch (error) {
           if (this.modalStatus) {

@@ -108,9 +108,9 @@
   }
 
   .mega-menu-products__card {
-    background: var(--colorNav);
-    border: 1px solid rgba(42, 55, 67, 0.14);
-    border-radius: 5px;
+    background: #fff;
+    border: 0;
+    border-radius: 0;
     color: var(--colorNavText);
     display: flex;
     flex: 1 1 auto;
@@ -118,12 +118,10 @@
     min-width: 0;
     overflow: hidden;
     text-decoration: none;
-    transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    transition: transform 160ms ease;
   }
 
   .mega-menu-products__card:hover {
-    border-color: rgba(42, 55, 67, 0.3);
-    box-shadow: 0 8px 18px rgba(15, 31, 61, 0.1);
     color: var(--colorNavText);
     transform: translateY(-2px);
   }
@@ -138,7 +136,7 @@
   .mega-menu-products__card-media {
     align-items: center;
     aspect-ratio: 4 / 3;
-    background: var(--colorBodyDim);
+    background: #fff;
     display: flex;
     justify-content: center;
     overflow: hidden;

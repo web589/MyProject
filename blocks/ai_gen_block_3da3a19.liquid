@@ -544,9 +544,22 @@
   assign sticky_image = sticky_variant.featured_image | default: sticky_product.featured_image | default: block.settings.mini_img
   assign sticky_price = sticky_variant.price
   assign sticky_compare_price = sticky_variant.compare_at_price
+  assign sticky_is_de_vat_candidate = false
+  assign sticky_de_zero_vat_eligible = sticky_product.metafields.custom.de_zero_vat_eligible.value
+  if sticky_de_zero_vat_eligible == true or sticky_product.tags contains 'DE-0-VAT-PV' or sticky_product.tags contains 'DE 0% MwSt. PV'
+    assign sticky_is_de_vat_candidate = true
+  endif
+  if sticky_is_de_vat_candidate == false
+    for sticky_variant_candidate in sticky_product.variants
+      if sticky_variant_candidate.metafields.custom.de_zero_vat_variant.value != blank or sticky_variant_candidate.metafields.custom.de_standard_vat_variant.value != blank
+        assign sticky_is_de_vat_candidate = true
+        break
+      endif
+    endfor
+  endif
 %}
 
-<sticky-buy-bar-{{ ai_gen_id }} class="sticky-buy-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<sticky-buy-bar-{{ ai_gen_id }} class="sticky-buy-bar-{{ ai_gen_id }}" data-de-vat-candidate="{{ sticky_is_de_vat_candidate }}" {{ block.shopify_attributes }}>
   <div class="sticky-buy-bar-inner-{{ ai_gen_id }}">
     <div class="bar-left-{{ ai_gen_id }}">
       {% if sticky_image %}
@@ -608,7 +621,7 @@
           <span data-bundle-button-label>{{ block.settings.addcart_btn_text }}</span>
         </button>
         <button type="button" class="btn-buy-now-bar-{{ ai_gen_id }}" data-bundle-buy-now data-bundle-action="buy-now" data-loading-text="{{ block.settings.loading_text | escape }}">
-          <span data-bundle-button-label>{{ block.settings.buynow_btn_text }}</span>
+          <span data-bundle-button-label>{% if sticky_is_de_vat_candidate %}Lieferland und MwSt.-Status bestätigen{% else %}{{ block.settings.buynow_btn_text }}{% endif %}</span>
         </button>
       </div>
     </div>

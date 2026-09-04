@@ -945,11 +945,26 @@
 {% assign shared_inventory_variant = bundle_product.variants.first %}
 {% assign bundle_display_title = bundle_product.title | strip %}
 {% assign bundle_description = bundle_product.description %}
+{% liquid
+  assign bundle_is_de_vat_candidate = false
+  assign bundle_de_zero_vat_eligible = bundle_product.metafields.custom.de_zero_vat_eligible.value
+  if bundle_de_zero_vat_eligible == true or bundle_product.tags contains 'DE-0-VAT-PV' or bundle_product.tags contains 'DE 0% MwSt. PV'
+    assign bundle_is_de_vat_candidate = true
+  endif
+  if bundle_is_de_vat_candidate == false
+    for bundle_variant in bundle_product.variants
+      if bundle_variant.metafields.custom.de_zero_vat_variant.value != blank or bundle_variant.metafields.custom.de_standard_vat_variant.value != blank
+        assign bundle_is_de_vat_candidate = true
+        break
+      endif
+    endfor
+  endif
+%}
 {% if is_product_context == false and bundle_description == blank %}
   {% assign bundle_description = block.settings.description %}
 {% endif %}
 
-<pdp-bundle-{{ ai_gen_id }} id="pdp-buy" class="pdp-bundle-{{ ai_gen_id }}" data-pdp-bundle {{ block.shopify_attributes }}>
+<pdp-bundle-{{ ai_gen_id }} id="pdp-buy" class="pdp-bundle-{{ ai_gen_id }}" data-pdp-bundle data-de-vat-candidate="{{ bundle_is_de_vat_candidate }}" {{ block.shopify_attributes }}>
   <div class="pdp-bundle-grid-{{ ai_gen_id }}">
     <div class="pdp-left-{{ ai_gen_id }}">
       {% assign first_thumb = bundle_product.featured_image | default: bundle_product.images.first %}
@@ -1142,7 +1157,7 @@
             <span data-bundle-button-label>{{ block.settings.btn_text }}</span>
           </button>
           <button type="button" class="pdp-checkout-btn-{{ ai_gen_id }} pdp-checkout-btn-buy-{{ ai_gen_id }}" data-bundle-buy-now data-bundle-action="buy-now" data-loading-text="{{ block.settings.loading_text | escape }}">
-            <span data-bundle-button-label>{{ block.settings.buy_now_text }}</span>
+            <span data-bundle-button-label>{% if bundle_is_de_vat_candidate %}Lieferland und MwSt.-Status bestätigen{% else %}{{ block.settings.buy_now_text }}{% endif %}</span>
           </button>
         </div>
         <div class="pdp-cart-status-{{ ai_gen_id }}" data-cart-status role="status" aria-live="polite"></div>
@@ -1289,6 +1304,7 @@
       this.cartStatus = this.querySelector('[data-cart-status]');
       this.directCheckoutForm = this.querySelector('[data-direct-checkout-form]');
       this.directCheckoutSubmit = this.querySelector('[data-direct-checkout-submit]');
+      this.requiresVatReview = this.dataset.deVatCandidate === 'true';
       this.addToCartButtons = document.querySelectorAll('[data-bundle-action="add-cart"]');
       this.buyNowButtons = document.querySelectorAll('[data-bundle-action="buy-now"]');
       this.actionButtons = [...this.addToCartButtons, ...this.buyNowButtons];
@@ -1756,7 +1772,10 @@
       const actionType = event.currentTarget.dataset.bundleAction;
       if (!actionType) return;
       const loadingButtons = document.querySelectorAll(`[data-bundle-action="${actionType}"]`);
-      this.addSelectionsToCart(actionType === 'buy-now', loadingButtons);
+      // A VAT candidate must always pass through the cart delivery/tax review.
+      // Keep the normal product flow unchanged for non-candidates.
+      const goToCheckout = actionType === 'buy-now' && !this.requiresVatReview;
+      this.addSelectionsToCart(goToCheckout, loadingButtons);
     }
 
     async refreshSelectedAvailability() {
@@ -2004,6 +2023,10 @@
     }
 
     submitDirectCheckout() {
+      if (this.requiresVatReview) {
+        this.openCartForVatReview();
+        return;
+      }
       if (!this.directCheckoutForm || !this.directCheckoutSubmit) {
         throw new Error('Checkout-Formular konnte nicht geladen werden.');
       }
@@ -2012,6 +2035,17 @@
       } else {
         this.directCheckoutSubmit.click();
       }
+    }
+
+    openCartForVatReview() {
+      const root = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
+      const cartType = window.theme && window.theme.settings ? window.theme.settings.cartType : 'drawer';
+      const cartDrawer = document.querySelector('#CartDrawer');
+      if (cartType === 'page' || !cartDrawer) {
+        window.location.assign(`${root}cart`);
+        return;
+      }
+      document.dispatchEvent(new CustomEvent('cart:open'));
     }
 
     async addSelectionsToCart(goToCheckout, loadingButtons) {
@@ -2059,11 +2093,12 @@
         }
 
         if (this.cartStatus) {
-          this.cartStatus.textContent = goToCheckout
+          this.cartStatus.textContent = goToCheckout || this.requiresVatReview
             ? 'Zum Warenkorb hinzugefügt. Bitte Lieferland und MwSt.-Status bestätigen.'
             : 'Zum Warenkorb hinzugefügt.';
         }
         document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: { items: result.items || items } }));
+        if (this.requiresVatReview) this.openCartForVatReview();
       } catch (error) {
         if (this.cartStatus) this.cartStatus.textContent = error.message;
       } finally {
