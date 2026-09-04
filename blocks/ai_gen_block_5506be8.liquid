@@ -293,6 +293,7 @@
     <div
       class="ai-media-scroll__container-{{ ai_gen_id }}"
       data-media-scroll-container
+      role="region"
       {% if block.settings.title != blank %}aria-label="{{ block.settings.title | strip_html | escape }}"{% endif %}
     >
       <div class="ai-media-scroll__track-{{ ai_gen_id }}" data-media-scroll-track>
