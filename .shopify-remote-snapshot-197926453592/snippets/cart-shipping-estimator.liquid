@@ -1,0 +1,395 @@
+<style>
+  .cart-page-shipping {
+    margin: 24px 0;
+    padding: 20px;
+    border: 1px solid var(--colorBorder, #e0dfdf);
+  }
+
+  .cart-page-shipping .cart-delivery-heading {
+    margin: 0 0 10px;
+    font-weight: 600;
+  }
+
+  .cart-page-shipping .cart-country-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cart-page-shipping .cart-country-option,
+  .cart-page-shipping [data-shipping-calculate],
+  .cart-page-shipping .cart-postcode-toggle {
+    min-height: 42px;
+    padding: 8px 14px;
+    border: 1px solid currentColor;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .cart-page-shipping .cart-country-option[aria-pressed='true'] {
+    background: currentColor;
+    color: var(--colorBody, #fff);
+  }
+
+  .cart-page-shipping .cart-postcode-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .cart-page-shipping .cart-postcode-row[hidden],
+  .cart-page-shipping .cart-postcode-toggle[hidden] {
+    display: none;
+  }
+
+  .cart-page-shipping .cart-postcode-row input {
+    flex: 1 1 160px;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--colorBorder, #e0dfdf);
+  }
+
+  .cart-page-shipping .cart-shipping-estimate {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .cart-page-shipping .cart-shipping-estimate.is-error {
+    color: #b42318;
+  }
+
+  .cart-page-shipping .cart-country-note,
+  .cart-page-shipping .cart-delivery-status {
+    margin: 10px 0 0;
+    font-size: 0.875em;
+  }
+
+  .cart-page-shipping .cart-delivery-status:empty {
+    display: none;
+  }
+</style>
+
+{%- liquid
+  assign estimator_country = selected_country | default: localization.country.iso_code
+  unless estimator_country == 'DE' or estimator_country == 'NL' or estimator_country == 'BE'
+    assign estimator_country = 'DE'
+  endunless
+-%}
+
+<cart-shipping-estimator
+  class="cart-page-shipping"
+  data-initial-country="{{ estimator_country }}"
+  data-market-country="{{ localization.country.iso_code }}"
+  data-initial-postcode="{{ selected_postcode | default: '' | escape }}"
+  data-localization-form-id="{{ localization_form_id | default: 'CartPageLocalizationForm' }}"
+>
+  <p class="cart-delivery-heading">Land / Region</p>
+  <div class="cart-country-options" role="group" aria-label="Lieferland wählen">
+    <button type="button" class="cart-country-option" data-delivery-country="DE" aria-pressed="{% if estimator_country == 'DE' %}true{% else %}false{% endif %}">Deutschland</button>
+    <button type="button" class="cart-country-option" data-delivery-country="NL" aria-pressed="{% if estimator_country == 'NL' %}true{% else %}false{% endif %}">Niederlande</button>
+    <button type="button" class="cart-country-option" data-delivery-country="BE" aria-pressed="{% if estimator_country == 'BE' %}true{% else %}false{% endif %}">Belgien</button>
+  </div>
+  <p class="cart-country-note">Die Versandkosten werden anhand des ausgewählten Lieferlands und gegebenenfalls der PLZ aus Shopify geladen.</p>
+
+  <div class="cart-postcode-row" data-postcode-row hidden>
+    <label class="visually-hidden" for="CartPageDeliveryPostcode">Postleitzahl</label>
+    <input id="CartPageDeliveryPostcode" type="text" inputmode="text" autocomplete="postal-code" placeholder="Postleitzahl" value="{{ selected_postcode | default: '' | escape }}" data-delivery-postcode>
+    <button type="button" data-shipping-calculate>Versand berechnen</button>
+  </div>
+
+  <div class="cart-shipping-estimate" data-shipping-estimate role="status" aria-live="polite">
+    <span data-shipping-message>Shopify Versandkosten werden geladen …</span>
+    <button type="button" class="cart-postcode-toggle" data-postcode-toggle hidden>PLZ für genaue Berechnung eingeben</button>
+  </div>
+
+  <input type="hidden" name="attributes[Lieferland]" value="" data-delivery-country-name>
+  <input type="hidden" name="attributes[Lieferland ISO]" value="{{ estimator_country }}" data-delivery-country-code>
+  <input type="hidden" name="attributes[Lieferland PLZ]" value="{{ selected_postcode | default: '' | escape }}" data-delivery-postcode-attribute>
+  <p class="cart-delivery-status" data-delivery-status role="alert"></p>
+</cart-shipping-estimator>
+
+<script>
+  (function() {
+    if (customElements.get('cart-shipping-estimator')) return;
+
+    class CartShippingEstimator extends HTMLElement {
+      connectedCallback() {
+        this.form = this.closest('form');
+        if (!this.form) return;
+
+        this.rootUrl = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
+        this.countryNames = { DE: 'Deutschland', NL: 'Niederlande', BE: 'Belgien' };
+        this.selectedCountry = this.countryNames[this.dataset.initialCountry] ? this.dataset.initialCountry : 'DE';
+        this.marketCountry = this.dataset.marketCountry || '';
+        this.postcodeRow = this.querySelector('[data-postcode-row]');
+        this.postcodeInput = this.querySelector('[data-delivery-postcode]');
+        this.postcodeAttribute = this.querySelector('[data-delivery-postcode-attribute]');
+        this.countryNameAttribute = this.querySelector('[data-delivery-country-name]');
+        this.countryCodeAttribute = this.querySelector('[data-delivery-country-code]');
+        this.countryButtons = [...this.querySelectorAll('[data-delivery-country]')];
+        this.shippingButton = this.querySelector('[data-shipping-calculate]');
+        this.postcodeToggle = this.querySelector('[data-postcode-toggle]');
+        this.shippingBox = this.querySelector('[data-shipping-estimate]');
+        this.shippingMessage = this.querySelector('[data-shipping-message]');
+        this.shippingSummary = this.form.querySelector('[data-cart-summary-shipping]');
+        this.status = this.querySelector('[data-delivery-status]');
+        this.localizationForm = document.getElementById(this.dataset.localizationFormId);
+        this.localizationInput = this.localizationForm && this.localizationForm.querySelector('[data-cart-localization-country]');
+        this.cartCurrency = 'EUR';
+        this.shippingRequestId = 0;
+        this.shippingInputTimer = null;
+        this.savePromise = Promise.resolve();
+
+        this.handleCountryClick = this.handleCountryClick.bind(this);
+        this.handleShippingCalculate = this.handleShippingCalculate.bind(this);
+        this.handlePostcodeInput = this.handlePostcodeInput.bind(this);
+        this.handlePostcodeKeydown = this.handlePostcodeKeydown.bind(this);
+        this.handlePostcodeToggle = this.handlePostcodeToggle.bind(this);
+        this.handleCartChanged = this.handleCartChanged.bind(this);
+        this.handleExternalContextChange = this.handleExternalContextChange.bind(this);
+
+        this.countryButtons.forEach(button => button.addEventListener('click', this.handleCountryClick));
+        this.shippingButton.addEventListener('click', this.handleShippingCalculate);
+        this.postcodeInput.addEventListener('input', this.handlePostcodeInput);
+        this.postcodeInput.addEventListener('keydown', this.handlePostcodeKeydown);
+        this.postcodeToggle.addEventListener('click', this.handlePostcodeToggle);
+        document.addEventListener('cart:updated', this.handleCartChanged);
+        document.addEventListener('ajaxProduct:added', this.handleCartChanged);
+        document.addEventListener('cart:delivery-context-updated', this.handleExternalContextChange);
+
+        this.applyCountryUI();
+        this.loadCartContext();
+        window.setTimeout(() => this.loadShippingRates(), 500);
+      }
+
+      disconnectedCallback() {
+        this.countryButtons && this.countryButtons.forEach(button => button.removeEventListener('click', this.handleCountryClick));
+        this.shippingButton && this.shippingButton.removeEventListener('click', this.handleShippingCalculate);
+        this.postcodeInput && this.postcodeInput.removeEventListener('input', this.handlePostcodeInput);
+        this.postcodeInput && this.postcodeInput.removeEventListener('keydown', this.handlePostcodeKeydown);
+        this.postcodeToggle && this.postcodeToggle.removeEventListener('click', this.handlePostcodeToggle);
+        document.removeEventListener('cart:updated', this.handleCartChanged);
+        document.removeEventListener('ajaxProduct:added', this.handleCartChanged);
+        document.removeEventListener('cart:delivery-context-updated', this.handleExternalContextChange);
+        if (this.shippingInputTimer) window.clearTimeout(this.shippingInputTimer);
+      }
+
+      async loadCartContext() {
+        try {
+          const response = await fetch(`${this.rootUrl}cart.js`, { headers: { Accept: 'application/json' } });
+          const cart = await response.json();
+          if (!response.ok) return;
+
+          this.cartCurrency = cart.currency || 'EUR';
+          const attributes = cart.attributes || {};
+          const savedCountry = attributes['Lieferland ISO'];
+          if (this.countryNames[savedCountry]) this.selectedCountry = savedCountry;
+          if (typeof attributes['Lieferland PLZ'] === 'string') this.postcodeInput.value = attributes['Lieferland PLZ'];
+          this.applyCountryUI();
+          if (this.selectedCountry !== this.marketCountry) await this.syncLocalization(this.selectedCountry);
+          this.loadShippingRates();
+        } catch (error) {
+          this.setStatus('Der Warenkorbkontext konnte nicht vollständig geladen werden.');
+        }
+      }
+
+      handleCartChanged() {
+        window.setTimeout(() => this.loadShippingRates(), 450);
+      }
+
+      handleExternalContextChange(event) {
+        if (event.detail && event.detail.source === this) return;
+        this.loadCartContext();
+      }
+
+      async handleCountryClick(event) {
+        const nextCountry = event.currentTarget.dataset.deliveryCountry;
+        if (!this.countryNames[nextCountry]) return;
+
+        if (this.shippingInputTimer) window.clearTimeout(this.shippingInputTimer);
+        const countryChanged = nextCountry !== this.selectedCountry;
+        this.selectedCountry = nextCountry;
+        if (countryChanged) this.postcodeInput.value = '';
+        this.setStatus('');
+        this.applyCountryUI();
+
+        try {
+          await this.persistAttributes();
+          await this.syncLocalization(nextCountry);
+        } catch (error) {
+          this.setStatus(error.message || 'Das Lieferland konnte nicht angewendet werden.');
+        } finally {
+          this.loadShippingRates();
+        }
+      }
+
+      handleShippingCalculate() {
+        if (this.shippingInputTimer) window.clearTimeout(this.shippingInputTimer);
+        this.setStatus('');
+        this.persistAttributes()
+          .catch(() => {})
+          .finally(() => this.loadShippingRates());
+      }
+
+      handlePostcodeInput() {
+        if (this.shippingInputTimer) window.clearTimeout(this.shippingInputTimer);
+        this.postcodeRow.hidden = false;
+        this.postcodeToggle.hidden = true;
+        this.applyCountryUI();
+        this.shippingInputTimer = window.setTimeout(() => {
+          this.shippingInputTimer = null;
+          this.handleShippingCalculate();
+        }, 550);
+      }
+
+      handlePostcodeKeydown(event) {
+        if (event.key !== 'Enter') return;
+        event.preventDefault();
+        this.handleShippingCalculate();
+      }
+
+      handlePostcodeToggle() {
+        this.postcodeRow.hidden = !this.postcodeRow.hidden;
+        if (!this.postcodeRow.hidden) this.postcodeInput.focus();
+      }
+
+      applyCountryUI() {
+        this.countryButtons.forEach(button => {
+          button.setAttribute('aria-pressed', String(button.dataset.deliveryCountry === this.selectedCountry));
+        });
+        this.countryNameAttribute.value = this.countryNames[this.selectedCountry];
+        this.countryCodeAttribute.value = this.selectedCountry;
+        this.postcodeAttribute.value = this.postcodeInput.value.trim();
+      }
+
+      getAttributePayload() {
+        this.applyCountryUI();
+        return {
+          Lieferland: this.countryNames[this.selectedCountry],
+          'Lieferland ISO': this.selectedCountry,
+          'Lieferland PLZ': this.postcodeInput.value.trim()
+        };
+      }
+
+      persistAttributes() {
+        const attributes = this.getAttributePayload();
+        const save = () => fetch(`${this.rootUrl}cart/update.js`, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ attributes })
+        }).then(async response => {
+          const cart = await response.json();
+          if (!response.ok) throw new Error(cart.description || cart.message || 'Auswahl konnte nicht gespeichert werden.');
+          this.cartCurrency = cart.currency || this.cartCurrency;
+          document.dispatchEvent(new CustomEvent('cart:delivery-context-updated', { detail: { source: this } }));
+          return cart;
+        });
+
+        this.savePromise = this.savePromise
+          .catch(() => {})
+          .then(save)
+          .catch(error => {
+            this.setStatus(error.message || 'Auswahl konnte nicht gespeichert werden.');
+            throw error;
+          });
+        return this.savePromise;
+      }
+
+      async syncLocalization(countryCode) {
+        if (!this.localizationForm || !this.localizationInput || countryCode === this.marketCountry) return;
+        this.localizationInput.value = countryCode;
+        try {
+          const response = await fetch(this.localizationForm.action, {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: new FormData(this.localizationForm)
+          });
+          if (response.ok) this.marketCountry = countryCode;
+        } catch (error) {
+          // The explicit shipping address below remains the source for the estimate.
+        }
+      }
+
+      async loadShippingRates() {
+        const requestId = ++this.shippingRequestId;
+        if (!this.form.querySelector('[data-products] .cart__item')) {
+          this.setShippingMessage('Lege zuerst ein Produkt in den Warenkorb.', false);
+          this.setShippingSummary('—', false);
+          return;
+        }
+
+        this.setShippingMessage('Shopify Versandkosten werden geladen …', false);
+        this.setShippingSummary('Wird berechnet …', true);
+        this.postcodeToggle.hidden = true;
+
+        try {
+          const result = await this.getShippingRates({
+            rootUrl: this.rootUrl,
+            countryCode: this.selectedCountry,
+            postcode: this.postcodeInput.value,
+            currency: this.cartCurrency
+          });
+          if (requestId !== this.shippingRequestId) return;
+
+          const cheapest = result.rates[0];
+          const rateName = cheapest.presentment_name || cheapest.name || cheapest.code || 'Versand';
+          const extraRates = result.rates.length > 1
+            ? ` · ${result.rates.length - 1} weitere Rate${result.rates.length > 2 ? 'n' : ''} im Checkout`
+            : '';
+          this.setShippingMessage(`${rateName}: ${result.formattedPrice}${extraRates}`, false);
+          this.setShippingSummary(`${result.rates.length > 1 ? 'ab ' : ''}${result.formattedPrice}`, false);
+          this.postcodeRow.hidden = true;
+          this.postcodeToggle.hidden = true;
+        } catch (error) {
+          if (requestId !== this.shippingRequestId) return;
+          if (error.needsPostcode && !this.postcodeInput.value.trim()) {
+            this.postcodeRow.hidden = true;
+            this.postcodeToggle.hidden = false;
+            this.setShippingMessage(`Versand nach ${this.countryNames[this.selectedCountry]} · bitte PLZ eingeben`, false);
+          } else {
+            this.setShippingMessage(error.message || 'Versandkosten konnten nicht geladen werden.', true);
+          }
+          this.setShippingSummary('Im Checkout berechnet', false);
+        }
+      }
+
+      async getShippingRates(options) {
+        if (!window.CartShippingRates) {
+          await new Promise(resolve => {
+            const onReady = () => {
+              window.clearTimeout(timeout);
+              window.removeEventListener('cart:shipping-rates-ready', onReady);
+              resolve();
+            };
+            const timeout = window.setTimeout(onReady, 2000);
+            window.addEventListener('cart:shipping-rates-ready', onReady);
+          });
+        }
+        if (!window.CartShippingRates) throw new Error('Versandkosten konnten nicht geladen werden.');
+        return window.CartShippingRates.getRates(options);
+      }
+
+      setShippingMessage(message, isError) {
+        this.shippingMessage.textContent = message;
+        this.shippingBox.classList.toggle('is-error', Boolean(isError));
+      }
+
+      setShippingSummary(message, isLoading) {
+        if (!this.shippingSummary) return;
+        this.shippingSummary.textContent = message;
+        this.shippingSummary.classList.toggle('is-loading', Boolean(isLoading));
+      }
+
+      setStatus(message) {
+        this.status.textContent = message || '';
+      }
+    }
+
+    customElements.define('cart-shipping-estimator', CartShippingEstimator);
+  })();
+</script>

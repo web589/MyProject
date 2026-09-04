@@ -126,9 +126,6 @@
       {%- if product_description != blank -%}
         <p class="mega-menu-products__card-description">{{ product_description | escape | newline_to_br }}</p>
       {%- endif -%}
-      {%- if card_variant != blank and card_variant.price != blank -%}
-        <p class="mega-menu-products__card-price">{{ card_variant.price | money }}</p>
-      {%- endif -%}
     </div>
   </a>
 {%- endif -%}
