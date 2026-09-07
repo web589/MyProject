@@ -678,6 +678,7 @@
         this.handleLocationChange = this.handleLocationChange.bind(this);
         this.updateAnchorOffset = this.updateAnchorOffset.bind(this);
         this.handleLayoutChange = this.handleLayoutChange.bind(this);
+        this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
         this.scheduleHashAlignment = this.scheduleHashAlignment.bind(this);
         this.handleInitialHashOnLoad = this.handleInitialHashOnLoad.bind(this);
 
@@ -686,6 +687,7 @@
 
         window.addEventListener('hashchange', this.handleLocationChange);
         window.addEventListener('popstate', this.handleLocationChange);
+        document.addEventListener('transitionend', this.handleTransitionEnd, true);
 
         if (window.location.hash) {
           this.scheduleHashAlignment('auto');
@@ -731,6 +733,24 @@
         if (this.getHashTarget()) {
           this.scheduleHashAlignment('auto');
         }
+      }
+
+      handleTransitionEnd(event) {
+        if (event.propertyName !== 'transform') {
+          return;
+        }
+
+        const targetElement = this.getHashTarget();
+        const revealedSection = event.target;
+        if (
+          !targetElement ||
+          !revealedSection?.hasAttribute('data-scroll-reveal-section-ready') ||
+          !revealedSection.contains(targetElement)
+        ) {
+          return;
+        }
+
+        this.scheduleHashAlignment('auto');
       }
 
       getHashTarget() {
@@ -822,6 +842,7 @@
         this.navItems?.forEach(item => item.removeEventListener('click', this.handleNavigationClick));
         window.removeEventListener('hashchange', this.handleLocationChange);
         window.removeEventListener('popstate', this.handleLocationChange);
+        document.removeEventListener('transitionend', this.handleTransitionEnd, true);
         window.removeEventListener('resize', this.handleLayoutChange);
         window.removeEventListener('load', this.handleInitialHashOnLoad);
         this.anchorResizeObserver?.disconnect();
