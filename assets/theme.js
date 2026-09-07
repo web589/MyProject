@@ -2124,11 +2124,9 @@ theme.recentlyViewed = {
           return Promise.resolve();
         }
 
-        var refreshPromise = this.quantityMarkupRefreshNeeded
-          ? this.buildCart().catch(function(error) {
-              this.latestQuantityError = this.latestQuantityError || error;
-            }.bind(this))
-          : Promise.resolve();
+        var refreshPromise = this.buildCart().catch(function(error) {
+          this.latestQuantityError = this.latestQuantityError || error;
+        }.bind(this));
 
         return refreshPromise.then(function() {
           this.quantityMarkupRefreshNeeded = false;
