@@ -1865,7 +1865,9 @@
       visit(result, 0);
       if (!values.length && typeof rawMessage === 'string' && (!result || typeof result !== 'object')) {
         const text = rawMessage.trim();
-        if (text) values.push(text);
+        // Shopify may return an HTML connection-check page instead of JSON.
+        // Never surface that document as the cart error message.
+        if (text && !/^\s*</.test(text)) values.push(text);
       }
       return [...new Set(values)].join(' ').trim();
     }

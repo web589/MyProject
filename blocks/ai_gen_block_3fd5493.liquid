@@ -1333,7 +1333,15 @@
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
             body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
           });
-          const result = await response.json();
+          const responseText = await response.text();
+          let result = null;
+          try {
+            result = responseText ? JSON.parse(responseText) : {};
+          } catch (parseError) {
+            throw new Error(/^\s*</.test(responseText || '')
+              ? 'Die Shopify-Warenkorbverbindung wird gerade geprüft. Bitte lade die Seite neu und versuche es erneut.'
+              : 'Produkt konnte nicht hinzugefügt werden.');
+          }
           if (!response.ok) throw new Error(result.description || result.message || 'Produkt konnte nicht hinzugefügt werden.');
           if (button.dataset.productAction === 'buy_now' && !requiresVatReview) {
             this.querySelector('[data-carousel-checkout-form]')?.requestSubmit();
