@@ -1028,16 +1028,6 @@
 
         try {
           const root = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
-          const response = await fetch(`${root}cart.js`, {
-            cache: 'no-store',
-            headers: {
-              Accept: 'application/json',
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          });
-          const cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorb konnte nicht geprüft werden.');
-          if (!response.ok) throw new Error(cart.description || cart.message || 'Der Warenkorb konnte nicht geprüft werden.');
-
           const limits = new Map();
           drawer.querySelectorAll('[data-venus-shared-variant-id]').forEach(item => {
             const variantId = String(item.dataset.venusSharedVariantId || '');
@@ -1048,6 +1038,26 @@
               message: item.dataset.venusInventoryMessage || 'Nicht genügend gemeinsamer Lagerbestand verfügbar. Bitte reduziere die gewählte Menge.'
             });
           });
+
+          // Products that do not use the legacy shared-inventory mechanism do
+          // not need a second cart.js request here. Shopify Checkout remains
+          // the authoritative inventory check for all normal cart lines.
+          if (!limits.size) {
+            form.dataset.inventoryValidated = 'true';
+            submitter.disabled = false;
+            form.requestSubmit(submitter);
+            return;
+          }
+
+          const response = await fetch(`${root}cart.js`, {
+            cache: 'no-store',
+            headers: {
+              Accept: 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          });
+          const cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorb konnte nicht geprüft werden.');
+          if (!response.ok) throw new Error(cart.description || cart.message || 'Der Warenkorb konnte nicht geprüft werden.');
 
           const sharedTotals = new Map();
           (cart.items || []).forEach(item => {
