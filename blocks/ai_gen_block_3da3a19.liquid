@@ -235,6 +235,14 @@
     z-index: {{ block.settings.bar_z_index }};
   }
 
+  #pdp-buy,
+  #pdp-overview,
+  #pdp-specifications,
+  #pdp-included,
+  #pdp-faq {
+    scroll-margin-top: calc(var(--pdp-sticky-anchor-offset, var(--site-header-group-height, 0px)) + 8px);
+  }
+
   .sticky-buy-bar-inner-{{ ai_gen_id }} {
     max-width: {{ block.settings.bar_max_width }}px;
     margin: 0 auto;
@@ -309,10 +317,13 @@
     flex: 0 0 100%;
     order: 3;
     display: flex;
+    align-self: stretch;
+    align-items: stretch;
     justify-content: flex-start;
     gap: {{ block.settings.nav_item_gap }}px;
     min-width: 0;
     margin-top: 1px;
+    margin-bottom: calc(-1 * {{ block.settings.bar_padding_y }}px);
   }
 
   .bar-nav-item-{{ ai_gen_id }} {
@@ -324,11 +335,24 @@
     white-space: nowrap;
     transition: color 0.2s;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
   }
 
   .bar-nav-item-{{ ai_gen_id }}:hover,
   .bar-nav-item-{{ ai_gen_id }}.active {
     color: {{ block.settings.nav_color_active }};
+  }
+
+  .bar-nav-item-{{ ai_gen_id }}.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: #0099FE;
   }
 
   .bar-right-{{ ai_gen_id }} {
@@ -637,34 +661,135 @@
 
       connectedCallback() {
         this.navItems = this.querySelectorAll('.bar-nav-item-{{ ai_gen_id }}');
+        this.handleNavigationClick = this.handleNavigationClick.bind(this);
+        this.handleLocationChange = this.handleLocationChange.bind(this);
+        this.updateAnchorOffset = this.updateAnchorOffset.bind(this);
+        this.handleInitialHashOnLoad = this.handleInitialHashOnLoad.bind(this);
+
         this.setupNavigation();
+        this.setupAnchorOffset();
+
+        window.addEventListener('hashchange', this.handleLocationChange);
+        window.addEventListener('popstate', this.handleLocationChange);
+
+        if (window.location.hash) {
+          window.requestAnimationFrame(this.handleLocationChange);
+          window.addEventListener('load', this.handleInitialHashOnLoad, { once: true });
+        }
       }
 
       setupNavigation() {
-        this.navItems.forEach(item => {
-          item.addEventListener('click', (e) => {
-            const href = item.getAttribute('href');
-            if (href && href.startsWith('#')) {
-              e.preventDefault();
-              const targetId = href.substring(1);
-              const targetElement = document.getElementById(targetId);
-              if (targetElement) {
-                // Use the bar's actual viewport position so the offset also
-                // includes the full header group (announcement bar included).
-                const barBottom = this.getBoundingClientRect().bottom;
-                const targetTop = targetElement.getBoundingClientRect().top + window.scrollY - barBottom - 8;
-                window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
-                window.history.replaceState(null, '', href);
-                this.navItems.forEach(nav => nav.classList.remove('active'));
-                item.classList.add('active');
-              }
-            }
-          });
+        this.navItems.forEach(item => item.addEventListener('click', this.handleNavigationClick));
+      }
+
+      setupAnchorOffset() {
+        this.updateAnchorOffset();
+        window.addEventListener('resize', this.updateAnchorOffset);
+
+        if (window.ResizeObserver) {
+          this.anchorResizeObserver = new ResizeObserver(this.updateAnchorOffset);
+          this.anchorResizeObserver.observe(this);
+
+          const headerGroup = document.getElementById('SiteHeaderGroup');
+          if (headerGroup) {
+            this.anchorResizeObserver.observe(headerGroup);
+          }
+        }
+      }
+
+      updateAnchorOffset() {
+        const barBottom = Math.max(0, this.getBoundingClientRect().bottom);
+        document.documentElement.style.setProperty('--pdp-sticky-anchor-offset', `${barBottom}px`);
+      }
+
+      getHashTarget() {
+        let targetId = window.location.hash.replace(/^#/, '');
+
+        try {
+          targetId = decodeURIComponent(targetId);
+        } catch (error) {
+          return null;
+        }
+
+        return targetId ? document.getElementById(targetId) : null;
+      }
+
+      setActiveNavItem(targetId) {
+        this.navItems.forEach(nav => {
+          const isActive = nav.getAttribute('href') === `#${targetId}`;
+          nav.classList.toggle('active', isActive);
         });
+      }
+
+      scrollToTarget(targetElement, behavior) {
+        const anchorOffset = this.getBoundingClientRect().bottom + 8;
+        const targetTop = targetElement.getBoundingClientRect().top + window.scrollY - anchorOffset;
+
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          behavior
+        });
+      }
+
+      handleNavigationClick(event) {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+          return;
+        }
+
+        const item = event.currentTarget;
+        const href = item.getAttribute('href');
+        if (!href || !href.startsWith('#')) {
+          return;
+        }
+
+        const targetId = href.substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (!targetElement) {
+          return;
+        }
+
+        event.preventDefault();
+        this.updateAnchorOffset();
+        this.scrollToTarget(targetElement, 'smooth');
+        window.history.replaceState(null, '', href);
+        this.setActiveNavItem(targetId);
+      }
+
+      handleLocationChange() {
+        window.requestAnimationFrame(() => {
+          const targetElement = this.getHashTarget();
+          if (!targetElement) {
+            return;
+          }
+
+          const targetId = targetElement.id;
+          this.updateAnchorOffset();
+          this.scrollToTarget(targetElement, 'auto');
+          this.setActiveNavItem(targetId);
+        });
+      }
+
+      handleInitialHashOnLoad() {
+        if (window.location.hash) {
+          this.handleLocationChange();
+        }
+      }
+
+      disconnectedCallback() {
+        this.navItems?.forEach(item => item.removeEventListener('click', this.handleNavigationClick));
+        window.removeEventListener('hashchange', this.handleLocationChange);
+        window.removeEventListener('popstate', this.handleLocationChange);
+        window.removeEventListener('resize', this.updateAnchorOffset);
+        window.removeEventListener('load', this.handleInitialHashOnLoad);
+        this.anchorResizeObserver?.disconnect();
+
+        document.documentElement.style.removeProperty('--pdp-sticky-anchor-offset');
       }
     }
 
-    customElements.define('sticky-buy-bar-{{ ai_gen_id }}', StickyBuyBar{{ ai_gen_id }});
+    if (!customElements.get('sticky-buy-bar-{{ ai_gen_id }}')) {
+      customElements.define('sticky-buy-bar-{{ ai_gen_id }}', StickyBuyBar{{ ai_gen_id }});
+    }
   })();
 </script>
 
@@ -957,7 +1082,7 @@
       "type": "color",
       "id": "nav_color_active",
       "label": "Nav active color",
-      "default": "#1958d9"
+      "default": "#0099FE"
     },
     {
       "type": "range",
