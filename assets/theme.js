@@ -1744,8 +1744,14 @@ theme.recentlyViewed = {
       this.subtotal = form.querySelector(selectors.subTotal);
       this.termsCheckbox = form.querySelector(selectors.termsCheckbox);
       this.noteInput = form.querySelector(selectors.cartNote);
-  
+      this.cartStatus = form.querySelector('[data-cart-status]');
+
       this.cartItemsUpdated = false;
+      this.quantityUpdateQueue = Promise.resolve();
+      this.pendingQuantityUpdates = new Set();
+      this.quantityMarkupRefreshNeeded = false;
+      this.latestQuantityCart = null;
+      this.latestQuantityError = null;
   
       if (this.termsCheckbox) {
         config.requiresTerms = true;
@@ -1781,6 +1787,13 @@ theme.recentlyViewed = {
   
       onSubmit: function(evt) {
         this.submitBtn.classList.add(classes.btnLoading);
+
+        if (this.pendingQuantityUpdates.size) {
+          evt.preventDefault();
+          this.submitBtn.classList.remove(classes.btnLoading);
+          this.setCartStatus('Warenkorb wird aktualisiert. Bitte kurz warten.');
+          return false;
+        }
   
         /*
           Checks for drawer or cart open class on body element
@@ -1829,12 +1842,17 @@ theme.recentlyViewed = {
       },
   
       buildCart: function() {
-        theme.cart.getCartProductMarkup().then(this.cartMarkup.bind(this));
+        return theme.cart.getCartProductMarkup().then(this.cartMarkup.bind(this));
       },
-  
+
       cartMarkup: function(text) {
         var markup = this._parseProductHTML(text);
         var items = markup.items;
+
+        if (!items) {
+          throw new Error('Der Warenkorb konnte nicht dargestellt werden.');
+        }
+
         var count = parseInt(items.dataset.count);
         var subtotal = items.dataset.cartSubtotal;
         var discount = items.dataset.cartDiscount;
@@ -1896,59 +1914,261 @@ theme.recentlyViewed = {
           });
         });
       },
-  
+
       quantityChanged: function(evt) {
         var key = evt.detail[0];
         var qty = evt.detail[1];
         var el = evt.detail[2];
-  
+
         if (!key || !qty) {
           return;
         }
-  
-        // Disable qty selector so multiple clicks can't happen while loading
-        if (el) {
-          el.classList.add('is-loading');
+
+        var operation = {
+          key: key,
+          qty: qty,
+          element: el
+        };
+
+        this.pendingQuantityUpdates.add(operation);
+        this.setQuantityLoading(operation, true);
+
+        this.quantityUpdateQueue = this.quantityUpdateQueue
+          .catch(function() {})
+          .then(function() {
+            return this.processQuantityChange(operation);
+          }.bind(this));
+
+        return this.quantityUpdateQueue;
+      },
+
+      setCartStatus: function(message) {
+        if (this.cartStatus) {
+          this.cartStatus.textContent = message || '';
         }
-  
-        theme.cart.changeItem(key, qty)
+      },
+
+      setQuantityLoading: function(operation, isLoading) {
+        var el = operation && operation.element;
+        if (!el || !document.documentElement.contains(el)) {
+          return;
+        }
+
+        el.classList.toggle('is-loading', isLoading);
+
+        if (isLoading) {
+          el.setAttribute('aria-busy', 'true');
+          el.querySelectorAll('input, button').forEach(control => {
+            control.dataset.cartLoadingDisabled = control.disabled ? 'true' : 'false';
+            control.disabled = true;
+          });
+          this.setCartStatus('Warenkorb wird aktualisiert.');
+          return;
+        }
+
+        el.removeAttribute('aria-busy');
+        el.querySelectorAll('input, button').forEach(control => {
+          if (control.dataset.cartLoadingDisabled === 'false') {
+            control.disabled = false;
+          }
+          delete control.dataset.cartLoadingDisabled;
+        });
+      },
+
+      parseQuantityCart: function(cart) {
+        var parsedCart = typeof cart === 'string' ? JSON.parse(cart) : cart;
+
+        if (!parsedCart || typeof parsedCart !== 'object') {
+          throw new Error('Der Warenkorb konnte nicht aktualisiert werden.');
+        }
+
+        if (parsedCart.status === 422 || !Array.isArray(parsedCart.items)) {
+          throw new Error(parsedCart.description || parsedCart.message || 'Die gewählte Menge ist nicht verfügbar.');
+        }
+
+        return parsedCart;
+      },
+
+      getCartDisplayCount: function(cart) {
+        return (cart.items || []).reduce(function(count, item) {
+          var properties = item.properties || {};
+          var packSize = parseInt(properties._venus_pack_size, 10) || 1;
+          if (packSize < 1) {
+            packSize = 1;
+          }
+          return count + Math.floor((parseInt(item.quantity, 10) || 0) / packSize);
+        }, 0);
+      },
+
+      formatCartMoney: function(cents) {
+        return theme.Currency.formatMoney(
+          parseInt(cents, 10) || 0,
+          theme.settings.moneyFormat
+        );
+      },
+
+      findCartItemElement: function(key) {
+        var itemElement = null;
+        this.form.querySelectorAll('.cart__item[data-key]').forEach(el => {
+          if (el.dataset.key === key) {
+            itemElement = el;
+          }
+        });
+        return itemElement;
+      },
+
+      applyCartJSON: function(cart, key) {
+        var itemCount = parseInt(cart.item_count, 10);
+        if (isNaN(itemCount)) {
+          itemCount = (cart.items || []).length;
+        }
+
+        if (itemCount > 0) {
+          this.wrapper.classList.remove('is-empty');
+        } else {
+          this.wrapper.classList.add('is-empty');
+        }
+
+        this.updateCount(this.getCartDisplayCount(cart));
+
+        var summarySubtotal = this.form.querySelector('[data-cart-summary-subtotal]');
+        var summaryDiscount = this.form.querySelector('[data-cart-summary-discount]');
+        var subtotal = typeof cart.original_total_price !== 'undefined'
+          ? cart.original_total_price
+          : cart.items_subtotal_price;
+        var discount = cart.total_discount || 0;
+        var total = cart.total_price || 0;
+
+        if (summarySubtotal && typeof subtotal !== 'undefined') {
+          summarySubtotal.innerHTML = this.formatCartMoney(subtotal);
+        }
+        if (summaryDiscount) {
+          summaryDiscount.innerHTML = '−' + this.formatCartMoney(discount);
+        }
+        if (this.subtotal && typeof total !== 'undefined') {
+          this.subtotal.innerHTML = this.formatCartMoney(total);
+        }
+
+        var cartItems = this.products && this.products.querySelector('.cart__items');
+        if (cartItems) {
+          if (typeof subtotal !== 'undefined') cartItems.dataset.cartSubtotal = subtotal;
+          cartItems.dataset.cartDiscount = discount;
+          cartItems.dataset.cartTotal = total;
+        }
+
+        var updatedItem = (cart.items || []).find(item => item.key === key);
+        var itemElement = key ? this.findCartItemElement(key) : null;
+        if (!updatedItem || !itemElement) {
+          return updatedItem;
+        }
+
+        var input = itemElement.querySelector('.js-qty__num');
+        if (input) {
+          var multiplier = parseInt(input.dataset.quantityMultiplier, 10) || 1;
+          input.value = Math.floor((parseInt(updatedItem.quantity, 10) || 0) / multiplier);
+        }
+
+        var currentPrice = itemElement.querySelector('.cart__price--current');
+        var finalLinePrice = typeof updatedItem.final_line_price !== 'undefined'
+          ? updatedItem.final_line_price
+          : updatedItem.line_price;
+        if (currentPrice && typeof finalLinePrice !== 'undefined') {
+          currentPrice.innerHTML = this.formatCartMoney(finalLinePrice);
+        }
+
+        return updatedItem;
+      },
+
+      shouldRefreshQuantityMarkup: function(cart, operation, updatedItem) {
+        if (!updatedItem || updatedItem.quantity !== operation.qty) {
+          return true;
+        }
+
+        var itemElement = this.findCartItemElement(operation.key);
+        if (!itemElement) {
+          return true;
+        }
+
+        var cartItems = this.products && this.products.querySelector('.cart__items');
+        if (cartItems && parseInt(cartItems.dataset.cartDiscount, 10) !== (parseInt(cart.total_discount, 10) || 0)) {
+          return true;
+        }
+
+        var finalLinePrice = typeof updatedItem.final_line_price !== 'undefined'
+          ? updatedItem.final_line_price
+          : updatedItem.line_price;
+        var originalLinePrice = typeof updatedItem.original_line_price !== 'undefined'
+          ? updatedItem.original_line_price
+          : updatedItem.original_price;
+        var hasLineDiscount = parseInt(originalLinePrice, 10) > parseInt(finalLinePrice, 10);
+        var hasDiscountMarkup = itemElement.querySelector('.cart__price--strikethrough, .cart__discount');
+        var hasCartDiscount = parseInt(cart.total_discount, 10) > 0;
+        var hasLineDiscountAllocation = Array.isArray(updatedItem.line_level_discount_allocations)
+          && updatedItem.line_level_discount_allocations.length > 0;
+
+        return Boolean(hasLineDiscount || hasDiscountMarkup || hasCartDiscount || hasLineDiscountAllocation);
+      },
+
+      reconcileQuantityError: function(operation) {
+        return theme.cart.getCart()
           .then(function(cart) {
-  
-            const parsedCart = JSON.parse(cart);
-  
-            if (parsedCart.status === 422) {
-              alert(parsedCart.message);
-            } else {
-              const updatedItem = parsedCart.items.find(item => item.key === key);
-  
-              // Update cartItemsUpdated property on object so we can reference later
-              if (updatedItem && (evt.type === 'cart:quantity.cart-cart-drawer' || evt.type === 'cart:quantity.cart-header')) {
-                this.cartItemsUpdated = true;
-              }
-  
-              if ((updatedItem && evt.type === 'cart:quantity.cart-cart-drawer') || (updatedItem && evt.type === 'cart:quantity.cart-header')) {
-                if (updatedItem.quantity !== qty) {
-                }
-                // Reset property on object so that checkout button will work as usual
-                this.cartItemsUpdated = false;
-              }
-  
-              if (parsedCart.item_count > 0) {
-                this.wrapper.classList.remove('is-empty');
-              } else {
-                this.wrapper.classList.add('is-empty');
-              }
-            }
-  
-            this.buildCart();
-  
+            this.latestQuantityCart = cart;
+            this.quantityMarkupRefreshNeeded = true;
+            this.applyCartJSON(cart, operation.key);
+          }.bind(this))
+          .catch(function() {});
+      },
+
+      flushQuantityUpdates: function() {
+        if (this.pendingQuantityUpdates.size) {
+          return Promise.resolve();
+        }
+
+        var refreshPromise = this.quantityMarkupRefreshNeeded
+          ? this.buildCart().catch(function(error) {
+              this.latestQuantityError = this.latestQuantityError || error;
+            }.bind(this))
+          : Promise.resolve();
+
+        return refreshPromise.then(function() {
+          this.quantityMarkupRefreshNeeded = false;
+
+          if (this.latestQuantityCart) {
             document.dispatchEvent(new CustomEvent('cart:updated', {
               detail: {
-                cart: parsedCart
+                cart: this.latestQuantityCart
               }
             }));
+          }
+
+          this.setCartStatus(this.latestQuantityError
+            ? 'Der Warenkorb konnte nicht vollständig aktualisiert werden. Bitte prüfe die Auswahl erneut.'
+            : 'Warenkorb aktualisiert.');
+          this.latestQuantityCart = null;
+          this.latestQuantityError = null;
+        }.bind(this));
+      },
+
+      processQuantityChange: function(operation) {
+        return theme.cart.changeItem(operation.key, operation.qty)
+          .then(function(cart) {
+            var parsedCart = this.parseQuantityCart(cart);
+            var updatedItem = (parsedCart.items || []).find(item => item.key === operation.key);
+            var needsMarkupRefresh = this.shouldRefreshQuantityMarkup(parsedCart, operation, updatedItem);
+            this.applyCartJSON(parsedCart, operation.key);
+            this.latestQuantityCart = parsedCart;
+            this.quantityMarkupRefreshNeeded = this.quantityMarkupRefreshNeeded
+              || needsMarkupRefresh;
           }.bind(this))
-          .catch(function(XMLHttpRequest){});
+          .catch(function(error) {
+            this.latestQuantityError = error;
+            return this.reconcileQuantityError(operation);
+          }.bind(this))
+          .then(function() {
+            this.pendingQuantityUpdates.delete(operation);
+            this.setQuantityLoading(operation, false);
+            return this.flushQuantityUpdates();
+          }.bind(this));
       },
   
       /*============================================================================

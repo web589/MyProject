@@ -159,6 +159,47 @@
       object-fit: contain;
     }
 
+    #CartDrawer .cart-quantity-loader {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 14px;
+      height: 14px;
+      margin: -7px 0 0 -7px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      color: #0099fe;
+      pointer-events: none;
+      animation: spin 0.75s linear infinite;
+    }
+
+    #CartDrawer .js-qty__wrapper.is-loading {
+      opacity: 0.72;
+    }
+
+    #CartDrawer .js-qty__wrapper.is-loading .cart-quantity-loader {
+      display: block;
+    }
+
+    #CartDrawer .js-qty__wrapper.is-loading .js-qty__num {
+      color: transparent;
+      caret-color: transparent;
+    }
+
+    #CartDrawer .js-qty__wrapper.is-loading .js-qty__adjust {
+      opacity: 0.35;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #CartDrawer .cart-quantity-loader {
+        animation: none;
+        border-top-color: currentColor;
+        opacity: 0.7;
+      }
+    }
+
     #CartDrawer .drawer__footer {
       border-color: #e2e5e9;
       padding-top: 16px;
@@ -650,6 +691,7 @@
       <div class="drawer__inner">
         <div class="drawer__scrollable">
           <div data-products class="appear-animation appear-delay-2"></div>
+          <p class="cart-drawer-update-status visually-hidden" data-cart-status role="status" aria-live="polite"></p>
 
           {% if settings.cart_notes_enable %}
             <div class="appear-animation appear-delay-3">

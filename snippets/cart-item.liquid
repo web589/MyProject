@@ -128,7 +128,8 @@
     </div>
     <div class="cart__item-sub">
       <div>
-        <div class="js-qty__wrapper">
+        <div class="js-qty__wrapper" data-cart-quantity-control>
+          <span class="cart-quantity-loader" aria-hidden="true"></span>
           <label for="cart_updates_{{ product.key }}" class="hidden-label">{{ 'cart.label.quantity' | t }}</label>
           <input type="text"
             id="cart_updates_{{ product.key }}"
