@@ -149,6 +149,7 @@
     height: 100%;
     transform: translate3d(0, 0, 0);
     will-change: transform;
+    animation: ai-marquee-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
   }
 
   .ai-marquee-item-{{ ai_gen_id }} {
@@ -161,15 +162,6 @@
     color: {{ block.settings.text_color }};
     line-height: {{ block.settings.bar_height }}px;
     white-space: nowrap;
-  }
-
-  .ai-marquee-bar-{{ ai_gen_id }}[data-overflow="true"] {
-    overflow-x: hidden;
-  }
-
-  .ai-marquee-bar-{{ ai_gen_id }}[data-overflow="true"] .ai-marquee-wrapper-{{ ai_gen_id }} {
-    justify-content: flex-start;
-    animation: ai-marquee-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite alternate;
   }
 
   {% if block.settings.pause_on_hover %}
@@ -198,18 +190,14 @@
 
   @keyframes ai-marquee-scroll-{{ ai_gen_id }} {
     0% {
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(var(--marquee-start, 100%), 0, 0);
     }
     100% {
-      transform: translate3d(calc(-1 * var(--marquee-distance, 0px)), 0, 0);
+      transform: translate3d(var(--marquee-end, -100%), 0, 0);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .ai-marquee-bar-{{ ai_gen_id }}[data-overflow="true"] {
-      overflow-x: auto;
-    }
-
     .ai-marquee-wrapper-{{ ai_gen_id }} {
       animation: none !important;
     }
@@ -228,7 +216,6 @@
 {% if has_announcement %}
   <marquee-bar-{{ ai_gen_id }}
     class="ai-marquee-bar-{{ ai_gen_id }}"
-    data-overflow="false"
     {{ block.shopify_attributes }}
   >
     <div class="ai-marquee-wrapper-{{ ai_gen_id }}">
@@ -299,9 +286,10 @@
               return;
             }
 
-            const distance = Math.max(0, this.wrapper.scrollWidth - this.clientWidth);
-            this.style.setProperty('--marquee-distance', `${distance}px`);
-            this.dataset.overflow = distance > 1 ? 'true' : 'false';
+            const containerWidth = this.clientWidth;
+            const trackWidth = this.wrapper.scrollWidth;
+            this.style.setProperty('--marquee-start', `${containerWidth}px`);
+            this.style.setProperty('--marquee-end', `${-trackWidth}px`);
           }
         }
 
