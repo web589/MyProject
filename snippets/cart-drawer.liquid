@@ -1723,19 +1723,29 @@
           }
         }
 
-        handleVatFallback() {
+        selectRegularVat() {
           const regularChoice = this.vatChoices.find(input => input.value === 'regular');
-          if (!regularChoice) return;
+          if (!regularChoice) return Promise.resolve(false);
 
           regularChoice.checked = true;
           this.vatConfirm.checked = false;
           ++this.vatSelectionRevision;
+          this.zeroVatVariantUnavailable = false;
           this.showVatFallback(false);
           this.updateVatUI();
-          this.setStatus('');
-          this.persistAttributes().catch(error => {
+          return this.persistAttributes().then(() => true);
+        }
+
+        async handleVatFallback() {
+          const regularChoice = this.vatChoices.find(input => input.value === 'regular');
+          if (!regularChoice) return;
+
+          try {
+            await this.selectRegularVat();
+            this.setStatus('');
+          } catch (error) {
             this.setStatus(error.message || 'Die MwSt.-Auswahl konnte nicht gespeichert werden.');
-          });
+          }
           regularChoice.focus();
         }
 
@@ -1841,8 +1851,18 @@
           } catch (error) {
             this.updateVatUI();
             submitter.disabled = false;
-            this.showVatFallback(Boolean(error && error.canFallbackToStandardVat));
-            this.setStatus(error.message || 'Die MwSt.-Auswahl konnte nicht angewendet werden.');
+            if (error && error.canFallbackToStandardVat) {
+              try {
+                await this.selectRegularVat();
+                this.setStatus('Die 0-%-MwSt.-Variante ist nicht verfügbar. Der reguläre MwSt.-Satz wurde ausgewählt. Bitte klicke erneut auf „Zur Kasse“.');
+              } catch (fallbackError) {
+                this.showVatFallback(true);
+                this.setStatus(fallbackError.message || error.message || 'Die MwSt.-Auswahl konnte nicht angewendet werden.');
+              }
+            } else {
+              this.showVatFallback(false);
+              this.setStatus(error.message || 'Die MwSt.-Auswahl konnte nicht angewendet werden.');
+            }
           }
         }
       }

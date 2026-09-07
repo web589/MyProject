@@ -1,0 +1,46 @@
+{%- liquid
+  assign article = block.settings.article
+
+  if article != blank
+    assign article_image = block.settings.image | default: article.image
+    assign card_title = block.settings.title | default: article.title
+    assign card_description = block.settings.description
+    if card_description == blank
+      assign card_description = article.excerpt | strip_html | truncatewords: 18
+    endif
+    if card_description == blank
+      assign card_description = article.content | strip_html | truncatewords: 18
+    endif
+    assign article_link = block.settings.link | default: article.url
+  endif
+-%}
+
+{%- if article != blank -%}
+  <a
+    class="mega-menu-products__card"
+    href="{{ article_link | escape }}"
+    aria-label="{{ card_title | escape }}"
+  >
+    <div class="mega-menu-products__card-media">
+      {%- if article_image != blank -%}
+        {%- render 'image-element',
+          img: article_image,
+          widths: '300, 500, 700',
+          sizeVariable: '25vw',
+          alt: card_title,
+          classes: 'mega-menu-products__card-image',
+          loading: 'lazy',
+        -%}
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'mega-menu-products__card-image' }}
+      {%- endif -%}
+    </div>
+
+    <div class="mega-menu-products__card-content">
+      <h3 class="mega-menu-products__card-title">{{ card_title | escape }}</h3>
+      {%- if card_description != blank -%}
+        <p class="mega-menu-products__card-description">{{ card_description | escape | newline_to_br }}</p>
+      {%- endif -%}
+    </div>
+  </a>
+{%- endif -%}

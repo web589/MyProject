@@ -12,8 +12,8 @@
     {%- liquid
       assign mega_menu_block = nil
       assign link_handle = link.title | handleize
-      assign product_block_count = 0
-      assign default_product_category = blank
+      assign menu_card_block_count = 0
+      assign default_menu_category = blank
 
       for block in section.blocks
         if block.type == 'mega_menu'
@@ -26,10 +26,10 @@
       endfor
 
       for block in section.blocks
-        if block.type == 'mega_menu_product'
+        if block.type == 'mega_menu_product' and block.settings.product != blank
           assign product_menu_handle = block.settings.menu_handle | handleize
-          if product_menu_handle == link_handle and block.settings.product != blank
-            assign product_block_count = product_block_count | plus: 1
+          if product_menu_handle == link_handle
+            assign menu_card_block_count = menu_card_block_count | plus: 1
             assign product_category_handle = block.settings.category_handle
             if product_category_handle == blank
               assign product_category_handle = block.settings.product.handle
@@ -44,8 +44,21 @@
             elsif product_category_handle contains 'venus-e-max'
               assign product_category_handle = 'venus-e-max'
             endif
-            if default_product_category == blank
-              assign default_product_category = product_category_handle
+            if default_menu_category == blank
+              assign default_menu_category = product_category_handle
+            endif
+          endif
+        elsif block.type == 'mega_menu_article' and block.settings.article != blank
+          assign article_menu_handle = block.settings.menu_handle | handleize
+          if article_menu_handle == link_handle
+            assign menu_card_block_count = menu_card_block_count | plus: 1
+            assign article_category_handle = block.settings.category_handle
+            if article_category_handle == blank
+              assign article_category_handle = block.settings.article.handle
+            endif
+            assign article_category_handle = article_category_handle | handleize
+            if default_menu_category == blank
+              assign default_menu_category = article_category_handle
             endif
           endif
         endif
@@ -53,14 +66,14 @@
 
       assign has_dropdown = false
       assign is_megamenu = false
-      assign has_product_menu = false
+      assign has_menu_cards = false
       if link.links != blank
         assign has_dropdown = true
         if mega_menu_block != nil
           assign is_megamenu = true
         endif
-        if is_megamenu and product_block_count > 0
-          assign has_product_menu = true
+        if is_megamenu and menu_card_block_count > 0
+          assign has_menu_cards = true
         endif
       endif
 
@@ -95,11 +108,11 @@
         </a>
       {% endif %}
 
-      {%- if has_product_menu -%}
+      {%- if has_menu_cards -%}
         <div
           class="site-nav__dropdown megamenu mega-menu-products text-left"
           data-mega-menu-products
-          data-default-category="{{ default_product_category }}"
+          data-default-category="{{ default_menu_category }}"
         >
           <div class="page-width">
             <div class="mega-menu-products__inner">
@@ -125,45 +138,58 @@
                       elsif category_handle contains 'venus-e-max'
                         assign category_handle = 'venus-e-max'
                       endif
-                      assign has_product_category = false
-                      for product_block in section.blocks
-                        if product_block.type == 'mega_menu_product'
-                          assign product_menu_handle = product_block.settings.menu_handle | handleize
-                          if product_menu_handle == link_handle and product_block.settings.product != blank
-                            assign product_category_handle = product_block.settings.category_handle
-                            if product_category_handle == blank
-                              assign product_category_handle = product_block.settings.product.handle
+                      assign has_menu_category = false
+                      for menu_block in section.blocks
+                        if menu_block.type == 'mega_menu_product' and menu_block.settings.product != blank
+                          assign block_menu_handle = menu_block.settings.menu_handle | handleize
+                          if block_menu_handle == link_handle
+                            assign menu_category_handle = menu_block.settings.category_handle
+                            if menu_category_handle == blank
+                              assign menu_category_handle = menu_block.settings.product.handle
                             endif
-                            assign product_category_handle = product_category_handle | handleize
-                            if product_category_handle contains 'venus-e-mini'
-                              assign product_category_handle = 'venus-e-mini'
-                            elsif product_category_handle contains 'venus-e-3'
-                              assign product_category_handle = 'venus-e-3'
-                            elsif product_category_handle contains 'venus-e-4'
-                              assign product_category_handle = 'venus-e-4'
-                            elsif product_category_handle contains 'venus-e-max'
-                              assign product_category_handle = 'venus-e-max'
+                            assign menu_category_handle = menu_category_handle | handleize
+                            if menu_category_handle contains 'venus-e-mini'
+                              assign menu_category_handle = 'venus-e-mini'
+                            elsif menu_category_handle contains 'venus-e-3'
+                              assign menu_category_handle = 'venus-e-3'
+                            elsif menu_category_handle contains 'venus-e-4'
+                              assign menu_category_handle = 'venus-e-4'
+                            elsif menu_category_handle contains 'venus-e-max'
+                              assign menu_category_handle = 'venus-e-max'
                             endif
-                            if product_category_handle == category_handle
-                              assign has_product_category = true
+                            if menu_category_handle == category_handle
+                              assign has_menu_category = true
+                              break
+                            endif
+                          endif
+                        elsif menu_block.type == 'mega_menu_article' and menu_block.settings.article != blank
+                          assign block_menu_handle = menu_block.settings.menu_handle | handleize
+                          if block_menu_handle == link_handle
+                            assign menu_category_handle = menu_block.settings.category_handle
+                            if menu_category_handle == blank
+                              assign menu_category_handle = menu_block.settings.article.handle
+                            endif
+                            assign menu_category_handle = menu_category_handle | handleize
+                            if menu_category_handle == category_handle
+                              assign has_menu_category = true
                               break
                             endif
                           endif
                         endif
                       endfor
 
-                      assign is_product_category_active = false
-                      if has_product_category
-                        if category_handle == default_product_category
-                          assign is_product_category_active = true
+                      assign is_menu_category_active = false
+                      if has_menu_category
+                        if category_handle == default_menu_category
+                          assign is_menu_category_active = true
                         endif
                       endif
                     -%}
-                    <li class="mega-menu-products__category-item{% if has_product_category %} is-product-category{% endif %}{% if is_product_category_active %} is-active{% endif %}" data-mega-menu-category-item="{{ category_handle }}">
+                    <li class="mega-menu-products__category-item{% if has_menu_category %} is-menu-category{% endif %}{% if is_menu_category_active %} is-active{% endif %}" data-mega-menu-category-item="{{ category_handle }}">
                       <a
                         href="{{ childlink_url }}"
                         class="mega-menu-products__category-link"
-                        {% if has_product_category %}data-mega-menu-category="{{ category_handle }}" aria-controls="mega-menu-products-{{ mega_menu_block.id }}-{{ category_handle }}" aria-expanded="{% if category_handle == default_product_category %}true{% else %}false{% endif %}"{% endif %}
+                        {% if has_menu_category %}data-mega-menu-category="{{ category_handle }}" aria-controls="mega-menu-products-{{ mega_menu_block.id }}-{{ category_handle }}" aria-expanded="{% if category_handle == default_menu_category %}true{% else %}false{% endif %}"{% endif %}
                         {% if childlink.active %}aria-current="page"{% endif %}
                       >
                         <span>{{ childlink.title | escape }}</span>
@@ -186,13 +212,13 @@
               </nav>
 
               <div class="mega-menu-products__panels">
-                {%- for product_block in section.blocks -%}
-                  {%- if product_block.type == 'mega_menu_product' -%}
-                    {%- assign product_menu_handle = product_block.settings.menu_handle | handleize -%}
-                    {%- if product_menu_handle == link_handle and product_block.settings.product != blank -%}
-                      {%- assign product_category_handle = product_block.settings.category_handle -%}
+                {%- for menu_block in section.blocks -%}
+                  {%- if menu_block.type == 'mega_menu_product' and menu_block.settings.product != blank -%}
+                    {%- assign product_menu_handle = menu_block.settings.menu_handle | handleize -%}
+                    {%- if product_menu_handle == link_handle -%}
+                      {%- assign product_category_handle = menu_block.settings.category_handle -%}
                       {%- if product_category_handle == blank -%}
-                        {%- assign product_category_handle = product_block.settings.product.handle -%}
+                        {%- assign product_category_handle = menu_block.settings.product.handle -%}
                       {%- endif -%}
                       {%- assign product_category_handle = product_category_handle | handleize -%}
                       {%- if product_category_handle contains 'venus-e-mini' -%}
@@ -208,14 +234,35 @@
                         id="mega-menu-products-{{ mega_menu_block.id }}-{{ product_category_handle }}"
                         class="mega-menu-products__panel"
                         data-mega-menu-category-panel="{{ product_category_handle }}"
-                        {% unless product_category_handle == default_product_category %}hidden{% endunless %}
+                        {% unless product_category_handle == default_menu_category %}hidden{% endunless %}
                       >
                         <div class="mega-menu-products__cards" role="list">
-                          {%- for mega_variant in product_block.settings.product.variants limit: 3 -%}
+                          {%- for mega_variant in menu_block.settings.product.variants limit: 3 -%}
                             <div role="listitem">
-                              {%- render 'product-menu-card', block: product_block, variant: mega_variant, quantity: forloop.index -%}
+                              {%- render 'product-menu-card', block: menu_block, variant: mega_variant, quantity: forloop.index -%}
                             </div>
                           {%- endfor -%}
+                        </div>
+                      </div>
+                    {%- endif -%}
+                  {%- elsif menu_block.type == 'mega_menu_article' and menu_block.settings.article != blank -%}
+                    {%- assign article_menu_handle = menu_block.settings.menu_handle | handleize -%}
+                    {%- if article_menu_handle == link_handle -%}
+                      {%- assign article_category_handle = menu_block.settings.category_handle -%}
+                      {%- if article_category_handle == blank -%}
+                        {%- assign article_category_handle = menu_block.settings.article.handle -%}
+                      {%- endif -%}
+                      {%- assign article_category_handle = article_category_handle | handleize -%}
+                      <div
+                        id="mega-menu-products-{{ mega_menu_block.id }}-{{ article_category_handle }}"
+                        class="mega-menu-products__panel"
+                        data-mega-menu-category-panel="{{ article_category_handle }}"
+                        {% unless article_category_handle == default_menu_category %}hidden{% endunless %}
+                      >
+                        <div class="mega-menu-products__cards" role="list">
+                          <div role="listitem">
+                            {%- render 'article-menu-card', block: menu_block -%}
+                          </div>
                         </div>
                       </div>
                     {%- endif -%}
@@ -409,7 +456,7 @@
         menu.setAttribute('data-mega-menu-ready', 'true');
 
         var categoryLinks = menu.querySelectorAll('[data-mega-menu-category]');
-        var categoryItems = menu.querySelectorAll('[data-mega-menu-category-item].is-product-category');
+        var categoryItems = menu.querySelectorAll('[data-mega-menu-category-item].is-menu-category');
         var panels = menu.querySelectorAll('[data-mega-menu-category-panel]');
         var defaultCategory = menu.getAttribute('data-default-category');
 

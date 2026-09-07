@@ -869,6 +869,55 @@
           "info": "Leave blank to link to the selected product."
         }
       ]
+    },
+    {
+      "type": "mega_menu_article",
+      "name": "Mega menu article",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_handle",
+          "label": "Top-level menu handle",
+          "default": "balkonkraftwerk",
+          "info": "Articles are shown when this handle matches a top-level menu item, for example: balkonkraftwerk."
+        },
+        {
+          "type": "text",
+          "id": "category_handle",
+          "label": "Category handle",
+          "info": "Match a child item under the top-level menu, for example: balkonkraftwerk-mit-speicher."
+        },
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Blog article"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card image",
+          "info": "Optional. If blank, the selected article's image is used."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card title",
+          "info": "Optional. If blank, the selected article's title is used."
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Short description",
+          "info": "Optional. If blank, the article excerpt or first content text is used."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link override",
+          "info": "Optional. If blank, the selected article URL is used."
+        }
+      ]
     }
   ],
   "default": {
