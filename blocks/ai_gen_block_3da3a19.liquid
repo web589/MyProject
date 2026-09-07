@@ -243,6 +243,19 @@
     scroll-margin-top: calc(var(--pdp-sticky-anchor-offset, var(--site-header-group-height, 0px)) + 8px);
   }
 
+  #pdp-buy h1,
+  #pdp-buy h2,
+  #pdp-overview h1,
+  #pdp-overview h2,
+  #pdp-specifications h1,
+  #pdp-specifications h2,
+  #pdp-included h1,
+  #pdp-included h2,
+  #pdp-faq h1,
+  #pdp-faq h2 {
+    scroll-margin-top: calc(var(--pdp-sticky-anchor-offset, var(--site-header-group-height, 0px)) + 8px);
+  }
+
   .sticky-buy-bar-inner-{{ ai_gen_id }} {
     max-width: {{ block.settings.bar_max_width }}px;
     margin: 0 auto;
@@ -739,9 +752,14 @@
         });
       }
 
+      getScrollTarget(targetElement) {
+        return targetElement.querySelector('h1, h2') || targetElement;
+      }
+
       scrollToTarget(targetElement, behavior) {
+        const scrollTarget = this.getScrollTarget(targetElement);
         const anchorOffset = this.getBoundingClientRect().bottom + 8;
-        const targetTop = targetElement.getBoundingClientRect().top + window.scrollY - anchorOffset;
+        const targetTop = scrollTarget.getBoundingClientRect().top + window.scrollY - anchorOffset;
 
         window.scrollTo({
           top: Math.max(0, targetTop),
