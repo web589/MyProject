@@ -26,6 +26,15 @@
       padding-top: 20px;
     }
 
+    #CartDrawer:has([data-bundle-suggestion]) .drawer__scrollable {
+      flex: 0 1 260px;
+      min-height: 260px;
+    }
+
+    #CartDrawer:has([data-bundle-suggestion]) .drawer__footer {
+      min-height: 0;
+    }
+
     #CartDrawer .cart__item {
       align-items: stretch;
       gap: 14px;
@@ -50,15 +59,9 @@
     #CartDrawer .cart__item-details {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      grid-template-rows: auto auto;
+      grid-template-rows: auto 1fr;
       column-gap: 12px;
-      row-gap: 8px;
       min-width: 0;
-    }
-
-    #CartDrawer .cart__item--bundle-suggestion .cart__item-details {
-      grid-template-rows: auto 36px;
-      min-height: 190px;
     }
 
     #CartDrawer .cart__item-title {
