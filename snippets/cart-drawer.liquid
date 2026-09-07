@@ -1141,6 +1141,7 @@
           this.isSyncingVatMerchandise = false;
           this.vatSyncRevision = 0;
           this.vatSyncRetryScheduled = false;
+          this.zeroVatVariantUnavailable = false;
 
           this.handleCountryClick = this.handleCountryClick.bind(this);
           this.handleShippingCalculate = this.handleShippingCalculate.bind(this);
@@ -1343,6 +1344,7 @@
           }
           this.setStatus('');
           this.showVatFallback(false);
+          this.zeroVatVariantUnavailable = false;
           this.updateVatUI();
           try {
             // Keep radio changes local to the cart context. The merchandise
@@ -1500,6 +1502,11 @@
           if (!eligibleElements.length) return;
 
           const targetMode = this.getTargetVatMode();
+          if (targetMode === 'zero' && this.zeroVatVariantUnavailable) {
+            const unavailableError = new Error('Die 0-%-MwSt.-Variante ist derzeit nicht verfügbar. Bitte wähle den regulären MwSt.-Satz oder stelle den Lagerbestand der 0-%-Variante im Shopify-Admin wieder her.');
+            unavailableError.canFallbackToStandardVat = true;
+            throw unavailableError;
+          }
           const switches = eligibleElements.filter(item => {
             const targetVariantId = targetMode === 'zero'
               ? item.dataset.deZeroVatVariantId
@@ -1583,6 +1590,7 @@
                 ? 'Die 0-%-MwSt.-Variante ist derzeit nicht verfügbar. Bitte wähle den regulären MwSt.-Satz oder stelle den Lagerbestand der 0-%-Variante im Shopify-Admin wieder her.'
                 : (addMessage || 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.'));
               addError.canFallbackToStandardVat = isZeroVatInventoryError;
+              if (isZeroVatInventoryError) this.zeroVatVariantUnavailable = true;
               throw addError;
             }
 
