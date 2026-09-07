@@ -189,7 +189,10 @@
           responseData = await this.waitForCartResponse();
         } else {
           // No subscriber handled it, proceed with default behavior
-          const response = await fetch(`${window.Shopify.routes.root}cart/add.js`, config);       
+          const request = () => fetch(`${window.Shopify.routes.root}cart/add.js`, config);
+          const response = await (window.PVTaxCart && window.PVTaxCart.enqueue
+            ? window.PVTaxCart.enqueue(request)
+            : request());
           responseData = await this.readJsonResponse(
             response,
             'Das Produkt konnte gerade nicht in den Warenkorb gelegt werden.'

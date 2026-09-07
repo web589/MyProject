@@ -7,8 +7,35 @@
     BE: 'Belgium'
   };
 
-  function delay(milliseconds) {
-    return new Promise(resolve => window.setTimeout(resolve, milliseconds));
+  function abortError() {
+    const error = new Error('Shipping rate request was cancelled.');
+    error.name = 'AbortError';
+    return error;
+  }
+
+  function delay(milliseconds, signal) {
+    return new Promise((resolve, reject) => {
+      if (signal && signal.aborted) {
+        reject(abortError());
+        return;
+      }
+
+      const cleanup = () => {
+        if (signal) signal.removeEventListener('abort', onAbort);
+      };
+      const cleanupAndResolve = () => {
+        cleanup();
+        resolve();
+      };
+      const onAbort = () => {
+        window.clearTimeout(timeout);
+        cleanup();
+        reject(abortError());
+      };
+      const timeout = window.setTimeout(cleanupAndResolve, milliseconds);
+
+      if (signal) signal.addEventListener('abort', onAbort, { once: true });
+    });
   }
 
   async function readJsonSafely(response) {
@@ -65,6 +92,7 @@
   async function getRates(options) {
     const config = options || {};
     const rootUrl = config.rootUrl || '/';
+    const signal = config.signal;
     const query = buildQuery(config.countryCode, config.postcode);
     const prepareUrl = `${rootUrl}cart/prepare_shipping_rates.json?${query}`;
     const ratesUrl = `${rootUrl}cart/async_shipping_rates.json?${query}`;
@@ -77,7 +105,8 @@
         Accept: 'application/json',
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
-      }
+      },
+      signal
     });
 
     if (!prepareResponse.ok) {
@@ -87,7 +116,7 @@
 
     let shippingData = null;
     for (let attempt = 0; attempt < 8; attempt += 1) {
-      await delay(350 + attempt * 120);
+      await delay(350 + attempt * 120, signal);
 
       const ratesResponse = await fetch(ratesUrl, {
         credentials: 'same-origin',
@@ -95,7 +124,8 @@
         headers: {
           Accept: 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
-        }
+        },
+        signal
       });
 
       if (!ratesResponse.ok) {

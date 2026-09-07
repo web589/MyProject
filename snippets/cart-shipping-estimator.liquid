@@ -277,18 +277,29 @@
 
       persistAttributes() {
         const attributes = this.getAttributePayload();
-        const save = () => fetch(`${this.rootUrl}cart/update.js`, {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ attributes })
-        }).then(async response => {
-          const cart = await response.json();
-          if (!response.ok) throw new Error(cart.description || cart.message || 'Auswahl konnte nicht gespeichert werden.');
-          this.cartCurrency = cart.currency || this.cartCurrency;
-          document.dispatchEvent(new CustomEvent('cart:delivery-context-updated', { detail: { source: this } }));
-          return cart;
-        });
+        const save = () => {
+          const request = () => fetch(`${this.rootUrl}cart/update.js`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ attributes })
+          });
+          const requestPromise = window.PVTaxCart && window.PVTaxCart.enqueue
+            ? window.PVTaxCart.enqueue(request)
+            : request();
+
+          return requestPromise.then(async response => {
+            const cart = await response.json();
+            if (!response.ok) throw new Error(cart.description || cart.message || 'Auswahl konnte nicht gespeichert werden.');
+            this.cartCurrency = cart.currency || this.cartCurrency;
+            document.dispatchEvent(new CustomEvent('cart:delivery-context-updated', { detail: { source: this } }));
+            return cart;
+          });
+        };
 
         this.savePromise = this.savePromise
           .catch(() => {})

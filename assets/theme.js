@@ -1648,16 +1648,23 @@ theme.recentlyViewed = {
     },
   
     _updateCart: function(params) {
-      return fetch(params.url, {
-        method: 'POST',
-        body: params.data,
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-          'Accept': 'application/json'
-        }
-      })
+      var request = function() {
+        return fetch(params.url, {
+          method: 'POST',
+          body: params.data,
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+          }
+        });
+      };
+      var requestPromise = window.PVTaxCart && window.PVTaxCart.enqueue
+        ? window.PVTaxCart.enqueue(request)
+        : request();
+
+      return requestPromise
       .then(response => { return response.text() })
       .then(cart => { return cart; });
     },
@@ -2891,13 +2898,22 @@ theme.recentlyViewed = {
   
         var data = new FormData(this.form);
   
-        fetch(theme.routes.cartAdd, {
-          method: 'POST',
-          body: data,
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        })
+        var request = function() {
+          return fetch(theme.routes.cartAdd, {
+            method: 'POST',
+            body: data,
+            credentials: 'same-origin',
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Accept': 'application/json'
+            }
+          });
+        };
+        var requestPromise = window.PVTaxCart && window.PVTaxCart.enqueue
+          ? window.PVTaxCart.enqueue(request)
+          : request();
+
+        requestPromise
         .then(response => theme.utils.readJsonResponse(
           response,
           'Das Produkt konnte gerade nicht in den Warenkorb gelegt werden.'

@@ -1343,11 +1343,19 @@
         const card = button.closest('[data-product-card]');
         const requiresVatReview = card?.dataset.deVatCandidate === 'true';
         try {
-          const response = await fetch(`${root}cart/add.js`, {
+          const request = () => fetch(`${root}cart/add.js`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
             body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
           });
+          const response = await (window.PVTaxCart && window.PVTaxCart.enqueue
+            ? window.PVTaxCart.enqueue(request)
+            : request());
           const responseText = await response.text();
           let result = null;
           try {

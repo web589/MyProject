@@ -1,6 +1,6 @@
 {%- assign blog_center_url = blog_center_home_link.url | default: blog.url -%}
 {%- assign is_blog_center_home = false -%}
-{%- if blog.url == blog_center_url -%}
+{%- if blog.url == blog_center_url or blog_center_url contains blog.url -%}
   {%- assign is_blog_center_home = true -%}
 {%- endif -%}
 

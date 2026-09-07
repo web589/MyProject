@@ -823,6 +823,17 @@
   </div>
   <script>
     window.PVTaxCart = window.PVTaxCart || {};
+    if (!window.PVTaxCart.enqueue) {
+      window.PVTaxCart._requestQueue = Promise.resolve();
+      window.PVTaxCart.enqueue = function(task) {
+        const previous = window.PVTaxCart._requestQueue || Promise.resolve();
+        const next = previous
+          .catch(() => {})
+          .then(() => task());
+        window.PVTaxCart._requestQueue = next.catch(() => {});
+        return next;
+      };
+    }
     if (!window.PVTaxCart.readJsonResponse) {
       window.PVTaxCart.readJsonResponse = function(response, fallbackMessage) {
         return response.text().then(function(text) {
@@ -1007,7 +1018,9 @@
           this.cartCurrency = 'EUR';
           this.hasEligibleProduct = false;
           this.shippingRequestId = 0;
+          this.shippingAbortController = null;
           this.shippingInputTimer = null;
+          this.cartRefreshTimer = null;
           this.savePromise = Promise.resolve();
           this.vatSelectionRevision = 0;
           this.productsContainer = this.drawer.querySelector('[data-products]');
@@ -1063,6 +1076,8 @@
           this.form && this.form.removeEventListener('submit', this.handleCheckout, true);
           this.productsObserver && this.productsObserver.disconnect();
           if (this.shippingInputTimer) window.clearTimeout(this.shippingInputTimer);
+          if (this.cartRefreshTimer) window.clearTimeout(this.cartRefreshTimer);
+          if (this.shippingAbortController) this.shippingAbortController.abort();
         }
 
         async loadCartContext() {
@@ -1101,7 +1116,11 @@
         }
 
         handleCartChanged() {
-          window.setTimeout(() => this.refreshForCartChange(), 450);
+          if (this.cartRefreshTimer) window.clearTimeout(this.cartRefreshTimer);
+          this.cartRefreshTimer = window.setTimeout(() => {
+            this.cartRefreshTimer = null;
+            this.refreshForCartChange();
+          }, 450);
         }
 
         handleExternalContextChange(event) {
@@ -1110,6 +1129,11 @@
         }
 
         refreshForCartChange() {
+          // CartDrawer is rendered before the asynchronous cart markup. Do not
+          // interpret that temporary empty container as a real empty cart or
+          // clear a VAT choice while the drawer is still being built.
+          if (!this.productsContainer || !this.productsContainer.querySelector('.cart__items')) return;
+
           const eligibleItems = this.getEligibleVatItems();
           this.hasEligibleProduct = eligibleItems.length > 0;
           this.hasVatSwitchConfiguration = eligibleItems.every(item => {
@@ -1205,9 +1229,7 @@
             // A slower request from an earlier click must not clear a newer
             // selection made while that request was still pending.
             if (selectionRevision !== this.vatSelectionRevision) return;
-            this.clearVatState();
             this.updateVatUI();
-            this.persistAttributes().catch(() => {});
             this.setStatus(error.message || 'Die MwSt.-Auswahl konnte nicht angewendet werden.');
           }
         }
@@ -1310,22 +1332,29 @@
 
         persistAttributes(selectionRevision = this.vatSelectionRevision) {
           const attributes = this.getAttributePayload();
-          const save = () => fetch(`${this.rootUrl}cart/update.js`, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-              'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({ attributes })
-          }).then(async response => {
-            const cart = await window.PVTaxCart.readJsonResponse(response, 'Auswahl konnte nicht gespeichert werden.');
-            if (!response.ok) throw new Error(cart.description || cart.message || 'Auswahl konnte nicht gespeichert werden.');
-            this.cartCurrency = cart.currency || this.cartCurrency;
-            document.dispatchEvent(new CustomEvent('cart:delivery-context-updated', { detail: { source: this } }));
-            return cart;
-          });
+          const save = () => {
+            const request = () => fetch(`${this.rootUrl}cart/update.js`, {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              body: JSON.stringify({ attributes })
+            });
+            const requestPromise = window.PVTaxCart && window.PVTaxCart.enqueue
+              ? window.PVTaxCart.enqueue(request)
+              : request();
+
+            return requestPromise.then(async response => {
+              const cart = await window.PVTaxCart.readJsonResponse(response, 'Auswahl konnte nicht gespeichert werden.');
+              if (!response.ok) throw new Error(cart.description || cart.message || 'Auswahl konnte nicht gespeichert werden.');
+              this.cartCurrency = cart.currency || this.cartCurrency;
+              document.dispatchEvent(new CustomEvent('cart:delivery-context-updated', { detail: { source: this } }));
+              return cart;
+            });
+          };
 
           this.savePromise = this.savePromise
             .catch(() => {})
@@ -1407,7 +1436,7 @@
             if (missingLine) throw new Error('Der Warenkorb wurde geändert. Bitte prüfe die MwSt.-Auswahl erneut.');
             if (!additions.length) return;
 
-            const addResponse = await fetch(`${this.rootUrl}cart/add.js`, {
+            const addRequest = () => fetch(`${this.rootUrl}cart/add.js`, {
               method: 'POST',
               credentials: 'same-origin',
               headers: {
@@ -1417,6 +1446,9 @@
               },
               body: JSON.stringify({ items: additions })
             });
+            const addResponse = await (window.PVTaxCart && window.PVTaxCart.enqueue
+              ? window.PVTaxCart.enqueue(addRequest)
+              : addRequest());
             const addResult = await window.PVTaxCart.readJsonResponse(addResponse, 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.');
             if (!addResponse.ok) throw new Error(addResult.description || addResult.message || 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.');
 
@@ -1424,7 +1456,7 @@
               .map(item => item.key)
               .filter(Boolean);
             try {
-              const updateResponse = await fetch(`${this.rootUrl}cart/update.js`, {
+              const updateRequest = () => fetch(`${this.rootUrl}cart/update.js`, {
                 method: 'POST',
                 credentials: 'same-origin',
                 headers: {
@@ -1434,6 +1466,9 @@
                 },
                 body: JSON.stringify({ updates: removals })
               });
+              const updateResponse = await (window.PVTaxCart && window.PVTaxCart.enqueue
+                ? window.PVTaxCart.enqueue(updateRequest)
+                : updateRequest());
               const updatedCart = await window.PVTaxCart.readJsonResponse(updateResponse, 'Die bisherige Produktvariante konnte nicht entfernt werden.');
               if (!updateResponse.ok) throw new Error(updatedCart.description || updatedCart.message || 'Die bisherige Produktvariante konnte nicht entfernt werden.');
 
@@ -1447,7 +1482,7 @@
               if (addedKeys.length) {
                 const rollbackUpdates = {};
                 addedKeys.forEach(key => { rollbackUpdates[key] = 0; });
-                await fetch(`${this.rootUrl}cart/update.js`, {
+                const rollbackRequest = () => fetch(`${this.rootUrl}cart/update.js`, {
                   method: 'POST',
                   credentials: 'same-origin',
                   headers: {
@@ -1456,7 +1491,10 @@
                     'X-Requested-With': 'XMLHttpRequest'
                   },
                   body: JSON.stringify({ updates: rollbackUpdates })
-                }).catch(() => {});
+                });
+                await (window.PVTaxCart && window.PVTaxCart.enqueue
+                  ? window.PVTaxCart.enqueue(rollbackRequest)
+                  : rollbackRequest()).catch(() => {});
               }
               throw error;
             }
@@ -1488,6 +1526,11 @@
 
         async loadShippingRates() {
           const requestId = ++this.shippingRequestId;
+          if (this.shippingAbortController) this.shippingAbortController.abort();
+          this.shippingAbortController = typeof AbortController === 'function'
+            ? new AbortController()
+            : null;
+
           if (!this.drawer.querySelector('[data-products] .cart__item')) {
             this.setShippingMessage('Lege zuerst ein Produkt in den Warenkorb.', false);
             this.setShippingSummary('—', false);
@@ -1503,7 +1546,8 @@
               rootUrl: this.rootUrl,
               countryCode: this.selectedCountry,
               postcode: this.postcodeInput.value,
-              currency: this.cartCurrency
+              currency: this.cartCurrency,
+              signal: this.shippingAbortController && this.shippingAbortController.signal
             });
             if (requestId !== this.shippingRequestId) return;
 
@@ -1519,6 +1563,7 @@
             this.postcodeToggle.hidden = true;
           } catch (error) {
             if (requestId !== this.shippingRequestId) return;
+            if (error && error.name === 'AbortError') return;
             if (error.needsPostcode && !this.postcodeInput.value.trim()) {
               // A postcode is required for a destination-specific rate. Keep the
               // input visible so the shipping amount can be calculated here,
@@ -1531,6 +1576,8 @@
               this.setShippingMessage(error.message || 'Versandkosten konnten nicht geladen werden.', true);
               this.setShippingSummary('Im Checkout berechnet', false);
             }
+          } finally {
+            if (requestId === this.shippingRequestId) this.shippingAbortController = null;
           }
         }
 
@@ -1607,9 +1654,7 @@
             submitter.disabled = false;
             this.form.requestSubmit(submitter);
           } catch (error) {
-            this.clearVatState();
             this.updateVatUI();
-            this.persistAttributes().catch(() => {});
             submitter.disabled = false;
             this.setStatus(error.message || 'Die MwSt.-Auswahl konnte nicht angewendet werden.');
           }
@@ -1661,7 +1706,7 @@
           this.discountButton.disabled = true;
           this.discountStatus.textContent = 'Rabattcode wird geprüft …';
           try {
-            const response = await fetch(`${this.rootUrl}cart/update.js`, {
+            const request = () => fetch(`${this.rootUrl}cart/update.js`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -1670,6 +1715,9 @@
               },
               body: JSON.stringify({ discount: code })
             });
+            const response = await (window.PVTaxCart && window.PVTaxCart.enqueue
+              ? window.PVTaxCart.enqueue(request)
+              : request());
             const cart = await window.PVTaxCart.readJsonResponse(response, 'Rabattcode konnte nicht geprüft werden.');
             if (!response.ok) throw new Error(cart.description || cart.message || 'Rabattcode konnte nicht geprüft werden.');
 
@@ -1778,7 +1826,7 @@
         async addRecommendation(button, variantId) {
           button.disabled = true;
           try {
-            const response = await fetch(`${this.rootUrl}cart/add.js`, {
+            const request = () => fetch(`${this.rootUrl}cart/add.js`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -1787,6 +1835,9 @@
               },
               body: JSON.stringify({ items: [{ id: Number(variantId), quantity: 1 }] })
             });
+            const response = await (window.PVTaxCart && window.PVTaxCart.enqueue
+              ? window.PVTaxCart.enqueue(request)
+              : request());
             const result = await window.PVTaxCart.readJsonResponse(response, 'Produkt konnte nicht hinzugefügt werden.');
             if (!response.ok) throw new Error(result.description || result.message);
             document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: result }));

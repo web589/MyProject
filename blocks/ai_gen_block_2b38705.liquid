@@ -2062,7 +2062,7 @@
         if (!items.length) throw new Error('Für diese Auswahl ist kein Shopify-Produkt konfiguriert.');
 
         const root = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
-        const response = await fetch(`${root}cart/add.js`, {
+        const request = () => fetch(`${root}cart/add.js`, {
           method: 'POST',
           credentials: 'same-origin',
           headers: {
@@ -2072,6 +2072,9 @@
           },
           body: JSON.stringify({ items })
         });
+        const response = await (window.PVTaxCart && window.PVTaxCart.enqueue
+          ? window.PVTaxCart.enqueue(request)
+          : request());
         const responseText = await response.text();
         let result = null;
         try {
