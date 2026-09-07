@@ -1,12 +1,46 @@
 {%- liquid
   assign blog_center_menu = linklists['blog-center']
   assign blog_center_home_link = blank
+  assign is_all_blog_view = false
   if blog_center_menu != blank and blog_center_menu.links.size > 0
     assign blog_center_home_link = blog_center_menu.links | first
   endif
--%}
+  if template.suffix == 'all'
+    assign is_all_blog_view = true
+  endif
 
-{%- paginate blog.articles by 10 -%}
+  assign all_articles = '' | split: ''
+  assign all_blog_handles = '|'
+  if is_all_blog_view and blog_center_menu != blank
+    for link in blog_center_menu.links
+      assign source_blog_handle = blank
+      if link.object != blank and link.object.handle != blank
+        assign source_blog_handle = link.object.handle
+      endif
+
+      if source_blog_handle == blank and link.url != blank
+        assign source_blog_url = link.url | split: '?' | first | split: '#' | first
+        assign source_blog_url_parts = source_blog_url | split: '/blogs/'
+        if source_blog_url_parts.size > 1
+          assign source_blog_path = source_blog_url_parts[1]
+          assign source_blog_handle = source_blog_path | split: '/' | first
+        endif
+      endif
+
+      assign source_blog_key = '|' | append: source_blog_handle | append: '|'
+      if source_blog_handle != blank and all_blog_handles contains source_blog_key
+        continue
+      endif
+
+      assign source_blog = blogs[source_blog_handle]
+      if source_blog != blank and source_blog.articles_count > 0
+        assign all_articles = all_articles | concat: source_blog.articles
+        assign all_blog_handles = all_blog_handles | append: source_blog_handle | append: '|'
+      endif
+    endfor
+    assign all_articles = all_articles | sort: 'published_at' | reverse
+  endif
+-%}
 
 {% style %}
   .blog-page {
@@ -429,7 +463,7 @@
         <nav class="blog-category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
           {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
             {%- assign is_blog_center_home = false -%}
-            {%- if blog.url == blog_center_home_link.url or blog_center_home_link.url contains blog.url -%}
+            {%- if is_all_blog_view -%}
               {%- assign is_blog_center_home = true -%}
             {%- endif -%}
             <a
@@ -447,8 +481,10 @@
               {%- assign link_blog_handle = link.object.handle -%}
             {%- endif -%}
             {%- assign is_current_blog = false -%}
-            {%- if link_blog_handle == blog.handle or link.url == blog.url or link.url contains blog.url -%}
-              {%- assign is_current_blog = true -%}
+            {%- if is_all_blog_view == false -%}
+              {%- if link_blog_handle == blog.handle or link.url == blog.url or link.url contains blog.url -%}
+                {%- assign is_current_blog = true -%}
+              {%- endif -%}
             {%- endif -%}
 
             {%- if link.type == 'blog_link' or link_blog_handle != blank or link.url contains '/blogs/' -%}
@@ -473,32 +509,53 @@
 
     {%- render 'blog-breadcrumbs', blog: blog, blog_center_home_link: blog_center_home_link -%}
 
-    {%- if blog.articles_count > 0 -%}
-      {%- for article in blog.articles limit: 1 -%}
-        <section class="blog-featured">
-          {%- render 'blog-card', blog: blog, article: article, featured: true -%}
+    {%- if is_all_blog_view -%}
+      {%- if all_articles.size > 0 -%}
+        {%- for article in all_articles limit: 1 -%}
+          <section class="blog-featured">
+            {%- render 'blog-card', blog: blog, article: article, featured: true -%}
+          </section>
+        {%- endfor -%}
+
+        <section aria-labelledby="BlogArticles-{{ section.id }}">
+          <h2 id="BlogArticles-{{ section.id }}" class="blog-section-heading">{{ 'blogs.article.more_articles' | t }}</h2>
+          <div class="blog-card-grid">
+            {%- for article in all_articles offset: 1 -%}
+              {%- render 'blog-card', blog: blog, article: article -%}
+            {%- endfor -%}
+          </div>
         </section>
-      {%- endfor -%}
-
-      <section aria-labelledby="BlogArticles-{{ section.id }}">
-        <h2 id="BlogArticles-{{ section.id }}" class="blog-section-heading">{{ 'blogs.article.more_articles' | t }}</h2>
-        <div class="blog-card-grid">
-          {%- for article in blog.articles offset: 1 -%}
-            {%- render 'blog-card', blog: blog, article: article -%}
-          {%- endfor -%}
-        </div>
-      </section>
-
-      {%- if paginate.pages > 1 -%}
-        {%- render 'pagination', paginate: paginate -%}
+      {%- else -%}
+        <p class="blog-empty-state">{{ 'home_page.onboarding.no_content' | t }}</p>
       {%- endif -%}
     {%- else -%}
-      <p class="blog-empty-state">{{ 'home_page.onboarding.no_content' | t }}</p>
+      {%- paginate blog.articles by 10 -%}
+        {%- if blog.articles_count > 0 -%}
+          {%- for article in blog.articles limit: 1 -%}
+            <section class="blog-featured">
+              {%- render 'blog-card', blog: blog, article: article, featured: true -%}
+            </section>
+          {%- endfor -%}
+
+          <section aria-labelledby="BlogArticles-{{ section.id }}">
+            <h2 id="BlogArticles-{{ section.id }}" class="blog-section-heading">{{ 'blogs.article.more_articles' | t }}</h2>
+            <div class="blog-card-grid">
+              {%- for article in blog.articles offset: 1 -%}
+                {%- render 'blog-card', blog: blog, article: article -%}
+              {%- endfor -%}
+            </div>
+          </section>
+
+          {%- if paginate.pages > 1 -%}
+            {%- render 'pagination', paginate: paginate -%}
+          {%- endif -%}
+        {%- else -%}
+          <p class="blog-empty-state">{{ 'home_page.onboarding.no_content' | t }}</p>
+        {%- endif -%}
+      {%- endpaginate -%}
     {%- endif -%}
   </div>
 </div>
-
-{%- endpaginate -%}
 
 {% schema %}
 {
