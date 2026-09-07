@@ -128,16 +128,48 @@
     width: 100%;
     height: {{ block.settings.bar_height }}px;
     background-color: {{ block.settings.bg_color }};
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     position: relative;
+    scrollbar-width: none;
+  }
+
+  .ai-marquee-bar-{{ ai_gen_id }}::-webkit-scrollbar {
+    display: none;
   }
 
   .ai-marquee-wrapper-{{ ai_gen_id }} {
     display: flex;
-    white-space: nowrap;
-    animation: ai-marquee-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
-    height: 100%;
     align-items: center;
+    flex-wrap: nowrap;
+    justify-content: center;
+    min-width: 100%;
+    width: max-content;
+    white-space: nowrap;
+    height: 100%;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+
+  .ai-marquee-item-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    height: 100%;
+    padding: 0 clamp(16px, 4vw, {{ block.settings.item_spacing }}px);
+    font-size: clamp(12px, 1vw, {{ block.settings.font_size }}px);
+    color: {{ block.settings.text_color }};
+    line-height: {{ block.settings.bar_height }}px;
+    white-space: nowrap;
+  }
+
+  .ai-marquee-bar-{{ ai_gen_id }}[data-overflow="true"] {
+    overflow-x: hidden;
+  }
+
+  .ai-marquee-bar-{{ ai_gen_id }}[data-overflow="true"] .ai-marquee-wrapper-{{ ai_gen_id }} {
+    justify-content: flex-start;
+    animation: ai-marquee-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite alternate;
   }
 
   {% if block.settings.pause_on_hover %}
@@ -146,21 +178,12 @@
     }
   {% endif %}
 
-  .ai-marquee-item-{{ ai_gen_id }} {
-    display: inline-flex;
-    align-items: center;
-    height: 100%;
-    padding: 0 {{ block.settings.item_spacing }}px;
-    font-size: {{ block.settings.font_size }}px;
-    color: {{ block.settings.text_color }};
-    line-height: {{ block.settings.bar_height }}px;
-  }
-
   .ai-marquee-item-{{ ai_gen_id }} a {
     color: inherit;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    white-space: nowrap;
   }
 
   .ai-marquee-item-{{ ai_gen_id }} a:hover {
@@ -175,93 +198,118 @@
 
   @keyframes ai-marquee-scroll-{{ ai_gen_id }} {
     0% {
-      transform: translateX(0);
+      transform: translate3d(0, 0, 0);
     }
     100% {
-      transform: translateX(-50%);
+      transform: translate3d(calc(-1 * var(--marquee-distance, 0px)), 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-marquee-bar-{{ ai_gen_id }}[data-overflow="true"] {
+      overflow-x: auto;
+    }
+
+    .ai-marquee-wrapper-{{ ai_gen_id }} {
+      animation: none !important;
     }
   }
 {% endstyle %}
 
-<marquee-bar-{{ ai_gen_id }} class="ai-marquee-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
-  <div class="ai-marquee-wrapper-{{ ai_gen_id }}">
-    {% for i in (1..4) %}
-      {% liquid
-        assign tag_key = 'announcement_' | append: i | append: '_tag'
-        assign text_key = 'announcement_' | append: i | append: '_text'
-        assign link_key = 'announcement_' | append: i | append: '_link'
-        
-        assign tag = block.settings[tag_key]
-        assign text = block.settings[text_key]
-        assign link = block.settings[link_key]
-      %}
-      
-      {% if text != blank %}
-        <div class="ai-marquee-item-{{ ai_gen_id }}">
-          {% if link != blank %}
-            <a href="{{ link | escape }}">
+{% assign has_announcement = false %}
+{% for i in (1..4) %}
+  {% assign text_key = 'announcement_' | append: i | append: '_text' %}
+  {% if block.settings[text_key] != blank %}
+    {% assign has_announcement = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% if has_announcement %}
+  <marquee-bar-{{ ai_gen_id }}
+    class="ai-marquee-bar-{{ ai_gen_id }}"
+    data-overflow="false"
+    {{ block.shopify_attributes }}
+  >
+    <div class="ai-marquee-wrapper-{{ ai_gen_id }}">
+      {% for i in (1..4) %}
+        {% liquid
+          assign tag_key = 'announcement_' | append: i | append: '_tag'
+          assign text_key = 'announcement_' | append: i | append: '_text'
+          assign link_key = 'announcement_' | append: i | append: '_link'
+
+          assign tag = block.settings[tag_key]
+          assign text = block.settings[text_key]
+          assign link = block.settings[link_key]
+        %}
+
+        {% if text != blank %}
+          <div class="ai-marquee-item-{{ ai_gen_id }}">
+            {% if link != blank %}
+              <a href="{{ link | escape }}">
+                {% if tag != blank %}
+                  <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
+                {% endif %}
+                {{ text | escape }}
+              </a>
+            {% else %}
               {% if tag != blank %}
                 <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
               {% endif %}
               {{ text | escape }}
-            </a>
-          {% else %}
-            {% if tag != blank %}
-              <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
             {% endif %}
-            {{ text | escape }}
-          {% endif %}
-        </div>
-      {% endif %}
-    {% endfor %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </marquee-bar-{{ ai_gen_id }}>
 
-    {% for i in (1..4) %}
-      {% liquid
-        assign tag_key = 'announcement_' | append: i | append: '_tag'
-        assign text_key = 'announcement_' | append: i | append: '_text'
-        assign link_key = 'announcement_' | append: i | append: '_link'
-        
-        assign tag = block.settings[tag_key]
-        assign text = block.settings[text_key]
-        assign link = block.settings[link_key]
-      %}
-      
-      {% if text != blank %}
-        <div class="ai-marquee-item-{{ ai_gen_id }}">
-          {% if link != blank %}
-            <a href="{{ link | escape }}">
-              {% if tag != blank %}
-                <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
-              {% endif %}
-              {{ text | escape }}
-            </a>
-          {% else %}
-            {% if tag != blank %}
-              <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
-            {% endif %}
-            {{ text | escape }}
-          {% endif %}
-        </div>
-      {% endif %}
-    {% endfor %}
-  </div>
-</marquee-bar-{{ ai_gen_id }}>
+  <script>
+    (function() {
+      const tagName = 'marquee-bar-{{ ai_gen_id }}';
 
-<script>
-  (function() {
-    class MarqueeBar{{ ai_gen_id }} extends HTMLElement {
-      constructor() {
-        super();
+      if (!customElements.get(tagName)) {
+        class MarqueeBar{{ ai_gen_id }} extends HTMLElement {
+          connectedCallback() {
+            this.wrapper = this.querySelector('.ai-marquee-wrapper-{{ ai_gen_id }}');
+
+            if (!this.wrapper) {
+              return;
+            }
+
+            this.updateLayout = this.updateLayout.bind(this);
+
+            if (window.ResizeObserver) {
+              this.resizeObserver = new ResizeObserver(this.updateLayout);
+              this.resizeObserver.observe(this);
+              this.resizeObserver.observe(this.wrapper);
+            }
+
+            this.updateLayout();
+          }
+
+          disconnectedCallback() {
+            if (this.resizeObserver) {
+              this.resizeObserver.disconnect();
+            }
+          }
+
+          updateLayout() {
+            if (!this.wrapper) {
+              return;
+            }
+
+            const distance = Math.max(0, this.wrapper.scrollWidth - this.clientWidth);
+            this.style.setProperty('--marquee-distance', `${distance}px`);
+            this.dataset.overflow = distance > 1 ? 'true' : 'false';
+          }
+        }
+
+        customElements.define(tagName, MarqueeBar{{ ai_gen_id }});
       }
-
-      connectedCallback() {
-        this.wrapper = this.querySelector('.ai-marquee-wrapper-{{ ai_gen_id }}');
-      }
-    }
-
-    customElements.define('marquee-bar-{{ ai_gen_id }}', MarqueeBar{{ ai_gen_id }});
-  })();
-</script>
+    })();
+  </script>
+{% endif %}
 
 {% schema %}
 {

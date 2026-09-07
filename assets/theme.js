@@ -2226,7 +2226,127 @@ theme.recentlyViewed = {
   
     return CartForm;
   })();
-  
+
+  /*============================================================================
+    Bundle suggestions
+    - Offer the matching 2×/3× variant when a 1× line reaches that quantity
+    - Keep the change explicit: add the bundle variant, then remove the old line
+  ==============================================================================*/
+  (function() {
+    if (window.themeBundleSuggestionInitialized) return;
+    window.themeBundleSuggestionInitialized = true;
+
+    function getRootUrl() {
+      return window.Shopify && window.Shopify.routes && window.Shopify.routes.root
+        ? window.Shopify.routes.root
+        : '/';
+    }
+
+    function enqueue(request) {
+      return window.PVTaxCart && window.PVTaxCart.enqueue
+        ? window.PVTaxCart.enqueue(request)
+        : request();
+    }
+
+    function readJson(response, fallbackMessage) {
+      if (window.PVTaxCart && window.PVTaxCart.readJsonResponse) {
+        return window.PVTaxCart.readJsonResponse(response, fallbackMessage);
+      }
+
+      return response.text().then(text => {
+        try {
+          return text ? JSON.parse(text) : {};
+        } catch (error) {
+          throw new Error(fallbackMessage);
+        }
+      });
+    }
+
+    function getResponseMessage(result, fallbackMessage) {
+      return (result && (result.description || result.message || result.error)) || fallbackMessage;
+    }
+
+    function setSwitchStatus(button, message) {
+      const wrapper = button.closest('[data-bundle-suggestion]');
+      if (!wrapper) return;
+
+      let status = wrapper.querySelector('[data-bundle-switch-status]');
+      if (!status) {
+        status = document.createElement('p');
+        status.className = 'cart-bundle-suggestion__status';
+        status.dataset.bundleSwitchStatus = '';
+        status.setAttribute('role', 'alert');
+        wrapper.appendChild(status);
+      }
+      status.textContent = message || '';
+    }
+
+    async function switchToBundle(button) {
+      if (button.getAttribute('aria-busy') === 'true') return;
+
+      const cartKey = button.dataset.cartKey;
+      const targetVariantId = Number(button.dataset.targetVariantId);
+      const targetQuantity = Number(button.dataset.targetQuantity) || 1;
+      if (!cartKey || !Number.isFinite(targetVariantId) || targetVariantId < 1) return;
+
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+      button.textContent = 'Wird geladen…';
+      setSwitchStatus(button, '');
+
+      try {
+        const root = getRootUrl();
+        const addResponse = await enqueue(() => fetch(`${root}cart/add.js`, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify({
+            items: [{ id: targetVariantId, quantity: targetQuantity }]
+          })
+        }));
+        const addResult = await readJson(addResponse, 'Das Bundle konnte nicht hinzugefügt werden.');
+        if (!addResponse.ok) {
+          throw new Error(getResponseMessage(addResult, 'Das Bundle konnte nicht hinzugefügt werden.'));
+        }
+
+        const updateResponse = await enqueue(() => fetch(`${root}cart/update.js`, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify({ updates: { [cartKey]: 0 } })
+        }));
+        const updatedCart = await readJson(updateResponse, 'Die Einzelposition konnte nicht ersetzt werden.');
+        if (!updateResponse.ok) {
+          throw new Error(getResponseMessage(updatedCart, 'Die Einzelposition konnte nicht ersetzt werden.'));
+        }
+
+        document.dispatchEvent(new CustomEvent('cart:build'));
+        document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: updatedCart } }));
+      } catch (error) {
+        setSwitchStatus(button, error.message || 'Die Bundle-Auswahl konnte nicht angewendet werden.');
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+        button.textContent = originalText;
+      }
+    }
+
+    document.addEventListener('click', event => {
+      const button = event.target.closest('[data-bundle-switch]');
+      if (!button) return;
+      event.preventDefault();
+      switchToBundle(button);
+    });
+  })();
+
   // Either collapsible containers all acting individually,
   // or tabs that can only have one open at a time
   theme.collapsibles = (function() {

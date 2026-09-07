@@ -776,6 +776,18 @@
         return targetElement.querySelector('h1, h2') || targetElement;
       }
 
+      prepareHashTarget(targetElement) {
+        const revealedSection = targetElement.closest('[data-scroll-reveal-section-ready]');
+        if (!revealedSection) {
+          return;
+        }
+
+        // Anchor scrolling must use the final visual position. Otherwise the
+        // section's entrance transform moves the target after the scroll has
+        // started and forces a second alignment when the transition ends.
+        revealedSection.classList.add('is-scroll-revealed', 'is-scroll-reveal-settled');
+      }
+
       scrollToTarget(targetElement, behavior) {
         const scrollTarget = this.getScrollTarget(targetElement);
         const anchorOffset = this.getBoundingClientRect().bottom + 8;
@@ -832,6 +844,7 @@
             return;
           }
 
+          this.prepareHashTarget(targetElement);
           this.updateAnchorOffset();
           this.scrollToTarget(targetElement, behavior);
           this.setActiveNavItem(targetElement.id);

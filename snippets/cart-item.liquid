@@ -41,6 +41,25 @@
       assign has_visible_variant_option = true
     endunless
   endfor
+
+  assign bundle_switch_quantity = product.quantity | plus: 0
+  assign bundle_base_variant = product.product.variants.first
+  assign bundle_suggestion_variant = blank
+  assign bundle_suggestion_savings = 0
+  if product.properties['_venus_pack_size'] == blank and product.variant_id == bundle_base_variant.id
+    if bundle_switch_quantity == 2 or bundle_switch_quantity == 3
+      for bundle_variant in product.product.variants limit: 3
+        if forloop.index == bundle_switch_quantity
+          assign bundle_suggestion_variant = bundle_variant
+          break
+        endif
+      endfor
+      if bundle_suggestion_variant != blank
+        assign bundle_single_total = bundle_base_variant.price | times: bundle_switch_quantity
+        assign bundle_suggestion_savings = bundle_single_total | minus: bundle_suggestion_variant.price
+      endif
+    endif
+  endif
 -%}
 <div
   class="cart__item"
@@ -123,6 +142,22 @@
             {%- endunless -%}
           {% endunless %}
         {% endfor %}
+      {% endif %}
+
+      {% if bundle_suggestion_variant != blank and bundle_suggestion_savings > 0 %}
+        <div class="cart-bundle-suggestion" data-bundle-suggestion>
+          <p class="cart-bundle-suggestion__copy">
+            Spartipp: Mit dem {{ bundle_switch_quantity }}×-Set sparst du {{ bundle_suggestion_savings | money }}.
+          </p>
+          <button
+            type="button"
+            class="cart-bundle-suggestion__button"
+            data-bundle-switch
+            data-cart-key="{{ product.key | escape }}"
+            data-target-variant-id="{{ bundle_suggestion_variant.id }}"
+            data-target-quantity="1"
+          >Zum {{ bundle_switch_quantity }}×-Set wechseln</button>
+        </div>
       {% endif %}
 
     </div>
