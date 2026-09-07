@@ -1733,7 +1733,16 @@
           this.zeroVatVariantUnavailable = false;
           this.showVatFallback(false);
           this.updateVatUI();
-          return this.persistAttributes().then(() => true);
+          // The regular-tax choice is the safe fallback when the zero-tax
+          // companion variant is unavailable. Attribute persistence is useful
+          // for checkout context, but must not prevent that fallback from
+          // continuing if Shopify returns a non-JSON cart response.
+          return this.persistAttributes()
+            .catch(() => {})
+            .then(() => {
+              this.setStatus('');
+              return true;
+            });
         }
 
         async handleVatFallback() {
@@ -1843,8 +1852,15 @@
           this.setStatus('');
           this.showVatFallback(false);
           try {
-            await this.persistAttributes();
+            const targetMode = this.getTargetVatMode();
             await this.syncVatMerchandise(false);
+            try {
+              await this.persistAttributes();
+            } catch (error) {
+              // Standard VAT does not depend on the optional cart attributes.
+              // Do not block checkout when only that context write fails.
+              if (targetMode !== 'standard') throw error;
+            }
             this.form.dataset.deliveryContextResubmit = 'true';
             submitter.disabled = false;
             this.form.requestSubmit(submitter);
