@@ -298,8 +298,8 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    background: rgba(226, 226, 226, 0.92);
-    border: 0;
+    background: rgba(71, 85, 105, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.7);
     width: 64px;
     height: 64px;
     border-radius: 50%;
@@ -307,14 +307,20 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-    box-shadow: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.16);
   }
 
   .ai-carousel-nav-{{ ai_gen_id }}:hover {
-    background: rgba(188, 188, 188, 0.96);
-    transform: translateY(-50%);
-    box-shadow: none;
+    background: rgba(30, 41, 59, 0.96);
+    border-color: #ffffff;
+    transform: translateY(-50%) scale(1.08);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.28);
+  }
+
+  .ai-carousel-nav-{{ ai_gen_id }}:focus-visible {
+    outline: 3px solid rgba(14, 165, 233, 0.55);
+    outline-offset: 3px;
   }
 
   .ai-carousel-nav-{{ ai_gen_id }}:disabled {
@@ -337,6 +343,15 @@
     stroke: #ffffff;
     stroke-width: 3;
     fill: none;
+    transition: transform 0.2s ease;
+  }
+
+  .ai-carousel-nav-{{ ai_gen_id }}.prev:hover svg {
+    transform: translateX(-2px);
+  }
+
+  .ai-carousel-nav-{{ ai_gen_id }}.next:hover svg {
+    transform: translateX(2px);
   }
 
   .ai-product-card-{{ ai_gen_id }} {
