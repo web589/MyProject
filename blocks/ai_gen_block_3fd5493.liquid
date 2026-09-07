@@ -354,6 +354,11 @@
     transform: translateX(2px);
   }
 
+  .ai-product-carousel-{{ ai_gen_id }} [data-carousel-prev][hidden],
+  .ai-product-carousel-{{ ai_gen_id }} [data-carousel-next][hidden] {
+    display: none;
+  }
+
   .ai-product-card-{{ ai_gen_id }} {
     flex: 0 0 22.4%;
     min-width: 0;
@@ -1420,6 +1425,16 @@
 
           const updateButtons = () => {
             const cards = track.querySelectorAll('[data-product-card]');
+            const shouldShowNavigation = cards.length > 4;
+            prevBtn.hidden = !shouldShowNavigation;
+            nextBtn.hidden = !shouldShowNavigation;
+
+            if (!shouldShowNavigation) {
+              this.currentPositions[tabId] = 0;
+              track.style.transform = 'translateX(0)';
+              return;
+            }
+
             const cardWidth = cards[0]?.offsetWidth || 282;
             const gap = parseFloat(getComputedStyle(track).gap) || 16;
             const scrollAmount = cardWidth + gap;

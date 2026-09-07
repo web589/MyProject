@@ -1081,6 +1081,7 @@
         }
 
         async loadCartContext() {
+          const vatSelectionRevision = this.vatSelectionRevision;
           try {
             const response = await fetch(`${this.rootUrl}cart.js`, {
               cache: 'no-store',
@@ -1096,7 +1097,9 @@
             const savedCountry = attributes['Lieferland ISO'];
             if (this.countryNames[savedCountry]) this.selectedCountry = savedCountry;
             if (typeof attributes['Lieferland PLZ'] === 'string') this.postcodeInput.value = attributes['Lieferland PLZ'];
-            this.applySavedVatState(attributes);
+            if (vatSelectionRevision === this.vatSelectionRevision) {
+              this.applySavedVatState(attributes);
+            }
             this.applyCountryUI();
             this.updateVatUI();
             if (this.selectedCountry !== this.marketCountry) this.syncLocalization(this.selectedCountry);
