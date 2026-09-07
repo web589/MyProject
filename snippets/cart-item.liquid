@@ -32,14 +32,14 @@
     assign de_zero_vat_eligible = true
   endif
   assign has_visible_variant_option = false
-  assign bundle_capacity_option_name = blank
   assign bundle_capacity_option_value = blank
+  assign bundle_capacity_display_value = blank
   for option in product.options_with_values
     assign is_bundle_capacity_summary = false
     if option.value contains '×' and option.value contains 'VENUS E'
       assign is_bundle_capacity_summary = true
-      assign bundle_capacity_option_name = option.name
       assign bundle_capacity_option_value = option.value
+      assign bundle_capacity_display_value = option.value | split: ' – ' | last
     endif
     unless is_bundle_capacity_summary
       assign has_visible_variant_option = true
@@ -150,7 +150,7 @@
 
       {% if bundle_capacity_option_value != blank and bundle_capacity_rendered == false %}
         <div class="cart__item--variants">
-          <span>{{ bundle_capacity_option_name }}:</span> {{ bundle_capacity_option_value }}
+          {{ bundle_capacity_display_value }}
         </div>
       {% endif %}
 
