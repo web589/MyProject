@@ -664,6 +664,8 @@
         this.handleNavigationClick = this.handleNavigationClick.bind(this);
         this.handleLocationChange = this.handleLocationChange.bind(this);
         this.updateAnchorOffset = this.updateAnchorOffset.bind(this);
+        this.handleLayoutChange = this.handleLayoutChange.bind(this);
+        this.scheduleHashAlignment = this.scheduleHashAlignment.bind(this);
         this.handleInitialHashOnLoad = this.handleInitialHashOnLoad.bind(this);
 
         this.setupNavigation();
@@ -673,7 +675,7 @@
         window.addEventListener('popstate', this.handleLocationChange);
 
         if (window.location.hash) {
-          window.requestAnimationFrame(this.handleLocationChange);
+          this.scheduleHashAlignment('auto');
           window.addEventListener('load', this.handleInitialHashOnLoad, { once: true });
         }
       }
@@ -684,15 +686,23 @@
 
       setupAnchorOffset() {
         this.updateAnchorOffset();
-        window.addEventListener('resize', this.updateAnchorOffset);
+        window.addEventListener('resize', this.handleLayoutChange);
 
         if (window.ResizeObserver) {
-          this.anchorResizeObserver = new ResizeObserver(this.updateAnchorOffset);
+          this.anchorResizeObserver = new ResizeObserver(this.handleLayoutChange);
           this.anchorResizeObserver.observe(this);
 
           const headerGroup = document.getElementById('SiteHeaderGroup');
           if (headerGroup) {
             this.anchorResizeObserver.observe(headerGroup);
+          }
+
+          const mainContent = document.getElementById('MainContent');
+          if (mainContent) {
+            this.anchorResizeObserver.observe(mainContent);
+            Array.from(mainContent.children).forEach((section) => {
+              this.anchorResizeObserver.observe(section);
+            });
           }
         }
       }
@@ -700,6 +710,14 @@
       updateAnchorOffset() {
         const barBottom = Math.max(0, this.getBoundingClientRect().bottom);
         document.documentElement.style.setProperty('--pdp-sticky-anchor-offset', `${barBottom}px`);
+      }
+
+      handleLayoutChange() {
+        this.updateAnchorOffset();
+
+        if (this.getHashTarget()) {
+          this.scheduleHashAlignment('auto');
+        }
       }
 
       getHashTarget() {
@@ -749,24 +767,12 @@
         }
 
         event.preventDefault();
-        this.updateAnchorOffset();
-        this.scrollToTarget(targetElement, 'smooth');
         window.history.replaceState(null, '', href);
-        this.setActiveNavItem(targetId);
+        this.scheduleHashAlignment('smooth');
       }
 
       handleLocationChange() {
-        window.requestAnimationFrame(() => {
-          const targetElement = this.getHashTarget();
-          if (!targetElement) {
-            return;
-          }
-
-          const targetId = targetElement.id;
-          this.updateAnchorOffset();
-          this.scrollToTarget(targetElement, 'auto');
-          this.setActiveNavItem(targetId);
-        });
+        this.scheduleHashAlignment('auto');
       }
 
       handleInitialHashOnLoad() {
@@ -775,13 +781,36 @@
         }
       }
 
+      scheduleHashAlignment(behavior) {
+        if (this.hashAlignmentFrame) {
+          window.cancelAnimationFrame(this.hashAlignmentFrame);
+        }
+
+        this.hashAlignmentFrame = window.requestAnimationFrame(() => {
+          this.hashAlignmentFrame = null;
+
+          const targetElement = this.getHashTarget();
+          if (!targetElement) {
+            return;
+          }
+
+          this.updateAnchorOffset();
+          this.scrollToTarget(targetElement, behavior);
+          this.setActiveNavItem(targetElement.id);
+        });
+      }
+
       disconnectedCallback() {
         this.navItems?.forEach(item => item.removeEventListener('click', this.handleNavigationClick));
         window.removeEventListener('hashchange', this.handleLocationChange);
         window.removeEventListener('popstate', this.handleLocationChange);
-        window.removeEventListener('resize', this.updateAnchorOffset);
+        window.removeEventListener('resize', this.handleLayoutChange);
         window.removeEventListener('load', this.handleInitialHashOnLoad);
         this.anchorResizeObserver?.disconnect();
+
+        if (this.hashAlignmentFrame) {
+          window.cancelAnimationFrame(this.hashAlignmentFrame);
+        }
 
         document.documentElement.style.removeProperty('--pdp-sticky-anchor-offset');
       }
