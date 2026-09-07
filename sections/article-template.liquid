@@ -540,15 +540,25 @@
 
           {%- for link in blog_center_menu.links offset: 1 -%}
             {%- assign link_blog_handle = blank -%}
+            {%- assign linked_blog = blank -%}
             {%- if link.object != blank and link.object.handle != blank -%}
               {%- assign link_blog_handle = link.object.handle -%}
+              {%- assign linked_blog = link.object -%}
+            {%- endif -%}
+            {%- if link_blog_handle == blank and link.url != blank -%}
+              {%- assign link_url = link.url | split: '?' | first | split: '#' | first -%}
+              {%- assign link_url_parts = link_url | split: '/blogs/' -%}
+              {%- if link_url_parts.size > 1 -%}
+                {%- assign link_blog_handle = link_url_parts[1] | split: '/' | first -%}
+                {%- assign linked_blog = blogs[link_blog_handle] -%}
+              {%- endif -%}
             {%- endif -%}
             {%- assign is_current_blog = false -%}
             {%- if link_blog_handle == article_blog.handle or link.url == article_blog.url -%}
               {%- assign is_current_blog = true -%}
             {%- endif -%}
 
-            {%- if link.type == 'blog_link' or link_blog_handle != blank -%}
+            {%- if linked_blog != blank and linked_blog.articles_count > 0 -%}
               <a
                 class="blog-article__category-link"
                 href="{{ link.url }}"

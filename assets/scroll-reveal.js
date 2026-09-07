@@ -1,5 +1,5 @@
 /*
- * Lightweight, replayable scroll-reveal animation for Shopify content sections.
+ * Lightweight, one-time scroll-reveal animation for Shopify content sections.
  * Existing AOS and custom component animations are deliberately left untouched.
  */
 (function() {
@@ -256,7 +256,14 @@
 
   function revealFocusedTarget(event) {
     var target = event.target.closest && event.target.closest('[data-scroll-reveal-ready], [data-scroll-reveal-section-ready]');
-    if (target) target.classList.add('is-scroll-revealed');
+    if (target) revealTarget(target);
+  }
+
+  function revealTarget(target) {
+    if (!target || !target.classList) return;
+
+    target.classList.add('is-scroll-revealed');
+    observer.unobserve(target);
   }
 
   function init() {
@@ -264,8 +271,7 @@
 
     observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
-        entry.target.classList.toggle('is-scroll-revealed', entry.isIntersecting);
-        if (!entry.isIntersecting) entry.target.classList.remove('is-scroll-reveal-settled');
+        if (entry.isIntersecting) revealTarget(entry.target);
       });
     }, {
       threshold: 0.15,

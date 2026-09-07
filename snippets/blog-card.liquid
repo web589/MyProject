@@ -12,7 +12,16 @@
     assign card_loading = 'eager'
   endif
 
-  assign article_blog = article.blog | default: blog
+  assign article_blog = article.blog
+  if article_blog == blank and article.url != blank
+    assign article_url = article.url | split: '?' | first | split: '#' | first
+    assign article_url_parts = article_url | split: '/blogs/'
+    if article_url_parts.size > 1
+      assign article_blog_handle = article_url_parts[1] | split: '/' | first
+      assign article_blog = blogs[article_blog_handle]
+    endif
+  endif
+  assign article_blog = article_blog | default: blog
   assign article_blog_title = article_blog.title
   assign article_blog_url = article_blog.url
 

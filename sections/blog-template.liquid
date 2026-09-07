@@ -83,12 +83,16 @@
 
   .blog-page__header {
     align-items: center;
+    background: #fff;
     border-bottom: 1px solid var(--blog-border);
     display: flex;
     gap: 32px;
     justify-content: space-between;
     margin-bottom: 16px;
     padding-bottom: 12px;
+    position: sticky;
+    top: var(--site-header-group-height, var(--header-height, 0px));
+    z-index: 10;
   }
 
   .blog-page__title {
@@ -143,13 +147,6 @@
 
   .blog-featured {
     margin-bottom: 56px;
-  }
-
-  .blog-section-heading {
-    color: var(--blog-ink);
-    font-size: 24px;
-    letter-spacing: -0.02em;
-    margin: 0 0 22px;
   }
 
   .blog-card {
@@ -477,8 +474,18 @@
 
           {%- for link in blog_center_menu.links offset: 1 -%}
             {%- assign link_blog_handle = blank -%}
+            {%- assign linked_blog = blank -%}
             {%- if link.object != blank and link.object.handle != blank -%}
               {%- assign link_blog_handle = link.object.handle -%}
+              {%- assign linked_blog = link.object -%}
+            {%- endif -%}
+            {%- if link_blog_handle == blank and link.url != blank -%}
+              {%- assign link_url = link.url | split: '?' | first | split: '#' | first -%}
+              {%- assign link_url_parts = link_url | split: '/blogs/' -%}
+              {%- if link_url_parts.size > 1 -%}
+                {%- assign link_blog_handle = link_url_parts[1] | split: '/' | first -%}
+                {%- assign linked_blog = blogs[link_blog_handle] -%}
+              {%- endif -%}
             {%- endif -%}
             {%- assign is_current_blog = false -%}
             {%- if is_all_blog_view == false -%}
@@ -487,7 +494,7 @@
               {%- endif -%}
             {%- endif -%}
 
-            {%- if link.type == 'blog_link' or link_blog_handle != blank or link.url contains '/blogs/' -%}
+            {%- if linked_blog != blank and linked_blog.articles_count > 0 -%}
               <a
                 class="blog-category-nav__link{% if is_current_blog %} is-active{% endif %}"
                 href="{{ link.url }}"
@@ -498,7 +505,7 @@
             {%- endif -%}
           {%- endfor -%}
         </nav>
-      {%- else -%}
+      {%- elsif blog.articles_count > 0 -%}
         <nav class="blog-category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
           <a class="blog-category-nav__link is-active" href="{{ blog.url }}" aria-current="page">
             {{ blog.title | escape }}
@@ -517,8 +524,7 @@
           </section>
         {%- endfor -%}
 
-        <section aria-labelledby="BlogArticles-{{ section.id }}">
-          <h2 id="BlogArticles-{{ section.id }}" class="blog-section-heading">{{ 'blogs.article.more_articles' | t }}</h2>
+        <section>
           <div class="blog-card-grid">
             {%- for article in all_articles offset: 1 -%}
               {%- render 'blog-card', blog: blog, article: article -%}
@@ -537,8 +543,7 @@
             </section>
           {%- endfor -%}
 
-          <section aria-labelledby="BlogArticles-{{ section.id }}">
-            <h2 id="BlogArticles-{{ section.id }}" class="blog-section-heading">{{ 'blogs.article.more_articles' | t }}</h2>
+          <section>
             <div class="blog-card-grid">
               {%- for article in blog.articles offset: 1 -%}
                 {%- render 'blog-card', blog: blog, article: article -%}
