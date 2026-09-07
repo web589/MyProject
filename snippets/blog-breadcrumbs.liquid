@@ -1,14 +1,8 @@
-{%- assign visible_current_tags = blank -%}
-{%- for current_tag in current_tags -%}
-  {%- assign current_tag_first_character = current_tag | slice: 0, 1 -%}
-  {%- unless current_tag_first_character == '_' -%}
-    {%- if visible_current_tags == blank -%}
-      {%- assign visible_current_tags = current_tag -%}
-    {%- else -%}
-      {%- assign visible_current_tags = visible_current_tags | append: ' + ' | append: current_tag -%}
-    {%- endif -%}
-  {%- endunless -%}
-{%- endfor -%}
+{%- assign blog_center_url = blog_center_home_link.url | default: blog.url -%}
+{%- assign is_blog_center_home = false -%}
+{%- if blog.url == blog_center_url -%}
+  {%- assign is_blog_center_home = true -%}
+{%- endif -%}
 
 <nav class="blog-breadcrumbs" aria-label="breadcrumbs">
   <a href="{{ routes.root_url }}" title="{{ 'general.breadcrumbs.home_link_title' | t }}">
@@ -17,11 +11,11 @@
 
   <span class="blog-breadcrumbs__divider" aria-hidden="true">/</span>
 
-  {%- if visible_current_tags != blank -%}
-    <a href="{{ blog.url }}">{{ 'blogs.article.blog_center' | t }}</a>
-    <span class="blog-breadcrumbs__divider" aria-hidden="true">/</span>
-    <span aria-current="page">{{ visible_current_tags }}</span>
-  {%- else -%}
+  {%- if is_blog_center_home -%}
     <span aria-current="page">{{ 'blogs.article.blog_center' | t }}</span>
+  {%- else -%}
+    <a href="{{ blog_center_url }}">{{ 'blogs.article.blog_center' | t }}</a>
+    <span class="blog-breadcrumbs__divider" aria-hidden="true">/</span>
+    <span aria-current="page">{{ blog.title | escape }}</span>
   {%- endif -%}
 </nav>

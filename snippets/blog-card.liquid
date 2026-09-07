@@ -12,14 +12,9 @@
     assign card_loading = 'eager'
   endif
 
-  assign primary_tag = blank
-  for article_tag in article.tags
-    assign tag_first_character = article_tag | slice: 0, 1
-    unless tag_first_character == '_'
-      assign primary_tag = article_tag
-      break
-    endunless
-  endfor
+  assign article_blog = article.blog | default: blog
+  assign article_blog_title = article_blog.title
+  assign article_blog_url = article_blog.url
 
   assign article_excerpt = article.excerpt | strip_html
   if article_excerpt == blank
@@ -46,13 +41,12 @@
   </a>
 
   <div class="blog-card__content">
-    {%- if primary_tag != blank -%}
-      {%- assign primary_tag_handle = primary_tag | handleize -%}
+    {%- if article_blog_title != blank and article_blog_url != blank -%}
       <a
         class="blog-card__tag"
-        href="{{ blog.url }}/tagged/{{ primary_tag_handle }}"
+        href="{{ article_blog_url }}"
       >
-        {{ primary_tag | escape }}
+        {{ article_blog_title | escape }}
       </a>
     {%- endif -%}
 
