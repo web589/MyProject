@@ -124,6 +124,7 @@
 
 {% style %}
   .ai-marquee-bar-{{ ai_gen_id }} {
+    --marquee-gap: clamp(16px, 3vw, {{ block.settings.item_spacing }}px);
     display: block;
     width: 100%;
     height: {{ block.settings.bar_height }}px;
@@ -142,7 +143,7 @@
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
-    justify-content: center;
+    gap: var(--marquee-gap);
     min-width: 100%;
     width: max-content;
     white-space: nowrap;
@@ -152,12 +153,21 @@
     animation: ai-marquee-scroll-{{ ai_gen_id }} {{ block.settings.scroll_speed }}s linear infinite;
   }
 
+  .ai-marquee-track-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: var(--marquee-gap);
+    width: max-content;
+    height: 100%;
+  }
+
   .ai-marquee-item-{{ ai_gen_id }} {
     display: inline-flex;
     align-items: center;
     flex: 0 0 auto;
     height: 100%;
-    padding: 0 clamp(16px, 4vw, {{ block.settings.item_spacing }}px);
+    padding: 0;
     font-size: clamp(12px, 1vw, {{ block.settings.font_size }}px);
     color: {{ block.settings.text_color }};
     line-height: {{ block.settings.bar_height }}px;
@@ -190,10 +200,10 @@
 
   @keyframes ai-marquee-scroll-{{ ai_gen_id }} {
     0% {
-      transform: translate3d(var(--marquee-start, 100%), 0, 0);
+      transform: translate3d(0, 0, 0);
     }
     100% {
-      transform: translate3d(var(--marquee-end, -100%), 0, 0);
+      transform: translate3d(calc(-1 * var(--marquee-distance, 0px)), 0, 0);
     }
   }
 
@@ -219,35 +229,37 @@
     {{ block.shopify_attributes }}
   >
     <div class="ai-marquee-wrapper-{{ ai_gen_id }}">
-      {% for i in (1..4) %}
-        {% liquid
-          assign tag_key = 'announcement_' | append: i | append: '_tag'
-          assign text_key = 'announcement_' | append: i | append: '_text'
-          assign link_key = 'announcement_' | append: i | append: '_link'
+      <div class="ai-marquee-track-{{ ai_gen_id }}">
+        {% for i in (1..4) %}
+          {% liquid
+            assign tag_key = 'announcement_' | append: i | append: '_tag'
+            assign text_key = 'announcement_' | append: i | append: '_text'
+            assign link_key = 'announcement_' | append: i | append: '_link'
 
-          assign tag = block.settings[tag_key]
-          assign text = block.settings[text_key]
-          assign link = block.settings[link_key]
-        %}
+            assign tag = block.settings[tag_key]
+            assign text = block.settings[text_key]
+            assign link = block.settings[link_key]
+          %}
 
-        {% if text != blank %}
-          <div class="ai-marquee-item-{{ ai_gen_id }}">
-            {% if link != blank %}
-              <a href="{{ link | escape }}">
+          {% if text != blank %}
+            <div class="ai-marquee-item-{{ ai_gen_id }}">
+              {% if link != blank %}
+                <a href="{{ link | escape }}">
+                  {% if tag != blank %}
+                    <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
+                  {% endif %}
+                  {{ text | escape }}
+                </a>
+              {% else %}
                 {% if tag != blank %}
                   <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
                 {% endif %}
                 {{ text | escape }}
-              </a>
-            {% else %}
-              {% if tag != blank %}
-                <span class="ai-marquee-tag-{{ ai_gen_id }}">{{ tag | escape }}</span>
               {% endif %}
-              {{ text | escape }}
-            {% endif %}
-          </div>
-        {% endif %}
-      {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
   </marquee-bar-{{ ai_gen_id }}>
 
@@ -259,17 +271,25 @@
         class MarqueeBar{{ ai_gen_id }} extends HTMLElement {
           connectedCallback() {
             this.wrapper = this.querySelector('.ai-marquee-wrapper-{{ ai_gen_id }}');
+            this.track = this.querySelector('.ai-marquee-track-{{ ai_gen_id }}');
 
-            if (!this.wrapper) {
+            if (!this.wrapper || !this.track) {
               return;
             }
 
             this.updateLayout = this.updateLayout.bind(this);
+            this.motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
             if (window.ResizeObserver) {
               this.resizeObserver = new ResizeObserver(this.updateLayout);
               this.resizeObserver.observe(this);
-              this.resizeObserver.observe(this.wrapper);
+              this.resizeObserver.observe(this.track);
+            }
+
+            if (this.motionQuery.addEventListener) {
+              this.motionQuery.addEventListener('change', this.updateLayout);
+            } else if (this.motionQuery.addListener) {
+              this.motionQuery.addListener(this.updateLayout);
             }
 
             this.updateLayout();
@@ -279,17 +299,46 @@
             if (this.resizeObserver) {
               this.resizeObserver.disconnect();
             }
+
+            if (this.motionQuery) {
+              if (this.motionQuery.removeEventListener) {
+                this.motionQuery.removeEventListener('change', this.updateLayout);
+              } else if (this.motionQuery.removeListener) {
+                this.motionQuery.removeListener(this.updateLayout);
+              }
+            }
           }
 
           updateLayout() {
-            if (!this.wrapper) {
+            if (!this.wrapper || !this.track) {
               return;
             }
 
-            const containerWidth = this.clientWidth;
-            const trackWidth = this.wrapper.scrollWidth;
-            this.style.setProperty('--marquee-start', `${containerWidth}px`);
-            this.style.setProperty('--marquee-end', `${-trackWidth}px`);
+            this.wrapper.querySelectorAll('[data-marquee-clone]').forEach((clone) => clone.remove());
+
+            const trackWidth = this.track.scrollWidth;
+            const gap = parseFloat(window.getComputedStyle(this.wrapper).columnGap) || 0;
+            const cycleWidth = trackWidth + gap;
+
+            if (!cycleWidth) {
+              return;
+            }
+
+            if (!this.motionQuery.matches) {
+              const copyCount = Math.max(2, Math.ceil((this.clientWidth + cycleWidth) / cycleWidth));
+
+              for (let index = 1; index < copyCount; index += 1) {
+                const clone = this.track.cloneNode(true);
+                clone.setAttribute('aria-hidden', 'true');
+                clone.setAttribute('data-marquee-clone', 'true');
+                clone.querySelectorAll('a').forEach((link) => link.setAttribute('tabindex', '-1'));
+                this.wrapper.appendChild(clone);
+              }
+
+              this.style.setProperty('--marquee-distance', `${cycleWidth}px`);
+            } else {
+              this.style.setProperty('--marquee-distance', '0px');
+            }
           }
         }
 
