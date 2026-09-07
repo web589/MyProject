@@ -1011,6 +1011,13 @@
       const inventoryStatus = drawer.querySelector('[data-cart-inventory-status]');
       if (!form || !inventoryStatus) return;
 
+      const resetCheckoutButton = button => {
+        if (!button) return;
+        button.disabled = false;
+        button.classList.remove('btn--loading');
+        button.removeAttribute('aria-busy');
+      };
+
       form.addEventListener('submit', async (event) => {
         const submitter = event.submitter || document.activeElement;
         if (!submitter || submitter.getAttribute('name') !== 'checkout') return;
@@ -1019,7 +1026,12 @@
           return;
         }
 
+        // The VAT preflight owns normal cart lines. Only intercept here when
+        // the legacy shared-inventory guard is actually present.
+        if (!drawer.querySelector('[data-venus-shared-variant-id]')) return;
+
         event.preventDefault();
+        event.stopImmediatePropagation();
         if (form.dataset.inventoryChecking === 'true') return;
         form.dataset.inventoryChecking = 'true';
         submitter.disabled = true;
@@ -1040,12 +1052,10 @@
           });
 
           // Products that do not use the legacy shared-inventory mechanism do
-          // not need a second cart.js request here. Shopify Checkout remains
-          // the authoritative inventory check for all normal cart lines.
+          // not need a second cart.js request here. Let the VAT preflight
+          // listener's resubmission continue to Shopify's native submit flow;
+          // a second requestSubmit here would race that listener.
           if (!limits.size) {
-            form.dataset.inventoryValidated = 'true';
-            submitter.disabled = false;
-            form.requestSubmit(submitter);
             return;
           }
 
@@ -1083,7 +1093,7 @@
           inventoryStatus.hidden = false;
         } finally {
           form.dataset.inventoryChecking = 'false';
-          submitter.disabled = false;
+          resetCheckoutButton(submitter);
         }
       });
     })();
@@ -1803,6 +1813,13 @@
           this.status.textContent = message || '';
         }
 
+        resetCheckoutButton(submitter) {
+          if (!submitter) return;
+          submitter.disabled = false;
+          submitter.classList.remove('btn--loading');
+          submitter.removeAttribute('aria-busy');
+        }
+
         showVatFallback(show) {
           if (!this.vatFallbackButton) return;
           this.vatFallbackButton.hidden = !show;
@@ -1833,6 +1850,7 @@
           if (this.isSyncingVatMerchandise || this.vatSyncRetryScheduled) {
             event.preventDefault();
             event.stopImmediatePropagation();
+            this.resetCheckoutButton(submitter);
             this.setStatus('Die MwSt.-Auswahl wird noch angewendet. Bitte erneut versuchen.');
             return;
           }
@@ -1841,6 +1859,7 @@
           if (validationMessage) {
             event.preventDefault();
             event.stopImmediatePropagation();
+            this.resetCheckoutButton(submitter);
             this.setStatus(validationMessage);
             this.qualification.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             return;
@@ -1866,7 +1885,7 @@
             this.form.requestSubmit(submitter);
           } catch (error) {
             this.updateVatUI();
-            submitter.disabled = false;
+            this.resetCheckoutButton(submitter);
             if (error && error.canFallbackToStandardVat) {
               try {
                 await this.selectRegularVat();
