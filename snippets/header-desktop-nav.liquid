@@ -151,8 +151,15 @@
                           endif
                         endif
                       endfor
+
+                      assign is_product_category_active = false
+                      if has_product_category
+                        if category_handle == default_product_category
+                          assign is_product_category_active = true
+                        endif
+                      endif
                     -%}
-                    <li class="mega-menu-products__category-item{% if category_handle == default_product_category or childlink.active or childlink.child_active %} is-active{% endif %}" data-mega-menu-category-item="{{ category_handle }}">
+                    <li class="mega-menu-products__category-item{% if has_product_category %} is-product-category{% endif %}{% if is_product_category_active %} is-active{% endif %}" data-mega-menu-category-item="{{ category_handle }}">
                       <a
                         href="{{ childlink_url }}"
                         class="mega-menu-products__category-link"
@@ -402,7 +409,7 @@
         menu.setAttribute('data-mega-menu-ready', 'true');
 
         var categoryLinks = menu.querySelectorAll('[data-mega-menu-category]');
-        var categoryItems = menu.querySelectorAll('[data-mega-menu-category-item]');
+        var categoryItems = menu.querySelectorAll('[data-mega-menu-category-item].is-product-category');
         var panels = menu.querySelectorAll('[data-mega-menu-category-panel]');
         var defaultCategory = menu.getAttribute('data-default-category');
 
