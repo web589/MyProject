@@ -1520,13 +1520,17 @@
           } catch (error) {
             if (requestId !== this.shippingRequestId) return;
             if (error.needsPostcode && !this.postcodeInput.value.trim()) {
-              this.postcodeRow.hidden = true;
-              this.postcodeToggle.hidden = false;
+              // A postcode is required for a destination-specific rate. Keep the
+              // input visible so the shipping amount can be calculated here,
+              // instead of leaving the summary at the generic checkout fallback.
+              this.postcodeRow.hidden = false;
+              this.postcodeToggle.hidden = true;
               this.setShippingMessage(`Versand nach ${this.countryNames[this.selectedCountry]} · bitte PLZ eingeben`, false);
+              this.setShippingSummary('PLZ eingeben', false);
             } else {
               this.setShippingMessage(error.message || 'Versandkosten konnten nicht geladen werden.', true);
+              this.setShippingSummary('Im Checkout berechnet', false);
             }
-            this.setShippingSummary('Im Checkout berechnet', false);
           }
         }
 
