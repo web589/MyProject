@@ -66,7 +66,7 @@
   endif
 -%}
 <div
-  class="cart__item"
+  class="cart__item{% if bundle_suggestion_variant != blank and bundle_suggestion_savings > 0 %} cart__item--bundle-suggestion{% endif %}"
   data-key="{{ product.key }}"
   data-de-zero-vat-eligible="{{ de_zero_vat_eligible | default: false }}"
   data-de-vat-mode="{{ de_vat_mode }}"
