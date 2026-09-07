@@ -1,0 +1,84 @@
+{%- liquid
+  assign featured = featured | default: false
+  assign card_heading_level = 'h3'
+  assign card_widths = '360, 540, 720, 900, 1080'
+  assign card_sizes = '(min-width: 1100px) 33vw, (min-width: 769px) 50vw, 100vw'
+  assign card_loading = 'lazy'
+
+  if featured
+    assign card_heading_level = 'h2'
+    assign card_widths = '540, 720, 900, 1200, 1440'
+    assign card_sizes = '(min-width: 769px) 50vw, 100vw'
+    assign card_loading = 'eager'
+  endif
+
+  assign primary_tag = blank
+  for article_tag in article.tags
+    assign tag_first_character = article_tag | slice: 0, 1
+    unless tag_first_character == '_'
+      assign primary_tag = article_tag
+      break
+    endunless
+  endfor
+
+  assign article_excerpt = article.excerpt | strip_html
+  if article_excerpt == blank
+    assign article_excerpt = article.content | strip_html
+  endif
+  assign article_excerpt = article_excerpt | truncatewords: 32
+-%}
+
+<article class="blog-card{% if featured %} blog-card--featured{% endif %}">
+  <a class="blog-card__media" href="{{ article.url }}" aria-label="{{ article.title | escape }}">
+    {%- if article.image -%}
+      {%- render 'image-element',
+        img: article.image,
+        classes: 'blog-card__image',
+        sizes: card_sizes,
+        widths: card_widths,
+        loading: card_loading
+      -%}
+    {%- else -%}
+      <span class="blog-card__placeholder" aria-hidden="true">
+        {{ 'image' | placeholder_svg_tag: 'blog-card__placeholder-svg' }}
+      </span>
+    {%- endif -%}
+  </a>
+
+  <div class="blog-card__content">
+    {%- if primary_tag != blank -%}
+      {%- assign primary_tag_handle = primary_tag | handleize -%}
+      <a
+        class="blog-card__tag"
+        href="{{ blog.url }}/tagged/{{ primary_tag_handle }}"
+      >
+        {{ primary_tag | escape }}
+      </a>
+    {%- endif -%}
+
+    {%- if article.published_at != blank -%}
+      <time class="blog-card__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+        {{ article.published_at | date: '%-d. %b %Y' }}
+      </time>
+    {%- endif -%}
+
+    {%- if card_heading_level == 'h2' -%}
+      <h2 class="blog-card__title">
+        <a href="{{ article.url }}">{{ article.title | escape }}</a>
+      </h2>
+    {%- else -%}
+      <h3 class="blog-card__title">
+        <a href="{{ article.url }}">{{ article.title | escape }}</a>
+      </h3>
+    {%- endif -%}
+
+    {%- if article_excerpt != blank -%}
+      <p class="blog-card__excerpt">{{ article_excerpt | escape }}</p>
+    {%- endif -%}
+
+    <a class="blog-card__link" href="{{ article.url }}">
+      {{ 'blogs.article.read_more' | t }}
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</article>
