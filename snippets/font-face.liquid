@@ -3,6 +3,8 @@
 {%- assign base_font_bold = base_font | font_modify: 'weight', '600' -%}
 {%- assign base_font_italic = base_font | font_modify: 'style', 'italic' -%}
 {%- assign base_font_bold_italic = base_font_bold | font_modify: 'style', 'italic' -%}
+{%- assign pdp_heading_font = settings.pdp_heading_font -%}
+{%- assign pdp_body_font = settings.pdp_body_font -%}
 
 {%- style -%}
   {{ header_font | font_face: font_display: 'swap' }}
@@ -11,4 +13,13 @@
   {{ base_font_bold | font_face: font_display: 'swap' }}
   {{ base_font_italic | font_face: font_display: 'swap' }}
   {{ base_font_bold_italic | font_face: font_display: 'swap' }}
+
+  {%- if request.page_type == 'product' and pdp_heading_font != blank -%}
+    {{ pdp_heading_font | font_face: font_display: 'swap' }}
+    {{ pdp_heading_font | font_modify: 'weight', '700' | font_face: font_display: 'swap' }}
+  {%- endif -%}
+  {%- if request.page_type == 'product' and pdp_body_font != blank -%}
+    {{ pdp_body_font | font_face: font_display: 'swap' }}
+    {{ pdp_body_font | font_modify: 'weight', '500' | font_face: font_display: 'swap' }}
+  {%- endif -%}
 {%- endstyle -%}

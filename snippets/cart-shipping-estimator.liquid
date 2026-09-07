@@ -16,6 +16,44 @@
     gap: 8px;
   }
 
+  .cart-page-shipping .cart-country-option:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+
+  .cart-page-shipping .cart-country-loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0 0;
+    color: inherit;
+    font-size: 0.875em;
+  }
+
+  .cart-page-shipping .cart-country-loading[hidden] {
+    display: none;
+  }
+
+  .cart-page-shipping .cart-loading-spinner {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: cart-shipping-spinner 0.7s linear infinite;
+  }
+
+  @keyframes cart-shipping-spinner {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cart-page-shipping .cart-loading-spinner {
+      animation: none;
+    }
+  }
+
   .cart-page-shipping .cart-country-option,
   .cart-page-shipping [data-shipping-calculate],
   .cart-page-shipping .cart-postcode-toggle {
@@ -93,6 +131,10 @@
     <button type="button" class="cart-country-option" data-delivery-country="NL" aria-pressed="{% if estimator_country == 'NL' %}true{% else %}false{% endif %}">Niederlande</button>
     <button type="button" class="cart-country-option" data-delivery-country="BE" aria-pressed="{% if estimator_country == 'BE' %}true{% else %}false{% endif %}">Belgien</button>
   </div>
+  <p class="cart-country-loading" data-country-loading hidden role="status" aria-live="polite">
+    <span class="cart-loading-spinner" aria-hidden="true"></span>
+    <span>Land wird aktualisiert...</span>
+  </p>
   <p class="cart-country-note">Die Versandkosten werden anhand des ausgewählten Lieferlands und gegebenenfalls der PLZ aus Shopify geladen.</p>
 
   <div class="cart-postcode-row" data-postcode-row hidden>
@@ -127,6 +169,7 @@
         this.marketCountry = this.dataset.marketCountry || '';
         this.postcodeRow = this.querySelector('[data-postcode-row]');
         this.postcodeInput = this.querySelector('[data-delivery-postcode]');
+        this.countryLoading = this.querySelector('[data-country-loading]');
         this.postcodeAttribute = this.querySelector('[data-delivery-postcode-attribute]');
         this.countryNameAttribute = this.querySelector('[data-delivery-country-name]');
         this.countryCodeAttribute = this.querySelector('[data-delivery-country-code]');
@@ -143,6 +186,7 @@
         this.shippingRequestId = 0;
         this.shippingInputTimer = null;
         this.savePromise = Promise.resolve();
+        this.isCountryLoading = false;
 
         this.handleCountryClick = this.handleCountryClick.bind(this);
         this.handleShippingCalculate = this.handleShippingCalculate.bind(this);
@@ -207,6 +251,8 @@
       }
 
       async handleCountryClick(event) {
+        if (this.isCountryLoading) return;
+
         const nextCountry = event.currentTarget.dataset.deliveryCountry;
         if (!this.countryNames[nextCountry]) return;
 
@@ -216,6 +262,7 @@
         if (countryChanged) this.postcodeInput.value = '';
         this.setStatus('');
         this.applyCountryUI();
+        this.setCountryLoading(true);
 
         try {
           await this.persistAttributes();
@@ -223,7 +270,11 @@
         } catch (error) {
           this.setStatus(error.message || 'Das Lieferland konnte nicht angewendet werden.');
         } finally {
-          this.loadShippingRates();
+          try {
+            await this.loadShippingRates();
+          } finally {
+            this.setCountryLoading(false);
+          }
         }
       }
 
@@ -394,6 +445,22 @@
         if (!this.shippingSummary) return;
         this.shippingSummary.textContent = message;
         this.shippingSummary.classList.toggle('is-loading', Boolean(isLoading));
+      }
+
+      setCountryLoading(isLoading) {
+        this.isCountryLoading = Boolean(isLoading);
+        this.classList.toggle('is-country-loading', this.isCountryLoading);
+        this.setAttribute('aria-busy', String(this.isCountryLoading));
+        if (this.countryLoading) this.countryLoading.hidden = !this.isCountryLoading;
+        this.countryButtons.forEach(button => {
+          button.disabled = this.isCountryLoading;
+          button.setAttribute('aria-disabled', String(this.isCountryLoading));
+        });
+        if (this.isCountryLoading) {
+          this.setShippingMessage('Shopify Versandkosten werden geladen...', false);
+          this.setShippingSummary('Wird berechnet...', true);
+          this.postcodeToggle.hidden = true;
+        }
       }
 
       setStatus(message) {

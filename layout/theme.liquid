@@ -425,5 +425,9 @@
       </image-element>
     </div>
   </template>
+
+  {%- if request.page_type == 'product' -%}
+    {%- render 'pdp-design-system' -%}
+  {%- endif -%}
 </body>
 </html>
