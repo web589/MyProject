@@ -5,12 +5,6 @@
 
 <div class="site-nav">
   <div class="site-nav__icons">
-    {%- if section.settings.toolbar_social -%}
-      <div class="header-social small--hide">
-        {%- render 'social-icons', additional_classes: 'inline-list header-social__list' -%}
-      </div>
-    {%- endif -%}
-
     {%- if settings.search_enable -%}
       <a href="{{ routes.search_url }}" class="site-nav__link site-nav__link--icon header-action js-search-header{% if section.settings.main_menu_alignment == 'center' or section.settings.main_menu_alignment == 'center-split' %} medium-up--hide{% endif %}" aria-label="Suche">
         <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-search header-action__icon" viewBox="0 0 64 64"><title>Suche</title><path d="M47.16 28.58A18.58 18.58 0 1 1 28.58 10a18.58 18.58 0 0 1 18.58 18.58ZM54 54 41.94 42"/></svg>
@@ -50,5 +44,11 @@
       </span>
       <span class="header-action__label" aria-hidden="true">Warenkorb (<span class="cart-link__bubble-num">{{ cart_display_count }}</span>)</span>
     </a>
+
+    {%- if section.settings.toolbar_social -%}
+      <div class="header-social small--hide">
+        {%- render 'social-icons', additional_classes: 'inline-list header-social__list' -%}
+      </div>
+    {%- endif -%}
   </div>
 </div>
