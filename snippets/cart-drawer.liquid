@@ -918,7 +918,13 @@
 
         try {
           const root = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
-          const response = await fetch(`${root}cart.js`, { headers: { Accept: 'application/json' } });
+          const response = await fetch(`${root}cart.js`, {
+            cache: 'no-store',
+            headers: {
+              Accept: 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          });
           const cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorb konnte nicht geprüft werden.');
           if (!response.ok) throw new Error(cart.description || cart.message || 'Der Warenkorb konnte nicht geprüft werden.');
 
@@ -1003,6 +1009,7 @@
           this.shippingRequestId = 0;
           this.shippingInputTimer = null;
           this.savePromise = Promise.resolve();
+          this.vatSelectionRevision = 0;
           this.productsContainer = this.drawer.querySelector('[data-products]');
           this.acceleratedCheckout = this.drawer.querySelector('.additional-checkout-buttons');
           this.hasVatSwitchConfiguration = false;
@@ -1060,7 +1067,13 @@
 
         async loadCartContext() {
           try {
-            const response = await fetch(`${this.rootUrl}cart.js`, { headers: { Accept: 'application/json' } });
+            const response = await fetch(`${this.rootUrl}cart.js`, {
+              cache: 'no-store',
+              headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              }
+            });
             const cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorbkontext konnte nicht geladen werden.');
             if (!response.ok) return;
             this.cartCurrency = cart.currency || 'EUR';
@@ -1178,15 +1191,20 @@
         }
 
         async handleVatChange(event) {
+          const selectionRevision = ++this.vatSelectionRevision;
           if (event.target.matches('[data-vat-choice]') && event.target.value !== 'eligible') {
             this.vatConfirm.checked = false;
           }
           this.setStatus('');
           this.updateVatUI();
           try {
-            await this.persistAttributes();
-            await this.syncVatMerchandise(true);
+            // Keep radio changes local to the cart context. The merchandise
+            // switch is performed once, for the final choice, at checkout.
+            await this.persistAttributes(selectionRevision);
           } catch (error) {
+            // A slower request from an earlier click must not clear a newer
+            // selection made while that request was still pending.
+            if (selectionRevision !== this.vatSelectionRevision) return;
             this.clearVatState();
             this.updateVatUI();
             this.persistAttributes().catch(() => {});
@@ -1290,12 +1308,16 @@
           };
         }
 
-        persistAttributes() {
+        persistAttributes(selectionRevision = this.vatSelectionRevision) {
           const attributes = this.getAttributePayload();
           const save = () => fetch(`${this.rootUrl}cart/update.js`, {
             method: 'POST',
             credentials: 'same-origin',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
             body: JSON.stringify({ attributes })
           }).then(async response => {
             const cart = await window.PVTaxCart.readJsonResponse(response, 'Auswahl konnte nicht gespeichert werden.');
@@ -1309,7 +1331,9 @@
             .catch(() => {})
             .then(save)
             .catch(error => {
-              this.setStatus(error.message || 'Auswahl konnte nicht gespeichert werden.');
+              if (selectionRevision === this.vatSelectionRevision) {
+                this.setStatus(error.message || 'Auswahl konnte nicht gespeichert werden.');
+              }
               throw error;
             });
           return this.savePromise;
@@ -1345,7 +1369,13 @@
 
           this.isSyncingVatMerchandise = true;
           try {
-            const cartResponse = await fetch(`${this.rootUrl}cart.js`, { headers: { Accept: 'application/json' } });
+            const cartResponse = await fetch(`${this.rootUrl}cart.js`, {
+              cache: 'no-store',
+              headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              }
+            });
             const cart = await window.PVTaxCart.readJsonResponse(cartResponse, 'Der Warenkorb konnte nicht geladen werden.');
             if (!cartResponse.ok) throw new Error(cart.description || cart.message || 'Der Warenkorb konnte nicht geladen werden.');
 
@@ -1380,7 +1410,11 @@
             const addResponse = await fetch(`${this.rootUrl}cart/add.js`, {
               method: 'POST',
               credentials: 'same-origin',
-              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
               body: JSON.stringify({ items: additions })
             });
             const addResult = await window.PVTaxCart.readJsonResponse(addResponse, 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.');
@@ -1393,7 +1427,11 @@
               const updateResponse = await fetch(`${this.rootUrl}cart/update.js`, {
                 method: 'POST',
                 credentials: 'same-origin',
-                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                headers: {
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+                  'X-Requested-With': 'XMLHttpRequest'
+                },
                 body: JSON.stringify({ updates: removals })
               });
               const updatedCart = await window.PVTaxCart.readJsonResponse(updateResponse, 'Die bisherige Produktvariante konnte nicht entfernt werden.');
@@ -1412,7 +1450,11 @@
                 await fetch(`${this.rootUrl}cart/update.js`, {
                   method: 'POST',
                   credentials: 'same-origin',
-                  headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                  },
                   body: JSON.stringify({ updates: rollbackUpdates })
                 }).catch(() => {});
               }
@@ -1617,7 +1659,11 @@
           try {
             const response = await fetch(`${this.rootUrl}cart/update.js`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
               body: JSON.stringify({ discount: code })
             });
             const cart = await window.PVTaxCart.readJsonResponse(response, 'Rabattcode konnte nicht geprüft werden.');
@@ -1730,7 +1776,11 @@
           try {
             const response = await fetch(`${this.rootUrl}cart/add.js`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
               body: JSON.stringify({ items: [{ id: Number(variantId), quantity: 1 }] })
             });
             const result = await window.PVTaxCart.readJsonResponse(response, 'Produkt konnte nicht hinzugefügt werden.');
