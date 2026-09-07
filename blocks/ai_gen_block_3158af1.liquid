@@ -267,12 +267,23 @@
     pointer-events: none;
   }
 
-  .ai-scenario-card-text-{{ ai_gen_id }} {
+  .ai-scenario-card-content-{{ ai_gen_id }} {
     position: absolute;
     bottom: {{ block.settings.content_padding }}px;
     left: {{ block.settings.content_padding }}px;
+    right: {{ block.settings.content_padding }}px;
     z-index: 2;
-    max-width: 70%;
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    pointer-events: none;
+  }
+
+  .ai-scenario-card-text-{{ ai_gen_id }} {
+    position: static;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 60%;
     color: {{ block.settings.text_color }};
     text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
     pointer-events: none;
@@ -291,14 +302,16 @@
     opacity: 0.95;
     line-height: 1.5;
     font-weight: 400;
-    max-width: 400px;
+    max-width: 100%;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
 
   .ai-scenario-card-btn-{{ ai_gen_id }} {
-    position: absolute;
-    bottom: {{ block.settings.content_padding }}px;
-    right: {{ block.settings.content_padding }}px;
-    z-index: 2;
+    flex: 0 0 auto;
+    margin-left: auto;
     pointer-events: auto;
   }
 
@@ -355,9 +368,8 @@
     }
 
     .ai-scenario-card-text-{{ ai_gen_id }} {
-      bottom: 18px;
-      left: 18px;
-      max-width: 75%;
+      width: 100%;
+      max-width: 100%;
     }
 
     .ai-scenario-card-text-{{ ai_gen_id }} h3 {
@@ -366,12 +378,20 @@
 
     .ai-scenario-card-text-{{ ai_gen_id }} p {
       font-size: {{ block.settings.card_description_size | times: 0.87 }}px;
-      max-width: 200px;
+      max-width: 100%;
+    }
+
+    .ai-scenario-card-content-{{ ai_gen_id }} {
+      right: 18px;
+      bottom: 18px;
+      left: 18px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
     }
 
     .ai-scenario-card-btn-{{ ai_gen_id }} {
-      bottom: 18px;
-      right: 18px;
+      margin-left: 0;
     }
 
     .ai-scenario-card-btn-{{ ai_gen_id }} a {
@@ -438,22 +458,24 @@
       >
         <div class="ai-scenario-card-overlay-{{ ai_gen_id }}"></div>
 
-        {% if card_title != blank or card_description != blank %}
-          <div class="ai-scenario-card-text-{{ ai_gen_id }}">
-            {% if card_title != blank %}
-              <h3>{{ card_title }}</h3>
-            {% endif %}
-            {% if card_description != blank %}
-              <p>{{ card_description }}</p>
-            {% endif %}
-          </div>
-        {% endif %}
+        <div class="ai-scenario-card-content-{{ ai_gen_id }}">
+          {% if card_title != blank or card_description != blank %}
+            <div class="ai-scenario-card-text-{{ ai_gen_id }}">
+              {% if card_title != blank %}
+                <h3>{{ card_title }}</h3>
+              {% endif %}
+              {% if card_description != blank %}
+                <p>{{ card_description }}</p>
+              {% endif %}
+            </div>
+          {% endif %}
 
-        {% if card_button_text != blank and card_button_link != blank %}
-          <div class="ai-scenario-card-btn-{{ ai_gen_id }}">
-            <a href="{{ card_button_link }}">{{ card_button_text }}</a>
-          </div>
-        {% endif %}
+          {% if card_button_text != blank and card_button_link != blank %}
+            <div class="ai-scenario-card-btn-{{ ai_gen_id }}">
+              <a href="{{ card_button_link }}">{{ card_button_text }}</a>
+            </div>
+          {% endif %}
+        </div>
       </div>
     {% endfor %}
   </div>
