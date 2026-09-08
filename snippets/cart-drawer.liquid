@@ -230,7 +230,6 @@
 
     #CartDrawer .cart-drawer-sticky-actions {
       flex: 0 0 auto;
-      border-top: 1px solid #e2e5e9;
       padding: 12px var(--drawer-gutter) var(--drawer-gutter);
       background: #fff;
       box-shadow: 0 -8px 18px rgba(32, 33, 36, 0.06);
@@ -596,11 +595,6 @@
       font: inherit;
     }
 
-    #CartDrawer .cart-drawer-summary-divider {
-      margin: 10px 0 12px;
-      border-top: 1px solid #e2e5e9;
-    }
-
     #CartDrawer .cart-drawer-summary-total {
       min-height: 26px;
       color: #202124;
@@ -945,7 +939,6 @@
       </div>
 
       <div class="cart-drawer-sticky-actions" aria-label="Bestellübersicht">
-        <div class="cart-drawer-summary-divider" aria-hidden="true"></div>
         <div class="cart-drawer-summary-row cart-drawer-summary-total">
           <span>Warenkorb gesamt</span>
           <span class="cart-drawer-summary-value" data-subtotal>{{ cart.total_price | money_without_currency }} €</span>
