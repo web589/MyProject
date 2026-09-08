@@ -740,6 +740,7 @@
         }
 
         const activationLine = this.getBoundingClientRect().bottom + 8;
+        const activationTolerance = 2;
         const targetsByPosition = navigationTargets
           .map(target => ({
             ...target,
@@ -748,7 +749,7 @@
           .sort((first, second) => first.top - second.top);
 
         const activeTarget = targetsByPosition.reduce((currentTarget, target) => {
-          return target.top <= activationLine ? target : currentTarget;
+          return target.top <= activationLine + activationTolerance ? target : currentTarget;
         }, targetsByPosition[0]);
 
         this.setActiveNavItem(activeTarget.targetId);

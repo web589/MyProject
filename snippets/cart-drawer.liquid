@@ -27,8 +27,8 @@
     }
 
     #CartDrawer:has([data-bundle-suggestion]) .drawer__scrollable {
-      flex: 0 1 260px;
-      min-height: 260px;
+      flex: 0 1 390px;
+      min-height: 390px;
     }
 
     #CartDrawer:has([data-bundle-suggestion]) .drawer__footer {
@@ -70,6 +70,15 @@
       min-width: 0;
     }
 
+    #CartDrawer .cart__item-details:has(.cart-bundle-suggestion) {
+      grid-template-rows: auto auto auto;
+    }
+
+    #CartDrawer .cart-bundle-suggestion {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
     #CartDrawer .cart__item-name {
       display: -webkit-box;
       overflow: hidden;
@@ -105,6 +114,11 @@
       margin: 0;
     }
 
+    #CartDrawer .cart__item-details:has(.cart-bundle-suggestion) .cart__item-sub > div:first-child {
+      grid-row: 3;
+      align-self: start;
+    }
+
     #CartDrawer .cart__item-price-col {
       grid-column: 2;
       grid-row: 1 / span 2;
@@ -113,6 +127,10 @@
       align-items: flex-end;
       min-width: 86px;
       text-align: right;
+    }
+
+    #CartDrawer .cart__item-details:has(.cart-bundle-suggestion) .cart__item-price-col {
+      grid-row: 1 / span 3;
     }
 
     #CartDrawer .cart__price--current {

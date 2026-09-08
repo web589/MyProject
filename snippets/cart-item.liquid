@@ -192,24 +192,57 @@
         </div>
       {% endif %}
 
-      {% if product.key == bundle_suggestion_anchor_key and bundle_suggestion_variant != blank and bundle_suggestion_variant.available and bundle_target_present == false and bundle_suggestion_savings > 0 %}
-        <div class="cart-bundle-suggestion" data-bundle-suggestion>
-          <p class="cart-bundle-suggestion__copy">
-            Spartipp: Mit dem {{ bundle_switch_quantity }}×-Set sparst du {{ bundle_suggestion_savings | money }}.
-          </p>
-          <button
-            type="button"
-            class="cart-bundle-suggestion__button"
-            data-bundle-switch
-            data-cart-key="{{ product.key | escape }}"
-            data-cart-keys="{{ bundle_suggestion_cart_keys | split: '||' | json | escape }}"
-            data-target-variant-id="{{ bundle_suggestion_variant.id }}"
-            data-target-quantity="1"
-          >Zum {{ bundle_switch_quantity }}×-Set wechseln</button>
-        </div>
-      {% endif %}
-
     </div>
+
+    {% if product.key == bundle_suggestion_anchor_key and bundle_suggestion_variant != blank and bundle_suggestion_variant.available and bundle_target_present == false and bundle_suggestion_savings > 0 %}
+      <div class="cart-bundle-suggestion" data-bundle-suggestion>
+        <div class="cart-bundle-suggestion__header">
+          <span class="cart-bundle-suggestion__label">
+            <svg class="cart-bundle-suggestion__tag-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3.5 4.5h7.2l9.8 9.8-6.2 6.2-9.8-9.8V4.5Zm4.2 4.2h.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="7.8" cy="8.7" r="1" fill="currentColor"/>
+            </svg>
+            <span>Bundle-Empfehlung</span>
+          </span>
+          <span class="cart-bundle-suggestion__saving">Spare {{ bundle_suggestion_savings | money }}</span>
+        </div>
+
+        <p class="cart-bundle-suggestion__headline">
+          Mit dem {{ bundle_switch_quantity }}×-Set sparst du {{ bundle_suggestion_savings | money }}
+        </p>
+
+        <div class="cart-bundle-suggestion__comparison" aria-label="Preisvergleich">
+          <div class="cart-bundle-suggestion__comparison-item">
+            <span>{{ bundle_switch_quantity }} × Einzelgerät</span>
+            <strong>{{ bundle_current_total | money }}</strong>
+          </div>
+          <span class="cart-bundle-suggestion__comparison-arrow" aria-hidden="true">→</span>
+          <div class="cart-bundle-suggestion__comparison-item cart-bundle-suggestion__comparison-item--bundle">
+            <span>{{ bundle_switch_quantity }}× Set</span>
+            <strong>{{ bundle_suggestion_variant.price | money }}</strong>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="cart-bundle-suggestion__button"
+          data-bundle-switch
+          data-cart-key="{{ product.key | escape }}"
+          data-cart-keys="{{ bundle_suggestion_cart_keys | split: '||' | json | escape }}"
+          data-target-variant-id="{{ bundle_suggestion_variant.id }}"
+          data-target-quantity="1"
+        >
+          <span>Zum {{ bundle_switch_quantity }}×-Set wechseln</span>
+          <span class="cart-bundle-suggestion__button-arrow" aria-hidden="true">→</span>
+        </button>
+
+        <p class="cart-bundle-suggestion__benefit">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="currentColor"/><path d="m6.3 10.1 2.3 2.3 5.1-5.1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Gleiche Leistung. Weniger Kosten. Mehr Unabhängigkeit.</span>
+        </p>
+      </div>
+    {% endif %}
+
     <div class="cart__item-sub">
       <div>
         <div class="js-qty__wrapper" data-cart-quantity-control>
