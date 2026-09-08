@@ -652,8 +652,7 @@
           {% assign feature_title_key = 'feature_' | append: feature_index | append: '_title' %}
           {% assign feature_text_key = 'feature_' | append: feature_index | append: '_text' %}
           {% assign feature_icon_key = 'feature_' | append: feature_index | append: '_icon' %}
-          {% assign legacy_feature_key = 'feature_' | append: feature_index %}
-          {% assign feature_title = block.settings[feature_title_key] | default: block.settings[legacy_feature_key] %}
+          {% assign feature_title = block.settings[feature_title_key] %}
           {% assign feature_text = block.settings[feature_text_key] %}
           {% assign feature_icon = block.settings[feature_icon_key] %}
           {% if feature_title != blank or feature_text != blank %}
@@ -1144,9 +1143,6 @@
     { "type": "text", "id": "feature_3_text", "label": "Feature 3 text" },
     { "type": "image_picker", "id": "feature_3_icon", "label": "Feature 3 icon" },
     { "type": "text", "id": "left_note", "label": "Bottom note", "default": "Ideal als Einstieg für Balkonkraftwerk, Nachrüstung und Heimspeicher." },
-    { "type": "text", "id": "feature_1", "label": "Legacy feature 1 fallback" },
-    { "type": "text", "id": "feature_2", "label": "Legacy feature 2 fallback" },
-    { "type": "text", "id": "feature_3", "label": "Legacy feature 3 fallback" },
     { "type": "range", "id": "feature_text_size", "label": "Feature text size", "min": 13, "max": 18, "step": 1, "unit": "px", "default": 15 },
 
     { "type": "header", "content": "Calculator content" },
