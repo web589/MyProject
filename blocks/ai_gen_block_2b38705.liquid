@@ -219,6 +219,7 @@
     主图图片来源使用 Shopify 产品主图 {{product.featured_image | image_url: width: 1200}}，确保放大后清晰, 左边的主图不用单独列出一个图，他就是下面的图片展示，常态下展示下面图片的左边第一张，当鼠标点击其他图片时，点哪张主图卡片就展示哪张, 其他地方不变，主图下方的图片数量可以自由增加或减少，最多不超过12张图片数量，主图下面的展示的四张卡片要展示完全，不要漏半截，下面四张的最右边那张卡片要展示完全，还有主图的放大效果要改一下，鼠标放置在原来底图的哪个位置，那么那个放大遮罩就以鼠标放置底图的那个位置的图片为中心放大, 其他不变，右侧标题下面的星星可根据评分的多少，来填满星星的颜色，满分是5分，少一分就有一个空心星星，最低单位为0.1，还有下方两个部分的选项卡组合是纵向排列，只保持一列，不要横向出现第二列，一行就是一个选项卡占满整行，每个选项卡的右边都有一个空心带边框的圆圈按钮，按钮边框常态颜色为灰色，当鼠标点击选中选项卡后，圆圈按钮边框加粗中间空心圆缩小，圆圈边框变成蓝色, 其他不变，右侧标题下面的星星可根据评分的多少，来填满星星的颜色，满分是5分，少一分就有一个空心星星，最低单位为0.1，还有下方两个部分的选项卡组合是纵向排列，只保持一列，不要横向出现第二列，一行就是一个选项卡占满整行，每个选项卡的右边都有一个空心带边框的圆圈按钮，按钮边框常态颜色为灰色，当鼠标点击选中选项卡后，圆圈按钮边框加粗中间空心圆缩小，圆圈边框变成蓝色, 其他不变，右侧标题下面的星星可根据评分的多少，来填满星星的颜色，满分是5分，少一分就有一个空心星星，最低单位为0.1。, 其他不变，右侧下方两个部分的选项卡组合是纵向排列，只保持一列，不要横向出现第二列，一行就是一个选项卡占满整行，每个选项卡的右边都有一个空心带边框的圆圈按钮，按钮边框常态颜色为灰色，当鼠标点击选中选项卡后，圆圈按钮边框加粗中间空心圆缩小，圆圈边框变成蓝色, 其他不变，增加一个分别调节左右两部分区域横向宽度的设置，还有右边每个选项卡点击之后的右边按钮样式是中心为空心圆圈，中心为没有颜色的圆圈，外围变成填满颜色的一圈空心圆, 其他不变，增加一个可以调节选项卡右边按钮点击之后圆圈中心空心圆半径的设置，再增加一个右边标题下的星星变成支持小数评分的星级显示组件，采用两层叠加法（overlay technique）：底层是 5 颗灰色空星（outline），上层是 5 颗实心彩色星，上层容器宽度根据评分百分比动态计算（例如评分 4.8，则上层宽度为 4.8/5 = 96%），上层超出容器的部分用 overflow: hidden 裁剪，从而实现第 5 颗星只填充 80% 的半星效果。评分通过变量控制，支持任意小数（如 4.2、3.7、4.8），星星颜色、大小可配置。, 其他不用改，增加一个可以调节容器内上下边距的设置，再增加一个可以调节每个选项卡点击之后右边的圆圈按钮的边框朝内粗细的设置，
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
 {% liquid
   assign is_product_context = false
   assign bundle_rating_value = blank
@@ -1058,7 +1059,7 @@
   {% assign bundle_description = block.settings.description %}
 {% endif %}
 
-<pdp-bundle-{{ ai_gen_id }} id="pdp-buy" class="pdp-bundle-{{ ai_gen_id }}" data-pdp-bundle data-de-vat-candidate="{{ bundle_is_de_vat_candidate }}" {{ block.shopify_attributes }}>
+<pdp-bundle-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target pdp-bundle-{{ ai_gen_id }}" data-pdp-bundle data-de-vat-candidate="{{ bundle_is_de_vat_candidate }}" {{ block.shopify_attributes }}>
   <div class="pdp-bundle-grid-{{ ai_gen_id }}">
     <div class="pdp-left-{{ ai_gen_id }}">
       {% assign first_thumb = bundle_product.featured_image | default: bundle_product.images.first %}
@@ -1170,7 +1171,7 @@
           {% endfor %}
         </div>
 
-        <div class="pdp-quantity-row-{{ ai_gen_id }}">
+        <div class="pdp-quantity-row-{{ ai_gen_id }}" data-bundle-quantity-row hidden>
           <label class="pdp-quantity-label-{{ ai_gen_id }}" for="PdpBundleQuantity-{{ ai_gen_id }}">Anzahl</label>
           <div class="pdp-quantity-control-{{ ai_gen_id }}">
             <button type="button" data-bundle-quantity-decrease aria-label="Anzahl reduzieren">−</button>
@@ -1407,6 +1408,7 @@
       this.quantityInput = this.querySelector('[data-bundle-quantity-input]');
       this.quantityDecrease = this.querySelector('[data-bundle-quantity-decrease]');
       this.quantityIncrease = this.querySelector('[data-bundle-quantity-increase]');
+      this.quantityRow = this.querySelector('[data-bundle-quantity-row]');
       this.quantitySuggestion = this.querySelector('[data-bundle-quantity-suggestion]');
       this.quantitySuggestionCopy = this.querySelector('[data-bundle-suggestion-copy]');
       this.quantitySuggestionAction = this.querySelector('[data-bundle-suggestion-action]');
@@ -1528,6 +1530,7 @@
       const baseOption = this.optionConfig.group1.options[0];
       const targetOption = this.optionConfig.group1.options[quantity - 1];
       const isBaseSelection = this.selectedIndex.group1 === 0;
+      if (this.quantityRow) this.quantityRow.hidden = !isBaseSelection;
       const savings = baseOption && targetOption
         ? (this.getOptionCurrentPrice(baseOption) * quantity) - this.getOptionCurrentPrice(targetOption)
         : 0;
@@ -2361,6 +2364,12 @@
 {
   "name": "PDP bundle module",
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
     {
       "type": "select",
       "id": "content_source",

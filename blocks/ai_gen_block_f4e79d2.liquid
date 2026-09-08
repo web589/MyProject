@@ -138,8 +138,9 @@
     </div>, 每张卡片的高度宽度可以单独自由调节, 每张卡片的宽度可以单独独立调节，高度也可以单独独立调节，在调节宽度时，只拉宽或变窄卡片，卡片高度不变，高度在调节时，宽度也不会变化, 整个卡片模块要整体保持居中, 其他地方不变，加一个可以调节整个模块容器与上一个模块间距的设置，还有给每个卡片加一层由顶部到卡片2分之一处黑色至透明渐变的遮罩, 其他不用变，再添加一个可以调节容器内标题距离顶部的距离的设置，还有容器下面内部边距设置，还有整个模块容器与下面一个模块间距的设置, 其他地方不用变化，添加一个可以调节卡片内文字位置的设置, 在前两排卡片下方再加一排图片卡片,为三个卡片并排,, 每张卡片可以单独调节宽度，可以单独高度，并且宽度可以调节无上限，但整个模块始终保持居中，左侧卡片的左边不能超过左边容器边框，右侧卡片的右边不能超过右边容器边框, 增加一个可以调节每个图片卡片里标题和描述的上下左右位置的设置，这个设置的滑块设置的 step(步长)单位为1来调节，图片里的黑色遮罩的位置和高度还有透明度也可以自定义调节, 增加一个可以调节标题在左边还是居中还是右边的设置，请帮我把当前这个 section 里 "Container max width"(容器最大宽度)这个滑块设置的 step(步长)从 40 改成 10,其他不用变。还有再增加一个每个卡片里的标题和描述可以选择左对齐、居中、右对齐的设置
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
 
-<div id="pdp-overview" class="ai-feature-cards-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<div{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target ai-feature-cards-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
 {% style %}
   .ai-feature-cards-{{ ai_gen_id }} {
     display: block;
@@ -637,6 +638,12 @@
   "name": "Feature cards",
   "tag": null,
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
     {
       "type": "select",
       "id": "content_source",

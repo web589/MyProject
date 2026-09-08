@@ -164,7 +164,7 @@
   }
 </style>
 
-<div{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handle }}"{% endif %} class="page-width page-width--narrow">
+<div{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handle }}"{% endif %} class="pdp-anchor-target page-width page-width--narrow">
   {%- if faq_title != blank or faq_subtitle != blank -%}
     <header class="faq-section-header">
       {%- if faq_title != blank -%}

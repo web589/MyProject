@@ -175,6 +175,7 @@
     </div>, 增加一个可以调节容器外部与上下模块间距的设置，再添加一个可以调节容器内部上下边距的设置，还有整个模块卡片和标题都保持居中，每个卡片都有边框颜色，卡片的圆角也可以自由调节, 其他地方不变，加一个可以选择标题是左对齐、居中还有右对齐的设置, 增加一个可以调节整个容器宽度的设置, 请帮我把当前这个 section 里 "Max width"(容器最大宽度)这个滑块设置的 step(步长)从 40 改成 10,其他不用变。, 请帮我把当前这个 section 里 "Card gap"(卡片间距)这个滑块设置的 step(步长)改成1，其他不用变。
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
 
 {% style %}
   .ai-delivery-scope-{{ ai_gen_id }} {
@@ -314,8 +315,8 @@
 
 {% if included_title != blank or included_subtitle != blank or included_items != blank or has_theme_editor_item %}
 <delivery-scope-{{ ai_gen_id }}
-  id="pdp-included"
-  class="ai-delivery-scope-{{ ai_gen_id }}"
+  {% if pdp_anchor_id != blank %}id="{{ pdp_anchor_id }}"{% endif %}
+  class="pdp-anchor-target ai-delivery-scope-{{ ai_gen_id }}"
   {{ block.shopify_attributes }}
 >
   <div class="ai-delivery-scope-inner-{{ ai_gen_id }}">
@@ -501,6 +502,12 @@
 {
   "name": "Im Lieferumfang",
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
     {
       "type": "select",
       "id": "content_source",

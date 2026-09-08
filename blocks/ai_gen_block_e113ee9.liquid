@@ -3,6 +3,7 @@
   Shopify Product Metafields. Empty fields and empty groups are omitted.
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
 
 {% style %}
   .ai-tech-specs-{{ ai_gen_id }} {
@@ -121,7 +122,7 @@
   }
 {% endstyle %}
 
-<div id="pdp-specifications" class="ai-tech-specs-{{ ai_gen_id }}" data-tech-specs-root="{{ ai_gen_id }}" data-initial-variant-id="{{ product.selected_or_first_available_variant.id }}" {{ block.shopify_attributes }}>
+<div{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target ai-tech-specs-{{ ai_gen_id }}" data-tech-specs-root="{{ ai_gen_id }}" data-initial-variant-id="{{ product.selected_or_first_available_variant.id }}" {{ block.shopify_attributes }}>
   <div class="ai-tech-specs-inner-{{ ai_gen_id }}">
     {% liquid
       assign technical_heading = blank
@@ -311,6 +312,12 @@
 {
   "name": "Technical specifications",
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
     {
       "type": "select",
       "id": "content_source",

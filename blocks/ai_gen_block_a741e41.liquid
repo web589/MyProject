@@ -211,6 +211,10 @@
   .ai-compare-card-{{ ai_gen_id }} {
     flex: 1;
     width: 100%;
+  }
+
+  .ai-compare-card-media-wrap-{{ ai_gen_id }} {
+    width: 100%;
     height: {{ block.settings.card_height }}px;
     border-radius: {{ block.settings.card_radius }}px;
     overflow: hidden;
@@ -229,15 +233,9 @@
   }
 
   .ai-compare-card-content-{{ ai_gen_id }} {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    padding: 72px 32px 28px;
-    color: #ffffff;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0));
-    pointer-events: none;
+    margin-top: 16px;
+    color: #111111;
+    text-align: left;
   }
 
   .ai-compare-card-title-{{ ai_gen_id }} {
@@ -246,6 +244,7 @@
     font-size: 24px;
     font-weight: 700;
     line-height: 1.2;
+    color: #111111;
   }
 
   .ai-compare-card-description-{{ ai_gen_id }} {
@@ -253,6 +252,7 @@
     font-family: 'Inter', var(--font-body), sans-serif;
     font-size: 16px;
     line-height: 1.5;
+    color: #444444;
   }
 
   .ai-compare-placeholder-{{ ai_gen_id }} {
@@ -295,12 +295,12 @@
       flex-direction: column;
     }
 
-    .ai-compare-card-{{ ai_gen_id }} {
+    .ai-compare-card-media-wrap-{{ ai_gen_id }} {
       height: {{ block.settings.card_height_mobile }}px;
     }
 
     .ai-compare-card-content-{{ ai_gen_id }} {
-      padding: 64px 20px 20px;
+      margin-top: 12px;
     }
 
     .ai-compare-card-title-{{ ai_gen_id }} {
@@ -364,18 +364,20 @@
     <div class="ai-dual-cards-wrap-{{ ai_gen_id }}">
       {% if durability_left_image != blank %}
       <div class="ai-compare-card-{{ ai_gen_id }}" data-card="left">
-        {% if durability_left_image != blank %}
-          <img
-            class="ai-compare-media-{{ ai_gen_id }}"
-            src="{{ durability_left_image | image_url: width: 1200 }}"
-            alt="{{ left_card_title | default: durability_title | escape }}"
-            loading="lazy"
-            width="{{ durability_left_image.width }}"
-            height="{{ durability_left_image.height }}"
-          >
-        {% else %}
-          <div class="ai-compare-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>
-        {% endif %}
+        <div class="ai-compare-card-media-wrap-{{ ai_gen_id }}">
+          {% if durability_left_image != blank %}
+            <img
+              class="ai-compare-media-{{ ai_gen_id }}"
+              src="{{ durability_left_image | image_url: width: 1200 }}"
+              alt="{{ left_card_title | default: durability_title | escape }}"
+              loading="lazy"
+              width="{{ durability_left_image.width }}"
+              height="{{ durability_left_image.height }}"
+            >
+          {% else %}
+            <div class="ai-compare-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>
+          {% endif %}
+        </div>
         {% if left_card_title != blank or left_card_description != blank %}
           <div class="ai-compare-card-content-{{ ai_gen_id }}">
             {% if left_card_title != blank %}
@@ -391,18 +393,20 @@
 
       {% if durability_right_image != blank %}
       <div class="ai-compare-card-{{ ai_gen_id }}" data-card="right">
-        {% if durability_right_image != blank %}
-          <img
-            class="ai-compare-media-{{ ai_gen_id }}"
-            src="{{ durability_right_image | image_url: width: 1200 }}"
-            alt="{{ right_card_title | default: durability_title | escape }}"
-            loading="lazy"
-            width="{{ durability_right_image.width }}"
-            height="{{ durability_right_image.height }}"
-          >
-        {% else %}
-          <div class="ai-compare-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>
-        {% endif %}
+        <div class="ai-compare-card-media-wrap-{{ ai_gen_id }}">
+          {% if durability_right_image != blank %}
+            <img
+              class="ai-compare-media-{{ ai_gen_id }}"
+              src="{{ durability_right_image | image_url: width: 1200 }}"
+              alt="{{ right_card_title | default: durability_title | escape }}"
+              loading="lazy"
+              width="{{ durability_right_image.width }}"
+              height="{{ durability_right_image.height }}"
+            >
+          {% else %}
+            <div class="ai-compare-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>
+          {% endif %}
+        </div>
         {% if right_card_title != blank or right_card_description != blank %}
           <div class="ai-compare-card-content-{{ ai_gen_id }}">
             {% if right_card_title != blank %}
