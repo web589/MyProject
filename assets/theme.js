@@ -1920,7 +1920,7 @@ theme.recentlyViewed = {
         var qty = evt.detail[1];
         var el = evt.detail[2];
 
-        if (!key || !qty) {
+        if (!key || qty === null || typeof qty === 'undefined' || Number.isNaN(Number(qty)) || Number(qty) < 0) {
           return;
         }
 

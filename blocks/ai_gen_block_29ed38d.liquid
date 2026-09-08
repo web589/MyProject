@@ -177,6 +177,15 @@
               <img class="card-bg" src="https://images.u, Testimonial要10个
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% liquid
+  assign image_size_scale = block.settings.image_size_scale | default: 100
+  assign desktop_card_width_percent = image_size_scale | times: 1.0 | divided_by: block.settings.slides_per_view
+  assign desktop_gap_count = block.settings.slides_per_view | minus: 1
+  assign desktop_gap_offset = block.settings.card_gap | times: image_size_scale | times: desktop_gap_count | divided_by: 100.0 | divided_by: block.settings.slides_per_view
+  assign tablet_card_width_percent = image_size_scale | divided_by: 2.0
+  assign tablet_gap_offset = block.settings.card_gap | times: image_size_scale | divided_by: 200.0
+  assign image_sizes = '(max-width: 749px) ' | append: image_size_scale | append: 'vw, (max-width: 989px) ' | append: tablet_card_width_percent | append: 'vw, ' | append: desktop_card_width_percent | append: 'vw'
+%}
 
 {% style %}
   .ai-testimonial-section-{{ ai_gen_id }} {
@@ -248,8 +257,8 @@
   }
 
   .ai-testimonial-slide-{{ ai_gen_id }} {
-    flex: 0 0 calc((100vw - {{ block.settings.card_gap }}px * (var(--ai-testimonial-columns-{{ ai_gen_id }}) - 1)) / var(--ai-testimonial-columns-{{ ai_gen_id }}));
-    max-width: calc((100vw - {{ block.settings.card_gap }}px * (var(--ai-testimonial-columns-{{ ai_gen_id }}) - 1)) / var(--ai-testimonial-columns-{{ ai_gen_id }}));
+    flex: 0 0 calc({{ desktop_card_width_percent }}vw - {{ desktop_gap_offset }}px);
+    max-width: calc({{ desktop_card_width_percent }}vw - {{ desktop_gap_offset }}px);
     border-radius: {{ block.settings.card_border_radius }}px;
     overflow: hidden;
   }
@@ -376,8 +385,8 @@
     }
 
     .ai-testimonial-slide-{{ ai_gen_id }} {
-      flex-basis: calc((100vw - {{ block.settings.card_gap }}px) / 2);
-      max-width: calc((100vw - {{ block.settings.card_gap }}px) / 2);
+      flex-basis: calc({{ tablet_card_width_percent }}vw - {{ tablet_gap_offset }}px);
+      max-width: calc({{ tablet_card_width_percent }}vw - {{ tablet_gap_offset }}px);
     }
   }
 
@@ -392,8 +401,8 @@
     }
 
     .ai-testimonial-slide-{{ ai_gen_id }} {
-      flex: 0 0 100%;
-      max-width: 100%;
+      flex: 0 0 {{ image_size_scale }}vw;
+      max-width: 100vw;
     }
 
     .ai-testimonial-heading-{{ ai_gen_id }} {
@@ -422,8 +431,6 @@
     assign use_shared_testimonials = true
   endif
   assign show_testimonial_module = true
-  assign desktop_image_width = 100 | divided_by: block.settings.slides_per_view
-  assign image_sizes = '(max-width: 749px) 100vw, (max-width: 989px) 50vw, ' | append: desktop_image_width | append: 'vw'
 %}
 
 {% if show_testimonial_module %}
@@ -740,6 +747,17 @@
       "max": 4,
       "step": 1,
       "default": 4
+    },
+    {
+      "type": "range",
+      "id": "image_size_scale",
+      "label": "Image size",
+      "info": "Adjust the width of all testimonial images together.",
+      "min": 70,
+      "max": 130,
+      "step": 5,
+      "unit": "%",
+      "default": 100
     },
     {
       "type": "range",

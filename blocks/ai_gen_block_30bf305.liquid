@@ -328,8 +328,8 @@
 
   .ai-feature-grid-cards-{{ ai_gen_id }} {
     display: grid;
-    grid-template-columns: 1fr 1.7fr 0.9fr;
-    grid-template-rows: 160px 88px 160px;
+    grid-template-columns: {{ block.settings.card_column_left }}fr {{ block.settings.card_column_center }}fr {{ block.settings.card_column_right }}fr;
+    grid-template-rows: {{ block.settings.card_row_top_height }}px {{ block.settings.card_row_middle_height }}px {{ block.settings.card_row_bottom_height }}px;
     gap: {{ block.settings.grid_gap }}px;
     grid-template-areas:
       "card1 card2 card3"
@@ -468,11 +468,11 @@
     }
 
     .ai-feature-card-{{ ai_gen_id }} {
-      min-height: 280px;
+      min-height: {{ block.settings.tablet_card_height }}px;
     }
 
     .ai-feature-card-1-{{ ai_gen_id }} {
-      min-height: 400px;
+      min-height: {{ block.settings.tablet_tall_card_height }}px;
     }
   }
 
@@ -519,7 +519,7 @@
     .ai-feature-card-3-{{ ai_gen_id }},
     .ai-feature-card-4-{{ ai_gen_id }},
     .ai-feature-card-5-{{ ai_gen_id }} {
-      min-height: 220px;
+      min-height: {{ block.settings.mobile_card_height }}px;
     }
   }
 {% endstyle %}
@@ -763,6 +763,100 @@
       "step": 4,
       "unit": "px",
       "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Card size"
+    },
+    {
+      "type": "range",
+      "id": "card_column_left",
+      "label": "Left column width (card 1)",
+      "info": "Adjusts the width of the tall left card relative to the other columns.",
+      "min": 0.5,
+      "max": 3,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "card_column_center",
+      "label": "Center column width (cards 2 and 4)",
+      "info": "Adjusts the width of the two center cards relative to the other columns.",
+      "min": 0.5,
+      "max": 3,
+      "step": 0.1,
+      "default": 1.7
+    },
+    {
+      "type": "range",
+      "id": "card_column_right",
+      "label": "Right column width (cards 3 and 5)",
+      "info": "Adjusts the width of the two right cards relative to the other columns.",
+      "min": 0.5,
+      "max": 3,
+      "step": 0.1,
+      "default": 0.9
+    },
+    {
+      "type": "range",
+      "id": "card_row_top_height",
+      "label": "Top row height (cards 2 and 3)",
+      "min": 80,
+      "max": 400,
+      "step": 4,
+      "unit": "px",
+      "default": 160
+    },
+    {
+      "type": "range",
+      "id": "card_row_middle_height",
+      "label": "Middle row height (cards 2 and 5)",
+      "min": 40,
+      "max": 300,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "card_row_bottom_height",
+      "label": "Bottom row height (cards 4 and 5)",
+      "min": 80,
+      "max": 400,
+      "step": 4,
+      "unit": "px",
+      "default": 160
+    },
+    {
+      "type": "range",
+      "id": "tablet_card_height",
+      "label": "Tablet card height",
+      "min": 200,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "tablet_tall_card_height",
+      "label": "Tablet tall card height",
+      "min": 300,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_height",
+      "label": "Mobile card height",
+      "min": 160,
+      "max": 420,
+      "step": 10,
+      "unit": "px",
+      "default": 220
     },
     {
       "type": "range",
