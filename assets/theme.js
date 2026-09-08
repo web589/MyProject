@@ -5038,7 +5038,16 @@ theme.recentlyViewed = {
     CartDrawer.prototype = Object.assign({}, CartDrawer.prototype, {
       init: function() {
         this.cartForm = new theme.CartForm(this.form);
-        this.cartForm.buildCart();
+        var restorePromise = window.PVTaxCart && window.PVTaxCart.restorePendingVatMerchandise
+          ? window.PVTaxCart.restorePendingVatMerchandise()
+          : Promise.resolve();
+        restorePromise
+          .catch(function(error) {
+            console.warn('VAT-Warenkorbposition konnte nicht wiederhergestellt werden:', error);
+          })
+          .then(function() {
+            return this.cartForm.buildCart();
+          }.bind(this));
   
         document.addEventListener('ajaxProduct:added', function(evt) {
           this.cartForm.buildCart();
@@ -9123,9 +9132,19 @@ theme.recentlyViewed = {
     theme.rteInit();
 
     if (document.body.classList.contains('template-cart')) {
-      var cartPageForm = document.getElementById('CartPageForm');
-      if (cartPageForm) {
-        new theme.CartForm(cartPageForm);
+      var cartPageFormElement = document.getElementById('CartPageForm');
+      if (cartPageFormElement) {
+        var cartPageForm = new theme.CartForm(cartPageFormElement);
+        var restorePromise = window.PVTaxCart && window.PVTaxCart.restorePendingVatMerchandise
+          ? window.PVTaxCart.restorePendingVatMerchandise()
+          : Promise.resolve();
+        restorePromise
+          .catch(function(error) {
+            console.warn('VAT-Warenkorbposition konnte nicht wiederhergestellt werden:', error);
+          })
+          .then(function() {
+            return cartPageForm.buildCart();
+          });
       }
     }
 

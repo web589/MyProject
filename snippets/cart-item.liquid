@@ -107,7 +107,12 @@
       {% if property_size > 0 %}
         {% for p in product.properties %}
           {%- assign first_character_in_key = p.first | truncate: 1, '' -%}
-          {% unless p.last == blank or first_character_in_key == '_' %}
+          {%- assign normalized_property_key = p.first | strip | downcase -%}
+          {%- assign is_quantity_metadata = false -%}
+          {%- if normalized_property_key == 'quantity' or normalized_property_key == 'menge' or p.first == '数量' -%}
+            {%- assign is_quantity_metadata = true -%}
+          {%- endif -%}
+          {% unless p.last == blank or first_character_in_key == '_' or is_quantity_metadata %}
             {%- assign is_bundle_capacity_duplicate = false -%}
             {%- if p.last contains '×' and p.last contains 'VENUS E' -%}
               {%- if bundle_capacity_rendered -%}

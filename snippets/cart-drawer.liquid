@@ -1007,6 +1007,143 @@
         }
       };
     }
+    if (!window.PVTaxCart.restorePendingVatMerchandise) {
+      window.PVTaxCart._vatRestorePromise = null;
+      window.PVTaxCart.restorePendingVatMerchandise = function(rootUrl) {
+        if (window.PVTaxCart._vatRestorePromise) return window.PVTaxCart._vatRestorePromise;
+
+        const root = rootUrl || (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+        const vatPrivateKeys = [
+          '_de_vat_mode',
+          '_de_standard_vat_variant_id',
+          '_de_zero_vat_variant_id',
+          '_de_vat_switch_token',
+          '_de_vat_restore_variant_id',
+          '_de_vat_restore_quantity',
+          '_de_vat_restore_token'
+        ];
+        const request = (url, options) => {
+          const task = () => fetch(url, Object.assign({ credentials: 'same-origin' }, options || {}));
+          return window.PVTaxCart.enqueue ? window.PVTaxCart.enqueue(task) : task();
+        };
+        const cleanVatProperties = properties => {
+          const cleaned = Object.assign({}, properties || {});
+          vatPrivateKeys.forEach(key => delete cleaned[key]);
+          return cleaned;
+        };
+
+        const restore = async () => {
+          const cartResponse = await request(`${root}cart.js?t=${Date.now()}`, {
+            cache: 'no-store',
+            headers: {
+              Accept: 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          });
+          const cart = await window.PVTaxCart.readJsonResponse(cartResponse, 'Der Warenkorb konnte nicht geladen werden.');
+          if (!cartResponse.ok) throw new Error(cart.description || cart.message || 'Der Warenkorb konnte nicht geladen werden.');
+
+          const pendingItems = (cart.items || []).filter(item => {
+            const properties = item.properties || {};
+            return properties._de_vat_restore_token
+              && properties._de_vat_restore_variant_id
+              && properties._de_vat_restore_quantity;
+          });
+          if (!pendingItems.length) return { cart, restored: false };
+
+          const additions = [];
+          const removals = {};
+          pendingItems.forEach((line, index) => {
+            const properties = line.properties || {};
+            const variantId = Number(properties._de_vat_restore_variant_id);
+            const quantity = Number(properties._de_vat_restore_quantity);
+            if (!Number.isInteger(variantId) || variantId < 1 || !Number.isInteger(quantity) || quantity < 1) {
+              throw new Error('Die ursprüngliche Produktvariante konnte nicht wiederhergestellt werden.');
+            }
+
+            const restoreToken = `de-vat-restore-${Date.now()}-${index}`;
+            const restoreProperties = cleanVatProperties(properties);
+            restoreProperties._de_vat_restore_token = restoreToken;
+            additions.push({ id: variantId, quantity, properties: restoreProperties });
+            removals[line.key] = 0;
+          });
+
+          const addResponse = await request(`${root}cart/add.js`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ items: additions })
+          });
+          const addResult = await window.PVTaxCart.readJsonResponse(addResponse, 'Das ursprüngliche Produkt konnte nicht wiederhergestellt werden.');
+          if (!addResponse.ok) throw new Error(addResult.description || addResult.message || 'Das ursprüngliche Produkt konnte nicht wiederhergestellt werden.');
+
+          const addedItems = (addResult.items || []).filter(item => item.key);
+          const addedKeys = addedItems.map(item => item.key);
+          if (!addedKeys.length) throw new Error('Das ursprüngliche Produkt konnte im Warenkorb nicht gefunden werden.');
+
+          try {
+            const updateResponse = await request(`${root}cart/update.js`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              body: JSON.stringify({ updates: removals })
+            });
+            let updatedCart = await window.PVTaxCart.readJsonResponse(updateResponse, 'Die temporäre Steuerposition konnte nicht entfernt werden.');
+            if (!updateResponse.ok) throw new Error(updatedCart.description || updatedCart.message || 'Die temporäre Steuerposition konnte nicht entfernt werden.');
+
+            for (const item of addedItems) {
+              if (!item.properties || !item.properties._de_vat_restore_token) continue;
+              const cleanupResponse = await request(`${root}cart/change.js`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+                  'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                  id: item.key,
+                  quantity: item.quantity,
+                  properties: cleanVatProperties(item.properties)
+                })
+              });
+              if (cleanupResponse.ok) {
+                updatedCart = await window.PVTaxCart.readJsonResponse(cleanupResponse, '');
+              }
+            }
+
+            return { cart: updatedCart, restored: true };
+          } catch (error) {
+            if (addedKeys.length) {
+              const rollbackUpdates = {};
+              addedKeys.forEach(key => { rollbackUpdates[key] = 0; });
+              await request(`${root}cart/update.js`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+                  'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ updates: rollbackUpdates })
+              }).catch(() => {});
+            }
+            throw error;
+          }
+        };
+
+        const promise = restore().catch(error => {
+          window.PVTaxCart._vatRestorePromise = null;
+          throw error;
+        });
+        window.PVTaxCart._vatRestorePromise = promise;
+        return promise;
+      };
+    }
 
     (function() {
       const drawer = document.getElementById('CartDrawer');
@@ -1250,15 +1387,22 @@
         async loadCartContext() {
           const vatSelectionRevision = this.vatSelectionRevision;
           try {
-            const response = await fetch(`${this.rootUrl}cart.js`, {
-              cache: 'no-store',
-              headers: {
-                Accept: 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-              }
-            });
-            const cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorbkontext konnte nicht geladen werden.');
-            if (!response.ok) return;
+            let cart;
+            if (window.PVTaxCart && window.PVTaxCart.restorePendingVatMerchandise) {
+              const restoration = await window.PVTaxCart.restorePendingVatMerchandise(this.rootUrl);
+              cart = restoration && restoration.cart;
+            }
+            if (!cart) {
+              const response = await fetch(`${this.rootUrl}cart.js`, {
+                cache: 'no-store',
+                headers: {
+                  Accept: 'application/json',
+                  'X-Requested-With': 'XMLHttpRequest'
+                }
+              });
+              cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorbkontext konnte nicht geladen werden.');
+              if (!response.ok) return;
+            }
             this.cartCurrency = cart.currency || 'EUR';
             const attributes = cart.attributes || {};
             const savedCountry = attributes['Lieferland ISO'];
@@ -1601,15 +1745,28 @@
               const standardVariantId = element.dataset.deStandardVatVariantId;
               const zeroVariantId = element.dataset.deZeroVatVariantId;
               const switchToken = `de-vat-${Date.now()}-${++this.vatSyncRevision}`;
+              const sourceProperties = { ...(line.properties || {}) };
+              const restoreVariantId = sourceProperties._de_vat_restore_variant_id || line.variant_id;
+              const restoreQuantity = sourceProperties._de_vat_restore_quantity || line.quantity;
+              delete sourceProperties._de_vat_restore_variant_id;
+              delete sourceProperties._de_vat_restore_quantity;
+              delete sourceProperties._de_vat_restore_token;
               additions.push({
                 id: Number(targetMode === 'zero' ? zeroVariantId : standardVariantId),
                 quantity: line.quantity,
                 properties: {
-                  ...(line.properties || {}),
+                  ...sourceProperties,
                   _de_vat_mode: targetMode,
                   _de_standard_vat_variant_id: String(standardVariantId),
                   _de_zero_vat_variant_id: String(zeroVariantId),
-                  _de_vat_switch_token: switchToken
+                  _de_vat_switch_token: switchToken,
+                  ...(targetMode === 'zero'
+                    ? {
+                        _de_vat_restore_variant_id: String(restoreVariantId),
+                        _de_vat_restore_quantity: String(restoreQuantity),
+                        _de_vat_restore_token: switchToken
+                      }
+                    : {})
                 }
               });
               removals[line.key] = 0;
