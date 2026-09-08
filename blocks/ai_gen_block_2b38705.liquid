@@ -1051,9 +1051,9 @@
               {% endif %}
               {% assign opt_img = opt_variant.featured_image | default: bundle_product.featured_image %}
               {% assign opt_is_available = opt_variant.available %}
-              {% if block.settings.use_native_bundle_cart_validation %}
-                {% assign opt_is_available = true %}
-              {% elsif block.settings.enforce_shared_inventory and shared_inventory_variant != blank %}
+              {% if opt_variant.inventory_management != blank and opt_variant.inventory_quantity != blank and opt_variant.inventory_quantity <= 0 %}
+                {% assign opt_is_available = false %}
+              {% elsif block.settings.enforce_shared_inventory and shared_inventory_variant != blank and block.settings.use_native_bundle_cart_validation == false %}
                 {% assign opt_is_available = shared_inventory_variant.available %}
               {% endif %}
               <div class="pdp-option-card-{{ ai_gen_id }}{% if opt_variant.id == selected_bundle_variant.id %} selected{% endif %}{% unless opt_is_available %} is-unavailable{% endunless %}" data-option-card data-option-index="{{ forloop.index0 }}" data-option-group="1"{% unless opt_is_available %} aria-disabled="true"{% endunless %}>
@@ -1087,14 +1087,19 @@
           {% for opt_product in block.settings.opt2_products %}
             {% assign opt_variant = opt_product.selected_or_first_available_variant %}
             {% assign opt_img = opt_variant.featured_image | default: opt_product.featured_image %}
+            {% assign opt_is_available = opt_variant.available %}
+            {% if opt_variant.inventory_management != blank and opt_variant.inventory_quantity != blank and opt_variant.inventory_quantity <= 0 %}
+              {% assign opt_is_available = false %}
+            {% endif %}
             <div
-              class="pdp-option-card-{{ ai_gen_id }}"
+              class="pdp-option-card-{{ ai_gen_id }}{% unless opt_is_available %} is-unavailable{% endunless %}"
               data-option-card
               data-option-index="{{ forloop.index0 }}"
               data-option-group="2"
               role="checkbox"
               aria-checked="false"
               tabindex="0"
+              {% unless opt_is_available %}aria-disabled="true"{% endunless %}
             >
               {% if opt_img %}
                 <div class="pdp-option-img-{{ ai_gen_id }}">
@@ -1107,7 +1112,7 @@
                   <span data-option-current>{{ opt_variant.price | money }}</span>
                   <span class="pdp-option-orig-{{ ai_gen_id }}" data-option-original{% unless opt_variant.compare_at_price > opt_variant.price %} hidden{% endunless %}>{% if opt_variant.compare_at_price > opt_variant.price %}{{ opt_variant.compare_at_price | money }}{% endif %}</span>
                 </div>
-                <div class="pdp-option-stock-{{ ai_gen_id }}" data-option-stock hidden>{{ block.settings.sold_out_text }}</div>
+                <div class="pdp-option-stock-{{ ai_gen_id }}" data-option-stock{% if opt_is_available %} hidden{% endif %}>{{ block.settings.sold_out_text }}</div>
               </div>
               <div class="pdp-option-radio-{{ ai_gen_id }}">
                 <div class="pdp-option-radio-inner-{{ ai_gen_id }}"></div>
@@ -1622,10 +1627,14 @@
         const option = this.optionConfig[groupKey].options[Number(card.dataset.optionIndex)];
         if (!option) return;
 
+        const needsShopifyProduct = !option.variantId && this.getOptionCurrentPrice(option) > 0;
+        const isAvailable = this.isOptionAvailable(groupKey, option);
         const selectedIndex = this.selectedIndex[groupKey];
         const isSelected = selectedIndex !== null
           && selectedIndex !== undefined
-          && Number(selectedIndex) === Number(card.dataset.optionIndex);
+          && Number(selectedIndex) === Number(card.dataset.optionIndex)
+          && !needsShopifyProduct
+          && isAvailable;
         card.classList.toggle('selected', isSelected);
         if (groupKey === 'group2') card.setAttribute('aria-checked', String(isSelected));
 
@@ -1640,8 +1649,6 @@
           original.textContent = this.formatPrice(this.getOptionOriginalPrice(option));
           original.hidden = this.getOptionOriginalPrice(option) <= this.getOptionCurrentPrice(option);
         }
-        const needsShopifyProduct = !option.variantId && this.getOptionCurrentPrice(option) > 0;
-        const isAvailable = this.isOptionAvailable(groupKey, option);
         if (needsShopifyProduct || !isAvailable) {
           card.classList.add('is-unavailable');
           card.setAttribute('aria-disabled', 'true');
@@ -1671,12 +1678,29 @@
     isOptionAvailable(groupKey, option) {
       if (!option) return false;
       if (this.unavailableOptionKeys.has(this.getOptionKey(groupKey, option))) return false;
+      if (groupKey === 'group2') {
+        if (option.available === false) return false;
+        if (
+          this.hasKnownInventoryQuantity(option)
+          && option.inventoryManagement
+          && Number(option.inventoryQuantity) <= 0
+        ) {
+          return false;
+        }
+      }
       if (groupKey === 'group1' && this.useNativeBundleCartValidation) {
         // The native Bundle variant is validated by Shopify, but an explicit
         // `available: false` is still authoritative for the current market.
         // Ignoring that value leaves the button enabled in markets where a
         // component is not published or has no fulfillable inventory.
         if (!option.variantId) return false;
+        if (
+          this.hasKnownInventoryQuantity(option)
+          && option.inventoryManagement
+          && Number(option.inventoryQuantity) <= 0
+        ) {
+          return false;
+        }
         return typeof option.available === 'boolean' ? option.available : true;
       }
       if (groupKey === 'group1' && this.enforceSharedInventory) {

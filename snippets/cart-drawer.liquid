@@ -4,6 +4,17 @@
       --drawer-gutter: 24px;
       background: #fff;
       color: #202124;
+      overflow: hidden;
+    }
+
+    #CartDrawer .drawer__contents {
+      min-height: 0;
+    }
+
+    #CartDrawer .drawer__inner {
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
     }
 
     #CartDrawer .drawer__header {
@@ -22,17 +33,14 @@
       height: 18px;
     }
 
-    #CartDrawer .drawer__scrollable {
+    #CartDrawer .drawer__inner > .drawer__scrollable {
+      flex: 0 0 auto;
+      overflow: visible;
       padding-top: 20px;
     }
 
-    #CartDrawer:has([data-bundle-suggestion]) .drawer__scrollable {
-      flex: 0 1 390px;
-      min-height: 390px;
-    }
-
-    #CartDrawer:has([data-bundle-suggestion]) .drawer__footer {
-      min-height: 0;
+    #CartDrawer .drawer__cart-empty .drawer__scrollable {
+      overflow: visible;
     }
 
     #CartDrawer .cart__item {
@@ -214,10 +222,36 @@
 
     #CartDrawer .drawer__footer {
       border-color: #e2e5e9;
+      border-top: 0;
+      flex: 0 0 auto;
       padding-top: 16px;
-      max-height: 72vh;
-      overflow-y: auto;
-      overscroll-behavior: contain;
+      overflow: visible;
+    }
+
+    #CartDrawer .cart-drawer-sticky-actions {
+      flex: 0 0 auto;
+      border-top: 1px solid #e2e5e9;
+      padding: 12px var(--drawer-gutter) var(--drawer-gutter);
+      background: #fff;
+      box-shadow: 0 -8px 18px rgba(32, 33, 36, 0.06);
+      position: relative;
+      z-index: 2;
+    }
+
+    #CartDrawer .cart-drawer-sticky-actions .cart-drawer-summary-total {
+      margin: 0 0 10px;
+    }
+
+    #CartDrawer .cart-drawer-sticky-actions .cart__checkout-wrapper {
+      margin: 0;
+    }
+
+    #CartDrawer .cart-drawer-sticky-actions .cart__checkout {
+      width: 100%;
+    }
+
+    #CartDrawer.is-empty .cart-drawer-sticky-actions {
+      display: none;
     }
 
     #CartDrawer .cart-drawer-benefits {
@@ -512,8 +546,8 @@
         --drawer-gutter: 14px;
       }
 
-      #CartDrawer .drawer__footer {
-        max-height: 76vh;
+      #CartDrawer .cart-drawer-sticky-actions {
+        padding-top: 10px;
       }
     }
 
@@ -749,7 +783,7 @@
         </div>
       </div>
 
-      <div class="drawer__inner">
+      <div class="drawer__inner" data-cart-scroll-container>
         <div class="drawer__scrollable">
           <div data-products class="appear-animation appear-delay-2"></div>
           <p class="cart-drawer-update-status visually-hidden" data-cart-status role="status" aria-live="polite"></p>
@@ -886,11 +920,6 @@
               <span>Rabatt</span>
               <span class="cart-drawer-summary-value" data-cart-summary-discount>−{{ cart.total_discount | money_without_currency }} €</span>
             </div>
-            <div class="cart-drawer-summary-divider" aria-hidden="true"></div>
-            <div class="cart-drawer-summary-row cart-drawer-summary-total">
-              <span>Warenkorb gesamt</span>
-              <span class="cart-drawer-summary-value" data-subtotal>{{ cart.total_price | money_without_currency }} €</span>
-            </div>
             <p class="cart-drawer-summary-note">Versand und MwSt. werden anhand der Lieferadresse im Shopify Checkout abschließend berechnet.</p>
           </div>
 
@@ -908,16 +937,23 @@
           {% endif %}
 
           <p class="cart-inventory-status" data-cart-inventory-status role="alert" hidden></p>
-          <div class="cart__checkout-wrapper">
-            <button type="submit" name="checkout" data-terms-required="{{ settings.cart_terms_conditions_enable }}" class="btn cart__checkout">
-              Zur Kasse
-            </button>
-
-            {% if additional_checkout_buttons and settings.cart_additional_buttons %}
-              <div class="additional-checkout-buttons additional-checkout-buttons--vertical">{{ content_for_additional_checkout_buttons }}</div>
-            {% endif %}
-          </div>
+          {% if additional_checkout_buttons and settings.cart_additional_buttons %}
+            <div class="additional-checkout-buttons additional-checkout-buttons--vertical">{{ content_for_additional_checkout_buttons }}</div>
+          {% endif %}
           <a class="cart-drawer-continue js-drawer-close" href="{{ routes.all_products_collection_url }}">Weiter einkaufen</a>
+        </div>
+      </div>
+
+      <div class="cart-drawer-sticky-actions" aria-label="Bestellübersicht">
+        <div class="cart-drawer-summary-divider" aria-hidden="true"></div>
+        <div class="cart-drawer-summary-row cart-drawer-summary-total">
+          <span>Warenkorb gesamt</span>
+          <span class="cart-drawer-summary-value" data-subtotal>{{ cart.total_price | money_without_currency }} €</span>
+        </div>
+        <div class="cart__checkout-wrapper">
+          <button type="submit" name="checkout" data-terms-required="{{ settings.cart_terms_conditions_enable }}" class="btn cart__checkout">
+            Zur Kasse
+          </button>
         </div>
       </div>
 

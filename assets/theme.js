@@ -1848,6 +1848,10 @@ theme.recentlyViewed = {
       cartMarkup: function(text) {
         var markup = this._parseProductHTML(text);
         var items = markup.items;
+        var drawerScrollContainer = this.location === 'cart-drawer'
+          ? this.form.querySelector('[data-cart-scroll-container]')
+          : null;
+        var drawerScrollTop = drawerScrollContainer ? drawerScrollContainer.scrollTop : null;
 
         if (!items) {
           throw new Error('Der Warenkorb konnte nicht dargestellt werden.');
@@ -1873,7 +1877,16 @@ theme.recentlyViewed = {
         // Append item markup
         this.products.innerHTML = '';
         this.products.append(items);
-  
+
+        if (drawerScrollContainer && drawerScrollTop !== null) {
+          window.requestAnimationFrame(function() {
+            drawerScrollContainer.scrollTop = Math.min(
+              drawerScrollTop,
+              Math.max(0, drawerScrollContainer.scrollHeight - drawerScrollContainer.clientHeight)
+            );
+          });
+        }
+
         // Update the drawer summary from Shopify cart totals.
         var summarySubtotal = this.form.querySelector('[data-cart-summary-subtotal]');
         var summaryDiscount = this.form.querySelector('[data-cart-summary-discount]');
