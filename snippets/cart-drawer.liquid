@@ -1045,9 +1045,12 @@
 
           const pendingItems = (cart.items || []).filter(item => {
             const properties = item.properties || {};
-            return properties._de_vat_restore_token
+            const hasRestoreMetadata = properties._de_vat_restore_token
               && properties._de_vat_restore_variant_id
               && properties._de_vat_restore_quantity;
+            const hasLegacyZeroVatMetadata = properties._de_vat_mode === 'zero'
+              && properties._de_standard_vat_variant_id;
+            return hasRestoreMetadata || hasLegacyZeroVatMetadata;
           });
           if (!pendingItems.length) return { cart, restored: false };
 
@@ -1055,8 +1058,11 @@
           const removals = {};
           pendingItems.forEach((line, index) => {
             const properties = line.properties || {};
-            const variantId = Number(properties._de_vat_restore_variant_id);
-            const quantity = Number(properties._de_vat_restore_quantity);
+            const variantId = Number(
+              properties._de_vat_restore_variant_id
+                || (properties._de_vat_mode === 'zero' && properties._de_standard_vat_variant_id)
+            );
+            const quantity = Number(properties._de_vat_restore_quantity || line.quantity);
             if (!Number.isInteger(variantId) || variantId < 1 || !Number.isInteger(quantity) || quantity < 1) {
               throw new Error('Die ursprüngliche Produktvariante konnte nicht wiederhergestellt werden.');
             }
@@ -1416,7 +1422,10 @@
             if (this.selectedCountry !== this.marketCountry) this.syncLocalization(this.selectedCountry);
             this.refreshForCartChange();
           } catch (error) {
-            this.setStatus('Der Warenkorbkontext konnte nicht vollständig geladen werden.');
+            console.warn('Warenkorbkontext konnte nicht geladen werden:', error);
+            this.setStatus(error && error.message
+              ? error.message
+              : 'Der Warenkorbkontext konnte nicht vollständig geladen werden.');
           }
         }
 

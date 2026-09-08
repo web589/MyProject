@@ -36,12 +36,17 @@
   assign bundle_capacity_display_value = blank
   for option in product.options_with_values
     assign is_bundle_capacity_summary = false
+    assign is_quantity_variant_option = false
+    assign normalized_option_name = option.name | strip | downcase
+    if normalized_option_name == 'quantity' or normalized_option_name == 'menge' or option.name == '数量'
+      assign is_quantity_variant_option = true
+    endif
     if option.value contains '×' and option.value contains 'VENUS E'
       assign is_bundle_capacity_summary = true
       assign bundle_capacity_option_value = option.value
       assign bundle_capacity_display_value = option.value | split: ' – ' | last
     endif
-    unless is_bundle_capacity_summary
+    unless is_bundle_capacity_summary or is_quantity_variant_option
       assign has_visible_variant_option = true
     endunless
   endfor
@@ -87,11 +92,16 @@
           {%- for option in product.options_with_values -%}
             {%- liquid
               assign is_bundle_capacity_summary = false
+              assign is_quantity_variant_option = false
+              assign normalized_option_name = option.name | strip | downcase
+              if normalized_option_name == 'quantity' or normalized_option_name == 'menge' or option.name == '数量'
+                assign is_quantity_variant_option = true
+              endif
               if option.value contains '×' and option.value contains 'VENUS E'
                 assign is_bundle_capacity_summary = true
               endif
             -%}
-            {%- unless is_bundle_capacity_summary -%}
+            {%- unless is_bundle_capacity_summary or is_quantity_variant_option -%}
               <div><span>{{ option.name }}:</span> {{ option.value }}</div>
             {%- endunless -%}
           {%- endfor -%}

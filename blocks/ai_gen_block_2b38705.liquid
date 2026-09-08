@@ -396,7 +396,7 @@
   .pdp-title-{{ ai_gen_id }} {
     font-family: 'Manrope', var(--font-heading, sans-serif);
     font-size: {{ block.settings.title_size }}px;
-    font-weight: 700;
+    font-weight: {{ block.settings.title_font_weight }};
     line-height: 1.2;
     color: {{ block.settings.heading_color }};
     margin: 0;
@@ -2409,6 +2409,15 @@
       "step": 2,
       "unit": "px",
       "default": 32
+    },
+    {
+      "type": "range",
+      "id": "title_font_weight",
+      "label": "Title font weight",
+      "min": 400,
+      "max": 800,
+      "step": 100,
+      "default": 700
     },
     {
       "type": "header",
