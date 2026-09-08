@@ -43,7 +43,7 @@
   .ai-savings-calculator-{{ ai_gen_id }} {
     display: block;
     width: 100%;
-    min-height: 650px;
+    min-height: 700px;
     padding: {{ block.settings.section_padding }}px 24px;
     background: linear-gradient(110deg, #e8f7ff 0%, #d1eaff 100%);
     {% if block.settings.background_image != blank %}
@@ -65,7 +65,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(540px, 680px);
     align-items: center;
-    gap: clamp(48px, 7vw, 120px);
+    gap: clamp(56px, 7vw, 120px);
     width: 100%;
     max-width: {{ block.settings.max_width }}px;
     margin: 0 auto;
@@ -148,7 +148,11 @@
   .ai-savings-icon-wrapper-{{ ai_gen_id }} svg {
     width: 20px;
     height: 20px;
-    fill: currentColor;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
   }
 
   .ai-savings-icon-wrapper-{{ ai_gen_id }} img {
@@ -198,7 +202,7 @@
 
   .ai-savings-form-column-{{ ai_gen_id }} {
     width: 100%;
-    padding: 38px;
+    padding: clamp(30px, 3vw, 38px);
     border: 1px solid rgba(226, 232, 240, 0.85);
     border-radius: 22px;
     background: rgba(255, 255, 255, 0.96);
@@ -308,22 +312,42 @@
   .ai-savings-result-box-{{ ai_gen_id }} {
     width: 100%;
     margin: 0 0 18px;
-    padding: 20px 22px;
-    border-radius: 12px;
+    padding: 20px 22px 18px;
+    border-radius: 13px;
     background: linear-gradient(110deg, #098be8 0%, #20d7d0 100%);
     color: #ffffff;
   }
 
-  .ai-savings-result-label-{{ ai_gen_id }} {
-    display: block;
+  .ai-savings-result-heading-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     margin-bottom: 4px;
     font-size: 14px;
     font-weight: 600;
     line-height: 1.4;
   }
 
+  .ai-savings-result-heading-{{ ai_gen_id }} svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  .ai-savings-result-value-row-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
   .ai-savings-result-amount-{{ ai_gen_id }} {
-    display: inline-block;
+    display: block;
     font-size: {{ block.settings.result_amount_size }}px;
     font-weight: 700;
     line-height: 1.2;
@@ -331,9 +355,9 @@
 
   .ai-savings-result-badge-{{ ai_gen_id }} {
     display: inline-flex;
+    align-items: center;
+    gap: 7px;
     max-width: 190px;
-    margin: 0 0 0 14px;
-    vertical-align: middle;
     padding: 7px 10px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.72);
@@ -343,14 +367,32 @@
     line-height: 1.3;
   }
 
+  .ai-savings-result-badge-{{ ai_gen_id }} svg {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
   .ai-savings-recommendation-{{ ai_gen_id }} {
-    display: block;
-    margin-top: 15px;
-    padding-top: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.25);
     font-size: 14px;
     font-weight: 700;
     line-height: 1.35;
+  }
+
+  .ai-savings-recommendation-icon-{{ ai_gen_id }} {
+    font-size: 20px;
+    line-height: 1;
   }
 
   .ai-savings-status-{{ ai_gen_id }} {
@@ -373,7 +415,7 @@
     margin: 0 0 18px;
     padding: 12px;
     border: 1px solid #dfe8f3;
-    border-radius: 12px;
+    border-radius: 13px;
     background: rgba(255, 255, 255, 0.86);
   }
 
@@ -470,6 +512,13 @@
     transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
+  .ai-savings-cta-button-{{ ai_gen_id }}::after {
+    margin-left: 8px;
+    content: '→';
+    font-size: 19px;
+    line-height: 1;
+  }
+
   .ai-savings-cta-button-{{ ai_gen_id }}:hover {
     border-color: #0369a1;
     background: #0369a1;
@@ -495,6 +544,11 @@
     font-weight: 600;
     text-align: center;
     text-underline-offset: 3px;
+  }
+
+  .ai-savings-compare-link-{{ ai_gen_id }}:focus-visible {
+    outline: 2px solid #0099fc;
+    outline-offset: 3px;
   }
 
   .ai-savings-info-{{ ai_gen_id }} {
@@ -534,6 +588,7 @@
 
   @media screen and (max-width: 900px) {
     .ai-savings-calculator-{{ ai_gen_id }} {
+      min-height: 0;
       padding: 48px 20px;
       {% if block.settings.background_image != blank %}
         background-image:
@@ -607,6 +662,10 @@
       max-width: none;
       margin: 10px 0 0;
     }
+
+    .ai-savings-result-value-row-{{ ai_gen_id }} {
+      display: block;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -667,7 +726,14 @@
                     height="{{ feature_icon.height }}"
                   >
                 {% else %}
-                  <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  {% case feature_index %}
+                    {% when 1 %}
+                      <svg viewBox="0 0 24 24"><path d="M13.5 2 5 13.25h5.5L9.75 22 19 10.25h-5.75L13.5 2Z"/></svg>
+                    {% when 2 %}
+                      <svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+                    {% when 3 %}
+                      <svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>
+                  {% endcase %}
                 {% endif %}
               </span>
               <span class="ai-savings-feature-content-{{ ai_gen_id }}">
@@ -750,12 +816,23 @@
         </div>
 
         <div class="ai-savings-result-box-{{ ai_gen_id }}" aria-live="polite">
-          <span class="ai-savings-result-label-{{ ai_gen_id }}">{{ block.settings.result_label }}</span>
-          <span class="ai-savings-result-amount-{{ ai_gen_id }}" data-result></span>
-          {% if block.settings.result_badge != blank %}
-            <span class="ai-savings-result-badge-{{ ai_gen_id }}">{{ block.settings.result_badge }}</span>
-          {% endif %}
-          <span class="ai-savings-recommendation-{{ ai_gen_id }}" data-recommendation></span>
+          <div class="ai-savings-result-heading-{{ ai_gen_id }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c0-5.5 1.5-10.5 6.5-15.5C13 5.7 8.2 8.2 7.1 12.1 6.3 15 8.1 17.4 12 18"/><path d="M4 20c2-4.1 4.9-6.9 8.8-8.8"/></svg>
+            <span>{{ block.settings.result_label }}</span>
+          </div>
+          <div class="ai-savings-result-value-row-{{ ai_gen_id }}">
+            <span class="ai-savings-result-amount-{{ ai_gen_id }}" data-result></span>
+            {% if block.settings.result_badge != blank %}
+              <span class="ai-savings-result-badge-{{ ai_gen_id }}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+                <span>{{ block.settings.result_badge }}</span>
+              </span>
+            {% endif %}
+          </div>
+          <span class="ai-savings-recommendation-{{ ai_gen_id }}" data-recommendation>
+            <span class="ai-savings-recommendation-icon-{{ ai_gen_id }}" aria-hidden="true">★</span>
+            <span data-recommendation-text></span>
+          </span>
           <span class="ai-savings-status-{{ ai_gen_id }}" data-status data-visible="false"></span>
         </div>
 
@@ -863,8 +940,10 @@
 
         this.costInput = this.querySelector('[data-input="cost"]');
         this.pvInput = this.querySelector('[data-input="pv"]');
+        this.form = this.querySelector('[data-calculator-form]');
         this.resultDisplay = this.querySelector('[data-result]');
         this.recommendationDisplay = this.querySelector('[data-recommendation]');
+        this.recommendationText = this.querySelector('[data-recommendation-text]');
         this.costError = this.querySelector('[data-error="cost"]');
         this.pvError = this.querySelector('[data-error="pv"]');
         this.statusDisplay = this.querySelector('[data-status]');
@@ -911,10 +990,13 @@
         this.emptyResult = this.dataset.resultEmpty || '€ / Jahr';
         this.recommendationPrefix = {{ block.settings.recommendation_prefix | json }};
 
-        if (!this.costInput || !this.pvInput || !this.resultDisplay || !this.recommendationDisplay || !this.costError || !this.pvError || !this.statusDisplay) return;
+        if (!this.form || !this.costInput || !this.pvInput || !this.resultDisplay || !this.recommendationDisplay || !this.recommendationText || !this.costError || !this.pvError || !this.statusDisplay) return;
 
+        this.form.addEventListener('submit', (event) => event.preventDefault());
         this.costInput.addEventListener('input', () => this.calculate());
         this.pvInput.addEventListener('input', () => this.calculate());
+        this.costInput.addEventListener('change', () => this.calculate());
+        this.pvInput.addEventListener('change', () => this.calculate());
         this.calculate();
       }
 
@@ -943,7 +1025,15 @@
             normalized = normalized.replace(/,/g, '');
           }
         } else if (commaIndex > -1) {
-          normalized = normalized.replace(',', '.');
+          const commaCount = (normalized.match(/,/g) || []).length;
+          const decimalDigits = normalized.length - commaIndex - 1;
+          normalized = commaCount > 1 || decimalDigits === 3
+            ? normalized.replace(/,/g, '')
+            : normalized.replace(',', '.');
+        } else if (dotIndex > -1) {
+          const dotCount = (normalized.match(/\./g) || []).length;
+          const decimalDigits = normalized.length - dotIndex - 1;
+          if (dotCount > 1 || decimalDigits === 3) normalized = normalized.replace(/\./g, '');
         }
 
         const parsed = Number(normalized);
@@ -964,7 +1054,7 @@
 
       setEmptyResult() {
         this.resultDisplay.textContent = this.emptyResult;
-        this.recommendationDisplay.textContent = '';
+        this.recommendationText.textContent = '';
         if (this.recommendationCard) this.recommendationCard.hidden = true;
         this.clearProductCta();
       }
@@ -998,7 +1088,7 @@
           return;
         }
 
-        this.recommendationDisplay.textContent = [this.recommendationPrefix, recommendation.name]
+        this.recommendationText.textContent = [this.recommendationPrefix, recommendation.name]
           .filter((value) => value && value.trim())
           .join(' ');
 

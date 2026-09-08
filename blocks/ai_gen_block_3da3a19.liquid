@@ -668,12 +668,14 @@
         this.updateAnchorOffset = this.updateAnchorOffset.bind(this);
         this.handleLayoutChange = this.handleLayoutChange.bind(this);
         this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
+        this.handleScrollEnd = this.handleScrollEnd.bind(this);
         this.scheduleHashAlignment = this.scheduleHashAlignment.bind(this);
         this.handleInitialHashOnLoad = this.handleInitialHashOnLoad.bind(this);
 
         this.setupNavigation();
         this.setupAnchorOffset();
         window.addEventListener('scroll', this.handleScroll, { passive: true });
+        window.addEventListener('scrollend', this.handleScrollEnd, { passive: true });
         this.scheduleActiveNavUpdate();
 
         window.addEventListener('hashchange', this.handleLocationChange);
@@ -691,6 +693,51 @@
       }
 
       handleScroll() {
+        // Keep the clicked item active while smooth scrolling is in progress.
+        // Otherwise the scroll spy can temporarily activate another item and
+        // make the underline jump between two navigation states.
+        if (this.navigationTargetId) {
+          this.setActiveNavItem(this.navigationTargetId);
+          return;
+        }
+
+        this.scheduleActiveNavUpdate();
+      }
+
+      handleScrollEnd() {
+        if (!this.navigationTargetId) {
+          return;
+        }
+
+        this.releaseNavigationLock();
+      }
+
+      lockNavigationTo(targetId) {
+        this.navigationTargetId = targetId;
+        this.setActiveNavItem(targetId);
+
+        if (this.navigationLockTimer) {
+          window.clearTimeout(this.navigationLockTimer);
+        }
+
+        // scrollend is supported by current browsers; this timeout keeps the
+        // state from remaining locked in browsers that do not emit it.
+        this.navigationLockTimer = window.setTimeout(() => {
+          this.releaseNavigationLock();
+        }, 1600);
+      }
+
+      releaseNavigationLock() {
+        if (this.navigationLockTimer) {
+          window.clearTimeout(this.navigationLockTimer);
+          this.navigationLockTimer = null;
+        }
+
+        if (!this.navigationTargetId) {
+          return;
+        }
+
+        this.navigationTargetId = null;
         this.scheduleActiveNavUpdate();
       }
 
@@ -734,6 +781,11 @@
       }
 
       updateActiveNavFromScroll() {
+        if (this.navigationTargetId) {
+          this.setActiveNavItem(this.navigationTargetId);
+          return;
+        }
+
         const navigationTargets = this.getNavigationTargets();
         if (!navigationTargets.length) {
           return;
@@ -787,13 +839,13 @@
         this.updateAnchorOffset();
         this.scheduleActiveNavUpdate();
 
-        if (this.getHashTarget()) {
+        if (!this.navigationTargetId && this.getHashTarget()) {
           this.scheduleHashAlignment('auto');
         }
       }
 
       handleTransitionEnd(event) {
-        if (event.propertyName !== 'transform') {
+        if (event.propertyName !== 'transform' || this.navigationTargetId) {
           return;
         }
 
@@ -874,11 +926,13 @@
         }
 
         event.preventDefault();
+        this.lockNavigationTo(targetId);
         window.history.replaceState(null, '', href);
         this.scheduleHashAlignment('smooth');
       }
 
       handleLocationChange() {
+        this.releaseNavigationLock();
         this.scheduleHashAlignment('auto');
       }
 
@@ -911,6 +965,7 @@
       disconnectedCallback() {
         this.navItems?.forEach(item => item.removeEventListener('click', this.handleNavigationClick));
         window.removeEventListener('scroll', this.handleScroll);
+        window.removeEventListener('scrollend', this.handleScrollEnd);
         window.removeEventListener('hashchange', this.handleLocationChange);
         window.removeEventListener('popstate', this.handleLocationChange);
         document.removeEventListener('transitionend', this.handleTransitionEnd, true);
@@ -924,6 +979,10 @@
 
         if (this.activeNavFrame) {
           window.cancelAnimationFrame(this.activeNavFrame);
+        }
+
+        if (this.navigationLockTimer) {
+          window.clearTimeout(this.navigationLockTimer);
         }
 
         document.documentElement.style.removeProperty('--pdp-sticky-anchor-offset');
