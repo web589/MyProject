@@ -2265,6 +2265,21 @@ theme.recentlyViewed = {
       return (result && (result.description || result.message || result.error)) || fallbackMessage;
     }
 
+    async function getLatestCart(root) {
+      const response = await enqueue(() => fetch(`${root}cart.js?t=${Date.now()}`, {
+        credentials: 'same-origin',
+        headers: {
+          Accept: 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      }));
+      const cart = await readJson(response, 'Der Warenkorb konnte gerade nicht geladen werden.');
+      if (!response.ok || !cart || !Array.isArray(cart.items)) {
+        throw new Error(getResponseMessage(cart, 'Der Warenkorb konnte gerade nicht geladen werden.'));
+      }
+      return cart;
+    }
+
     function setSwitchStatus(button, message) {
       const wrapper = button.closest('[data-bundle-suggestion]');
       if (!wrapper) return;
@@ -2347,10 +2362,41 @@ theme.recentlyViewed = {
           throw new Error(getResponseMessage(addResult, 'Das Bundle konnte nicht hinzugefügt werden.'));
         }
 
+        // Adding a target variant can merge into an existing line. Reconcile
+        // against the post-add cart so that an existing target line is not
+        // accidentally removed with the source lines.
+        const latestCart = await getLatestCart(root);
+        const originalCartKeySet = new Set(cartKeys);
+        const targetQuantityByVariant = new Map();
+        targetItems.forEach(item => {
+          targetQuantityByVariant.set(
+            item.id,
+            (targetQuantityByVariant.get(item.id) || 0) + item.quantity
+          );
+        });
+
         const updates = {};
         cartKeys.forEach(key => {
           updates[key] = 0;
         });
+
+        targetQuantityByVariant.forEach((quantity, variantId) => {
+          const targetLines = latestCart.items.filter(item => Number(item.variant_id) === variantId);
+          const targetLine = targetLines.find(item => !originalCartKeySet.has(item.key))
+            || targetLines.find(item => originalCartKeySet.has(item.key));
+
+          if (!targetLine) {
+            throw new Error('Das Bundle konnte im Warenkorb nicht gefunden werden.');
+          }
+
+          targetLines.forEach(item => {
+            if (item.key !== targetLine.key) {
+              updates[item.key] = 0;
+            }
+          });
+          updates[targetLine.key] = quantity;
+        });
+
         const updateResponse = await enqueue(() => fetch(`${root}cart/update.js`, {
           method: 'POST',
           credentials: 'same-origin',
@@ -2380,6 +2426,8 @@ theme.recentlyViewed = {
       const button = event.target.closest('[data-bundle-switch]');
       if (!button) return;
       event.preventDefault();
+      // Keep the drawer's outside-click handler from treating the CTA as a close action.
+      event.stopPropagation();
       switchToBundle(button);
     });
   })();

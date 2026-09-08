@@ -1,49 +1,115 @@
-{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% liquid
+  assign ai_gen_id = block.id | replace: '_', '' | downcase
+
+  assign overlay_left = block.settings.overlay_opacity_left | divided_by: 100.0
+  assign overlay_middle = block.settings.overlay_opacity_middle | divided_by: 100.0
+  assign overlay_right = block.settings.overlay_opacity_right | divided_by: 100.0
+  assign overlay_mobile = block.settings.overlay_opacity_mobile | divided_by: 100.0
+
+  assign mini_product = block.settings.mini_product
+  assign product_3 = block.settings.product_3
+  assign product_4 = block.settings.product_4
+  assign max_product = block.settings.max_product
+
+  assign mini_name = block.settings.mini_product_name | default: mini_product.title | default: 'VENUS E Mini'
+  assign product_3_name = block.settings.product_3_name | default: product_3.title | default: 'VENUS E 3.0'
+  assign product_4_name = block.settings.product_4_name | default: product_4.title | default: 'VENUS E 4.0'
+  assign max_name = block.settings.max_product_name | default: max_product.title | default: 'VENUS E Max'
+
+  assign mini_url = block.settings.mini_url
+  if mini_url == blank and mini_product != blank
+    assign mini_url = mini_product.url
+  endif
+  assign product_3_url = block.settings.product_3_url
+  if product_3_url == blank and product_3 != blank
+    assign product_3_url = product_3.url
+  endif
+  assign product_4_url = block.settings.product_4_url
+  if product_4_url == blank and product_4 != blank
+    assign product_4_url = product_4.url
+  endif
+  assign max_url = block.settings.max_url
+  if max_url == blank and max_product != blank
+    assign max_url = max_product.url
+  endif
+
+  assign mini_image = mini_product.featured_image
+  assign product_3_image = product_3.featured_image
+  assign product_4_image = product_4.featured_image
+  assign max_image = max_product.featured_image
+%}
 
 {% style %}
   .ai-savings-calculator-{{ ai_gen_id }} {
     display: block;
     width: 100%;
+    padding: {{ block.settings.section_padding }}px 24px;
     background: linear-gradient(110deg, #e8f7ff 0%, #d1eaff 100%);
-    padding: 64px 24px;
+    {% if block.settings.background_image != blank %}
+      background-image:
+        linear-gradient(
+          90deg,
+          {{ block.settings.overlay_color | color_modify: 'alpha', overlay_left }} 0%,
+          {{ block.settings.overlay_color | color_modify: 'alpha', overlay_middle }} 45%,
+          {{ block.settings.overlay_color | color_modify: 'alpha', overlay_right }} 75%
+        ),
+        url('{{ block.settings.background_image | image_url: width: 2400 }}');
+      background-position: {{ block.settings.image_position }};
+      background-size: cover;
+      background-repeat: no-repeat;
+    {% endif %}
   }
 
   .ai-savings-calculator-container-{{ ai_gen_id }} {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(340px, 420px);
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 560px);
     align-items: center;
-    gap: 88px;
+    gap: clamp(32px, 6vw, 88px);
     width: 100%;
     max-width: {{ block.settings.max_width }}px;
     margin: 0 auto;
   }
 
   .ai-savings-text-column-{{ ai_gen_id }} {
-    max-width: 560px;
+    max-width: 620px;
+  }
+
+  .ai-savings-eyebrow-{{ ai_gen_id }} {
+    margin: 0 0 22px;
+    color: #48658d;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1.4;
+    text-transform: uppercase;
   }
 
   .ai-savings-heading-{{ ai_gen_id }} {
-    margin: 0 0 16px;
-    color: #242424;
+    margin: 0 0 18px;
+    color: #0c1730;
     font-size: {{ block.settings.heading_size }}px;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.12;
   }
 
   .ai-savings-description-{{ ai_gen_id }} {
-    margin: 0 0 28px;
-    color: #596b82;
+    margin: 0 0 32px;
+    color: #4d658c;
     font-size: {{ block.settings.text_size }}px;
     line-height: 1.65;
   }
 
   .ai-savings-description-{{ ai_gen_id }} p {
-    margin: 0;
+    margin: 0 0 10px;
+  }
+
+  .ai-savings-description-{{ ai_gen_id }} p:last-child {
+    margin-bottom: 0;
   }
 
   .ai-savings-feature-list-{{ ai_gen_id }} {
     display: grid;
-    gap: 14px;
+    gap: 18px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -51,9 +117,9 @@
 
   .ai-savings-feature-item-{{ ai_gen_id }} {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #242424;
+    align-items: flex-start;
+    gap: 14px;
+    color: #1d355d;
     font-size: {{ block.settings.feature_text_size }}px;
     line-height: 1.45;
   }
@@ -62,35 +128,96 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    flex: 0 0 24px;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    margin-top: 1px;
     border-radius: 50%;
-    background: #e0f2fe;
-    color: #0369a1;
+    background: rgba(215, 239, 255, 0.9);
+    color: #078be8;
   }
 
   .ai-savings-icon-wrapper-{{ ai_gen_id }} svg {
-    width: 13px;
-    height: 13px;
+    width: 20px;
+    height: 20px;
     fill: currentColor;
+  }
+
+  .ai-savings-feature-content-{{ ai_gen_id }} {
+    display: grid;
+    gap: 2px;
+    padding-top: 1px;
+  }
+
+  .ai-savings-feature-content-{{ ai_gen_id }} strong {
+    color: #1d355d;
+    font-weight: 700;
+  }
+
+  .ai-savings-feature-content-{{ ai_gen_id }} span {
+    color: #4d658c;
   }
 
   .ai-savings-form-column-{{ ai_gen_id }} {
     width: 100%;
-    padding: 28px;
+    padding: 30px;
     border: 1px solid rgba(226, 232, 240, 0.85);
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0 12px 32px rgba(3, 105, 161, 0.08);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.93);
+    box-shadow: 0 18px 45px rgba(3, 63, 119, 0.12);
+    backdrop-filter: blur(8px);
   }
 
   .ai-savings-form-{{ ai_gen_id }} {
     margin: 0;
   }
 
+  .ai-savings-form-header-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 0 24px;
+  }
+
+  .ai-savings-form-heading-{{ ai_gen_id }} {
+    margin: 0;
+    color: #10172a;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .ai-savings-form-helper-{{ ai_gen_id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #58709a;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: right;
+  }
+
+  .ai-savings-form-helper-{{ ai_gen_id }} svg {
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  .ai-savings-input-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
   .ai-savings-form-group-{{ ai_gen_id }} {
-    margin: 0 0 18px;
+    min-width: 0;
+    margin: 0 0 20px;
   }
 
   .ai-savings-field-error-{{ ai_gen_id }} {
@@ -109,25 +236,23 @@
   .ai-savings-form-label-{{ ai_gen_id }} {
     display: block;
     margin: 0 0 8px;
-    color: #596b82;
-    font-size: 12px;
+    color: #526b95;
+    font-size: 14px;
     font-weight: 600;
     line-height: 1.4;
-    letter-spacing: 0;
-    text-transform: uppercase;
   }
 
   .ai-savings-form-input-{{ ai_gen_id }} {
     width: 100%;
-    height: 48px;
-    padding: 0 14px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
+    height: 52px;
+    padding: 0 16px;
+    border: 1px solid #dbe5f2;
+    border-radius: 10px;
     outline: none;
     background: #ffffff;
-    color: #242424;
+    color: #17213a;
     font: inherit;
-    font-size: 16px;
+    font-size: 17px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
@@ -144,17 +269,17 @@
 
   .ai-savings-result-box-{{ ai_gen_id }} {
     width: 100%;
-    margin: 4px 0 16px;
-    padding: 17px 18px;
-    border-radius: 8px;
-    background: linear-gradient(90deg, #0099fc 0%, #00efdd 100%);
+    margin: 0 0 18px;
+    padding: 20px 22px;
+    border-radius: 12px;
+    background: linear-gradient(110deg, #098be8 0%, #20d7d0 100%);
     color: #ffffff;
   }
 
   .ai-savings-result-label-{{ ai_gen_id }} {
     display: block;
     margin-bottom: 4px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 1.4;
   }
@@ -166,17 +291,31 @@
     line-height: 1.2;
   }
 
+  .ai-savings-result-badge-{{ ai_gen_id }} {
+    display: inline-flex;
+    margin-top: 10px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    color: #143c5a;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
   .ai-savings-recommendation-{{ ai_gen_id }} {
     display: block;
-    margin-top: 7px;
-    font-size: 13px;
-    font-weight: 600;
+    margin-top: 15px;
+    padding-top: 13px;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    font-size: 14px;
+    font-weight: 700;
     line-height: 1.35;
   }
 
   .ai-savings-status-{{ ai_gen_id }} {
     display: none;
-    margin-top: 7px;
+    margin-top: 8px;
     font-size: 13px;
     font-weight: 600;
     line-height: 1.35;
@@ -186,36 +325,157 @@
     display: block;
   }
 
+  .ai-savings-product-card-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    margin: 0 0 18px;
+    padding: 12px;
+    border: 1px solid #dfe8f3;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.86);
+  }
+
+  .ai-savings-product-card-{{ ai_gen_id }}[hidden] {
+    display: none;
+  }
+
+  .ai-savings-product-media-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 138px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #edf5ff;
+  }
+
+  .ai-savings-product-media-{{ ai_gen_id }}[hidden] {
+    display: none;
+  }
+
+  .ai-savings-product-media-{{ ai_gen_id }} img {
+    display: block;
+    width: 100%;
+    height: 138px;
+    object-fit: contain;
+  }
+
+  .ai-savings-product-content-{{ ai_gen_id }} {
+    min-width: 0;
+  }
+
+  .ai-savings-product-name-{{ ai_gen_id }} {
+    margin: 0 0 11px;
+    color: #10172a;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .ai-savings-product-points-{{ ai_gen_id }} {
+    display: grid;
+    gap: 6px;
+    margin: 0 0 16px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ai-savings-product-point-{{ ai_gen_id }} {
+    position: relative;
+    padding-left: 22px;
+    color: #526b95;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .ai-savings-product-point-{{ ai_gen_id }}::before {
+    position: absolute;
+    top: 0.18em;
+    left: 0;
+    width: 13px;
+    height: 13px;
+    border: 2px solid #178fe8;
+    border-radius: 50%;
+    content: '✓';
+    color: #178fe8;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 9px;
+    text-align: center;
+  }
+
+  .ai-savings-product-point-{{ ai_gen_id }}[hidden] {
+    display: none;
+  }
+
   .ai-savings-cta-button-{{ ai_gen_id }} {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 44px;
-    padding: 10px 18px;
-    border: 1px solid #0099fc;
-    border-radius: 8px;
-    background: #ffffff;
-    color: #0099fc;
+    min-height: 46px;
+    padding: 11px 18px;
+    border: 1px solid #078be8;
+    border-radius: 9px;
+    background: #078be8;
+    color: #ffffff;
     font-size: 15px;
     font-weight: 700;
     line-height: 1.2;
     text-align: center;
     text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   .ai-savings-cta-button-{{ ai_gen_id }}:hover {
-    border-color: #0099fc;
-    background: #e0f7ff;
-    color: #0369a1;
-    box-shadow: 0 5px 14px rgba(0, 153, 252, 0.12);
+    border-color: #0369a1;
+    background: #0369a1;
+    box-shadow: 0 5px 14px rgba(0, 105, 161, 0.18);
   }
 
   .ai-savings-cta-button-{{ ai_gen_id }}:focus-visible {
     outline: 2px solid #0099fc;
     outline-offset: 3px;
+  }
+
+  .ai-savings-cta-button-{{ ai_gen_id }}[aria-disabled='true'] {
+    border-color: #b7c6d8;
+    background: #b7c6d8;
+    cursor: not-allowed;
+  }
+
+  .ai-savings-compare-link-{{ ai_gen_id }} {
+    display: block;
+    margin-top: 12px;
+    color: #087ed0;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    text-underline-offset: 3px;
+  }
+
+  .ai-savings-info-{{ ai_gen_id }} {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 18px 0 0;
+    color: #60769b;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .ai-savings-info-{{ ai_gen_id }} svg {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
   }
 
   .ai-savings-disclaimer-{{ ai_gen_id }} {
@@ -235,12 +495,20 @@
   @media screen and (max-width: 900px) {
     .ai-savings-calculator-{{ ai_gen_id }} {
       padding: 48px 20px;
+      {% if block.settings.background_image != blank %}
+        background-image:
+          linear-gradient(
+            {{ block.settings.overlay_color | color_modify: 'alpha', overlay_mobile }} 0%,
+            {{ block.settings.overlay_color | color_modify: 'alpha', overlay_mobile }} 100%
+          ),
+          url('{{ block.settings.background_image | image_url: width: 1600 }}');
+      {% endif %}
     }
 
     .ai-savings-calculator-container-{{ ai_gen_id }} {
       grid-template-columns: 1fr;
       gap: 32px;
-      max-width: 640px;
+      max-width: 680px;
     }
 
     .ai-savings-text-column-{{ ai_gen_id }} {
@@ -248,7 +516,7 @@
     }
 
     .ai-savings-form-column-{{ ai_gen_id }} {
-      max-width: 480px;
+      max-width: 600px;
       margin: 0 auto;
     }
   }
@@ -259,11 +527,39 @@
     }
 
     .ai-savings-heading-{{ ai_gen_id }} {
-      font-size: 28px;
+      font-size: 34px;
     }
 
     .ai-savings-form-column-{{ ai_gen_id }} {
       padding: 22px 18px;
+      border-radius: 14px;
+    }
+
+    .ai-savings-form-header-{{ ai_gen_id }} {
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .ai-savings-form-helper-{{ ai_gen_id }} {
+      margin-top: 9px;
+      text-align: left;
+    }
+
+    .ai-savings-input-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .ai-savings-product-card-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-savings-product-media-{{ ai_gen_id }} {
+      min-height: 170px;
+    }
+
+    .ai-savings-product-media-{{ ai_gen_id }} img {
+      height: 170px;
     }
   }
 
@@ -282,12 +578,21 @@
   data-baseline-self-use="{{ block.settings.baseline_self_use_rate }}"
   data-storage-self-use="{{ block.settings.storage_self_use_rate }}"
   data-bonus-factor="{{ block.settings.bonus_factor }}"
-  data-mini-threshold="{{ block.settings.mini_threshold }}"
-  data-max-threshold="{{ block.settings.max_threshold }}"
+  data-pv-mini-max="{{ block.settings.pv_mini_max }}"
+  data-pv-3-max="{{ block.settings.pv_3_max }}"
+  data-pv-4-max="{{ block.settings.pv_4_max }}"
+  data-bill-mini-max="{{ block.settings.bill_mini_max }}"
+  data-bill-3-max="{{ block.settings.bill_3_max }}"
+  data-bill-4-max="{{ block.settings.bill_4_max }}"
+  data-result-empty="{{ block.settings.currency_symbol | append: ' ' | append: block.settings.result_period | escape }}"
   {{ block.shopify_attributes }}
 >
   <div class="ai-savings-calculator-container-{{ ai_gen_id }}">
     <div class="ai-savings-text-column-{{ ai_gen_id }}">
+      {% if block.settings.eyebrow != blank %}
+        <p class="ai-savings-eyebrow-{{ ai_gen_id }}">{{ block.settings.eyebrow }}</p>
+      {% endif %}
+
       {% if block.settings.heading != blank %}
         <h2 class="ai-savings-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
       {% endif %}
@@ -298,14 +603,20 @@
 
       <ul class="ai-savings-feature-list-{{ ai_gen_id }}">
         {% for feature_index in (1..3) %}
-          {% assign feature_key = 'feature_' | append: feature_index %}
-          {% assign feature = block.settings[feature_key] %}
-          {% if feature != blank %}
+          {% assign feature_title_key = 'feature_' | append: feature_index | append: '_title' %}
+          {% assign feature_text_key = 'feature_' | append: feature_index | append: '_text' %}
+          {% assign legacy_feature_key = 'feature_' | append: feature_index %}
+          {% assign feature_title = block.settings[feature_title_key] | default: block.settings[legacy_feature_key] %}
+          {% assign feature_text = block.settings[feature_text_key] %}
+          {% if feature_title != blank or feature_text != blank %}
             <li class="ai-savings-feature-item-{{ ai_gen_id }}">
               <span class="ai-savings-icon-wrapper-{{ ai_gen_id }}" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
               </span>
-              <span>{{ feature }}</span>
+              <span class="ai-savings-feature-content-{{ ai_gen_id }}">
+                {% if feature_title != blank %}<strong>{{ feature_title }}</strong>{% endif %}
+                {% if feature_text != blank %}<span>{{ feature_text }}</span>{% endif %}
+              </span>
             </li>
           {% endif %}
         {% endfor %}
@@ -314,63 +625,107 @@
 
     <div class="ai-savings-form-column-{{ ai_gen_id }}">
       <form class="ai-savings-form-{{ ai_gen_id }}" data-calculator-form novalidate>
-        <div class="ai-savings-form-group-{{ ai_gen_id }}">
-          <label for="ai-savings-cost-{{ ai_gen_id }}" class="ai-savings-form-label-{{ ai_gen_id }}">
-            {{ block.settings.label_monthly_cost }}
-          </label>
-          <input
-            type="number"
-            id="ai-savings-cost-{{ ai_gen_id }}"
-            class="ai-savings-form-input-{{ ai_gen_id }}"
-            value="{{ block.settings.default_monthly_cost }}"
-            min="0"
-            step="1"
-            inputmode="decimal"
-            data-input="cost"
-            aria-describedby="ai-savings-cost-error-{{ ai_gen_id }}"
-          >
-          <span
-            id="ai-savings-cost-error-{{ ai_gen_id }}"
-            class="ai-savings-field-error-{{ ai_gen_id }}"
-            data-error="cost"
-            data-visible="false"
-            role="alert"
-          ></span>
+        <div class="ai-savings-form-header-{{ ai_gen_id }}">
+          {% if block.settings.form_heading != blank %}
+            <h3 class="ai-savings-form-heading-{{ ai_gen_id }}">{{ block.settings.form_heading }}</h3>
+          {% endif %}
+          {% if block.settings.form_helper != blank %}
+            <span class="ai-savings-form-helper-{{ ai_gen_id }}">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              {{ block.settings.form_helper }}
+            </span>
+          {% endif %}
         </div>
 
-        <div class="ai-savings-form-group-{{ ai_gen_id }}">
-          <label for="ai-savings-pv-{{ ai_gen_id }}" class="ai-savings-form-label-{{ ai_gen_id }}">
-            {{ block.settings.label_pv_power }}
-          </label>
-          <input
-            type="text"
-            id="ai-savings-pv-{{ ai_gen_id }}"
-            class="ai-savings-form-input-{{ ai_gen_id }}"
-            value="{{ block.settings.default_pv_power }}"
-            inputmode="decimal"
-            data-input="pv"
-            aria-describedby="ai-savings-pv-error-{{ ai_gen_id }}"
-          >
-          <span
-            id="ai-savings-pv-error-{{ ai_gen_id }}"
-            class="ai-savings-field-error-{{ ai_gen_id }}"
-            data-error="pv"
-            data-visible="false"
-            role="alert"
-          ></span>
+        <div class="ai-savings-input-grid-{{ ai_gen_id }}">
+          <div class="ai-savings-form-group-{{ ai_gen_id }}">
+            <label for="ai-savings-cost-{{ ai_gen_id }}" class="ai-savings-form-label-{{ ai_gen_id }}">
+              {{ block.settings.label_monthly_cost }}
+            </label>
+            <input
+              type="text"
+              id="ai-savings-cost-{{ ai_gen_id }}"
+              class="ai-savings-form-input-{{ ai_gen_id }}"
+              value="{{ block.settings.default_monthly_cost }}"
+              inputmode="decimal"
+              autocomplete="off"
+              data-input="cost"
+              aria-describedby="ai-savings-cost-error-{{ ai_gen_id }}"
+            >
+            <span
+              id="ai-savings-cost-error-{{ ai_gen_id }}"
+              class="ai-savings-field-error-{{ ai_gen_id }}"
+              data-error="cost"
+              data-visible="false"
+              role="alert"
+            ></span>
+          </div>
+
+          <div class="ai-savings-form-group-{{ ai_gen_id }}">
+            <label for="ai-savings-pv-{{ ai_gen_id }}" class="ai-savings-form-label-{{ ai_gen_id }}">
+              {{ block.settings.label_pv_power }}
+            </label>
+            <input
+              type="text"
+              id="ai-savings-pv-{{ ai_gen_id }}"
+              class="ai-savings-form-input-{{ ai_gen_id }}"
+              value="{{ block.settings.default_pv_power }}"
+              inputmode="decimal"
+              autocomplete="off"
+              data-input="pv"
+              aria-describedby="ai-savings-pv-error-{{ ai_gen_id }}"
+            >
+            <span
+              id="ai-savings-pv-error-{{ ai_gen_id }}"
+              class="ai-savings-field-error-{{ ai_gen_id }}"
+              data-error="pv"
+              data-visible="false"
+              role="alert"
+            ></span>
+          </div>
         </div>
 
         <div class="ai-savings-result-box-{{ ai_gen_id }}" aria-live="polite">
           <span class="ai-savings-result-label-{{ ai_gen_id }}">{{ block.settings.result_label }}</span>
-          <span class="ai-savings-result-amount-{{ ai_gen_id }}" data-result>€0 / Jahr</span>
+          <span class="ai-savings-result-amount-{{ ai_gen_id }}" data-result></span>
+          {% if block.settings.result_badge != blank %}
+            <span class="ai-savings-result-badge-{{ ai_gen_id }}">{{ block.settings.result_badge }}</span>
+          {% endif %}
           <span class="ai-savings-recommendation-{{ ai_gen_id }}" data-recommendation></span>
           <span class="ai-savings-status-{{ ai_gen_id }}" data-status data-visible="false"></span>
         </div>
 
-        {% if block.settings.button_link != blank %}
-          <a href="{{ block.settings.button_link }}" class="ai-savings-cta-button-{{ ai_gen_id }}">{{ block.settings.button_text }}</a>
-        {% else %}
-          <button type="button" class="ai-savings-cta-button-{{ ai_gen_id }}">{{ block.settings.button_text }}</button>
+        <div class="ai-savings-product-card-{{ ai_gen_id }}" data-recommendation-card hidden>
+          <div class="ai-savings-product-media-{{ ai_gen_id }}" data-product-image-wrap hidden>
+            <img
+              data-product-image
+              {% if mini_image %}src="{{ mini_image | image_url: width: 600 }}"{% endif %}
+              alt=""
+              loading="lazy"
+              width="600"
+              height="600"
+            >
+          </div>
+          <div class="ai-savings-product-content-{{ ai_gen_id }}">
+            <h4 class="ai-savings-product-name-{{ ai_gen_id }}" data-product-name></h4>
+            <ul class="ai-savings-product-points-{{ ai_gen_id }}">
+              <li class="ai-savings-product-point-{{ ai_gen_id }}" data-product-point="1"></li>
+              <li class="ai-savings-product-point-{{ ai_gen_id }}" data-product-point="2"></li>
+            </ul>
+            <a class="ai-savings-cta-button-{{ ai_gen_id }}" data-product-cta aria-disabled="true" tabindex="-1"></a>
+            {% if block.settings.comparison_url != blank %}
+              <a href="{{ block.settings.comparison_url }}" class="ai-savings-compare-link-{{ ai_gen_id }}">
+                {{ block.settings.comparison_text }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if block.settings.info_text != blank %}
+          <p class="ai-savings-info-{{ ai_gen_id }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 10v6M12 7h.01"/></svg>
+            <span>{{ block.settings.info_text }}</span>
+          </p>
         {% endif %}
       </form>
     </div>
@@ -384,12 +739,64 @@
       {% endif %}
     </p>
   {% endif %}
+
+  <script type="application/json" data-recommendation-data>
+    {
+      "mini": {
+        "name": {{ mini_name | json }},
+        "url": {{ mini_url | default: '' | json }},
+        "cta": {{ block.settings.mini_cta | json }},
+        "point1": {{ block.settings.mini_point_1 | json }},
+        "point2": {{ block.settings.mini_point_2 | json }},
+        "image": {% if mini_image %}{{ mini_image | image_url: width: 600 | json }}{% else %}""{% endif %},
+        "imageAlt": {% if mini_image %}{{ mini_image.alt | default: mini_name | json }}{% else %}{{ mini_name | json }}{% endif %},
+        "imageWidth": {% if mini_image %}{{ mini_image.width | json }}{% else %}null{% endif %},
+        "imageHeight": {% if mini_image %}{{ mini_image.height | json }}{% else %}null{% endif %}
+      },
+      "3": {
+        "name": {{ product_3_name | json }},
+        "url": {{ product_3_url | default: '' | json }},
+        "cta": {{ block.settings.product_3_cta | json }},
+        "point1": {{ block.settings.product_3_point_1 | json }},
+        "point2": {{ block.settings.product_3_point_2 | json }},
+        "image": {% if product_3_image %}{{ product_3_image | image_url: width: 600 | json }}{% else %}""{% endif %},
+        "imageAlt": {% if product_3_image %}{{ product_3_image.alt | default: product_3_name | json }}{% else %}{{ product_3_name | json }}{% endif %},
+        "imageWidth": {% if product_3_image %}{{ product_3_image.width | json }}{% else %}null{% endif %},
+        "imageHeight": {% if product_3_image %}{{ product_3_image.height | json }}{% else %}null{% endif %}
+      },
+      "4": {
+        "name": {{ product_4_name | json }},
+        "url": {{ product_4_url | default: '' | json }},
+        "cta": {{ block.settings.product_4_cta | json }},
+        "point1": {{ block.settings.product_4_point_1 | json }},
+        "point2": {{ block.settings.product_4_point_2 | json }},
+        "image": {% if product_4_image %}{{ product_4_image | image_url: width: 600 | json }}{% else %}""{% endif %},
+        "imageAlt": {% if product_4_image %}{{ product_4_image.alt | default: product_4_name | json }}{% else %}{{ product_4_name | json }}{% endif %},
+        "imageWidth": {% if product_4_image %}{{ product_4_image.width | json }}{% else %}null{% endif %},
+        "imageHeight": {% if product_4_image %}{{ product_4_image.height | json }}{% else %}null{% endif %}
+      },
+      "max": {
+        "name": {{ max_name | json }},
+        "url": {{ max_url | default: '' | json }},
+        "cta": {{ block.settings.max_cta | json }},
+        "point1": {{ block.settings.max_point_1 | json }},
+        "point2": {{ block.settings.max_point_2 | json }},
+        "image": {% if max_image %}{{ max_image | image_url: width: 600 | json }}{% else %}""{% endif %},
+        "imageAlt": {% if max_image %}{{ max_image.alt | default: max_name | json }}{% else %}{{ max_name | json }}{% endif %},
+        "imageWidth": {% if max_image %}{{ max_image.width | json }}{% else %}null{% endif %},
+        "imageHeight": {% if max_image %}{{ max_image.height | json }}{% else %}null{% endif %}
+      }
+    }
+  </script>
 </savings-calculator-{{ ai_gen_id }}>
 
 <script>
   (function() {
     class SavingsCalculator{{ ai_gen_id }} extends HTMLElement {
       connectedCallback() {
+        if (this.dataset.initialized === 'true') return;
+        this.dataset.initialized = 'true';
+
         this.costInput = this.querySelector('[data-input="cost"]');
         this.pvInput = this.querySelector('[data-input="pv"]');
         this.resultDisplay = this.querySelector('[data-result]');
@@ -397,14 +804,48 @@
         this.costError = this.querySelector('[data-error="cost"]');
         this.pvError = this.querySelector('[data-error="pv"]');
         this.statusDisplay = this.querySelector('[data-status]');
+        this.recommendationCard = this.querySelector('[data-recommendation-card]');
+        this.productImageWrap = this.querySelector('[data-product-image-wrap]');
+        this.productImage = this.querySelector('[data-product-image]');
+        this.productName = this.querySelector('[data-product-name]');
+        this.productCta = this.querySelector('[data-product-cta]');
+        this.productPoints = [
+          this.querySelector('[data-product-point="1"]'),
+          this.querySelector('[data-product-point="2"]')
+        ];
 
-        this.electricityPrice = Number(this.dataset.electricityPrice) || 0.4;
-        this.annualSunHours = Number(this.dataset.annualSunHours) || 1000;
-        this.baselineSelfUse = Number(this.dataset.baselineSelfUse) || 0.3;
-        this.storageSelfUse = Number(this.dataset.storageSelfUse) || 0.8;
-        this.bonusFactor = Number(this.dataset.bonusFactor) || 1.15;
-        this.miniThreshold = Number(this.dataset.miniThreshold) || 650;
-        this.maxThreshold = Number(this.dataset.maxThreshold) || 1600;
+        const dataElement = this.querySelector('[data-recommendation-data]');
+        try {
+          this.recommendations = JSON.parse(dataElement ? dataElement.textContent : '{}');
+        } catch (error) {
+          this.recommendations = {};
+        }
+
+        this.electricityPrice = this.readNumber(this.dataset.electricityPrice, 0.4);
+        this.annualSunHours = this.readNumber(this.dataset.annualSunHours, 1000);
+        this.baselineSelfUse = this.readNumber(this.dataset.baselineSelfUse, 0.3);
+        this.storageSelfUse = this.readNumber(this.dataset.storageSelfUse, 0.8);
+        this.bonusFactor = this.readNumber(this.dataset.bonusFactor, 1.15);
+        this.pvThresholds = this.getThresholds(
+          [
+            this.readNumber(this.dataset.pvMiniMax, Number.NaN),
+            this.readNumber(this.dataset.pv3Max, Number.NaN),
+            this.readNumber(this.dataset.pv4Max, Number.NaN)
+          ],
+          [2.5, 4.5, 6.5]
+        );
+        this.billThresholds = this.getThresholds(
+          [
+            this.readNumber(this.dataset.billMiniMax, Number.NaN),
+            this.readNumber(this.dataset.bill3Max, Number.NaN),
+            this.readNumber(this.dataset.bill4Max, Number.NaN)
+          ],
+          [90, 130, 180]
+        );
+        this.currencySymbol = {{ block.settings.currency_symbol | json }};
+        this.resultPeriod = {{ block.settings.result_period | json }};
+        this.emptyResult = this.dataset.resultEmpty || '€ / Jahr';
+        this.recommendationPrefix = {{ block.settings.recommendation_prefix | json }};
 
         if (!this.costInput || !this.pvInput || !this.resultDisplay || !this.recommendationDisplay || !this.costError || !this.pvError || !this.statusDisplay) return;
 
@@ -413,9 +854,36 @@
         this.calculate();
       }
 
+      readNumber(value, fallback) {
+        const number = Number(value);
+        return Number.isFinite(number) ? number : fallback;
+      }
+
+      getThresholds(values, fallback) {
+        if (values.every((value) => Number.isFinite(value)) && values[0] < values[1] && values[1] < values[2]) {
+          return values;
+        }
+        return fallback;
+      }
+
       parseNumber(value) {
-        const normalized = String(value).trim().replace(/\s/g, '').replace(',', '.');
-        return normalized === '' ? Number.NaN : Number(normalized);
+        let normalized = String(value).trim().replace(/\s/g, '');
+        if (normalized === '') return Number.NaN;
+
+        const commaIndex = normalized.lastIndexOf(',');
+        const dotIndex = normalized.lastIndexOf('.');
+        if (commaIndex > -1 && dotIndex > -1) {
+          if (commaIndex > dotIndex) {
+            normalized = normalized.replace(/\./g, '').replace(',', '.');
+          } else {
+            normalized = normalized.replace(/,/g, '');
+          }
+        } else if (commaIndex > -1) {
+          normalized = normalized.replace(',', '.');
+        }
+
+        const parsed = Number(normalized);
+        return Number.isFinite(parsed) ? parsed : Number.NaN;
       }
 
       setFieldError(input, errorElement, message) {
@@ -430,6 +898,84 @@
         this.statusDisplay.dataset.visible = String(message !== '');
       }
 
+      setEmptyResult() {
+        this.resultDisplay.textContent = this.emptyResult;
+        this.recommendationDisplay.textContent = '';
+        if (this.recommendationCard) this.recommendationCard.hidden = true;
+        this.clearProductCta();
+      }
+
+      clearProductCta() {
+        if (!this.productCta) return;
+        this.productCta.removeAttribute('href');
+        this.productCta.setAttribute('aria-disabled', 'true');
+        this.productCta.setAttribute('tabindex', '-1');
+      }
+
+      getTier(value, thresholds) {
+        if (value <= thresholds[0]) return 0;
+        if (value <= thresholds[1]) return 1;
+        if (value <= thresholds[2]) return 2;
+        return 3;
+      }
+
+      formatResult(value) {
+        const formattedValue = new Intl.NumberFormat('de-DE', {
+          maximumFractionDigits: 0
+        }).format(value);
+        return (this.currencySymbol || '') + formattedValue + (this.resultPeriod ? ' ' + this.resultPeriod : '');
+      }
+
+      updateRecommendation(tier) {
+        const tierKeys = ['mini', '3', '4', 'max'];
+        const recommendation = this.recommendations[tierKeys[tier]];
+        if (!recommendation) {
+          this.setEmptyResult();
+          return;
+        }
+
+        this.recommendationDisplay.textContent = [this.recommendationPrefix, recommendation.name]
+          .filter((value) => value && value.trim())
+          .join(' ');
+
+        if (!this.recommendationCard) return;
+        this.recommendationCard.hidden = false;
+
+        if (this.productName) this.productName.textContent = recommendation.name || '';
+
+        this.productPoints.forEach((pointElement, index) => {
+          if (!pointElement) return;
+          const point = index === 0 ? recommendation.point1 : recommendation.point2;
+          pointElement.textContent = point || '';
+          pointElement.hidden = !point;
+        });
+
+        if (this.productImage && this.productImageWrap) {
+          if (recommendation.image) {
+            this.productImage.src = recommendation.image;
+            this.productImage.alt = recommendation.imageAlt || recommendation.name || '';
+            if (recommendation.imageWidth) this.productImage.width = recommendation.imageWidth;
+            if (recommendation.imageHeight) this.productImage.height = recommendation.imageHeight;
+            this.productImageWrap.hidden = false;
+          } else {
+            this.productImage.removeAttribute('src');
+            this.productImage.alt = '';
+            this.productImageWrap.hidden = true;
+          }
+        }
+
+        if (this.productCta) {
+          this.productCta.textContent = recommendation.cta || '';
+          if (recommendation.url) {
+            this.productCta.href = recommendation.url;
+            this.productCta.setAttribute('aria-disabled', 'false');
+            this.productCta.setAttribute('tabindex', '0');
+          } else {
+            this.clearProductCta();
+          }
+        }
+      }
+
       calculate() {
         const monthlyBill = this.parseNumber(this.costInput.value);
         const pvPower = this.parseNumber(this.pvInput.value);
@@ -440,22 +986,21 @@
         this.setFieldError(
           this.costInput,
           this.costError,
-          billInvalid ? '{{ block.settings.bill_error_message | escape }}' : ''
+          billInvalid ? {{ block.settings.bill_error_message | json }} : ''
         );
         this.setFieldError(
           this.pvInput,
           this.pvError,
           noPvInstalled
-            ? '{{ block.settings.no_pv_message | escape }}'
-            : (pvInvalid ? '{{ block.settings.pv_error_message | escape }}' : '')
+            ? {{ block.settings.no_pv_message | json }}
+            : (pvInvalid ? {{ block.settings.pv_error_message | json }} : '')
         );
 
         if (billInvalid || pvInvalid || noPvInstalled) {
-          this.resultDisplay.textContent = '€0 / Jahr';
-          this.recommendationDisplay.textContent = '';
+          this.setEmptyResult();
           this.setStatus(noPvInstalled
-            ? '{{ block.settings.no_pv_message | escape }}'
-            : '{{ block.settings.invalid_message | escape }}'
+            ? {{ block.settings.no_pv_message | json }}
+            : {{ block.settings.invalid_message | json }}
           );
           return;
         }
@@ -463,9 +1008,8 @@
         const annualUse = (monthlyBill / this.electricityPrice) * 12;
         const annualPvYield = pvPower * this.annualSunHours;
         if (annualPvYield === 0) {
-          this.resultDisplay.textContent = '€0 / Jahr';
-          this.recommendationDisplay.textContent = '';
-          this.setStatus('{{ block.settings.no_pv_message | escape }}');
+          this.setEmptyResult();
+          this.setStatus({{ block.settings.no_pv_message | json }});
           return;
         }
 
@@ -478,18 +1022,13 @@
         const extraSelfUse = Math.max(0, storageEnergy - baselineEnergy);
         const yearlySaving = Math.max(0, Math.round(extraSelfUse * this.electricityPrice * this.bonusFactor));
 
-        let model = 'VENUS E Mini';
-        if (yearlySaving >= this.miniThreshold && yearlySaving <= this.maxThreshold) {
-          model = 'VENUS E 4.0';
-        } else if (yearlySaving > this.maxThreshold) {
-          model = 'VENUS E MAX';
-        }
+        const pvTier = this.getTier(pvPower, this.pvThresholds);
+        const billTier = this.getTier(monthlyBill, this.billThresholds);
+        const recommendedTier = Math.min(pvTier, billTier);
 
-        this.resultDisplay.textContent = '€' + new Intl.NumberFormat('de-DE', {
-          maximumFractionDigits: 0
-        }).format(yearlySaving) + ' / Jahr';
-        this.recommendationDisplay.textContent = '{{ block.settings.recommendation_prefix | escape }} ' + model;
-        this.setStatus(rateWasAdjusted ? '{{ block.settings.rate_adjustment_message | escape }}' : '');
+        this.resultDisplay.textContent = this.formatResult(yearlySaving);
+        this.updateRecommendation(recommendedTier);
+        this.setStatus(rateWasAdjusted ? {{ block.settings.rate_adjustment_message | json }} : '');
       }
     }
 
@@ -504,41 +1043,110 @@
   "name": "Savings calculator",
   "settings": [
     { "type": "header", "content": "Layout" },
-    { "type": "range", "id": "max_width", "label": "Maximum width", "min": 900, "max": 1400, "step": 50, "unit": "px", "default": 1100 },
-    { "type": "header", "content": "Content" },
-    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Berechnen Sie Ihre Ersparnis" },
-    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 24, "max": 44, "step": 2, "unit": "px", "default": 32 },
-    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Geben Sie Ihre monatlichen Stromkosten und die PV-Leistung ein, um Ihre jährliche Ersparnis zu schätzen.</p>" },
-    { "type": "range", "id": "text_size", "label": "Description size", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 16 },
-    { "type": "text", "id": "feature_1", "label": "Feature 1", "default": "Berücksichtigt Eigenverbrauch und Solarertrag" },
-    { "type": "text", "id": "feature_2", "label": "Feature 2", "default": "Empfiehlt das passende VENUS E Modell" },
-    { "type": "text", "id": "feature_3", "label": "Feature 3" },
+    { "type": "range", "id": "max_width", "label": "Maximum width", "min": 900, "max": 1400, "step": 50, "unit": "px", "default": 1150 },
+    { "type": "range", "id": "section_padding", "label": "Section vertical padding", "min": 32, "max": 120, "step": 4, "unit": "px", "default": 64 },
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Background image position",
+      "options": [
+        { "value": "left center", "label": "Left" },
+        { "value": "center center", "label": "Center" },
+        { "value": "right center", "label": "Right" }
+      ],
+      "default": "center center"
+    },
+    { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#d8efff" },
+    { "type": "range", "id": "overlay_opacity_left", "label": "Overlay opacity left", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 88 },
+    { "type": "range", "id": "overlay_opacity_middle", "label": "Overlay opacity middle", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 66 },
+    { "type": "range", "id": "overlay_opacity_right", "label": "Overlay opacity right", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 18 },
+    { "type": "range", "id": "overlay_opacity_mobile", "label": "Overlay opacity mobile", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 78 },
+
+    { "type": "header", "content": "Left content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "MEHR UNABHÄNGIGKEIT · NIEDRIGERE STROMKOSTEN · EINE SAUBERERE ZUKUNFT" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Berechne dein Sparpotenzial mit VENUS E" },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 28, "max": 64, "step": 2, "unit": "px", "default": 48 },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Gib deine monatlichen Stromkosten und deine PV-Leistung ein. Wir schätzen deine jährliche Ersparnis und empfehlen dir das passende VENUS E Modell.</p>" },
+    { "type": "range", "id": "text_size", "label": "Description size", "min": 14, "max": 20, "step": 1, "unit": "px", "default": 17 },
+    { "type": "text", "id": "feature_1_title", "label": "Feature 1 title", "default": "Schnelle Orientierung" },
+    { "type": "text", "id": "feature_1_text", "label": "Feature 1 text", "default": "für deine passende Speichergröße" },
+    { "type": "text", "id": "feature_2_title", "label": "Feature 2 title", "default": "Berücksichtigt Stromkosten und PV-Leistung" },
+    { "type": "text", "id": "feature_2_text", "label": "Feature 2 text", "default": "für eine passende Empfehlung" },
+    { "type": "text", "id": "feature_3_title", "label": "Feature 3 title", "default": "Direkt zum empfohlenen VENUS E Modell" },
+    { "type": "text", "id": "feature_3_text", "label": "Feature 3 text" },
+    { "type": "text", "id": "feature_1", "label": "Legacy feature 1 fallback" },
+    { "type": "text", "id": "feature_2", "label": "Legacy feature 2 fallback" },
+    { "type": "text", "id": "feature_3", "label": "Legacy feature 3 fallback" },
     { "type": "range", "id": "feature_text_size", "label": "Feature text size", "min": 13, "max": 18, "step": 1, "unit": "px", "default": 15 },
-    { "type": "header", "content": "Form" },
+
+    { "type": "header", "content": "Calculator content" },
+    { "type": "text", "id": "form_heading", "label": "Form heading", "default": "Deine Eingaben" },
+    { "type": "text", "id": "form_helper", "label": "Form helper", "default": "In 30 Sekunden zu deinem Ergebnis" },
     { "type": "text", "id": "label_monthly_cost", "label": "Monthly cost label", "default": "Monatl. Stromkosten (€)" },
     { "type": "text", "id": "default_monthly_cost", "label": "Default monthly cost", "default": "150" },
     { "type": "text", "id": "label_pv_power", "label": "PV power label", "default": "PV-Leistung (kWp)" },
     { "type": "text", "id": "default_pv_power", "label": "Default PV power", "default": "5,0" },
-    { "type": "text", "id": "result_label", "label": "Result label", "default": "Geschätzte Ersparnis" },
-    { "type": "range", "id": "result_amount_size", "label": "Result amount size", "min": 22, "max": 34, "step": 2, "unit": "px", "default": 28 },
+    { "type": "text", "id": "result_label", "label": "Result label", "default": "Geschätzte jährliche Ersparnis" },
+    { "type": "text", "id": "currency_symbol", "label": "Currency symbol", "default": "€" },
+    { "type": "text", "id": "result_period", "label": "Result period", "default": "/ Jahr" },
+    { "type": "range", "id": "result_amount_size", "label": "Result amount size", "min": 22, "max": 44, "step": 2, "unit": "px", "default": 38 },
+    { "type": "text", "id": "result_badge", "label": "Result badge", "default": "Bis zu 70 % weniger Stromkosten" },
     { "type": "text", "id": "recommendation_prefix", "label": "Recommendation prefix", "default": "Empfohlen:" },
-    { "type": "text", "id": "invalid_message", "label": "Invalid input message", "default": "Bitte gültige Werte eingeben." },
-    { "type": "text", "id": "bill_error_message", "label": "Invalid bill message", "default": "Bitte geben Sie gültige monatliche Stromkosten ein." },
-    { "type": "text", "id": "pv_error_message", "label": "Invalid PV message", "default": "Bitte geben Sie eine gültige PV-Leistung ein." },
-    { "type": "text", "id": "no_pv_message", "label": "No PV message", "default": "Bitte installieren Sie zuerst eine PV-Anlage." },
-    { "type": "text", "id": "rate_adjustment_message", "label": "Rate adjustment message", "default": "Die Eigenverbrauchsrate wurde automatisch angepasst." },
-    { "type": "text", "id": "button_text", "label": "Button text", "default": "Details anfordern" },
-    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "comparison_text", "label": "Comparison link text", "default": "Alle Modelle vergleichen" },
+    { "type": "url", "id": "comparison_url", "label": "Comparison link" },
+    { "type": "text", "id": "info_text", "label": "Info text", "default": "Empfehlung und Ersparnis basieren auf deinen Angaben und dienen als Orientierung." },
+
+    { "type": "header", "content": "Product mapping and CTA" },
+    { "type": "product", "id": "mini_product", "label": "Mini product" },
+    { "type": "text", "id": "mini_product_name", "label": "Mini display name override" },
+    { "type": "text", "id": "mini_point_1", "label": "Mini point 1", "default": "2 kWh Speicherkapazität" },
+    { "type": "text", "id": "mini_point_2", "label": "Mini point 2", "default": "Bis zu 6 kWh erweiterbar" },
+    { "type": "text", "id": "mini_cta", "label": "Mini CTA text", "default": "VENUS E Mini ansehen" },
+    { "type": "url", "id": "mini_url", "label": "Mini URL override" },
+    { "type": "product", "id": "product_3", "label": "3.0 product" },
+    { "type": "text", "id": "product_3_name", "label": "3.0 display name override" },
+    { "type": "text", "id": "product_3_point_1", "label": "3.0 point 1", "default": "5,12 kWh Speicherkapazität" },
+    { "type": "text", "id": "product_3_point_2", "label": "3.0 point 2", "default": "Bis zu 15,36 kWh erweiterbar" },
+    { "type": "text", "id": "product_3_cta", "label": "3.0 CTA text", "default": "VENUS E 3.0 ansehen" },
+    { "type": "url", "id": "product_3_url", "label": "3.0 URL override" },
+    { "type": "product", "id": "product_4", "label": "4.0 product" },
+    { "type": "text", "id": "product_4_name", "label": "4.0 display name override" },
+    { "type": "text", "id": "product_4_point_1", "label": "4.0 point 1", "default": "5 kWh Speicherkapazität" },
+    { "type": "text", "id": "product_4_point_2", "label": "4.0 point 2", "default": "Bis zu 15 kWh erweiterbar" },
+    { "type": "text", "id": "product_4_cta", "label": "4.0 CTA text", "default": "VENUS E 4.0 ansehen" },
+    { "type": "url", "id": "product_4_url", "label": "4.0 URL override" },
+    { "type": "product", "id": "max_product", "label": "Max product" },
+    { "type": "text", "id": "max_product_name", "label": "Max display name override" },
+    { "type": "text", "id": "max_point_1", "label": "Max point 1", "default": "10 kWh Einsatzkapazität" },
+    { "type": "text", "id": "max_point_2", "label": "Max point 2", "default": "Bis zu 30 kWh erweiterbar" },
+    { "type": "text", "id": "max_cta", "label": "Max CTA text", "default": "VENUS E Max ansehen" },
+    { "type": "url", "id": "max_url", "label": "Max URL override" },
+
+    { "type": "header", "content": "Recommendation thresholds" },
+    { "type": "range", "id": "pv_mini_max", "label": "PV Mini upper limit", "info": "Use ascending limits. Values at or below this limit are Mini.", "min": 0, "max": 50, "step": 0.1, "unit": "kWp", "default": 2.5 },
+    { "type": "range", "id": "pv_3_max", "label": "PV 3.0 upper limit", "info": "Values above the Mini limit and at or below this limit are 3.0.", "min": 0, "max": 50, "step": 0.1, "unit": "kWp", "default": 4.5 },
+    { "type": "range", "id": "pv_4_max", "label": "PV 4.0 upper limit", "info": "Values above the 3.0 limit and at or below this limit are 4.0; higher values are Max.", "min": 0, "max": 50, "step": 0.1, "unit": "kWp", "default": 6.5 },
+    { "type": "range", "id": "bill_mini_max", "label": "Monthly cost Mini upper limit", "info": "Use ascending limits. Values at or below this limit are Mini.", "min": 0, "max": 5000, "step": 1, "unit": "€", "default": 90 },
+    { "type": "range", "id": "bill_3_max", "label": "Monthly cost 3.0 upper limit", "info": "Values above the Mini limit and at or below this limit are 3.0.", "min": 0, "max": 5000, "step": 1, "unit": "€", "default": 130 },
+    { "type": "range", "id": "bill_4_max", "label": "Monthly cost 4.0 upper limit", "info": "Values above the 3.0 limit and at or below this limit are 4.0; higher values are Max.", "min": 0, "max": 5000, "step": 1, "unit": "€", "default": 180 },
+
     { "type": "header", "content": "Calculation" },
-    { "type": "range", "id": "electricity_price", "label": "Electricity price", "min": 0.2, "max": 0.8, "step": 0.1, "unit": "€", "default": 0.4 },
+    { "type": "range", "id": "electricity_price", "label": "Electricity price", "min": 0.2, "max": 0.8, "step": 0.1, "unit": "€ / kWh", "default": 0.4 },
     { "type": "range", "id": "annual_sun_hours", "label": "Annual sun hours", "min": 700, "max": 1400, "step": 25, "unit": "h", "default": 1000 },
     { "type": "range", "id": "baseline_self_use_rate", "label": "Self-use without storage", "min": 0.1, "max": 0.6, "step": 0.1, "default": 0.3 },
     { "type": "range", "id": "storage_self_use_rate", "label": "Self-use with storage", "min": 0.5, "max": 1.0, "step": 0.1, "default": 0.8 },
     { "type": "text", "id": "bonus_factor", "label": "Bonus factor", "default": "1.15" },
-    { "type": "range", "id": "mini_threshold", "label": "Mini threshold", "min": 300, "max": 1000, "step": 25, "unit": "€", "default": 650 },
-    { "type": "range", "id": "max_threshold", "label": "MAX threshold", "min": 1000, "max": 2500, "step": 50, "unit": "€", "default": 1600 },
+
+    { "type": "header", "content": "Messages" },
+    { "type": "text", "id": "invalid_message", "label": "Invalid input message", "default": "Bitte gültige Werte eingeben." },
+    { "type": "text", "id": "bill_error_message", "label": "Invalid bill message", "default": "Bitte gib gültige monatliche Stromkosten ein." },
+    { "type": "text", "id": "pv_error_message", "label": "Invalid PV message", "default": "Bitte gib eine gültige PV-Leistung ein." },
+    { "type": "text", "id": "no_pv_message", "label": "No PV message", "default": "Bitte gib eine PV-Leistung größer als 0 ein." },
+    { "type": "text", "id": "rate_adjustment_message", "label": "Rate adjustment message", "default": "Die Eigenverbrauchsrate wurde automatisch angepasst." },
+
     { "type": "header", "content": "Disclaimer" },
-    { "type": "textarea", "id": "disclaimer_text", "label": "Disclaimer", "default": "Die Berechnung ist eine unverbindliche Schätzung. Tatsächliche Einsparungen hängen unter anderem von Stromtarif, Solarertrag und Verbrauchsprofil ab." },
+    { "type": "textarea", "id": "disclaimer_text", "label": "Disclaimer", "default": "Berechnung auf Basis deiner Angaben zu Stromverbrauch, Strompreis, PV-Ertrag und Eigenverbrauch. Tatsächliche Einsparungen können abweichen." },
     { "type": "text", "id": "disclaimer_link_text", "label": "Disclaimer link text", "default": "Berechnungsgrundlage ansehen" },
     { "type": "url", "id": "disclaimer_link", "label": "Disclaimer link" }
   ],

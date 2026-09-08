@@ -12655,6 +12655,18 @@ iframe.zoid-component-frame{
   line-height:1.35;
 }
 
+.cart-bundle-suggestions{
+  width:100%;
+}
+
+.cart-bundle-suggestions:empty{
+  display:none;
+}
+
+.cart__item:has(+ .cart-bundle-suggestions:not(:empty)){
+  margin-bottom:0;
+}
+
 .cart-bundle-suggestion__header{
   display:flex;
   flex-wrap:wrap;

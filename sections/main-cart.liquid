@@ -34,6 +34,9 @@
           {% for item in cart.items %}
             {%- render 'cart-item', product: item, sizes: '150px', -%}
           {%- endfor -%}
+          <div class="cart-bundle-suggestions" data-bundle-suggestions>{%- for item in cart.items -%}
+            {%- render 'cart-bundle-suggestion', product: item, cart: cart -%}
+          {%- endfor -%}</div>
         </div>
         <div class="cart__page-col">
           {% if settings.cart_notes_enable %}
