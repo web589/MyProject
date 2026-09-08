@@ -69,7 +69,7 @@
 
       <span class="breadcrumb__divider" aria-hidden="true">/</span>
       {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
-        <a href="{{ blog_center_home_link.url }}">{{ 'blogs.article.blog_center' | t }}</a>
+        <a href="{{ routes.blogs_url | default: '/blogs' }}">{{ 'blogs.article.blog_center' | t }}</a>
       {%- else -%}
         <span>{{ 'blogs.article.blog_center' | t }}</span>
       {%- endif -%}
@@ -80,7 +80,13 @@
       {%- endif -%}
 
       <span class="breadcrumb__divider" aria-hidden="true">/</span>
-      <span aria-current="page">{{ article.title | escape }}</span>
+      <span
+        class="breadcrumb__current"
+        aria-current="page"
+        title="{{ article.title | escape }}"
+      >
+        {{ article.title | truncate: 40 | escape }}
+      </span>
 
     {% elsif template.name == 'page' %}
 

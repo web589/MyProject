@@ -1,4 +1,4 @@
-{%- assign blog_center_url = blog_center_home_link.url | default: blog.url -%}
+{%- assign blog_center_url = routes.blogs_url | default: '/blogs' -%}
 {%- assign is_blog_center_home = false -%}
 {%- if template.suffix == 'all' -%}
   {%- assign is_blog_center_home = true -%}

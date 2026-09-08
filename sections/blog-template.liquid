@@ -1,6 +1,7 @@
 {%- liquid
   assign blog_center_menu = linklists['blog-center']
   assign blog_center_home_link = blank
+  assign blog_center_url = routes.blogs_url | default: '/blogs'
   assign is_all_blog_view = false
   if blog_center_menu != blank and blog_center_menu.links.size > 0
     assign blog_center_home_link = blog_center_menu.links | first
@@ -465,7 +466,7 @@
             {%- endif -%}
             <a
               class="blog-category-nav__link{% if is_blog_center_home %} is-active{% endif %}"
-              href="{{ blog_center_home_link.url }}"
+              href="{{ blog_center_url }}"
               {% if is_blog_center_home %}aria-current="page"{% endif %}
             >
               {{ 'blogs.article.all' | t }}

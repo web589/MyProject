@@ -42,6 +42,45 @@
     return height;
   }
 
+  function isImageOnlyBlock(element) {
+    if (!element || element.nodeType !== 1) return false;
+
+    var hasImage = element.matches('img, picture, figure') || element.querySelector('img, picture, figure');
+    return Boolean(hasImage && !element.textContent.trim());
+  }
+
+  function placeTableOfContents(body, toc) {
+    var contentElements = Array.prototype.filter.call(body.children, function(element) {
+      return element !== toc;
+    });
+    var intro = contentElements.find(function(element) {
+      return element.tagName.toLowerCase() === 'p' && element.textContent.trim();
+    });
+
+    if (!intro) {
+      var firstHeading = contentElements.find(function(element) {
+        return element.tagName.toLowerCase() === 'h2';
+      });
+
+      if (firstHeading) {
+        body.insertBefore(toc, firstHeading);
+      } else {
+        body.appendChild(toc);
+      }
+      return;
+    }
+
+    var insertionPoint = intro;
+    var nextElement = insertionPoint.nextElementSibling;
+    if (nextElement === toc) nextElement = nextElement.nextElementSibling;
+
+    if (isImageOnlyBlock(nextElement)) {
+      insertionPoint = nextElement;
+    }
+
+    insertionPoint.insertAdjacentElement('afterend', toc);
+  }
+
   function initTableOfContents(root) {
     if (!root || root.getAttribute('data-blog-article-ready') === 'true') return;
 
@@ -90,7 +129,7 @@
       return;
     }
 
-    headings = Array.prototype.slice.call(body.querySelectorAll('h2, h3'));
+    headings = Array.prototype.slice.call(body.querySelectorAll('h2'));
     if (!headings.length) {
       observeBlogCenter();
       return;
@@ -107,7 +146,7 @@
       usedIds[id] = true;
 
       var item = document.createElement('li');
-      item.className = 'blog-article__toc-item' + (heading.tagName.toLowerCase() === 'h3' ? ' blog-article__toc-item--sub' : '');
+      item.className = 'blog-article__toc-item';
 
       var link = document.createElement('a');
       link.className = 'blog-article__toc-link';
@@ -130,6 +169,7 @@
       list.appendChild(item);
     });
 
+    placeTableOfContents(body, toc);
     toc.hidden = false;
     setActiveItem(list, headings[0].id);
 

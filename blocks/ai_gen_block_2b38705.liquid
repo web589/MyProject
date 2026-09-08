@@ -965,7 +965,7 @@
   {% assign bundle_description = block.settings.description %}
 {% endif %}
 
-<pdp-bundle-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target pdp-bundle-{{ ai_gen_id }}" data-pdp-bundle data-de-vat-candidate="{{ bundle_is_de_vat_candidate }}" {{ block.shopify_attributes }}>
+<pdp-bundle-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target pdp-bundle-{{ ai_gen_id }}" data-scroll-reveal="off" data-pdp-bundle data-de-vat-candidate="{{ bundle_is_de_vat_candidate }}" {{ block.shopify_attributes }}>
   <div class="pdp-bundle-grid-{{ ai_gen_id }}">
     <div class="pdp-left-{{ ai_gen_id }}">
       {% assign first_thumb = bundle_product.featured_image | default: bundle_product.images.first %}

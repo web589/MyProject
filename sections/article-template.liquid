@@ -11,8 +11,7 @@
     assign blog_center_home_link = blog_center_menu.links | first
   endif
 
-  assign article_cta_product = article.metafields.custom.article_product_cta.value
-  assign article_recommended_products = article.metafields.custom.article_recommended_products.value
+  assign blog_recommended_product_handles = 'venus-e-mini,venus-e-3,venus-e-4,venus-e-max' | split: ','
 
   assign privacy_policy_url = '/policies/privacy-policy'
   assign newsletter_form_id = 'blog-article-newsletter-' | append: section.id
@@ -40,7 +39,37 @@
   }
 
   .blog-article__hero .breadcrumb {
+    align-items: center;
+    color: #7b8794;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    line-height: 1.5;
+    max-width: 100%;
+    overflow: hidden;
     margin: 0 0 58px;
+  }
+
+  .blog-article__hero .breadcrumb > * {
+    flex: 0 0 auto;
+  }
+
+  .blog-article__hero .breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .blog-article__hero .breadcrumb a:hover,
+  .blog-article__hero .breadcrumb a:focus-visible {
+    color: var(--blog-article-blue);
+  }
+
+  .blog-article__hero .breadcrumb__current {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .blog-article__heading {
@@ -155,16 +184,6 @@
     min-width: 0;
   }
 
-  .blog-article__excerpt {
-    font-size: clamp(18px, 2vw, 22px);
-    line-height: 1.42;
-    margin: 0 0 34px;
-  }
-
-  .blog-article__excerpt:empty {
-    display: none;
-  }
-
   .blog-article__toc {
     border-left: 3px solid var(--blog-article-blue);
     margin: 0 0 48px;
@@ -189,10 +208,6 @@
 
   .blog-article__toc-item {
     margin: 0;
-  }
-
-  .blog-article__toc-item--sub {
-    padding-left: 16px;
   }
 
   .blog-article__toc-link {
@@ -241,7 +256,6 @@
   }
 
   .blog-article__newsletter,
-  .blog-article__sticky-cta,
   .blog-article__recommended {
     margin-bottom: 32px;
   }
@@ -311,7 +325,7 @@
     margin: 0;
   }
 
-  .blog-article__sticky-cta {
+  .blog-article__sidebar-sticky {
     position: sticky;
     top: calc(var(--blog-center-sticky-height, 0px) + 24px);
   }
@@ -459,7 +473,7 @@
       margin-top: 48px;
     }
 
-    .blog-article__sticky-cta {
+    .blog-article__sidebar-sticky {
       position: static;
     }
 
@@ -499,17 +513,15 @@
             {%- if section.settings.blog_show_date and article.published_at != blank -%}
               {{ article.published_at | time_tag: format: 'month_day_year' }}
             {%- endif -%}
-            {%- if section.settings.blog_show_author and article.author != blank and article.published_at != blank -%}
+            {%- if section.settings.blog_show_date and article.published_at != blank -%}
               <span class="blog-article__meta-separator" aria-hidden="true">|</span>
             {%- endif -%}
-            {%- if section.settings.blog_show_author and article.author != blank -%}
-              <span>{{ article.author | escape }}</span>
-            {%- endif -%}
+            <span>Venus E</span>
           </div>
 
           {%- if section.settings.social_sharing_blog -%}
             <div class="blog-article__social">
-              {%- render 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image -%}
+              {%- render 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image, show_labels: false -%}
             </div>
           {%- endif -%}
         </div>
@@ -522,7 +534,7 @@
       <div class="page-width">
         <div class="blog-article__category-inner">
           {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
-            <a class="blog-article__category-heading" href="{{ blog_center_home_link.url }}">
+            <a class="blog-article__category-heading" href="{{ routes.blogs_url | default: '/blogs' }}">
               {{ 'blogs.article.blog_center' | t }}
             </a>
           {%- else -%}
@@ -533,7 +545,7 @@
 
           <nav class="blog-article__category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
           {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
-            <a class="blog-article__category-link" href="{{ blog_center_home_link.url }}">
+            <a class="blog-article__category-link" href="{{ routes.blogs_url | default: '/blogs' }}">
               {{ 'blogs.article.all' | t }}
             </a>
           {%- endif -%}
@@ -577,17 +589,12 @@
   <div class="page-width">
     <div class="blog-article__layout">
       <div class="blog-article__main">
-        {%- if article.excerpt != blank -%}
-          <div class="rte blog-article__excerpt">{{ article.excerpt }}</div>
-        {%- endif -%}
-
-        <nav class="blog-article__toc" data-blog-article-toc hidden aria-label="{{ 'blogs.article.table_of_contents' | t }}">
-          <div class="blog-article__toc-title">{{ 'blogs.article.table_of_contents' | t }}</div>
-          <ol class="blog-article__toc-list" data-blog-article-toc-list></ol>
-        </nav>
-
         {%- if article.content != blank -%}
           <div class="article__body rte blog-article__body" data-blog-article-body>
+            <nav class="blog-article__toc" data-blog-article-toc hidden aria-label="{{ 'blogs.article.table_of_contents' | t }}">
+              <div class="blog-article__toc-title">{{ 'blogs.article.table_of_contents' | t }}</div>
+              <ol class="blog-article__toc-list" data-blog-article-toc-list></ol>
+            </nav>
             {{ article.content }}
           </div>
         {%- endif -%}
@@ -732,63 +739,60 @@
       </div>
 
       <aside class="blog-article__sidebar">
-        <section class="blog-article__newsletter" aria-labelledby="BlogArticleNewsletter-{{ section.id }}">
-          <h2 class="blog-article__newsletter-title" id="BlogArticleNewsletter-{{ section.id }}">
-            {{ 'blogs.article.newsletter_title' | t }}
-          </h2>
-          <p class="blog-article__newsletter-copy">{{ 'blogs.article.newsletter_text' | t }}</p>
+        <div class="blog-article__sidebar-sticky">
+          <section class="blog-article__newsletter" aria-labelledby="BlogArticleNewsletter-{{ section.id }}">
+            <h2 class="blog-article__newsletter-title" id="BlogArticleNewsletter-{{ section.id }}">
+              {{ 'blogs.article.newsletter_title' | t }}
+            </h2>
+            <p class="blog-article__newsletter-copy">{{ 'blogs.article.newsletter_text' | t }}</p>
 
-          {%- form 'customer', id: newsletter_form_id -%}
-            {%- if form.posted_successfully? -%}
-              <p class="blog-article__form-message note note--success">
-                {{ 'general.newsletter_form.newsletter_confirmation' | t }}
-              </p>
-            {%- else -%}
-              {{ form.errors | default_errors }}
-              <input type="hidden" name="contact[tags]" value="prospect,newsletter">
-              <label class="visually-hidden" for="BlogArticleEmail-{{ section.id }}">
-                {{ 'general.newsletter_form.newsletter_email' | t }}
-              </label>
-              <input
-                class="input-full"
-                type="email"
-                name="contact[email]"
-                id="BlogArticleEmail-{{ section.id }}"
-                value="{% if customer %}{{ customer.email }}{% endif %}"
-                placeholder="{{ 'blogs.article.newsletter_email' | t }}"
-                autocorrect="off"
-                autocapitalize="off"
-                required
-              >
-              <label class="blog-article__consent" for="BlogArticleConsent-{{ section.id }}">
-                <input id="BlogArticleConsent-{{ section.id }}" type="checkbox" name="contact[accepts_marketing]" value="true" required>
-                <span>{{ 'blogs.article.newsletter_consent_html' | t: privacy_url: privacy_policy_url }}</span>
-              </label>
-              <button class="blog-article__newsletter-submit" type="submit">
-                {{ 'blogs.article.newsletter_submit' | t }}
-              </button>
-            {%- endif -%}
-          {%- endform -%}
-        </section>
+            {%- form 'customer', id: newsletter_form_id -%}
+              {%- if form.posted_successfully? -%}
+                <p class="blog-article__form-message note note--success">
+                  {{ 'general.newsletter_form.newsletter_confirmation' | t }}
+                </p>
+              {%- else -%}
+                {{ form.errors | default_errors }}
+                <input type="hidden" name="contact[tags]" value="prospect,newsletter">
+                <label class="visually-hidden" for="BlogArticleEmail-{{ section.id }}">
+                  {{ 'general.newsletter_form.newsletter_email' | t }}
+                </label>
+                <input
+                  class="input-full"
+                  type="email"
+                  name="contact[email]"
+                  id="BlogArticleEmail-{{ section.id }}"
+                  value="{% if customer %}{{ customer.email }}{% endif %}"
+                  placeholder="{{ 'blogs.article.newsletter_email' | t }}"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  required
+                >
+                <label class="blog-article__consent" for="BlogArticleConsent-{{ section.id }}">
+                  <input id="BlogArticleConsent-{{ section.id }}" type="checkbox" name="contact[accepts_marketing]" value="true" required>
+                  <span>{{ 'blogs.article.newsletter_consent_html' | t: privacy_url: privacy_policy_url }}</span>
+                </label>
+                <button class="blog-article__newsletter-submit" type="submit">
+                  {{ 'blogs.article.newsletter_submit' | t }}
+                </button>
+              {%- endif -%}
+            {%- endform -%}
+          </section>
 
-        {%- if article_cta_product != blank -%}
-          <div class="blog-article__sticky-cta">
-            {%- render 'blog-article-product-card', product: article_cta_product, variant: 'cta' -%}
-          </div>
-        {%- endif -%}
-
-        {%- if article_recommended_products != blank -%}
           <section class="blog-article__recommended" aria-labelledby="BlogArticleRecommended-{{ section.id }}">
             <h2 class="blog-article__recommended-title" id="BlogArticleRecommended-{{ section.id }}">
               {{ 'blogs.article.recommended_products' | t }}
             </h2>
             <div class="blog-article__recommended-list">
-              {%- for recommended_product in article_recommended_products limit: 3 -%}
-                {%- render 'blog-article-product-card', product: recommended_product, variant: 'compact' -%}
+              {%- for product_handle in blog_recommended_product_handles -%}
+                {%- assign recommended_product = all_products[product_handle] -%}
+                {%- if recommended_product != blank -%}
+                  {%- render 'blog-article-product-card', product: recommended_product, variant: 'compact' -%}
+                {%- endif -%}
               {%- endfor -%}
             </div>
           </section>
-        {%- endif -%}
+        </div>
       </aside>
     </div>
   </div>
@@ -819,7 +823,7 @@
   "dateCreated": {{ article.created_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
   "author": {
     "@type": "Person",
-    "name": {{ article.author | json }}
+    "name": "Venus E"
   },
   "publisher": {
     "@type": "Organization",
@@ -844,12 +848,6 @@
       "type": "checkbox",
       "id": "blog_show_date",
       "label": "t:sections.article-template.settings.blog_show_date.label",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "blog_show_author",
-      "label": "t:sections.article-template.settings.blog_show_author.label",
       "default": true
     },
     {
