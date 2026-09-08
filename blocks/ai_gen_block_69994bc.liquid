@@ -109,6 +109,7 @@
     </div>, Horizontal offset滑块步长为1, 文本数可以自由添加或删除
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
 {% liquid
   assign breadcrumb_current_text = block.settings.item_5_text
   if product != blank
@@ -181,7 +182,7 @@
   }
 {% endstyle %}
 
-<breadcrumb-nav-{{ ai_gen_id }} class="ai-breadcrumb-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<breadcrumb-nav-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target ai-breadcrumb-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
   <div class="ai-breadcrumb-inner-{{ ai_gen_id }}">
     <nav class="ai-breadcrumb-list-{{ ai_gen_id }}" aria-label="Breadcrumb">
       {% assign item_1_href = block.settings.item_1_url | default: routes.root_url %}
@@ -265,6 +266,12 @@
 {
   "name": "Breadcrumb navigation",
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
     {
       "type": "header",
       "content": "Layout"

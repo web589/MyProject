@@ -185,6 +185,7 @@
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 {% assign newsletter_form_id = 'newsletter-form-' | append: ai_gen_id %}
 {% assign newsletter_anchor_id = 'newsletter-' | append: ai_gen_id %}
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
 {% assign newsletter_return_to = request.path | append: '?newsletter_success=' | append: ai_gen_id %}
 
 {% style %}
@@ -500,6 +501,7 @@
   }
 {% endstyle %}
 
+<div{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target">
 <newsletter-signup-{{ ai_gen_id }}
   id="{{ newsletter_anchor_id }}"
   class="ai-newsletter-section-{{ ai_gen_id }}"
@@ -639,6 +641,7 @@
     </div>
   </div>
 </newsletter-signup-{{ ai_gen_id }}>
+</div>
 
 <script>
   (function() {
@@ -922,6 +925,12 @@
   "name": "Newsletter signup",
   "tag": null,
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
     {
       "type": "header",
       "content": "Content"

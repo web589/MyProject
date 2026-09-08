@@ -46,25 +46,68 @@
     endunless
   endfor
 
+  assign bundle_variant_1 = blank
+  assign bundle_variant_2 = blank
+  assign bundle_variant_3 = blank
+  for bundle_variant in product.product.variants limit: 3
+    case forloop.index
+      when 1
+        assign bundle_variant_1 = bundle_variant
+      when 2
+        assign bundle_variant_2 = bundle_variant
+      when 3
+        assign bundle_variant_3 = bundle_variant
+    endcase
+  endfor
+
+  assign bundle_variant_1_available = false
+  assign bundle_variant_2_available = false
+  assign bundle_variant_3_available = false
+  if bundle_variant_1 != blank and bundle_variant_1.available
+    assign bundle_variant_1_available = true
+  endif
+  if bundle_variant_2 != blank and bundle_variant_2.available
+    assign bundle_variant_2_available = true
+  endif
+  if bundle_variant_3 != blank and bundle_variant_3.available
+    assign bundle_variant_3_available = true
+  endif
+
   assign bundle_switch_quantity = 0
   assign bundle_suggestion_variant = blank
   assign bundle_suggestion_savings = 0
   assign bundle_suggestion_anchor_key = blank
   assign bundle_suggestion_cart_keys = blank
   assign bundle_current_total = 0
-  assign bundle_target_present = false
   assign bundle_product_id = product.product.id
+  assign bundle_related_item_count = 0
+  assign bundle_all_related_lines_resolved = true
 
   for cart_item in cart.items
     if cart_item.product.id == bundle_product_id
+      assign bundle_related_item_count = bundle_related_item_count | plus: 1
       assign cart_item_pack_size = cart_item.properties['_venus_pack_size'] | plus: 0
+
+      if cart_item_pack_size < 1 or cart_item_pack_size > 3
+        assign cart_item_pack_size = 0
+        if bundle_variant_1 != blank and cart_item.variant_id == bundle_variant_1.id
+          assign cart_item_pack_size = 1
+        elsif bundle_variant_2 != blank and cart_item.variant_id == bundle_variant_2.id
+          assign cart_item_pack_size = 2
+        elsif bundle_variant_3 != blank and cart_item.variant_id == bundle_variant_3.id
+          assign cart_item_pack_size = 3
+        endif
+      endif
+
       if cart_item_pack_size < 1
-        for bundle_variant in cart_item.product.variants limit: 3
-          if bundle_variant.id == cart_item.variant_id
-            assign cart_item_pack_size = forloop.index
-            break
-          endif
-        endfor
+        assign cart_item_variant_title = cart_item.variant.title | default: ''
+        if cart_item_variant_title contains '3×' or cart_item_variant_title contains '3x'
+          assign cart_item_pack_size = 3
+        elsif cart_item_variant_title contains '2×' or cart_item_variant_title contains '2x'
+          assign cart_item_pack_size = 2
+        elsif cart_item_variant_title contains '1×' or cart_item_variant_title contains '1x'
+          assign cart_item_pack_size = 1
+        endif
       endif
 
       if cart_item_pack_size > 0 and cart_item_pack_size <= 3
@@ -80,28 +123,170 @@
         else
           assign bundle_suggestion_cart_keys = bundle_suggestion_cart_keys | append: '||' | append: cart_item.key
         endif
+      else
+        assign bundle_all_related_lines_resolved = false
       endif
     endif
   endfor
 
-  if bundle_switch_quantity == 2 or bundle_switch_quantity == 3
-    for bundle_variant in product.product.variants limit: 3
-      if forloop.index == bundle_switch_quantity
-        assign bundle_suggestion_variant = bundle_variant
-        break
-      endif
-    endfor
+  assign bundle_suggestion_ready = false
+  assign bundle_recommended_price = 0
+  assign bundle_best_count_1 = 0
+  assign bundle_best_count_2 = 0
+  assign bundle_best_count_3 = 0
+  assign bundle_target_line_count = 0
+  assign bundle_best_found = false
 
-    if bundle_suggestion_variant != blank
+  if bundle_related_item_count > 0 and bundle_all_related_lines_resolved and bundle_switch_quantity >= 2 and bundle_switch_quantity <= 99
+    assign bundle_max_count_3 = bundle_switch_quantity | divided_by: 3
+    assign bundle_max_count_2 = bundle_switch_quantity | divided_by: 2
+
+    for bundle_count_3 in (0..bundle_max_count_3)
+      for bundle_count_2 in (0..bundle_max_count_2)
+        assign bundle_units_3 = bundle_count_3 | times: 3
+        assign bundle_units_2 = bundle_count_2 | times: 2
+        assign bundle_count_1 = bundle_switch_quantity | minus: bundle_units_3 | minus: bundle_units_2
+        if bundle_count_1 >= 0
+          assign bundle_candidate_valid = true
+
+          if bundle_count_1 > 0
+            unless bundle_variant_1_available
+              assign bundle_candidate_valid = false
+            endunless
+          endif
+          if bundle_count_2 > 0
+            unless bundle_variant_2_available
+              assign bundle_candidate_valid = false
+            endunless
+          endif
+          if bundle_count_3 > 0
+            unless bundle_variant_3_available
+              assign bundle_candidate_valid = false
+            endunless
+          endif
+
+          if bundle_switch_quantity == 2 and bundle_count_2 != 1
+            assign bundle_candidate_valid = false
+          endif
+          if bundle_switch_quantity == 3 and bundle_count_3 != 1
+            assign bundle_candidate_valid = false
+          endif
+
+          if bundle_candidate_valid
+            assign bundle_candidate_price = 0
+            if bundle_count_1 > 0
+              assign bundle_candidate_price = bundle_variant_1.price | times: bundle_count_1
+            endif
+            if bundle_count_2 > 0
+              assign bundle_variant_2_total = bundle_variant_2.price | times: bundle_count_2
+              assign bundle_candidate_price = bundle_candidate_price | plus: bundle_variant_2_total
+            endif
+            if bundle_count_3 > 0
+              assign bundle_variant_3_total = bundle_variant_3.price | times: bundle_count_3
+              assign bundle_candidate_price = bundle_candidate_price | plus: bundle_variant_3_total
+            endif
+            assign bundle_candidate_line_count = bundle_count_1 | plus: bundle_count_2 | plus: bundle_count_3
+
+            assign bundle_candidate_is_better = false
+            if bundle_best_found == false
+              assign bundle_candidate_is_better = true
+            elsif bundle_candidate_price < bundle_recommended_price
+              assign bundle_candidate_is_better = true
+            elsif bundle_candidate_price == bundle_recommended_price
+              if bundle_candidate_line_count < bundle_target_line_count
+                assign bundle_candidate_is_better = true
+              elsif bundle_candidate_line_count == bundle_target_line_count and bundle_count_3 > bundle_best_count_3
+                assign bundle_candidate_is_better = true
+              endif
+            endif
+
+            if bundle_candidate_is_better
+              assign bundle_best_found = true
+              assign bundle_recommended_price = bundle_candidate_price
+              assign bundle_best_count_1 = bundle_count_1
+              assign bundle_best_count_2 = bundle_count_2
+              assign bundle_best_count_3 = bundle_count_3
+              assign bundle_target_line_count = bundle_candidate_line_count
+            endif
+          endif
+        endif
+      endfor
+    endfor
+  endif
+
+  if bundle_best_found
+    assign bundle_suggestion_savings = bundle_current_total | minus: bundle_recommended_price
+    if bundle_suggestion_savings > 0
+      assign bundle_suggestion_ready = true
+    endif
+
+    if bundle_switch_quantity == 2 and bundle_best_count_2 == 1
+      assign bundle_suggestion_variant = bundle_variant_2
       for cart_item in cart.items
         if cart_item.product.id == bundle_product_id and cart_item.variant_id == bundle_suggestion_variant.id
-          assign bundle_target_present = true
+          assign bundle_suggestion_ready = false
           break
         endif
       endfor
-      assign bundle_suggestion_savings = bundle_current_total | minus: bundle_suggestion_variant.price
+    elsif bundle_switch_quantity == 3 and bundle_best_count_3 == 1
+      assign bundle_suggestion_variant = bundle_variant_3
+      for cart_item in cart.items
+        if cart_item.product.id == bundle_product_id and cart_item.variant_id == bundle_suggestion_variant.id
+          assign bundle_suggestion_ready = false
+          break
+        endif
+      endfor
     endif
   endif
+
+  assign bundle_suggestion_summary = blank
+  assign bundle_target_items_json = '['
+  assign bundle_target_items_added = 0
+  if bundle_suggestion_ready
+    if bundle_best_count_3 > 0
+      if bundle_suggestion_summary != blank
+        assign bundle_suggestion_summary = bundle_suggestion_summary | append: ' + '
+      endif
+      if bundle_best_count_3 == 1
+        assign bundle_suggestion_summary = bundle_suggestion_summary | append: '3× Set'
+      else
+        assign bundle_suggestion_summary = bundle_suggestion_summary | append: bundle_best_count_3 | append: ' × 3× Set'
+      endif
+      assign bundle_target_items_json = bundle_target_items_json | append: '{"id":' | append: bundle_variant_3.id | append: ',"quantity":' | append: bundle_best_count_3 | append: '}'
+      assign bundle_target_items_added = bundle_target_items_added | plus: 1
+    endif
+    if bundle_best_count_2 > 0
+      if bundle_suggestion_summary != blank
+        assign bundle_suggestion_summary = bundle_suggestion_summary | append: ' + '
+      endif
+      if bundle_best_count_2 == 1
+        assign bundle_suggestion_summary = bundle_suggestion_summary | append: '2× Set'
+      else
+        assign bundle_suggestion_summary = bundle_suggestion_summary | append: bundle_best_count_2 | append: ' × 2× Set'
+      endif
+      if bundle_target_items_added > 0
+        assign bundle_target_items_json = bundle_target_items_json | append: ','
+      endif
+      assign bundle_target_items_json = bundle_target_items_json | append: '{"id":' | append: bundle_variant_2.id | append: ',"quantity":' | append: bundle_best_count_2 | append: '}'
+      assign bundle_target_items_added = bundle_target_items_added | plus: 1
+    endif
+    if bundle_best_count_1 > 0
+      if bundle_suggestion_summary != blank
+        assign bundle_suggestion_summary = bundle_suggestion_summary | append: ' + '
+      endif
+      if bundle_best_count_1 == 1
+        assign bundle_suggestion_summary = bundle_suggestion_summary | append: '1× Einzelgerät'
+      else
+        assign bundle_suggestion_summary = bundle_suggestion_summary | append: bundle_best_count_1 | append: ' × Einzelgeräte'
+      endif
+      if bundle_target_items_added > 0
+        assign bundle_target_items_json = bundle_target_items_json | append: ','
+      endif
+      assign bundle_target_items_json = bundle_target_items_json | append: '{"id":' | append: bundle_variant_1.id | append: ',"quantity":' | append: bundle_best_count_1 | append: '}'
+      assign bundle_target_items_added = bundle_target_items_added | plus: 1
+    endif
+  endif
+  assign bundle_target_items_json = bundle_target_items_json | append: ']'
 -%}
 <div
   class="cart__item"
@@ -194,8 +379,8 @@
 
     </div>
 
-    {% if product.key == bundle_suggestion_anchor_key and bundle_suggestion_variant != blank and bundle_suggestion_variant.available and bundle_target_present == false and bundle_suggestion_savings > 0 %}
-      <div class="cart-bundle-suggestion" data-bundle-suggestion>
+    {% if product.key == bundle_suggestion_anchor_key and bundle_suggestion_ready %}
+      <div class="cart-bundle-suggestion{% if bundle_target_line_count > 1 %} cart-bundle-suggestion--combination{% endif %}" data-bundle-suggestion>
         <div class="cart-bundle-suggestion__header">
           <span class="cart-bundle-suggestion__label">
             <svg class="cart-bundle-suggestion__tag-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -208,7 +393,11 @@
         </div>
 
         <p class="cart-bundle-suggestion__headline">
-          Mit dem {{ bundle_switch_quantity }}×-Set sparst du {{ bundle_suggestion_savings | money }}
+          {% if bundle_target_line_count == 1 %}
+            Mit dem {{ bundle_switch_quantity }}×-Set sparst du {{ bundle_suggestion_savings | money }}
+          {% else %}
+            Mit der Bundle-Kombination {{ bundle_suggestion_summary }} sparst du {{ bundle_suggestion_savings | money }}
+          {% endif %}
         </p>
 
         <div class="cart-bundle-suggestion__comparison" aria-label="Preisvergleich">
@@ -218,8 +407,8 @@
           </div>
           <span class="cart-bundle-suggestion__comparison-arrow" aria-hidden="true">→</span>
           <div class="cart-bundle-suggestion__comparison-item cart-bundle-suggestion__comparison-item--bundle">
-            <span>{{ bundle_switch_quantity }}× Set</span>
-            <strong>{{ bundle_suggestion_variant.price | money }}</strong>
+            <span>{{ bundle_suggestion_summary }}</span>
+            <strong>{{ bundle_recommended_price | money }}</strong>
           </div>
         </div>
 
@@ -229,10 +418,15 @@
           data-bundle-switch
           data-cart-key="{{ product.key | escape }}"
           data-cart-keys="{{ bundle_suggestion_cart_keys | split: '||' | json | escape }}"
-          data-target-variant-id="{{ bundle_suggestion_variant.id }}"
+          data-target-items="{{ bundle_target_items_json | escape }}"
+          data-target-variant-id="{% if bundle_suggestion_variant != blank %}{{ bundle_suggestion_variant.id }}{% endif %}"
           data-target-quantity="1"
         >
-          <span>Zum {{ bundle_switch_quantity }}×-Set wechseln</span>
+          {% if bundle_target_line_count == 1 %}
+            <span>Zum {{ bundle_switch_quantity }}×-Set wechseln</span>
+          {% else %}
+            <span>Zur Bundle-Kombination wechseln</span>
+          {% endif %}
           <span class="cart-bundle-suggestion__button-arrow" aria-hidden="true">→</span>
         </button>
 

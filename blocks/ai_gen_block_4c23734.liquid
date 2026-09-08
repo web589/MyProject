@@ -114,6 +114,7 @@
     </div>, 每一个text前面的图标要变成可替换的图片
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
 
 {% style %}
   .ai-trust-banner-{{ ai_gen_id }} {
@@ -224,7 +225,7 @@
 %}
 
 {% if trust_items != blank or is_product_context == false %}
-<trust-banner-{{ ai_gen_id }} class="ai-trust-banner-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<trust-banner-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target ai-trust-banner-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
   <div class="ai-trust-container-{{ ai_gen_id }}">
     <div class="ai-trust-list-{{ ai_gen_id }}">
       {% if use_product_trust_items %}
@@ -302,6 +303,12 @@
 {
   "name": "Trust banner",
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
     {
       "type": "select",
       "id": "content_source",

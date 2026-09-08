@@ -66,10 +66,13 @@
   {% endif %}
 {%- endstyle -%}
 
+{% assign pdp_anchor_id = section.settings.anchor_id | handle %}
+
 <div
+  {% if pdp_anchor_id != blank %}id="{{ pdp_anchor_id }}"{% endif %}
   data-section-id="{{ section.id }}"
   data-section-type="video-section"
-  class="video-parent-section hero hero--{{ section.id }} hero--{{ section.settings.section_height }} hero--mobile--{{ section.settings.mobile_height }}{% if section.settings.constrain_video_width %} hero--constrained{% endif %}{% if section.settings.remove_media_overlay %} hero--no-media-overlay{% endif %}"
+  class="pdp-anchor-target video-parent-section hero hero--{{ section.id }} hero--{{ section.settings.section_height }} hero--mobile--{{ section.settings.mobile_height }}{% if section.settings.constrain_video_width %} hero--constrained{% endif %}{% if section.settings.remove_media_overlay %} hero--no-media-overlay{% endif %}"
   data-mobile-natural="false"
   data-aos="hero__animation">
 
@@ -181,6 +184,12 @@
   "name": "t:sections.hero-video.name",
   "class": "index-section--hero",
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
     {
       "type": "textarea",
       "id": "title",

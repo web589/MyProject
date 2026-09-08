@@ -3,12 +3,14 @@
   keeping a second set of block settings. This makes the homepage the only
   content and style source for this module.
 {% endcomment %}
-<div
-  id="HomepageTestimonialsSync-{{ block.id }}"
-  data-homepage-testimonials-sync
-  aria-busy="true"
-  {{ block.shopify_attributes }}
-></div>
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
+<div{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target" {{ block.shopify_attributes }}>
+  <div
+    id="HomepageTestimonialsSync-{{ block.id }}"
+    data-homepage-testimonials-sync
+    aria-busy="true"
+  ></div>
+</div>
 
 <script>
   (function () {
@@ -81,7 +83,14 @@
 {% schema %}
 {
   "name": "Homepage testimonial sync",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    }
+  ],
   "presets": [
     {
       "name": "Homepage testimonial sync"

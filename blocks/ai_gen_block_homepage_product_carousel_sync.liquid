@@ -3,12 +3,14 @@
   Homepage block settings and live Shopify product data remain the single
   source for products, prices, inventory states, badges, styles and scripts.
 {% endcomment %}
-<div
-  id="HomepageProductCarouselSync-{{ block.id }}"
-  data-homepage-product-carousel-sync
-  aria-busy="true"
-  {{ block.shopify_attributes }}
-></div>
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
+<div{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target" {{ block.shopify_attributes }}>
+  <div
+    id="HomepageProductCarouselSync-{{ block.id }}"
+    data-homepage-product-carousel-sync
+    aria-busy="true"
+  ></div>
+</div>
 
 <script>
   (function () {
@@ -79,7 +81,14 @@
 {% schema %}
 {
   "name": "Homepage product sync",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    }
+  ],
   "blocks": [
     {
       "type": "venus_product_category"

@@ -1,4 +1,5 @@
 {% assign scenario_id = block.id | replace: '_', '' | downcase %}
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
 {% liquid
   assign is_product_context = false
   assign use_product_scenario = false
@@ -209,7 +210,7 @@
 {% endstyle %}
 
 {% if scenario_image != blank or scenario_heading != blank or scenario_text != blank %}
-<section class="pdp-scenario-item-{{ scenario_id }}" data-scenario-item {{ block.shopify_attributes }}>
+<section{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target pdp-scenario-item-{{ scenario_id }}" data-scenario-item {{ block.shopify_attributes }}>
   {% if block.settings.show_section_header %}
     {% if scenario_section_title != blank or scenario_section_description != blank %}
       <div class="pdp-scenario-item__header-{{ scenario_id }}">
@@ -267,6 +268,7 @@
   "name": "Scenario item",
   "tag": null,
   "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Anchor ID", "info": "Use the same value in navigation links, without the # symbol." },
     { "type": "select", "id": "content_source", "label": "内容来源", "options": [{ "value": "theme_editor", "label": "右侧 Theme Editor（默认）" }, { "value": "pdp_content", "label": "PDP 后台内容（备份/旧模式）" }], "default": "theme_editor", "info": "选择右侧 Theme Editor 后，此场景只读取当前模板的下方字段。" },
     { "type": "header", "content": "Section header" },
     { "type": "checkbox", "id": "show_section_header", "label": "Show section header", "default": false },

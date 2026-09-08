@@ -173,6 +173,7 @@
     </html>
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
 
 {% style %}
   .ai-format-cards-container-{{ ai_gen_id }} {
@@ -306,7 +307,7 @@
   }
 {% endstyle %}
 
-<div class="ai-format-cards-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<div{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target ai-format-cards-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
   <div class="ai-format-cards-inner-{{ ai_gen_id }}">
     {% if block.settings.section_title != blank %}
       <h2 class="ai-format-cards-title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
@@ -377,6 +378,12 @@
   "name": "Drei Formate Karten",
   "tag": null,
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
     {
       "type": "header",
       "content": "Abschnitt"

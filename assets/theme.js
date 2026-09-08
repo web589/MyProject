@@ -2227,8 +2227,9 @@ theme.recentlyViewed = {
 
   /*============================================================================
     Bundle suggestions
-    - Offer the matching 2×/3× variant when the same product reaches that quantity
-    - Keep the change explicit: add the bundle variant, then remove all old lines
+    - Offer the lowest-price 1×/2×/3× combination when the same product reaches
+      at least two devices
+    - Keep the change explicit: add the recommended variants, then remove all old lines
   ==============================================================================*/
   (function() {
     if (window.themeBundleSuggestionInitialized) return;
@@ -2296,9 +2297,30 @@ theme.recentlyViewed = {
       if (!cartKeys.length && button.dataset.cartKey) {
         cartKeys = [button.dataset.cartKey];
       }
-      const targetVariantId = Number(button.dataset.targetVariantId);
-      const targetQuantity = Number(button.dataset.targetQuantity) || 1;
-      if (!cartKeys.length || !Number.isFinite(targetVariantId) || targetVariantId < 1) return;
+      let targetItems = [];
+      if (button.dataset.targetItems) {
+        try {
+          const parsedItems = JSON.parse(button.dataset.targetItems);
+          if (Array.isArray(parsedItems)) {
+            targetItems = parsedItems
+              .map(item => ({
+                id: Number(item && item.id),
+                quantity: Number(item && item.quantity)
+              }))
+              .filter(item => Number.isInteger(item.id) && item.id > 0 && Number.isInteger(item.quantity) && item.quantity > 0);
+          }
+        } catch (error) {
+          targetItems = [];
+        }
+      }
+      if (!targetItems.length) {
+        const targetVariantId = Number(button.dataset.targetVariantId);
+        const targetQuantity = Number(button.dataset.targetQuantity) || 1;
+        if (Number.isInteger(targetVariantId) && targetVariantId > 0 && Number.isInteger(targetQuantity) && targetQuantity > 0) {
+          targetItems = [{ id: targetVariantId, quantity: targetQuantity }];
+        }
+      }
+      if (!cartKeys.length || !targetItems.length) return;
 
       const originalText = button.textContent;
       button.disabled = true;
@@ -2317,7 +2339,7 @@ theme.recentlyViewed = {
             'X-Requested-With': 'XMLHttpRequest'
           },
           body: JSON.stringify({
-            items: [{ id: targetVariantId, quantity: targetQuantity }]
+            items: targetItems
           })
         }));
         const addResult = await readJson(addResponse, 'Das Bundle konnte nicht hinzugefügt werden.');

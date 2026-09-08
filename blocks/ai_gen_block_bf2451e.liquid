@@ -167,6 +167,7 @@
     </div>, 把所有Statistic 模块删除，再把Top text删除, 增加一个可以调节容器外部与上下模块间距的设置，再增加一个可以调节容器内上下边距的设置, 请帮我把当前这个 section 里 "Maximum width"(布局最大宽度)这个滑块设置的 step(步长)从 40 改成 10,其他不用变。, 其他地方不变，分别加一个可以选择标题或描述区是左对齐、居中还有右对齐的设置
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign pdp_anchor_id = block.settings.anchor_id | handle %}
 
 {% style %}
   .power-feature-module-{{ ai_gen_id }} {
@@ -282,7 +283,7 @@
   endif
 %}
 {% if smart_energy_title != blank or smart_energy_description != blank or smart_energy_image != blank %}
-<div class="power-feature-module-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<div{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target power-feature-module-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
   <div class="power-feature-inner-{{ ai_gen_id }}">
     {% if smart_energy_title != blank %}
       <h2 class="power-heading-main-{{ ai_gen_id }}">{{ smart_energy_title }}</h2>
@@ -316,6 +317,12 @@
 {
   "name": "High power feature",
   "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol."
+    },
     {
       "type": "select",
       "id": "content_source",
