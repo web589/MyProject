@@ -727,6 +727,7 @@
           return {
             nav,
             targetId,
+            targetElement,
             scrollTarget: this.getScrollTarget(targetElement)
           };
         }).filter(Boolean);
@@ -742,7 +743,7 @@
         const targetsByPosition = navigationTargets
           .map(target => ({
             ...target,
-            top: target.scrollTarget.getBoundingClientRect().top
+            top: target.targetElement.getBoundingClientRect().top
           }))
           .sort((first, second) => first.top - second.top);
 

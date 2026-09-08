@@ -1752,10 +1752,11 @@
           this.zeroVatVariantUnavailable = false;
           this.showVatFallback(false);
           this.updateVatUI();
-          // The regular-tax choice is the safe fallback when the zero-tax
-          // companion variant is unavailable. Attribute persistence is useful
-          // for checkout context, but must not prevent that fallback from
-          // continuing if Shopify returns a non-JSON cart response.
+          // The regular-tax choice is an explicit user-selected fallback when
+          // the zero-tax companion variant is unavailable. Attribute
+          // persistence is useful for checkout context, but must not prevent
+          // that explicit fallback from continuing if Shopify returns a
+          // non-JSON cart response.
           return this.persistAttributes()
             .catch(() => {})
             .then(() => {
@@ -1896,13 +1897,11 @@
             this.updateVatUI();
             this.resetCheckoutButton(submitter);
             if (error && error.canFallbackToStandardVat) {
-              try {
-                await this.selectRegularVat();
-                this.setStatus('Die 0-%-MwSt.-Variante ist nicht verfügbar. Der reguläre MwSt.-Satz wurde ausgewählt. Bitte klicke erneut auf „Zur Kasse“.');
-              } catch (fallbackError) {
-                this.showVatFallback(true);
-                this.setStatus(fallbackError.message || error.message || 'Die MwSt.-Auswahl konnte nicht angewendet werden.');
-              }
+              // Never change the tax mode implicitly. Keep the 0% choice
+              // visible and let the shopper explicitly choose the regular
+              // VAT mode if that is what they want.
+              this.showVatFallback(true);
+              this.setStatus('Die 0-%-MwSt.-Variante ist nicht verfügbar. Bitte prüfe den Lagerbestand oder wähle den regulären MwSt.-Satz manuell.');
             } else {
               this.showVatFallback(false);
               this.setStatus(error.message || 'Die MwSt.-Auswahl konnte nicht angewendet werden.');
