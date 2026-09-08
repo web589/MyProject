@@ -565,6 +565,7 @@
   assign sticky_product = product
   assign sticky_variant = sticky_product.selected_or_first_available_variant
   assign sticky_title = sticky_product.title | default: block.settings.product_title
+  assign sticky_title = sticky_title | replace: 'Smart Meter für VENUS E', ''
   assign sticky_title = sticky_title | strip
   assign sticky_image = sticky_variant.featured_image | default: sticky_product.featured_image | default: block.settings.mini_img
   assign sticky_price = sticky_variant.price
