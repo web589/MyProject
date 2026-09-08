@@ -1457,7 +1457,10 @@
     }
 
     shortProductTitle(value) {
-      return String(value || '').split(/[–-]/)[0].trim();
+      return String(value || '')
+        .replace(' Smart Meter für VENUS E', '')
+        .replace('Smart Meter für VENUS E', '')
+        .trim();
     }
 
     getOptionCurrentPrice(option) {
@@ -1511,7 +1514,7 @@
       if (stickyTitle) {
         const purchaseTitle = this.querySelector('.pdp-title-{{ ai_gen_id }}');
         const sourceTitle = g1 && g1.title ? g1.title : (purchaseTitle ? purchaseTitle.textContent : '');
-        stickyTitle.textContent = sourceTitle;
+        stickyTitle.textContent = this.shortProductTitle(sourceTitle);
       }
 
       if (stickySub1) {
