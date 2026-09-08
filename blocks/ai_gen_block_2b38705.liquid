@@ -582,100 +582,6 @@
     gap: {{ block.settings.card_gap }}px;
   }
 
-  .pdp-quantity-row-{{ ai_gen_id }} {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 4px;
-  }
-
-  .pdp-quantity-label-{{ ai_gen_id }} {
-    color: {{ block.settings.heading_color }};
-    font-size: {{ block.settings.label_size }}px;
-    font-weight: 600;
-  }
-
-  .pdp-quantity-control-{{ ai_gen_id }} {
-    display: inline-flex;
-    align-items: center;
-    overflow: hidden;
-    border: 1px solid {{ block.settings.border_color }};
-    border-radius: 8px;
-    background: #fff;
-  }
-
-  .pdp-quantity-control-{{ ai_gen_id }} button,
-  .pdp-quantity-control-{{ ai_gen_id }} input {
-    width: 40px;
-    height: 40px;
-    border: 0;
-    background: transparent;
-    color: {{ block.settings.heading_color }};
-    text-align: center;
-  }
-
-  .pdp-quantity-control-{{ ai_gen_id }} button {
-    cursor: pointer;
-    font-size: 20px;
-    line-height: 1;
-  }
-
-  .pdp-quantity-control-{{ ai_gen_id }} button:hover,
-  .pdp-quantity-control-{{ ai_gen_id }} button:focus-visible {
-    background: {{ block.settings.primary_light }};
-    color: {{ block.settings.primary_color }};
-  }
-
-  .pdp-quantity-control-{{ ai_gen_id }} input {
-    width: 44px;
-    padding: 0;
-    font-size: 15px;
-    font-weight: 600;
-    -moz-appearance: textfield;
-  }
-
-  .pdp-quantity-control-{{ ai_gen_id }} input::-webkit-outer-spin-button,
-  .pdp-quantity-control-{{ ai_gen_id }} input::-webkit-inner-spin-button {
-    margin: 0;
-    -webkit-appearance: none;
-  }
-
-  .pdp-bundle-suggestion-{{ ai_gen_id }} {
-    display: grid;
-    gap: 10px;
-    margin-top: 4px;
-    border: 1px solid #b8e6d0;
-    border-radius: 10px;
-    padding: 12px 14px;
-    background: #f0fcf6;
-    color: #087443;
-    font-size: 13px;
-    line-height: 1.4;
-  }
-
-  .pdp-bundle-suggestion-{{ ai_gen_id }}[hidden] {
-    display: none;
-  }
-
-  .pdp-bundle-suggestion-copy-{{ ai_gen_id }} {
-    margin: 0;
-    font-weight: 600;
-  }
-
-  .pdp-bundle-suggestion-button-{{ ai_gen_id }} {
-    width: fit-content;
-    border: 0;
-    padding: 0;
-    background: transparent;
-    color: #087443;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
   .pdp-option-card-{{ ai_gen_id }} {
     border: 2px solid {{ block.settings.border_color }};
     border-radius: {{ block.settings.card_radius }}px;
@@ -1171,19 +1077,6 @@
           {% endfor %}
         </div>
 
-        <div class="pdp-quantity-row-{{ ai_gen_id }}" data-bundle-quantity-row hidden>
-          <label class="pdp-quantity-label-{{ ai_gen_id }}" for="PdpBundleQuantity-{{ ai_gen_id }}">Anzahl</label>
-          <div class="pdp-quantity-control-{{ ai_gen_id }}">
-            <button type="button" data-bundle-quantity-decrease aria-label="Anzahl reduzieren">−</button>
-            <input id="PdpBundleQuantity-{{ ai_gen_id }}" type="number" name="quantity" value="1" min="1" max="99" inputmode="numeric" data-bundle-quantity-input aria-label="Anzahl">
-            <button type="button" data-bundle-quantity-increase aria-label="Anzahl erhöhen">+</button>
-          </div>
-        </div>
-
-        <div class="pdp-bundle-suggestion-{{ ai_gen_id }}" data-bundle-quantity-suggestion hidden role="status" aria-live="polite">
-          <p class="pdp-bundle-suggestion-copy-{{ ai_gen_id }}" data-bundle-suggestion-copy></p>
-          <button type="button" class="pdp-bundle-suggestion-button-{{ ai_gen_id }}" data-bundle-suggestion-action></button>
-        </div>
       </div>
       {% endif %}
 
@@ -1405,13 +1298,6 @@
       this.thumbPrev = this.querySelector('[data-thumb-prev]');
       this.thumbNext = this.querySelector('[data-thumb-next]');
       this.optionCards = this.querySelectorAll('[data-option-card]');
-      this.quantityInput = this.querySelector('[data-bundle-quantity-input]');
-      this.quantityDecrease = this.querySelector('[data-bundle-quantity-decrease]');
-      this.quantityIncrease = this.querySelector('[data-bundle-quantity-increase]');
-      this.quantityRow = this.querySelector('[data-bundle-quantity-row]');
-      this.quantitySuggestion = this.querySelector('[data-bundle-quantity-suggestion]');
-      this.quantitySuggestionCopy = this.querySelector('[data-bundle-suggestion-copy]');
-      this.quantitySuggestionAction = this.querySelector('[data-bundle-suggestion-action]');
       this.checkoutImg = this.querySelector('[data-checkout-img]');
       this.checkoutTitle = this.querySelector('[data-checkout-title]');
       this.checkoutSubtitle = this.querySelector('[data-checkout-subtitle]');
@@ -1433,7 +1319,6 @@
       this.ensureValidInitialSelection();
       this.hydrateOptionCards();
       this.setupOptions();
-      this.setupQuantity();
       this.updateThumbButtons();
       this.updateCheckoutCard();
       this.updateActionAvailability();
@@ -1476,76 +1361,6 @@
       const buyBarRect = this.stickyBuyBar ? this.stickyBuyBar.getBoundingClientRect() : null;
       const buyBarBottom = buyBarRect ? Math.max(0, buyBarRect.bottom) : 0;
       this.style.setProperty('--pdp-media-sticky-top', `${Math.round(buyBarBottom + configuredOffset)}px`);
-    }
-
-    setupQuantity() {
-      if (!this.quantityInput) return;
-
-      const update = () => {
-        const value = Math.max(1, Math.min(99, parseInt(this.quantityInput.value, 10) || 1));
-        this.quantityInput.value = value;
-        this.updateQuantitySuggestion();
-        this.updateCheckoutCard();
-        this.syncStickyBar();
-        this.updateActionAvailability();
-      };
-
-      this.quantityInput.addEventListener('input', update);
-      this.quantityInput.addEventListener('change', update);
-      if (this.quantityDecrease) {
-        this.quantityDecrease.addEventListener('click', () => {
-          this.quantityInput.value = Math.max(1, (parseInt(this.quantityInput.value, 10) || 1) - 1);
-          update();
-        });
-      }
-      if (this.quantityIncrease) {
-        this.quantityIncrease.addEventListener('click', () => {
-          this.quantityInput.value = Math.min(99, (parseInt(this.quantityInput.value, 10) || 1) + 1);
-          update();
-        });
-      }
-      if (this.quantitySuggestionAction) {
-        this.quantitySuggestionAction.addEventListener('click', () => {
-          const quantity = this.getSelectedQuantity();
-          const targetIndex = quantity - 1;
-          const target = this.optionConfig.group1.options[targetIndex];
-          if (!target || targetIndex < 1) return;
-
-          this.selectedIndex.group1 = targetIndex;
-          this.quantityInput.value = 1;
-          this.hydrateOptionCards();
-          this.updateQuantitySuggestion();
-          this.updateCheckoutCard();
-          this.syncStickyBar();
-          this.updateActionAvailability();
-        });
-      }
-      update();
-    }
-
-    updateQuantitySuggestion() {
-      if (!this.quantitySuggestion || !this.quantityInput) return;
-
-      const quantity = this.getSelectedQuantity();
-      const baseOption = this.optionConfig.group1.options[0];
-      const targetOption = this.optionConfig.group1.options[quantity - 1];
-      const isBaseSelection = this.selectedIndex.group1 === 0;
-      if (this.quantityRow) this.quantityRow.hidden = !isBaseSelection;
-      const savings = baseOption && targetOption
-        ? (this.getOptionCurrentPrice(baseOption) * quantity) - this.getOptionCurrentPrice(targetOption)
-        : 0;
-      const shouldShow = isBaseSelection
-        && (quantity === 2 || quantity === 3)
-        && targetOption
-        && targetOption.variantId
-        && this.isOptionAvailable('group1', targetOption)
-        && savings > 0;
-
-      this.quantitySuggestion.hidden = !shouldShow;
-      if (!shouldShow) return;
-
-      this.quantitySuggestionCopy.textContent = `Spartipp: Mit dem ${quantity}×-Set sparst du ${this.formatPrice(savings)}.`;
-      this.quantitySuggestionAction.textContent = `Zum ${quantity}×-Set wechseln`;
     }
 
     setupDescriptionScroller() {
@@ -1926,7 +1741,6 @@
             this.selectedIndex[group === '1' ? 'group1' : 'group2'] = index;
           }
           
-          this.updateQuantitySuggestion();
           this.updateCheckoutCard();
           this.syncStickyBar();
           this.updateActionAvailability();
@@ -2208,9 +2022,8 @@
     }
 
     getSelectedQuantity() {
-      const quantityInput = this.quantityInput || this.querySelector('[name="quantity"]');
-      const quantity = quantityInput ? Number(quantityInput.value) : 1;
-      return Number.isInteger(quantity) && quantity > 0 ? quantity : 1;
+      // Bundle size is selected with the option cards; this module has no separate quantity control.
+      return 1;
     }
 
     submitDirectCheckout() {
