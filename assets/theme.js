@@ -2227,8 +2227,8 @@ theme.recentlyViewed = {
 
   /*============================================================================
     Bundle suggestions
-    - Offer the matching 2×/3× variant when a 1× line reaches that quantity
-    - Keep the change explicit: add the bundle variant, then remove the old line
+    - Offer the matching 2×/3× variant when the same product reaches that quantity
+    - Keep the change explicit: add the bundle variant, then remove all old lines
   ==============================================================================*/
   (function() {
     if (window.themeBundleSuggestionInitialized) return;
@@ -2282,10 +2282,23 @@ theme.recentlyViewed = {
     async function switchToBundle(button) {
       if (button.getAttribute('aria-busy') === 'true') return;
 
-      const cartKey = button.dataset.cartKey;
+      let cartKeys = [];
+      if (button.dataset.cartKeys) {
+        try {
+          const parsedKeys = JSON.parse(button.dataset.cartKeys);
+          if (Array.isArray(parsedKeys)) {
+            cartKeys = parsedKeys.filter(key => typeof key === 'string' && key);
+          }
+        } catch (error) {
+          cartKeys = [];
+        }
+      }
+      if (!cartKeys.length && button.dataset.cartKey) {
+        cartKeys = [button.dataset.cartKey];
+      }
       const targetVariantId = Number(button.dataset.targetVariantId);
       const targetQuantity = Number(button.dataset.targetQuantity) || 1;
-      if (!cartKey || !Number.isFinite(targetVariantId) || targetVariantId < 1) return;
+      if (!cartKeys.length || !Number.isFinite(targetVariantId) || targetVariantId < 1) return;
 
       const originalText = button.textContent;
       button.disabled = true;
@@ -2312,6 +2325,10 @@ theme.recentlyViewed = {
           throw new Error(getResponseMessage(addResult, 'Das Bundle konnte nicht hinzugefügt werden.'));
         }
 
+        const updates = {};
+        cartKeys.forEach(key => {
+          updates[key] = 0;
+        });
         const updateResponse = await enqueue(() => fetch(`${root}cart/update.js`, {
           method: 'POST',
           credentials: 'same-origin',
@@ -2320,7 +2337,7 @@ theme.recentlyViewed = {
             Accept: 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
           },
-          body: JSON.stringify({ updates: { [cartKey]: 0 } })
+          body: JSON.stringify({ updates })
         }));
         const updatedCart = await readJson(updateResponse, 'Die Einzelposition konnte nicht ersetzt werden.');
         if (!updateResponse.ok) {

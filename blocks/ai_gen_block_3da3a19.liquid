@@ -663,6 +663,7 @@
       connectedCallback() {
         this.navItems = this.querySelectorAll('.bar-nav-item-{{ ai_gen_id }}');
         this.handleNavigationClick = this.handleNavigationClick.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
         this.handleLocationChange = this.handleLocationChange.bind(this);
         this.updateAnchorOffset = this.updateAnchorOffset.bind(this);
         this.handleLayoutChange = this.handleLayoutChange.bind(this);
@@ -672,6 +673,8 @@
 
         this.setupNavigation();
         this.setupAnchorOffset();
+        window.addEventListener('scroll', this.handleScroll, { passive: true });
+        this.scheduleActiveNavUpdate();
 
         window.addEventListener('hashchange', this.handleLocationChange);
         window.addEventListener('popstate', this.handleLocationChange);
@@ -685,6 +688,69 @@
 
       setupNavigation() {
         this.navItems.forEach(item => item.addEventListener('click', this.handleNavigationClick));
+      }
+
+      handleScroll() {
+        this.scheduleActiveNavUpdate();
+      }
+
+      scheduleActiveNavUpdate() {
+        if (this.activeNavFrame) {
+          return;
+        }
+
+        this.activeNavFrame = window.requestAnimationFrame(() => {
+          this.activeNavFrame = null;
+          this.updateActiveNavFromScroll();
+        });
+      }
+
+      getNavigationTargets() {
+        return Array.from(this.navItems).map(nav => {
+          const href = nav.getAttribute('href') || '';
+          if (!href.startsWith('#') || href === '#') {
+            return null;
+          }
+
+          let targetId = href.substring(1);
+          try {
+            targetId = decodeURIComponent(targetId);
+          } catch (error) {
+            return null;
+          }
+
+          const targetElement = document.getElementById(targetId);
+          if (!targetElement) {
+            return null;
+          }
+
+          return {
+            nav,
+            targetId,
+            scrollTarget: this.getScrollTarget(targetElement)
+          };
+        }).filter(Boolean);
+      }
+
+      updateActiveNavFromScroll() {
+        const navigationTargets = this.getNavigationTargets();
+        if (!navigationTargets.length) {
+          return;
+        }
+
+        const activationLine = this.getBoundingClientRect().bottom + 8;
+        const targetsByPosition = navigationTargets
+          .map(target => ({
+            ...target,
+            top: target.scrollTarget.getBoundingClientRect().top
+          }))
+          .sort((first, second) => first.top - second.top);
+
+        const activeTarget = targetsByPosition.reduce((currentTarget, target) => {
+          return target.top <= activationLine ? target : currentTarget;
+        }, targetsByPosition[0]);
+
+        this.setActiveNavItem(activeTarget.targetId);
       }
 
       setupAnchorOffset() {
@@ -717,6 +783,7 @@
 
       handleLayoutChange() {
         this.updateAnchorOffset();
+        this.scheduleActiveNavUpdate();
 
         if (this.getHashTarget()) {
           this.scheduleHashAlignment('auto');
@@ -841,6 +908,7 @@
 
       disconnectedCallback() {
         this.navItems?.forEach(item => item.removeEventListener('click', this.handleNavigationClick));
+        window.removeEventListener('scroll', this.handleScroll);
         window.removeEventListener('hashchange', this.handleLocationChange);
         window.removeEventListener('popstate', this.handleLocationChange);
         document.removeEventListener('transitionend', this.handleTransitionEnd, true);
@@ -850,6 +918,10 @@
 
         if (this.hashAlignmentFrame) {
           window.cancelAnimationFrame(this.hashAlignmentFrame);
+        }
+
+        if (this.activeNavFrame) {
+          window.cancelAnimationFrame(this.activeNavFrame);
         }
 
         document.documentElement.style.removeProperty('--pdp-sticky-anchor-offset');
