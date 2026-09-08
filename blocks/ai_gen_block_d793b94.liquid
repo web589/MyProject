@@ -1006,7 +1006,7 @@
       }
 
       getThresholds(values, fallback) {
-        if (values.every((value) => Number.isFinite(value)) && values[0] < values[1] && values[1] < values[2]) {
+        if (values.every((value) => Number.isFinite(value) && value >= 0) && values[0] < values[1] && values[1] < values[2]) {
           return values;
         }
         return fallback;
@@ -1212,10 +1212,10 @@
       "default": "center center"
     },
     { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#d8efff" },
-    { "type": "range", "id": "overlay_opacity_left", "label": "Overlay opacity left", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 88 },
-    { "type": "range", "id": "overlay_opacity_middle", "label": "Overlay opacity middle", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 66 },
-    { "type": "range", "id": "overlay_opacity_right", "label": "Overlay opacity right", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 18 },
-    { "type": "range", "id": "overlay_opacity_mobile", "label": "Overlay opacity mobile", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 78 },
+    { "type": "range", "id": "overlay_opacity_left", "label": "Overlay opacity left", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 88 },
+    { "type": "range", "id": "overlay_opacity_middle", "label": "Overlay opacity middle", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 66 },
+    { "type": "range", "id": "overlay_opacity_right", "label": "Overlay opacity right", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 18 },
+    { "type": "range", "id": "overlay_opacity_mobile", "label": "Overlay opacity mobile", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 78 },
 
     { "type": "header", "content": "Left content" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "MEHR UNABHÄNGIGKEIT · NIEDRIGERE STROMKOSTEN · EINE SAUBERERE ZUKUNFT" },
@@ -1279,15 +1279,15 @@
     { "type": "url", "id": "max_url", "label": "Max URL override" },
 
     { "type": "header", "content": "Recommendation thresholds" },
-    { "type": "range", "id": "pv_mini_max", "label": "PV Mini upper limit", "info": "Use ascending limits. Values at or below this limit are Mini.", "min": 0, "max": 50, "step": 0.1, "unit": "kWp", "default": 2.5 },
-    { "type": "range", "id": "pv_3_max", "label": "PV 3.0 upper limit", "info": "Values above the Mini limit and at or below this limit are 3.0.", "min": 0, "max": 50, "step": 0.1, "unit": "kWp", "default": 4.5 },
-    { "type": "range", "id": "pv_4_max", "label": "PV 4.0 upper limit", "info": "Values above the 3.0 limit and at or below this limit are 4.0; higher values are Max.", "min": 0, "max": 50, "step": 0.1, "unit": "kWp", "default": 6.5 },
-    { "type": "range", "id": "bill_mini_max", "label": "Monthly cost Mini upper limit", "info": "Use ascending limits. Values at or below this limit are Mini.", "min": 0, "max": 5000, "step": 1, "unit": "€", "default": 90 },
-    { "type": "range", "id": "bill_3_max", "label": "Monthly cost 3.0 upper limit", "info": "Values above the Mini limit and at or below this limit are 3.0.", "min": 0, "max": 5000, "step": 1, "unit": "€", "default": 130 },
-    { "type": "range", "id": "bill_4_max", "label": "Monthly cost 4.0 upper limit", "info": "Values above the 3.0 limit and at or below this limit are 4.0; higher values are Max.", "min": 0, "max": 5000, "step": 1, "unit": "€", "default": 180 },
+    { "type": "number", "id": "pv_mini_max", "label": "PV Mini upper limit (kWp)", "info": "Use ascending limits. Values at or below this limit are Mini.", "default": 2.5 },
+    { "type": "number", "id": "pv_3_max", "label": "PV 3.0 upper limit (kWp)", "info": "Values above the Mini limit and at or below this limit are 3.0.", "default": 4.5 },
+    { "type": "number", "id": "pv_4_max", "label": "PV 4.0 upper limit (kWp)", "info": "Values above the 3.0 limit and at or below this limit are 4.0; higher values are Max.", "default": 6.5 },
+    { "type": "number", "id": "bill_mini_max", "label": "Monthly cost Mini upper limit (€)", "info": "Use ascending limits. Values at or below this limit are Mini.", "default": 90 },
+    { "type": "number", "id": "bill_3_max", "label": "Monthly cost 3.0 upper limit (€)", "info": "Values above the Mini limit and at or below this limit are 3.0.", "default": 130 },
+    { "type": "number", "id": "bill_4_max", "label": "Monthly cost 4.0 upper limit (€)", "info": "Values above the 3.0 limit and at or below this limit are 4.0; higher values are Max.", "default": 180 },
 
     { "type": "header", "content": "Calculation" },
-    { "type": "range", "id": "electricity_price", "label": "Electricity price", "min": 0.2, "max": 0.8, "step": 0.1, "unit": "€ / kWh", "default": 0.4 },
+    { "type": "range", "id": "electricity_price", "label": "Electricity price (€/kWh)", "min": 0.2, "max": 0.8, "step": 0.1, "unit": "€", "default": 0.4 },
     { "type": "range", "id": "annual_sun_hours", "label": "Annual sun hours", "min": 700, "max": 1400, "step": 25, "unit": "h", "default": 1000 },
     { "type": "range", "id": "baseline_self_use_rate", "label": "Self-use without storage", "min": 0.1, "max": 0.6, "step": 0.1, "default": 0.3 },
     { "type": "range", "id": "storage_self_use_rate", "label": "Self-use with storage", "min": 0.5, "max": 1.0, "step": 0.1, "default": 0.8 },
