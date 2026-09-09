@@ -255,6 +255,13 @@
       <span class="cart-bundle-suggestion__saving">Spare {{ bundle_suggestion_savings | money }}</span>
     </div>
 
+    <div class="cart-bundle-suggestion__source">
+      <span class="cart-bundle-suggestion__source-label">Passend zu:</span>
+      <a class="cart-bundle-suggestion__source-name" href="{{ product.url }}">
+        {{ product.product.title }}
+      </a>
+    </div>
+
     <p class="cart-bundle-suggestion__headline">
       {% if bundle_target_line_count == 1 %}
         Mit dem {{ bundle_switch_quantity }}×-Set sparst du {{ bundle_suggestion_savings | money }}
