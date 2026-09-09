@@ -1,13 +1,23 @@
 {%- liquid
   assign blog_center_menu = linklists['blog-center']
   assign blog_center_home_link = blank
+  assign blog_center_page = pages['blogs']
+  assign is_blog_all_page = false
   assign is_all_blog_view = false
   if blog_center_menu != blank and blog_center_menu.links.size > 0
     assign blog_center_home_link = blog_center_menu.links | first
   endif
-  assign blog_center_url = blog_center_home_link.url | default: blog.url
+  if template.name == 'page' and template.suffix == 'blogs'
+    assign is_blog_all_page = true
+    assign is_all_blog_view = true
+    assign blog_center_url = page.url
+  elsif blog_center_page != blank and blog_center_page.url != blank
+    assign blog_center_url = blog_center_page.url
+  else
+    assign blog_center_url = blog_center_home_link.url | default: blog.url
+  endif
   if blog_center_url != blank
-    unless blog_center_url contains 'view='
+    unless is_blog_all_page or blog_center_url contains '/pages/' or blog_center_url contains 'view='
       if blog_center_url contains '?'
         assign blog_center_url = blog_center_url | append: '&view=all'
       else
@@ -524,7 +534,7 @@
       {%- endif -%}
     </header>
 
-    {%- render 'blog-breadcrumbs', blog: blog, blog_center_home_link: blog_center_home_link -%}
+    {%- render 'blog-breadcrumbs', blog: blog, blog_center_home_link: blog_center_home_link, blog_center_url: blog_center_url, is_blog_all_page: is_blog_all_page -%}
 
     {%- if is_all_blog_view -%}
       {%- if all_articles.size > 0 -%}

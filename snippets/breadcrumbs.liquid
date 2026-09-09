@@ -63,12 +63,17 @@
       {%- assign article_blog = article.blog | default: blog -%}
       {%- assign blog_center_menu = linklists['blog-center'] -%}
       {%- assign blog_center_home_link = blank -%}
+      {%- assign blog_center_page = pages['blogs'] -%}
       {%- if blog_center_menu != blank and blog_center_menu.links.size > 0 -%}
         {%- assign blog_center_home_link = blog_center_menu.links | first -%}
       {%- endif -%}
-      {%- assign blog_center_url = blog_center_home_link.url | default: article_blog.url -%}
+      {%- if blog_center_page != blank and blog_center_page.url != blank -%}
+        {%- assign blog_center_url = blog_center_page.url -%}
+      {%- else -%}
+        {%- assign blog_center_url = blog_center_home_link.url | default: article_blog.url -%}
+      {%- endif -%}
       {%- if blog_center_url != blank -%}
-        {%- unless blog_center_url contains 'view=' -%}
+        {%- unless blog_center_url contains '/pages/' or blog_center_url contains 'view=' -%}
           {%- if blog_center_url contains '?' -%}
             {%- assign blog_center_url = blog_center_url | append: '&view=all' -%}
           {%- else -%}
@@ -78,7 +83,7 @@
       {%- endif -%}
 
       <span class="breadcrumb__divider" aria-hidden="true">/</span>
-      {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
+      {%- if blog_center_url != blank -%}
         <a href="{{ blog_center_url }}">{{ 'blogs.article.blog_center' | t }}</a>
       {%- else -%}
         <span>{{ 'blogs.article.blog_center' | t }}</span>

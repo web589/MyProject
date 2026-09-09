@@ -1,17 +1,18 @@
-{%- assign blog_center_url = blog_center_home_link.url | default: blog.url -%}
-{%- if blog_center_url != blank -%}
-  {%- unless blog_center_url contains 'view=' -%}
-    {%- if blog_center_url contains '?' -%}
-      {%- assign blog_center_url = blog_center_url | append: '&view=all' -%}
-    {%- else -%}
-      {%- assign blog_center_url = blog_center_url | append: '?view=all' -%}
-    {%- endif -%}
-  {%- endunless -%}
-{%- endif -%}
-{%- assign is_blog_center_home = false -%}
-{%- if template.suffix == 'all' -%}
-  {%- assign is_blog_center_home = true -%}
-{%- endif -%}
+{%- liquid
+  assign blog_center_page = pages['blogs']
+  assign resolved_blog_center_url = blog_center_url
+  if resolved_blog_center_url == blank
+    if blog_center_page != blank and blog_center_page.url != blank
+      assign resolved_blog_center_url = blog_center_page.url
+    else
+      assign resolved_blog_center_url = blog_center_home_link.url | default: blog.url
+    endif
+  endif
+  assign is_blog_center_home = false
+  if is_blog_all_page or template.suffix == 'all'
+    assign is_blog_center_home = true
+  endif
+-%}
 
 <nav class="blog-breadcrumbs" aria-label="breadcrumbs">
   <a href="{{ routes.root_url }}" title="{{ 'general.breadcrumbs.home_link_title' | t }}">
@@ -22,9 +23,11 @@
 
   {%- if is_blog_center_home -%}
     <span aria-current="page">{{ 'blogs.article.blog_center' | t }}</span>
-  {%- else -%}
-    <a href="{{ blog_center_url }}">{{ 'blogs.article.blog_center' | t }}</a>
+  {%- elsif resolved_blog_center_url != blank -%}
+    <a href="{{ resolved_blog_center_url }}">{{ 'blogs.article.blog_center' | t }}</a>
     <span class="blog-breadcrumbs__divider" aria-hidden="true">/</span>
+    <span aria-current="page">{{ blog.title | escape }}</span>
+  {%- else -%}
     <span aria-current="page">{{ blog.title | escape }}</span>
   {%- endif -%}
 </nav>

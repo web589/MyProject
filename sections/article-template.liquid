@@ -7,8 +7,11 @@
   assign article_blog = article.blog | default: blog
   assign blog_center_menu = linklists['blog-center']
   assign blog_center_home_link = blank
+  assign blog_center_page = pages['blogs']
   assign blog_center_url = blank
-  if blog_center_menu != blank and blog_center_menu.links.size > 0
+  if blog_center_page != blank and blog_center_page.url != blank
+    assign blog_center_url = blog_center_page.url
+  elsif blog_center_menu != blank and blog_center_menu.links.size > 0
     assign blog_center_home_link = blog_center_menu.links | first
     assign blog_center_url = blog_center_home_link.url
   endif
@@ -16,7 +19,7 @@
     assign blog_center_url = article_blog.url
   endif
   if blog_center_url != blank
-    unless blog_center_url contains 'view='
+    unless blog_center_url contains '/pages/' or blog_center_url contains 'view='
       if blog_center_url contains '?'
         assign blog_center_url = blog_center_url | append: '&view=all'
       else
@@ -547,7 +550,7 @@
     <div class="blog-article__category-bar" data-blog-center>
       <div class="page-width">
         <div class="blog-article__category-inner">
-          {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
+          {%- if blog_center_url != blank -%}
             <a class="blog-article__category-heading" href="{{ blog_center_url }}">
               {{ 'blogs.article.blog_center' | t }}
             </a>
@@ -558,7 +561,7 @@
           {%- endif -%}
 
           <nav class="blog-article__category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
-          {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
+          {%- if blog_center_url != blank -%}
             <a class="blog-article__category-link" href="{{ blog_center_url }}">
               {{ 'blogs.article.all' | t }}
             </a>

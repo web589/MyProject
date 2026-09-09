@@ -8,13 +8,16 @@
 
   assign blog_center_menu = linklists['blog-center']
   assign blog_center_home_link = blank
+  assign blog_center_page = pages['blogs']
   assign blog_center_url = blank
-  if blog_center_menu != blank and blog_center_menu.links.size > 0
+  if blog_center_page != blank and blog_center_page.url != blank
+    assign blog_center_url = blog_center_page.url
+  elsif blog_center_menu != blank and blog_center_menu.links.size > 0
     assign blog_center_home_link = blog_center_menu.links | first
     assign blog_center_url = blog_center_home_link.url
   endif
   if blog_center_url != blank
-    unless blog_center_url contains 'view='
+    unless blog_center_url contains '/pages/' or blog_center_url contains 'view='
       if blog_center_url contains '?'
         assign blog_center_url = blog_center_url | append: '&view=all'
       else
@@ -27,6 +30,11 @@
 <ul class="site-nav site-navigation small--hide">
   {%- for link in main_menu.links limit: limit offset: offset -%}
     {%- liquid
+      assign link_url = link.url
+      assign link_title_handle = link.title | handleize
+      if link_title_handle == 'blog' and blog_center_url != blank
+        assign link_url = blog_center_url
+      endif
       assign mega_menu_block = nil
       assign link_handle = link.title | handleize
       assign menu_card_block_count = 0
@@ -109,7 +117,7 @@
           class="site-nav__details"
         >
           <summary
-            data-link="{{ link.url }}"
+            data-link="{{ link_url }}"
             aria-expanded="false"
             aria-controls="site-nav-item--{{ forloop.index }}"
             class="site-nav__link site-nav__link--underline{% if has_dropdown %} site-nav__link--has-dropdown{% endif %}"
@@ -118,7 +126,7 @@
           </summary>
       {% else %}
         <a
-          href="{{ link.url }}"
+          href="{{ link_url }}"
           class="site-nav__link site-nav__link--underline"
         >
           {{ link.title }}
