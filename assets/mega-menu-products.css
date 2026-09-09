@@ -195,6 +195,11 @@
     padding: 12px 0 8px;
   }
 
+  .mega-menu-products__card--article .mega-menu-products__card-content {
+    box-sizing: border-box;
+    min-height: 86px;
+  }
+
   .mega-menu-products__card-title {
     color: var(--mega-menu-text-strong);
     font-family: 'Manrope', var(--typeHeaderPrimary), var(--typeHeaderFallback), sans-serif;
@@ -202,6 +207,13 @@
     font-weight: 600;
     line-height: 1.35;
     margin: 0;
+  }
+
+  .mega-menu-products__card--article .mega-menu-products__card-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
 
   .mega-menu-products__card-description {
@@ -213,6 +225,10 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
+  }
+
+  .mega-menu-products__card--article .mega-menu-products__card-description {
+    -webkit-line-clamp: 1;
   }
 
   .mega-menu-products__card-specs {
