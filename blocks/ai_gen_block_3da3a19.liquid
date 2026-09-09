@@ -221,6 +221,9 @@
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 
 {% style %}
+  {{ block.settings.title_font | font_face: font_display: 'swap' }}
+  {{ block.settings.nav_font | font_face: font_display: 'swap' }}
+
   .sticky-buy-bar-{{ ai_gen_id }} {
     position: relative;
     background: {{ block.settings.bar_bg_color }};
@@ -269,7 +272,7 @@
   }
 
   .bar-product-title-{{ ai_gen_id }} {
-    font-family: 'Manrope', {{ block.settings.title_font.family }}, sans-serif;
+    font-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
     font-size: {{ block.settings.title_font_size }}px;
     font-weight: {{ block.settings.title_font_weight }};
     color: {{ block.settings.title_color }};
@@ -328,7 +331,7 @@
   }
 
   .bar-nav-item-{{ ai_gen_id }} {
-    font-family: 'Inter', {{ block.settings.nav_font.family }}, sans-serif;
+    font-family: {{ block.settings.nav_font.family }}, {{ block.settings.nav_font.fallback_families }};
     font-size: {{ block.settings.nav_font_size }}px;
     font-weight: {{ block.settings.nav_font_weight }};
     color: {{ block.settings.nav_color_normal }};
