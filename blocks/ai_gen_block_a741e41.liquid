@@ -229,8 +229,14 @@
     transition: transform 0.32s ease;
   }
 
-  .ai-compare-card-{{ ai_gen_id }}:hover .ai-compare-media-{{ ai_gen_id }}:not(video) {
+  .ai-compare-card-{{ ai_gen_id }}:not([data-media-type='video']):hover .ai-compare-media-{{ ai_gen_id }}:not(video) {
     transform: scale({{ block.settings.hover_scale }});
+  }
+
+  .ai-compare-card-media-wrap-{{ ai_gen_id }} > [data-video-fallback] {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
   }
 
   .ai-compare-card-content-{{ ai_gen_id }} {
@@ -396,12 +402,13 @@
 
     <div class="ai-dual-cards-wrap-{{ ai_gen_id }}">
       {% if left_media_available %}
-      <div class="ai-compare-card-{{ ai_gen_id }}" data-card="left">
+      <div class="ai-compare-card-{{ ai_gen_id }}" data-card="left" data-media-type="{% if left_video_selected %}video{% else %}image{% endif %}">
         <div class="ai-compare-card-media-wrap-{{ ai_gen_id }}">
           {% if left_video_enabled %}
             <video
               class="ai-compare-media-{{ ai_gen_id }}"
-              data-hover-play
+              data-autoplay-video
+              autoplay
               muted
               loop
               playsinline
@@ -419,10 +426,9 @@
                 loading="lazy"
                 width="{{ durability_left_image.width }}"
                 height="{{ durability_left_image.height }}"
-                hidden
               >
             {% else %}
-              <div class="ai-compare-placeholder-{{ ai_gen_id }}" data-video-fallback hidden>{{ 'image' | placeholder_svg_tag }}</div>
+              <div class="ai-compare-placeholder-{{ ai_gen_id }}" data-video-fallback>{{ 'image' | placeholder_svg_tag }}</div>
             {% endif %}
           {% elsif durability_left_image != blank %}
             <img
@@ -451,12 +457,13 @@
       {% endif %}
 
       {% if right_media_available %}
-      <div class="ai-compare-card-{{ ai_gen_id }}" data-card="right">
+      <div class="ai-compare-card-{{ ai_gen_id }}" data-card="right" data-media-type="{% if right_video_selected %}video{% else %}image{% endif %}">
         <div class="ai-compare-card-media-wrap-{{ ai_gen_id }}">
           {% if right_video_enabled %}
             <video
               class="ai-compare-media-{{ ai_gen_id }}"
-              data-hover-play
+              data-autoplay-video
+              autoplay
               muted
               loop
               playsinline
@@ -474,10 +481,9 @@
                 loading="lazy"
                 width="{{ durability_right_image.width }}"
                 height="{{ durability_right_image.height }}"
-                hidden
               >
             {% else %}
-              <div class="ai-compare-placeholder-{{ ai_gen_id }}" data-video-fallback hidden>{{ 'image' | placeholder_svg_tag }}</div>
+              <div class="ai-compare-placeholder-{{ ai_gen_id }}" data-video-fallback>{{ 'image' | placeholder_svg_tag }}</div>
             {% endif %}
           {% elsif durability_right_image != blank %}
             <img
@@ -518,17 +524,15 @@
 
     connectedCallback() {
       this.cards = this.querySelectorAll('[data-card]');
-      this.setupHoverInteraction();
+      this.setupVideoPlayback();
     }
 
-    setupHoverInteraction() {
+    setupVideoPlayback() {
       this.cards.forEach(card => {
-        const video = card.querySelector('[data-hover-play]');
+        const video = card.querySelector('[data-autoplay-video]');
         const fallback = card.querySelector('[data-video-fallback]');
         
         if (video) {
-          video.pause();
-
           const showFallback = () => {
             video.hidden = true;
             if (fallback) {
@@ -536,7 +540,23 @@
             }
           };
 
+          const hideFallback = () => {
+            video.hidden = false;
+            if (fallback) {
+              fallback.hidden = true;
+            }
+          };
+
+          const playVideo = () => {
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+              playPromise.catch(() => {});
+            }
+          };
+
           video.addEventListener('error', showFallback);
+          video.addEventListener('playing', hideFallback);
+          video.addEventListener('loadeddata', playVideo, { once: true });
           if (video.error) {
             showFallback();
           }
@@ -546,20 +566,6 @@
             video.src = videoSrc;
             video.load();
           }
-          
-          card.addEventListener('mouseenter', () => {
-            if (video.hidden) return;
-
-            const playPromise = video.play();
-            if (playPromise && typeof playPromise.catch === 'function') {
-              playPromise.catch(() => {});
-            }
-          });
-          
-          card.addEventListener('mouseleave', () => {
-            video.pause();
-            video.currentTime = 0;
-          });
         }
       });
     }
@@ -809,7 +815,8 @@
     {
       "type": "url",
       "id": "left_video",
-      "label": "Video URL"
+      "label": "Video URL",
+      "visible_if": "{{ block.settings.left_media_type == 'video' }}"
     },
     {
       "type": "text",
@@ -849,7 +856,8 @@
     {
       "type": "url",
       "id": "right_video",
-      "label": "Video URL"
+      "label": "Video URL",
+      "visible_if": "{{ block.settings.right_media_type == 'video' }}"
     },
     {
       "type": "text",
