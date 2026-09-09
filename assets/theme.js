@@ -27,6 +27,28 @@ theme.config = {
   rtl: document.documentElement.getAttribute('dir') == 'rtl' ? true : false
 };
 
+var shouldOpenCartDrawerOnLoad = false;
+(function() {
+  var cartDrawerReturnParam = 'pv-cart-drawer-return';
+  var currentUrl;
+
+  try {
+    currentUrl = new URL(window.location.href);
+  } catch (error) {
+    return;
+  }
+
+  if (currentUrl.searchParams.get(cartDrawerReturnParam) !== '1') return;
+
+  shouldOpenCartDrawerOnLoad = true;
+  currentUrl.searchParams.delete(cartDrawerReturnParam);
+  window.history.replaceState(
+    {},
+    document.title,
+    currentUrl.pathname + currentUrl.search + currentUrl.hash
+  );
+})();
+
 if (theme.config.isTouch) {
   document.documentElement.className += ' supports-touch';
 }
@@ -9130,6 +9152,14 @@ theme.recentlyViewed = {
     theme.initGlobals();
     theme.initQuickShop();
     theme.rteInit();
+
+    if (shouldOpenCartDrawerOnLoad && theme.settings.cartType === 'drawer') {
+      window.setTimeout(function() {
+        if (document.getElementById('CartDrawer')) {
+          document.dispatchEvent(new CustomEvent('cart:open'));
+        }
+      }, 0);
+    }
 
     if (document.body.classList.contains('template-cart')) {
       var cartPageFormElement = document.getElementById('CartPageForm');

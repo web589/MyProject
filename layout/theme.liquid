@@ -80,6 +80,39 @@
     };
   </script>
 
+  {% comment %}
+    Shopify's hosted checkout returns to the cart page. When checkout was
+    started from the cart drawer, route that return back to the original page
+    so the drawer can be restored there.
+  {% endcomment %}
+  <script>
+    (function() {
+      var checkoutReturnKey = 'pv-checkout-return-url';
+      var cartDrawerReturnParam = 'pv-cart-drawer-return';
+      var cartPath = {{ routes.cart_url | json }};
+      var currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+      var normalizedCartPath = String(cartPath || '').replace(/\/+$/, '') || '/';
+
+      if (currentPath !== normalizedCartPath) return;
+
+      try {
+        var returnUrl = window.sessionStorage.getItem(checkoutReturnKey);
+        if (!returnUrl) return;
+
+        window.sessionStorage.removeItem(checkoutReturnKey);
+
+        var targetUrl = new URL(returnUrl, window.location.origin);
+        var targetPath = targetUrl.pathname.replace(/\/+$/, '') || '/';
+        if (targetUrl.origin !== window.location.origin || targetPath === normalizedCartPath) return;
+
+        targetUrl.searchParams.set(cartDrawerReturnParam, '1');
+        window.location.replace(targetUrl.pathname + targetUrl.search + targetUrl.hash);
+      } catch (error) {
+        // Session storage can be unavailable in private browsing contexts.
+      }
+    })();
+  </script>
+
   {{ content_for_header }}
 
   {% render 'kit.overrides' %}

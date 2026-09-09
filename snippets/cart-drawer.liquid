@@ -963,6 +963,23 @@
   </div>
   <script>
     window.PVTaxCart = window.PVTaxCart || {};
+    if (!window.PVTaxCart.rememberCheckoutReturn) {
+      window.PVTaxCart.rememberCheckoutReturn = function() {
+        try {
+          if (document.body && document.body.classList.contains('template-cart')) {
+            window.sessionStorage.removeItem('pv-checkout-return-url');
+            return;
+          }
+
+          window.sessionStorage.setItem(
+            'pv-checkout-return-url',
+            window.location.pathname + window.location.search + window.location.hash
+          );
+        } catch (error) {
+          // Session storage can be unavailable in private browsing contexts.
+        }
+      };
+    }
     if (!window.PVTaxCart.enqueue) {
       window.PVTaxCart._requestQueue = Promise.resolve();
       window.PVTaxCart.enqueue = function(task) {
@@ -2089,6 +2106,9 @@
               if (targetMode !== 'standard') throw error;
             }
             this.form.dataset.deliveryContextResubmit = 'true';
+            if (window.PVTaxCart && window.PVTaxCart.rememberCheckoutReturn) {
+              window.PVTaxCart.rememberCheckoutReturn();
+            }
             submitter.disabled = false;
             this.form.requestSubmit(submitter);
           } catch (error) {
