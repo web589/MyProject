@@ -405,10 +405,10 @@
               muted
               loop
               playsinline
-              preload="metadata"
+              preload="none"
+              data-video-src="{{ durability_left_video | escape }}"
               {% if durability_left_image != blank %}poster="{{ durability_left_image | image_url: width: 1200 }}"{% endif %}
             >
-              <source src="{{ durability_left_video | escape }}" type="video/mp4">
             </video>
             {% if durability_left_image != blank %}
               <img
@@ -460,10 +460,10 @@
               muted
               loop
               playsinline
-              preload="metadata"
+              preload="none"
+              data-video-src="{{ durability_right_video | escape }}"
               {% if durability_right_image != blank %}poster="{{ durability_right_image | image_url: width: 1200 }}"{% endif %}
             >
-              <source src="{{ durability_right_video | escape }}" type="video/mp4">
             </video>
             {% if durability_right_image != blank %}
               <img
@@ -539,6 +539,12 @@
           video.addEventListener('error', showFallback);
           if (video.error) {
             showFallback();
+          }
+
+          const videoSrc = video.dataset.videoSrc;
+          if (videoSrc) {
+            video.src = videoSrc;
+            video.load();
           }
           
           card.addEventListener('mouseenter', () => {

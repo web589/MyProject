@@ -8,11 +8,14 @@
     --back-to-top-accent: #0099fc;
 
     align-items: center;
-    background: transparent;
-    border: 3px solid var(--back-to-top-accent);
+    background: var(--back-to-top-accent);
+    border: 0;
+    border-radius: 50%;
     bottom: max(24px, env(safe-area-inset-bottom));
+    box-shadow: 0 5px 18px rgba(42, 55, 67, 0.18);
+    cursor: pointer;
     display: flex;
-    height: 70px;
+    height: 52px;
     justify-content: center;
     opacity: 0;
     padding: 0;
@@ -22,7 +25,7 @@
     transform: translateY(12px);
     transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
     visibility: hidden;
-    width: 80px;
+    width: 52px;
     z-index: 20;
   }
 
@@ -36,15 +39,14 @@
 
   .back-to-top__circle {
     align-items: center;
-    background: #fff;
+    background: transparent;
     border-radius: 50%;
-    box-shadow: 0 5px 18px rgba(42, 55, 67, 0.14);
-    color: var(--back-to-top-accent);
+    color: #fff;
     display: flex;
-    height: 44px;
+    height: 100%;
     justify-content: center;
     transition: transform 0.2s ease;
-    width: 44px;
+    width: 100%;
   }
 
   .back-to-top:hover .back-to-top__circle {
@@ -56,8 +58,9 @@
   }
 
   .back-to-top:focus-visible {
-    outline: 2px solid var(--back-to-top-accent);
+    outline: 2px solid #fff;
     outline-offset: 4px;
+    box-shadow: 0 0 0 6px rgba(0, 153, 252, 0.28), 0 5px 18px rgba(42, 55, 67, 0.18);
   }
 
   .back-to-top__icon {
@@ -72,16 +75,10 @@
 
   @media only screen and (max-width: 768px) {
     .back-to-top {
-      border-width: 2px;
       bottom: max(16px, env(safe-area-inset-bottom));
-      height: 60px;
+      height: 48px;
       right: max(12px, env(safe-area-inset-right));
-      width: 68px;
-    }
-
-    .back-to-top__circle {
-      height: 42px;
-      width: 42px;
+      width: 48px;
     }
   }
 
