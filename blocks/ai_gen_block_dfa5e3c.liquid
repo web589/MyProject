@@ -223,11 +223,17 @@
 {% style %}
   .ai-custom-blog-section-{{ ai_gen_id }} {
     display: block;
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: {{ block.settings.section_padding_top }}px 12px {{ block.settings.section_padding_bottom }}px;
-    background-color: {{ block.settings.background_color }};
     width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0;
+    padding: {{ block.settings.section_padding_top }}px 20px {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-custom-blog-content-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   .ai-custom-blog-header-{{ ai_gen_id }} {
@@ -446,6 +452,11 @@
   }
 
   @media screen and (max-width: 640px) {
+    .ai-custom-blog-section-{{ ai_gen_id }} {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
     .ai-custom-blog-header-{{ ai_gen_id }} {
       align-items: {% if block.settings.subtitle != blank %}flex-start{% else %}flex-end{% endif %};
       gap: 12px;
@@ -487,26 +498,27 @@
 %}
 
 <custom-blog-section-{{ ai_gen_id }} class="ai-custom-blog-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
-  <div class="ai-custom-blog-header-{{ ai_gen_id }}">
-    <div class="ai-custom-blog-heading-group-{{ ai_gen_id }}">
-      {% if block.settings.heading != blank %}
-        <h2 class="ai-custom-blog-title-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
-      {% endif %}
-      {% if block.settings.subtitle != blank %}
-        <div class="ai-custom-blog-subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
+  <div class="ai-custom-blog-content-{{ ai_gen_id }}">
+    <div class="ai-custom-blog-header-{{ ai_gen_id }}">
+      <div class="ai-custom-blog-heading-group-{{ ai_gen_id }}">
+        {% if block.settings.heading != blank %}
+          <h2 class="ai-custom-blog-title-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+        {% endif %}
+        {% if block.settings.subtitle != blank %}
+          <div class="ai-custom-blog-subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
+        {% endif %}
+      </div>
+      {% if block.settings.show_view_all %}
+        <a href="{{ routes.search_url }}?q=&type=article" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
+          {{ block.settings.view_all_text | escape }}
+          <svg class="ai-custom-blog-arrow-{{ ai_gen_id }}" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       {% endif %}
     </div>
-    {% if block.settings.show_view_all %}
-      <a href="{{ routes.search_url }}?q=&type=article" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
-        {{ block.settings.view_all_text | escape }}
-        <svg class="ai-custom-blog-arrow-{{ ai_gen_id }}" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-    {% endif %}
-  </div>
 
-  <div class="ai-custom-blog-grid-{{ ai_gen_id }}">
+    <div class="ai-custom-blog-grid-{{ ai_gen_id }}">
     {% if all_articles != blank %}
       {% for article in all_articles limit: post_limit %}
         {% liquid
@@ -576,6 +588,7 @@
         Keine Blogartikel verfügbar.
       </div>
     {% endif %}
+    </div>
   </div>
 </custom-blog-section-{{ ai_gen_id }}>
 

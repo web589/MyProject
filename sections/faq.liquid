@@ -49,7 +49,22 @@
 
 <style>
   #shopify-section-{{ section.id }} .page-width--narrow {
-    max-width: 1200px;
+    max-width: 1280px;
+  }
+
+  @media only screen and (min-width: 769px) and (max-width: 1280px) {
+    #shopify-section-{{ section.id }} .page-width--narrow {
+      max-width: 1240px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    #shopify-section-{{ section.id }} .page-width--narrow {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
   }
 
   #shopify-section-{{ section.id }} .faq-section-header {

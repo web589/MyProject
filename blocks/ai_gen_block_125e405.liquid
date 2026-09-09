@@ -198,11 +198,17 @@
 {% style %}
   .ai-comparison-section-{{ ai_gen_id }} {
     display: block;
-    max-width: 1280px;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
     margin: {{ block.settings.section_top_margin }}px auto {{ block.settings.section_bottom_margin }}px;
     padding: 0 20px;
     font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
-    width: {{ block.settings.desktop_width_percent }}%;
+  }
+
+  .ai-comparison-content-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   .ai-comparison-title-{{ ai_gen_id }} {
@@ -312,6 +318,8 @@
   @media (max-width: 749px) {
     .ai-comparison-section-{{ ai_gen_id }} {
       width: 100%;
+      padding-left: 16px;
+      padding-right: 16px;
     }
 
     .ai-comparison-title-{{ ai_gen_id }} {
@@ -343,17 +351,18 @@
 {% endstyle %}
 
 <product-comparison-{{ ai_gen_id }} class="ai-comparison-section-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
-{% if block.settings.section_title != blank %}
-  <h2 class="ai-comparison-title-{{ ai_gen_id }}">
-    {{ block.settings.section_title }}
-  </h2>
-  {% if block.settings.subtitle != blank %}
-    <div class="ai-comparison-subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
+  <div class="ai-comparison-content-{{ ai_gen_id }}">
+  {% if block.settings.section_title != blank %}
+    <h2 class="ai-comparison-title-{{ ai_gen_id }}">
+      {{ block.settings.section_title }}
+    </h2>
+    {% if block.settings.subtitle != blank %}
+      <div class="ai-comparison-subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
+    {% endif %}
   {% endif %}
-{% endif %}
 
-  <div class="ai-comparison-wrapper-{{ ai_gen_id }}">
-    <table class="ai-comparison-table-{{ ai_gen_id }}">
+    <div class="ai-comparison-wrapper-{{ ai_gen_id }}">
+      <table class="ai-comparison-table-{{ ai_gen_id }}">
       <thead>
         <tr>
           <th>{{ block.settings.header_spec }}</th>
@@ -415,7 +424,8 @@
           </tr>
         {% endfor %}
       </tbody>
-    </table>
+      </table>
+    </div>
   </div>
 </product-comparison-{{ ai_gen_id }}>
 
