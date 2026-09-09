@@ -225,6 +225,7 @@
   .ai-compare-media-{{ ai_gen_id }} {
     width: 100%;
     height: 100%;
+    display: block;
     object-fit: cover;
     transition: transform 0.32s ease;
   }
@@ -237,6 +238,11 @@
     position: absolute;
     inset: 0;
     z-index: 2;
+    pointer-events: none;
+  }
+
+  .ai-compare-card-media-wrap-{{ ai_gen_id }} > [data-video-fallback].is-hidden {
+    display: none !important;
   }
 
   .ai-compare-card-content-{{ ai_gen_id }} {
@@ -412,22 +418,12 @@
               muted
               loop
               playsinline
-              preload="none"
-              data-video-src="{{ durability_left_video | escape }}"
+              preload="auto"
+              src="{{ durability_left_video | escape }}"
               {% if durability_left_image != blank %}poster="{{ durability_left_image | image_url: width: 1200 }}"{% endif %}
             >
             </video>
-            {% if durability_left_image != blank %}
-              <img
-                class="ai-compare-media-{{ ai_gen_id }}"
-                data-video-fallback
-                src="{{ durability_left_image | image_url: width: 1200 }}"
-                alt="{{ left_card_title | default: durability_title | escape }}"
-                loading="lazy"
-                width="{{ durability_left_image.width }}"
-                height="{{ durability_left_image.height }}"
-              >
-            {% else %}
+            {% if durability_left_image == blank %}
               <div class="ai-compare-placeholder-{{ ai_gen_id }}" data-video-fallback>{{ 'image' | placeholder_svg_tag }}</div>
             {% endif %}
           {% elsif durability_left_image != blank %}
@@ -467,22 +463,12 @@
               muted
               loop
               playsinline
-              preload="none"
-              data-video-src="{{ durability_right_video | escape }}"
+              preload="auto"
+              src="{{ durability_right_video | escape }}"
               {% if durability_right_image != blank %}poster="{{ durability_right_image | image_url: width: 1200 }}"{% endif %}
             >
             </video>
-            {% if durability_right_image != blank %}
-              <img
-                class="ai-compare-media-{{ ai_gen_id }}"
-                data-video-fallback
-                src="{{ durability_right_image | image_url: width: 1200 }}"
-                alt="{{ right_card_title | default: durability_title | escape }}"
-                loading="lazy"
-                width="{{ durability_right_image.width }}"
-                height="{{ durability_right_image.height }}"
-              >
-            {% else %}
+            {% if durability_right_image == blank %}
               <div class="ai-compare-placeholder-{{ ai_gen_id }}" data-video-fallback>{{ 'image' | placeholder_svg_tag }}</div>
             {% endif %}
           {% elsif durability_right_image != blank %}
@@ -517,61 +503,43 @@
 
 <script>
 (function() {
-  class DualCompare{{ ai_gen_id }} extends HTMLElement {
-    constructor() {
-      super();
+  var root = document.querySelector('.ai-dual-compare-{{ ai_gen_id }}');
+  if (!root || root.dataset.videoInitialized === 'true') return;
+
+  root.dataset.videoInitialized = 'true';
+
+  root.querySelectorAll('[data-autoplay-video]').forEach(function(video) {
+    var fallback = video.parentElement.querySelector('[data-video-fallback]');
+
+    var showFallback = function() {
+      if (fallback) fallback.classList.remove('is-hidden');
+    };
+
+    var hideFallback = function() {
+      if (fallback) fallback.classList.add('is-hidden');
+    };
+
+    var playVideo = function() {
+      video.muted = true;
+      var playPromise = video.play();
+
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(showFallback);
+      }
+    };
+
+    video.addEventListener('playing', hideFallback);
+    video.addEventListener('error', showFallback);
+    video.addEventListener('loadeddata', playVideo, { once: true });
+    video.addEventListener('canplay', playVideo, { once: true });
+
+    if (video.error) {
+      showFallback();
+    } else if (video.readyState >= 2) {
+      if (video.paused) playVideo();
+      else hideFallback();
     }
-
-    connectedCallback() {
-      this.cards = this.querySelectorAll('[data-card]');
-      this.setupVideoPlayback();
-    }
-
-    setupVideoPlayback() {
-      this.cards.forEach(card => {
-        const video = card.querySelector('[data-autoplay-video]');
-        const fallback = card.querySelector('[data-video-fallback]');
-        
-        if (video) {
-          const showFallback = () => {
-            video.hidden = true;
-            if (fallback) {
-              fallback.hidden = false;
-            }
-          };
-
-          const hideFallback = () => {
-            video.hidden = false;
-            if (fallback) {
-              fallback.hidden = true;
-            }
-          };
-
-          const playVideo = () => {
-            const playPromise = video.play();
-            if (playPromise && typeof playPromise.catch === 'function') {
-              playPromise.catch(() => {});
-            }
-          };
-
-          video.addEventListener('error', showFallback);
-          video.addEventListener('playing', hideFallback);
-          video.addEventListener('loadeddata', playVideo, { once: true });
-          if (video.error) {
-            showFallback();
-          }
-
-          const videoSrc = video.dataset.videoSrc;
-          if (videoSrc) {
-            video.src = videoSrc;
-            video.load();
-          }
-        }
-      });
-    }
-  }
-
-  customElements.define('dual-compare-{{ ai_gen_id }}', DualCompare{{ ai_gen_id }});
+  });
 })();
 </script>
 
