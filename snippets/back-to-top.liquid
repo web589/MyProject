@@ -1,0 +1,178 @@
+{%- comment -%}
+  Global back-to-top control.
+  The control is revealed only while the page is being scrolled upward.
+{%- endcomment -%}
+
+<style>
+  .back-to-top {
+    --back-to-top-accent: #0099fc;
+
+    align-items: center;
+    background: transparent;
+    border: 3px solid var(--back-to-top-accent);
+    bottom: max(24px, env(safe-area-inset-bottom));
+    display: flex;
+    height: 70px;
+    justify-content: center;
+    opacity: 0;
+    padding: 0;
+    pointer-events: none;
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    transform: translateY(12px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+    visibility: hidden;
+    width: 80px;
+    z-index: 20;
+  }
+
+  .back-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    visibility: visible;
+  }
+
+  .back-to-top__circle {
+    align-items: center;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 5px 18px rgba(42, 55, 67, 0.14);
+    color: var(--back-to-top-accent);
+    display: flex;
+    height: 44px;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    width: 44px;
+  }
+
+  .back-to-top:hover .back-to-top__circle {
+    transform: translateY(-2px);
+  }
+
+  .back-to-top:active .back-to-top__circle {
+    transform: translateY(0);
+  }
+
+  .back-to-top:focus-visible {
+    outline: 2px solid var(--back-to-top-accent);
+    outline-offset: 4px;
+  }
+
+  .back-to-top__icon {
+    fill: none;
+    height: 22px;
+    stroke: currentColor;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    stroke-width: 1.8;
+    width: 22px;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .back-to-top {
+      border-width: 2px;
+      bottom: max(16px, env(safe-area-inset-bottom));
+      height: 60px;
+      right: max(12px, env(safe-area-inset-right));
+      width: 68px;
+    }
+
+    .back-to-top__circle {
+      height: 42px;
+      width: 42px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top,
+    .back-to-top__circle {
+      transition: none;
+    }
+  }
+</style>
+
+<button
+  class="back-to-top"
+  type="button"
+  data-back-to-top
+  aria-label="{{ 'general.accessibility.back_to_top' | t | escape }}"
+  title="{{ 'general.accessibility.back_to_top' | t | escape }}"
+>
+  <span class="back-to-top__circle" aria-hidden="true">
+    <svg class="back-to-top__icon" viewBox="0 0 24 24" focusable="false">
+      <path d="M12 19V5"></path>
+      <path d="m6 11 6-6 6 6"></path>
+      <path d="M5 19h14"></path>
+    </svg>
+  </span>
+</button>
+
+<script>
+  (function() {
+    var button = document.querySelector('[data-back-to-top]');
+    if (!button) return;
+
+    var scrollThreshold = 120;
+    var lastScrollY = Math.max(window.pageYOffset || document.documentElement.scrollTop || 0, 0);
+    var isTicking = false;
+    var isReturningToTop = false;
+
+    function getScrollY() {
+      return Math.max(window.pageYOffset || document.documentElement.scrollTop || 0, 0);
+    }
+
+    function setVisible(isVisible) {
+      button.classList.toggle('is-visible', isVisible);
+    }
+
+    function updateButton() {
+      var currentScrollY = getScrollY();
+      var scrollingUp = currentScrollY < lastScrollY;
+
+      if (currentScrollY <= scrollThreshold) {
+        isReturningToTop = false;
+      }
+
+      setVisible(
+        currentScrollY > scrollThreshold &&
+        scrollingUp &&
+        !isReturningToTop
+      );
+
+      lastScrollY = currentScrollY;
+      isTicking = false;
+    }
+
+    function requestUpdate() {
+      if (isTicking) return;
+
+      isTicking = true;
+      if (window.requestAnimationFrame) {
+        window.requestAnimationFrame(updateButton);
+      } else {
+        window.setTimeout(updateButton, 16);
+      }
+    }
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+
+    button.addEventListener('click', function() {
+      isReturningToTop = true;
+      setVisible(false);
+
+      var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({
+        top: 0,
+        behavior: reducedMotion ? 'auto' : 'smooth'
+      });
+
+      window.setTimeout(function() {
+        isReturningToTop = false;
+        lastScrollY = getScrollY();
+        requestUpdate();
+      }, reducedMotion ? 0 : 1000);
+    });
+  })();
+</script>

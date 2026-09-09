@@ -28,10 +28,22 @@
     assign native_sticky_header = true
   endif
   assign sticky_header = native_sticky_header
-  if request.page_type == 'product'
-    assign sticky_header = false
+
+  assign disable_header_sticky = false
+  if request.page_type == 'blog' or request.page_type == 'article'
+    assign disable_header_sticky = true
+  elsif request.page_type == 'product'
+    comment
+      The standard Venus E product templates include the floating anchor
+      navigation. Keep the alternate product templates on their normal
+      header behavior unless they add that navigation later.
+    endcomment
+    if template.suffix == blank or template.suffix contains 'venus-e'
+      assign disable_header_sticky = true
+    endif
   endif
-  if request.page_type == 'article'
+
+  if disable_header_sticky
     assign native_sticky_header = false
     assign sticky_header = false
   endif

@@ -234,7 +234,7 @@
 
   .shopify-section:has(.sticky-buy-bar-{{ ai_gen_id }}) {
     position: sticky;
-    top: var(--site-header-group-height, 0px);
+    top: 0;
     z-index: {{ block.settings.bar_z_index }};
   }
 
@@ -835,8 +835,8 @@
       }
 
       updateAnchorOffset() {
-        const barBottom = Math.max(0, this.getBoundingClientRect().bottom);
-        document.documentElement.style.setProperty('--pdp-sticky-anchor-offset', `${barBottom}px`);
+        const barHeight = Math.max(0, Math.ceil(this.getBoundingClientRect().height));
+        document.documentElement.style.setProperty('--pdp-sticky-anchor-offset', `${barHeight}px`);
       }
 
       handleLayoutChange() {
@@ -903,7 +903,7 @@
 
       scrollToTarget(targetElement, behavior) {
         const scrollTarget = this.getScrollTarget(targetElement);
-        const anchorOffset = this.getBoundingClientRect().bottom + 8;
+        const anchorOffset = Math.max(0, Math.ceil(this.getBoundingClientRect().height)) + 8;
         const targetTop = scrollTarget.getBoundingClientRect().top + window.scrollY - anchorOffset;
 
         window.scrollTo({
