@@ -28,14 +28,54 @@
     endunless
   endif
 
-  assign blog_recommended_product_handles = 'venus-e-mini,venus-e-3,venus-e-4,venus-e-max' | split: ','
-
   assign privacy_policy_url = '/policies/privacy-policy'
   assign newsletter_form_id = 'blog-article-newsletter-' | append: section.id
   for store_policy in shop.policies
     if store_policy.url contains 'privacy'
       assign privacy_policy_url = store_policy.url
       break
+    endif
+  endfor
+
+  assign newsletter_title = 'blogs.article.newsletter_title' | t
+  if section.settings.newsletter_title != blank
+    assign newsletter_title = section.settings.newsletter_title
+  endif
+
+  assign newsletter_text = 'blogs.article.newsletter_text' | t
+  if section.settings.newsletter_text != blank
+    assign newsletter_text = section.settings.newsletter_text
+  endif
+
+  assign newsletter_email_placeholder = 'blogs.article.newsletter_email' | t
+  if section.settings.newsletter_email_placeholder != blank
+    assign newsletter_email_placeholder = section.settings.newsletter_email_placeholder
+  endif
+
+  assign newsletter_consent = 'blogs.article.newsletter_consent_html' | t: privacy_url: privacy_policy_url
+  if section.settings.newsletter_consent != blank
+    assign newsletter_consent = section.settings.newsletter_consent
+  endif
+
+  assign newsletter_submit = 'blogs.article.newsletter_submit' | t
+  if section.settings.newsletter_submit != blank
+    assign newsletter_submit = section.settings.newsletter_submit
+  endif
+
+  assign newsletter_success = 'general.newsletter_form.newsletter_confirmation' | t
+  if section.settings.newsletter_success != blank
+    assign newsletter_success = section.settings.newsletter_success
+  endif
+
+  assign recommended_products_title = 'blogs.article.recommended_products' | t
+  if section.settings.recommended_products_title != blank
+    assign recommended_products_title = section.settings.recommended_products_title
+  endif
+
+  assign recommended_product_count = 0
+  for block in section.blocks
+    if block.type == 'product' and block.settings.product != blank
+      assign recommended_product_count = recommended_product_count | plus: 1
     endif
   endfor
 -%}
@@ -135,7 +175,7 @@
     border-top: 1px solid var(--blog-article-border);
     margin-bottom: 62px;
     position: sticky;
-    top: 0;
+    top: var(--site-header-group-height, var(--header-height, 0px));
     z-index: 25;
   }
 
@@ -279,6 +319,7 @@
   }
 
   .blog-article__newsletter {
+    background: #fff;
     border: 1px solid var(--blog-article-border);
     border-radius: 16px;
     padding: 24px;
@@ -295,6 +336,11 @@
     color: var(--blog-article-muted);
     line-height: 1.45;
     margin: 0 0 18px;
+  }
+
+  .blog-article__newsletter-copy p,
+  .blog-article__consent-copy p {
+    margin: 0;
   }
 
   .blog-article__newsletter .input-full {
@@ -333,7 +379,11 @@
     margin: 2px 0 0;
   }
 
-  .blog-article__consent a {
+  .blog-article__consent-copy {
+    flex: 1 1 auto;
+  }
+
+  .blog-article__consent-copy a {
     color: inherit;
     text-decoration: underline;
   }
@@ -345,7 +395,7 @@
 
   .blog-article__sidebar-sticky {
     position: sticky;
-    top: calc(var(--blog-center-sticky-height, 0px) + 24px);
+    top: calc(var(--site-header-group-height, var(--header-height, 0px)) + var(--blog-center-sticky-height, 0px) + 24px);
   }
 
   .blog-article__recommended-title {
@@ -760,14 +810,14 @@
         <div class="blog-article__sidebar-sticky">
           <section class="blog-article__newsletter" aria-labelledby="BlogArticleNewsletter-{{ section.id }}">
             <h2 class="blog-article__newsletter-title" id="BlogArticleNewsletter-{{ section.id }}">
-              {{ 'blogs.article.newsletter_title' | t }}
+              {{ newsletter_title | escape }}
             </h2>
-            <p class="blog-article__newsletter-copy">{{ 'blogs.article.newsletter_text' | t }}</p>
+            <div class="blog-article__newsletter-copy">{{ newsletter_text }}</div>
 
             {%- form 'customer', id: newsletter_form_id -%}
               {%- if form.posted_successfully? -%}
                 <p class="blog-article__form-message note note--success">
-                  {{ 'general.newsletter_form.newsletter_confirmation' | t }}
+                  {{ newsletter_success | escape }}
                 </p>
               {%- else -%}
                 {{ form.errors | default_errors }}
@@ -781,35 +831,48 @@
                   name="contact[email]"
                   id="BlogArticleEmail-{{ section.id }}"
                   value="{% if customer %}{{ customer.email }}{% endif %}"
-                  placeholder="{{ 'blogs.article.newsletter_email' | t }}"
+                  placeholder="{{ newsletter_email_placeholder | escape }}"
                   autocorrect="off"
                   autocapitalize="off"
                   required
                 >
-                <label class="blog-article__consent" for="BlogArticleConsent-{{ section.id }}">
-                  <input id="BlogArticleConsent-{{ section.id }}" type="checkbox" name="contact[accepts_marketing]" value="true" required>
-                  <span>{{ 'blogs.article.newsletter_consent_html' | t: privacy_url: privacy_policy_url }}</span>
-                </label>
+                <div class="blog-article__consent">
+                  <input id="BlogArticleConsent-{{ section.id }}" type="checkbox" name="contact[accepts_marketing]" value="true" aria-labelledby="BlogArticleConsentText-{{ section.id }}" required>
+                  <div class="blog-article__consent-copy" id="BlogArticleConsentText-{{ section.id }}">{{ newsletter_consent }}</div>
+                </div>
                 <button class="blog-article__newsletter-submit" type="submit">
-                  {{ 'blogs.article.newsletter_submit' | t }}
+                  {{ newsletter_submit | escape }}
                 </button>
               {%- endif -%}
             {%- endform -%}
           </section>
 
-          <section class="blog-article__recommended" aria-labelledby="BlogArticleRecommended-{{ section.id }}">
-            <h2 class="blog-article__recommended-title" id="BlogArticleRecommended-{{ section.id }}">
-              {{ 'blogs.article.recommended_products' | t }}
-            </h2>
-            <div class="blog-article__recommended-list">
-              {%- for product_handle in blog_recommended_product_handles -%}
-                {%- assign recommended_product = all_products[product_handle] -%}
-                {%- if recommended_product != blank -%}
-                  {%- render 'blog-article-product-card', product: recommended_product, variant: 'compact' -%}
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
-          </section>
+          {%- if recommended_product_count > 0 -%}
+            <section class="blog-article__recommended" aria-labelledby="BlogArticleRecommended-{{ section.id }}">
+              <h2 class="blog-article__recommended-title" id="BlogArticleRecommended-{{ section.id }}">
+                {{ recommended_products_title | escape }}
+              </h2>
+              <div class="blog-article__recommended-list">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'product' and block.settings.product != blank -%}
+                    {%- render 'blog-article-product-card',
+                      product: block.settings.product,
+                      variant: 'compact',
+                      custom_image: block.settings.image,
+                      title_override: block.settings.title,
+                      subtitle_override: block.settings.description,
+                      specs_override: block.settings.specs,
+                      badge_override: block.settings.badge,
+                      badge_color_override: block.settings.badge_color,
+                      cta_label_override: block.settings.button_label,
+                      link_override: block.settings.link,
+                      block_attributes: block.shopify_attributes
+                    -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </section>
+          {%- endif -%}
         </div>
       </aside>
     </div>
@@ -879,8 +942,123 @@
       "id": "social_sharing_blog",
       "label": "t:sections.article-template.settings.social_sharing_blog.label",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sidebar content"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter title",
+      "info": "Leave blank to use the translated default."
+    },
+    {
+      "type": "richtext",
+      "id": "newsletter_text",
+      "label": "Newsletter description",
+      "info": "Leave blank to use the translated default."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_email_placeholder",
+      "label": "Email input placeholder",
+      "info": "Leave blank to use the translated default."
+    },
+    {
+      "type": "richtext",
+      "id": "newsletter_consent",
+      "label": "Privacy consent text",
+      "info": "Leave blank to use the translated default. Add the privacy policy link when using custom text."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_submit",
+      "label": "Newsletter button text",
+      "info": "Leave blank to use the translated default."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_success",
+      "label": "Newsletter success message",
+      "info": "Leave blank to use the translated default."
+    },
+    {
+      "type": "text",
+      "id": "recommended_products_title",
+      "label": "Recommended products title",
+      "info": "Leave blank to use the translated default."
     }
   ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Recommended product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card title",
+          "info": "Leave blank to use the product metafield or product title."
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Card description",
+          "info": "Leave blank to use the product metafield."
+        },
+        {
+          "type": "text",
+          "id": "specs",
+          "label": "Card specifications",
+          "info": "Leave blank to use the product metafield."
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge text"
+        },
+        {
+          "type": "select",
+          "id": "badge_color",
+          "label": "Badge color",
+          "default": "blue",
+          "options": [
+            {
+              "value": "blue",
+              "label": "Blue"
+            },
+            {
+              "value": "orange",
+              "label": "Orange"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button text",
+          "info": "Leave blank to use the translated default."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
   "disabled_on": {
     "groups": ["footer", "header", "custom.popups"]
   }

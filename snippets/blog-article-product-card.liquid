@@ -1,30 +1,47 @@
 {%- if product != blank -%}
   {%- liquid
     assign card_variant = product.selected_or_first_available_variant
-    assign card_image = card_variant.featured_image | default: product.featured_image
-    assign card_title = product.metafields.custom.carousel_title.value | default: product.title
-    assign card_subtitle = product.metafields.custom.carousel_subtitle.value
-    assign card_specs = product.metafields.custom.carousel_specs.value
-    assign card_cta_label = product.metafields.custom.carousel_primary_label.value
+    assign card_image = custom_image | default: card_variant.featured_image | default: product.featured_image
+    assign card_title = title_override | default: product.metafields.custom.carousel_title.value | default: product.title
+    assign card_subtitle = subtitle_override | default: product.metafields.custom.carousel_subtitle.value
+    assign card_specs = specs_override | default: product.metafields.custom.carousel_specs.value
+    assign card_cta_label = cta_label_override | default: product.metafields.custom.carousel_primary_label.value
     if card_cta_label == blank
       assign card_cta_label = 'blogs.article.view_product' | t
     endif
+    assign card_badge = badge_override | default: product.metafields.custom.carousel_badge.value
+    assign card_badge_tone = badge_color_override | default: 'blue'
+    if card_badge_tone != 'orange'
+      assign card_badge_tone = 'blue'
+    endif
+    assign card_link = link_override | default: product.url
   -%}
 
-  <article class="blog-article-product-card blog-article-product-card--{{ variant | default: 'compact' }}{% if card_image == blank %} blog-article-product-card--no-image{% endif %}">
+  <article class="blog-article-product-card blog-article-product-card--{{ variant | default: 'compact' }}{% if card_image == blank %} blog-article-product-card--no-image{% endif %}"{% if block_attributes != blank %} {{ block_attributes }}{% endif %}>
     {%- if card_image != blank -%}
-      <a class="blog-article-product-card__image" href="{{ product.url }}" aria-label="{{ card_title | escape }}">
+      <a class="blog-article-product-card__image" href="{{ card_link | escape }}" aria-label="{{ card_title | escape }}">
         {%- render 'image-element',
           img: card_image,
           sizes: '(min-width: 769px) 320px, 90vw',
           widths: '240, 360, 540, 720',
         -%}
+        {%- if card_badge != blank -%}
+          <span class="blog-article-product-card__badge blog-article-product-card__badge--{{ card_badge_tone }}">
+            {{ card_badge | escape }}
+          </span>
+        {%- endif -%}
       </a>
     {%- endif -%}
 
     <div class="blog-article-product-card__content">
+      {%- if card_badge != blank and card_image == blank -%}
+        <span class="blog-article-product-card__badge blog-article-product-card__badge--{{ card_badge_tone }}">
+          {{ card_badge | escape }}
+        </span>
+      {%- endif -%}
+
       <h3 class="blog-article-product-card__title">
-        <a href="{{ product.url }}">{{ card_title | escape }}</a>
+        <a href="{{ card_link | escape }}">{{ card_title | escape }}</a>
       </h3>
 
       {%- if card_subtitle != blank -%}
@@ -44,7 +61,7 @@
         </div>
       {%- endif -%}
 
-      <a class="blog-article-product-card__button" href="{{ product.url }}">
+      <a class="blog-article-product-card__button" href="{{ card_link | escape }}">
         {{ card_cta_label | escape }}
       </a>
     </div>
@@ -55,17 +72,24 @@
   .blog-article-product-card {
     background: #fff;
     border: 1px solid #e1e4e8;
-    border-radius: 14px;
+    border-radius: 12px;
     overflow: hidden;
   }
 
   .blog-article-product-card__image {
     align-items: center;
-    background: #f1f4f6;
+    background: #fff;
     display: flex;
+    height: 180px;
     justify-content: center;
-    min-height: 160px;
     overflow: hidden;
+    position: relative;
+  }
+
+  .blog-article-product-card__image image-element {
+    display: block;
+    height: 100%;
+    width: 100%;
   }
 
   .blog-article-product-card__image img {
@@ -89,17 +113,40 @@
   }
 
   .blog-article-product-card--compact .blog-article-product-card__image {
-    min-height: 140px;
+    height: 180px;
+  }
+
+  .blog-article-product-card__badge {
+    border-radius: 999px;
+    color: #fff;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    left: 10px;
+    line-height: 1.2;
+    padding: 5px 9px;
+    position: absolute;
+    text-transform: uppercase;
+    top: 10px;
+    z-index: 1;
+  }
+
+  .blog-article-product-card__badge--blue {
+    background: #0099fc;
+  }
+
+  .blog-article-product-card__badge--orange {
+    background: #f59e0b;
   }
 
   .blog-article-product-card__content {
-    padding: 16px;
+    padding: 12px;
   }
 
   .blog-article-product-card__title {
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1.25;
-    margin: 0 0 6px;
+    margin: 0 0 5px;
   }
 
   .blog-article-product-card__title a {
@@ -109,15 +156,15 @@
   .blog-article-product-card__subtitle,
   .blog-article-product-card__specs {
     color: #8a8f98;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.35;
-    margin: 0 0 6px;
+    margin: 0 0 5px;
   }
 
   .blog-article-product-card__price {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
-    margin: 12px 0;
+    margin: 8px 0;
   }
 
   .blog-article-product-card__price s {
@@ -132,8 +179,8 @@
     border-radius: 999px;
     color: #fff;
     display: block;
-    font-size: 13px;
-    padding: 11px 14px;
+    font-size: 12px;
+    padding: 10px 12px;
     text-align: center;
   }
 
@@ -146,6 +193,10 @@
   @media only screen and (max-width: 768px) {
     .blog-article-product-card--cta {
       grid-template-columns: 96px minmax(0, 1fr);
+    }
+
+    .blog-article-product-card--compact .blog-article-product-card__image {
+      height: 160px;
     }
   }
 {% endstyle %}
