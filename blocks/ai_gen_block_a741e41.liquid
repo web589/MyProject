@@ -343,13 +343,45 @@
     assign durability_description = block.settings.description
     assign durability_left_image = block.settings.left_image
     assign durability_right_image = block.settings.right_image
+    assign durability_left_video = block.settings.left_video
+    assign durability_right_video = block.settings.right_video
     assign left_card_title = block.settings.left_card_title
     assign left_card_description = block.settings.left_card_description
     assign right_card_title = block.settings.right_card_title
     assign right_card_description = block.settings.right_card_description
   endif
+
+  assign left_video_selected = false
+  if is_product_context == false and block.settings.left_media_type == 'video'
+    assign left_video_selected = true
+  endif
+
+  assign left_video_enabled = false
+  if left_video_selected and durability_left_video != blank
+    assign left_video_enabled = true
+  endif
+
+  assign right_video_selected = false
+  if is_product_context == false and block.settings.right_media_type == 'video'
+    assign right_video_selected = true
+  endif
+
+  assign right_video_enabled = false
+  if right_video_selected and durability_right_video != blank
+    assign right_video_enabled = true
+  endif
+
+  assign left_media_available = false
+  if left_video_selected or durability_left_image != blank
+    assign left_media_available = true
+  endif
+
+  assign right_media_available = false
+  if right_video_selected or durability_right_image != blank
+    assign right_media_available = true
+  endif
 %}
-{% if durability_title != blank or durability_description != blank or durability_left_image != blank or durability_right_image != blank %}
+{% if durability_title != blank or durability_description != blank or left_media_available or right_media_available %}
 <dual-compare-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target ai-dual-compare-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
   <div class="ai-dual-compare-inner-{{ ai_gen_id }}">
     {% if durability_title != blank %}
@@ -363,10 +395,36 @@
     {% endif %}
 
     <div class="ai-dual-cards-wrap-{{ ai_gen_id }}">
-      {% if durability_left_image != blank %}
+      {% if left_media_available %}
       <div class="ai-compare-card-{{ ai_gen_id }}" data-card="left">
         <div class="ai-compare-card-media-wrap-{{ ai_gen_id }}">
-          {% if durability_left_image != blank %}
+          {% if left_video_enabled %}
+            <video
+              class="ai-compare-media-{{ ai_gen_id }}"
+              data-hover-play
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              {% if durability_left_image != blank %}poster="{{ durability_left_image | image_url: width: 1200 }}"{% endif %}
+            >
+              <source src="{{ durability_left_video | escape }}" type="video/mp4">
+            </video>
+            {% if durability_left_image != blank %}
+              <img
+                class="ai-compare-media-{{ ai_gen_id }}"
+                data-video-fallback
+                src="{{ durability_left_image | image_url: width: 1200 }}"
+                alt="{{ left_card_title | default: durability_title | escape }}"
+                loading="lazy"
+                width="{{ durability_left_image.width }}"
+                height="{{ durability_left_image.height }}"
+                hidden
+              >
+            {% else %}
+              <div class="ai-compare-placeholder-{{ ai_gen_id }}" data-video-fallback hidden>{{ 'image' | placeholder_svg_tag }}</div>
+            {% endif %}
+          {% elsif durability_left_image != blank %}
             <img
               class="ai-compare-media-{{ ai_gen_id }}"
               src="{{ durability_left_image | image_url: width: 1200 }}"
@@ -392,10 +450,36 @@
       </div>
       {% endif %}
 
-      {% if durability_right_image != blank %}
+      {% if right_media_available %}
       <div class="ai-compare-card-{{ ai_gen_id }}" data-card="right">
         <div class="ai-compare-card-media-wrap-{{ ai_gen_id }}">
-          {% if durability_right_image != blank %}
+          {% if right_video_enabled %}
+            <video
+              class="ai-compare-media-{{ ai_gen_id }}"
+              data-hover-play
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              {% if durability_right_image != blank %}poster="{{ durability_right_image | image_url: width: 1200 }}"{% endif %}
+            >
+              <source src="{{ durability_right_video | escape }}" type="video/mp4">
+            </video>
+            {% if durability_right_image != blank %}
+              <img
+                class="ai-compare-media-{{ ai_gen_id }}"
+                data-video-fallback
+                src="{{ durability_right_image | image_url: width: 1200 }}"
+                alt="{{ right_card_title | default: durability_title | escape }}"
+                loading="lazy"
+                width="{{ durability_right_image.width }}"
+                height="{{ durability_right_image.height }}"
+                hidden
+              >
+            {% else %}
+              <div class="ai-compare-placeholder-{{ ai_gen_id }}" data-video-fallback hidden>{{ 'image' | placeholder_svg_tag }}</div>
+            {% endif %}
+          {% elsif durability_right_image != blank %}
             <img
               class="ai-compare-media-{{ ai_gen_id }}"
               src="{{ durability_right_image | image_url: width: 1200 }}"
@@ -440,16 +524,35 @@
     setupHoverInteraction() {
       this.cards.forEach(card => {
         const video = card.querySelector('[data-hover-play]');
+        const fallback = card.querySelector('[data-video-fallback]');
         
         if (video) {
           video.pause();
+
+          const showFallback = () => {
+            video.hidden = true;
+            if (fallback) {
+              fallback.hidden = false;
+            }
+          };
+
+          video.addEventListener('error', showFallback);
+          if (video.error) {
+            showFallback();
+          }
           
           card.addEventListener('mouseenter', () => {
-            video.play();
+            if (video.hidden) return;
+
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+              playPromise.catch(() => {});
+            }
           });
           
           card.addEventListener('mouseleave', () => {
             video.pause();
+            video.currentTime = 0;
           });
         }
       });
