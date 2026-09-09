@@ -466,6 +466,13 @@
       grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
     }
   }
+
+  @media screen and (min-width: 641px) and (max-width: 768px) {
+    .ai-custom-blog-section-{{ ai_gen_id }} {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
 {% endstyle %}
 
 {% liquid
