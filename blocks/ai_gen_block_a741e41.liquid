@@ -783,7 +783,8 @@
     {
       "type": "image_picker",
       "id": "left_image",
-      "label": "Image"
+      "label": "Image",
+      "visible_if": "{{ block.settings.left_media_type == 'image' }}"
     },
     {
       "type": "url",
@@ -824,7 +825,8 @@
     {
       "type": "image_picker",
       "id": "right_image",
-      "label": "Image"
+      "label": "Image",
+      "visible_if": "{{ block.settings.right_media_type == 'image' }}"
     },
     {
       "type": "url",
