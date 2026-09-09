@@ -211,6 +211,11 @@
     margin-right: 0;
   }
 
+  .power-feature-module-{{ ai_gen_id }}.power-feature-module--product .power-description-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .power-img-wrap-{{ ai_gen_id }} {
     width: {{ block.settings.desktop_width_percent }}%;
     height: {{ block.settings.card_img_height }}px;
@@ -283,7 +288,7 @@
   endif
 %}
 {% if smart_energy_title != blank or smart_energy_description != blank or smart_energy_image != blank %}
-<div{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target power-feature-module-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<div{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target power-feature-module-{{ ai_gen_id }}{% if request.page_type == 'product' %} power-feature-module--product{% endif %}" {{ block.shopify_attributes }}>
   <div class="power-feature-inner-{{ ai_gen_id }}">
     {% if smart_energy_title != blank %}
       <h2 class="power-heading-main-{{ ai_gen_id }}">{{ smart_energy_title }}</h2>

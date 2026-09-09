@@ -203,6 +203,11 @@
     margin-right: 0;
   }
 
+  .ai-dual-compare-{{ ai_gen_id }}.ai-dual-compare--product .ai-dual-compare-desc-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .ai-dual-cards-wrap-{{ ai_gen_id }} {
     display: flex;
     gap: {{ block.settings.cards_gap }}px;
@@ -394,7 +399,7 @@
   endif
 %}
 {% if durability_title != blank or durability_description != blank or left_media_available or right_media_available %}
-<dual-compare-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target ai-dual-compare-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+<dual-compare-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target ai-dual-compare-{{ ai_gen_id }}{% if request.page_type == 'product' %} ai-dual-compare--product{% endif %}" {{ block.shopify_attributes }}>
   <div class="ai-dual-compare-inner-{{ ai_gen_id }}">
     {% if durability_title != blank %}
       <h2 class="ai-dual-compare-heading-{{ ai_gen_id }}">{{ durability_title }}</h2>
