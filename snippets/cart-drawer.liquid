@@ -843,7 +843,7 @@
               <div class="cart-shipping-estimate" data-shipping-estimate role="status" aria-live="polite">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h11v10H3V6Zm11 4h3l4 4v2h-7v-6ZM7 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
                 <span data-shipping-message>Shopify Versandkosten werden geladen …</span>
-                <button type="button" class="cart-postcode-toggle" data-postcode-toggle hidden>PLZ für genaue Berechnung eingeben</button>
+                <button type="button" class="cart-postcode-toggle" data-postcode-toggle hidden>PLZ ändern</button>
               </div>
 
               <section class="cart-vat-qualification" data-vat-qualification hidden>
@@ -1548,8 +1548,10 @@
         }
 
         handlePostcodeToggle() {
-          this.postcodeRow.hidden = !this.postcodeRow.hidden;
-          if (!this.postcodeRow.hidden) this.postcodeInput.focus();
+          this.postcodeRow.hidden = false;
+          this.postcodeToggle.hidden = true;
+          this.postcodeInput.focus();
+          this.postcodeInput.select();
         }
 
         handlePostcodeKeydown(event) {
@@ -1587,6 +1589,9 @@
           this.countryNameAttribute.value = this.countryNames[this.selectedCountry];
           this.countryCodeAttribute.value = this.selectedCountry;
           this.postcodeAttribute.value = this.postcodeInput.value.trim();
+          this.postcodeToggle.textContent = this.postcodeInput.value.trim()
+            ? `PLZ ${this.postcodeInput.value.trim()} ändern`
+            : 'PLZ eingeben';
         }
 
         shouldShowVatQualification() {
@@ -1936,7 +1941,7 @@
             this.setShippingMessage(`${rateName}: ${formattedPrice}${extraRates}`, false);
             this.setShippingSummary(`${result.rates.length > 1 ? 'ab ' : ''}${formattedPrice}`, false);
             this.postcodeRow.hidden = true;
-            this.postcodeToggle.hidden = true;
+            this.postcodeToggle.hidden = false;
           } catch (error) {
             if (requestId !== this.shippingRequestId) return;
             if (error && error.name === 'AbortError') return;
@@ -1949,6 +1954,8 @@
               this.setShippingMessage(`Versand nach ${this.countryNames[this.selectedCountry]} · bitte PLZ eingeben`, false);
               this.setShippingSummary('PLZ eingeben', false);
             } else {
+              this.postcodeRow.hidden = false;
+              this.postcodeToggle.hidden = true;
               this.setShippingMessage(error.message || 'Versandkosten konnten nicht geladen werden.', true);
               this.setShippingSummary('Im Checkout berechnet', false);
             }

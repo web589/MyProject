@@ -145,7 +145,7 @@
 
   <div class="cart-shipping-estimate" data-shipping-estimate role="status" aria-live="polite">
     <span data-shipping-message>Shopify Versandkosten werden geladen …</span>
-    <button type="button" class="cart-postcode-toggle" data-postcode-toggle hidden>PLZ für genaue Berechnung eingeben</button>
+    <button type="button" class="cart-postcode-toggle" data-postcode-toggle hidden>PLZ ändern</button>
   </div>
 
   <input type="hidden" name="attributes[Lieferland]" value="" data-delivery-country-name>
@@ -304,8 +304,10 @@
       }
 
       handlePostcodeToggle() {
-        this.postcodeRow.hidden = !this.postcodeRow.hidden;
-        if (!this.postcodeRow.hidden) this.postcodeInput.focus();
+        this.postcodeRow.hidden = false;
+        this.postcodeToggle.hidden = true;
+        this.postcodeInput.focus();
+        this.postcodeInput.select();
       }
 
       applyCountryUI() {
@@ -315,6 +317,9 @@
         this.countryNameAttribute.value = this.countryNames[this.selectedCountry];
         this.countryCodeAttribute.value = this.selectedCountry;
         this.postcodeAttribute.value = this.postcodeInput.value.trim();
+        this.postcodeToggle.textContent = this.postcodeInput.value.trim()
+          ? `PLZ ${this.postcodeInput.value.trim()} ändern`
+          : 'PLZ eingeben';
       }
 
       getAttributePayload() {
@@ -406,7 +411,7 @@
           this.setShippingMessage(`${rateName}: ${result.formattedPrice}${extraRates}`, false);
           this.setShippingSummary(`${result.rates.length > 1 ? 'ab ' : ''}${result.formattedPrice}`, false);
           this.postcodeRow.hidden = true;
-          this.postcodeToggle.hidden = true;
+          this.postcodeToggle.hidden = false;
         } catch (error) {
           if (requestId !== this.shippingRequestId) return;
           if (error.needsPostcode && !this.postcodeInput.value.trim()) {
@@ -414,6 +419,8 @@
             this.postcodeToggle.hidden = false;
             this.setShippingMessage(`Versand nach ${this.countryNames[this.selectedCountry]} · bitte PLZ eingeben`, false);
           } else {
+            this.postcodeRow.hidden = false;
+            this.postcodeToggle.hidden = true;
             this.setShippingMessage(error.message || 'Versandkosten konnten nicht geladen werden.', true);
           }
           this.setShippingSummary('Im Checkout berechnet', false);
