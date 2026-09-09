@@ -1,4 +1,13 @@
-{%- assign blog_center_url = routes.blogs_url | default: '/blogs' -%}
+{%- assign blog_center_url = blog_center_home_link.url | default: blog.url -%}
+{%- if blog_center_url != blank -%}
+  {%- unless blog_center_url contains 'view=' -%}
+    {%- if blog_center_url contains '?' -%}
+      {%- assign blog_center_url = blog_center_url | append: '&view=all' -%}
+    {%- else -%}
+      {%- assign blog_center_url = blog_center_url | append: '?view=all' -%}
+    {%- endif -%}
+  {%- endunless -%}
+{%- endif -%}
 {%- assign is_blog_center_home = false -%}
 {%- if template.suffix == 'all' -%}
   {%- assign is_blog_center_home = true -%}

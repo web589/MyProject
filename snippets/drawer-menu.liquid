@@ -1,5 +1,21 @@
 {%- assign animation_row = 1 -%}
 {%- assign drawer_position = 'right' -%}
+{%- assign blog_center_menu = linklists['blog-center'] -%}
+{%- assign blog_center_home_link = blank -%}
+{%- assign blog_center_url = blank -%}
+{%- if blog_center_menu != blank and blog_center_menu.links.size > 0 -%}
+  {%- assign blog_center_home_link = blog_center_menu.links | first -%}
+  {%- assign blog_center_url = blog_center_home_link.url -%}
+{%- endif -%}
+{%- if blog_center_url != blank -%}
+  {%- unless blog_center_url contains 'view=' -%}
+    {%- if blog_center_url contains '?' -%}
+      {%- assign blog_center_url = blog_center_url | append: '&view=all' -%}
+    {%- else -%}
+      {%- assign blog_center_url = blog_center_url | append: '?view=all' -%}
+    {%- endif -%}
+  {%- endunless -%}
+{%- endif -%}
 {% if logo_alignment == 'center' %}
   {%- assign drawer_position = 'left' -%}
 {% endif %}
@@ -89,8 +105,8 @@
                         assign grand_child_list_handle = childlink.url | handleize | append: forloop.index
                         assign childlink_url = childlink.url
                         assign childlink_title_handle = childlink.title | handleize
-                        if childlink_title_handle == 'blog'
-                          assign childlink_url = routes.blogs_url | default: '/blogs'
+                        if childlink_title_handle == 'blog' and blog_center_url != blank
+                          assign childlink_url = blog_center_url
                         endif
                         if childlink_title_handle == 'venus-e-mini'
                           assign childlink_url = '/products/venus-e-mini'

@@ -1,10 +1,19 @@
 {%- liquid
   assign blog_center_menu = linklists['blog-center']
   assign blog_center_home_link = blank
-  assign blog_center_url = routes.blogs_url | default: '/blogs'
   assign is_all_blog_view = false
   if blog_center_menu != blank and blog_center_menu.links.size > 0
     assign blog_center_home_link = blog_center_menu.links | first
+  endif
+  assign blog_center_url = blog_center_home_link.url | default: blog.url
+  if blog_center_url != blank
+    unless blog_center_url contains 'view='
+      if blog_center_url contains '?'
+        assign blog_center_url = blog_center_url | append: '&view=all'
+      else
+        assign blog_center_url = blog_center_url | append: '?view=all'
+      endif
+    endunless
   endif
   if template.suffix == 'all'
     assign is_all_blog_view = true

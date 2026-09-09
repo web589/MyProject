@@ -7,8 +7,22 @@
   assign article_blog = article.blog | default: blog
   assign blog_center_menu = linklists['blog-center']
   assign blog_center_home_link = blank
+  assign blog_center_url = blank
   if blog_center_menu != blank and blog_center_menu.links.size > 0
     assign blog_center_home_link = blog_center_menu.links | first
+    assign blog_center_url = blog_center_home_link.url
+  endif
+  if blog_center_url == blank
+    assign blog_center_url = article_blog.url
+  endif
+  if blog_center_url != blank
+    unless blog_center_url contains 'view='
+      if blog_center_url contains '?'
+        assign blog_center_url = blog_center_url | append: '&view=all'
+      else
+        assign blog_center_url = blog_center_url | append: '?view=all'
+      endif
+    endunless
   endif
 
   assign blog_recommended_product_handles = 'venus-e-mini,venus-e-3,venus-e-4,venus-e-max' | split: ','
@@ -534,7 +548,7 @@
       <div class="page-width">
         <div class="blog-article__category-inner">
           {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
-            <a class="blog-article__category-heading" href="{{ routes.blogs_url | default: '/blogs' }}">
+            <a class="blog-article__category-heading" href="{{ blog_center_url }}">
               {{ 'blogs.article.blog_center' | t }}
             </a>
           {%- else -%}
@@ -545,7 +559,7 @@
 
           <nav class="blog-article__category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
           {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
-            <a class="blog-article__category-link" href="{{ routes.blogs_url | default: '/blogs' }}">
+            <a class="blog-article__category-link" href="{{ blog_center_url }}">
               {{ 'blogs.article.all' | t }}
             </a>
           {%- endif -%}
