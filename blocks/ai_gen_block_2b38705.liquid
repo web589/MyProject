@@ -1692,19 +1692,14 @@
         }
       }
       if (groupKey === 'group1' && this.useNativeBundleCartValidation) {
-        // The native Bundle variant is validated by Shopify, but an explicit
-        // `available: false` is still authoritative for the current market.
-        // Ignoring that value leaves the button enabled in markets where a
-        // component is not published or has no fulfillable inventory.
+        // The native Bundle parent is resolved by Shopify Cart Transform, so
+        // its storefront availability can become stale after adding. A
+        // concrete variant id is enough to render the action; Cart API remains
+        // authoritative for publication and inventory.
         if (!option.variantId) return false;
-        if (
-          this.hasKnownInventoryQuantity(option)
-          && option.inventoryManagement
-          && Number(option.inventoryQuantity) <= 0
-        ) {
-          return false;
-        }
-        return typeof option.available === 'boolean' ? option.available : true;
+        // The native Bundle parent can report a stale unavailable state after
+        // the first add. Let Shopify Cart API validate the real inventory.
+        return Boolean(option.variantId);
       }
       if (groupKey === 'group1' && this.enforceSharedInventory) {
         if (!this.hasValidSharedInventory()) return false;
@@ -1870,6 +1865,188 @@
     isInventoryErrorResponse(status, message) {
       return (status === 400 || status === 422)
         && /stock|inventory|quantity|available|verfügbar|lager|ausverkauft|sold\s*out|out\s*of\s*stock/i.test(message || '');
+    }
+
+    getCartRequestHeaders() {
+      return {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      };
+    }
+
+    async parseCartApiResponse(response, fallbackMessage) {
+      const responseText = await response.text();
+      let result = null;
+
+      try {
+        result = responseText ? JSON.parse(responseText) : {};
+      } catch (error) {
+        const message = /^\s*</.test(responseText || '')
+          ? 'Die Shopify-Warenkorbverbindung wird gerade geprüft. Bitte lade die Seite neu und versuche es erneut.'
+          : fallbackMessage;
+        throw new Error(message);
+      }
+
+      if (!response.ok) {
+        throw new Error(this.getResponseMessage(result, responseText) || fallbackMessage);
+      }
+
+      return result;
+    }
+
+    async fetchCartSnapshot(root) {
+      const response = await fetch(`${root}cart.js?t=${Date.now()}`, {
+        method: 'GET',
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers: {
+          Accept: 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+      const cart = await this.parseCartApiResponse(
+        response,
+        'Der Warenkorb konnte gerade nicht geladen werden. Bitte lade die Seite neu und versuche es erneut.'
+      );
+
+      if (!cart || !Array.isArray(cart.items)) {
+        throw new Error('Der Warenkorb konnte gerade nicht geladen werden. Bitte lade die Seite neu und versuche es erneut.');
+      }
+
+      return cart;
+    }
+
+    normalizeCartProperties(properties) {
+      if (!properties || typeof properties !== 'object') return {};
+
+      return Object.keys(properties)
+        .filter(key => key && key.charAt(0) !== '_' && properties[key] !== null && properties[key] !== undefined && String(properties[key]) !== '')
+        .sort()
+        .reduce((normalized, key) => {
+          normalized[key] = String(properties[key]);
+          return normalized;
+        }, {});
+    }
+
+    cartLineMatchesItem(line, item) {
+      const lineVariantId = line && (line.variant_id || line.id);
+      if (!line || !item || Number(lineVariantId) !== Number(item.id)) return false;
+
+      // Private VAT/implementation metadata must not split an otherwise
+      // identical product into a new cart line. Keep meaningful public
+      // properties distinct when both sides provide them.
+      const lineProperties = this.normalizeCartProperties(line.properties);
+      const itemProperties = this.normalizeCartProperties(item.properties);
+      const linePropertyKeys = Object.keys(lineProperties);
+      const itemPropertyKeys = Object.keys(itemProperties);
+
+      if (!linePropertyKeys.length || !itemPropertyKeys.length) return true;
+      return JSON.stringify(lineProperties) === JSON.stringify(itemProperties);
+    }
+
+    mergeSelectedCartItems(items) {
+      return items.reduce((merged, item) => {
+        const existing = merged.find(candidate => this.cartLineMatchesItem(candidate, item));
+        if (existing) {
+          existing.quantity += Number(item.quantity) || 0;
+        } else {
+          merged.push({
+            ...item,
+            quantity: Number(item.quantity) || 0
+          });
+        }
+        return merged;
+      }, []).filter(item => item.quantity > 0);
+    }
+
+    async incrementOrAddCartItems(items, root) {
+      const run = async () => {
+        const cart = await this.fetchCartSnapshot(root);
+        const selectedItems = this.mergeSelectedCartItems(items);
+        const existingUpdates = [];
+        const additions = [];
+
+        selectedItems.forEach(item => {
+          const existingLine = cart.items.find(line => this.cartLineMatchesItem(line, item));
+          if (existingLine && existingLine.key) {
+            existingUpdates.push({
+              key: existingLine.key,
+              previousQuantity: Number(existingLine.quantity) || 0,
+              quantity: (Number(existingLine.quantity) || 0) + item.quantity
+            });
+          } else {
+            additions.push(item);
+          }
+        });
+
+        const changedLines = [];
+        let addedKeys = [];
+
+        const rollback = async () => {
+          for (const line of changedLines.reverse()) {
+            await fetch(`${root}cart/change.js`, {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: this.getCartRequestHeaders(),
+              body: JSON.stringify({ id: line.key, quantity: line.previousQuantity })
+            }).catch(() => {});
+          }
+
+          if (addedKeys.length) {
+            const updates = {};
+            addedKeys.forEach(key => { updates[key] = 0; });
+            await fetch(`${root}cart/update.js`, {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: this.getCartRequestHeaders(),
+              body: JSON.stringify({ updates })
+            }).catch(() => {});
+          }
+        };
+
+        try {
+          for (const update of existingUpdates) {
+            changedLines.push(update);
+            const response = await fetch(`${root}cart/change.js`, {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: this.getCartRequestHeaders(),
+              body: JSON.stringify({ id: update.key, quantity: update.quantity })
+            });
+            await this.parseCartApiResponse(
+              response,
+              'Die Auswahl konnte nicht aktualisiert werden. Bitte prüfe die Produktverfügbarkeit und versuche es erneut.'
+            );
+          }
+
+          if (additions.length) {
+            const response = await fetch(`${root}cart/add.js`, {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: this.getCartRequestHeaders(),
+              body: JSON.stringify({ items: additions })
+            });
+            const result = await this.parseCartApiResponse(
+              response,
+              'Die Auswahl konnte nicht hinzugefügt werden. Bitte prüfe die Produktverfügbarkeit und versuche es erneut.'
+            );
+            addedKeys = (result.items || []).map(item => item.key).filter(Boolean);
+          }
+
+          return {
+            cart: await this.fetchCartSnapshot(root),
+            items: selectedItems
+          };
+        } catch (error) {
+          await rollback();
+          throw error;
+        }
+      };
+
+      return window.PVTaxCart && window.PVTaxCart.enqueue
+        ? window.PVTaxCart.enqueue(run)
+        : run();
     }
 
     getResponseMessage(result, rawMessage) {
@@ -2091,47 +2268,14 @@
         if (!items.length) throw new Error('Für diese Auswahl ist kein Shopify-Produkt konfiguriert.');
 
         const root = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
-        const request = () => fetch(`${root}cart/add.js`, {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          body: JSON.stringify({ items })
-        });
-        const response = await (window.PVTaxCart && window.PVTaxCart.enqueue
-          ? window.PVTaxCart.enqueue(request)
-          : request());
-        const responseText = await response.text();
-        let result = null;
-        try {
-          result = responseText ? JSON.parse(responseText) : {};
-        } catch (parseError) {
-          result = null;
-        }
-        const responseMessage = this.getResponseMessage(result, responseText);
-        const responseHasInventoryError = this.isInventoryErrorResponse(response.status, responseText);
-        if (responseHasInventoryError) {
-          // Native Shopify Bundles can return a 422 for publication or component
-          // availability as well as for stock. Do not permanently disable the
-          // selected card unless Shopify has provided a conclusive reason.
-          throw new Error(responseMessage || 'Shopify konnte diese Bundle-Auswahl derzeit nicht zum Warenkorb hinzufügen. Bitte prüfe die Veröffentlichung und Verfügbarkeit der Bundle-Komponenten im Onlineshop.');
-        }
-        if (!response.ok) {
-          throw new Error(responseMessage || 'Die Auswahl konnte nicht hinzugefügt werden. Bitte prüfe die Produktverfügbarkeit und versuche es erneut.');
-        }
-        if (!result) {
-          throw new Error('Shopify hat keine gültige Warenkorb-Antwort geliefert. Bitte prüfe, ob das Bundle aktiv und im Onlineshop veröffentlicht ist.');
-        }
+        const cartResult = await this.incrementOrAddCartItems(items, root);
 
         if (this.cartStatus) {
           this.cartStatus.textContent = goToCheckout || this.requiresVatReview
             ? 'Zum Warenkorb hinzugefügt. Bitte Lieferland und MwSt.-Status bestätigen.'
             : 'Zum Warenkorb hinzugefügt.';
         }
-        document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: { items: result.items || items } }));
+        document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: cartResult }));
         if (this.requiresVatReview) this.openCartForVatReview();
       } catch (error) {
         if (this.cartStatus) this.cartStatus.textContent = error.message;
