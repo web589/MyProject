@@ -10,23 +10,7 @@
 {% endcomment %}
 {% layout none %}
 
-{%- capture cart_display_count_output -%}
-  {%- render 'cart-display-count', display_cart: cart -%}
-{%- endcapture -%}
-{%- assign cart_display_count = cart_display_count_output | strip | plus: 0 -%}
-
-<div class="cart__items"
-  data-count="{{ cart_display_count }}"
-  data-cart-subtotal="{{ cart.original_total_price }}"
-  data-cart-discount="{{ cart.total_discount }}"
-  data-cart-total="{{ cart.total_price }}">
-  {% for item in cart.items %}
-    {%- render 'cart-item', product: item, sizes: '100px', -%}
-  {% endfor %}
-  <div class="cart-bundle-suggestions" data-bundle-suggestions>{%- for item in cart.items -%}
-    {%- render 'cart-bundle-suggestion', product: item, cart: cart -%}
-  {%- endfor -%}</div>
-</div>
+{%- render 'cart-items', cart_to_render: cart, image_sizes: '100px' -%}
 <div class="cart__discounts cart__item-sub cart__item-row{% if cart.cart_level_discount_applications == blank %} hide{% endif %}">
   <div>{{ 'cart.general.discounts' | t }}</div>
   <div>

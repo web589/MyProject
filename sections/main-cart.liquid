@@ -17,10 +17,16 @@
       assign has_de_vat_candidate = false
       assign selected_delivery_country = cart.attributes['Lieferland ISO'] | default: localization.country.iso_code
       unless selected_delivery_country == 'DE' or selected_delivery_country == 'NL' or selected_delivery_country == 'BE'
-        assign selected_delivery_country = 'DE'
+      assign selected_delivery_country = 'DE'
       endunless
       assign selected_delivery_postcode = cart.attributes['Lieferland PLZ']
+      assign has_pending_vat_restore = false
       for item in cart.items
+        if item.properties['_de_vat_restore_token'] != blank and item.properties['_de_vat_restore_variant_id'] != blank and item.properties['_de_vat_restore_quantity'] != blank
+          assign has_pending_vat_restore = true
+        elsif item.properties['_de_vat_mode'] == 'zero' and item.properties['_de_standard_vat_variant_id'] != blank
+          assign has_pending_vat_restore = true
+        endif
         assign item_de_vat_eligible = item.product.metafields.custom.de_zero_vat_eligible.value
         if item_de_vat_eligible == true or item.product.tags contains 'DE-0-VAT-PV' or item.product.tags contains 'DE 0% MwSt. PV' or item.variant.metafields.custom.de_zero_vat_variant.value != blank or item.variant.metafields.custom.de_standard_vat_variant.value != blank
           assign has_de_vat_candidate = true
@@ -28,15 +34,10 @@
         endif
       endfor
     -%}
-    <form action="{{ routes.cart_url }}" method="post" novalidate data-location="page" id="CartPageForm">
+    <form action="{{ routes.cart_url }}" method="post" novalidate data-location="page" id="CartPageForm" data-vat-restore-pending="{{ has_pending_vat_restore }}">
       <div class="cart__page">
         <div data-products class="cart__page-col">
-          {% for item in cart.items %}
-            {%- render 'cart-item', product: item, sizes: '150px', -%}
-          {%- endfor -%}
-          <div class="cart-bundle-suggestions" data-bundle-suggestions>{%- for item in cart.items -%}
-            {%- render 'cart-bundle-suggestion', product: item, cart: cart -%}
-          {%- endfor -%}</div>
+          {%- render 'cart-items', cart_to_render: cart, image_sizes: '150px' -%}
         </div>
         <div class="cart__page-col">
           {% if settings.cart_notes_enable %}

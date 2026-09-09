@@ -1,0 +1,21 @@
+{%- liquid
+  assign rendered_cart = cart_to_render | default: cart
+  assign item_sizes = image_sizes | default: '100px'
+  capture cart_display_count_output
+    render 'cart-display-count', display_cart: rendered_cart
+  endcapture
+  assign cart_display_count = cart_display_count_output | strip | plus: 0
+-%}
+
+<div class="cart__items"
+  data-count="{{ cart_display_count }}"
+  data-cart-subtotal="{{ rendered_cart.original_total_price }}"
+  data-cart-discount="{{ rendered_cart.total_discount }}"
+  data-cart-total="{{ rendered_cart.total_price }}">
+  {% for item in rendered_cart.items %}
+    {%- render 'cart-item', product: item, sizes: item_sizes -%}
+  {% endfor %}
+  <div class="cart-bundle-suggestions" data-bundle-suggestions>{%- for item in rendered_cart.items -%}
+    {%- render 'cart-bundle-suggestion', product: item, cart: rendered_cart -%}
+  {%- endfor -%}</div>
+</div>

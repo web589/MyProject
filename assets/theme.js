@@ -5060,15 +5060,20 @@ theme.recentlyViewed = {
     CartDrawer.prototype = Object.assign({}, CartDrawer.prototype, {
       init: function() {
         this.cartForm = new theme.CartForm(this.form);
-        var restorePromise = window.PVTaxCart && window.PVTaxCart.restorePendingVatMerchandise
+        var hasInitialMarkup = !!this.form.querySelector('[data-products] .cart__items');
+        var needsVatRestore = this.drawer && this.drawer.drawer
+          && this.drawer.drawer.dataset.vatRestorePending === 'true';
+        var restorePromise = needsVatRestore && window.PVTaxCart && window.PVTaxCart.restorePendingVatMerchandise
           ? window.PVTaxCart.restorePendingVatMerchandise()
-          : Promise.resolve();
+          : Promise.resolve({ restored: false });
         restorePromise
           .catch(function(error) {
             console.warn('VAT-Warenkorbposition konnte nicht wiederhergestellt werden:', error);
           })
           .then(function() {
-            return this.cartForm.buildCart();
+            if (needsVatRestore || !hasInitialMarkup) {
+              return this.cartForm.buildCart();
+            }
           }.bind(this));
   
         document.addEventListener('ajaxProduct:added', function(evt) {
@@ -9165,15 +9170,19 @@ theme.recentlyViewed = {
       var cartPageFormElement = document.getElementById('CartPageForm');
       if (cartPageFormElement) {
         var cartPageForm = new theme.CartForm(cartPageFormElement);
-        var restorePromise = window.PVTaxCart && window.PVTaxCart.restorePendingVatMerchandise
+        var hasInitialMarkup = !!cartPageFormElement.querySelector('[data-products] .cart__items');
+        var needsVatRestore = cartPageFormElement.dataset.vatRestorePending === 'true';
+        var restorePromise = needsVatRestore && window.PVTaxCart && window.PVTaxCart.restorePendingVatMerchandise
           ? window.PVTaxCart.restorePendingVatMerchandise()
-          : Promise.resolve();
+          : Promise.resolve({ restored: false });
         restorePromise
           .catch(function(error) {
             console.warn('VAT-Warenkorbposition konnte nicht wiederhergestellt werden:', error);
           })
           .then(function() {
-            return cartPageForm.buildCart();
+            if (needsVatRestore || !hasInitialMarkup) {
+              return cartPageForm.buildCart();
+            }
           });
       }
     }
