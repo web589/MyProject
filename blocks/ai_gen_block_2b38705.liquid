@@ -453,6 +453,55 @@
     color: {{ block.settings.text_muted }};
   }
 
+  .pdp-tabs-{{ ai_gen_id }} {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    width: 100%;
+    margin-top: 4px;
+    border-bottom: 1px solid {{ block.settings.border_color }};
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .pdp-tabs-{{ ai_gen_id }}::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pdp-tab-{{ ai_gen_id }} {
+    position: relative;
+    flex: 0 0 auto;
+    padding: 0 0 9px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    background: transparent;
+    color: {{ block.settings.text_muted }};
+    font-family: 'Inter', var(--font-body, sans-serif);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .pdp-tab-{{ ai_gen_id }}:hover,
+  .pdp-tab-{{ ai_gen_id }}:focus-visible,
+  .pdp-tab-{{ ai_gen_id }}[aria-selected="true"] {
+    color: {{ block.settings.primary_color }};
+  }
+
+  .pdp-tab-{{ ai_gen_id }}[aria-selected="true"] {
+    border-bottom-color: {{ block.settings.primary_color }};
+  }
+
+  .pdp-tab-{{ ai_gen_id }}:focus-visible {
+    outline: 2px solid {{ block.settings.primary_color }};
+    outline-offset: 3px;
+  }
+
   .pdp-desc-shell-{{ ai_gen_id }} {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -474,7 +523,10 @@
     max-height: {{ block.settings.desc_max_height }}px;
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding-right: 4px;
+    padding: 12px 14px;
+    border-radius: 6px;
+    background: {{ block.settings.desc_background_color }};
+    box-sizing: border-box;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -483,11 +535,15 @@
     display: none;
   }
 
-  .pdp-desc-{{ ai_gen_id }} > :first-child {
+  .pdp-desc-panel-{{ ai_gen_id }}[hidden] {
+    display: none;
+  }
+
+  .pdp-desc-panel-{{ ai_gen_id }} > :first-child {
     margin-top: 0;
   }
 
-  .pdp-desc-{{ ai_gen_id }} > :last-child {
+  .pdp-desc-panel-{{ ai_gen_id }} > :last-child {
     margin-bottom: 0;
   }
 
@@ -498,7 +554,7 @@
     min-height: {{ block.settings.desc_max_height }}px;
     padding: 4px 0;
     border-radius: 7px;
-    background: #f3f6f9;
+    background: {{ block.settings.desc_background_color }};
     user-select: none;
   }
 
@@ -964,6 +1020,21 @@
 {% if is_product_context == false and bundle_description == blank %}
   {% assign bundle_description = block.settings.description %}
 {% endif %}
+{% liquid
+  assign pdp_tab_count = 0
+  for pdp_tab_index in (1..4)
+    assign pdp_tab_label_key = 'tag_' | append: pdp_tab_index | append: '_label'
+    assign pdp_tab_content_key = 'tag_' | append: pdp_tab_index | append: '_content'
+    assign pdp_tab_label = block.settings[pdp_tab_label_key]
+    assign pdp_tab_content = block.settings[pdp_tab_content_key]
+    if pdp_tab_index == 1 and pdp_tab_content == blank
+      assign pdp_tab_content = bundle_description
+    endif
+    if pdp_tab_label != blank and pdp_tab_content != blank
+      assign pdp_tab_count = pdp_tab_count | plus: 1
+    endif
+  endfor
+%}
 
 <pdp-bundle-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target pdp-bundle-{{ ai_gen_id }}" data-scroll-reveal="off" data-pdp-bundle data-de-vat-candidate="{{ bundle_is_de_vat_candidate }}" {{ block.shopify_attributes }}>
   <div class="pdp-bundle-grid-{{ ai_gen_id }}">
@@ -1023,15 +1094,75 @@
         {% endif %}
       </div>
 
-      {% if bundle_description != blank %}
+      {% if pdp_tab_count > 0 %}
+        <div class="pdp-tabs-{{ ai_gen_id }}" data-pdp-tabs role="tablist" aria-label="Produktinformationen">
+          {% assign pdp_rendered_tab_index = 0 %}
+          {% for pdp_tab_index in (1..4) %}
+            {% assign pdp_tab_label_key = 'tag_' | append: pdp_tab_index | append: '_label' %}
+            {% assign pdp_tab_content_key = 'tag_' | append: pdp_tab_index | append: '_content' %}
+            {% assign pdp_tab_label = block.settings[pdp_tab_label_key] %}
+            {% assign pdp_tab_content = block.settings[pdp_tab_content_key] %}
+            {% if pdp_tab_index == 1 and pdp_tab_content == blank %}
+              {% assign pdp_tab_content = bundle_description %}
+            {% endif %}
+            {% if pdp_tab_label != blank and pdp_tab_content != blank %}
+              {% assign pdp_rendered_tab_index = pdp_rendered_tab_index | plus: 1 %}
+              {% assign pdp_tab_id = 'pdp-tab-' | append: ai_gen_id | append: '-' | append: pdp_tab_index %}
+              {% assign pdp_panel_id = 'pdp-panel-' | append: ai_gen_id | append: '-' | append: pdp_tab_index %}
+              {% assign pdp_tab_is_active = false %}
+              {% if pdp_rendered_tab_index == 1 %}
+                {% assign pdp_tab_is_active = true %}
+              {% endif %}
+              <button
+                id="{{ pdp_tab_id }}"
+                class="pdp-tab-{{ ai_gen_id }}"
+                type="button"
+                role="tab"
+                aria-selected="{{ pdp_tab_is_active }}"
+                aria-controls="{{ pdp_panel_id }}"
+                tabindex="{% if pdp_tab_is_active %}0{% else %}-1{% endif %}"
+                data-pdp-tab
+              >
+                {{ pdp_tab_label | escape }}
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+
         <div class="pdp-desc-shell-{{ ai_gen_id }}" data-desc-shell>
-          <div class="pdp-desc-{{ ai_gen_id }}" data-desc-scroll tabindex="0">{{ bundle_description }}</div>
+          <div class="pdp-desc-{{ ai_gen_id }}" data-desc-scroll tabindex="0">
+            {% assign pdp_rendered_tab_index = 0 %}
+            {% for pdp_tab_index in (1..4) %}
+              {% assign pdp_tab_label_key = 'tag_' | append: pdp_tab_index | append: '_label' %}
+              {% assign pdp_tab_content_key = 'tag_' | append: pdp_tab_index | append: '_content' %}
+              {% assign pdp_tab_label = block.settings[pdp_tab_label_key] %}
+              {% assign pdp_tab_content = block.settings[pdp_tab_content_key] %}
+              {% if pdp_tab_index == 1 and pdp_tab_content == blank %}
+                {% assign pdp_tab_content = bundle_description %}
+              {% endif %}
+              {% if pdp_tab_label != blank and pdp_tab_content != blank %}
+                {% assign pdp_rendered_tab_index = pdp_rendered_tab_index | plus: 1 %}
+                {% assign pdp_tab_id = 'pdp-tab-' | append: ai_gen_id | append: '-' | append: pdp_tab_index %}
+                {% assign pdp_panel_id = 'pdp-panel-' | append: ai_gen_id | append: '-' | append: pdp_tab_index %}
+                <div
+                  id="{{ pdp_panel_id }}"
+                  class="pdp-desc-panel-{{ ai_gen_id }}"
+                  role="tabpanel"
+                  aria-labelledby="{{ pdp_tab_id }}"
+                  data-desc-panel
+                  {% unless pdp_rendered_tab_index == 1 %}hidden{% endunless %}
+                >
+                  {{ pdp_tab_content }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
           <div class="pdp-desc-controls-{{ ai_gen_id }}" data-desc-controls hidden aria-hidden="true">
-            <button class="pdp-desc-arrow-{{ ai_gen_id }} pdp-desc-arrow-{{ ai_gen_id }}--up" type="button" data-desc-up aria-label="Produktbeschreibung nach oben scrollen"></button>
+            <button class="pdp-desc-arrow-{{ ai_gen_id }} pdp-desc-arrow-{{ ai_gen_id }}--up" type="button" data-desc-up aria-label="Produktinformation nach oben scrollen"></button>
             <div class="pdp-desc-track-{{ ai_gen_id }}" data-desc-track>
               <span class="pdp-desc-thumb-{{ ai_gen_id }}" data-desc-thumb></span>
             </div>
-            <button class="pdp-desc-arrow-{{ ai_gen_id }} pdp-desc-arrow-{{ ai_gen_id }}--down" type="button" data-desc-down aria-label="Produktbeschreibung nach unten scrollen"></button>
+            <button class="pdp-desc-arrow-{{ ai_gen_id }} pdp-desc-arrow-{{ ai_gen_id }}--down" type="button" data-desc-down aria-label="Produktinformation nach unten scrollen"></button>
           </div>
         </div>
       {% endif %}
@@ -1262,7 +1393,7 @@
                 assign option_variant = option_product.selected_or_first_available_variant
                 assign option_image = option_variant.featured_image | default: option_product.featured_image
               %}
-              { title: {{ option_product.title | json }}, price: {% if option_variant %}{{ option_variant.price | money | json }}{% else %}{{ '' | json }}{% endif %}, origPrice: {% if option_variant and option_variant.compare_at_price > option_variant.price %}{{ option_variant.compare_at_price | money | json }}{% else %}{{ '' | json }}{% endif %}, image: {% if option_image %}{{ option_image | image_url: width: 400 | json }}{% else %}{{ '' | json }}{% endif %}, variantTitle: {% if option_variant and option_variant.title != 'Default Title' %}{{ option_variant.title | json }}{% else %}{{ '' | json }}{% endif %}, variantId: {% if option_variant %}{{ option_variant.id | json }}{% else %}null{% endif %}, priceCents: {% if option_variant %}{{ option_variant.price | json }}{% else %}null{% endif %}, compareAtPriceCents: {% if option_variant %}{{ option_variant.compare_at_price | json }}{% else %}null{% endif %}, available: {% if option_variant %}{{ option_variant.available | json }}{% else %}true{% endif %}, inventoryManagement: {% if option_variant %}{{ option_variant.inventory_management | json }}{% else %}null{% endif %}, inventoryPolicy: {% if option_variant %}{{ option_variant.inventory_policy | json }}{% else %}null{% endif %}, inventoryQuantity: {% if option_variant %}{{ option_variant.inventory_quantity | json }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
+              { title: {{ option_product.title | json }}, productHandle: {{ option_product.handle | json }}, price: {% if option_variant %}{{ option_variant.price | money | json }}{% else %}{{ '' | json }}{% endif %}, origPrice: {% if option_variant and option_variant.compare_at_price > option_variant.price %}{{ option_variant.compare_at_price | money | json }}{% else %}{{ '' | json }}{% endif %}, image: {% if option_image %}{{ option_image | image_url: width: 400 | json }}{% else %}{{ '' | json }}{% endif %}, variantTitle: {% if option_variant and option_variant.title != 'Default Title' %}{{ option_variant.title | json }}{% else %}{{ '' | json }}{% endif %}, variantId: {% if option_variant %}{{ option_variant.id | json }}{% else %}null{% endif %}, priceCents: {% if option_variant %}{{ option_variant.price | json }}{% else %}null{% endif %}, compareAtPriceCents: {% if option_variant %}{{ option_variant.compare_at_price | json }}{% else %}null{% endif %}, available: {% if option_variant %}{{ option_variant.available | json }}{% else %}false{% endif %}, inventoryManagement: {% if option_variant %}{{ option_variant.inventory_management | json }}{% else %}null{% endif %}, inventoryPolicy: {% if option_variant %}{{ option_variant.inventory_policy | json }}{% else %}null{% endif %}, inventoryQuantity: {% if option_variant %}{{ option_variant.inventory_quantity | json }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
             {% endfor %}
           ]
         }
@@ -1298,6 +1429,8 @@
       this.descThumb = this.querySelector('[data-desc-thumb]');
       this.descUp = this.querySelector('[data-desc-up]');
       this.descDown = this.querySelector('[data-desc-down]');
+      this.tabButtons = this.querySelectorAll('[data-pdp-tab]');
+      this.descPanels = this.querySelectorAll('[data-desc-panel]');
       this.thumbTrack = this.querySelector('[data-thumb-track]');
       this.thumbItems = this.querySelectorAll('[data-thumb-item]');
       this.thumbPrev = this.querySelector('[data-thumb-prev]');
@@ -1319,6 +1452,7 @@
       this.actionButtons.forEach(button => button.addEventListener('click', this.handleActionClick));
 
       this.setupZoom();
+      this.setupTabs();
       this.setupDescriptionScroller();
       this.setupThumbnails();
       this.ensureValidInitialSelection();
@@ -1328,10 +1462,62 @@
       this.updateCheckoutCard();
       this.updateActionAvailability();
       this.setupStickyMedia();
+      this.refreshSelectedAvailability();
 
       // Initialize sticky bar with first selection
       // Retry with delay to handle component loading order
       this.initStickyBarSync();
+    }
+
+    setupTabs() {
+      if (!this.tabButtons || !this.tabButtons.length || !this.descPanels || !this.descPanels.length) return;
+
+      this.handleTabClick = (event) => {
+        const selectedTab = event.currentTarget;
+        const panelId = selectedTab.getAttribute('aria-controls');
+        if (!panelId) return;
+
+        this.tabButtons.forEach(tab => {
+          const isSelected = tab === selectedTab;
+          tab.setAttribute('aria-selected', String(isSelected));
+          tab.tabIndex = isSelected ? 0 : -1;
+        });
+
+        this.descPanels.forEach(panel => {
+          panel.hidden = panel.id !== panelId;
+        });
+
+        if (this.descScroll) this.descScroll.scrollTop = 0;
+        this.updateDescriptionScroller();
+      };
+
+      this.handleTabKeydown = (event) => {
+        const tabs = Array.from(this.tabButtons);
+        const currentIndex = tabs.indexOf(event.currentTarget);
+        if (currentIndex < 0) return;
+
+        let nextIndex = currentIndex;
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+          nextIndex = (currentIndex + 1) % tabs.length;
+        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+          nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+        } else if (event.key === 'Home') {
+          nextIndex = 0;
+        } else if (event.key === 'End') {
+          nextIndex = tabs.length - 1;
+        } else {
+          return;
+        }
+
+        event.preventDefault();
+        tabs[nextIndex].focus();
+        tabs[nextIndex].click();
+      };
+
+      this.tabButtons.forEach(tab => {
+        tab.addEventListener('click', this.handleTabClick);
+        tab.addEventListener('keydown', this.handleTabKeydown);
+      });
     }
 
     setupStickyMedia() {
@@ -1692,14 +1878,18 @@
         }
       }
       if (groupKey === 'group1' && this.useNativeBundleCartValidation) {
-        // The native Bundle parent is resolved by Shopify Cart Transform, so
-        // its storefront availability can become stale after adding. A
-        // concrete variant id is enough to render the action; Cart API remains
-        // authoritative for publication and inventory.
+        // Shopify Cart Transform remains the final authority for native Bundles,
+        // but an explicitly empty tracked inventory must still disable the
+        // option in the selector.
         if (!option.variantId) return false;
-        // The native Bundle parent can report a stale unavailable state after
-        // the first add. Let Shopify Cart API validate the real inventory.
-        return Boolean(option.variantId);
+        if (
+          this.hasKnownInventoryQuantity(option)
+          && option.inventoryManagement
+          && Number(option.inventoryQuantity) <= 0
+        ) {
+          return false;
+        }
+        return typeof option.available === 'boolean' ? option.available : true;
       }
       if (groupKey === 'group1' && this.enforceSharedInventory) {
         if (!this.hasValidSharedInventory()) return false;
@@ -1824,6 +2014,47 @@
         const liveVariants = new Map((liveProduct.variants || []).map(variant => [String(variant.id), variant]));
         this.optionConfig.group1.options.forEach(option => {
           const liveVariant = liveVariants.get(String(option.variantId));
+          if (!liveVariant) return;
+          if (Object.prototype.hasOwnProperty.call(liveVariant, 'available')) {
+            option.available = liveVariant.available;
+          }
+          if (Object.prototype.hasOwnProperty.call(liveVariant, 'inventory_management')) {
+            option.inventoryManagement = liveVariant.inventory_management;
+          }
+          if (Object.prototype.hasOwnProperty.call(liveVariant, 'inventory_policy')) {
+            option.inventoryPolicy = liveVariant.inventory_policy;
+          }
+          if (Object.prototype.hasOwnProperty.call(liveVariant, 'inventory_quantity')) {
+            option.inventoryQuantity = liveVariant.inventory_quantity;
+          }
+        });
+
+        const group2Handles = [...new Set(
+          this.optionConfig.group2.options
+            .map(option => option.productHandle)
+            .filter(Boolean)
+        )];
+        const liveGroup2Products = await Promise.all(group2Handles.map(async handle => {
+          const optionUrl = `${root}products/${encodeURIComponent(handle)}.js?availability=${Date.now()}${countryCode ? `&country=${encodeURIComponent(countryCode)}` : ''}`;
+          try {
+            const response = await fetch(optionUrl, {
+              credentials: 'same-origin',
+              cache: 'no-store',
+              headers: { Accept: 'application/json' }
+            });
+            if (!response.ok) return null;
+            return [handle, await response.json()];
+          } catch (error) {
+            return null;
+          }
+        }));
+        const liveGroup2ByHandle = new Map(liveGroup2Products.filter(Boolean));
+        this.optionConfig.group2.options.forEach(option => {
+          const liveProduct = liveGroup2ByHandle.get(option.productHandle);
+          if (!liveProduct) return;
+          const liveVariant = (liveProduct.variants || []).find(variant => (
+            String(variant.id) === String(option.variantId)
+          ));
           if (!liveVariant) return;
           if (Object.prototype.hasOwnProperty.call(liveVariant, 'available')) {
             option.available = liveVariant.available;
@@ -2324,6 +2555,12 @@
       if (this.mainImg) {
         this.mainImg.removeEventListener('mousemove', this.setupZoom);
       }
+      if (this.tabButtons && this.handleTabClick && this.handleTabKeydown) {
+        this.tabButtons.forEach(tab => {
+          tab.removeEventListener('click', this.handleTabClick);
+          tab.removeEventListener('keydown', this.handleTabKeydown);
+        });
+      }
       if (this.descScroll && this.handleDescriptionScroll) {
         this.descScroll.removeEventListener('scroll', this.handleDescriptionScroll);
       }
@@ -2622,13 +2859,62 @@
     },
     {
       "type": "header",
-      "content": "Description"
+      "content": "Description & Tags"
     },
     {
       "type": "richtext",
       "id": "description",
       "label": "Description",
       "default": "<p>Der modulare Speicher für dein Balkonkraftwerk. Bis zu 10 kWh erweiterbar, 2400W PV-Eingang, über 40 % kompakter und 15 Jahre Lebensdauer.</p>"
+    },
+    {
+      "type": "text",
+      "id": "tag_1_label",
+      "label": "Tag 1 label",
+      "default": "Beschreibung"
+    },
+    {
+      "type": "richtext",
+      "id": "tag_1_content",
+      "label": "Tag 1 content",
+      "info": "Leave blank to use the current product description.",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "tag_2_label",
+      "label": "Tag 2 label",
+      "default": ""
+    },
+    {
+      "type": "richtext",
+      "id": "tag_2_content",
+      "label": "Tag 2 content",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "tag_3_label",
+      "label": "Tag 3 label",
+      "default": ""
+    },
+    {
+      "type": "richtext",
+      "id": "tag_3_content",
+      "label": "Tag 3 content",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "tag_4_label",
+      "label": "Tag 4 label",
+      "default": ""
+    },
+    {
+      "type": "richtext",
+      "id": "tag_4_content",
+      "label": "Tag 4 content",
+      "default": ""
     },
     {
       "type": "range",
@@ -2650,6 +2936,12 @@
       "step": 8,
       "unit": "px",
       "default": 96
+    },
+    {
+      "type": "color",
+      "id": "desc_background_color",
+      "label": "Description background",
+      "default": "#f5f5f5"
     },
     {
       "type": "header",
