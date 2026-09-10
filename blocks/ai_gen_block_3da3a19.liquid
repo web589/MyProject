@@ -620,7 +620,16 @@
         {% assign nav_text = block.settings[nav_text_key] %}
         {% assign nav_link = block.settings[nav_link_key] %}
         {% if nav_text != blank and nav_link != blank %}
-          <a href="{{ nav_link }}" class="bar-nav-item-{{ ai_gen_id }}">{{ nav_text }}</a>
+          {% assign nav_href = nav_link | strip %}
+          {% assign nav_href_prefix = nav_href | slice: 0, 1 %}
+          {% assign nav_target_id = blank %}
+          {% if nav_href_prefix == '#' %}
+            {% assign nav_target_id = nav_href | remove_first: '#' | handle %}
+            {% if nav_target_id != blank %}
+              {% assign nav_href = '#' | append: nav_target_id %}
+            {% endif %}
+          {% endif %}
+          <a href="{{ nav_href | escape }}" class="bar-nav-item-{{ ai_gen_id }}"{% if nav_target_id != blank %} data-anchor-target="{{ nav_target_id }}"{% endif %}>{{ nav_text }}</a>
         {% endif %}
       {% endfor %}
     </nav>
@@ -756,21 +765,46 @@
         });
       }
 
+      getNavTargetId(nav) {
+        const dataTarget = nav.getAttribute('data-anchor-target');
+        const href = nav.getAttribute('href') || '';
+        let targetId = dataTarget || (href.startsWith('#') && href !== '#' ? href.substring(1) : '');
+
+        if (!targetId) {
+          return null;
+        }
+
+        try {
+          return decodeURIComponent(targetId);
+        } catch (error) {
+          return null;
+        }
+      }
+
+      getAnchorElement(targetId) {
+        if (!targetId) {
+          return null;
+        }
+
+        const exactTarget = document.getElementById(targetId);
+        if (exactTarget) {
+          return exactTarget;
+        }
+
+        const normalizedTargetId = targetId.trim().toLowerCase();
+        if (!normalizedTargetId) {
+          return null;
+        }
+
+        return Array.from(document.querySelectorAll('.pdp-anchor-target[id]')).find(target => {
+          return target.id.toLowerCase() === normalizedTargetId;
+        }) || null;
+      }
+
       getNavigationTargets() {
         return Array.from(this.navItems).map(nav => {
-          const href = nav.getAttribute('href') || '';
-          if (!href.startsWith('#') || href === '#') {
-            return null;
-          }
-
-          let targetId = href.substring(1);
-          try {
-            targetId = decodeURIComponent(targetId);
-          } catch (error) {
-            return null;
-          }
-
-          const targetElement = document.getElementById(targetId);
+          const targetId = this.getNavTargetId(nav);
+          const targetElement = this.getAnchorElement(targetId);
           if (!targetElement) {
             return null;
           }
@@ -875,12 +909,12 @@
           return null;
         }
 
-        return targetId ? document.getElementById(targetId) : null;
+        return this.getAnchorElement(targetId);
       }
 
       setActiveNavItem(targetId) {
         this.navItems.forEach(nav => {
-          const isActive = nav.getAttribute('href') === `#${targetId}`;
+          const isActive = this.getNavTargetId(nav) === targetId;
           nav.classList.toggle('active', isActive);
         });
       }
@@ -923,15 +957,15 @@
           return;
         }
 
-        const targetId = href.substring(1);
-        const targetElement = document.getElementById(targetId);
+        const targetId = this.getNavTargetId(item);
+        const targetElement = this.getAnchorElement(targetId);
         if (!targetElement) {
           return;
         }
 
         event.preventDefault();
         this.lockNavigationTo(targetId);
-        window.history.replaceState(null, '', href);
+        window.history.replaceState(null, '', `#${targetElement.id}`);
         this.scheduleHashAlignment('smooth');
       }
 
