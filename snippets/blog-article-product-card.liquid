@@ -32,10 +32,15 @@
     endif
 
     assign card_title = product.metafields.custom.carousel_title.value | default: automatic_title
+    assign card_title_vendor_prefix = product.vendor | append: ' '
+    if product.vendor != blank and card_title contains card_title_vendor_prefix
+      assign card_title = card_title | remove_first: card_title_vendor_prefix | strip
+    endif
     assign card_specs = product.metafields.custom.carousel_specs.value | default: automatic_specs
     assign card_image_alt = card_image.alt | default: card_title
     assign card_badge = badge_override
     assign card_badge_color = badge_color_override | default: '#dff7e8'
+    assign card_badge_icon = badge_icon_override | default: 'none'
 
     case card_badge_color
       when 'blue'
@@ -75,7 +80,7 @@
           img: card_image,
           alt: card_image_alt,
           loading: 'lazy',
-          sizes: '(min-width: 769px) 88px, 82px',
+          sizes: '(min-width: 769px) 104px, 88px',
           widths: '120, 180, 240',
         -%}
       </a>
@@ -107,7 +112,34 @@
 
       <div class="blog-article-product-card__actions">
         {%- if card_badge != blank -%}
-          <span class="blog-article-product-card__badge">{{ card_badge | escape }}</span>
+          <span class="blog-article-product-card__badge">
+            {%- case card_badge_icon -%}
+              {%- when 'beginner' -%}
+                <span class="blog-article-product-card__badge-icon" aria-hidden="true">
+                  {%- render 'element.icon', name: 'leaf' -%}
+                </span>
+              {%- when 'popular' -%}
+                <span class="blog-article-product-card__badge-icon" aria-hidden="true">
+                  {%- render 'element.icon', name: 'bestseller' -%}
+                </span>
+              {%- when 'family' -%}
+                <span class="blog-article-product-card__badge-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                    <circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/>
+                    <circle cx="5.5" cy="10" r="2.2" stroke="currentColor" stroke-width="1.8"/>
+                    <circle cx="18.5" cy="10" r="2.2" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M6 20c.3-3.2 2.3-5 6-5s5.7 1.8 6 5M1.5 19c.2-2.4 1.5-3.8 4-3.8 1 0 1.8.2 2.5.7M22.5 19c-.2-2.4-1.5-3.8-4-3.8-1 0-1.8.2-2.5.7" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/>
+                  </svg>
+                </span>
+              {%- when 'power' -%}
+                <span class="blog-article-product-card__badge-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor" focusable="false">
+                    <path d="M14.2 1.5 5.4 13.8h5.4L9.8 22.5l8.8-12.3h-5.4l1-8.7Z"/>
+                  </svg>
+                </span>
+            {%- endcase -%}
+            <span class="blog-article-product-card__badge-label">{{ card_badge | escape }}</span>
+          </span>
         {%- endif -%}
 
         {%- if card_state == 'sold-out' -%}
@@ -130,8 +162,9 @@
     border: 1px solid #e1e4e8;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 88px minmax(0, 1fr);
-    min-height: 104px;
+    font-family: var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
+    grid-template-columns: 104px minmax(0, 1fr);
+    min-height: 112px;
     overflow: hidden;
     transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
   }
@@ -149,9 +182,9 @@
     display: flex;
     height: 100%;
     justify-content: center;
-    min-height: 104px;
+    min-height: 112px;
     overflow: hidden;
-    width: 88px;
+    width: 104px;
   }
 
   .blog-article-product-card__image image-element {
@@ -164,7 +197,7 @@
     display: block;
     height: 100%;
     object-fit: contain;
-    padding: 8px;
+    padding: 4px;
     width: 100%;
   }
 
@@ -176,10 +209,10 @@
   .blog-article-product-card__content {
     align-items: center;
     display: grid;
-    gap: 12px;
+    gap: 14px;
     grid-template-columns: minmax(0, 1fr) auto;
     min-width: 0;
-    padding: 12px 14px 12px 15px;
+    padding: 14px 16px 14px 17px;
   }
 
   .blog-article-product-card__details {
@@ -187,25 +220,30 @@
   }
 
   .blog-article-product-card__title {
-    font-size: 16px;
+    color: var(--blog-article-ink, #17283b);
+    font-family: var(--typeHeaderPrimary, var(--typeBasePrimary, sans-serif)), var(--typeHeaderFallback, sans-serif);
+    font-size: 17px;
+    font-weight: 700;
     line-height: 1.25;
     margin: 0 0 4px;
   }
 
   .blog-article-product-card__title a {
     color: inherit;
+    text-decoration: none;
   }
 
   .blog-article-product-card__specs {
     color: #617b95;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.3;
     margin: 0 0 5px;
   }
 
   .blog-article-product-card__price {
     color: #17283b;
-    font-size: 16px;
+    font-family: var(--typeHeaderPrimary, var(--typeBasePrimary, sans-serif)), var(--typeHeaderFallback, sans-serif);
+    font-size: 17px;
     font-weight: 700;
     line-height: 1.2;
     white-space: nowrap;
@@ -225,7 +263,7 @@
     gap: 9px;
     height: 100%;
     justify-content: space-between;
-    min-width: 112px;
+    min-width: 126px;
   }
 
   .blog-article-product-card__badge {
@@ -233,8 +271,11 @@
     border: 1px solid rgba(23, 40, 59, 0.06);
     border-radius: 999px;
     color: #1f2937;
-    display: inline-block;
-    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
+    font-size: 10px;
     font-weight: 700;
     line-height: 1.2;
     max-width: 100%;
@@ -244,16 +285,37 @@
     white-space: nowrap;
   }
 
+  .blog-article-product-card__badge-icon {
+    align-items: center;
+    display: inline-flex;
+    flex: 0 0 14px;
+    height: 14px;
+    justify-content: center;
+    width: 14px;
+  }
+
+  .blog-article-product-card__badge-icon .element-icon,
+  .blog-article-product-card__badge-icon svg {
+    --element-icon-color: currentColor;
+    --element-icon-size: 14px;
+    display: block;
+    height: 14px;
+    width: 14px;
+  }
+
   .blog-article-product-card__button {
     background: #0099fc;
     border: 1px solid #0099fc;
     border-radius: 8px;
     color: #fff;
     display: block;
-    font-size: 12px;
+    font-family: var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
+    font-size: 13px;
+    font-weight: 700;
     line-height: 1.2;
-    min-width: 112px;
-    padding: 10px 12px;
+    min-height: 38px;
+    min-width: 126px;
+    padding: 10px 14px;
     text-align: center;
     white-space: nowrap;
   }
@@ -285,13 +347,13 @@
 
   @media only screen and (max-width: 768px) {
     .blog-article-product-card {
-      grid-template-columns: 82px minmax(0, 1fr);
-      min-height: 96px;
+      grid-template-columns: 88px minmax(0, 1fr);
+      min-height: 104px;
     }
 
     .blog-article-product-card__image {
-      min-height: 96px;
-      width: 82px;
+      min-height: 104px;
+      width: 88px;
     }
 
     .blog-article-product-card__content {

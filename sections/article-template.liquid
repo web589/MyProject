@@ -73,6 +73,11 @@
     assign recommended_products_title = section.settings.recommended_products_title
   endif
 
+  assign recommended_products_text = 'blogs.article.recommended_products_text' | t
+  if section.settings.recommended_products_text != blank
+    assign recommended_products_text = section.settings.recommended_products_text
+  endif
+
   assign recommended_product_count = 0
   for block in section.blocks
     if block.type == 'product' and block.settings.product != blank
@@ -389,7 +394,9 @@
 
   .blog-article__newsletter-title,
   .blog-article__recommended-title {
+    font-family: var(--typeHeaderPrimary, var(--typeBasePrimary, sans-serif)), var(--typeHeaderFallback, sans-serif);
     font-size: 22px;
+    font-weight: 600;
     line-height: 1.2;
     margin: 0 0 14px;
   }
@@ -463,22 +470,36 @@
 
   .blog-article__recommended-title {
     align-items: center;
-    border-left: 3px solid var(--blog-article-blue);
     color: var(--blog-article-ink);
     display: flex;
-    gap: 9px;
+    gap: 10px;
     margin-bottom: 18px;
-    padding-left: 11px;
   }
 
-  .blog-article__recommended-title::before {
-    background: #dff1ff;
-    border: 1px solid #b7e0fb;
+  .blog-article__recommended-icon {
+    align-items: center;
+    background: #e5f4ff;
+    border: 1px solid #c1e5fb;
     border-radius: 50%;
-    box-shadow: inset 0 0 0 5px #f8fcff;
-    content: '';
-    flex: 0 0 18px;
-    height: 18px;
+    color: var(--blog-article-blue);
+    display: inline-flex;
+    flex: 0 0 42px;
+    height: 42px;
+    justify-content: center;
+    width: 42px;
+  }
+
+  .blog-article__recommended-icon .element-icon {
+    --element-icon-color: currentColor;
+    --element-icon-size: 24px;
+  }
+
+  .blog-article__recommended-subtitle {
+    color: var(--blog-article-muted);
+    font-family: var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
+    font-size: 14px;
+    line-height: 1.45;
+    margin: -8px 0 18px 52px;
   }
 
   .blog-article__recommended-list {
@@ -492,14 +513,37 @@
     border: 1px solid #8bcfff;
     border-radius: 8px;
     color: var(--blog-article-blue);
-    display: flex;
+    display: grid;
     font-size: 14px;
     font-weight: 700;
-    justify-content: space-between;
+    grid-template-columns: 26px minmax(0, 1fr) 22px;
+    gap: 10px;
     margin-top: 16px;
     min-height: 46px;
     padding: 10px 14px;
     text-decoration: none;
+  }
+
+  .blog-article__compare-icon,
+  .blog-article__compare-arrow {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+  }
+
+  .blog-article__compare-icon svg {
+    display: block;
+    height: 24px;
+    width: 24px;
+  }
+
+  .blog-article__compare-arrow .element-icon {
+    --element-icon-color: currentColor;
+    --element-icon-size: 18px;
+  }
+
+  .blog-article__compare-label {
+    text-align: center;
   }
 
   .blog-article__compare-link:hover,
@@ -997,8 +1041,14 @@
           {%- if recommended_product_count > 0 -%}
             <section class="blog-article__recommended" aria-labelledby="BlogArticleRecommended-{{ section.id }}">
               <h2 class="blog-article__recommended-title" id="BlogArticleRecommended-{{ section.id }}">
-                {{ recommended_products_title | escape }}
+                <span class="blog-article__recommended-icon" aria-hidden="true">
+                  {%- render 'element.icon', name: 'package' -%}
+                </span>
+                <span>{{ recommended_products_title | escape }}</span>
               </h2>
+              {%- if recommended_products_text != blank -%}
+                <p class="blog-article__recommended-subtitle">{{ recommended_products_text | escape }}</p>
+              {%- endif -%}
               <div class="blog-article__recommended-list">
                 {%- for block in section.blocks -%}
                   {%- if block.type == 'product' and block.settings.product != blank -%}
@@ -1007,14 +1057,22 @@
                       variant: 'compact',
                       badge_override: block.settings.badge,
                       badge_color_override: block.settings.badge_color,
+                      badge_icon_override: block.settings.badge_icon,
                       block_attributes: block.shopify_attributes
                     -%}
                   {%- endif -%}
                 {%- endfor -%}
               </div>
               <a class="blog-article__compare-link" href="{{ collections['alle-venus-e-serie'].url | default: '/collections/alle-venus-e-serie' }}">
-                <span>{{ 'blogs.article.compare_models' | t }}</span>
-                <span aria-hidden="true">&rarr;</span>
+                <span class="blog-article__compare-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32" fill="none" focusable="false">
+                    <path d="M16 4v23M7 8h18M7 8l-4 9h8L7 8ZM25 8l-4 9h8l-4-9ZM4 22h6M22 22h6M2 26h10M20 26h10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+                  </svg>
+                </span>
+                <span class="blog-article__compare-label">{{ 'blogs.article.compare_models' | t }}</span>
+                <span class="blog-article__compare-arrow" aria-hidden="true">
+                  {%- render 'element.icon', name: 'arrow-right' -%}
+                </span>
               </a>
             </section>
           {%- endif -%}
@@ -1133,6 +1191,12 @@
       "id": "recommended_products_title",
       "label": "Recommended products title",
       "info": "Leave blank to use the translated default."
+    },
+    {
+      "type": "text",
+      "id": "recommended_products_text",
+      "label": "Recommended products description",
+      "info": "Leave blank to use the translated default."
     }
   ],
   "blocks": [
@@ -1155,6 +1219,34 @@
           "id": "badge_color",
           "label": "Badge color",
           "default": "#dff7e8"
+        },
+        {
+          "type": "select",
+          "id": "badge_icon",
+          "label": "Badge icon",
+          "default": "none",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "beginner",
+              "label": "Beginner"
+            },
+            {
+              "value": "popular",
+              "label": "Popular"
+            },
+            {
+              "value": "family",
+              "label": "Family"
+            },
+            {
+              "value": "power",
+              "label": "Power"
+            }
+          ]
         }
       ]
     }
