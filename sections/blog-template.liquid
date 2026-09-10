@@ -83,7 +83,6 @@
 
   .blog-page__sticky {
     background: #fff;
-    margin-bottom: 28px;
     position: sticky;
     top: 0;
     z-index: 25;
@@ -97,7 +96,7 @@
     font-size: 14px;
     gap: 10px;
     line-height: 1.5;
-    margin: 0;
+    margin: 0 0 28px;
   }
 
   .blog-breadcrumbs a {
@@ -544,9 +543,9 @@
           </nav>
         {%- endif -%}
       </header>
-
-      {%- render 'blog-breadcrumbs', blog: blog, blog_center_home_link: blog_center_home_link, blog_center_url: blog_center_url, is_blog_all_page: is_blog_all_page -%}
     </div>
+
+    {%- render 'blog-breadcrumbs', blog: blog, blog_center_home_link: blog_center_home_link, blog_center_url: blog_center_url, is_blog_all_page: is_blog_all_page -%}
 
     {%- if is_all_blog_view -%}
       {%- if all_articles.size > 0 -%}
