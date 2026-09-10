@@ -1406,9 +1406,7 @@
 
           this.applyCountryUI();
           this.updateVatUI();
-          if (this.hasPendingVatRestore) {
-            this.loadCartContext();
-          }
+          this.loadCartContext();
         }
 
         disconnectedCallback() {
@@ -1449,7 +1447,7 @@
                 }
               });
               cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorbkontext konnte nicht geladen werden.');
-              if (!response.ok) return;
+              if (!response.ok) throw new Error('Der Warenkorbkontext konnte nicht geladen werden.');
             }
             this.cartCurrency = cart.currency || 'EUR';
             const attributes = cart.attributes || {};
@@ -1461,7 +1459,9 @@
             }
             this.applyCountryUI();
             this.updateVatUI();
-            if (this.selectedCountry !== this.marketCountry) this.syncLocalization(this.selectedCountry);
+            if (this.selectedCountry !== this.marketCountry) {
+              await this.syncLocalization(this.selectedCountry);
+            }
             this.cartContextReady = true;
             if (this.hasOpened) this.refreshForCartChange();
           } catch (error) {
@@ -1939,7 +1939,10 @@
         }
 
         async syncLocalization(countryCode) {
-          if (!this.localizationForm || !this.localizationInput || countryCode === this.marketCountry) return;
+          if (countryCode === this.marketCountry) return true;
+          if (!this.localizationForm || !this.localizationInput) {
+            throw new Error('Das Lieferland konnte nicht mit Shopify synchronisiert werden. Bitte lade die Seite neu und versuche es erneut.');
+          }
           this.localizationInput.value = countryCode;
           try {
             const response = await fetch(this.localizationForm.action, {
@@ -1947,10 +1950,31 @@
               credentials: 'same-origin',
               body: new FormData(this.localizationForm)
             });
-            if (response.ok) this.marketCountry = countryCode;
+            if (!response.ok) {
+              throw new Error('Das Lieferland konnte nicht mit Shopify synchronisiert werden. Bitte lade die Seite neu und versuche es erneut.');
+            }
+            this.marketCountry = countryCode;
+            return true;
           } catch (error) {
-            // Shipping estimates still use the explicit delivery address below.
+            if (error && error.message) throw error;
+            throw new Error('Das Lieferland konnte nicht mit Shopify synchronisiert werden. Bitte lade die Seite neu und versuche es erneut.');
           }
+        }
+
+        buildCheckoutAction() {
+          const baseAction = this.form.dataset.checkoutBaseAction
+            || this.form.getAttribute('action')
+            || this.form.action;
+          const checkoutAction = new URL(baseAction, window.location.origin);
+          const countryName = this.shippingCountryNames[this.selectedCountry] || this.selectedCountry;
+          const postcode = this.postcodeInput.value.trim();
+
+          checkoutAction.searchParams.delete('checkout[shipping_address][country]');
+          checkoutAction.searchParams.delete('checkout[shipping_address][zip]');
+          checkoutAction.searchParams.set('checkout[shipping_address][country]', countryName);
+          checkoutAction.searchParams.set('checkout[shipping_address][zip]', postcode);
+
+          return checkoutAction.pathname + checkoutAction.search + checkoutAction.hash;
         }
 
         async loadShippingRates() {
@@ -2160,6 +2184,11 @@
               // Do not block checkout when only that context write fails.
               if (targetMode !== 'standard') throw error;
             }
+            await this.syncLocalization(this.selectedCountry);
+            this.form.dataset.checkoutBaseAction = this.form.dataset.checkoutBaseAction
+              || this.form.getAttribute('action')
+              || this.form.action;
+            this.form.action = this.buildCheckoutAction();
             this.form.dataset.deliveryContextResubmit = 'true';
             if (window.PVTaxCart && window.PVTaxCart.rememberCheckoutReturn) {
               window.PVTaxCart.rememberCheckoutReturn();
