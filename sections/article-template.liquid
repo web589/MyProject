@@ -8,6 +8,7 @@
   assign blog_center_menu = linklists['blog-center']
   assign blog_center_home_link = blank
   assign blog_center_page = pages['blogs']
+  assign all_blogs_url = '/blogs/blog-center'
   assign blog_center_url = blank
   if blog_center_page != blank and blog_center_page.url != blank
     assign blog_center_url = blog_center_page.url
@@ -617,7 +618,7 @@
 
           <nav class="blog-article__category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
           {%- if blog_center_url != blank -%}
-            <a class="blog-article__category-link" href="{{ blog_center_url }}">
+            <a class="blog-article__category-link" href="{{ all_blogs_url }}">
               {{ 'blogs.article.all' | t }}
             </a>
           {%- endif -%}

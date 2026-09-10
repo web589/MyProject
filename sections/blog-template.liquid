@@ -2,6 +2,7 @@
   assign blog_center_menu = linklists['blog-center']
   assign blog_center_home_link = blank
   assign blog_center_page = pages['blogs']
+  assign all_blogs_url = '/blogs/blog-center'
   assign is_blog_all_page = false
   assign is_all_blog_view = false
   if blog_center_menu != blank and blog_center_menu.links.size > 0
@@ -11,6 +12,10 @@
     assign is_blog_all_page = true
     assign is_all_blog_view = true
     assign blog_center_url = page.url
+  elsif template.name == 'blog' and blog.handle == 'blog-center'
+    assign is_blog_all_page = true
+    assign is_all_blog_view = true
+    assign blog_center_url = all_blogs_url
   elsif blog_center_page != blank and blog_center_page.url != blank
     assign blog_center_url = blog_center_page.url
   else
@@ -76,6 +81,14 @@
     padding-bottom: 72px;
   }
 
+  .blog-page__sticky {
+    background: #fff;
+    margin-bottom: 28px;
+    position: sticky;
+    top: 0;
+    z-index: 25;
+  }
+
   .blog-breadcrumbs {
     align-items: center;
     color: #7b8794;
@@ -84,7 +97,7 @@
     font-size: 14px;
     gap: 10px;
     line-height: 1.5;
-    margin: 0 0 28px;
+    margin: 0;
   }
 
   .blog-breadcrumbs a {
@@ -110,9 +123,6 @@
     justify-content: space-between;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
   }
 
   .blog-page__title {
@@ -472,69 +482,71 @@
 
 <div class="blog-page" data-section-id="{{ section.id }}" data-section-type="blog">
   <div class="page-width page-content blog-page__content">
-    <header class="blog-page__header">
-      <div>
-        <h1 class="blog-page__title">{{ 'blogs.article.blog_center' | t }}</h1>
-      </div>
-      {%- if blog_center_menu != blank and blog_center_menu.links.size > 0 -%}
-        <nav class="blog-category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
-          {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
-            {%- assign is_blog_center_home = false -%}
-            {%- if is_all_blog_view -%}
-              {%- assign is_blog_center_home = true -%}
-            {%- endif -%}
-            <a
-              class="blog-category-nav__link{% if is_blog_center_home %} is-active{% endif %}"
-              href="{{ blog_center_url }}"
-              {% if is_blog_center_home %}aria-current="page"{% endif %}
-            >
-              {{ 'blogs.article.all' | t }}
-            </a>
-          {%- endif -%}
-
-          {%- for link in blog_center_menu.links offset: 1 -%}
-            {%- assign link_blog_handle = blank -%}
-            {%- assign linked_blog = blank -%}
-            {%- if link.object != blank and link.object.handle != blank -%}
-              {%- assign link_blog_handle = link.object.handle -%}
-              {%- assign linked_blog = link.object -%}
-            {%- endif -%}
-            {%- if link_blog_handle == blank and link.url != blank -%}
-              {%- assign link_url = link.url | split: '?' | first | split: '#' | first -%}
-              {%- assign link_url_parts = link_url | split: '/blogs/' -%}
-              {%- if link_url_parts.size > 1 -%}
-                {%- assign link_blog_handle = link_url_parts[1] | split: '/' | first -%}
-                {%- assign linked_blog = blogs[link_blog_handle] -%}
+    <div class="blog-page__sticky">
+      <header class="blog-page__header">
+        <div>
+          <h1 class="blog-page__title">{{ 'blogs.article.blog_center' | t }}</h1>
+        </div>
+        {%- if blog_center_menu != blank and blog_center_menu.links.size > 0 -%}
+          <nav class="blog-category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
+            {%- if blog_center_home_link != blank and blog_center_home_link.url != blank -%}
+              {%- assign is_blog_center_home = false -%}
+              {%- if is_all_blog_view -%}
+                {%- assign is_blog_center_home = true -%}
               {%- endif -%}
-            {%- endif -%}
-            {%- assign is_current_blog = false -%}
-            {%- if is_all_blog_view == false -%}
-              {%- if link_blog_handle == blog.handle or link.url == blog.url or link.url contains blog.url -%}
-                {%- assign is_current_blog = true -%}
-              {%- endif -%}
-            {%- endif -%}
-
-            {%- if linked_blog != blank and linked_blog.articles_count > 0 -%}
               <a
-                class="blog-category-nav__link{% if is_current_blog %} is-active{% endif %}"
-                href="{{ link.url }}"
-                {% if is_current_blog %}aria-current="page"{% endif %}
+                class="blog-category-nav__link{% if is_blog_center_home %} is-active{% endif %}"
+                href="{{ all_blogs_url }}"
+                {% if is_blog_center_home %}aria-current="page"{% endif %}
               >
-                {{ link.object.title | default: link.title | escape }}
+                {{ 'blogs.article.all' | t }}
               </a>
             {%- endif -%}
-          {%- endfor -%}
-        </nav>
-      {%- elsif blog.articles_count > 0 -%}
-        <nav class="blog-category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
-          <a class="blog-category-nav__link is-active" href="{{ blog.url }}" aria-current="page">
-            {{ blog.title | escape }}
-          </a>
-        </nav>
-      {%- endif -%}
-    </header>
 
-    {%- render 'blog-breadcrumbs', blog: blog, blog_center_home_link: blog_center_home_link, blog_center_url: blog_center_url, is_blog_all_page: is_blog_all_page -%}
+            {%- for link in blog_center_menu.links offset: 1 -%}
+              {%- assign link_blog_handle = blank -%}
+              {%- assign linked_blog = blank -%}
+              {%- if link.object != blank and link.object.handle != blank -%}
+                {%- assign link_blog_handle = link.object.handle -%}
+                {%- assign linked_blog = link.object -%}
+              {%- endif -%}
+              {%- if link_blog_handle == blank and link.url != blank -%}
+                {%- assign link_url = link.url | split: '?' | first | split: '#' | first -%}
+                {%- assign link_url_parts = link_url | split: '/blogs/' -%}
+                {%- if link_url_parts.size > 1 -%}
+                  {%- assign link_blog_handle = link_url_parts[1] | split: '/' | first -%}
+                  {%- assign linked_blog = blogs[link_blog_handle] -%}
+                {%- endif -%}
+              {%- endif -%}
+              {%- assign is_current_blog = false -%}
+              {%- if is_all_blog_view == false -%}
+                {%- if link_blog_handle == blog.handle or link.url == blog.url or link.url contains blog.url -%}
+                  {%- assign is_current_blog = true -%}
+                {%- endif -%}
+              {%- endif -%}
+
+              {%- if linked_blog != blank and linked_blog.articles_count > 0 -%}
+                <a
+                  class="blog-category-nav__link{% if is_current_blog %} is-active{% endif %}"
+                  href="{{ link.url }}"
+                  {% if is_current_blog %}aria-current="page"{% endif %}
+                >
+                  {{ link.object.title | default: link.title | escape }}
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </nav>
+        {%- elsif blog.articles_count > 0 -%}
+          <nav class="blog-category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
+            <a class="blog-category-nav__link is-active" href="{{ blog.url }}" aria-current="page">
+              {{ blog.title | escape }}
+            </a>
+          </nav>
+        {%- endif -%}
+      </header>
+
+      {%- render 'blog-breadcrumbs', blog: blog, blog_center_home_link: blog_center_home_link, blog_center_url: blog_center_url, is_blog_all_page: is_blog_all_page -%}
+    </div>
 
     {%- if is_all_blog_view -%}
       {%- if all_articles.size > 0 -%}
