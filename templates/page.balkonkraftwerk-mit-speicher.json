@@ -1,0 +1,53 @@
+{
+  "sections": {
+    "storage_page": {
+      "type": "balkonkraftwerk-storage-page",
+      "settings": {
+        "hero_heading": "Mehr Eigenstrom. Weniger Netzstrom.",
+        "hero_text": "Du hast schon ein Balkonkraftwerk (oder planst eines)? Mit einem VENUS E Speicher nutzt du deinen Solarstrom auch abends und nachts – statt ihn ins Netz zu verschenken.",
+        "hero_primary_label": "Passenden Speicher finden",
+        "hero_secondary_label": "Welche Größe brauche ich?",
+        "final_heading": "Wie geht es weiter?",
+        "final_text": "Finde in wenigen Sekunden die passende VENUS E Kapazität für deinen Haushalt.",
+        "product_mini": "venus-e-mini",
+        "product_3": "venus-e-3",
+        "product_4": "venus-e-4",
+        "product_max": "venus-e-max"
+      }
+    },
+    "homepage_products": {
+      "type": "_blocks",
+      "blocks": {
+        "homepage_product_sync": {
+          "type": "ai_gen_block_homepage_product_carousel_sync",
+          "settings": {"anchor_id":"modelle"}
+        }
+      },
+      "block_order": ["homepage_product_sync"],
+      "settings": {}
+    },
+    "homepage_reviews": {
+      "type": "_blocks",
+      "blocks": {
+        "homepage_testimonial_sync": {
+          "type": "ai_gen_block_homepage_testimonial_sync",
+          "settings": {"anchor_id":"bewertungen"}
+        }
+      },
+      "block_order": ["homepage_testimonial_sync"],
+      "settings": {}
+    },
+    "homepage_newsletter": {
+      "type": "_blocks",
+      "blocks": {
+        "homepage_newsletter_sync": {
+          "type": "ai_gen_block_homepage_newsletter_sync",
+          "settings": {"anchor_id":"newsletter"}
+        }
+      },
+      "block_order": ["homepage_newsletter_sync"],
+      "settings": {}
+    }
+  },
+  "order": ["storage_page", "homepage_products", "homepage_reviews", "homepage_newsletter"]
+}

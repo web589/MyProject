@@ -1,0 +1,51 @@
+{% comment %}
+  Reuse the homepage newsletter so this page keeps the same subscription form,
+  copy and consent handling as the storefront homepage.
+{% endcomment %}
+{% assign bw_anchor_id = block.settings.anchor_id | handle %}
+<div{% if bw_anchor_id != blank %} id="{{ bw_anchor_id }}"{% endif %} class="bw-homepage-sync-anchor" {{ block.shopify_attributes }}>
+  <div id="HomepageNewsletterSync-{{ block.id }}" data-homepage-newsletter-sync aria-busy="true"></div>
+</div>
+
+<script>
+  (function () {
+    var mount = document.getElementById('HomepageNewsletterSync-{{ block.id }}');
+    var sectionId = '1786674497042b635a';
+    if (!mount || !window.fetch) return;
+    var rootUrl = window.Shopify && window.Shopify.routes && window.Shopify.routes.root ? window.Shopify.routes.root : '/';
+    var homepageUrl = new URL(rootUrl, window.location.origin);
+    var requestUrl = new URL(homepageUrl.toString());
+    requestUrl.searchParams.set('section_id', sectionId);
+    var previewThemeId = new URLSearchParams(window.location.search).get('preview_theme_id');
+    if (previewThemeId) { requestUrl.searchParams.set('preview_theme_id', previewThemeId); homepageUrl.searchParams.set('preview_theme_id', previewThemeId); }
+    function requestMarkup(url) {
+      return fetch(url, { credentials: 'same-origin', headers: { Accept: 'text/html' } }).then(function (response) { if (!response.ok) throw new Error('Homepage newsletter request failed.'); return response.text(); });
+    }
+    requestMarkup(requestUrl.toString()).catch(function () {
+      return requestMarkup(homepageUrl.toString()).then(function (homepageMarkup) {
+        var documentCopy = new DOMParser().parseFromString(homepageMarkup, 'text/html');
+        var homepageSection = documentCopy.getElementById('shopify-section-' + sectionId) || documentCopy.querySelector('[id^="shopify-section-"][id$="__' + sectionId + '"]');
+        if (!homepageSection) throw new Error('Homepage newsletter section is unavailable.');
+        return homepageSection.outerHTML;
+      });
+    }).then(function (markup) {
+      if (!markup || !markup.trim()) throw new Error('Homepage newsletter section is unavailable.');
+      mount.innerHTML = markup;
+      mount.removeAttribute('aria-busy');
+      mount.querySelectorAll('script').forEach(function (oldScript) {
+        var script = document.createElement('script');
+        Array.prototype.forEach.call(oldScript.attributes, function (attribute) { script.setAttribute(attribute.name, attribute.value); });
+        script.text = oldScript.text || oldScript.textContent;
+        oldScript.parentNode.replaceChild(script, oldScript);
+      });
+    }).catch(function () { mount.removeAttribute('aria-busy'); });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Homepage newsletter sync",
+  "settings": [{"type":"text","id":"anchor_id","label":"Anchor ID","info":"Use the same value in navigation links, without the # symbol."}],
+  "presets": [{"name":"Homepage newsletter sync"}]
+}
+{% endschema %}
