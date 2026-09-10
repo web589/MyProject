@@ -1511,7 +1511,10 @@
           const eligibleItems = this.getEligibleVatItems();
           this.hasEligibleProduct = eligibleItems.length > 0;
           this.hasVatSwitchConfiguration = eligibleItems.every(item => {
-            return Boolean(item.dataset.deStandardVatVariantId && item.dataset.deZeroVatVariantId);
+            return Boolean(
+              item.dataset.deStandardVatVariantId
+              && (item.dataset.deZeroVatVariantId || item.dataset.deVatSingleSource === 'true')
+            );
           });
           if (this.acceleratedCheckout) {
             const containsZeroVatItem = eligibleItems.some(item => item.dataset.deVatMode === 'zero');
@@ -1654,6 +1657,11 @@
           return items.length > 0 && items.every(item => item.dataset.deVatMode === mode);
         }
 
+        allEligibleItemsUseSingleSource() {
+          const items = this.getEligibleVatItems();
+          return items.length > 0 && items.every(item => item.dataset.deVatSingleSource === 'true');
+        }
+
         hasVatSelection() {
           return Boolean(this.getVatChoice() || this.vatConfirm.checked || this.vatStatusAttribute.value || this.vatConfirmAttribute.value);
         }
@@ -1678,6 +1686,8 @@
             this.taxSummary.textContent = '0-%-Komponente fehlt · Checkout gesperrt';
           } else if (choice === 'eligible' && this.vatConfirm.checked && this.allEligibleItemsUseMode('zero')) {
             this.taxSummary.textContent = '0-%-Komponente aktiv · Checkout prüft Lieferadresse';
+          } else if (choice === 'eligible' && this.vatConfirm.checked && this.allEligibleItemsUseSingleSource()) {
+            this.taxSummary.textContent = '0-%-Steuer wird im Checkout anhand der Produktkomponenten geprüft';
           } else if (choice === 'eligible' && this.vatConfirm.checked) {
             this.taxSummary.textContent = '0-%-Komponente wird vorbereitet …';
           } else if (choice === 'regular') {
@@ -1768,6 +1778,10 @@
             throw unavailableError;
           }
           const switches = eligibleElements.filter(item => {
+            // A normal Bundle can be the only merchandise line when its
+            // component inventory/tax is managed by Shopify Bundles. Keep
+            // that line unchanged instead of requiring a duplicate 0-% SKU.
+            if (targetMode === 'zero' && item.dataset.deVatSingleSource === 'true') return false;
             const targetVariantId = targetMode === 'zero'
               ? item.dataset.deZeroVatVariantId
               : item.dataset.deStandardVatVariantId;

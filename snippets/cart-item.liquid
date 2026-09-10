@@ -31,6 +31,10 @@
   if de_vat_mode == 'zero' and de_standard_vat_variant != blank
     assign de_zero_vat_eligible = true
   endif
+  assign de_vat_single_source = false
+  if de_zero_vat_eligible == true and de_vat_mode == 'standard' and de_zero_vat_variant == blank and de_standard_vat_variant == blank
+    assign de_vat_single_source = true
+  endif
   assign has_visible_variant_option = false
   assign bundle_capacity_option_value = blank
   assign bundle_capacity_display_value = blank
@@ -60,6 +64,7 @@
   data-de-vat-product-id="{{ product.product.id }}"
   data-de-vat-variant-id="{{ product.variant_id }}"
   data-de-vat-is-zero-product="{% if de_vat_mode == 'zero' %}true{% else %}false{% endif %}"
+  data-de-vat-single-source="{{ de_vat_single_source }}"
   data-de-standard-vat-variant-id="{% if de_vat_mode == 'zero' %}{{ de_standard_vat_variant.id }}{% else %}{{ product.variant_id }}{% endif %}"
   data-de-zero-vat-variant-id="{% if de_vat_mode == 'zero' %}{{ product.variant_id }}{% else %}{{ de_zero_vat_variant.id }}{% endif %}"
   {% if is_venus_shared_inventory %}
