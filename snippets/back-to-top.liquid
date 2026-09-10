@@ -11,7 +11,7 @@
     background: var(--back-to-top-accent);
     border: 0;
     border-radius: 50%;
-    bottom: max(24px, env(safe-area-inset-bottom));
+    bottom: max(80px, calc(env(safe-area-inset-bottom) + 56px));
     box-shadow: 0 5px 18px rgba(42, 55, 67, 0.18);
     cursor: pointer;
     display: flex;
@@ -75,7 +75,7 @@
 
   @media only screen and (max-width: 768px) {
     .back-to-top {
-      bottom: max(16px, env(safe-area-inset-bottom));
+      bottom: max(72px, calc(env(safe-area-inset-bottom) + 56px));
       height: 48px;
       right: max(12px, env(safe-area-inset-right));
       width: 48px;

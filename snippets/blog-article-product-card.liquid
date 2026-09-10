@@ -36,6 +36,15 @@
     if product.vendor != blank and card_title contains card_title_vendor_prefix
       assign card_title = card_title | remove_first: card_title_vendor_prefix | strip
     endif
+
+    # Keep the display name focused on the VENUS E model, even when a merchant
+    # has included the brand in the optional carousel title metafield.
+    if card_title contains 'VENUS E'
+      assign card_title_parts = card_title | split: 'VENUS E'
+      assign card_title_suffix = card_title_parts | last | strip
+      assign card_title = 'VENUS E ' | append: card_title_suffix | strip
+    endif
+
     assign card_specs = product.metafields.custom.carousel_specs.value | default: automatic_specs
     assign card_image_alt = card_image.alt | default: card_title
     assign card_badge = badge_override
@@ -120,15 +129,17 @@
                 </span>
               {%- when 'popular' -%}
                 <span class="blog-article-product-card__badge-icon" aria-hidden="true">
-                  {%- render 'element.icon', name: 'bestseller' -%}
+                  <svg viewBox="0 0 24 24" fill="currentColor" focusable="false">
+                    <path d="M12.3 2.2c.5 3.4-.9 5.1-2.6 6.7-1.2 1.1-2.3 2.2-2.3 4.3 0 2.7 2.1 4.9 4.8 4.9 2.9 0 5.2-2.2 5.2-5.2 0-1.5-.6-2.8-1.7-4.1.1 1.4-.5 2.4-1.5 2.9.1-3.5-1.3-6.6-1.9-9.5Zm-.1 18.1c-3.9 0-6.8-3-6.8-7.1 0-3.2 1.8-5.1 3.4-6.7 1.1-1.2 2-2.2 2-4.1l.1-.7.7.4c2.7 1.8 4.1 4.9 4.2 7.9.2-.5.3-1.1.1-1.8l-.2-1.1.9.7c2.2 1.8 3.5 4.1 3.5 6.6 0 3.8-3.1 6.9-7.9 6.9Zm.1-2c2.3 0 4.2-1.8 4.2-4.3 0-.8-.2-1.5-.6-2.2-.3 1-1 1.8-2.2 2.1l-.9.2.2-.9c.3-1.9-.1-3.9-1.2-5.6-.4 1-.9 1.7-1.7 2.5-1.2 1.2-2.4 2.4-2.4 4.1 0 2.3 1.8 4.1 4.6 4.1Z"/>
+                  </svg>
                 </span>
               {%- when 'family' -%}
                 <span class="blog-article-product-card__badge-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" focusable="false">
-                    <circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/>
-                    <circle cx="5.5" cy="10" r="2.2" stroke="currentColor" stroke-width="1.8"/>
-                    <circle cx="18.5" cy="10" r="2.2" stroke="currentColor" stroke-width="1.8"/>
-                    <path d="M6 20c.3-3.2 2.3-5 6-5s5.7 1.8 6 5M1.5 19c.2-2.4 1.5-3.8 4-3.8 1 0 1.8.2 2.5.7M22.5 19c-.2-2.4-1.5-3.8-4-3.8-1 0-1.8.2-2.5.7" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/>
+                  <svg viewBox="0 0 24 24" fill="currentColor" focusable="false">
+                    <circle cx="12" cy="7.3" r="2.9"/>
+                    <circle cx="5.8" cy="9.2" r="2.1"/>
+                    <circle cx="18.2" cy="9.2" r="2.1"/>
+                    <path d="M7.8 20.5c.3-3.3 1.8-5.2 4.2-5.2s3.9 1.9 4.2 5.2H7.8Zm-6.1 0c.2-2.6 1.4-4.1 3.6-4.1 1.5 0 2.5.7 3.1 1.9-.3.6-.5 1.3-.6 2.2H1.7Zm13.9 0c-.1-.9-.3-1.6-.6-2.2.6-1.2 1.6-1.9 3.1-1.9 2.2 0 3.4 1.5 3.6 4.1h-6.1Z"/>
                   </svg>
                 </span>
               {%- when 'power' -%}
@@ -164,7 +175,7 @@
     display: grid;
     font-family: var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
     grid-template-columns: 104px minmax(0, 1fr);
-    min-height: 112px;
+    min-height: 106px;
     overflow: hidden;
     transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
   }
@@ -182,7 +193,7 @@
     display: flex;
     height: 100%;
     justify-content: center;
-    min-height: 112px;
+    min-height: 106px;
     overflow: hidden;
     width: 104px;
   }
@@ -197,7 +208,7 @@
     display: block;
     height: 100%;
     object-fit: contain;
-    padding: 4px;
+    padding: 11px 12px;
     width: 100%;
   }
 
@@ -209,10 +220,10 @@
   .blog-article-product-card__content {
     align-items: center;
     display: grid;
-    gap: 14px;
+    gap: 12px;
     grid-template-columns: minmax(0, 1fr) auto;
     min-width: 0;
-    padding: 14px 16px 14px 17px;
+    padding: 12px 16px 12px 17px;
   }
 
   .blog-article-product-card__details {
@@ -224,8 +235,8 @@
     font-family: var(--typeHeaderPrimary, var(--typeBasePrimary, sans-serif)), var(--typeHeaderFallback, sans-serif);
     font-size: 17px;
     font-weight: 700;
-    line-height: 1.25;
-    margin: 0 0 4px;
+    line-height: 1.16;
+    margin: 0 0 3px;
   }
 
   .blog-article-product-card__title a {
@@ -236,14 +247,14 @@
   .blog-article-product-card__specs {
     color: #617b95;
     font-size: 14px;
-    line-height: 1.3;
-    margin: 0 0 5px;
+    line-height: 1.2;
+    margin: 0 0 4px;
   }
 
   .blog-article-product-card__price {
     color: #17283b;
     font-family: var(--typeHeaderPrimary, var(--typeBasePrimary, sans-serif)), var(--typeHeaderFallback, sans-serif);
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 700;
     line-height: 1.2;
     white-space: nowrap;
@@ -268,19 +279,19 @@
 
   .blog-article-product-card__badge {
     background: var(--blog-article-product-badge-color, #dff7e8);
-    border: 1px solid rgba(23, 40, 59, 0.06);
+    border: 1px solid rgba(23, 40, 59, 0.08);
     border-radius: 999px;
     color: #1f2937;
     display: inline-flex;
     align-items: center;
     gap: 5px;
     font-family: var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 700;
     line-height: 1.2;
     max-width: 100%;
     overflow: hidden;
-    padding: 6px 9px;
+    padding: 6px 10px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -304,24 +315,24 @@
   .blog-article-product-card__badge-icon {
     align-items: center;
     display: inline-flex;
-    flex: 0 0 14px;
-    height: 14px;
+    flex: 0 0 15px;
+    height: 15px;
     justify-content: center;
-    width: 14px;
+    width: 15px;
   }
 
   .blog-article-product-card__badge-icon .element-icon,
   .blog-article-product-card__badge-icon svg {
     --element-icon-color: currentColor;
-    --element-icon-size: 14px;
+    --element-icon-size: 15px;
     display: block;
-    height: 14px;
-    width: 14px;
+    height: 15px;
+    width: 15px;
   }
 
   .blog-article-product-card__button {
-    background: #0099fc;
-    border: 1px solid #0099fc;
+    background: #009cf5;
+    border: 1px solid #009cf5;
     border-radius: 8px;
     color: #fff;
     display: block;
@@ -329,7 +340,7 @@
     font-size: 13px;
     font-weight: 700;
     line-height: 1.2;
-    min-height: 38px;
+    min-height: 40px;
     min-width: 126px;
     padding: 10px 14px;
     text-align: center;
@@ -338,8 +349,8 @@
 
   .blog-article-product-card__button:hover,
   .blog-article-product-card__button:focus-visible {
-    background: #007dcc;
-    border-color: #007dcc;
+    background: #007fd0;
+    border-color: #007fd0;
     color: #fff;
   }
 
