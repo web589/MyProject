@@ -90,7 +90,7 @@
   }
 
   .blog-article .page-width {
-    max-width: 1280px;
+    max-width: 1440px;
   }
 
   .blog-article__hero {
@@ -282,7 +282,7 @@
     align-items: stretch;
     display: grid;
     gap: 64px;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+    grid-template-columns: minmax(0, 1fr) minmax(380px, 460px);
   }
 
   .blog-article__main {
@@ -506,6 +506,13 @@
   .blog-article__compare-link:focus-visible {
     background: #eff9ff;
     color: #007dcc;
+  }
+
+  @media only screen and (min-width: 769px) and (max-width: 1200px) {
+    .blog-article__layout {
+      gap: 40px;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 400px);
+    }
   }
 
   .blog-article__related {
