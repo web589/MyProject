@@ -112,7 +112,7 @@
 
       <div class="blog-article-product-card__actions">
         {%- if card_badge != blank -%}
-          <span class="blog-article-product-card__badge">
+          <span class="blog-article-product-card__badge blog-article-product-card__badge--{{ card_badge_icon }}">
             {%- case card_badge_icon -%}
               {%- when 'beginner' -%}
                 <span class="blog-article-product-card__badge-icon" aria-hidden="true">
@@ -283,6 +283,22 @@
     padding: 6px 9px;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .blog-article-product-card__badge--beginner {
+    color: #147a3d;
+  }
+
+  .blog-article-product-card__badge--popular {
+    color: #d52650;
+  }
+
+  .blog-article-product-card__badge--family {
+    color: #aa6500;
+  }
+
+  .blog-article-product-card__badge--power {
+    color: #7134c4;
   }
 
   .blog-article-product-card__badge-icon {
