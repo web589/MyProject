@@ -84,8 +84,8 @@
 {% style %}
   .blog-article {
     --blog-article-blue: #0099fc;
-    --blog-article-ink: var(--colorTextBody, #2a3743);
-    --blog-article-muted: #8a8f98;
+    --blog-article-ink: #17283b;
+    --blog-article-muted: #6b7f99;
     --blog-article-border: #e1e4e8;
   }
 
@@ -94,19 +94,36 @@
   }
 
   .blog-article__hero {
-    padding: 30px 0 64px;
+    align-items: center;
+    background-color: #eef6fc;
+    background-position: center right;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    min-height: 430px;
+    padding: 36px 0;
+  }
+
+  .blog-article__hero > .page-width {
+    align-items: center;
+    display: flex;
+    min-height: 358px;
+    width: 100%;
   }
 
   .blog-article__hero .breadcrumb {
     align-items: center;
-    color: #7b8794;
+    color: var(--blog-article-muted);
     display: flex;
     flex-wrap: nowrap;
+    font-family: 'Inter', var(--typeBasePrimary), var(--typeBaseFallback), sans-serif;
+    font-size: 14px;
+    font-weight: 400;
     gap: 10px;
-    line-height: 1.5;
+    line-height: 1.4;
     max-width: 100%;
     overflow: hidden;
-    margin: 0 0 58px;
+    margin: 0 0 34px;
   }
 
   .blog-article__hero .breadcrumb > * {
@@ -132,21 +149,25 @@
   }
 
   .blog-article__heading {
-    max-width: 1100px;
+    max-width: 1150px;
   }
 
   .blog-article__title {
-    font-size: clamp(38px, 5vw, 64px);
-    line-height: 1.08;
-    letter-spacing: -0.025em;
-    margin: 0 0 28px;
+    color: var(--blog-article-ink);
+    font-family: 'Inter', var(--typeBasePrimary), var(--typeBaseFallback), sans-serif;
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 30px;
+    max-width: 1150px;
   }
 
   .blog-article__meta-row {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px 12px;
   }
 
   .blog-article__meta {
@@ -154,8 +175,16 @@
     color: var(--blog-article-muted);
     display: flex;
     flex-wrap: wrap;
-    font-size: var(--typeBodySmallSize);
+    font-family: 'Inter', var(--typeBasePrimary), var(--typeBaseFallback), sans-serif;
+    font-size: 14px;
+    font-weight: 400;
     gap: 10px;
+    line-height: 1.4;
+  }
+
+  .blog-article__meta time {
+    color: inherit;
+    font: inherit;
   }
 
   .blog-article__meta-separator {
@@ -167,6 +196,15 @@
   }
 
   .blog-article__social .social-sharing {
+    align-items: center;
+    display: flex;
+    gap: 18px;
+    margin: 0;
+  }
+
+  .blog-article__social .social-sharing__link {
+    align-items: center;
+    display: inline-flex;
     margin: 0;
   }
 
@@ -233,7 +271,7 @@
   }
 
   .blog-article__layout {
-    align-items: start;
+    align-items: stretch;
     display: grid;
     gap: 64px;
     grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
@@ -241,6 +279,11 @@
 
   .blog-article__main {
     min-width: 0;
+  }
+
+  .blog-article__continuation {
+    grid-column: 1;
+    grid-row: 2;
   }
 
   .blog-article__toc {
@@ -311,11 +354,10 @@
   }
 
   .blog-article__sidebar {
-    align-self: start;
+    align-self: stretch;
+    grid-column: 2;
+    grid-row: 1;
     min-width: 0;
-    position: sticky;
-    top: calc(var(--site-header-group-height, var(--header-height, 0px)) + var(--blog-center-sticky-height, 0px) + 24px);
-    z-index: 20;
   }
 
   .blog-article__newsletter,
@@ -398,8 +440,10 @@
     margin: 0;
   }
 
-  .blog-article__sidebar-sticky {
-    position: static;
+  .blog-article__recommended-sticky {
+    position: sticky;
+    top: calc(var(--site-header-group-height, var(--header-height, 0px)) + var(--blog-center-sticky-height, 0px) + 24px);
+    z-index: 20;
   }
 
   .blog-article__recommended-title {
@@ -408,7 +452,28 @@
 
   .blog-article__recommended-list {
     display: grid;
-    gap: 20px;
+    gap: 12px;
+  }
+
+  .blog-article__compare-link {
+    align-items: center;
+    border: 1px solid #8bcfff;
+    border-radius: 8px;
+    color: var(--blog-article-blue);
+    display: flex;
+    font-size: 14px;
+    font-weight: 700;
+    justify-content: space-between;
+    margin-top: 16px;
+    min-height: 46px;
+    padding: 10px 14px;
+    text-decoration: none;
+  }
+
+  .blog-article__compare-link:hover,
+  .blog-article__compare-link:focus-visible {
+    background: #eff9ff;
+    color: #007dcc;
   }
 
   .blog-article__related {
@@ -507,15 +572,36 @@
 
   @media only screen and (max-width: 768px) {
     .blog-article__hero {
-      padding: 22px 0 44px;
+      min-height: 390px;
+      padding: 28px 0 32px;
+    }
+
+    .blog-article__hero > .page-width {
+      min-height: 0;
+      padding-left: 24px;
+      padding-right: 24px;
     }
 
     .blog-article__hero .breadcrumb {
-      margin-bottom: 36px;
+      font-size: 13px;
+      gap: 8px;
+      margin-bottom: 32px;
     }
 
     .blog-article__title {
-      font-size: clamp(34px, 10vw, 48px);
+      font-size: 38px;
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      margin-bottom: 28px;
+    }
+
+    .blog-article__meta {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .blog-article__social {
+      margin-left: 0;
     }
 
     .blog-article__category-bar {
@@ -538,15 +624,24 @@
     }
 
     .blog-article__layout {
-      display: block;
+      display: flex;
+      flex-direction: column;
     }
 
     .blog-article__sidebar {
       margin-top: 48px;
-      position: static;
+      order: 3;
     }
 
-    .blog-article__sidebar-sticky {
+    .blog-article__main {
+      order: 1;
+    }
+
+    .blog-article__continuation {
+      order: 2;
+    }
+
+    .blog-article__recommended-sticky {
       position: static;
     }
 
@@ -584,7 +679,9 @@
         <div class="blog-article__meta-row">
           <div class="blog-article__meta">
             {%- if section.settings.blog_show_date and article.published_at != blank -%}
-              {{ article.published_at | time_tag: format: 'month_day_year' }}
+              <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                {{ article.published_at | date: '%d/%m/%Y' }}
+              </time>
             {%- endif -%}
             {%- if section.settings.blog_show_date and article.published_at != blank -%}
               <span class="blog-article__meta-separator" aria-hidden="true">|</span>
@@ -671,7 +768,9 @@
             {{ article.content }}
           </div>
         {%- endif -%}
+      </div>
 
+      <div class="blog-article__main blog-article__continuation">
         {%- if article_blog.articles_count > 1 -%}
           {%- assign related_count = 0 -%}
           <section class="blog-article__related" aria-labelledby="BlogArticleRelated-{{ section.id }}">
@@ -812,46 +911,46 @@
       </div>
 
       <aside class="blog-article__sidebar">
-        <div class="blog-article__sidebar-sticky">
-          <section class="blog-article__newsletter" aria-labelledby="BlogArticleNewsletter-{{ section.id }}">
-            <h2 class="blog-article__newsletter-title" id="BlogArticleNewsletter-{{ section.id }}">
-              {{ newsletter_title | escape }}
-            </h2>
-            <div class="blog-article__newsletter-copy">{{ newsletter_text }}</div>
+        <section class="blog-article__newsletter" aria-labelledby="BlogArticleNewsletter-{{ section.id }}">
+          <h2 class="blog-article__newsletter-title" id="BlogArticleNewsletter-{{ section.id }}">
+            {{ newsletter_title | escape }}
+          </h2>
+          <div class="blog-article__newsletter-copy">{{ newsletter_text }}</div>
 
-            {%- form 'customer', id: newsletter_form_id -%}
-              {%- if form.posted_successfully? -%}
-                <p class="blog-article__form-message note note--success">
-                  {{ newsletter_success | escape }}
-                </p>
-              {%- else -%}
-                {{ form.errors | default_errors }}
-                <input type="hidden" name="contact[tags]" value="prospect,newsletter">
-                <label class="visually-hidden" for="BlogArticleEmail-{{ section.id }}">
-                  {{ 'general.newsletter_form.newsletter_email' | t }}
-                </label>
-                <input
-                  class="input-full"
-                  type="email"
-                  name="contact[email]"
-                  id="BlogArticleEmail-{{ section.id }}"
-                  value="{% if customer %}{{ customer.email }}{% endif %}"
-                  placeholder="{{ newsletter_email_placeholder | escape }}"
-                  autocorrect="off"
-                  autocapitalize="off"
-                  required
-                >
-                <div class="blog-article__consent">
-                  <input id="BlogArticleConsent-{{ section.id }}" type="checkbox" name="contact[accepts_marketing]" value="true" aria-labelledby="BlogArticleConsentText-{{ section.id }}" required>
-                  <div class="blog-article__consent-copy" id="BlogArticleConsentText-{{ section.id }}">{{ newsletter_consent }}</div>
-                </div>
-                <button class="blog-article__newsletter-submit" type="submit">
-                  {{ newsletter_submit | escape }}
-                </button>
-              {%- endif -%}
-            {%- endform -%}
-          </section>
+          {%- form 'customer', id: newsletter_form_id -%}
+            {%- if form.posted_successfully? -%}
+              <p class="blog-article__form-message note note--success">
+                {{ newsletter_success | escape }}
+              </p>
+            {%- else -%}
+              {{ form.errors | default_errors }}
+              <input type="hidden" name="contact[tags]" value="prospect,newsletter">
+              <label class="visually-hidden" for="BlogArticleEmail-{{ section.id }}">
+                {{ 'general.newsletter_form.newsletter_email' | t }}
+              </label>
+              <input
+                class="input-full"
+                type="email"
+                name="contact[email]"
+                id="BlogArticleEmail-{{ section.id }}"
+                value="{% if customer %}{{ customer.email }}{% endif %}"
+                placeholder="{{ newsletter_email_placeholder | escape }}"
+                autocorrect="off"
+                autocapitalize="off"
+                required
+              >
+              <div class="blog-article__consent">
+                <input id="BlogArticleConsent-{{ section.id }}" type="checkbox" name="contact[accepts_marketing]" value="true" aria-labelledby="BlogArticleConsentText-{{ section.id }}" required>
+                <div class="blog-article__consent-copy" id="BlogArticleConsentText-{{ section.id }}">{{ newsletter_consent }}</div>
+              </div>
+              <button class="blog-article__newsletter-submit" type="submit">
+                {{ newsletter_submit | escape }}
+              </button>
+            {%- endif -%}
+          {%- endform -%}
+        </section>
 
+        <div class="blog-article__recommended-sticky">
           {%- if recommended_product_count > 0 -%}
             <section class="blog-article__recommended" aria-labelledby="BlogArticleRecommended-{{ section.id }}">
               <h2 class="blog-article__recommended-title" id="BlogArticleRecommended-{{ section.id }}">
@@ -863,22 +962,20 @@
                     {%- render 'blog-article-product-card',
                       product: block.settings.product,
                       variant: 'compact',
-                      custom_image: block.settings.image,
-                      title_override: block.settings.title,
-                      subtitle_override: block.settings.description,
-                      specs_override: block.settings.specs,
                       badge_override: block.settings.badge,
                       badge_color_override: block.settings.badge_color,
-                      cta_label_override: block.settings.button_label,
-                      link_override: block.settings.link,
                       block_attributes: block.shopify_attributes
                     -%}
                   {%- endif -%}
                 {%- endfor -%}
               </div>
+              <a class="blog-article__compare-link" href="{{ collections['alle-venus-e-serie'].url | default: '/collections/alle-venus-e-serie' }}">
+                <span>{{ 'blogs.article.compare_models' | t }}</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
             </section>
           {%- endif -%}
-        </div>
+          </div>
       </aside>
     </div>
   </div>
@@ -1006,64 +1103,20 @@
           "label": "Product"
         },
         {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image override"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Card title",
-          "info": "Leave blank to use the product metafield or product title."
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Card description",
-          "info": "Leave blank to use the product metafield."
-        },
-        {
-          "type": "text",
-          "id": "specs",
-          "label": "Card specifications",
-          "info": "Leave blank to use the product metafield."
-        },
-        {
           "type": "text",
           "id": "badge",
           "label": "Badge text"
         },
         {
-          "type": "select",
+          "type": "color",
           "id": "badge_color",
           "label": "Badge color",
-          "default": "blue",
-          "options": [
-            {
-              "value": "blue",
-              "label": "Blue"
-            },
-            {
-              "value": "orange",
-              "label": "Orange"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "id": "button_label",
-          "label": "Button text",
-          "info": "Leave blank to use the translated default."
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Card link"
+          "default": "#dff7e8"
         }
       ]
     }
   ],
-  "max_blocks": 6,
+  "max_blocks": 4,
   "disabled_on": {
     "groups": ["footer", "header", "custom.popups"]
   }

@@ -516,7 +516,7 @@
         {% endif %}
       </div>
       {% if block.settings.show_view_all %}
-        <a href="{{ routes.search_url }}?q=&type=article" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
+        <a href="{{ routes.root_url }}blogs/blog-center" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
           {{ block.settings.view_all_text | escape }}
           <svg class="ai-custom-blog-arrow-{{ ai_gen_id }}" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
