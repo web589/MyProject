@@ -89,6 +89,12 @@
 {% style %}
   .blog-article {
     --blog-article-blue: #008ff0;
+    --blog-article-blue-hover: #0077d2;
+    --blog-article-body-font-family: 'Inter', var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
+    --blog-article-body-font-size: var(--typeBodySize, 17px);
+    --blog-article-body-font-size-mobile: var(--typeBodySizeMobile, 16px);
+    --blog-article-body-line-height: 1.6;
+    --blog-article-body-color: var(--colorTextBody, #2a3743);
     --blog-article-ink: #112b46;
     --blog-article-muted: #6b7f99;
     --blog-article-border: #e1e4e8;
@@ -340,7 +346,26 @@
   }
 
   .blog-article__body {
+    color: var(--blog-article-body-color);
+    font-family: var(--blog-article-body-font-family);
+    font-size: var(--blog-article-body-font-size);
+    font-weight: 400;
+    line-height: var(--blog-article-body-line-height);
     margin-bottom: 72px;
+  }
+
+  /* Keep article-editor typography scoped to the article and leave the TOC intact. */
+  .blog-article__body > :not(.blog-article__toc),
+  .blog-article__body > :not(.blog-article__toc) :is(p, div, span, a, li, td, th, blockquote, figcaption, strong, b, em, i, u, mark) {
+    font-family: var(--blog-article-body-font-family) !important;
+  }
+
+  /* Override inline font-size/line-height values saved in Shopify article HTML. */
+  .blog-article__body > :not(.blog-article__toc):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6),
+  .blog-article__body > :not(.blog-article__toc) :is(p, div, span, a, li, td, th, blockquote, figcaption, strong, b, em, i, u, mark) {
+    color: var(--blog-article-body-color) !important;
+    font-size: var(--blog-article-body-font-size) !important;
+    line-height: var(--blog-article-body-line-height) !important;
   }
 
   .blog-article__body h2,
@@ -349,21 +374,121 @@
   }
 
   .blog-article__body h2 {
-    font-size: clamp(28px, 3vw, 40px);
-    line-height: 1.18;
-    margin: 52px 0 18px;
+    color: var(--blog-article-body-color) !important;
+    font-family: var(--blog-article-body-font-family) !important;
+    font-size: clamp(28px, 3vw, 40px) !important;
+    line-height: 1.18 !important;
+    margin: 52px 0 18px !important;
   }
 
   .blog-article__body h3 {
-    font-size: clamp(22px, 2.4vw, 30px);
-    line-height: 1.2;
-    margin: 38px 0 14px;
+    color: var(--blog-article-body-color) !important;
+    font-family: var(--blog-article-body-font-family) !important;
+    font-size: clamp(22px, 2.4vw, 30px) !important;
+    line-height: 1.2 !important;
+    margin: 38px 0 14px !important;
   }
 
-  .blog-article__body p,
-  .blog-article__body ul,
-  .blog-article__body ol {
-    line-height: 1.6;
+  .blog-article__body > p,
+  .blog-article__body > ul,
+  .blog-article__body > ol,
+  .blog-article__body > :not(.blog-article__toc) p,
+  .blog-article__body > :not(.blog-article__toc) ul,
+  .blog-article__body > :not(.blog-article__toc) ol {
+    color: var(--blog-article-body-color) !important;
+    line-height: var(--blog-article-body-line-height) !important;
+    margin-bottom: 24px;
+  }
+
+  .blog-article__body > ul,
+  .blog-article__body > ol,
+  .blog-article__body > :not(.blog-article__toc) ul,
+  .blog-article__body > :not(.blog-article__toc) ol {
+    padding-left: 30px;
+  }
+
+  .blog-article__body > li,
+  .blog-article__body > :not(.blog-article__toc) li {
+    line-height: var(--blog-article-body-line-height) !important;
+    margin-bottom: 8px;
+  }
+
+  .blog-article__body > :not(.blog-article__toc) li:last-child {
+    margin-bottom: 0;
+  }
+
+  .blog-article__body > :not(.blog-article__toc) ul ul,
+  .blog-article__body > :not(.blog-article__toc) ol ol,
+  .blog-article__body > :not(.blog-article__toc) ul ol,
+  .blog-article__body > :not(.blog-article__toc) ol ul {
+    margin-bottom: 0;
+    margin-top: 8px;
+  }
+
+  .blog-article__body > table,
+  .blog-article__body > :not(.blog-article__toc) table {
+    font-family: var(--blog-article-body-font-family) !important;
+    font-size: var(--blog-article-body-font-size) !important;
+    line-height: var(--blog-article-body-line-height) !important;
+    margin: 28px 0;
+    max-width: 100%;
+  }
+
+  .blog-article__body > table td,
+  .blog-article__body > table th,
+  .blog-article__body > :not(.blog-article__toc) table td,
+  .blog-article__body > :not(.blog-article__toc) table th {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+  }
+
+  .blog-article__body > :not(.blog-article__toc) img {
+    display: block;
+    height: auto !important;
+    margin: 28px auto !important;
+    max-width: 100%;
+  }
+
+  .blog-article__body > img {
+    display: block;
+    height: auto !important;
+    margin: 28px auto !important;
+    max-width: 100%;
+  }
+
+  .blog-article__body > :not(.blog-article__toc) p > img:only-child,
+  .blog-article__body > :not(.blog-article__toc) p > a.rte__image:only-child img {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .blog-article__body > :not(.blog-article__toc) a:not(.rte__image) {
+    color: var(--blog-article-blue) !important;
+  }
+
+  .blog-article__body > :not(.blog-article__toc) a:not(.rte__image):hover,
+  .blog-article__body > :not(.blog-article__toc) a:not(.rte__image):focus-visible {
+    color: var(--blog-article-blue-hover) !important;
+  }
+
+  .blog-article__body > a:not(.rte__image) {
+    color: var(--blog-article-blue) !important;
+  }
+
+  .blog-article__body > a:not(.rte__image):hover,
+  .blog-article__body > a:not(.rte__image):focus-visible {
+    color: var(--blog-article-blue-hover) !important;
+  }
+
+  .blog-article__body strong,
+  .blog-article__body b {
+    font-weight: 700 !important;
+  }
+
+  .blog-article__body em,
+  .blog-article__body i {
+    font-style: italic !important;
   }
 
   .blog-article__sidebar {
@@ -710,6 +835,72 @@
     .blog-article__layout {
       display: flex;
       flex-direction: column;
+    }
+
+    .blog-article__body {
+      font-size: var(--blog-article-body-font-size-mobile);
+      line-height: var(--blog-article-body-line-height);
+      margin-bottom: 48px;
+    }
+
+    .blog-article__body > :not(.blog-article__toc):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6),
+    .blog-article__body > :not(.blog-article__toc) :is(p, div, span, a, li, td, th, blockquote, figcaption, strong, b, em, i, u, mark),
+    .blog-article__body > table,
+    .blog-article__body > :not(.blog-article__toc) table {
+      font-size: var(--blog-article-body-font-size-mobile) !important;
+    }
+
+    .blog-article__body > p,
+    .blog-article__body > ul,
+    .blog-article__body > ol,
+    .blog-article__body > :not(.blog-article__toc) p,
+    .blog-article__body > :not(.blog-article__toc) ul,
+    .blog-article__body > :not(.blog-article__toc) ol {
+      margin-bottom: 18px;
+    }
+
+    .blog-article__body > :not(.blog-article__toc) li,
+    .blog-article__body > li {
+      margin-bottom: 6px;
+    }
+
+    .blog-article__body > :not(.blog-article__toc) li:last-child {
+      margin-bottom: 0;
+    }
+
+    .blog-article__body h2 {
+      font-size: clamp(24px, 7vw, 32px) !important;
+      line-height: 1.25 !important;
+      margin: 36px 0 14px !important;
+    }
+
+    .blog-article__body h3 {
+      font-size: clamp(20px, 5.5vw, 26px) !important;
+      line-height: 1.3 !important;
+      margin: 28px 0 12px !important;
+    }
+
+    .blog-article__body > table,
+    .blog-article__body > :not(.blog-article__toc) table {
+      margin: 22px 0;
+    }
+
+    .blog-article__body > table td,
+    .blog-article__body > table th,
+    .blog-article__body > :not(.blog-article__toc) table td,
+    .blog-article__body > :not(.blog-article__toc) table th {
+      padding: 6px 8px;
+    }
+
+    .blog-article__body > :not(.blog-article__toc) img,
+    .blog-article__body > img {
+      margin: 22px auto !important;
+    }
+
+    .blog-article__body > :not(.blog-article__toc) p > img:only-child,
+    .blog-article__body > :not(.blog-article__toc) p > a.rte__image:only-child img {
+      margin-bottom: 0 !important;
+      margin-top: 0 !important;
     }
 
     .blog-article__sidebar {
