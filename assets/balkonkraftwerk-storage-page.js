@@ -37,10 +37,10 @@
     return matches.find(function (variant) { return variant.available; }) || matches[0] || null;
   }
 
-  function getTier(people, pv, annual) {
-    var peopleTier = people <= 1 ? 5.12 : people <= 2 ? 10.24 : people <= 4 ? 15.36 : 30;
-    var pvTier = pv <= 2 ? 5.12 : pv <= 5 ? 10.24 : pv <= 8 ? 15.36 : 30;
-    var annualTier = annual <= 2500 ? 5.12 : annual <= 4500 ? 10.24 : annual <= 6500 ? 15.36 : 30;
+  function getTier(people, pv, annual, thresholds) {
+    var peopleTier = people <= thresholds.people5 ? 5.12 : people <= thresholds.people10 ? 10.24 : people <= thresholds.people15 ? 15.36 : 30;
+    var pvTier = pv <= thresholds.pv5 ? 5.12 : pv <= thresholds.pv10 ? 10.24 : pv <= thresholds.pv15 ? 15.36 : 30;
+    var annualTier = annual <= thresholds.annual5 ? 5.12 : annual <= thresholds.annual10 ? 10.24 : annual <= thresholds.annual15 ? 15.36 : 30;
     return Math.max(peopleTier, pvTier, annualTier).toFixed(2).replace(/\.00$/, '');
   }
 
@@ -72,6 +72,17 @@
       annual: root.querySelector('[data-bw-output="annual"]')
     };
     var state = { people: 3, pv: 6, annual: 4000, tier: '15.36', hasCalculated: false };
+    var thresholds = {
+      people5: Number(root.dataset.peopleTier5) || 1,
+      people10: Number(root.dataset.peopleTier10) || 2,
+      people15: Number(root.dataset.peopleTier15) || 4,
+      pv5: Number(root.dataset.pvTier5) || 2,
+      pv10: Number(root.dataset.pvTier10) || 5,
+      pv15: Number(root.dataset.pvTier15) || 8,
+      annual5: Number(root.dataset.annualTier5) || 2500,
+      annual10: Number(root.dataset.annualTier10) || 4500,
+      annual15: Number(root.dataset.annualTier15) || 6500
+    };
     var stored;
     try { stored = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY) || 'null'); } catch (error) { stored = null; }
     if (stored && stored.people && stored.pv !== undefined && stored.annual) {
@@ -156,7 +167,7 @@
       state.people = Number(inputs.people.value);
       state.pv = Number(inputs.pv.value);
       state.annual = Number(inputs.annual.value);
-      state.tier = getTier(state.people, state.pv, state.annual);
+      state.tier = getTier(state.people, state.pv, state.annual, thresholds);
       if (markCalculated) state.hasCalculated = true;
       save();
       render();

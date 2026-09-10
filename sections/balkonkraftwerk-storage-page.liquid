@@ -20,7 +20,16 @@
 {{ 'balkonkraftwerk-storage-page.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'balkonkraftwerk-storage-page.js' | asset_url }}" defer="defer"></script>
 
-<div class="bw-storage" data-bw-storage data-section-id="{{ section.id }}">
+<div class="bw-storage" data-bw-storage data-section-id="{{ section.id }}"
+  data-people-tier-5="{{ section.settings.people_tier_5_max }}"
+  data-people-tier-10="{{ section.settings.people_tier_10_max }}"
+  data-people-tier-15="{{ section.settings.people_tier_15_max }}"
+  data-pv-tier-5="{{ section.settings.pv_tier_5_max }}"
+  data-pv-tier-10="{{ section.settings.pv_tier_10_max }}"
+  data-pv-tier-15="{{ section.settings.pv_tier_15_max }}"
+  data-annual-tier-5="{{ section.settings.annual_tier_5_max }}"
+  data-annual-tier-10="{{ section.settings.annual_tier_10_max }}"
+  data-annual-tier-15="{{ section.settings.annual_tier_15_max }}">
   <nav class="bw-anchor-nav" data-bw-anchor-nav aria-label="Seitennavigation">
     <div class="bw-container bw-anchor-nav__inner">
       <a href="#balkonkraftwerk-kaufen" data-bw-anchor-link>Balkonkraftwerk kaufen</a>
@@ -198,7 +207,16 @@
     {"type":"product","id":"product_mini","label":"VENUS E Mini product"},
     {"type":"product","id":"product_3","label":"VENUS E 3.0 product"},
     {"type":"product","id":"product_4","label":"VENUS E 4.0 product"},
-    {"type":"product","id":"product_max","label":"VENUS E Max product"}
+    {"type":"product","id":"product_max","label":"VENUS E Max product"},
+    {"type":"range","id":"people_tier_5_max","label":"5.12 kWh: max. Personen","min":1,"max":6,"step":1,"default":1},
+    {"type":"range","id":"people_tier_10_max","label":"10.24 kWh: max. Personen","min":1,"max":6,"step":1,"default":2},
+    {"type":"range","id":"people_tier_15_max","label":"15.36 kWh: max. Personen","min":1,"max":6,"step":1,"default":4},
+    {"type":"range","id":"pv_tier_5_max","label":"5.12 kWh: max. PV-Leistung","min":0,"max":12,"step":0.5,"unit":"kWp","default":2},
+    {"type":"range","id":"pv_tier_10_max","label":"10.24 kWh: max. PV-Leistung","min":0,"max":12,"step":0.5,"unit":"kWp","default":5},
+    {"type":"range","id":"pv_tier_15_max","label":"15.36 kWh: max. PV-Leistung","min":0,"max":12,"step":0.5,"unit":"kWp","default":8},
+    {"type":"range","id":"annual_tier_5_max","label":"5.12 kWh: max. Jahresverbrauch","min":1500,"max":8000,"step":100,"unit":"kWh","default":2500},
+    {"type":"range","id":"annual_tier_10_max","label":"10.24 kWh: max. Jahresverbrauch","min":1500,"max":8000,"step":100,"unit":"kWh","default":4500},
+    {"type":"range","id":"annual_tier_15_max","label":"15.36 kWh: max. Jahresverbrauch","min":1500,"max":8000,"step":100,"unit":"kWh","default":6500}
   ],
   "presets": [{"name":"Balkonkraftwerk mit Speicher"}]
 }
