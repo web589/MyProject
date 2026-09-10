@@ -84,7 +84,7 @@
   .blog-page__sticky {
     background: #fff;
     position: sticky;
-    top: 0;
+    top: 24px;
     z-index: 25;
   }
 
@@ -418,6 +418,10 @@
   }
 
   @media only screen and (max-width: 768px) {
+    .blog-page__sticky {
+      top: 12px;
+    }
+
     .blog-page__content {
       padding-bottom: 48px;
     }
