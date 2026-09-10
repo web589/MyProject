@@ -1204,9 +1204,9 @@
           </h2>
           <div class="blog-article__newsletter-copy">{{ newsletter_text }}</div>
 
-          {%- form 'customer', id: newsletter_form_id -%}
+          {%- form 'customer', id: newsletter_form_id, data-blog-newsletter-form: '', data-success-message: newsletter_success -%}
             {%- if form.posted_successfully? -%}
-              <p class="blog-article__form-message note note--success">
+              <p class="blog-article__form-message note note--success" data-blog-newsletter-success role="status">
                 {{ newsletter_success | escape }}
               </p>
             {%- else -%}

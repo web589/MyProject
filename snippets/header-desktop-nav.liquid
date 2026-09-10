@@ -493,7 +493,10 @@
         var categoryLinks = menu.querySelectorAll('[data-mega-menu-category]');
         var categoryItems = menu.querySelectorAll('[data-mega-menu-category-item].is-menu-category');
         var panels = menu.querySelectorAll('[data-mega-menu-category-panel]');
-        var defaultCategory = menu.getAttribute('data-default-category');
+        var firstCategoryLink = menu.querySelector('[data-mega-menu-category]');
+        var defaultCategory = firstCategoryLink
+          ? firstCategoryLink.getAttribute('data-mega-menu-category')
+          : menu.getAttribute('data-default-category');
 
         var activateCategory = function (category) {
           if (!category) {
