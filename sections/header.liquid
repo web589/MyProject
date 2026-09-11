@@ -32,6 +32,13 @@
   assign disable_header_sticky = false
   if request.page_type == 'blog' or request.page_type == 'article'
     assign disable_header_sticky = true
+  elsif request.page_type == 'page' and template.suffix == 'balkonkraftwerk-mit-speicher'
+    comment
+      The storage landing page has its own in-page anchor navigation. Keep the
+      global announcement and header in normal flow so the anchor bar can sit
+      at the top of the viewport without stacking over page content.
+    endcomment
+    assign disable_header_sticky = true
   elsif request.page_type == 'product'
     comment
       The standard Venus E product templates include the floating anchor

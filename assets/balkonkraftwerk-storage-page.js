@@ -651,8 +651,11 @@
       }
       var href = link.getAttribute('href');
       var target = href && href.charAt(0) === '#' ? document.querySelector(href) : null;
-      var isCta = link.classList.contains('bw-anchor-nav__cta');
-      link.hidden = (!target || target.hidden) && !isCta;
+      link.hidden = !target || target.hidden;
+      if (link.hidden) {
+        link.classList.remove('is-active');
+        link.removeAttribute('aria-current');
+      }
       if (target && !target.hidden && !targets.includes(target)) targets.push(target);
     });
 

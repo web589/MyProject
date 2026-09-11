@@ -93,6 +93,7 @@
     --blog-article-body-font-family: 'Inter', var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
     --blog-article-body-font-size: var(--typeBodySize, 17px);
     --blog-article-body-font-size-mobile: var(--typeBodySizeMobile, 16px);
+    --blog-article-body-font-weight: 400;
     --blog-article-body-line-height: 1.6;
     --blog-article-body-color: var(--colorTextBody, #2a3743);
     --blog-article-ink: #112b46;
@@ -349,7 +350,7 @@
     color: var(--blog-article-body-color);
     font-family: var(--blog-article-body-font-family);
     font-size: var(--blog-article-body-font-size);
-    font-weight: 400;
+    font-weight: var(--blog-article-body-font-weight);
     line-height: var(--blog-article-body-line-height);
     margin-bottom: 72px;
   }
@@ -366,6 +367,16 @@
     color: var(--blog-article-body-color) !important;
     font-size: var(--blog-article-body-font-size) !important;
     line-height: var(--blog-article-body-line-height) !important;
+  }
+
+  /* Reset editor-saved font weights for regular text while preserving strong/b emphasis. */
+  .blog-article__body > :not(.blog-article__toc):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6):not(strong):not(b),
+  .blog-article__body > :not(.blog-article__toc) :is(p, div, span, a, li, td, th, blockquote, figcaption, em, i, u, mark) {
+    font-weight: var(--blog-article-body-font-weight) !important;
+  }
+
+  .blog-article__body > :not(.blog-article__toc) :is(strong, b) * {
+    font-weight: inherit !important;
   }
 
   .blog-article__body h2,
@@ -397,7 +408,8 @@
   .blog-article__body > :not(.blog-article__toc) ol {
     color: var(--blog-article-body-color) !important;
     line-height: var(--blog-article-body-line-height) !important;
-    margin-bottom: 24px;
+    margin-bottom: 24px !important;
+    margin-top: 0 !important;
   }
 
   .blog-article__body > ul,
@@ -421,8 +433,8 @@
   .blog-article__body > :not(.blog-article__toc) ol ol,
   .blog-article__body > :not(.blog-article__toc) ul ol,
   .blog-article__body > :not(.blog-article__toc) ol ul {
-    margin-bottom: 0;
-    margin-top: 8px;
+    margin-bottom: 0 !important;
+    margin-top: 8px !important;
   }
 
   .blog-article__body > table,
@@ -430,7 +442,7 @@
     font-family: var(--blog-article-body-font-family) !important;
     font-size: var(--blog-article-body-font-size) !important;
     line-height: var(--blog-article-body-line-height) !important;
-    margin: 28px 0;
+    margin: 28px 0 !important;
     max-width: 100%;
   }
 
@@ -856,16 +868,17 @@
     .blog-article__body > :not(.blog-article__toc) p,
     .blog-article__body > :not(.blog-article__toc) ul,
     .blog-article__body > :not(.blog-article__toc) ol {
-      margin-bottom: 18px;
+      margin-bottom: 18px !important;
+      margin-top: 0 !important;
     }
 
     .blog-article__body > :not(.blog-article__toc) li,
     .blog-article__body > li {
-      margin-bottom: 6px;
+      margin-bottom: 6px !important;
     }
 
     .blog-article__body > :not(.blog-article__toc) li:last-child {
-      margin-bottom: 0;
+      margin-bottom: 0 !important;
     }
 
     .blog-article__body h2 {
@@ -882,7 +895,7 @@
 
     .blog-article__body > table,
     .blog-article__body > :not(.blog-article__toc) table {
-      margin: 22px 0;
+      margin: 22px 0 !important;
     }
 
     .blog-article__body > table td,
