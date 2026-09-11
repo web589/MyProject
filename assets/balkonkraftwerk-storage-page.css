@@ -624,7 +624,11 @@
   width: 100%;
 }
 .bw-zero-feed {
+  padding: 28px 0 34px;
   background: #fff;
+}
+.bw-durability {
+  padding: 48px 0 50px;
 }
 .bw-zero-feed__container,
 .bw-durability__container {
@@ -637,13 +641,13 @@
 }
 .bw-zero-feed__intro h2,
 .bw-durability__intro h2 {
-  font-size: clamp(30px, 3.2vw, 42px);
+  font-size: clamp(30px, 2.8vw, 42px);
   letter-spacing: -0.04em;
   line-height: 1.12;
   margin: 0 0 10px;
 }
-.bw-zero-feed__intro p,
-.bw-durability__intro p {
+.bw-zero-feed__intro p:not(.bw-eyebrow),
+.bw-durability__intro p:not(.bw-eyebrow) {
   max-width: 980px;
   color: #8a9db5;
   font-size: 13px;
@@ -1105,6 +1109,12 @@
   .bw-section {
     padding: 70px 0;
   }
+  .bw-zero-feed {
+    padding: 34px 0 38px;
+  }
+  .bw-durability {
+    padding: 48px 0;
+  }
   .bw-section__intro {
     margin-bottom: 32px;
   }
@@ -1188,6 +1198,10 @@
   .bw-zero-feed__intro h2,
   .bw-durability__intro h2 {
     font-size: 31px;
+  }
+  .bw-zero-feed__intro p:not(.bw-eyebrow),
+  .bw-durability__intro p:not(.bw-eyebrow) {
+    font-size: 14px;
   }
   .bw-system-flow {
     padding: 18px;
