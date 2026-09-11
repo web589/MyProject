@@ -122,23 +122,37 @@
   }
 
   .blog-article__hero--has-background::before {
-    background: linear-gradient(
-      90deg,
-      rgba(238, 246, 252, 0.98) 0%,
-      rgba(238, 246, 252, 0.92) 40%,
-      rgba(238, 246, 252, 0.62) 70%,
-      rgba(238, 246, 252, 0.2) 100%
-    );
+    background-image: var(--blog-article-hero-image);
+    background-position: center right;
+    background-repeat: no-repeat;
+    background-size: cover;
     content: '';
-    inset: 0;
+    inset: 0 0 0 32%;
+    opacity: var(--blog-article-hero-image-opacity, 0.35);
     pointer-events: none;
     position: absolute;
     z-index: 0;
   }
 
+  .blog-article__hero--has-background::after {
+    background: linear-gradient(
+      90deg,
+      #eef6fc 0%,
+      #eef6fc 34%,
+      rgba(238, 246, 252, 0.96) 48%,
+      rgba(238, 246, 252, 0.58) 66%,
+      rgba(238, 246, 252, 0) 92%
+    );
+    content: '';
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+  }
+
   .blog-article__hero--has-background > .page-width {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 
   .blog-article__hero > .page-width {
@@ -825,11 +839,11 @@
 
   @media only screen and (max-width: 768px) {
     .blog-article__hero--has-background::before {
-      background: linear-gradient(
-        180deg,
-        rgba(238, 246, 252, 0.96) 0%,
-        rgba(238, 246, 252, 0.9) 100%
-      );
+      inset: 0;
+    }
+
+    .blog-article__hero--has-background::after {
+      background: rgba(238, 246, 252, 0.92);
     }
 
     .blog-article__hero--has-background .blog-article__heading,
@@ -1018,7 +1032,7 @@
   <header
     class="blog-article__hero{% if section.settings.hero_background_image != blank %} blog-article__hero--has-background{% endif %}"
     {% if section.settings.hero_background_image != blank %}
-      style="background-image: url('{{ section.settings.hero_background_image | image_url: width: 2400 }}');"
+      style="--blog-article-hero-image: url('{{ section.settings.hero_background_image | image_url: width: 2400 }}'); --blog-article-hero-image-opacity: {{ section.settings.hero_background_opacity | divided_by: 100.0 }};"
     {% endif %}
   >
     <div class="page-width">
@@ -1397,6 +1411,17 @@
       "id": "hero_background_image",
       "label": "Banner background image",
       "info": "Optional. Upload a background image for the article banner."
+    },
+    {
+      "type": "range",
+      "id": "hero_background_opacity",
+      "label": "Right background image opacity",
+      "info": "Adjust the image visibility on the right. The article text stays above the image, including at 100%.",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 35
     },
     {
       "type": "checkbox",
