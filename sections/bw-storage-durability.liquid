@@ -1,5 +1,13 @@
+{% liquid
+  assign durability_anchor = section.settings.anchor_id | handle
+  if durability_anchor == blank
+    assign durability_anchor = 'durability'
+  endif
+%}
+
 <section
-  class="bw-storage bw-storage-section bw-durability"
+  id="{{ durability_anchor }}"
+  class="bw-storage bw-storage-section bw-durability bw-anchor-target"
   data-bw-module="durability"
   aria-labelledby="bw-durability-heading-{{ section.id }}"
 >
@@ -51,6 +59,7 @@
 {
   "name": "VENUS E · Haltbarkeit",
   "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"durability"},
     {
       "type": "text",
       "id": "heading",

@@ -11,14 +11,19 @@
   if venus_max == blank
     assign venus_max = all_products['venus-e-max']
   endif
+  assign recommendations_anchor = section.settings.anchor_id | handle
+  if recommendations_anchor == blank
+    assign recommendations_anchor = 'empfehlungen'
+  endif
   assign recommendations_heading_id = 'bw-recommendations-heading-' | append: section.id
 %}
 
 <section
-  id="empfehlungen"
-  class="bw-storage bw-storage-section bw-section bw-recommendations"
+  id="{{ recommendations_anchor }}"
+  class="bw-storage bw-storage-section bw-section bw-recommendations bw-anchor-target"
   data-bw-module="recommendations"
   data-bw-results
+  data-bw-results-state="{% if request.design_mode %}visible{% else %}hidden{% endif %}"
   data-section-id="{{ section.id }}"
   aria-labelledby="{{ recommendations_heading_id }}"
   {% unless request.design_mode %}hidden{% endunless %}
@@ -26,7 +31,7 @@
   <div class="bw-container">
     <header class="bw-results__heading">
       {% if section.settings.context_label != blank %}<p>{{ section.settings.context_label }}: <strong data-bw-recommendation-summary>3 Personen · 6 kWp · 4.000 kWh/Jahr</strong></p>{% endif %}
-      <h2 id="{{ recommendations_heading_id }}">{{ section.settings.heading }} <span data-bw-capacity-inline>15,36 kWh</span></h2>
+      <h2 id="{{ recommendations_heading_id }}" data-bw-results-heading tabindex="-1">{{ section.settings.heading }} <span data-bw-capacity-inline>15,36 kWh</span></h2>
     </header>
 
     <div class="bw-results__grid">
@@ -150,6 +155,7 @@
   "class": "section-bw-storage-recommendations",
   "max_blocks": 3,
   "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"empfehlungen"},
     {"type":"text","id":"context_label","label":"Eingabe-Zusammenfassung","default":"Basierend auf deiner Eingabe"},
     {"type":"text","id":"heading","label":"Überschrift","default":"Diese Konfigurationen passen zu"},
     {"type":"product","id":"product_3","label":"VENUS E 3.0 Produkt"},

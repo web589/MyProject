@@ -1,5 +1,13 @@
+{% liquid
+  assign steps_anchor = section.settings.anchor_id | handle
+  if steps_anchor == blank
+    assign steps_anchor = 'steps'
+  endif
+%}
+
 <section
-  class="bw-storage bw-storage-section bw-steps-section"
+  id="{{ steps_anchor }}"
+  class="bw-storage bw-storage-section bw-steps-section bw-anchor-target"
   data-bw-module="steps"
   aria-labelledby="bw-steps-heading-{{ section.id }}"
 >
@@ -29,6 +37,7 @@
 {
   "name": "VENUS E · Schritte",
   "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"steps"},
     {
       "type": "text",
       "id": "heading",

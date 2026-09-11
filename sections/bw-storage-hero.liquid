@@ -1,4 +1,8 @@
 {% liquid
+  assign hero_anchor = section.settings.anchor_id | handle
+  if hero_anchor == blank
+    assign hero_anchor = 'balkonkraftwerk-kaufen'
+  endif
   assign primary_link = section.settings.primary_link
   assign secondary_link = section.settings.secondary_link
   if primary_link == blank
@@ -14,7 +18,7 @@
 %}
 
 <section
-  id="balkonkraftwerk-kaufen"
+  id="{{ hero_anchor }}"
   class="bw-storage bw-storage-section bw-hero bw-anchor-target"
   data-bw-module="hero"
   data-section-id="{{ section.id }}"
@@ -81,6 +85,7 @@
   "name": "VENUS E · Hero",
   "class": "section-bw-storage-hero",
   "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"balkonkraftwerk-kaufen"},
     {
       "type": "text",
       "id": "badge",

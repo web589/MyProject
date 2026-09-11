@@ -1,5 +1,13 @@
+{% liquid
+  assign navigation_anchor = section.settings.anchor_id | handle
+  if navigation_anchor == blank
+    assign navigation_anchor = 'navigation'
+  endif
+%}
+
 <nav
-  class="bw-storage bw-storage-section bw-anchor-nav"
+  id="{{ navigation_anchor }}"
+  class="bw-storage bw-storage-section bw-anchor-nav bw-anchor-target"
   data-bw-module="navigation"
   data-bw-anchor-nav
   data-section-id="{{ section.id }}"
@@ -7,10 +15,11 @@
 >
   <div class="bw-container bw-anchor-nav__inner">
     {% for block in section.blocks %}
-      {% if block.settings.label != blank %}
+      {% assign link_target = block.settings.target | remove_first: '#' | handle %}
+      {% if block.settings.label != blank and link_target != blank %}
         <a
           class="bw-anchor-nav__link"
-          href="{{ block.settings.target }}"
+          href="#{{ link_target }}"
           data-bw-anchor-link
           {{ block.shopify_attributes }}
         >
@@ -19,10 +28,11 @@
       {% endif %}
     {% endfor %}
 
-    {% if section.settings.cta_label != blank %}
+    {% assign cta_target = section.settings.cta_target | remove_first: '#' | handle %}
+    {% if section.settings.cta_label != blank and cta_target != blank %}
       <a
         class="bw-anchor-nav__cta"
-        href="{{ section.settings.cta_target }}"
+        href="#{{ cta_target }}"
         data-bw-anchor-link
       >
         {{ section.settings.cta_label | escape }}
@@ -43,6 +53,13 @@
       "default": "Seitennavigation"
     },
     {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anker-ID",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "default": "navigation"
+    },
+    {
       "type": "header",
       "content": "Hervorgehobener Button"
     },
@@ -53,20 +70,11 @@
       "default": "Jetzt kaufen"
     },
     {
-      "type": "select",
+      "type": "text",
       "id": "cta_target",
       "label": "Sprungziel",
-      "default": "#kapazitaet",
-      "options": [
-        { "value": "#balkonkraftwerk-kaufen", "label": "Balkonkraftwerk kaufen" },
-        { "value": "#warum-speicher", "label": "Warum" },
-        { "value": "#vergleich", "label": "Vergleich" },
-        { "value": "#funktionsweise", "label": "Funktionsweise" },
-        { "value": "#nachruesten", "label": "Nachrüsten" },
-        { "value": "#kapazitaet", "label": "Kapazität" },
-        { "value": "#modelle", "label": "Modelle" },
-        { "value": "#faq", "label": "FAQ" }
-      ]
+      "info": "Anker-ID mit oder ohne # eingeben.",
+      "default": "#kapazitaet"
     }
   ],
   "blocks": [
@@ -81,25 +89,16 @@
           "default": "Navigation"
         },
         {
-          "type": "select",
+          "type": "text",
           "id": "target",
           "label": "Sprungziel",
-          "default": "#balkonkraftwerk-kaufen",
-          "options": [
-            { "value": "#balkonkraftwerk-kaufen", "label": "Balkonkraftwerk kaufen" },
-            { "value": "#warum-speicher", "label": "Warum" },
-            { "value": "#vergleich", "label": "Vergleich" },
-            { "value": "#funktionsweise", "label": "Funktionsweise" },
-            { "value": "#nachruesten", "label": "Nachrüsten" },
-            { "value": "#kapazitaet", "label": "Kapazität" },
-            { "value": "#modelle", "label": "Modelle" },
-            { "value": "#faq", "label": "FAQ" }
-          ]
+          "info": "Anker-ID mit oder ohne # eingeben.",
+          "default": "#balkonkraftwerk-kaufen"
         }
       ]
     }
   ],
-  "max_blocks": 8,
+  "max_blocks": 20,
   "presets": [
     {
       "name": "VENUS E · Navigation",

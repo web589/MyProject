@@ -1,5 +1,13 @@
+{% liquid
+  assign features_anchor = section.settings.anchor_id | handle
+  if features_anchor == blank
+    assign features_anchor = 'features'
+  endif
+%}
+
 <section
-  class="bw-storage bw-storage-section bw-features"
+  id="{{ features_anchor }}"
+  class="bw-storage bw-storage-section bw-features bw-anchor-target"
   data-bw-module="features"
   aria-labelledby="bw-features-heading-{{ section.id }}"
 >
@@ -66,6 +74,7 @@
 {
   "name": "VENUS E · Eigenschaften",
   "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"features"},
     {
       "type": "text",
       "id": "heading",

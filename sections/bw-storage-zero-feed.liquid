@@ -1,10 +1,15 @@
 {% liquid
+  assign zero_feed_anchor = section.settings.anchor_id | handle
+  if zero_feed_anchor == blank
+    assign zero_feed_anchor = 'zero-feed'
+  endif
   assign section_ct002 = section.settings.product_ct002
   assign section_ct003 = section.settings.product_ct003
 %}
 
 <section
-  class="bw-storage bw-storage-section bw-zero-feed"
+  id="{{ zero_feed_anchor }}"
+  class="bw-storage bw-storage-section bw-zero-feed bw-anchor-target"
   data-bw-module="zero-feed"
   aria-labelledby="bw-zero-feed-heading-{{ section.id }}"
 >
@@ -150,6 +155,7 @@
 {
   "name": "VENUS E · Nulleinspeisung",
   "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"zero-feed"},
     {
       "type": "text",
       "id": "heading",

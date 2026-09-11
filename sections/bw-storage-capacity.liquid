@@ -1,9 +1,13 @@
 {% liquid
+  assign capacity_anchor = section.settings.anchor_id | handle
+  if capacity_anchor == blank
+    assign capacity_anchor = 'kapazitaet'
+  endif
   assign capacity_heading_id = 'bw-capacity-heading-' | append: section.id
 %}
 
 <section
-  id="kapazitaet"
+  id="{{ capacity_anchor }}"
   class="bw-storage bw-storage-section bw-section bw-capacity bw-anchor-target"
   data-bw-module="capacity"
   data-section-id="{{ section.id }}"
@@ -110,7 +114,7 @@
           <span data-bw-summary="pv">{{ section.settings.pv_default }} kWp</span>
           <span data-bw-summary="annual">{{ section.settings.annual_default }} kWh/Jahr</span>
         </div>
-        <button type="button" class="bw-button bw-button--primary" data-bw-scroll-results>
+        <button type="button" class="bw-button bw-button--primary" data-bw-scroll-results data-bw-results-control aria-expanded="false">
           {{ section.settings.result_button_label }} <span aria-hidden="true">→</span>
         </button>
         {% if section.settings.result_note != blank %}<small>{{ section.settings.result_note }}</small>{% endif %}
@@ -126,6 +130,7 @@
   "class": "section-bw-storage-capacity",
   "max_blocks": 4,
   "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"kapazitaet"},
     {"type":"text","id":"heading","label":"Überschrift","default":"Welche Kapazität passt zu deinem Haushalt?"},
     {"type":"textarea","id":"text","label":"Beschreibung","default":"Wähle nach deiner Wohnsituation, nicht nach Parametern. Von der Single-Wohnung bis zur Familie mit E-Auto."},
     {"type":"text","id":"presets_label","label":"Bezeichnung der Auswahl","default":"Kapazitätsstufen"},

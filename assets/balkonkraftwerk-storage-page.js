@@ -22,6 +22,7 @@
   var products = {};
   var resolvedRecommendation = null;
   var navigationObserver = null;
+  var renderFrame = null;
 
   function isDesignMode() {
     return Boolean(window.Shopify && window.Shopify.designMode);
@@ -80,6 +81,8 @@
     if (!stored || stored.people === undefined || stored.pv === undefined || stored.annual === undefined) return;
     state = Object.assign({}, DEFAULT_STATE, stored);
     if (!TIER_VALUES[state.tier]) state.tier = '15.36';
+    state.hasCalculated = false;
+    state.resultsVisible = false;
   }
 
   function saveState() {
@@ -195,11 +198,41 @@
   function syncStateFromInputs(root, markCalculated) {
     var inputs = inputsFrom(root);
     if (!inputs.people || !inputs.pv || !inputs.annual) return;
-    state.people = finiteNumber(inputs.people.value, DEFAULT_STATE.people);
-    state.pv = finiteNumber(inputs.pv.value, DEFAULT_STATE.pv);
-    state.annual = finiteNumber(inputs.annual.value, DEFAULT_STATE.annual);
-    state.tier = getTier(state.people, state.pv, state.annual, thresholdsFrom(root));
-    if (markCalculated) state.hasCalculated = true;
+    var people = finiteNumber(inputs.people.value, DEFAULT_STATE.people);
+    var pv = finiteNumber(inputs.pv.value, DEFAULT_STATE.pv);
+    var annual = finiteNumber(inputs.annual.value, DEFAULT_STATE.annual);
+    var tier = getTier(people, pv, annual, thresholdsFrom(root));
+    var hasCalculated = markCalculated ? true : state.hasCalculated;
+    var changed = state.people !== people
+      || state.pv !== pv
+      || state.annual !== annual
+      || state.tier !== tier
+      || state.hasCalculated !== hasCalculated;
+
+    if (!changed) return;
+
+    state.people = people;
+    state.pv = pv;
+    state.annual = annual;
+    state.tier = tier;
+    state.hasCalculated = hasCalculated;
+    scheduleRender();
+  }
+
+  function scheduleRender() {
+    if (renderFrame !== null) return;
+    renderFrame = window.requestAnimationFrame(function () {
+      renderFrame = null;
+      saveState();
+      renderAll();
+    });
+  }
+
+  function renderNow() {
+    if (renderFrame !== null) {
+      window.cancelAnimationFrame(renderFrame);
+      renderFrame = null;
+    }
     saveState();
     renderAll();
   }
@@ -230,6 +263,9 @@
     var peopleText = state.people + (Number(state.people) >= 6 ? '+ Personen' : ' Personen');
     var pvText = String(state.pv).replace('.', ',') + ' kWp';
     var annualText = formatNumber(state.annual) + ' kWh/Jahr';
+    if (inputs.people) inputs.people.setAttribute('aria-valuetext', peopleText);
+    if (inputs.pv) inputs.pv.setAttribute('aria-valuetext', pvText);
+    if (inputs.annual) inputs.annual.setAttribute('aria-valuetext', annualText);
     setText(root, '[data-bw-output="people"]', peopleText);
     setText(root, '[data-bw-output="pv"]', pvText);
     setText(root, '[data-bw-output="annual"]', annualText);
@@ -329,7 +365,11 @@
       renderFinalCta();
       return;
     }
-    root.hidden = isDesignMode() ? false : !state.resultsVisible;
+    var resultsVisible = isDesignMode() || state.resultsVisible;
+    root.hidden = !resultsVisible;
+    if (!resultsVisible) root.dataset.bwResultsState = 'hidden';
+    if (isDesignMode() && root.dataset.bwResultsState === 'hidden') root.dataset.bwResultsState = 'visible';
+    syncResultsControls(root, resultsVisible);
     setAllText(root, '[data-bw-capacity-inline]', formatCapacity(TIER_VALUES[state.tier]));
     setText(root, '[data-bw-results-input-summary], [data-bw-recommendation-summary]', resultSummary());
 
@@ -353,6 +393,14 @@
       compareAtPrice: primary.variant ? primary.variant.compare_at_price : null
     };
     document.dispatchEvent(new CustomEvent('venus:recommendation-resolved', { detail: detail }));
+  }
+
+  function syncResultsControls(root, expanded) {
+    var controls = document.querySelectorAll('[data-bw-results-control]');
+    controls.forEach(function (control) {
+      if (root && root.id) control.setAttribute('aria-controls', root.id);
+      control.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
   }
 
   function renderFinalCta() {
@@ -418,9 +466,18 @@
       button.addEventListener('click', function () {
         syncStateFromInputs(root, true);
         state.resultsVisible = true;
-        saveState();
-        renderAll();
-        window.requestAnimationFrame(function () { scrollToElement(getRecommendationsRoot()); });
+        renderNow();
+        var resultsRoot = getRecommendationsRoot();
+        refreshNavigation();
+        window.requestAnimationFrame(function () {
+          if (!resultsRoot) return;
+          resultsRoot.dataset.bwResultsState = 'visible';
+          scrollToElement(resultsRoot);
+          var resultsHeading = resultsRoot.querySelector('[data-bw-results-heading]');
+          if (resultsHeading && typeof resultsHeading.focus === 'function') {
+            resultsHeading.focus({ preventScroll: true });
+          }
+        });
       });
     });
   }
@@ -595,8 +652,8 @@
       var href = link.getAttribute('href');
       var target = href && href.charAt(0) === '#' ? document.querySelector(href) : null;
       var isCta = link.classList.contains('bw-anchor-nav__cta');
-      link.hidden = !target && !isCta;
-      if (target && !targets.includes(target)) targets.push(target);
+      link.hidden = (!target || target.hidden) && !isCta;
+      if (target && !target.hidden && !targets.includes(target)) targets.push(target);
     });
 
     if (!('IntersectionObserver' in window)) return;
@@ -605,7 +662,16 @@
         if (!entry.isIntersecting) return;
         var id = '#' + entry.target.id;
         links.forEach(function (link) {
-          link.classList.toggle('is-active', link.getAttribute('href') === id);
+          var active = link.getAttribute('href') === id;
+          link.classList.toggle('is-active', active);
+          if (active) {
+            link.setAttribute('aria-current', 'location');
+            if (link.classList.contains('bw-anchor-nav__link')) {
+              link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            }
+          } else {
+            link.removeAttribute('aria-current');
+          }
         });
       });
     }, { rootMargin: '-25% 0px -65% 0px', threshold: 0 });
@@ -668,7 +734,8 @@
       root.dataset.bwInitialized = 'true';
       root.querySelectorAll('[data-bw-final-calculate]').forEach(function (link) {
         link.addEventListener('click', function (event) {
-          var target = document.querySelector('#kapazitaet');
+          var href = link.getAttribute('href');
+          var target = href && href.charAt(0) === '#' ? document.querySelector(href) : null;
           if (!target) return;
           event.preventDefault();
           scrollToElement(target);

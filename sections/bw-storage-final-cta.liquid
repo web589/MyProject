@@ -1,9 +1,18 @@
 {% liquid
+  assign final_anchor = section.settings.anchor_id | handle
+  if final_anchor == blank
+    assign final_anchor = 'final-cta'
+  endif
+  assign empty_button_anchor = section.settings.empty_button_target | remove_first: '#' | handle
+  if empty_button_anchor == blank
+    assign empty_button_anchor = 'kapazitaet'
+  endif
   assign final_heading_id = 'bw-final-heading-' | append: section.id
 %}
 
 <section
-  class="bw-storage bw-storage-section bw-section bw-final-cta"
+  id="{{ final_anchor }}"
+  class="bw-storage bw-storage-section bw-section bw-final-cta bw-anchor-target"
   data-bw-module="final-cta"
   data-bw-final-state
   data-section-id="{{ section.id }}"
@@ -32,7 +41,7 @@
       <div class="bw-final-cta__empty" data-bw-final-uncalculated data-bw-uncalculated-state>
         <strong>{{ section.settings.empty_heading }}</strong>
         {% if section.settings.empty_text != blank %}<p>{{ section.settings.empty_text }}</p>{% endif %}
-        <a class="bw-button bw-button--primary" href="#kapazitaet" data-bw-anchor-link data-bw-final-calculate>{{ section.settings.empty_button_label }}</a>
+        <a class="bw-button bw-button--primary" href="#{{ empty_button_anchor }}" data-bw-anchor-link data-bw-final-calculate>{{ section.settings.empty_button_label }}</a>
       </div>
     </div>
 
@@ -49,11 +58,13 @@
   "tag": "section",
   "class": "section-bw-storage-final-cta",
   "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"final-cta"},
     {"type":"text","id":"heading","label":"Überschrift","default":"Wie geht es weiter?"},
     {"type":"text","id":"need_label","label":"Kapazitätslabel","default":"Du brauchst"},
     {"type":"text","id":"recommendation_label","label":"Empfehlungslabel","default":"Empfehlung:"},
     {"type":"text","id":"buy_label","label":"Kaufen-Button","default":"Jetzt kaufen"},
     {"type":"header","content":"Noch keine Berechnung"},
+    {"type":"text","id":"empty_button_target","label":"Button-Anker-ID","info":"Mit oder ohne # eingeben.","default":"kapazitaet"},
     {"type":"text","id":"empty_heading","label":"Titel","default":"Noch nicht die passende Kapazität gefunden?"},
     {"type":"textarea","id":"empty_text","label":"Text","default":"Beantworte drei kurze Fragen und erhalte sofort eine passende Orientierung."},
     {"type":"text","id":"empty_button_label","label":"Button","default":"Kapazität berechnen"},

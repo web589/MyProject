@@ -1,5 +1,12 @@
+{% liquid
+  assign faq_anchor = section.settings.anchor_id | handle
+  if faq_anchor == blank
+    assign faq_anchor = 'faq'
+  endif
+%}
+
 <section
-  id="faq"
+  id="{{ faq_anchor }}"
   class="bw-storage bw-storage-section bw-faq-section bw-anchor-target"
   data-bw-module="faq"
   aria-labelledby="bw-faq-heading-{{ section.id }}"
@@ -39,6 +46,13 @@
   "settings": [
     {
       "type": "text",
+      "id": "anchor_id",
+      "label": "Anker-ID",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "default": "faq"
+    },
+    {
+      "type": "text",
       "id": "heading",
       "label": "Überschrift",
       "default": "FAQ"
@@ -57,7 +71,7 @@
         { "value": "first", "label": "Nur die erste Frage" },
         { "value": "none", "label": "Keine Frage" }
       ],
-      "default": "all"
+      "default": "none"
     }
   ],
   "blocks": [

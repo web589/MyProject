@@ -1,5 +1,13 @@
+{% liquid
+  assign trust_anchor = section.settings.anchor_id | handle
+  if trust_anchor == blank
+    assign trust_anchor = 'trust'
+  endif
+%}
+
 <section
-  class="bw-storage bw-storage-section bw-trust"
+  id="{{ trust_anchor }}"
+  class="bw-storage bw-storage-section bw-trust bw-anchor-target"
   data-bw-module="trust"
   data-section-id="{{ section.id }}"
   aria-label="{{ section.settings.aria_label | escape }}"
@@ -38,6 +46,7 @@
   "name": "VENUS E · Trust",
   "class": "section-bw-storage-trust",
   "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"trust"},
     {
       "type": "text",
       "id": "aria_label",

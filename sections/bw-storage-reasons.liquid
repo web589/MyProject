@@ -1,4 +1,8 @@
 {% liquid
+  assign reasons_anchor = section.settings.anchor_id | handle
+  if reasons_anchor == blank
+    assign reasons_anchor = 'warum-speicher'
+  endif
   assign has_media = false
   if section.settings.video != blank or section.settings.image != blank
     assign has_media = true
@@ -6,7 +10,7 @@
 %}
 
 <section
-  id="warum-speicher"
+  id="{{ reasons_anchor }}"
   class="bw-storage bw-storage-section bw-section bw-reasons bw-anchor-target"
   data-bw-module="reasons"
   data-section-id="{{ section.id }}"
@@ -37,6 +41,7 @@
   "name": "VENUS E · Gründe",
   "class": "section-bw-storage-reasons",
   "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"warum-speicher"},
     {
       "type": "text",
       "id": "eyebrow",
