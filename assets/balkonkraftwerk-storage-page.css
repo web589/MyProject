@@ -948,8 +948,16 @@
   display: flex;
   justify-content: space-between;
   margin-top: 7px;
+  padding-inline: calc(var(--bw-range-thumb-size) / 2);
   color: #98a6b8;
   font-size: 0.61rem;
+}
+
+.bw-slider-scale span {
+  flex: 0 0 0;
+  overflow: visible;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .bw-calculator__result {
