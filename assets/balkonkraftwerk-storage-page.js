@@ -635,8 +635,21 @@
     if (navigationObserver) navigationObserver.disconnect();
     var nav = document.querySelector('[data-bw-anchor-nav]');
     if (!nav) return;
+    var navScroller = nav.querySelector('.bw-anchor-nav__inner');
     var links = Array.prototype.slice.call(nav.querySelectorAll('[data-bw-anchor-link]'));
     var targets = [];
+
+    function revealActiveLink(link) {
+      if (!navScroller || !link || !link.classList.contains('bw-anchor-nav__link')) return;
+      var scrollerRect = navScroller.getBoundingClientRect();
+      var linkRect = link.getBoundingClientRect();
+      if (linkRect.left < scrollerRect.left) {
+        navScroller.scrollLeft -= scrollerRect.left - linkRect.left;
+      } else if (linkRect.right > scrollerRect.right) {
+        navScroller.scrollLeft += linkRect.right - scrollerRect.right;
+      }
+    }
+
     links.forEach(function (link) {
       if (link.dataset.bwInitialized !== 'true') {
         link.dataset.bwInitialized = 'true';
@@ -669,9 +682,7 @@
           link.classList.toggle('is-active', active);
           if (active) {
             link.setAttribute('aria-current', 'location');
-            if (link.classList.contains('bw-anchor-nav__link')) {
-              link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-            }
+            revealActiveLink(link);
           } else {
             link.removeAttribute('aria-current');
           }
