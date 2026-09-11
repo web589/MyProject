@@ -163,7 +163,7 @@
       var cap4 = state.tier === '5.12' ? 5 : state.tier === '10.24' ? 10 : 15;
       return makeItem(products.venus4, cap4, (cap4 === 5 ? '1×' : cap4 === 10 ? '2×' : '3×') + ' VENUS E 4.0');
     }
-    var capMax = state.tier === '5.12' ? 10 : state.tier === '10.24' ? 20 : 30;
+    var capMax = state.tier === '5.12' ? 10 : state.tier === '30' ? 30 : 20;
     return makeItem(products.max, capMax, (capMax === 10 ? '1×' : capMax === 20 ? '2×' : '3×') + ' VENUS E Max');
   }
 
@@ -309,6 +309,7 @@
       compareAt.textContent = showCompare ? formatMoney(item.variant.compare_at_price) : '';
       compareAt.hidden = !showCompare;
     }
+    setText(card, '[data-bw-result-availability]', item.available ? 'Verfügbar' : 'Nicht verfügbar');
     updateMedia(card.querySelector('[data-bw-result-media]') || card, item.image, item.title);
     var action = card.querySelector('[data-bw-product-role], [data-bw-product-action]');
     configureAction(action, item, role === 'primary', role === 'primary' ? 'In den Warenkorb' : 'Zur Produktseite');
@@ -692,6 +693,7 @@
   document.addEventListener('shopify:section:load', function () { window.setTimeout(boot, 0); });
   document.addEventListener('shopify:section:unload', function () { window.setTimeout(boot, 0); });
   document.addEventListener('shopify:section:reorder', function () { window.setTimeout(boot, 0); });
+  document.addEventListener('venus:recommendation-resolved', renderFinalCta);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();

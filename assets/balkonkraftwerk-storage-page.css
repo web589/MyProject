@@ -115,14 +115,14 @@
 
 .bw-button {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 38px;
   align-items: center;
   justify-content: center;
-  padding: 10px 22px;
+  padding: 9px 17px;
   border: 1px solid transparent;
   border-radius: 7px;
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 13px;
   font-weight: 650;
   line-height: 1.2;
   text-align: center;
@@ -277,7 +277,7 @@
 
 .bw-hero h1 {
   margin: 0 0 21px;
-  font-size: clamp(2.8rem, 5.4vw, 4.25rem);
+  font-size: clamp(44px, 4.8vw, 52px);
   font-weight: 750;
 }
 
@@ -1203,6 +1203,11 @@
 
 .bw-homepage-product-sync .venus-category-unit:not([hidden]) {
   display: contents !important;
+}
+
+.bw-homepage-product-sync [class*='ai-product-btn-'] {
+  min-width: 0 !important;
+  font-size: 12px !important;
 }
 
 .bw-sync-status,
