@@ -23,10 +23,10 @@
   class="bw-storage bw-storage-section bw-section bw-recommendations bw-anchor-target"
   data-bw-module="recommendations"
   data-bw-results
-  data-bw-results-state="{% if request.design_mode %}visible{% else %}hidden{% endif %}"
+  data-bw-results-state="hidden"
   data-section-id="{{ section.id }}"
   aria-labelledby="{{ recommendations_heading_id }}"
-  {% unless request.design_mode %}hidden{% endunless %}
+  hidden
 >
   <div class="bw-container">
     <header class="bw-results__heading">

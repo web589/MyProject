@@ -395,7 +395,7 @@
       renderFinalCta();
       return;
     }
-    var resultsVisible = isDesignMode() || state.resultsVisible;
+    var resultsVisible = state.resultsVisible;
     root.hidden = !resultsVisible;
     root.dataset.bwResultsState = resultsVisible ? 'visible' : 'hidden';
     syncResultsControls(root, resultsVisible);

@@ -137,7 +137,7 @@
 .bw-accessory-card__button,
 .bw-anchor-nav__cta {
   border-color: transparent;
-  background: linear-gradient(105deg, var(--bw-blue), var(--bw-cyan));
+  background: var(--bw-blue);
   color: #fff;
 }
 
@@ -811,12 +811,13 @@
 .bw-slider-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 150px minmax(0, 1fr) 105px;
+  grid-template-columns: 200px minmax(0, 1fr) 105px;
   gap: 20px;
 }
 
 .bw-slider-row label,
 .bw-slider-row output {
+  min-width: 0;
   color: #3a4859;
   font-size: 0.78rem;
   font-weight: 650;
@@ -1821,7 +1822,7 @@
   }
 
   .bw-slider-row {
-    grid-template-columns: 130px minmax(0, 1fr) 95px;
+    grid-template-columns: 175px minmax(0, 1fr) 95px;
     gap: 15px;
   }
 
