@@ -23,6 +23,8 @@
   var resolvedRecommendation = null;
   var navigationObserver = null;
   var renderFrame = null;
+  var rangeResizeFrame = null;
+  var rangeResizeBound = false;
 
   function isDesignMode() {
     return Boolean(window.Shopify && window.Shopify.designMode);
@@ -247,6 +249,21 @@
     root.querySelectorAll(selector).forEach(function (node) { node.textContent = value; });
   }
 
+  function syncRangeProgress(input) {
+    if (!input) return;
+    var minimum = finiteNumber(input.min, 0);
+    var maximum = finiteNumber(input.max, 100);
+    var value = finiteNumber(input.value, minimum);
+    var ratio = maximum === minimum ? 0 : (value - minimum) / (maximum - minimum);
+    var trackWidth = input.getBoundingClientRect().width;
+    var thumbSize = parseFloat(window.getComputedStyle(input).getPropertyValue('--bw-range-thumb-size')) || 16;
+    var thumbOffset = trackWidth > thumbSize ? (thumbSize / (trackWidth * 2)) * 100 : 0;
+    var progress = thumbOffset + Math.max(0, Math.min(1, ratio)) * (100 - thumbOffset * 2);
+    var progressValue = Math.max(0, Math.min(100, progress)) + '%';
+    var control = input.closest('.bw-slider-row__control');
+    (control || input).style.setProperty('--bw-range-progress', progressValue);
+  }
+
   function renderCapacity() {
     var root = getCapacityRoot();
     if (!root) return;
@@ -254,10 +271,7 @@
     Object.keys(inputs).forEach(function (key) {
       if (!inputs[key]) return;
       if (document.activeElement !== inputs[key]) inputs[key].value = state[key];
-      var minimum = finiteNumber(inputs[key].min, 0);
-      var maximum = finiteNumber(inputs[key].max, 100);
-      var progress = maximum === minimum ? 0 : ((finiteNumber(inputs[key].value, minimum) - minimum) / (maximum - minimum)) * 100;
-      inputs[key].style.setProperty('--bw-range-progress', Math.max(0, Math.min(100, progress)) + '%');
+      syncRangeProgress(inputs[key]);
     });
 
     var peopleText = state.people + (Number(state.people) >= 6 ? '+ Personen' : ' Personen');
@@ -279,6 +293,22 @@
       var active = button.dataset.bwPreset === state.tier;
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function bindRangeResize() {
+    if (rangeResizeBound) return;
+    rangeResizeBound = true;
+    window.addEventListener('resize', function () {
+      if (rangeResizeFrame !== null) return;
+      rangeResizeFrame = window.requestAnimationFrame(function () {
+        rangeResizeFrame = null;
+        var root = getCapacityRoot();
+        if (!root) return;
+        Object.keys(inputsFrom(root)).forEach(function (key) {
+          syncRangeProgress(inputsFrom(root)[key]);
+        });
+      });
     });
   }
 
@@ -367,8 +397,7 @@
     }
     var resultsVisible = isDesignMode() || state.resultsVisible;
     root.hidden = !resultsVisible;
-    if (!resultsVisible) root.dataset.bwResultsState = 'hidden';
-    if (isDesignMode() && root.dataset.bwResultsState === 'hidden') root.dataset.bwResultsState = 'visible';
+    root.dataset.bwResultsState = resultsVisible ? 'visible' : 'hidden';
     syncResultsControls(root, resultsVisible);
     setAllText(root, '[data-bw-capacity-inline]', formatCapacity(TIER_VALUES[state.tier]));
     setText(root, '[data-bw-results-input-summary], [data-bw-recommendation-summary]', resultSummary());
@@ -448,6 +477,7 @@
     var root = getCapacityRoot();
     if (!root || root.dataset.bwInitialized === 'true') return;
     root.dataset.bwInitialized = 'true';
+    bindRangeResize();
     var inputs = inputsFrom(root);
     Object.keys(inputs).forEach(function (key) {
       if (!inputs[key]) return;
@@ -468,6 +498,7 @@
         state.resultsVisible = true;
         renderNow();
         var resultsRoot = getRecommendationsRoot();
+        if (resultsRoot) resultsRoot.dataset.bwResultsState = 'hidden';
         refreshNavigation();
         window.requestAnimationFrame(function () {
           if (!resultsRoot) return;
