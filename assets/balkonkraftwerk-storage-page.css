@@ -861,6 +861,7 @@
 }
 
 .bw-slider-row input[type="range"] {
+  display: block;
   width: 100%;
   height: var(--bw-range-input-height);
   margin: 0;
@@ -958,6 +959,19 @@
   overflow: visible;
   text-align: center;
   white-space: nowrap;
+}
+
+.bw-slider-scale.is-positioned {
+  position: relative;
+  display: block;
+  height: 1em;
+  padding-inline: 0;
+}
+
+.bw-slider-scale.is-positioned span {
+  position: absolute;
+  left: var(--bw-scale-position, 0%);
+  transform: translateX(-50%);
 }
 
 .bw-calculator__result {

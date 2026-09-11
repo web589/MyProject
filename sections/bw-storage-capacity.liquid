@@ -65,7 +65,7 @@
               step="1"
               value="{{ section.settings.people_default }}"
             >
-            <div class="bw-slider-scale" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6+</span></div>
+            <div class="bw-slider-scale" aria-hidden="true"><span data-bw-scale-value="1">1</span><span data-bw-scale-value="2">2</span><span data-bw-scale-value="3">3</span><span data-bw-scale-value="4">4</span><span data-bw-scale-value="5">5</span><span data-bw-scale-value="6">6+</span></div>
           </div>
           <output for="bw-people-{{ section.id }}" data-bw-output="people">{{ section.settings.people_default }} Personen</output>
         </div>
@@ -82,7 +82,7 @@
               step="0.5"
               value="{{ section.settings.pv_default }}"
             >
-            <div class="bw-slider-scale" aria-hidden="true"><span>0</span><span>3</span><span>6</span><span>9</span><span>12</span></div>
+            <div class="bw-slider-scale" aria-hidden="true"><span data-bw-scale-value="0">0</span><span data-bw-scale-value="3">3</span><span data-bw-scale-value="6">6</span><span data-bw-scale-value="9">9</span><span data-bw-scale-value="12">12</span></div>
           </div>
           <output for="bw-pv-{{ section.id }}" data-bw-output="pv">{{ section.settings.pv_default }} kWp</output>
         </div>
@@ -99,7 +99,7 @@
               step="100"
               value="{{ section.settings.annual_default }}"
             >
-            <div class="bw-slider-scale" aria-hidden="true"><span>1.500</span><span>3.000</span><span>4.500</span><span>6.000</span><span>8.000</span></div>
+            <div class="bw-slider-scale" aria-hidden="true"><span data-bw-scale-value="1500">1.500</span><span data-bw-scale-value="3000">3.000</span><span data-bw-scale-value="4500">4.500</span><span data-bw-scale-value="6000">6.000</span><span data-bw-scale-value="8000">8.000</span></div>
           </div>
           <output for="bw-annual-{{ section.id }}" data-bw-output="annual">{{ section.settings.annual_default }} kWh/Jahr</output>
         </div>

@@ -264,6 +264,25 @@
     (control || input).style.setProperty('--bw-range-progress', progressValue);
   }
 
+  function syncRangeScale(input) {
+    if (!input) return;
+    var control = input.closest('.bw-slider-row__control');
+    var scale = control && control.querySelector('.bw-slider-scale');
+    if (!scale) return;
+    var minimum = finiteNumber(input.min, 0);
+    var maximum = finiteNumber(input.max, 100);
+    var trackWidth = input.getBoundingClientRect().width;
+    var thumbSize = parseFloat(window.getComputedStyle(input).getPropertyValue('--bw-range-thumb-size')) || 16;
+    var thumbOffset = trackWidth > thumbSize ? (thumbSize / (trackWidth * 2)) * 100 : 0;
+    scale.classList.add('is-positioned');
+    scale.querySelectorAll('[data-bw-scale-value]').forEach(function (mark) {
+      var value = finiteNumber(mark.dataset.bwScaleValue, minimum);
+      var ratio = maximum === minimum ? 0 : (value - minimum) / (maximum - minimum);
+      var position = thumbOffset + Math.max(0, Math.min(1, ratio)) * (100 - thumbOffset * 2);
+      mark.style.setProperty('--bw-scale-position', Math.max(0, Math.min(100, position)) + '%');
+    });
+  }
+
   function renderCapacity() {
     var root = getCapacityRoot();
     if (!root) return;
@@ -272,6 +291,7 @@
       if (!inputs[key]) return;
       if (document.activeElement !== inputs[key]) inputs[key].value = state[key];
       syncRangeProgress(inputs[key]);
+      syncRangeScale(inputs[key]);
     });
 
     var peopleText = state.people + (Number(state.people) >= 6 ? '+ Personen' : ' Personen');
@@ -305,8 +325,10 @@
         rangeResizeFrame = null;
         var root = getCapacityRoot();
         if (!root) return;
-        Object.keys(inputsFrom(root)).forEach(function (key) {
-          syncRangeProgress(inputsFrom(root)[key]);
+        var inputs = inputsFrom(root);
+        Object.keys(inputs).forEach(function (key) {
+          syncRangeProgress(inputs[key]);
+          syncRangeScale(inputs[key]);
         });
       });
     });
