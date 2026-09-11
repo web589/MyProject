@@ -259,14 +259,15 @@
   }
 
   .blog-article__category-nav {
-    align-items: center;
+    align-items: stretch;
     display: flex;
     flex: 1 1 auto;
     gap: 34px;
     justify-content: flex-end;
     min-width: 0;
     overflow-x: auto;
-    padding: 18px 0;
+    padding: 0;
+    align-self: stretch;
     scrollbar-width: none;
   }
 
@@ -275,9 +276,13 @@
   }
 
   .blog-article__category-link {
+    align-items: center;
     color: var(--blog-article-ink);
+    display: inline-flex;
     font-size: 16px;
+    height: 100%;
     line-height: 1.4;
+    position: relative;
     white-space: nowrap;
   }
 
@@ -287,6 +292,7 @@
   }
 
   .blog-article__category-link[aria-current='page'] {
+    border-bottom: 2px solid var(--blog-article-blue);
     font-weight: 700;
   }
 
@@ -837,7 +843,7 @@
     .blog-article__category-nav {
       gap: 24px;
       justify-content: flex-start;
-      padding: 14px 0;
+      padding: 0;
     }
 
     .blog-article__layout {
@@ -966,7 +972,12 @@
   data-section-type="article"
   data-blog-article
 >
-  <header class="blog-article__hero">
+  <header
+    class="blog-article__hero"
+    {% if section.settings.hero_background_image != blank %}
+      style="background-image: url('{{ section.settings.hero_background_image | image_url: width: 2400 }}');"
+    {% endif %}
+  >
     <div class="page-width">
       {%- render 'breadcrumbs' -%}
 
@@ -1338,6 +1349,12 @@
 {
   "name": "t:sections.article-template.name",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_background_image",
+      "label": "Banner background image",
+      "info": "Optional. Upload a background image for the article banner."
+    },
     {
       "type": "checkbox",
       "id": "blog_show_date",
