@@ -645,7 +645,7 @@
     fetch(getRootUrl() + 'cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ items: [{ id: Number(action.dataset.variantId), quantity: 1 }] })
+      body: JSON.stringify({ items: [{ id: action.dataset.variantId, quantity: 1 }] })
     }).then(function (response) {
       if (!response.ok) throw new Error('cart');
       return response.json();
