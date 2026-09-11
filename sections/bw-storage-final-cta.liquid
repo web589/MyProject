@@ -1,0 +1,68 @@
+{% liquid
+  assign final_heading_id = 'bw-final-heading-' | append: section.id
+%}
+
+<section
+  class="bw-storage bw-storage-section bw-section bw-final-cta"
+  data-bw-module="final-cta"
+  data-bw-final-state
+  data-section-id="{{ section.id }}"
+  aria-labelledby="{{ final_heading_id }}"
+>
+  <div class="bw-container">
+    <h2 id="{{ final_heading_id }}">{{ section.settings.heading }}</h2>
+
+    <div class="bw-final-cta__card">
+      <div data-bw-final-calculated data-bw-calculated-state hidden>
+        <div class="bw-final-cta__recommendation">
+          <div class="bw-final-cta__media" data-bw-final-image-wrap hidden>
+            <img data-bw-final-image hidden width="480" height="480" loading="lazy" alt="">
+          </div>
+          <div class="bw-final-cta__copy" aria-live="polite">
+            <span>{{ section.settings.need_label }}</span>
+            <strong data-bw-final-capacity>15,36 kWh</strong>
+            <p><b>{{ section.settings.recommendation_label }}</b> <span data-bw-final-product>3× VENUS E 3.0</span></p>
+          </div>
+        </div>
+        <button type="button" class="bw-button bw-button--primary bw-final-cta__buy" data-bw-final-action>
+          {{ section.settings.buy_label }}
+        </button>
+      </div>
+
+      <div class="bw-final-cta__empty" data-bw-final-uncalculated data-bw-uncalculated-state>
+        <strong>{{ section.settings.empty_heading }}</strong>
+        {% if section.settings.empty_text != blank %}<p>{{ section.settings.empty_text }}</p>{% endif %}
+        <a class="bw-button bw-button--primary" href="#kapazitaet" data-bw-anchor-link data-bw-final-calculate>{{ section.settings.empty_button_label }}</a>
+      </div>
+    </div>
+
+    <div class="bw-final-cta__links">
+      <a class="bw-button bw-button--secondary" href="{{ section.settings.secondary_link_1 | default: '#kapazitaet' }}" data-bw-anchor-link>{{ section.settings.secondary_label_1 }}</a>
+      <a class="bw-button bw-button--secondary" href="{{ section.settings.secondary_link_2 | default: '#modelle' }}" data-bw-anchor-link>{{ section.settings.secondary_label_2 }}</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Final CTA",
+  "tag": "section",
+  "class": "section-bw-storage-final-cta",
+  "settings": [
+    {"type":"text","id":"heading","label":"Überschrift","default":"Wie geht es weiter?"},
+    {"type":"text","id":"need_label","label":"Kapazitätslabel","default":"Du brauchst"},
+    {"type":"text","id":"recommendation_label","label":"Empfehlungslabel","default":"Empfehlung:"},
+    {"type":"text","id":"buy_label","label":"Kaufen-Button","default":"Jetzt kaufen"},
+    {"type":"header","content":"Noch keine Berechnung"},
+    {"type":"text","id":"empty_heading","label":"Titel","default":"Noch nicht die passende Kapazität gefunden?"},
+    {"type":"textarea","id":"empty_text","label":"Text","default":"Beantworte drei kurze Fragen und erhalte sofort eine passende Orientierung."},
+    {"type":"text","id":"empty_button_label","label":"Button","default":"Kapazität berechnen"},
+    {"type":"header","content":"Sekundäre Links"},
+    {"type":"text","id":"secondary_label_1","label":"Link 1 Text","default":"Passenden VENUS E Speicher finden"},
+    {"type":"url","id":"secondary_link_1","label":"Link 1 Ziel"},
+    {"type":"text","id":"secondary_label_2","label":"Link 2 Text","default":"Modelle vergleichen"},
+    {"type":"url","id":"secondary_link_2","label":"Link 2 Ziel"}
+  ],
+  "presets": [{"name":"VENUS E · Final CTA"}]
+}
+{% endschema %}

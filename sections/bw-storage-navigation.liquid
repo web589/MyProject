@@ -1,0 +1,119 @@
+<nav
+  class="bw-storage bw-storage-section bw-anchor-nav"
+  data-bw-module="navigation"
+  data-bw-anchor-nav
+  data-section-id="{{ section.id }}"
+  aria-label="{{ section.settings.aria_label | escape }}"
+>
+  <div class="bw-container bw-anchor-nav__inner">
+    {% for block in section.blocks %}
+      {% if block.settings.label != blank %}
+        <a
+          class="bw-anchor-nav__link"
+          href="{{ block.settings.target }}"
+          data-bw-anchor-link
+          {{ block.shopify_attributes }}
+        >
+          {{ block.settings.label | escape }}
+        </a>
+      {% endif %}
+    {% endfor %}
+
+    {% if section.settings.cta_label != blank %}
+      <a
+        class="bw-anchor-nav__cta"
+        href="{{ section.settings.cta_target }}"
+        data-bw-anchor-link
+      >
+        {{ section.settings.cta_label | escape }}
+      </a>
+    {% endif %}
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "VENUS E · Navigation",
+  "class": "section-bw-storage-navigation",
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Barrierefreie Bezeichnung",
+      "default": "Seitennavigation"
+    },
+    {
+      "type": "header",
+      "content": "Hervorgehobener Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Beschriftung",
+      "default": "Jetzt kaufen"
+    },
+    {
+      "type": "select",
+      "id": "cta_target",
+      "label": "Sprungziel",
+      "default": "#kapazitaet",
+      "options": [
+        { "value": "#balkonkraftwerk-kaufen", "label": "Balkonkraftwerk kaufen" },
+        { "value": "#warum-speicher", "label": "Warum" },
+        { "value": "#vergleich", "label": "Vergleich" },
+        { "value": "#funktionsweise", "label": "Funktionsweise" },
+        { "value": "#nachruesten", "label": "Nachrüsten" },
+        { "value": "#kapazitaet", "label": "Kapazität" },
+        { "value": "#modelle", "label": "Modelle" },
+        { "value": "#faq", "label": "FAQ" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Navigationslink",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Beschriftung",
+          "default": "Navigation"
+        },
+        {
+          "type": "select",
+          "id": "target",
+          "label": "Sprungziel",
+          "default": "#balkonkraftwerk-kaufen",
+          "options": [
+            { "value": "#balkonkraftwerk-kaufen", "label": "Balkonkraftwerk kaufen" },
+            { "value": "#warum-speicher", "label": "Warum" },
+            { "value": "#vergleich", "label": "Vergleich" },
+            { "value": "#funktionsweise", "label": "Funktionsweise" },
+            { "value": "#nachruesten", "label": "Nachrüsten" },
+            { "value": "#kapazitaet", "label": "Kapazität" },
+            { "value": "#modelle", "label": "Modelle" },
+            { "value": "#faq", "label": "FAQ" }
+          ]
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "VENUS E · Navigation",
+      "blocks": [
+        { "type": "link", "settings": { "label": "Balkonkraftwerk kaufen", "target": "#balkonkraftwerk-kaufen" } },
+        { "type": "link", "settings": { "label": "Warum", "target": "#warum-speicher" } },
+        { "type": "link", "settings": { "label": "Vergleich", "target": "#vergleich" } },
+        { "type": "link", "settings": { "label": "Funktionsweise", "target": "#funktionsweise" } },
+        { "type": "link", "settings": { "label": "Nachrüsten", "target": "#nachruesten" } },
+        { "type": "link", "settings": { "label": "Kapazität", "target": "#kapazitaet" } },
+        { "type": "link", "settings": { "label": "Modelle", "target": "#modelle" } },
+        { "type": "link", "settings": { "label": "FAQ", "target": "#faq" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

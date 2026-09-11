@@ -1,0 +1,38 @@
+{% liquid
+  assign newsletter_anchor = section.settings.anchor_id | handle
+  if newsletter_anchor == blank
+    assign newsletter_anchor = 'newsletter'
+  endif
+%}
+
+<section
+  id="{{ newsletter_anchor }}"
+  class="bw-storage bw-storage-section bw-section bw-newsletter-sync"
+  data-bw-module="newsletter-sync"
+  data-section-id="{{ section.id }}"
+  aria-label="{{ section.settings.aria_label | escape }}"
+>
+  <div
+    id="BwHomepageNewsletterSync-{{ section.id }}"
+    class="bw-homepage-newsletter-sync"
+    data-bw-homepage-newsletter-sync
+    data-bw-source-section-id="{{ section.settings.source_section_id | escape }}"
+    aria-busy="true"
+  ></div>
+  <p class="bw-sync-status bw-container" data-bw-sync-status hidden>{{ section.settings.error_text }}</p>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Newsletter Sync",
+  "tag": "section",
+  "class": "section-bw-storage-newsletter-sync",
+  "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","default":"newsletter"},
+    {"type":"text","id":"aria_label","label":"Barrierefreie Bezeichnung","default":"VENUS E Newsletter"},
+    {"type":"text","id":"source_section_id","label":"Startseiten-Section-ID","default":"1786674497042b635a","info":"Nur ändern, wenn die Newslettersektion auf der Startseite ersetzt wurde."},
+    {"type":"text","id":"error_text","label":"Hinweis bei Ladefehler","default":"Das Newsletterformular konnte gerade nicht geladen werden."}
+  ],
+  "presets": [{"name":"VENUS E · Newsletter Sync"}]
+}
+{% endschema %}

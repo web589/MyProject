@@ -1,0 +1,127 @@
+<section
+  id="faq"
+  class="bw-storage bw-storage-section bw-faq-section bw-anchor-target"
+  data-bw-module="faq"
+  aria-labelledby="bw-faq-heading-{{ section.id }}"
+>
+  <div class="bw-container bw-faq">
+    <div class="bw-section__intro bw-faq__intro">
+      <h2 id="bw-faq-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {% if section.settings.text != blank %}
+        <p>{{ section.settings.text }}</p>
+      {% endif %}
+    </div>
+
+    <div class="bw-faq__items">
+      {% for block in section.blocks %}
+        {% liquid
+          assign item_open = false
+          if section.settings.initial_state == 'all'
+            assign item_open = true
+          elsif section.settings.initial_state == 'first' and forloop.first
+            assign item_open = true
+          endif
+        %}
+        <details class="bw-faq__item"{% if item_open %} open{% endif %} {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.question }}</summary>
+          {% if block.settings.answer != blank %}
+            <div class="bw-faq__answer">{{ block.settings.answer }}</div>
+          {% endif %}
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · FAQ",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "FAQ"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Einleitung"
+    },
+    {
+      "type": "select",
+      "id": "initial_state",
+      "label": "Beim Laden geöffnet",
+      "options": [
+        { "value": "all", "label": "Alle Fragen" },
+        { "value": "first", "label": "Nur die erste Frage" },
+        { "value": "none", "label": "Keine Frage" }
+      ],
+      "default": "all"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Frage",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Frage",
+          "default": "Frage eingeben"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Antwort",
+          "default": "<p>Antwort eingeben.</p>"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "VENUS E · FAQ",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "Brauche ich einen Elektriker für die Installation?",
+            "answer": "<p>Ob ein Elektriker erforderlich ist, hängt von deiner Hausinstallation und der gewählten Systemkonfiguration ab. Bei Unsicherheit empfehlen wir einen Fachbetrieb.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Funktioniert VENUS E auch ohne Photovoltaik?",
+            "answer": "<p>Die Nutzung ist auf die Kombination mit einer passenden PV-Anlage ausgelegt. Prüfe vor dem Kauf die Kompatibilität deines Wechselrichters und deiner Anlage.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Wie lange hält die Batterie?",
+            "answer": "<p>Die LiFePO₄-Batterie ist auf eine lange Lebensdauer ausgelegt. Die genaue Leistung hängt von Nutzung, Temperatur und Installationsbedingungen ab.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Was ist VPP und wie viel verdiene ich?",
+            "answer": "<p>VPP steht für virtuelles Kraftwerk. Ob und wie eine Vergütung möglich ist, hängt vom Programm, dem Land und den Teilnahmebedingungen ab.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Welche Länder werden unterstützt?",
+            "answer": "<p>Verfügbarkeit und Netzanforderungen unterscheiden sich je nach Land. Bitte prüfe die aktuellen regionalen Hinweise vor dem Kauf.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,85 @@
+{% liquid
+  assign has_media = false
+  if section.settings.video != blank or section.settings.image != blank
+    assign has_media = true
+  endif
+%}
+
+<section
+  id="warum-speicher"
+  class="bw-storage bw-storage-section bw-section bw-reasons bw-anchor-target"
+  data-bw-module="reasons"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bw-container">
+    <div class="bw-section__intro bw-reasons__intro">
+      {% if section.settings.eyebrow != blank %}<p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}
+      {% if section.settings.text != blank %}<div class="bw-reasons__text">{{ section.settings.text }}</div>{% endif %}
+    </div>
+
+    {% if has_media or request.design_mode %}
+      <div class="bw-media bw-reasons__media">
+        {% if section.settings.video != blank %}
+          {{ section.settings.video | video_tag: image_size: '1800x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
+        {% elsif section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '750, 1100, 1500, 2000', sizes: '(min-width: 1248px) 1200px, calc(100vw - 48px)', alt: section.settings.media_alt }}
+        {% elsif request.design_mode %}
+          <div class="bw-editor-placeholder">Breites Bild, GIF oder Shopify-Video auswählen</div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Gründe",
+  "class": "section-bw-storage-reasons",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Übertitel"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Drei Gründe, warum sich der Speicher rechnet"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Beschreibung",
+      "default": "<p>Ein Balkonkraftwerk erzeugt oft mehr Strom als du tagsüber verbrauchst. Ohne Speicher geht dieser Strom ungenutzt ins Netz – mit Speicher nutzt du ihn selbst.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Medien"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Shopify-Video",
+      "info": "Wenn ausgewählt, hat das Video Vorrang vor dem Bild."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Bild oder GIF"
+    },
+    {
+      "type": "text",
+      "id": "media_alt",
+      "label": "Alternativtext",
+      "default": "Balkonkraftwerk mit VENUS E Speicher"
+    }
+  ],
+  "presets": [
+    {
+      "name": "VENUS E · Gründe"
+    }
+  ]
+}
+{% endschema %}

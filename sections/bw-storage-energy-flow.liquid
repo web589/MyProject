@@ -1,0 +1,139 @@
+{% liquid
+  assign flow_anchor = section.settings.anchor_id | handle
+  if flow_anchor == blank
+    assign flow_anchor = 'funktionsweise'
+  endif
+  assign flow_heading_id = 'bw-flow-heading-' | append: section.id
+  assign day_tab_id = 'bw-flow-day-tab-' | append: section.id
+  assign evening_tab_id = 'bw-flow-evening-tab-' | append: section.id
+  assign day_panel_id = 'bw-flow-day-panel-' | append: section.id
+  assign evening_panel_id = 'bw-flow-evening-panel-' | append: section.id
+%}
+
+<section
+  id="{{ flow_anchor }}"
+  class="bw-storage bw-storage-section bw-section bw-energy-flow bw-anchor-target"
+  data-bw-module="energy-flow"
+  data-bw-flow
+  aria-labelledby="{{ flow_heading_id }}"
+>
+  <div class="bw-container">
+    <header class="bw-section__intro bw-energy-flow__intro">
+      <h2 id="{{ flow_heading_id }}">{{ section.settings.heading }}</h2>
+      {% if section.settings.text != blank %}<p>{{ section.settings.text }}</p>{% endif %}
+    </header>
+
+    <div class="bw-toggle" role="tablist" aria-label="{{ section.settings.tabs_label | escape }}">
+      <button
+        id="{{ day_tab_id }}"
+        type="button"
+        class="is-active"
+        role="tab"
+        aria-selected="true"
+        aria-controls="{{ day_panel_id }}"
+        data-bw-flow-tab="day"
+      >{{ section.settings.day_label }}</button>
+      <button
+        id="{{ evening_tab_id }}"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-controls="{{ evening_panel_id }}"
+        tabindex="-1"
+        data-bw-flow-tab="evening"
+      >{{ section.settings.evening_label }}</button>
+    </div>
+
+    {% for period in (1..2) %}
+      {% liquid
+        if period == 1
+          assign period_key = 'day'
+          assign panel_id = day_panel_id
+          assign labelledby_id = day_tab_id
+        else
+          assign period_key = 'evening'
+          assign panel_id = evening_panel_id
+          assign labelledby_id = evening_tab_id
+        endif
+      %}
+      <div
+        id="{{ panel_id }}"
+        class="bw-flow"
+        role="tabpanel"
+        aria-labelledby="{{ labelledby_id }}"
+        data-bw-flow-panel="{{ period_key }}"
+        {% if period_key == 'evening' %}hidden{% endif %}
+      >
+        {% assign rendered_nodes = 0 %}
+        {% for block in section.blocks %}
+          {% if block.settings.period == period_key %}
+            {% if rendered_nodes > 0 %}<span class="bw-flow__line" aria-hidden="true"><span></span></span>{% endif %}
+            <article class="bw-flow__node{% if block.settings.highlight %} bw-flow__node--accent{% endif %}" {{ block.shopify_attributes }}>
+              <span class="bw-flow__icon" aria-hidden="true">
+                {% if block.settings.icon_image != blank %}
+                  {{ block.settings.icon_image | image_url: width: 72 | image_tag: loading: 'lazy', widths: '36,54,72', sizes: '32px', alt: '' }}
+                {% else %}
+                  {% case block.settings.icon %}
+                    {% when 'battery' %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="16" height="12" rx="2"></rect><path d="M19 10h2v4h-2M8 12h6M11 9v6"></path></svg>
+                    {% when 'home' %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-8 9 8"></path><path d="M5.5 10v10h13V10M9 20v-6h6v6"></path></svg>
+                    {% when 'grid' %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21 12 3l5 18M5 14h14M8 8h8M4 21h16"></path></svg>
+                    {% else %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
+                  {% endcase %}
+                {% endif %}
+              </span>
+              <strong>{{ block.settings.title }}</strong>
+              {% if block.settings.text != blank %}<small>{{ block.settings.text }}</small>{% endif %}
+            </article>
+            {% assign rendered_nodes = rendered_nodes | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Energiefluss",
+  "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","default":"funktionsweise"},
+    {"type":"text","id":"heading","label":"Überschrift","default":"Tagsüber speichern, abends nutzen"},
+    {"type":"textarea","id":"text","label":"Beschreibung","default":"VENUS E verteilt deinen Strom automatisch dorthin, wo er gerade gebraucht wird."},
+    {"type":"text","id":"tabs_label","label":"Bezeichnung der Umschaltung","default":"Tageszeit auswählen"},
+    {"type":"text","id":"day_label","label":"Tab 1","default":"Tagsüber"},
+    {"type":"text","id":"evening_label","label":"Tab 2","default":"Abends"}
+  ],
+  "blocks": [
+    {
+      "type": "flow_node",
+      "name": "Energiefluss-Knoten",
+      "settings": [
+        {"type":"select","id":"period","label":"Ansicht","options":[{"value":"day","label":"Tagsüber"},{"value":"evening","label":"Abends"}],"default":"day"},
+        {"type":"select","id":"icon","label":"Standardsymbol","options":[{"value":"solar","label":"Sonne / PV"},{"value":"battery","label":"Speicher"},{"value":"home","label":"Haushalt"},{"value":"grid","label":"Stromnetz"}],"default":"solar"},
+        {"type":"image_picker","id":"icon_image","label":"Eigenes Symbol (optional)"},
+        {"type":"text","id":"title","label":"Titel","default":"PV-Anlage"},
+        {"type":"text","id":"text","label":"Beschreibung","default":"Erzeugt Solarstrom"},
+        {"type":"checkbox","id":"highlight","label":"Blau hervorheben","default":false}
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "VENUS E · Energiefluss",
+      "blocks": [
+        {"type":"flow_node","settings":{"period":"day","icon":"solar","title":"PV-Anlage","text":"Erzeugt Solarstrom"}},
+        {"type":"flow_node","settings":{"period":"day","icon":"battery","title":"VENUS E","text":"Speichert den Überschuss","highlight":true}},
+        {"type":"flow_node","settings":{"period":"day","icon":"home","title":"Haushalt","text":"Nutzt Strom direkt"}},
+        {"type":"flow_node","settings":{"period":"evening","icon":"battery","title":"VENUS E","text":"Gibt gespeicherten Strom ab"}},
+        {"type":"flow_node","settings":{"period":"evening","icon":"home","title":"Haushalt","text":"Versorgt deine Geräte","highlight":true}},
+        {"type":"flow_node","settings":{"period":"evening","icon":"grid","title":"Netz","text":"Nur wenn nötig"}}
+      ]
+    }
+  ]
+}
+{% endschema %}

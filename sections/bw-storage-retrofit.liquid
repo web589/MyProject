@@ -1,0 +1,101 @@
+{% liquid
+  assign retrofit_anchor = section.settings.anchor_id | handle
+  if retrofit_anchor == blank
+    assign retrofit_anchor = 'nachruesten'
+  endif
+  assign retrofit_heading_id = 'bw-retrofit-heading-' | append: section.id
+%}
+
+<section
+  id="{{ retrofit_anchor }}"
+  class="bw-storage bw-storage-section bw-section bw-retrofit bw-anchor-target"
+  data-bw-module="retrofit"
+  aria-labelledby="{{ retrofit_heading_id }}"
+>
+  <div class="bw-container bw-retrofit__layout">
+    {% if section.settings.video != blank or section.settings.image != blank or request.design_mode %}
+      <div class="bw-section-media bw-retrofit__media">
+        {% if section.settings.video != blank %}
+          {{ section.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', image_size: '1200x' }}
+        {% elsif section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '480,720,960,1200,1400', sizes: '(min-width: 990px) 44vw, 100vw', alt: section.settings.image.alt | default: section.settings.heading }}
+        {% else %}
+          <span class="bw-editor-placeholder">Bild, GIF oder Shopify-Video auswählen</span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="bw-retrofit__copy">
+      <h2 id="{{ retrofit_heading_id }}">{{ section.settings.heading }}</h2>
+      {% if section.settings.text != blank %}<div class="bw-rte">{{ section.settings.text }}</div>{% endif %}
+
+      {% if section.blocks.size > 0 %}
+        <ul class="bw-retrofit__benefits" role="list">
+          {% for block in section.blocks %}
+            <li {{ block.shopify_attributes }}>
+              <span aria-hidden="true">
+                {% if block.settings.icon_image != blank %}
+                  {{ block.settings.icon_image | image_url: width: 56 | image_tag: loading: 'lazy', widths: '28,42,56', sizes: '24px', alt: '' }}
+                {% else %}
+                  {% case block.settings.icon %}
+                    {% when 'bolt' %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-8 12h6l-1 8 9-13h-6z"></path></svg>
+                    {% when 'sun' %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
+                    {% when 'app' %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M10 5h4M11 18h2"></path></svg>
+                    {% else %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6M15 2v6M7 8h10v3a5 5 0 0 1-5 5v6M5 8h14"></path></svg>
+                  {% endcase %}
+                {% endif %}
+              </span>
+              <p>{{ block.settings.text }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if section.settings.button_label != blank %}
+        <a class="bw-button bw-button--primary" href="{{ section.settings.button_link | default: '#kapazitaet' }}" data-bw-anchor-link>{{ section.settings.button_label }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Nachrüsten",
+  "settings": [
+    {"type":"text","id":"anchor_id","label":"Anker-ID","default":"nachruesten"},
+    {"type":"image_picker","id":"image","label":"Bild oder GIF"},
+    {"type":"video","id":"video","label":"Shopify-Video","info":"Wenn ausgewählt, hat das Video Vorrang vor dem Bild."},
+    {"type":"text","id":"heading","label":"Überschrift","default":"Du hast schon ein Balkonkraftwerk? Perfekt."},
+    {"type":"richtext","id":"text","label":"Beschreibung","default":"<p>VENUS E wird über eine AC-Kopplung in deine bestehende Anlage integriert – ohne die PV-Seite neu zu verkabeln.</p>"},
+    {"type":"text","id":"button_label","label":"Button","default":"Mehr erfahren"},
+    {"type":"url","id":"button_link","label":"Button-Ziel"}
+  ],
+  "blocks": [
+    {
+      "type":"benefit",
+      "name":"Vorteil",
+      "settings":[
+        {"type":"select","id":"icon","label":"Standardsymbol","options":[{"value":"plug","label":"Stecker"},{"value":"bolt","label":"Blitz"},{"value":"sun","label":"Sonne"},{"value":"app","label":"App"}],"default":"plug"},
+        {"type":"image_picker","id":"icon_image","label":"Eigenes Symbol (optional)"},
+        {"type":"text","id":"text","label":"Text","default":"Mit bestehenden Anlagen kombinierbar"}
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name":"VENUS E · Nachrüsten",
+      "blocks":[
+        {"type":"benefit","settings":{"icon":"plug","text":"Anschluss an eine handelsübliche Solar-Inselanlage oder netzgekoppelte Mini-PV"}},
+        {"type":"benefit","settings":{"icon":"bolt","text":"Plug & Play mit dem MARSTEK Smart Meter (CT002 / CT003)"}},
+        {"type":"benefit","settings":{"icon":"sun","text":"Kein Eingriff in die bestehende PV-Installation nötig"}},
+        {"type":"benefit","settings":{"icon":"app","text":"Geführte Einrichtung über die App"}}
+      ]
+    }
+  ]
+}
+{% endschema %}

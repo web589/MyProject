@@ -1,0 +1,247 @@
+<section
+  id="vergleich"
+  class="bw-storage bw-storage-section bw-section bw-comparison bw-anchor-target"
+  data-bw-module="comparison"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bw-container">
+    <div class="bw-section__intro bw-comparison__intro">
+      {% if section.settings.eyebrow != blank %}<p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}
+      {% if section.settings.text != blank %}<div class="bw-comparison__text">{{ section.settings.text }}</div>{% endif %}
+    </div>
+
+    <div class="bw-compare">
+      {% for block in section.blocks %}
+        {% liquid
+          assign has_media = false
+          if block.settings.video != blank or block.settings.image != blank
+            assign has_media = true
+          endif
+        %}
+        <article class="bw-compare__card bw-compare__card--{{ block.settings.tone }}" {{ block.shopify_attributes }}>
+          {% if block.settings.tag != blank %}<p class="bw-compare__tag">{{ block.settings.tag | escape }}</p>{% endif %}
+          {% if block.settings.heading != blank %}<h3>{{ block.settings.heading | escape }}</h3>{% endif %}
+          {% if block.settings.text != blank %}<div class="bw-compare__copy">{{ block.settings.text }}</div>{% endif %}
+
+          {% if has_media or request.design_mode %}
+            <div class="bw-media bw-compare__media">
+              {% if block.settings.video != blank %}
+                {{ block.settings.video | video_tag: image_size: '1000x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
+              {% elsif block.settings.image != blank %}
+                {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '500, 750, 1000, 1200', sizes: '(min-width: 900px) 46vw, calc(100vw - 80px)', alt: block.settings.media_alt }}
+              {% elsif request.design_mode %}
+                <div class="bw-editor-placeholder">Vergleichsbild, GIF oder Shopify-Video auswählen</div>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          <ul class="bw-compare__points">
+            {% if block.settings.point_1_title != blank or block.settings.point_1_text != blank %}
+              <li>
+                <span class="bw-compare__point-icon" aria-hidden="true">
+                  {% if block.settings.tone == 'positive' %}
+                    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="m6.2 10.2 2.3 2.3 5.2-5.3" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {% else %}
+                    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M6.5 10h7" stroke="white" stroke-width="1.7" stroke-linecap="round"/></svg>
+                  {% endif %}
+                </span>
+                <span>{% if block.settings.point_1_title != blank %}<strong>{{ block.settings.point_1_title | escape }}</strong>{% endif %}{% if block.settings.point_1_text != blank %} <span>{{ block.settings.point_1_text | escape }}</span>{% endif %}</span>
+              </li>
+            {% endif %}
+            {% if block.settings.point_2_title != blank or block.settings.point_2_text != blank %}
+              <li>
+                <span class="bw-compare__point-icon" aria-hidden="true">
+                  {% if block.settings.tone == 'positive' %}
+                    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="m6.2 10.2 2.3 2.3 5.2-5.3" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {% else %}
+                    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M6.5 10h7" stroke="white" stroke-width="1.7" stroke-linecap="round"/></svg>
+                  {% endif %}
+                </span>
+                <span>{% if block.settings.point_2_title != blank %}<strong>{{ block.settings.point_2_title | escape }}</strong>{% endif %}{% if block.settings.point_2_text != blank %} <span>{{ block.settings.point_2_text | escape }}</span>{% endif %}</span>
+              </li>
+            {% endif %}
+            {% if block.settings.point_3_title != blank or block.settings.point_3_text != blank %}
+              <li>
+                <span class="bw-compare__point-icon" aria-hidden="true">
+                  {% if block.settings.tone == 'positive' %}
+                    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="m6.2 10.2 2.3 2.3 5.2-5.3" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {% else %}
+                    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M6.5 10h7" stroke="white" stroke-width="1.7" stroke-linecap="round"/></svg>
+                  {% endif %}
+                </span>
+                <span>{% if block.settings.point_3_title != blank %}<strong>{{ block.settings.point_3_title | escape }}</strong>{% endif %}{% if block.settings.point_3_text != blank %} <span>{{ block.settings.point_3_text | escape }}</span>{% endif %}</span>
+              </li>
+            {% endif %}
+          </ul>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Vergleich",
+  "class": "section-bw-storage-comparison",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Übertitel"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Was der Speicher im Alltag verändert"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Beschreibung",
+      "default": "<p>Ein direkter Vergleich: So fließt dein Strom an einem typischen Tag – mit und ohne Speicher.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Vergleichskarte",
+      "settings": [
+        {
+          "type": "select",
+          "id": "tone",
+          "label": "Darstellung",
+          "default": "positive",
+          "options": [
+            { "value": "positive", "label": "Mit VENUS E" },
+            { "value": "neutral", "label": "Ohne Speicher" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Kennzeichnung",
+          "default": "MIT VENUS E"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Überschrift",
+          "default": "Ihr Sonnenstrom wird voll genutzt."
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Beschreibung",
+          "default": "<p>Was deine PV tagsüber erzeugt, wird gespeichert und abends verbraucht – statt ungenutzt ins Netz zu fließen.</p>"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify-Video",
+          "info": "Wenn ausgewählt, hat das Video Vorrang vor dem Bild."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Bild oder GIF"
+        },
+        {
+          "type": "text",
+          "id": "media_alt",
+          "label": "Alternativtext"
+        },
+        {
+          "type": "header",
+          "content": "Vorteil 1"
+        },
+        {
+          "type": "text",
+          "id": "point_1_title",
+          "label": "Fetter Text",
+          "default": "Mehr Eigenverbrauch, weniger Netzbezug"
+        },
+        {
+          "type": "text",
+          "id": "point_1_text",
+          "label": "Zusatz",
+          "default": "– von ca. 30 % auf bis zu 85 %."
+        },
+        {
+          "type": "header",
+          "content": "Vorteil 2"
+        },
+        {
+          "type": "text",
+          "id": "point_2_title",
+          "label": "Fetter Text",
+          "default": "Stromkosten spürbar senken"
+        },
+        {
+          "type": "text",
+          "id": "point_2_text",
+          "label": "Zusatz",
+          "default": "– besonders in den Abendstunden."
+        },
+        {
+          "type": "header",
+          "content": "Vorteil 3"
+        },
+        {
+          "type": "text",
+          "id": "point_3_title",
+          "label": "Fetter Text",
+          "default": "Unabhängiger bei Preisschwankungen"
+        },
+        {
+          "type": "text",
+          "id": "point_3_text",
+          "label": "Zusatz",
+          "default": "– du nutzt deinen eigenen Strom."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "VENUS E · Vergleich",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "tone": "positive",
+            "tag": "MIT VENUS E",
+            "heading": "Ihr Sonnenstrom wird voll genutzt.",
+            "text": "<p>Was deine PV tagsüber erzeugt, wird gespeichert und abends verbraucht – statt ungenutzt ins Netz zu fließen.</p>",
+            "media_alt": "Energiefluss mit VENUS E Speicher",
+            "point_1_title": "Mehr Eigenverbrauch, weniger Netzbezug",
+            "point_1_text": "– von ca. 30 % auf bis zu 85 %.",
+            "point_2_title": "Stromkosten spürbar senken",
+            "point_2_text": "– besonders in den Abendstunden.",
+            "point_3_title": "Unabhängiger bei Preisschwankungen",
+            "point_3_text": "– du nutzt deinen eigenen Strom."
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "tone": "neutral",
+            "tag": "OHNE SPEICHER",
+            "heading": "Überschuss wird ungenutzt eingespeist.",
+            "text": "<p>Mittags produzierst du häufig mehr als du brauchst – der Überschuss fließt ins Netz.</p>",
+            "media_alt": "Energiefluss ohne Batteriespeicher",
+            "point_1_title": "Strom wird ins Netz gespeist",
+            "point_1_text": "– statt im Haushalt genutzt zu werden.",
+            "point_2_title": "Abhängigkeit vom Strompreis",
+            "point_2_text": "– besonders in Zeiten hoher Nachfrage.",
+            "point_3_title": "Keine Reserve am Abend",
+            "point_3_text": "– wenn die Sonne nicht mehr scheint."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,200 @@
+{% liquid
+  assign primary_link = section.settings.primary_link
+  assign secondary_link = section.settings.secondary_link
+  if primary_link == blank
+    assign primary_link = '#kapazitaet'
+  endif
+  if secondary_link == blank
+    assign secondary_link = '#kapazitaet'
+  endif
+  assign has_media = false
+  if section.settings.video != blank or section.settings.image != blank
+    assign has_media = true
+  endif
+%}
+
+<section
+  id="balkonkraftwerk-kaufen"
+  class="bw-storage bw-storage-section bw-hero bw-anchor-target"
+  data-bw-module="hero"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bw-container bw-hero__grid{% unless has_media or request.design_mode %} bw-hero__grid--copy-only{% endunless %}">
+    <div class="bw-hero__copy">
+      {% if section.settings.badge != blank %}
+        <p class="bw-hero__pill">{{ section.settings.badge | escape }}</p>
+      {% endif %}
+
+      <h1>
+        <span class="bw-hero__heading-line">{{ section.settings.heading_line_1 | escape }}</span>
+        <span class="bw-hero__heading-line">
+          {{ section.settings.heading_line_2 | escape }}
+          <span class="bw-hero__heading-accent">{{ section.settings.heading_accent | escape }}</span>
+        </span>
+      </h1>
+
+      {% if section.settings.text != blank %}
+        <div class="bw-lead">{{ section.settings.text }}</div>
+      {% endif %}
+
+      <div class="bw-actions">
+        {% if section.settings.primary_label != blank %}
+          <a class="bw-button bw-button--primary" href="{{ primary_link }}" data-bw-anchor-link>
+            {{ section.settings.primary_label | escape }}
+          </a>
+        {% endif %}
+        {% if section.settings.secondary_label != blank %}
+          <a class="bw-button bw-button--secondary" href="{{ secondary_link }}" data-bw-anchor-link>
+            {{ section.settings.secondary_label | escape }}
+          </a>
+        {% endif %}
+      </div>
+
+      {% if section.blocks.size > 0 %}
+        <div class="bw-hero__stats" aria-label="{{ section.settings.stats_label | escape }}">
+          {% for block in section.blocks %}
+            <div class="bw-hero__stat" {{ block.shopify_attributes }}>
+              {% if block.settings.value != blank %}<strong>{{ block.settings.value | escape }}</strong>{% endif %}
+              {% if block.settings.detail != blank %}<span>{{ block.settings.detail | escape }}</span>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if has_media or request.design_mode %}
+      <div class="bw-media bw-media--hero bw-hero__media">
+        {% if section.settings.video != blank %}
+          {{ section.settings.video | video_tag: image_size: '1400x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
+        {% elsif section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 1600 | image_tag: loading: 'eager', widths: '600, 900, 1200, 1600', sizes: '(min-width: 900px) 50vw, 100vw', alt: section.settings.media_alt }}
+        {% elsif request.design_mode %}
+          <div class="bw-editor-placeholder">Hero-Bild, GIF oder Shopify-Video auswählen</div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Hero",
+  "class": "section-bw-storage-hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Kennzeichnung",
+      "default": "Balkonkraftwerk mit Speicher"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Überschrift · Zeile 1",
+      "default": "Mehr Eigenstrom."
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Überschrift · Zeile 2",
+      "default": "Weniger"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Blauer Überschriftenteil",
+      "default": "Netzstrom."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Beschreibung",
+      "default": "<p>Du hast schon ein Balkonkraftwerk (oder planst eines)? Mit einem VENUS E Speicher nutzt du deinen Solarstrom auch abends und nachts – statt ihn ins Netz zu verschenken.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primärer Button",
+      "default": "Passenden Speicher finden"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primäres Linkziel"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Sekundärer Button",
+      "default": "Welche Größe brauche ich?"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Sekundäres Linkziel"
+    },
+    {
+      "type": "header",
+      "content": "Medien"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Shopify-Video",
+      "info": "Wenn ausgewählt, hat das Video Vorrang vor dem Bild."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Bild oder GIF"
+    },
+    {
+      "type": "text",
+      "id": "media_alt",
+      "label": "Alternativtext",
+      "default": "VENUS E Speicher im Wohnbereich"
+    },
+    {
+      "type": "text",
+      "id": "stats_label",
+      "label": "Bezeichnung der Kennzahlen",
+      "default": "Produktvorteile"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Kennzahl",
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Kennzahl",
+          "default": "4 Modelle"
+        },
+        {
+          "type": "text",
+          "id": "detail",
+          "label": "Zusatz",
+          "default": "2,56 – 10,24 kWh"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "VENUS E · Hero",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "4 Modelle", "detail": "2,56 – 10,24 kWh" } },
+        { "type": "stat", "settings": { "value": "bis 85 %", "detail": "Eigenverbrauch" } },
+        { "type": "stat", "settings": { "value": "10 Jahre", "detail": "Garantie" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -30,6 +30,10 @@
   {%- render 'font-face' -%}
   {{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}
   {{ 'scroll-reveal.css' | asset_url | stylesheet_tag }}
+  {%- if template.suffix == 'balkonkraftwerk-mit-speicher' -%}
+    {{ 'balkonkraftwerk-storage-page.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'balkonkraftwerk-storage-page.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
   {%- render 'css-variables' -%}
 
   <script>

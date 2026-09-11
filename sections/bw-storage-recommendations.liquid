@@ -1,0 +1,185 @@
+{% liquid
+  assign venus_3 = section.settings.product_3
+  assign venus_4 = section.settings.product_4
+  assign venus_max = section.settings.product_max
+  if venus_3 == blank
+    assign venus_3 = all_products['venus-e-3']
+  endif
+  if venus_4 == blank
+    assign venus_4 = all_products['venus-e-4']
+  endif
+  if venus_max == blank
+    assign venus_max = all_products['venus-e-max']
+  endif
+  assign recommendations_heading_id = 'bw-recommendations-heading-' | append: section.id
+%}
+
+<section
+  id="empfehlungen"
+  class="bw-storage bw-storage-section bw-section bw-recommendations"
+  data-bw-module="recommendations"
+  data-bw-results
+  data-section-id="{{ section.id }}"
+  aria-labelledby="{{ recommendations_heading_id }}"
+  {% unless request.design_mode %}hidden{% endunless %}
+>
+  <div class="bw-container">
+    <header class="bw-results__heading">
+      {% if section.settings.context_label != blank %}<p>{{ section.settings.context_label }}: <strong data-bw-recommendation-summary>3 Personen · 6 kWp · 4.000 kWh/Jahr</strong></p>{% endif %}
+      <h2 id="{{ recommendations_heading_id }}">{{ section.settings.heading }} <span data-bw-capacity-inline>15,36 kWh</span></h2>
+    </header>
+
+    <div class="bw-results__grid">
+      {% for block in section.blocks %}
+        {% liquid
+          case block.settings.role
+            when 'alt4'
+              assign card_product = venus_4
+              assign fallback_url = '/products/venus-e-4'
+              assign fallback_title = '3× VENUS E 4.0'
+              assign fallback_capacity = '15 kWh'
+            when 'altmax'
+              assign card_product = venus_max
+              assign fallback_url = '/products/venus-e-max'
+              assign fallback_title = '2× VENUS E Max'
+              assign fallback_capacity = '20 kWh'
+            else
+              assign card_product = venus_3
+              assign fallback_url = '/products/venus-e-3'
+              assign fallback_title = '3× VENUS E 3.0'
+              assign fallback_capacity = '15,36 kWh'
+          endcase
+          assign card_variant = card_product.selected_or_first_available_variant
+          assign card_image = card_variant.featured_image | default: card_product.featured_image
+          assign card_title = block.settings.title | default: fallback_title
+          assign card_capacity = block.settings.capacity | default: fallback_capacity
+          assign card_url = card_product.url | default: fallback_url
+        %}
+        <article
+          class="bw-result-card{% if block.settings.role == 'primary' %} bw-result-card--primary{% endif %}"
+          data-bw-result-card="{{ block.settings.role }}"
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.badge != blank %}<span class="bw-card-badge">{{ block.settings.badge }}</span>{% endif %}
+
+          <a class="bw-result-card__media" href="{{ card_url }}" data-bw-result-image-wrap{% if card_image == blank %} hidden{% endif %}>
+            <img
+              data-bw-result-image
+              {% if card_image != blank %}
+                src="{{ card_image | image_url: width: 800 }}"
+                srcset="{{ card_image | image_url: width: 400 }} 400w, {{ card_image | image_url: width: 800 }} 800w"
+              {% else %}
+                hidden
+              {% endif %}
+              sizes="(min-width: 990px) 30vw, 100vw"
+              width="800"
+              height="600"
+              loading="lazy"
+              alt="{{ card_product.title | default: card_title | escape }}"
+            >
+          </a>
+          {% if request.design_mode and card_image == blank %}<div class="bw-editor-media-placeholder">Produktbild wird aus Shopify geladen.</div>{% endif %}
+
+          <div class="bw-result-card__body">
+            <h3
+              data-bw-result-title
+              {% case block.settings.role %}{% when 'primary' %}data-bw-primary-title{% when 'alt4' %}data-bw-alt4-title{% when 'altmax' %}data-bw-altmax-title{% endcase %}
+            >{{ card_title }}</h3>
+            <small
+              data-bw-result-capacity
+              {% case block.settings.role %}{% when 'primary' %}data-bw-primary-capacity{% when 'alt4' %}data-bw-alt4-capacity{% when 'altmax' %}data-bw-altmax-capacity{% endcase %}
+            >{{ card_capacity }}</small>
+            {% if block.settings.text != blank %}<p>{{ block.settings.text }}</p>{% endif %}
+            <div class="bw-result-card__price">
+              <strong data-bw-result-price>{% if card_variant != blank %}{{ card_variant.price | money }}{% endif %}</strong>
+              <s data-bw-result-compare-at{% unless card_variant.compare_at_price > card_variant.price %} hidden{% endunless %}>{% if card_variant.compare_at_price > card_variant.price %}{{ card_variant.compare_at_price | money }}{% endif %}</s>
+            </div>
+            <span class="visually-hidden" data-bw-result-availability>{% if card_variant.available %}Verfügbar{% else %}Nicht verfügbar{% endif %}</span>
+
+            {% if block.settings.role == 'primary' %}
+              <button
+                type="button"
+                class="bw-button bw-button--primary bw-result-action"
+                data-bw-product-role="primary"
+                data-product-url="{{ card_url }}"
+                data-variant-id="{{ card_variant.id }}"
+                data-direct-add="{% if card_variant.available %}true{% else %}false{% endif %}"
+              >{% if card_variant.available %}{{ block.settings.button_label }}{% else %}{{ block.settings.sold_out_label }}{% endif %}</button>
+            {% else %}
+              <a
+                class="bw-button bw-button--secondary bw-result-action"
+                data-bw-product-role="{{ block.settings.role }}"
+                data-product-url="{{ card_url }}"
+                href="{{ card_url }}"
+              >{{ block.settings.button_label }}</a>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script type="application/json" data-bw-product-data>
+    {
+      "venus3": {
+        "url": {{ venus_3.url | default: '/products/venus-e-3' | json }},
+        "title": {{ venus_3.title | default: 'VENUS E 3.0' | json }},
+        "featured_image": {% if venus_3.featured_image != blank %}{{ venus_3.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
+        "variants": [{% if venus_3 != blank %}{% for variant in venus_3.variants %}{% assign variant_image = variant.featured_image | default: venus_3.featured_image %}{"id":{{ variant.id | json }},"title":{{ variant.title | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant_image != blank %}{{ variant_image | image_url: width: 1000 | json }}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
+      },
+      "venus4": {
+        "url": {{ venus_4.url | default: '/products/venus-e-4' | json }},
+        "title": {{ venus_4.title | default: 'VENUS E 4.0' | json }},
+        "featured_image": {% if venus_4.featured_image != blank %}{{ venus_4.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
+        "variants": [{% if venus_4 != blank %}{% for variant in venus_4.variants %}{% assign variant_image = variant.featured_image | default: venus_4.featured_image %}{"id":{{ variant.id | json }},"title":{{ variant.title | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant_image != blank %}{{ variant_image | image_url: width: 1000 | json }}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
+      },
+      "max": {
+        "url": {{ venus_max.url | default: '/products/venus-e-max' | json }},
+        "title": {{ venus_max.title | default: 'VENUS E Max' | json }},
+        "featured_image": {% if venus_max.featured_image != blank %}{{ venus_max.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
+        "variants": [{% if venus_max != blank %}{% for variant in venus_max.variants %}{% assign variant_image = variant.featured_image | default: venus_max.featured_image %}{"id":{{ variant.id | json }},"title":{{ variant.title | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant_image != blank %}{{ variant_image | image_url: width: 1000 | json }}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
+      }
+    }
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Empfehlungen",
+  "tag": "section",
+  "class": "section-bw-storage-recommendations",
+  "max_blocks": 3,
+  "settings": [
+    {"type":"text","id":"context_label","label":"Eingabe-Zusammenfassung","default":"Basierend auf deiner Eingabe"},
+    {"type":"text","id":"heading","label":"Überschrift","default":"Diese Konfigurationen passen zu"},
+    {"type":"product","id":"product_3","label":"VENUS E 3.0 Produkt"},
+    {"type":"product","id":"product_4","label":"VENUS E 4.0 Produkt"},
+    {"type":"product","id":"product_max","label":"VENUS E Max Produkt"}
+  ],
+  "blocks": [
+    {
+      "type": "recommendation_card",
+      "name": "Empfehlungskarte",
+      "settings": [
+        {"type":"select","id":"role","label":"Kartenrolle","options":[{"value":"primary","label":"Hauptempfehlung"},{"value":"alt4","label":"Alternative VENUS E 4.0"},{"value":"altmax","label":"Alternative VENUS E Max"}],"default":"primary"},
+        {"type":"text","id":"badge","label":"Badge"},
+        {"type":"text","id":"title","label":"Starttitel","info":"Wird nach der Berechnung dynamisch aktualisiert."},
+        {"type":"text","id":"capacity","label":"Startkapazität","info":"Wird nach der Berechnung dynamisch aktualisiert."},
+        {"type":"textarea","id":"text","label":"Beschreibung","default":"Die passende Konfiguration für deinen Bedarf."},
+        {"type":"text","id":"button_label","label":"Button","default":"Zur Produktseite"},
+        {"type":"text","id":"sold_out_label","label":"Nicht-verfügbar-Text","default":"Zur Produktseite"}
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VENUS E · Empfehlungen",
+      "blocks": [
+        {"type":"recommendation_card","settings":{"role":"primary","badge":"Empfohlen","title":"3× VENUS E 3.0","capacity":"15,36 kWh","text":"Die passende Kombination für deinen Bedarf – mit direkter Bestellmöglichkeit.","button_label":"In den Warenkorb"}},
+        {"type":"recommendation_card","settings":{"role":"alt4","title":"3× VENUS E 4.0","capacity":"15 kWh","text":"Mehr Leistung pro Einheit und eine kompakte Alternative.","button_label":"Zur Produktseite"}},
+        {"type":"recommendation_card","settings":{"role":"altmax","title":"2× VENUS E Max","capacity":"20 kWh","text":"Für größere Haushalte oder wenn du später erweitern möchtest.","button_label":"Zur Produktseite"}}
+      ]
+    }
+  ]
+}
+{% endschema %}

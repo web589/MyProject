@@ -1,0 +1,96 @@
+<section
+  class="bw-storage bw-storage-section bw-trust"
+  data-bw-module="trust"
+  data-section-id="{{ section.id }}"
+  aria-label="{{ section.settings.aria_label | escape }}"
+>
+  <div class="bw-container bw-trust__grid">
+    {% for block in section.blocks %}
+      <div class="bw-trust__item" {{ block.shopify_attributes }}>
+        <span class="bw-trust__icon" aria-hidden="true">
+          {% if block.settings.icon != blank %}
+            {{ block.settings.icon | image_url: width: 64 | image_tag: loading: 'lazy', widths: '32, 48, 64', sizes: '24px', alt: '' }}
+          {% else %}
+            {% case block.settings.fallback_icon %}
+              {% when 'certificate' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="9" r="4.25"/><path d="m9.2 12.2-.7 7.1 3.5-2.1 3.5 2.1-.7-7.1"/></svg>
+              {% when 'shield' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3.2 19 6v5.2c0 4.4-2.8 7.7-7 9.6-4.2-1.9-7-5.2-7-9.6V6l7-2.8Z"/></svg>
+              {% when 'check' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="m8.2 12 2.4 2.5 5.4-5.6"/></svg>
+              {% when 'star' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>
+              {% when 'battery' %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6.5" width="16" height="11" rx="1.5"/><path d="M21 10v4M7 12h8M11 9v6"/></svg>
+              {% else %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="M12 10.5v6M12 7.5h.01"/></svg>
+            {% endcase %}
+          {% endif %}
+        </span>
+        {% if block.settings.label != blank %}<span class="bw-trust__label">{{ block.settings.label | escape }}</span>{% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Trust",
+  "class": "section-bw-storage-trust",
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Barrierefreie Bezeichnung",
+      "default": "Qualität und Sicherheit"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Vertrauensmerkmal",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Eigenes Icon"
+        },
+        {
+          "type": "select",
+          "id": "fallback_icon",
+          "label": "Standard-Icon",
+          "default": "certificate",
+          "options": [
+            { "value": "certificate", "label": "Zertifikat" },
+            { "value": "shield", "label": "Schild" },
+            { "value": "check", "label": "Haken im Kreis" },
+            { "value": "star", "label": "Stern" },
+            { "value": "battery", "label": "Batterie" },
+            { "value": "info", "label": "Information" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Text",
+          "default": "TÜV-zertifiziert"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "VENUS E · Trust",
+      "blocks": [
+        { "type": "trust_item", "settings": { "fallback_icon": "certificate", "label": "TÜV-zertifiziert" } },
+        { "type": "trust_item", "settings": { "fallback_icon": "certificate", "label": "CE-zertifiziert" } },
+        { "type": "trust_item", "settings": { "fallback_icon": "shield", "label": "IP65 Schutz" } },
+        { "type": "trust_item", "settings": { "fallback_icon": "check", "label": "10 Jahre Garantie" } },
+        { "type": "trust_item", "settings": { "fallback_icon": "star", "label": "100.000+ Haushalte" } },
+        { "type": "trust_item", "settings": { "fallback_icon": "battery", "label": "LiFePO₄ Zellen" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

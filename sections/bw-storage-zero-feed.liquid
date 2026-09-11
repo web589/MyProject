@@ -1,0 +1,328 @@
+{% liquid
+  assign section_ct002 = section.settings.product_ct002
+  assign section_ct003 = section.settings.product_ct003
+%}
+
+<section
+  class="bw-storage bw-storage-section bw-zero-feed"
+  data-bw-module="zero-feed"
+  aria-labelledby="bw-zero-feed-heading-{{ section.id }}"
+>
+  <div class="bw-container bw-zero-feed__container">
+    <div class="bw-section__intro bw-zero-feed__intro">
+      <h2 id="bw-zero-feed-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {% if section.settings.text != blank %}
+        <p>{{ section.settings.text }}</p>
+      {% endif %}
+    </div>
+
+    <div class="bw-system-flow" role="list" aria-label="{{ section.settings.flow_label | escape }}">
+      {% for block in section.blocks %}
+        {% if block.type == 'flow_step' %}
+          <article
+            class="bw-system-flow__card{% if block.settings.highlight %} is-active{% endif %}"
+            role="listitem"
+            {% if block.settings.highlight %}aria-current="true"{% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <span class="bw-system-flow__icon" aria-hidden="true">
+              {% if block.settings.icon_image != blank %}
+                {{
+                  block.settings.icon_image
+                  | image_url: width: 64
+                  | image_tag: loading: 'lazy', widths: '32,48,64', sizes: '24px', alt: ''
+                }}
+              {% else %}
+                {% case block.settings.icon %}
+                  {% when 'battery' %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="15" height="10" rx="1.5"></rect><path d="M18 10h3v4h-3"></path></svg>
+                  {% when 'home' %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 9-8 9 8"></path><path d="M5.5 10v10h13V10M9 20v-6h6v6"></path></svg>
+                  {% else %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4.5"></circle><path d="M12 12.5v6M8.5 21h7"></path></svg>
+                {% endcase %}
+              {% endif %}
+            </span>
+            <strong>{{ block.settings.title }}</strong>
+            {% if block.settings.text != blank %}
+              <small>{{ block.settings.text | escape | newline_to_br }}</small>
+            {% endif %}
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="bw-accessory-grid" role="list" aria-label="{{ section.settings.accessory_label | escape }}">
+      {% for block in section.blocks %}
+        {% if block.type == 'accessory' %}
+          {% liquid
+            assign fallback_handle = 'ct002-smart-meter'
+            assign fallback_title = 'CT002'
+            assign fallback_subtitle = '3-Phasen Smart Meter für VENUS E'
+            assign accessory_product = block.settings.product
+
+            if block.settings.product_kind == 'ct003'
+              assign fallback_handle = 'ct003-smart-meter'
+              assign fallback_title = 'CT003'
+              assign fallback_subtitle = 'P1 Smart Meter für VENUS E'
+              if accessory_product == blank
+                assign accessory_product = section_ct003
+              endif
+            elsif accessory_product == blank
+              assign accessory_product = section_ct002
+            endif
+
+            if accessory_product == blank
+              assign accessory_product = all_products[fallback_handle]
+            endif
+
+            assign accessory_variant = accessory_product.selected_or_first_available_variant
+            assign accessory_image = accessory_variant.featured_image | default: accessory_product.featured_image
+            assign accessory_title = block.settings.title | default: fallback_title
+            assign accessory_subtitle = block.settings.subtitle
+            if accessory_subtitle == blank and accessory_product != blank
+              assign accessory_subtitle = accessory_product.title | remove_first: 'MARSTEK CT002 – ' | remove_first: 'MARSTEK CT002 - ' | remove_first: 'MARSTEK CT003 – ' | remove_first: 'MARSTEK CT003 - '
+            endif
+            if accessory_subtitle == blank
+              assign accessory_subtitle = fallback_subtitle
+            endif
+            assign accessory_url = accessory_product.url
+            if accessory_url == blank
+              assign accessory_url = '/products/' | append: fallback_handle
+            endif
+          %}
+
+          <article
+            class="bw-accessory-card{% if accessory_image == blank %} bw-accessory-card--no-image{% endif %}"
+            role="listitem"
+            {{ block.shopify_attributes }}
+          >
+            {% if accessory_image != blank or request.design_mode %}
+              <a
+                class="bw-accessory-card__image"
+                href="{{ accessory_url }}"
+                aria-label="{{ accessory_title | escape }} Produktseite"
+              >
+                {% if accessory_image != blank %}
+                  {{
+                    accessory_image
+                    | image_url: width: 240
+                    | image_tag: loading: 'lazy', widths: '120,180,240', sizes: '96px', alt: accessory_title
+                  }}
+                {% else %}
+                  <span class="bw-editor-placeholder">Produktbild auswählen</span>
+                {% endif %}
+              </a>
+            {% endif %}
+
+            <div class="bw-accessory-card__details">
+              <h3><a href="{{ accessory_url }}">{{ accessory_title }}</a></h3>
+              <p>{{ accessory_subtitle }}</p>
+              {% if block.settings.badge != blank %}
+                <span class="bw-accessory-card__badge">{{ block.settings.badge }}</span>
+              {% endif %}
+            </div>
+
+            <div class="bw-accessory-card__purchase">
+              {% if accessory_variant != blank %}
+                <div class="bw-accessory-card__price">
+                  <strong>{{ accessory_variant.price | money }}</strong>
+                  {% if accessory_variant.compare_at_price > accessory_variant.price %}
+                    <s>{{ accessory_variant.compare_at_price | money }}</s>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% if accessory_variant != blank and accessory_variant.available %}
+                <a class="bw-accessory-card__button" href="{{ accessory_url }}">{{ block.settings.button_label }}</a>
+              {% else %}
+                <span class="bw-accessory-card__button is-disabled" aria-disabled="true">{{ section.settings.sold_out_label }}</span>
+              {% endif %}
+            </div>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Nulleinspeisung",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Keine Einspeisung ins Netz. Automatisch."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Beschreibung",
+      "default": "Der Smart Meter erkennt deinen Verbrauch, VENUS E reagiert von selbst. Die CT-Sensoren (CT002 / CT003) erfassen jeden Lastfluss in Echtzeit. Innerhalb von unter 10 Millisekunden entscheidet VENUS E, ob Strom gespeichert, verbraucht oder – falls gewünscht – gar nicht ins Netz abgegeben wird. Keine komplizierte Konfiguration, kein Elektriker erforderlich."
+    },
+    {
+      "type": "text",
+      "id": "flow_label",
+      "label": "Bezeichnung des Ablaufs",
+      "default": "Automatischer Energiefluss"
+    },
+    {
+      "type": "text",
+      "id": "accessory_label",
+      "label": "Bezeichnung der Zubehörliste",
+      "default": "Passende Smart Meter"
+    },
+    {
+      "type": "product",
+      "id": "product_ct002",
+      "label": "CT002 Standardprodukt"
+    },
+    {
+      "type": "product",
+      "id": "product_ct003",
+      "label": "CT003 Standardprodukt"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Text bei Nichtverfügbarkeit",
+      "default": "Nicht verfügbar"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "flow_step",
+      "name": "Ablaufschritt",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Standardsymbol",
+          "options": [
+            { "value": "meter", "label": "Smart Meter" },
+            { "value": "battery", "label": "Speicher" },
+            { "value": "home", "label": "Hausnetz" }
+          ],
+          "default": "meter"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Eigenes Symbol (optional)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titel",
+          "default": "Smart Meter"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Misst Verbrauch & Erzeugung in Echtzeit"
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight",
+          "label": "Blau hervorheben",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "accessory",
+      "name": "Smart-Meter-Karte",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "select",
+          "id": "product_kind",
+          "label": "Fallback-Produkt",
+          "options": [
+            { "value": "ct002", "label": "CT002" },
+            { "value": "ct003", "label": "CT003" }
+          ],
+          "default": "ct002"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Abweichendes Produkt (optional)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Kurztitel"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Beschreibung"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "default": "Plug & Play"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button",
+          "default": "Auswählen"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VENUS E · Nulleinspeisung",
+      "blocks": [
+        {
+          "type": "flow_step",
+          "settings": {
+            "icon": "meter",
+            "title": "Smart Meter",
+            "text": "Misst Verbrauch & Erzeugung in Echtzeit"
+          }
+        },
+        {
+          "type": "flow_step",
+          "settings": {
+            "icon": "battery",
+            "title": "VENUS E",
+            "text": "≤ 10 ms Steuerung\nKein Watt ins Netz",
+            "highlight": true
+          }
+        },
+        {
+          "type": "flow_step",
+          "settings": {
+            "icon": "home",
+            "title": "Hausnetz",
+            "text": "Verbraucht, was gebraucht wird"
+          }
+        },
+        {
+          "type": "accessory",
+          "settings": {
+            "product_kind": "ct002",
+            "title": "CT002"
+          }
+        },
+        {
+          "type": "accessory",
+          "settings": {
+            "product_kind": "ct003",
+            "title": "CT003"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

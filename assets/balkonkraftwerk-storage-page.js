@@ -1,8 +1,40 @@
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'venusBalkonStorageRecommendation:v1';
-  var tierValues = { '5.12': 5.12, '10.24': 10.24, '15.36': 15.36, '30': 30 };
+  if (window.__bwStorageControllerInstalled) {
+    document.dispatchEvent(new CustomEvent('venus:storage-rescan'));
+    return;
+  }
+  window.__bwStorageControllerInstalled = true;
+
+  var STORAGE_KEY_V1 = 'venusBalkonStorageRecommendation:v1';
+  var STORAGE_KEY_V2 = 'venusBalkonStorageRecommendation:v2';
+  var TIER_VALUES = { '5.12': 5.12, '10.24': 10.24, '15.36': 15.36, '30': 30 };
+  var DEFAULT_STATE = {
+    people: 3,
+    pv: 6,
+    annual: 4000,
+    tier: '15.36',
+    hasCalculated: false,
+    resultsVisible: false
+  };
+  var state = Object.assign({}, DEFAULT_STATE);
+  var products = {};
+  var resolvedRecommendation = null;
+  var navigationObserver = null;
+
+  function isDesignMode() {
+    return Boolean(window.Shopify && window.Shopify.designMode);
+  }
+
+  function prefersReducedMotion() {
+    return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  function scrollToElement(element) {
+    if (!element) return;
+    element.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+  }
 
   function formatNumber(value) {
     return new Intl.NumberFormat('de-DE').format(Number(value));
@@ -13,28 +45,72 @@
     return (number % 1 ? number.toFixed(2) : number.toFixed(0)).replace('.', ',') + ' kWh';
   }
 
+  function formatMoney(cents) {
+    var currency = window.Shopify && window.Shopify.currency && window.Shopify.currency.active
+      ? window.Shopify.currency.active
+      : 'EUR';
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: currency }).format(Number(cents || 0) / 100);
+  }
+
   function parseCapacity(title) {
     var match = String(title || '').match(/(\d+(?:[,.]\d+)?)\s*kWh/i);
     return match ? parseFloat(match[1].replace(',', '.')) : null;
   }
 
+  function finiteNumber(value, fallback) {
+    var number = Number(value);
+    return Number.isFinite(number) ? number : fallback;
+  }
+
   function getRootUrl() {
-    return window.Shopify && window.Shopify.routes && window.Shopify.routes.root ? window.Shopify.routes.root : '/';
+    return window.Shopify && window.Shopify.routes && window.Shopify.routes.root
+      ? window.Shopify.routes.root
+      : '/';
   }
 
-  function readProductData(root) {
-    var node = root.querySelector('[data-bw-product-data]');
-    if (!node) return {};
-    try { return JSON.parse(node.textContent); } catch (error) { return {}; }
+  function readStoredState() {
+    var stored = null;
+    try {
+      stored = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY_V2) || 'null');
+      if (!stored) stored = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY_V1) || 'null');
+    } catch (error) {
+      stored = null;
+    }
+
+    if (!stored || stored.people === undefined || stored.pv === undefined || stored.annual === undefined) return;
+    state = Object.assign({}, DEFAULT_STATE, stored);
+    if (!TIER_VALUES[state.tier]) state.tier = '15.36';
   }
 
-  function findVariant(product, capacity) {
-    if (!product || !Array.isArray(product.variants)) return null;
-    var matches = product.variants.filter(function (variant) {
-      var parsed = parseCapacity(variant.title);
-      return parsed !== null && Math.abs(parsed - capacity) < 0.08;
-    });
-    return matches.find(function (variant) { return variant.available; }) || matches[0] || null;
+  function saveState() {
+    try {
+      window.sessionStorage.setItem(STORAGE_KEY_V2, JSON.stringify(state));
+    } catch (error) {
+      // Storage can be unavailable in private browsing contexts.
+    }
+  }
+
+  function getCapacityRoot() {
+    return document.querySelector('[data-bw-capacity-root], [data-bw-module="capacity"]');
+  }
+
+  function getRecommendationsRoot() {
+    return document.querySelector('[data-bw-recommendations], [data-bw-module="recommendations"]');
+  }
+
+  function thresholdsFrom(root) {
+    var data = root ? root.dataset : {};
+    return {
+      people5: finiteNumber(data.peopleTier5, 1),
+      people10: finiteNumber(data.peopleTier10, 2),
+      people15: finiteNumber(data.peopleTier15, 4),
+      pv5: finiteNumber(data.pvTier5, 2),
+      pv10: finiteNumber(data.pvTier10, 5),
+      pv15: finiteNumber(data.pvTier15, 8),
+      annual5: finiteNumber(data.annualTier5, 2500),
+      annual10: finiteNumber(data.annualTier10, 4500),
+      annual15: finiteNumber(data.annualTier15, 6500)
+    };
   }
 
   function getTier(people, pv, annual, thresholds) {
@@ -51,176 +127,571 @@
     return { people: 3, pv: 6, annual: 4000 };
   }
 
-  function scrollToTarget(target) {
-    var element = document.querySelector(target);
-    if (!element) return;
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function findVariant(product, capacity) {
+    if (!product || !Array.isArray(product.variants)) return null;
+    var matches = product.variants.filter(function (variant) {
+      var parsed = parseCapacity(variant.title);
+      return parsed !== null && Math.abs(parsed - capacity) < 0.08;
+    });
+    return matches.find(function (variant) { return variant.available; }) || matches[0] || null;
   }
 
-  function init(root) {
-    if (root.dataset.bwInitialized === 'true') return;
-    root.dataset.bwInitialized = 'true';
-    var products = readProductData(root);
-    var inputs = {
-      people: root.querySelector('[data-bw-input="people"]'),
-      pv: root.querySelector('[data-bw-input="pv"]'),
-      annual: root.querySelector('[data-bw-input="annual"]')
-    };
-    var outputs = {
-      people: root.querySelector('[data-bw-output="people"]'),
-      pv: root.querySelector('[data-bw-output="pv"]'),
-      annual: root.querySelector('[data-bw-output="annual"]')
-    };
-    var state = { people: 3, pv: 6, annual: 4000, tier: '15.36', hasCalculated: false };
-    var thresholds = {
-      people5: Number(root.dataset.peopleTier5) || 1,
-      people10: Number(root.dataset.peopleTier10) || 2,
-      people15: Number(root.dataset.peopleTier15) || 4,
-      pv5: Number(root.dataset.pvTier5) || 2,
-      pv10: Number(root.dataset.pvTier10) || 5,
-      pv15: Number(root.dataset.pvTier15) || 8,
-      annual5: Number(root.dataset.annualTier5) || 2500,
-      annual10: Number(root.dataset.annualTier10) || 4500,
-      annual15: Number(root.dataset.annualTier15) || 6500
-    };
-    var stored;
-    try { stored = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY) || 'null'); } catch (error) { stored = null; }
-    if (stored && stored.people && stored.pv !== undefined && stored.annual) {
-      state = Object.assign(state, stored);
-      Object.keys(inputs).forEach(function (key) { if (inputs[key]) inputs[key].value = state[key]; });
+  function readProductData() {
+    var root = getRecommendationsRoot();
+    var node = root && root.querySelector('[data-bw-product-data]');
+    if (!node) {
+      products = {};
+      return;
     }
-
-    function save() {
-      try { window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (error) { /* storage can be blocked */ }
+    try {
+      products = JSON.parse(node.textContent) || {};
+    } catch (error) {
+      products = {};
     }
+  }
 
-    function recommendation() {
-      var tier = state.tier;
-      if (tier === '5.12') return { key: 'venus3', capacity: 5.12, title: '1× VENUS E 3.0', variant: findVariant(products.venus3, 5.12) };
-      if (tier === '10.24') return { key: 'venus3', capacity: 10.24, title: '2× VENUS E 3.0', variant: findVariant(products.venus3, 10.24) };
-      if (tier === '30') return { key: 'max', capacity: 30, title: '3× VENUS E Max', variant: findVariant(products.max, 30) };
-      return { key: 'venus3', capacity: 15.36, title: '3× VENUS E 3.0', variant: findVariant(products.venus3, 15.36) };
+  function recommendationForState() {
+    var tier = state.tier;
+    if (tier === '5.12') return makeItem(products.venus3, 5.12, '1× VENUS E 3.0');
+    if (tier === '10.24') return makeItem(products.venus3, 10.24, '2× VENUS E 3.0');
+    if (tier === '30') return makeItem(products.max, 30, '3× VENUS E Max');
+    return makeItem(products.venus3, 15.36, '3× VENUS E 3.0');
+  }
+
+  function alternativeForState(role) {
+    if (role === 'alt4') {
+      var cap4 = state.tier === '5.12' ? 5 : state.tier === '10.24' ? 10 : 15;
+      return makeItem(products.venus4, cap4, (cap4 === 5 ? '1×' : cap4 === 10 ? '2×' : '3×') + ' VENUS E 4.0');
     }
+    var capMax = state.tier === '5.12' ? 10 : state.tier === '10.24' ? 20 : 30;
+    return makeItem(products.max, capMax, (capMax === 10 ? '1×' : capMax === 20 ? '2×' : '3×') + ' VENUS E Max');
+  }
 
-    function alternative(key) {
-      if (key === 'alt4') {
-        var cap4 = state.tier === '5.12' ? 5 : state.tier === '10.24' ? 10 : 15;
-        return { product: products.venus4, capacity: cap4, title: (cap4 === 5 ? '1×' : cap4 === 10 ? '2×' : '3×') + ' VENUS E 4.0', variant: findVariant(products.venus4, cap4) };
+  function makeItem(product, capacity, title) {
+    var variant = findVariant(product, capacity);
+    return {
+      product: product || {},
+      variant: variant,
+      capacity: capacity,
+      title: title,
+      url: product && product.url ? product.url : '',
+      image: variant && variant.image
+        ? variant.image
+        : product && (product.featured_image || product.image)
+          ? (product.featured_image || product.image)
+          : '',
+      available: Boolean(variant && variant.available)
+    };
+  }
+
+  function inputsFrom(root) {
+    return {
+      people: root && root.querySelector('[data-bw-input="people"]'),
+      pv: root && root.querySelector('[data-bw-input="pv"]'),
+      annual: root && root.querySelector('[data-bw-input="annual"]')
+    };
+  }
+
+  function syncStateFromInputs(root, markCalculated) {
+    var inputs = inputsFrom(root);
+    if (!inputs.people || !inputs.pv || !inputs.annual) return;
+    state.people = finiteNumber(inputs.people.value, DEFAULT_STATE.people);
+    state.pv = finiteNumber(inputs.pv.value, DEFAULT_STATE.pv);
+    state.annual = finiteNumber(inputs.annual.value, DEFAULT_STATE.annual);
+    state.tier = getTier(state.people, state.pv, state.annual, thresholdsFrom(root));
+    if (markCalculated) state.hasCalculated = true;
+    saveState();
+    renderAll();
+  }
+
+  function setText(root, selector, value) {
+    var node = root && root.querySelector(selector);
+    if (node) node.textContent = value;
+  }
+
+  function setAllText(root, selector, value) {
+    if (!root) return;
+    root.querySelectorAll(selector).forEach(function (node) { node.textContent = value; });
+  }
+
+  function renderCapacity() {
+    var root = getCapacityRoot();
+    if (!root) return;
+    var inputs = inputsFrom(root);
+    Object.keys(inputs).forEach(function (key) {
+      if (!inputs[key]) return;
+      if (document.activeElement !== inputs[key]) inputs[key].value = state[key];
+      var minimum = finiteNumber(inputs[key].min, 0);
+      var maximum = finiteNumber(inputs[key].max, 100);
+      var progress = maximum === minimum ? 0 : ((finiteNumber(inputs[key].value, minimum) - minimum) / (maximum - minimum)) * 100;
+      inputs[key].style.setProperty('--bw-range-progress', Math.max(0, Math.min(100, progress)) + '%');
+    });
+
+    var peopleText = state.people + (Number(state.people) >= 6 ? '+ Personen' : ' Personen');
+    var pvText = String(state.pv).replace('.', ',') + ' kWp';
+    var annualText = formatNumber(state.annual) + ' kWh/Jahr';
+    setText(root, '[data-bw-output="people"]', peopleText);
+    setText(root, '[data-bw-output="pv"]', pvText);
+    setText(root, '[data-bw-output="annual"]', annualText);
+    setAllText(root, '[data-bw-capacity]', formatCapacity(TIER_VALUES[state.tier]));
+    setText(root, '[data-bw-summary="people"]', peopleText);
+    setText(root, '[data-bw-summary="pv"]', pvText);
+    setText(root, '[data-bw-summary="annual"]', annualText);
+    var combined = root.querySelector('[data-bw-summary]:not([data-bw-summary="people"]):not([data-bw-summary="pv"]):not([data-bw-summary="annual"])');
+    if (combined) combined.textContent = peopleText + ' · ' + pvText + ' · ' + annualText;
+    root.querySelectorAll('[data-bw-preset]').forEach(function (button) {
+      var active = button.dataset.bwPreset === state.tier;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function updateMedia(container, imageUrl, alt) {
+    if (!container) return;
+    var image = container.matches('img') ? container : container.querySelector('[data-bw-result-image], [data-bw-final-image], img');
+    var placeholder = container.matches('[data-bw-result-placeholder], [data-bw-final-placeholder]')
+      ? container
+      : container.querySelector('[data-bw-result-placeholder], [data-bw-final-placeholder], .bw-product-placeholder');
+    var wrapper = image && image.closest('[data-bw-result-image-wrap], [data-bw-final-image-wrap]');
+    if (imageUrl) {
+      if (wrapper) wrapper.hidden = false;
+      if (image) {
+        image.src = imageUrl;
+        image.alt = alt || '';
+        image.hidden = false;
       }
-      var capMax = state.tier === '5.12' ? 10 : state.tier === '10.24' ? 20 : 30;
-      return { product: products.max, capacity: capMax, title: (capMax === 10 ? '1×' : capMax === 20 ? '2×' : '3×') + ' VENUS E Max', variant: findVariant(products.max, capMax) };
+      if (placeholder) placeholder.hidden = true;
+    } else {
+      if (image) image.hidden = true;
+      if (wrapper) wrapper.hidden = true;
+      if (placeholder) placeholder.hidden = false;
+    }
+  }
+
+  function configureAction(action, item, direct, fallbackLabel) {
+    if (!action) return;
+    var directAdd = Boolean(direct && item && item.variant && item.variant.available);
+    action.dataset.variantId = item && item.variant && item.variant.id ? item.variant.id : '';
+    action.dataset.productUrl = item && item.url ? item.url : '';
+    action.dataset.directAdd = directAdd ? 'true' : 'false';
+    action.removeAttribute('aria-disabled');
+    if ('disabled' in action) action.disabled = false;
+
+    if (direct && !directAdd) {
+      action.textContent = item && item.url ? 'Zur Produktseite' : 'Nicht verfügbar';
+      if (!item || !item.url) {
+        action.setAttribute('aria-disabled', 'true');
+        if ('disabled' in action) action.disabled = true;
+      }
+    } else if (fallbackLabel) {
+      action.textContent = fallbackLabel;
     }
 
-    function setAction(action, item, direct, label) {
-      if (!action || !item) return;
-      action.textContent = label;
-      action.dataset.variantId = item.variant && item.variant.id ? item.variant.id : '';
-      action.dataset.productUrl = (item.product && item.product.url) || '';
-      action.dataset.directAdd = direct && !!(item.variant && item.variant.available) ? 'true' : 'false';
-      if (action.tagName === 'A' && item.product && item.product.url) action.href = item.product.url;
+    if (action.tagName === 'A' && item && item.url) action.href = item.url;
+  }
+
+  function renderResultCard(root, role, item) {
+    var card = root.querySelector('[data-bw-result-card="' + role + '"]');
+    if (!card || !item) return;
+    setText(card, '[data-bw-result-title]', item.title);
+    setText(card, '[data-bw-result-capacity]', formatCapacity(item.capacity));
+    setText(card, '[data-bw-' + (role === 'primary' ? 'primary' : role === 'alt4' ? 'alt4' : 'altmax') + '-title]', item.title);
+    setText(card, '[data-bw-' + (role === 'primary' ? 'primary' : role === 'alt4' ? 'alt4' : 'altmax') + '-capacity]', formatCapacity(item.capacity));
+
+    var price = card.querySelector('[data-bw-result-price]');
+    var compareAt = card.querySelector('[data-bw-result-compare-at]');
+    if (price) {
+      price.textContent = item.variant ? formatMoney(item.variant.price) : '';
+      price.hidden = !item.variant;
     }
+    if (compareAt) {
+      var showCompare = item.variant && Number(item.variant.compare_at_price) > Number(item.variant.price);
+      compareAt.textContent = showCompare ? formatMoney(item.variant.compare_at_price) : '';
+      compareAt.hidden = !showCompare;
+    }
+    updateMedia(card.querySelector('[data-bw-result-media]') || card, item.image, item.title);
+    var action = card.querySelector('[data-bw-product-role], [data-bw-product-action]');
+    configureAction(action, item, role === 'primary', role === 'primary' ? 'In den Warenkorb' : 'Zur Produktseite');
+    card.classList.toggle('is-unavailable', !item.available);
+  }
 
-    function render() {
-      var tier = state.tier;
-      var capacityText = formatCapacity(tierValues[tier]);
-      var outputCapacity = root.querySelector('[data-bw-capacity]');
-      var inlineCapacity = root.querySelector('[data-bw-capacity-inline]');
-      var summary = root.querySelector('[data-bw-summary]');
-      if (outputCapacity) outputCapacity.textContent = capacityText;
-      if (inlineCapacity) inlineCapacity.textContent = capacityText;
-      if (outputs.people) outputs.people.textContent = state.people + (Number(state.people) >= 6 ? '+ Personen' : ' Personen');
-      if (outputs.pv) outputs.pv.textContent = String(state.pv).replace('.', ',') + ' kWp';
-      if (outputs.annual) outputs.annual.textContent = formatNumber(state.annual) + ' kWh/Jahr';
-      if (summary) summary.textContent = state.people + (Number(state.people) >= 6 ? '+ Personen' : ' Personen') + ' · ' + String(state.pv).replace('.', ',') + ' kWp · ' + formatNumber(state.annual) + ' kWh/Jahr';
-      root.querySelectorAll('[data-bw-preset]').forEach(function (button) { button.classList.toggle('is-active', button.dataset.bwPreset === tier); });
+  function resultSummary() {
+    return state.people + (Number(state.people) >= 6 ? '+ Personen' : ' Personen') + ' · '
+      + String(state.pv).replace('.', ',') + ' kWp · '
+      + formatNumber(state.annual) + ' kWh/Jahr';
+  }
 
-      var primary = recommendation();
-      var alt4 = alternative('alt4');
-      var altMax = alternative('altmax');
-      var primaryTitle = root.querySelector('[data-bw-primary-title]');
-      var primaryCapacity = root.querySelector('[data-bw-primary-capacity]');
-      var alt4Title = root.querySelector('[data-bw-alt4-title]');
-      var alt4Capacity = root.querySelector('[data-bw-alt4-capacity]');
-      var altMaxTitle = root.querySelector('[data-bw-altmax-title]');
-      var altMaxCapacity = root.querySelector('[data-bw-altmax-capacity]');
-      if (primaryTitle) primaryTitle.textContent = primary.title;
-      if (primaryCapacity) primaryCapacity.textContent = formatCapacity(primary.capacity);
-      if (alt4Title) alt4Title.textContent = alt4.title;
-      if (alt4Capacity) alt4Capacity.textContent = formatCapacity(alt4.capacity);
-      if (altMaxTitle) altMaxTitle.textContent = altMax.title;
-      if (altMaxCapacity) altMaxCapacity.textContent = formatCapacity(altMax.capacity);
-      setAction(root.querySelector('[data-bw-product-role="primary"]'), primary, true, primary.variant && primary.variant.available ? 'In den Warenkorb' : 'Zur Produktseite');
-      setAction(root.querySelector('[data-bw-product-role="alt4"]'), { product: alt4.product, variant: alt4.variant }, false, 'Zur Produktseite');
-      setAction(root.querySelector('[data-bw-product-role="altmax"]'), { product: altMax.product, variant: altMax.variant }, false, 'Zur Produktseite');
+  function renderRecommendations() {
+    var root = getRecommendationsRoot();
+    if (!root) {
+      resolvedRecommendation = null;
+      renderFinalCta();
+      return;
+    }
+    root.hidden = isDesignMode() ? false : !state.resultsVisible;
+    setAllText(root, '[data-bw-capacity-inline]', formatCapacity(TIER_VALUES[state.tier]));
+    setText(root, '[data-bw-results-input-summary], [data-bw-recommendation-summary]', resultSummary());
 
-      var finalCapacity = root.querySelector('[data-bw-final-capacity]');
-      var finalProduct = root.querySelector('[data-bw-final-product]');
-      if (finalCapacity) finalCapacity.textContent = capacityText;
-      if (finalProduct) finalProduct.textContent = primary.title;
+    var primary = recommendationForState();
+    var alt4 = alternativeForState('alt4');
+    var altMax = alternativeForState('altmax');
+    resolvedRecommendation = primary;
+    renderResultCard(root, 'primary', primary);
+    renderResultCard(root, 'alt4', alt4);
+    renderResultCard(root, 'altmax', altMax);
+
+    var detail = {
+      tier: state.tier,
+      capacityKwh: TIER_VALUES[state.tier],
+      productTitle: primary.title,
+      productUrl: primary.url,
+      variantId: primary.variant && primary.variant.id ? primary.variant.id : null,
+      available: primary.available,
+      image: primary.image,
+      price: primary.variant ? primary.variant.price : null,
+      compareAtPrice: primary.variant ? primary.variant.compare_at_price : null
+    };
+    document.dispatchEvent(new CustomEvent('venus:recommendation-resolved', { detail: detail }));
+  }
+
+  function renderFinalCta() {
+    document.querySelectorAll('[data-bw-final-state], [data-bw-module="final-cta"]').forEach(function (root) {
       var calculated = root.querySelector('[data-bw-calculated-state]');
       var uncalculated = root.querySelector('[data-bw-uncalculated-state]');
-      if (calculated) calculated.hidden = !state.hasCalculated;
-      if (uncalculated) uncalculated.hidden = !!state.hasCalculated;
-    }
+      var hasRecommendation = Boolean(state.hasCalculated && resolvedRecommendation);
+      if (calculated) calculated.hidden = !hasRecommendation;
+      if (uncalculated) uncalculated.hidden = hasRecommendation;
+      if (!hasRecommendation) return;
 
-    function calculate(markCalculated) {
-      state.people = Number(inputs.people.value);
-      state.pv = Number(inputs.pv.value);
-      state.annual = Number(inputs.annual.value);
-      state.tier = getTier(state.people, state.pv, state.annual, thresholds);
-      if (markCalculated) state.hasCalculated = true;
-      save();
-      render();
-      var primary = recommendation();
-      root.dispatchEvent(new CustomEvent('venus:capacity-recommendation', { bubbles: true, detail: { people: state.people, pvKw: state.pv, annualKwh: state.annual, capacityKwh: tierValues[state.tier], tier: state.tier, primaryVariantId: primary.variant && primary.variant.id ? primary.variant.id : null, hasCalculated: state.hasCalculated } }));
-    }
+      setAllText(root, '[data-bw-final-capacity]', formatCapacity(TIER_VALUES[state.tier]));
+      setAllText(root, '[data-bw-final-product]', resolvedRecommendation.title);
+      setText(root, '[data-bw-final-price]', resolvedRecommendation.variant ? formatMoney(resolvedRecommendation.variant.price) : '');
+      updateMedia(root.querySelector('[data-bw-final-media]') || root, resolvedRecommendation.image, resolvedRecommendation.title);
+      configureAction(root.querySelector('[data-bw-final-action]'), resolvedRecommendation, true, 'Jetzt kaufen');
+    });
+  }
 
-    Object.keys(inputs).forEach(function (key) { if (inputs[key]) inputs[key].addEventListener('input', function () { calculate(true); }); });
+  function emitCapacityChange() {
+    var primary = resolvedRecommendation || recommendationForState();
+    document.dispatchEvent(new CustomEvent('venus:capacity-change', {
+      detail: {
+        people: state.people,
+        pvKw: state.pv,
+        annualKwh: state.annual,
+        tier: state.tier,
+        capacityKwh: TIER_VALUES[state.tier],
+        hasCalculated: state.hasCalculated,
+        resultsVisible: state.resultsVisible,
+        primaryVariantId: primary && primary.variant && primary.variant.id ? primary.variant.id : null
+      }
+    }));
+  }
+
+  function renderAll() {
+    readProductData();
+    renderCapacity();
+    renderRecommendations();
+    renderFinalCta();
+    emitCapacityChange();
+  }
+
+  function bindCapacity() {
+    var root = getCapacityRoot();
+    if (!root || root.dataset.bwInitialized === 'true') return;
+    root.dataset.bwInitialized = 'true';
+    var inputs = inputsFrom(root);
+    Object.keys(inputs).forEach(function (key) {
+      if (!inputs[key]) return;
+      inputs[key].value = state[key];
+      inputs[key].addEventListener('input', function () { syncStateFromInputs(root, true); });
+      inputs[key].addEventListener('change', function () { syncStateFromInputs(root, true); });
+    });
     root.querySelectorAll('[data-bw-preset]').forEach(function (button) {
       button.addEventListener('click', function () {
         var values = valuesForTier(button.dataset.bwPreset);
         Object.keys(values).forEach(function (key) { if (inputs[key]) inputs[key].value = values[key]; });
-        calculate(true);
+        syncStateFromInputs(root, true);
       });
     });
-    root.querySelector('[data-bw-scroll-results]')?.addEventListener('click', function () { var result = root.querySelector('[data-bw-results]'); if (result) result.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-
-    root.addEventListener('click', function (event) {
-      var action = event.target.closest('[data-bw-product-role]');
-      if (!action) return;
-      if (action.dataset.directAdd !== 'true') {
-        if (action.dataset.productUrl) window.location.href = action.dataset.productUrl;
-        return;
-      }
-      event.preventDefault();
-      if (action.dataset.busy === 'true') return;
-      action.dataset.busy = 'true';
-      var originalLabel = action.textContent;
-      action.textContent = 'Wird hinzugefügt …';
-      fetch(getRootUrl() + 'cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ items: [{ id: Number(action.dataset.variantId), quantity: 1 }] }) })
-        .then(function (response) { if (!response.ok) throw new Error('cart'); return response.json(); })
-        .then(function (item) { document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: item })); action.textContent = 'Hinzugefügt ✓'; setTimeout(function () { action.textContent = originalLabel; }, 2200); })
-        .catch(function () { action.textContent = 'Erneut versuchen'; setTimeout(function () { action.textContent = originalLabel; }, 2200); })
-        .finally(function () { action.dataset.busy = 'false'; });
-    });
-    var finalAction = root.querySelector('[data-bw-final-action]');
-    if (finalAction) finalAction.addEventListener('click', function () { var primary = root.querySelector('[data-bw-product-role="primary"]'); if (primary) primary.click(); });
-
-    root.querySelectorAll('[data-bw-flow-tab]').forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        var target = tab.dataset.bwFlowTab;
-        root.querySelectorAll('[data-bw-flow-tab]').forEach(function (button) { var active = button === tab; button.classList.toggle('is-active', active); button.setAttribute('aria-selected', active ? 'true' : 'false'); });
-        root.querySelectorAll('[data-bw-flow-panel]').forEach(function (panel) { panel.hidden = panel.dataset.bwFlowPanel !== target; });
+    root.querySelectorAll('[data-bw-scroll-results]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        syncStateFromInputs(root, true);
+        state.resultsVisible = true;
+        saveState();
+        renderAll();
+        window.requestAnimationFrame(function () { scrollToElement(getRecommendationsRoot()); });
       });
     });
-    root.querySelectorAll('[data-bw-anchor-link]').forEach(function (link) { link.addEventListener('click', function (event) { var href = link.getAttribute('href'); if (href && href.charAt(0) === '#') { event.preventDefault(); scrollToTarget(href); } }); });
-    if ('IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function (entries) { entries.forEach(function (entry) { if (!entry.isIntersecting) return; var id = '#' + entry.target.id; root.querySelectorAll('[data-bw-anchor-link]').forEach(function (link) { link.classList.toggle('is-active', link.getAttribute('href') === id); }); }); }, { rootMargin: '-25% 0px -65% 0px', threshold: 0 });
-      root.querySelectorAll('.bw-anchor-target[id]').forEach(function (target) { observer.observe(target); });
-    }
-    render();
   }
 
-  function boot() { document.querySelectorAll('[data-bw-storage]').forEach(init); }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  function bindFlowSections() {
+    document.querySelectorAll('[data-bw-flow]').forEach(function (root) {
+      if (root.dataset.bwInitialized === 'true') return;
+      root.dataset.bwInitialized = 'true';
+      var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-bw-flow-tab]'));
+      function activate(tab) {
+        var target = tab.dataset.bwFlowTab;
+        tabs.forEach(function (button) {
+          var active = button === tab;
+          button.classList.toggle('is-active', active);
+          button.setAttribute('aria-selected', active ? 'true' : 'false');
+          button.tabIndex = active ? 0 : -1;
+        });
+        root.querySelectorAll('[data-bw-flow-panel]').forEach(function (panel) {
+          panel.hidden = panel.dataset.bwFlowPanel !== target;
+        });
+      }
+      tabs.forEach(function (tab, index) {
+        tab.addEventListener('click', function () { activate(tab); });
+        tab.addEventListener('keydown', function (event) {
+          if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+          event.preventDefault();
+          var direction = event.key === 'ArrowRight' ? 1 : -1;
+          var next = tabs[(index + direction + tabs.length) % tabs.length];
+          activate(next);
+          next.focus();
+        });
+      });
+      if (tabs[0]) activate(tabs.find(function (tab) { return tab.classList.contains('is-active'); }) || tabs[0]);
+    });
+  }
+
+  function executeScripts(container) {
+    container.querySelectorAll('script').forEach(function (oldScript) {
+      var script = document.createElement('script');
+      Array.prototype.forEach.call(oldScript.attributes, function (attribute) {
+        script.setAttribute(attribute.name, attribute.value);
+      });
+      script.text = oldScript.text || oldScript.textContent;
+      oldScript.parentNode.replaceChild(script, oldScript);
+    });
+  }
+
+  function normalizedText(value) {
+    return String(value || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase('de-DE');
+  }
+
+  function prepareHomepageProductSync(mount) {
+    if (!mount || !mount.matches('[data-bw-homepage-product-sync]')) return;
+    var category = normalizedText(mount.dataset.bwSourceCategory);
+
+    mount.querySelectorAll('[class*="ai-carousel-header-"], [class*="ai-tab-nav-"], [class*="ai-cta-card-"]').forEach(function (node) {
+      node.hidden = true;
+    });
+
+    var units = Array.prototype.slice.call(mount.querySelectorAll('.venus-category-unit'));
+    if (units.length) {
+      var selectedUnit = units.find(function (unit) {
+        var tab = unit.querySelector('.venus-category-tab');
+        var label = normalizedText(tab && tab.textContent);
+        return category && (label.indexOf(category) !== -1 || category.indexOf(label) !== -1);
+      }) || units[0];
+      var selectedUnitTab = selectedUnit.querySelector('.venus-category-tab');
+      if (selectedUnitTab && typeof selectedUnitTab.click === 'function') selectedUnitTab.click();
+      units.forEach(function (unit) {
+        var selected = unit === selectedUnit;
+        unit.hidden = !selected;
+        var tab = unit.querySelector('.venus-category-tab');
+        var panel = unit.querySelector('.venus-category-panel, [data-tab-content]');
+        if (tab) tab.hidden = true;
+        if (panel) {
+          panel.hidden = !selected;
+          panel.classList.toggle('active', selected);
+          if (selected) panel.style.removeProperty('display');
+        }
+      });
+    } else {
+      var tabs = Array.prototype.slice.call(mount.querySelectorAll('[data-tab]'));
+      var selectedTab = tabs.find(function (tab) {
+        var label = normalizedText(tab.textContent);
+        return category && (label.indexOf(category) !== -1 || category.indexOf(label) !== -1);
+      });
+      if (selectedTab) {
+        if (typeof selectedTab.click === 'function') selectedTab.click();
+        var selectedKey = selectedTab.dataset.tab;
+        mount.querySelectorAll('[data-tab-content]').forEach(function (panel) {
+          var selected = panel.dataset.tabContent === selectedKey;
+          panel.hidden = !selected;
+          panel.classList.toggle('active', selected);
+        });
+      }
+    }
+    mount.dataset.bwSyncReady = 'true';
+  }
+
+  function requestHomepageSection(sectionId) {
+    var homepageUrl = new URL(getRootUrl(), window.location.origin);
+    var requestUrl = new URL(homepageUrl.toString());
+    requestUrl.searchParams.set('section_id', sectionId);
+    var previewThemeId = new URLSearchParams(window.location.search).get('preview_theme_id');
+    if (previewThemeId) {
+      requestUrl.searchParams.set('preview_theme_id', previewThemeId);
+      homepageUrl.searchParams.set('preview_theme_id', previewThemeId);
+    }
+
+    function requestMarkup(url) {
+      return fetch(url, { credentials: 'same-origin', headers: { Accept: 'text/html' } }).then(function (response) {
+        if (!response.ok) throw new Error('Homepage section request failed.');
+        return response.text();
+      });
+    }
+
+    return requestMarkup(requestUrl.toString()).catch(function () {
+      return requestMarkup(homepageUrl.toString()).then(function (homepageMarkup) {
+        var documentCopy = new DOMParser().parseFromString(homepageMarkup, 'text/html');
+        var homepageSection = documentCopy.getElementById('shopify-section-' + sectionId)
+          || documentCopy.querySelector('[id^="shopify-section-"][id$="__' + sectionId + '"]');
+        if (!homepageSection) throw new Error('Homepage section is unavailable.');
+        return homepageSection.outerHTML;
+      });
+    });
+  }
+
+  function bindHomepageSync() {
+    document.querySelectorAll('[data-bw-homepage-product-sync], [data-bw-homepage-newsletter-sync]').forEach(function (mount) {
+      if (mount.dataset.bwInitialized === 'true') return;
+      mount.dataset.bwInitialized = 'true';
+      mount.setAttribute('aria-busy', 'true');
+      var sectionId = mount.dataset.bwSourceSectionId;
+      if (!sectionId || !window.fetch) {
+        mount.removeAttribute('aria-busy');
+        return;
+      }
+      requestHomepageSection(sectionId).then(function (markup) {
+        if (!markup || !markup.trim()) throw new Error('Homepage section is unavailable.');
+        mount.innerHTML = markup;
+        mount.removeAttribute('aria-busy');
+        executeScripts(mount);
+        prepareHomepageProductSync(mount);
+        mount.dispatchEvent(new CustomEvent('venus:homepage-sync-ready', { bubbles: true }));
+      }).catch(function () {
+        mount.removeAttribute('aria-busy');
+        if (isDesignMode()) {
+          mount.innerHTML = '<p class="bw-sync-error">Die Startseiten-Synchronisierung ist aktuell nicht verfügbar.</p>';
+        }
+      });
+    });
+  }
+
+  function refreshNavigation() {
+    if (navigationObserver) navigationObserver.disconnect();
+    var nav = document.querySelector('[data-bw-anchor-nav]');
+    if (!nav) return;
+    var links = Array.prototype.slice.call(nav.querySelectorAll('[data-bw-anchor-link]'));
+    var targets = [];
+    links.forEach(function (link) {
+      if (link.dataset.bwInitialized !== 'true') {
+        link.dataset.bwInitialized = 'true';
+        link.addEventListener('click', function (event) {
+          var href = link.getAttribute('href');
+          if (!href || href.charAt(0) !== '#') return;
+          var target = document.querySelector(href);
+          if (!target) return;
+          event.preventDefault();
+          scrollToElement(target);
+        });
+      }
+      var href = link.getAttribute('href');
+      var target = href && href.charAt(0) === '#' ? document.querySelector(href) : null;
+      var isCta = link.classList.contains('bw-anchor-nav__cta');
+      link.hidden = !target && !isCta;
+      if (target && !targets.includes(target)) targets.push(target);
+    });
+
+    if (!('IntersectionObserver' in window)) return;
+    navigationObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var id = '#' + entry.target.id;
+        links.forEach(function (link) {
+          link.classList.toggle('is-active', link.getAttribute('href') === id);
+        });
+      });
+    }, { rootMargin: '-25% 0px -65% 0px', threshold: 0 });
+    targets.forEach(function (target) { navigationObserver.observe(target); });
+  }
+
+  function bindAnchorLinks() {
+    document.querySelectorAll('[data-bw-anchor-link]').forEach(function (link) {
+      if (link.dataset.bwAnchorInitialized === 'true') return;
+      link.dataset.bwAnchorInitialized = 'true';
+      link.addEventListener('click', function (event) {
+        var href = link.getAttribute('href');
+        if (!href || href.charAt(0) !== '#') return;
+        var target = document.querySelector(href);
+        if (!target) return;
+        event.preventDefault();
+        scrollToElement(target);
+      });
+    });
+  }
+
+  function handleProductAction(event) {
+    var action = event.target.closest('[data-bw-product-role], [data-bw-product-action], [data-bw-final-action]');
+    if (!action) return;
+    var directAdd = action.dataset.directAdd === 'true';
+    var productUrl = action.dataset.productUrl;
+    if (!directAdd) {
+      if (action.tagName !== 'A' && productUrl) window.location.href = productUrl;
+      return;
+    }
+    event.preventDefault();
+    if (action.dataset.busy === 'true') return;
+    action.dataset.busy = 'true';
+    action.setAttribute('aria-busy', 'true');
+    var originalLabel = action.textContent;
+    action.textContent = 'Wird hinzugefügt …';
+    fetch(getRootUrl() + 'cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ items: [{ id: Number(action.dataset.variantId), quantity: 1 }] })
+    }).then(function (response) {
+      if (!response.ok) throw new Error('cart');
+      return response.json();
+    }).then(function (item) {
+      document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: item }));
+      action.textContent = 'Hinzugefügt ✓';
+      window.setTimeout(function () { action.textContent = originalLabel; }, 2200);
+    }).catch(function () {
+      action.textContent = 'Erneut versuchen';
+      window.setTimeout(function () { action.textContent = originalLabel; }, 2200);
+    }).finally(function () {
+      action.dataset.busy = 'false';
+      action.removeAttribute('aria-busy');
+    });
+  }
+
+  function bindFinalCta() {
+    document.querySelectorAll('[data-bw-final-state], [data-bw-module="final-cta"]').forEach(function (root) {
+      if (root.dataset.bwInitialized === 'true') return;
+      root.dataset.bwInitialized = 'true';
+      root.querySelectorAll('[data-bw-final-calculate]').forEach(function (link) {
+        link.addEventListener('click', function (event) {
+          var target = document.querySelector('#kapazitaet');
+          if (!target) return;
+          event.preventDefault();
+          scrollToElement(target);
+        });
+      });
+    });
+  }
+
+  function boot() {
+    bindCapacity();
+    bindFlowSections();
+    bindHomepageSync();
+    bindFinalCta();
+    bindAnchorLinks();
+    refreshNavigation();
+    renderAll();
+  }
+
+  readStoredState();
+  document.addEventListener('click', handleProductAction);
+  document.addEventListener('venus:storage-rescan', boot);
+  document.addEventListener('shopify:section:load', function () { window.setTimeout(boot, 0); });
+  document.addEventListener('shopify:section:unload', function () { window.setTimeout(boot, 0); });
+  document.addEventListener('shopify:section:reorder', function () { window.setTimeout(boot, 0); });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
