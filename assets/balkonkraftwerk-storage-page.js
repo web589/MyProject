@@ -504,7 +504,10 @@
     Object.keys(inputs).forEach(function (key) {
       if (!inputs[key]) return;
       inputs[key].value = state[key];
-      inputs[key].addEventListener('input', function () { syncStateFromInputs(root, true); });
+      inputs[key].addEventListener('input', function () {
+        syncRangeProgress(this);
+        syncStateFromInputs(root, true);
+      });
       inputs[key].addEventListener('change', function () { syncStateFromInputs(root, true); });
     });
     root.querySelectorAll('[data-bw-preset]').forEach(function (button) {
