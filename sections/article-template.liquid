@@ -121,20 +121,33 @@
     position: relative;
   }
 
-  .blog-article__hero--has-background::before {
-    background-image: var(--blog-article-hero-image);
-    background-position: center right;
-    background-repeat: no-repeat;
-    background-size: cover;
-    content: '';
-    inset: 0 0 0 32%;
-    opacity: var(--blog-article-hero-image-opacity, 0.35);
+  .blog-article__hero-background {
+    inset: 0;
     pointer-events: none;
     position: absolute;
     z-index: 0;
   }
 
-  .blog-article__hero--has-background::after {
+  .blog-article__hero-background-image {
+    background-image: var(--blog-article-hero-image);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    inset: 0;
+    position: absolute;
+  }
+
+  .blog-article__hero-background-image--left {
+    clip-path: inset(0 62% 0 0);
+    opacity: var(--blog-article-hero-image-left-opacity, 0);
+  }
+
+  .blog-article__hero-background-image--right {
+    clip-path: inset(0 0 0 38%);
+    opacity: var(--blog-article-hero-image-right-opacity, 0.35);
+  }
+
+  .blog-article__hero-background::after {
     background: linear-gradient(
       90deg,
       #eef6fc 0%,
@@ -838,11 +851,7 @@
   }
 
   @media only screen and (max-width: 768px) {
-    .blog-article__hero--has-background::before {
-      inset: 0;
-    }
-
-    .blog-article__hero--has-background::after {
+    .blog-article__hero--has-background .blog-article__hero-background::after {
       background: rgba(238, 246, 252, 0.92);
     }
 
@@ -1032,9 +1041,16 @@
   <header
     class="blog-article__hero{% if section.settings.hero_background_image != blank %} blog-article__hero--has-background{% endif %}"
     {% if section.settings.hero_background_image != blank %}
-      style="--blog-article-hero-image: url('{{ section.settings.hero_background_image | image_url: width: 2400 }}'); --blog-article-hero-image-opacity: {{ section.settings.hero_background_opacity | divided_by: 100.0 }};"
+      style="--blog-article-hero-image: url('{{ section.settings.hero_background_image | image_url: width: 2400 }}'); --blog-article-hero-image-left-opacity: {{ section.settings.hero_background_left_opacity | default: 0 | divided_by: 100.0 }}; --blog-article-hero-image-right-opacity: {{ section.settings.hero_background_opacity | default: 35 | divided_by: 100.0 }};"
     {% endif %}
   >
+    {% if section.settings.hero_background_image != blank %}
+      <div class="blog-article__hero-background" aria-hidden="true">
+        <span class="blog-article__hero-background-image blog-article__hero-background-image--left"></span>
+        <span class="blog-article__hero-background-image blog-article__hero-background-image--right"></span>
+      </div>
+    {% endif %}
+
     <div class="page-width">
       {%- render 'breadcrumbs' -%}
 
@@ -1411,6 +1427,17 @@
       "id": "hero_background_image",
       "label": "Banner background image",
       "info": "Optional. Upload a background image for the article banner."
+    },
+    {
+      "type": "range",
+      "id": "hero_background_left_opacity",
+      "label": "Left background image opacity",
+      "info": "Adjust the image visibility on the left. The article text stays above the image, including at 100%.",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 0
     },
     {
       "type": "range",
