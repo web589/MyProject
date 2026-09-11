@@ -42,45 +42,6 @@
     return height;
   }
 
-  function isImageOnlyBlock(element) {
-    if (!element || element.nodeType !== 1) return false;
-
-    var hasImage = element.matches('img, picture, figure') || element.querySelector('img, picture, figure');
-    return Boolean(hasImage && !element.textContent.trim());
-  }
-
-  function placeTableOfContents(body, toc) {
-    var contentElements = Array.prototype.filter.call(body.children, function(element) {
-      return element !== toc;
-    });
-    var intro = contentElements.find(function(element) {
-      return element.tagName.toLowerCase() === 'p' && element.textContent.trim();
-    });
-
-    if (!intro) {
-      var firstHeading = contentElements.find(function(element) {
-        return element.tagName.toLowerCase() === 'h2';
-      });
-
-      if (firstHeading) {
-        body.insertBefore(toc, firstHeading);
-      } else {
-        body.appendChild(toc);
-      }
-      return;
-    }
-
-    var insertionPoint = intro;
-    var nextElement = insertionPoint.nextElementSibling;
-    if (nextElement === toc) nextElement = nextElement.nextElementSibling;
-
-    if (isImageOnlyBlock(nextElement)) {
-      insertionPoint = nextElement;
-    }
-
-    insertionPoint.insertAdjacentElement('afterend', toc);
-  }
-
   function removeNewsletterActionHash(form) {
     var action = form.getAttribute('action');
     if (!action || action.indexOf('#') === -1) return;
@@ -308,7 +269,6 @@
       list.appendChild(item);
     });
 
-    placeTableOfContents(body, toc);
     toc.hidden = false;
     setActiveItem(list, headings[0].id);
 
