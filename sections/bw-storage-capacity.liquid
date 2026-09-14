@@ -116,7 +116,7 @@
     {"type":"header","content":"Hintergrund für den Kartenbereich"},
     {"type":"image_picker","id":"presets_background_image","label":"Hintergrundbild für Kartenbereich"},
     {"type":"select","id":"presets_background_position","label":"Bildposition","default":"center center","options":[{"value":"left center","label":"Links"},{"value":"center center","label":"Mitte"},{"value":"right center","label":"Rechts"},{"value":"center top","label":"Oben"},{"value":"center bottom","label":"Unten"}]},
-    {"type":"range","id":"presets_background_overlay","label":"Helle Überlagerung","min":0,"max":100,"step":5,"unit":"%","default":72},
+    {"type":"range","id":"presets_background_overlay","label":"Helle Überlagerung","min":0,"max":100,"step":5,"unit":"%","default":75},
     {"type":"header","content":"Rechner"},
     {"type":"text","id":"calculator_heading","label":"Rechner-Überschrift","default":"Nicht sicher, was zu dir passt?"},
     {"type":"textarea","id":"calculator_text","label":"Rechner-Beschreibung","default":"Beantworte drei Fragen – wir empfehlen dir die passende VENUS E Kapazität."},
@@ -125,7 +125,7 @@
     {"type":"text","id":"pv_label","label":"PV-Bezeichnung","default":"PV-Leistung"},
     {"type":"range","id":"pv_default","label":"PV-Startwert","min":0.8,"max":20,"step":0.2,"unit":"kWp","default":6},
     {"type":"text","id":"annual_label","label":"Verbrauch-Bezeichnung","default":"Jährlicher Verbrauch"},
-    {"type":"range","id":"annual_default","label":"Verbrauch-Startwert","min":1000,"max":20000,"step":100,"unit":"kWh","default":4000},
+    {"type":"text","id":"annual_default","label":"Verbrauch-Startwert","default":"4000","info":"Nur eine Zahl in kWh eingeben. Der Rechner unterstützt 1.000 bis 20.000 kWh."},
     {"type":"header","content":"Ergebnis"},
     {"type":"text","id":"result_eyebrow","label":"Ergebnis-Kicker","default":"EMPFOHLENE SPEICHERKLASSE"},
     {"type":"text","id":"result_text","label":"Ergebnis-Text","default":"Die Speicherklasse wird aus Verbrauch und PV-Leistung berechnet."},
@@ -147,7 +147,7 @@
         {"type":"textarea","id":"text","label":"Beschreibung","default":"6.200 kWh/Jahr"},
         {"type":"range","id":"people_value","label":"Haushaltsgröße","min":1,"max":6,"step":1,"default":3},
         {"type":"range","id":"pv_value","label":"PV-Leistung","min":0.8,"max":20,"step":0.2,"unit":"kWp","default":6},
-        {"type":"range","id":"annual_value","label":"Jährlicher Verbrauch","min":1000,"max":20000,"step":100,"unit":"kWh","default":6200}
+        {"type":"text","id":"annual_value","label":"Jährlicher Verbrauch","default":"6200","info":"Nur eine Zahl in kWh eingeben."}
       ]
     }
   ],
@@ -155,10 +155,10 @@
     {
       "name": "VENUS E · Kapazität",
       "blocks": [
-        {"type":"preset","settings":{"capacity":"5","badge":"ca. 5 kWh","title":"1 Person · 11 kWp","text":"3.200 kWh/Jahr","people_value":1,"pv_value":11,"annual_value":3200}},
-        {"type":"preset","settings":{"capacity":"10","badge":"ca. 10 kWh","title":"3 Personen · 6 kWp","text":"6.200 kWh/Jahr","people_value":3,"pv_value":6,"annual_value":6200}},
-        {"type":"preset","settings":{"capacity":"15","badge":"ca. 15 kWh","title":"4 Personen · 10 kWp","text":"9.000 kWh/Jahr","people_value":4,"pv_value":10,"annual_value":9000}},
-        {"type":"preset","settings":{"capacity":"30","badge":"ca. 30 kWh","title":"6+ Personen · 20 kWp","text":"20.000 kWh/Jahr","people_value":6,"pv_value":20,"annual_value":20000}}
+        {"type":"preset","settings":{"capacity":"5","badge":"ca. 5 kWh","title":"1 Person · 11 kWp","text":"3.200 kWh/Jahr","people_value":1,"pv_value":11,"annual_value":"3200"}},
+        {"type":"preset","settings":{"capacity":"10","badge":"ca. 10 kWh","title":"3 Personen · 6 kWp","text":"6.200 kWh/Jahr","people_value":3,"pv_value":6,"annual_value":"6200"}},
+        {"type":"preset","settings":{"capacity":"15","badge":"ca. 15 kWh","title":"4 Personen · 10 kWp","text":"9.000 kWh/Jahr","people_value":4,"pv_value":10,"annual_value":"9000"}},
+        {"type":"preset","settings":{"capacity":"30","badge":"ca. 30 kWh","title":"6+ Personen · 20 kWp","text":"20.000 kWh/Jahr","people_value":6,"pv_value":20,"annual_value":"20000"}}
       ]
     }
   ]
