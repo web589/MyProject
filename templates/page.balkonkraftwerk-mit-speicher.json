@@ -12,120 +12,488 @@
     "venus_navigation": {
       "type": "bw-storage-navigation",
       "blocks": {
-        "nav_buy": {"type":"link","settings":{"label":"Balkonkraftwerk kaufen","target":"#balkonkraftwerk-kaufen"}},
-        "nav_why": {"type":"link","settings":{"label":"Warum","target":"#warum-speicher"}},
-        "nav_compare": {"type":"link","settings":{"label":"Vergleich","target":"#vergleich"}},
-        "nav_flow": {"type":"link","settings":{"label":"Funktionsweise","target":"#funktionsweise"}},
-        "nav_retrofit": {"type":"link","settings":{"label":"Nachrüsten","target":"#nachruesten"}},
-        "nav_capacity": {"type":"link","settings":{"label":"Kapazität","target":"#kapazitaet"}},
-        "nav_models": {"type":"link","settings":{"label":"Modelle","target":"#modelle"}},
-        "nav_faq": {"type":"link","settings":{"label":"FAQ","target":"#faq"}}
+        "nav_buy": {
+          "type": "link",
+          "settings": {
+            "label": "Balkonkraftwerk kaufen",
+            "target": "#balkonkraftwerk-kaufen"
+          }
+        },
+        "nav_why": {
+          "type": "link",
+          "settings": {
+            "label": "Warum",
+            "target": "#warum-speicher"
+          }
+        },
+        "nav_compare": {
+          "type": "link",
+          "settings": {
+            "label": "Vergleich",
+            "target": "#vergleich"
+          }
+        },
+        "nav_flow": {
+          "type": "link",
+          "settings": {
+            "label": "Funktionsweise",
+            "target": "#funktionsweise"
+          }
+        },
+        "nav_retrofit": {
+          "type": "link",
+          "settings": {
+            "label": "Nachrüsten",
+            "target": "#nachruesten"
+          }
+        },
+        "nav_capacity": {
+          "type": "link",
+          "settings": {
+            "label": "Kapazität",
+            "target": "#kapazitaet"
+          }
+        },
+        "nav_models": {
+          "type": "link",
+          "settings": {
+            "label": "Modelle",
+            "target": "#modelle"
+          }
+        },
+        "nav_faq": {
+          "type": "link",
+          "settings": {
+            "label": "FAQ",
+            "target": "#faq"
+          }
+        }
       },
-      "block_order": ["nav_buy","nav_why","nav_compare","nav_flow","nav_retrofit","nav_capacity","nav_models","nav_faq"],
-      "settings": {}
+      "block_order": [
+        "nav_buy",
+        "nav_why",
+        "nav_compare",
+        "nav_flow",
+        "nav_retrofit",
+        "nav_capacity",
+        "nav_models",
+        "nav_faq"
+      ],
+      "settings": {
+        "aria_label": "Seitennavigation",
+        "anchor_id": "navigation",
+        "cta_label": "Jetzt kaufen",
+        "cta_target": "#kapazitaet"
+      }
     },
     "venus_hero": {
       "type": "bw-storage-hero",
       "blocks": {
-        "hero_models": {"type":"stat","settings":{"value":"4 Modelle","detail":"2,56 – 10,24 kWh"}},
-        "hero_self_use": {"type":"stat","settings":{"value":"bis 85 %","detail":"Eigenverbrauch"}},
-        "hero_warranty": {"type":"stat","settings":{"value":"10 Jahre","detail":"Garantie"}}
+        "hero_models": {
+          "type": "stat",
+          "settings": {
+            "value": "4 Modelle",
+            "detail": "2,56 – 10,24 kWh"
+          }
+        },
+        "hero_self_use": {
+          "type": "stat",
+          "settings": {
+            "value": "bis 85 %",
+            "detail": "Eigenverbrauch"
+          }
+        },
+        "hero_warranty": {
+          "type": "stat",
+          "settings": {
+            "value": "10 Jahre",
+            "detail": "Garantie"
+          }
+        }
       },
-      "block_order": ["hero_models","hero_self_use","hero_warranty"],
+      "block_order": [
+        "hero_models",
+        "hero_self_use",
+        "hero_warranty"
+      ],
       "settings": {
+        "anchor_id": "balkonkraftwerk-kaufen",
+        "badge": "Balkonkraftwerk mit Speicher",
         "heading_line_1": "Mehr Eigenstrom.",
         "heading_line_2": "Weniger",
         "heading_accent": "Netzstrom.",
         "text": "<p>Du hast schon ein Balkonkraftwerk (oder planst eines)? Mit einem VENUS E Speicher nutzt du deinen Solarstrom auch abends und nachts – statt ihn ins Netz zu verschenken.</p>",
         "primary_label": "Passenden Speicher finden",
-        "secondary_label": "Welche Größe brauche ich?"
+        "primary_link": "",
+        "secondary_label": "Welche Größe brauche ich?",
+        "secondary_link": "",
+        "media_width": 55,
+        "media_position": "right",
+        "media_alt": "VENUS E Speicher im Wohnbereich",
+        "stats_label": "Produktvorteile"
       }
     },
     "venus_trust": {
       "type": "bw-storage-trust",
       "blocks": {
-        "trust_tuv": {"type":"trust_item","settings":{"fallback_icon":"certificate","label":"TÜV-zertifiziert"}},
-        "trust_ce": {"type":"trust_item","settings":{"fallback_icon":"certificate","label":"CE-zertifiziert"}},
-        "trust_ip65": {"type":"trust_item","settings":{"fallback_icon":"shield","label":"IP65 Schutz"}},
-        "trust_warranty": {"type":"trust_item","settings":{"fallback_icon":"check","label":"10 Jahre Garantie"}},
-        "trust_homes": {"type":"trust_item","settings":{"fallback_icon":"star","label":"100.000+ Haushalte"}},
-        "trust_cells": {"type":"trust_item","settings":{"fallback_icon":"battery","label":"LiFePO₄ Zellen"}}
+        "trust_tuv": {
+          "type": "trust_item",
+          "settings": {
+            "fallback_icon": "certificate",
+            "label": "TÜV-zertifiziert"
+          }
+        },
+        "trust_ce": {
+          "type": "trust_item",
+          "settings": {
+            "fallback_icon": "certificate",
+            "label": "CE-zertifiziert"
+          }
+        },
+        "trust_ip65": {
+          "type": "trust_item",
+          "settings": {
+            "fallback_icon": "shield",
+            "label": "IP65 Schutz"
+          }
+        },
+        "trust_warranty": {
+          "type": "trust_item",
+          "settings": {
+            "fallback_icon": "check",
+            "label": "10 Jahre Garantie"
+          }
+        },
+        "trust_homes": {
+          "type": "trust_item",
+          "settings": {
+            "fallback_icon": "star",
+            "label": "100.000+ Haushalte"
+          }
+        },
+        "trust_cells": {
+          "type": "trust_item",
+          "settings": {
+            "fallback_icon": "battery",
+            "label": "LiFePO₄ Zellen"
+          }
+        }
       },
-      "block_order": ["trust_tuv","trust_ce","trust_ip65","trust_warranty","trust_homes","trust_cells"],
-      "settings": {}
+      "block_order": [
+        "trust_tuv",
+        "trust_ce",
+        "trust_ip65",
+        "trust_warranty",
+        "trust_homes",
+        "trust_cells"
+      ],
+      "settings": {
+        "anchor_id": "trust",
+        "aria_label": "Qualität und Sicherheit"
+      }
     },
     "venus_reasons": {
       "type": "bw-storage-reasons",
-      "settings": {}
+      "settings": {
+        "anchor_id": "warum-speicher",
+        "eyebrow": "",
+        "heading": "Drei Gründe, warum sich der Speicher rechnet",
+        "text": "<p>Ein Balkonkraftwerk erzeugt oft mehr Strom als du tagsüber verbrauchst. Ohne Speicher geht dieser Strom ungenutzt ins Netz – mit Speicher nutzt du ihn selbst.</p>",
+        "image": "shopify://shop_images/Balkonkraftwerk_mit_Speicher-16.webp",
+        "media_width": 100,
+        "media_alignment": "center",
+        "media_alt": "Balkonkraftwerk mit VENUS E Speicher"
+      }
     },
     "venus_comparison": {
       "type": "bw-storage-comparison",
       "blocks": {
-        "compare_with_1": {"type":"point","settings":{"card":"positive","title":"Mehr Eigenverbrauch, weniger Netzbezug","text":"– von ca. 30 % auf bis zu 85 %."}},
-        "compare_with_2": {"type":"point","settings":{"card":"positive","title":"Stromkosten spürbar senken","text":"– besonders in den Abendstunden."}},
-        "compare_with_3": {"type":"point","settings":{"card":"positive","title":"Unabhängiger bei Preisschwankungen","text":"– du nutzt deinen eigenen Strom."}},
-        "compare_without_1": {"type":"point","settings":{"card":"neutral","title":"Strom wird ins Netz gespeist","text":"– statt im Haushalt genutzt zu werden."}},
-        "compare_without_2": {"type":"point","settings":{"card":"neutral","title":"Abhängigkeit vom Strompreis","text":"– besonders in Zeiten hoher Nachfrage."}},
-        "compare_without_3": {"type":"point","settings":{"card":"neutral","title":"Keine Reserve am Abend","text":"– wenn die Sonne nicht mehr scheint."}},
         "compare_with": {
           "type": "card",
           "settings": {
-            "tone":"positive",
-            "tag":"MIT VENUS E",
-            "heading":"Ihr Sonnenstrom wird voll genutzt.",
-            "text":"<p>Was deine PV tagsüber erzeugt, wird gespeichert und abends verbraucht – statt ungenutzt ins Netz zu fließen.</p>",
-            "media_alt":"Energiefluss mit VENUS E Speicher"
+            "tone": "positive",
+            "tag": "MIT VENUS E",
+            "heading": "Ihr Sonnenstrom wird voll genutzt.",
+            "text": "<p>Was deine PV tagsüber erzeugt, wird gespeichert und abends verbraucht – statt ungenutzt ins Netz zu fließen.</p>",
+            "image": "shopify://shop_images/MARSTEK_VENUS_E_3.0_Betrieb_bis_-20_C_und_IP65-1.png",
+            "media_alt": "Energiefluss mit VENUS E Speicher",
+            "media_width": 100,
+            "media_alignment": "center"
+          }
+        },
+        "compare_with_1": {
+          "type": "point",
+          "settings": {
+            "card": "positive",
+            "title": "Mehr Eigenverbrauch, weniger Netzbezug",
+            "text": "– von ca. 30 % auf bis zu 85 %."
+          }
+        },
+        "compare_with_2": {
+          "type": "point",
+          "settings": {
+            "card": "positive",
+            "title": "Stromkosten spürbar senken",
+            "text": "– besonders in den Abendstunden."
+          }
+        },
+        "compare_with_3": {
+          "type": "point",
+          "settings": {
+            "card": "positive",
+            "title": "Unabhängiger bei Preisschwankungen",
+            "text": "– du nutzt deinen eigenen Strom."
+          }
+        },
+        "point_XpMmTq": {
+          "type": "point",
+          "settings": {
+            "card": "positive",
+            "title": "test add",
+            "text": "- test add"
           }
         },
         "compare_without": {
           "type": "card",
           "settings": {
-            "tone":"neutral",
-            "tag":"OHNE SPEICHER",
-            "heading":"Überschuss wird ungenutzt eingespeist.",
-            "text":"<p>Mittags produzierst du häufig mehr als du brauchst – der Überschuss fließt ins Netz.</p>",
-            "media_alt":"Energiefluss ohne Batteriespeicher"
+            "tone": "neutral",
+            "tag": "OHNE SPEICHER",
+            "heading": "Überschuss wird ungenutzt eingespeist.",
+            "text": "<p>Mittags produzierst du häufig mehr als du brauchst – der Überschuss fließt ins Netz.</p>",
+            "image": "shopify://shop_images/VENUS_E_Max_Solarspeicher_f_r_hohen_Energiebedarf.webp",
+            "media_alt": "Energiefluss ohne Batteriespeicher",
+            "media_width": 100,
+            "media_alignment": "center"
+          }
+        },
+        "compare_without_1": {
+          "type": "point",
+          "settings": {
+            "card": "neutral",
+            "title": "Strom wird ins Netz gespeist",
+            "text": "– statt im Haushalt genutzt zu werden."
+          }
+        },
+        "compare_without_2": {
+          "type": "point",
+          "settings": {
+            "card": "neutral",
+            "title": "Abhängigkeit vom Strompreis",
+            "text": "– besonders in Zeiten hoher Nachfrage."
+          }
+        },
+        "compare_without_3": {
+          "type": "point",
+          "settings": {
+            "card": "neutral",
+            "title": "Keine Reserve am Abend",
+            "text": "– wenn die Sonne nicht mehr scheint."
           }
         }
       },
-      "block_order": ["compare_with","compare_with_1","compare_with_2","compare_with_3","compare_without","compare_without_1","compare_without_2","compare_without_3"],
-      "settings": {}
+      "block_order": [
+        "compare_with",
+        "compare_with_1",
+        "compare_with_2",
+        "compare_with_3",
+        "point_XpMmTq",
+        "compare_without",
+        "compare_without_1",
+        "compare_without_2",
+        "compare_without_3"
+      ],
+      "settings": {
+        "anchor_id": "vergleich",
+        "eyebrow": "",
+        "heading": "Was der Speicher im Alltag verändert",
+        "text": "<p>Ein direkter Vergleich: So fließt dein Strom an einem typischen Tag – mit und ohne Speicher.</p>"
+      }
     },
     "venus_energy_flow": {
       "type": "bw-storage-energy-flow",
-      "settings": {}
+      "settings": {
+        "anchor_id": "funktionsweise",
+        "heading": "Tagsüber speichern, abends nutzen",
+        "text": "Dein VENUS E managt den Energiefluss automatisch. Zwei Szenarien, ein System.",
+        "tabs_label": "Tageszeit auswählen",
+        "day_label": "Tagsüber",
+        "day_image": "shopify://shop_images/Solarspeicher-15.webp",
+        "day_alt": "Energiefluss mit VENUS E am Tag",
+        "evening_label": "Abends",
+        "evening_alt": "Energiefluss mit VENUS E am Abend",
+        "media_width": 100,
+        "media_alignment": "center",
+        "footer_text": "Tagsüber speichern, abends nutzen – dein VENUS E managt den Fluss automatisch."
+      }
     },
     "venus_retrofit": {
       "type": "bw-storage-retrofit",
       "blocks": {
-        "retrofit_plug": {"type":"benefit","settings":{"icon":"plug","text":"Anschluss an eine handelsübliche Solar-Inselanlage oder netzgekoppelte Mini-PV"}},
-        "retrofit_meter": {"type":"benefit","settings":{"icon":"bolt","text":"Plug & Play mit dem MARSTEK Smart Meter (CT002 / CT003)"}},
-        "retrofit_pv": {"type":"benefit","settings":{"icon":"sun","text":"Kein Eingriff in die bestehende PV-Installation nötig"}},
-        "retrofit_app": {"type":"benefit","settings":{"icon":"app","text":"Geführte Einrichtung über die App"}}
+        "retrofit_plug": {
+          "type": "benefit",
+          "settings": {
+            "icon": "plug",
+            "text": "Anschluss an eine handelsübliche Solar-Inselanlage oder netzgekoppelte Mini-PV"
+          }
+        },
+        "retrofit_meter": {
+          "type": "benefit",
+          "settings": {
+            "icon": "bolt",
+            "text": "Plug & Play mit dem MARSTEK Smart Meter (CT002 / CT003)"
+          }
+        },
+        "retrofit_pv": {
+          "type": "benefit",
+          "settings": {
+            "icon": "sun",
+            "text": "Kein Eingriff in die bestehende PV-Installation nötig"
+          }
+        },
+        "retrofit_app": {
+          "type": "benefit",
+          "settings": {
+            "icon": "app",
+            "text": "Geführte Einrichtung über die App"
+          }
+        }
       },
-      "block_order": ["retrofit_plug","retrofit_meter","retrofit_pv","retrofit_app"],
-      "settings": {}
+      "block_order": [
+        "retrofit_plug",
+        "retrofit_meter",
+        "retrofit_pv",
+        "retrofit_app"
+      ],
+      "settings": {
+        "anchor_id": "nachruesten",
+        "media_width": 50,
+        "media_position": "left",
+        "heading": "Du hast schon ein Balkonkraftwerk? Perfekt.",
+        "text": "<p>VENUS E wird über eine AC-Kopplung in deine bestehende Anlage integriert – ohne die PV-Seite neu zu verkabeln.</p>",
+        "button_label": "Mehr erfahren",
+        "button_link": ""
+      }
     },
     "venus_capacity": {
       "type": "bw-storage-capacity",
       "blocks": {
-        "capacity_5": {"type":"preset","settings":{"capacity":"5","badge":"ca. 5 kWh","title":"1 Person · 11 kWp","text":"3.200 kWh/Jahr","people_value":1,"pv_value":11,"annual_value":3200}},
-        "capacity_10": {"type":"preset","settings":{"capacity":"10","badge":"ca. 10 kWh","title":"3 Personen · 6 kWp","text":"6.200 kWh/Jahr","people_value":3,"pv_value":6,"annual_value":6200}},
-        "capacity_15": {"type":"preset","settings":{"capacity":"15","badge":"ca. 15 kWh","title":"4 Personen · 10 kWp","text":"9.000 kWh/Jahr","people_value":4,"pv_value":10,"annual_value":9000}},
-        "capacity_30": {"type":"preset","settings":{"capacity":"30","badge":"ca. 30 kWh","title":"6+ Personen · 20 kWp","text":"20.000 kWh/Jahr","people_value":6,"pv_value":20,"annual_value":20000}}
+        "capacity_5": {
+          "type": "preset",
+          "settings": {
+            "capacity": "5",
+            "badge": "ca. 5 kWh",
+            "title": "1 Person · 11 kWp",
+            "text": "3.200 kWh/Jahr"
+          }
+        },
+        "capacity_10": {
+          "type": "preset",
+          "settings": {
+            "capacity": "10",
+            "badge": "ca. 10 kWh",
+            "title": "3 Personen · 6 kWp",
+            "text": "6.200 kWh/Jahr"
+          }
+        },
+        "capacity_15": {
+          "type": "preset",
+          "settings": {
+            "capacity": "15",
+            "badge": "ca. 15 kWh",
+            "title": "4 Personen · 10 kWp",
+            "text": "9.000 kWh/Jahr"
+          }
+        },
+        "capacity_30": {
+          "type": "preset",
+          "settings": {
+            "capacity": "30",
+            "badge": "ca. 30 kWh",
+            "title": "6+ Personen · 20 kWp",
+            "text": "20.000 kWh/Jahr"
+          }
+        }
       },
-      "block_order": ["capacity_5","capacity_10","capacity_15","capacity_30"],
-      "settings": {}
+      "block_order": [
+        "capacity_5",
+        "capacity_10",
+        "capacity_15",
+        "capacity_30"
+      ],
+      "settings": {
+        "anchor_id": "kapazitaet",
+        "heading": "Welche Kapazität passt zu deinem Haushalt?",
+        "text": "Wähle nach deiner Wohnsituation, nicht nach Parametern. Von der Single-Wohnung bis zur Familie mit E-Auto.",
+        "presets_label": "Kapazitätsstufen",
+        "calculator_heading": "Nicht sicher, was zu dir passt?",
+        "calculator_text": "Beantworte drei Fragen – wir empfehlen dir die passende VENUS E Kapazität.",
+        "people_label": "Haushaltsgröße",
+        "people_default": 3,
+        "pv_label": "PV-Leistung",
+        "pv_default": 6,
+        "annual_label": "Jährlicher Verbrauch",
+        "annual_default": 4000,
+        "result_eyebrow": "EMPFOHLENE KAPAZITÄT",
+        "result_text": "Passt zu Familie mit hohem Verbrauch",
+        "result_button_label": "Passende Konfigurationen ansehen",
+        "result_note": "Die Empfehlung ist eine Orientierung. Für eine genaue Planung berücksichtige bitte deine individuellen Verbrauchsdaten.",
+        "people_tier_5_max": 1,
+        "people_tier_10_max": 2,
+        "people_tier_15_max": 4,
+        "pv_tier_5_max": 2,
+        "pv_tier_10_max": 5,
+        "pv_tier_15_max": 8,
+        "annual_tier_5_max": 2500,
+        "annual_tier_10_max": 4500,
+        "annual_tier_15_max": 6500
+      }
     },
     "venus_recommendations": {
       "type": "bw-storage-recommendations",
       "blocks": {
-        "recommend_primary": {"type":"recommendation_card","settings":{"role":"slot1","badge":"Empfohlen","title":"VENUS E","capacity":"ca. 10 kWh","text":"Die passende Konfiguration für deinen Bedarf.","button_label":"In den Warenkorb"}},
-        "recommend_4": {"type":"recommendation_card","settings":{"role":"slot2","title":"Alternative","capacity":"ca. 10 kWh","text":"Eine weitere passende Konfiguration.","button_label":"In den Warenkorb"}},
-        "recommend_max": {"type":"recommendation_card","settings":{"role":"slot3","title":"Alternative","capacity":"ca. 10 kWh","text":"Eine weitere passende Konfiguration.","button_label":"In den Warenkorb"}}
+        "recommend_primary": {
+          "type": "recommendation_card",
+          "settings": {
+            "role": "slot1",
+            "badge": "Empfohlen",
+            "title": "VENUS E",
+            "capacity": "ca. 10 kWh",
+            "text": "Die passende Konfiguration für deinen Bedarf.",
+            "button_label": "In den Warenkorb"
+          }
+        },
+        "recommend_4": {
+          "type": "recommendation_card",
+          "settings": {
+            "role": "slot2",
+            "badge": "",
+            "title": "Alternative",
+            "capacity": "ca. 10 kWh",
+            "text": "Eine weitere passende Konfiguration.",
+            "button_label": "In den Warenkorb"
+          }
+        },
+        "recommend_max": {
+          "type": "recommendation_card",
+          "settings": {
+            "role": "slot3",
+            "badge": "",
+            "title": "Alternative",
+            "capacity": "ca. 10 kWh",
+            "text": "Eine weitere passende Konfiguration.",
+            "button_label": "In den Warenkorb"
+          }
+        }
       },
-      "block_order": ["recommend_primary","recommend_4","recommend_max"],
+      "block_order": [
+        "recommend_primary",
+        "recommend_4",
+        "recommend_max"
+      ],
       "settings": {
+        "anchor_id": "empfehlungen",
+        "context_label": "Basierend auf deiner Eingabe",
+        "heading": "Diese Konfigurationen passen zu",
         "product_mini": "venus-e-mini",
         "product_3": "venus-e-3",
         "product_4": "venus-e-4",
@@ -135,77 +503,348 @@
     "venus_zero_feed": {
       "type": "bw-storage-zero-feed",
       "blocks": {
-        "zero_measure": {"type":"feature_point","settings":{"icon":"measure","title":"Messen","text":"Verbrauch in Echtzeit erfassen"}},
-        "zero_control": {"type":"feature_point","settings":{"icon":"control","title":"Steuern","text":"VENUS E regelt automatisch"}},
-        "zero_store": {"type":"feature_point","settings":{"icon":"battery","title":"Speichern","text":"Überschüsse intelligent nutzen"}},
-        "zero_supply": {"type":"feature_point","settings":{"icon":"home","title":"Versorgen","text":"Dein Zuhause zuerst"}},
-        "zero_ct002": {"type":"accessory","settings":{"product_kind":"ct002","title":"CT002"}},
-        "zero_ct003": {"type":"accessory","settings":{"product_kind":"ct003","title":"CT003"}},
-        "zero_shipping": {"type":"service_point","settings":{"icon":"shipping","text":"Schneller Versand"}},
-        "zero_return": {"type":"service_point","settings":{"icon":"return","text":"30 Tage Rückgaberecht"}},
-        "zero_payment": {"type":"service_point","settings":{"icon":"payment","text":"Sichere Bezahlung"}}
+        "zero_measure": {
+          "type": "feature_point",
+          "settings": {
+            "icon": "measure",
+            "title": "Messen",
+            "text": "Verbrauch in Echtzeit erfassen"
+          }
+        },
+        "zero_control": {
+          "type": "feature_point",
+          "settings": {
+            "icon": "control",
+            "title": "Steuern",
+            "text": "VENUS E regelt automatisch"
+          }
+        },
+        "zero_store": {
+          "type": "feature_point",
+          "settings": {
+            "icon": "battery",
+            "title": "Speichern",
+            "text": "Überschüsse intelligent nutzen"
+          }
+        },
+        "zero_supply": {
+          "type": "feature_point",
+          "settings": {
+            "icon": "home",
+            "title": "Versorgen",
+            "text": "Dein Zuhause zuerst"
+          }
+        },
+        "zero_ct002": {
+          "type": "accessory",
+          "settings": {
+            "product_kind": "ct002",
+            "product": "",
+            "title": "CT002",
+            "subtitle": "",
+            "badge": "Plug & Play",
+            "button_label": "Auswählen"
+          }
+        },
+        "zero_ct003": {
+          "type": "accessory",
+          "settings": {
+            "product_kind": "ct003",
+            "product": "",
+            "title": "CT003",
+            "subtitle": "",
+            "badge": "Plug & Play",
+            "button_label": "Auswählen"
+          }
+        },
+        "zero_shipping": {
+          "type": "service_point",
+          "settings": {
+            "icon": "shipping",
+            "text": "Schneller Versand"
+          }
+        },
+        "zero_return": {
+          "type": "service_point",
+          "settings": {
+            "icon": "return",
+            "text": "30 Tage Rückgaberecht"
+          }
+        },
+        "zero_payment": {
+          "type": "service_point",
+          "settings": {
+            "icon": "payment",
+            "text": "Sichere Bezahlung"
+          }
+        }
       },
-      "block_order": ["zero_measure","zero_control","zero_store","zero_supply","zero_ct002","zero_ct003","zero_shipping","zero_return","zero_payment"],
+      "block_order": [
+        "zero_measure",
+        "zero_control",
+        "zero_store",
+        "zero_supply",
+        "zero_ct002",
+        "zero_ct003",
+        "zero_shipping",
+        "zero_return",
+        "zero_payment"
+      ],
       "settings": {
+        "anchor_id": "zero-feed",
+        "heading": "Keine Einspeisung ins Netz. Automatisch.",
+        "text": "Der Smart Meter erkennt deinen Verbrauch, VENUS E reagiert von selbst. Die CT-Sensoren (CT002 / CT003) erfassen jeden Lastfluss in Echtzeit. Innerhalb von unter 10 Millisekunden entscheidet VENUS E, ob Strom gespeichert, verbraucht oder – falls gewünscht – gar nicht ins Netz abgegeben wird. Keine komplizierte Konfiguration, kein Elektriker erforderlich.",
+        "flow_image_alt": "Smart Meter, VENUS E, Hausnetz, Speicher und Stromnetz im Energiefluss",
+        "media_width": 100,
+        "media_alignment": "center",
+        "feature_label": "Funktionen der automatischen Steuerung",
+        "accessory_label": "Passende Smart Meter",
+        "service_label": "Servicevorteile",
         "product_ct002": "ct002-smart-meter",
-        "product_ct003": "ct003-smart-meter"
+        "product_ct003": "ct003-smart-meter",
+        "sold_out_label": "Nicht verfügbar"
       }
     },
     "venus_models": {
       "type": "bw-storage-models-sync",
-      "settings": {}
+      "settings": {
+        "anchor_id": "modelle",
+        "aria_label": "VENUS E Modelle",
+        "source_section_id": "17864389448c0111e2",
+        "error_text": "Die Modelle konnten gerade nicht geladen werden."
+      }
     },
     "venus_features": {
       "type": "bw-storage-features",
       "blocks": {
-        "feature_backup": {"type":"feature","settings":{"title":"Notstrom","text":"Wichtige Verbraucher können bei einem Stromausfall versorgt bleiben, sofern die Anlage passend installiert und konfiguriert ist.","badge":"≤ 10 ms Reaktionszeit"}},
-        "feature_vpp": {"type":"feature","settings":{"title":"VPP","text":"Bereit für die Einbindung in kompatible Programme für vernetzte und flexible Energienutzung.","badge":"Für vernetzte Energienutzung"}},
-        "feature_ai": {"type":"feature","settings":{"title":"KI-Energiemanagement","text":"Die App hilft, Erzeugung, Verbrauch und Ladezustand übersichtlich zu steuern.","badge":"Passt sich deinem Verbrauch an"}},
-        "feature_expand": {"type":"feature","settings":{"title":"Erweiterbarkeit","text":"Beginne mit einer passenden Größe und ergänze später weitere Kapazität, wenn dein Bedarf wächst.","badge":"Modular erweiterbar"}}
+        "feature_backup": {
+          "type": "feature",
+          "settings": {
+            "title": "Notstrom",
+            "text": "Wichtige Verbraucher können bei einem Stromausfall versorgt bleiben, sofern die Anlage passend installiert und konfiguriert ist.",
+            "media_alt": "",
+            "media_width": 100,
+            "media_alignment": "center",
+            "badge": "≤ 10 ms Reaktionszeit"
+          }
+        },
+        "feature_vpp": {
+          "type": "feature",
+          "settings": {
+            "title": "VPP",
+            "text": "Bereit für die Einbindung in kompatible Programme für vernetzte und flexible Energienutzung.",
+            "media_alt": "",
+            "media_width": 100,
+            "media_alignment": "center",
+            "badge": "Für vernetzte Energienutzung"
+          }
+        },
+        "feature_ai": {
+          "type": "feature",
+          "settings": {
+            "title": "KI-Energiemanagement",
+            "text": "Die App hilft, Erzeugung, Verbrauch und Ladezustand übersichtlich zu steuern.",
+            "media_alt": "",
+            "media_width": 100,
+            "media_alignment": "center",
+            "badge": "Passt sich deinem Verbrauch an"
+          }
+        },
+        "feature_expand": {
+          "type": "feature",
+          "settings": {
+            "title": "Erweiterbarkeit",
+            "text": "Beginne mit einer passenden Größe und ergänze später weitere Kapazität, wenn dein Bedarf wächst.",
+            "media_alt": "",
+            "media_width": 100,
+            "media_alignment": "center",
+            "badge": "Modular erweiterbar"
+          }
+        }
       },
-      "block_order": ["feature_backup","feature_vpp","feature_ai","feature_expand"],
-      "settings": {}
+      "block_order": [
+        "feature_backup",
+        "feature_vpp",
+        "feature_ai",
+        "feature_expand"
+      ],
+      "settings": {
+        "anchor_id": "features",
+        "heading": "Vier Eigenschaften, die den Unterschied machen",
+        "text": "Was die VENUS E von einem gewöhnlichen Heimspeicher unterscheidet."
+      }
     },
     "venus_steps": {
       "type": "bw-storage-steps",
       "blocks": {
-        "step_1": {"type":"step","settings":{"number":"01","title":"Bedarf & Kapazität klären","text":"Wie viele Personen im Haushalt? Wie viel kWh pro Jahr? Welche Verbraucher willst du abdecken?"}},
-        "step_2": {"type":"step","settings":{"number":"02","title":"Modell wählen","text":"Mini, 3.0, 4.0 oder Max – passend zu deinem Balkonkraftwerk und deinem Verbrauch."}},
-        "step_3": {"type":"step","settings":{"number":"03","title":"Installieren & App verbinden","text":"Smart Meter anbringen, VENUS E einstecken und die App koppeln. Fertig."}}
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "title": "Bedarf & Kapazität klären",
+            "text": "Wie viele Personen im Haushalt? Wie viel kWh pro Jahr? Welche Verbraucher willst du abdecken?"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "title": "Modell wählen",
+            "text": "Mini, 3.0, 4.0 oder Max – passend zu deinem Balkonkraftwerk und deinem Verbrauch."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "title": "Installieren & App verbinden",
+            "text": "Smart Meter anbringen, VENUS E einstecken und die App koppeln. Fertig."
+          }
+        }
       },
-      "block_order": ["step_1","step_2","step_3"],
-      "settings": {}
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3"
+      ],
+      "settings": {
+        "anchor_id": "steps",
+        "heading": "Drei Schritte, dann läuft dein Speicher",
+        "text": "Vom Bedarf bis zur App – ohne Umweg über eine komplizierte Auswahl."
+      }
     },
     "venus_durability": {
       "type": "bw-storage-durability",
       "blocks": {
-        "durability_warranty": {"type":"stat","settings":{"icon":"shield","metric":"10","label":"Jahre Garantie","text":"Herstellergarantie auf alle Modelle – inklusive Batteriemanagement."}},
-        "durability_life": {"type":"stat","settings":{"icon":"battery","metric":"15","label":"Jahre Lebensdauer","text":"LiFePO₄ mit über 6.000 Ladezyklen bei 90 % Restkapazität."}},
-        "durability_weather": {"type":"stat","settings":{"icon":"check","metric":"IP65","label":"Für jedes Wetter","text":"Staubdicht, strahlwassergeschützt, −20 °C bis 55 °C."}},
-        "durability_tuv": {"type":"stat","settings":{"icon":"ribbon","metric":"TÜV","label":"Geprüft & zertifiziert","text":"CE-konform, mit mehrstufigem Zell- und Brandschutz."}}
+        "durability_warranty": {
+          "type": "stat",
+          "settings": {
+            "icon": "shield",
+            "metric": "10",
+            "label": "Jahre Garantie",
+            "text": "Herstellergarantie auf alle Modelle – inklusive Batteriemanagement."
+          }
+        },
+        "durability_life": {
+          "type": "stat",
+          "settings": {
+            "icon": "battery",
+            "metric": "15",
+            "label": "Jahre Lebensdauer",
+            "text": "LiFePO₄ mit über 6.000 Ladezyklen bei 90 % Restkapazität."
+          }
+        },
+        "durability_weather": {
+          "type": "stat",
+          "settings": {
+            "icon": "check",
+            "metric": "IP65",
+            "label": "Für jedes Wetter",
+            "text": "Staubdicht, strahlwassergeschützt, −20 °C bis 55 °C."
+          }
+        },
+        "durability_tuv": {
+          "type": "stat",
+          "settings": {
+            "icon": "ribbon",
+            "metric": "TÜV",
+            "label": "Geprüft & zertifiziert",
+            "text": "CE-konform, mit mehrstufigem Zell- und Brandschutz."
+          }
+        }
       },
-      "block_order": ["durability_warranty","durability_life","durability_weather","durability_tuv"],
-      "settings": {}
+      "block_order": [
+        "durability_warranty",
+        "durability_life",
+        "durability_weather",
+        "durability_tuv"
+      ],
+      "settings": {
+        "anchor_id": "durability",
+        "heading": "Auf 10 Jahre gebaut, auf 15 Jahre ausgelegt",
+        "text": "LiFePO₄-Zellen, IP65-Gehäuse und unabhängige Prüfungen – ein Speicher, der drinnen wie draußen funktioniert.",
+        "list_label": "Lebensdauer und Schutz"
+      }
     },
     "venus_faq": {
       "type": "bw-storage-faq",
       "blocks": {
-        "faq_installation": {"type":"question","settings":{"question":"Brauche ich einen Elektriker für die Installation?","answer":"<p>Ob ein Elektriker erforderlich ist, hängt von deiner Hausinstallation und der gewählten Systemkonfiguration ab. Bei Unsicherheit empfehlen wir einen Fachbetrieb.</p>"}},
-        "faq_without_pv": {"type":"question","settings":{"question":"Funktioniert VENUS E auch ohne Photovoltaik?","answer":"<p>Die Nutzung ist auf die Kombination mit einer passenden PV-Anlage ausgelegt. Prüfe vor dem Kauf die Kompatibilität deines Wechselrichters und deiner Anlage.</p>"}},
-        "faq_lifetime": {"type":"question","settings":{"question":"Wie lange hält die Batterie?","answer":"<p>Die LiFePO₄-Batterie ist auf eine lange Lebensdauer ausgelegt. Die genaue Leistung hängt von Nutzung, Temperatur und Installationsbedingungen ab.</p>"}},
-        "faq_vpp": {"type":"question","settings":{"question":"Was ist VPP und wie viel verdiene ich?","answer":"<p>VPP steht für virtuelles Kraftwerk. Ob und wie eine Vergütung möglich ist, hängt vom Programm, dem Land und den Teilnahmebedingungen ab.</p>"}},
-        "faq_regions": {"type":"question","settings":{"question":"Welche Länder werden unterstützt?","answer":"<p>Verfügbarkeit und Netzanforderungen unterscheiden sich je nach Land. Bitte prüfe die aktuellen regionalen Hinweise vor dem Kauf.</p>"}}
+        "faq_installation": {
+          "type": "question",
+          "settings": {
+            "question": "Brauche ich einen Elektriker für die Installation?",
+            "answer": "<p>Ob ein Elektriker erforderlich ist, hängt von deiner Hausinstallation und der gewählten Systemkonfiguration ab. Bei Unsicherheit empfehlen wir einen Fachbetrieb.</p>"
+          }
+        },
+        "faq_without_pv": {
+          "type": "question",
+          "settings": {
+            "question": "Funktioniert VENUS E auch ohne Photovoltaik?",
+            "answer": "<p>Die Nutzung ist auf die Kombination mit einer passenden PV-Anlage ausgelegt. Prüfe vor dem Kauf die Kompatibilität deines Wechselrichters und deiner Anlage.</p>"
+          }
+        },
+        "faq_lifetime": {
+          "type": "question",
+          "settings": {
+            "question": "Wie lange hält die Batterie?",
+            "answer": "<p>Die LiFePO₄-Batterie ist auf eine lange Lebensdauer ausgelegt. Die genaue Leistung hängt von Nutzung, Temperatur und Installationsbedingungen ab.</p>"
+          }
+        },
+        "faq_vpp": {
+          "type": "question",
+          "settings": {
+            "question": "Was ist VPP und wie viel verdiene ich?",
+            "answer": "<p>VPP steht für virtuelles Kraftwerk. Ob und wie eine Vergütung möglich ist, hängt vom Programm, dem Land und den Teilnahmebedingungen ab.</p>"
+          }
+        },
+        "faq_regions": {
+          "type": "question",
+          "settings": {
+            "question": "Welche Länder werden unterstützt?",
+            "answer": "<p>Verfügbarkeit und Netzanforderungen unterscheiden sich je nach Land. Bitte prüfe die aktuellen regionalen Hinweise vor dem Kauf.</p>"
+          }
+        }
       },
-      "block_order": ["faq_installation","faq_without_pv","faq_lifetime","faq_vpp","faq_regions"],
-      "settings": {"initial_state":"none"}
+      "block_order": [
+        "faq_installation",
+        "faq_without_pv",
+        "faq_lifetime",
+        "faq_vpp",
+        "faq_regions"
+      ],
+      "settings": {
+        "anchor_id": "faq",
+        "heading": "FAQ",
+        "text": "",
+        "initial_state": "none"
+      }
     },
     "venus_final_cta": {
       "type": "bw-storage-final-cta",
-      "settings": {}
+      "settings": {
+        "anchor_id": "final-cta",
+        "heading": "Wie geht es weiter?",
+        "need_label": "Du brauchst",
+        "recommendation_label": "Empfehlung:",
+        "buy_label": "Jetzt kaufen",
+        "empty_button_target": "kapazitaet",
+        "empty_heading": "Noch nicht die passende Kapazität gefunden?",
+        "empty_text": "Beantworte drei kurze Fragen und erhalte sofort eine passende Orientierung.",
+        "empty_button_label": "Kapazität berechnen",
+        "secondary_label_1": "Passenden VENUS E Speicher finden",
+        "secondary_link_1": "",
+        "secondary_label_2": "Modelle vergleichen",
+        "secondary_link_2": ""
+      }
     },
     "venus_newsletter": {
       "type": "bw-storage-newsletter-sync",
-      "settings": {}
+      "settings": {
+        "anchor_id": "newsletter",
+        "aria_label": "VENUS E Newsletter",
+        "source_section_id": "1786674497042b635a",
+        "error_text": "Das Newsletterformular konnte gerade nicht geladen werden."
+      }
     }
   },
   "order": [
