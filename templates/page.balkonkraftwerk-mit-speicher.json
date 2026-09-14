@@ -61,6 +61,12 @@
     "venus_comparison": {
       "type": "bw-storage-comparison",
       "blocks": {
+        "compare_with_1": {"type":"point","settings":{"card":"positive","title":"Mehr Eigenverbrauch, weniger Netzbezug","text":"– von ca. 30 % auf bis zu 85 %."}},
+        "compare_with_2": {"type":"point","settings":{"card":"positive","title":"Stromkosten spürbar senken","text":"– besonders in den Abendstunden."}},
+        "compare_with_3": {"type":"point","settings":{"card":"positive","title":"Unabhängiger bei Preisschwankungen","text":"– du nutzt deinen eigenen Strom."}},
+        "compare_without_1": {"type":"point","settings":{"card":"neutral","title":"Strom wird ins Netz gespeist","text":"– statt im Haushalt genutzt zu werden."}},
+        "compare_without_2": {"type":"point","settings":{"card":"neutral","title":"Abhängigkeit vom Strompreis","text":"– besonders in Zeiten hoher Nachfrage."}},
+        "compare_without_3": {"type":"point","settings":{"card":"neutral","title":"Keine Reserve am Abend","text":"– wenn die Sonne nicht mehr scheint."}},
         "compare_with": {
           "type": "card",
           "settings": {
@@ -68,13 +74,7 @@
             "tag":"MIT VENUS E",
             "heading":"Ihr Sonnenstrom wird voll genutzt.",
             "text":"<p>Was deine PV tagsüber erzeugt, wird gespeichert und abends verbraucht – statt ungenutzt ins Netz zu fließen.</p>",
-            "media_alt":"Energiefluss mit VENUS E Speicher",
-            "point_1_title":"Mehr Eigenverbrauch, weniger Netzbezug",
-            "point_1_text":"– von ca. 30 % auf bis zu 85 %.",
-            "point_2_title":"Stromkosten spürbar senken",
-            "point_2_text":"– besonders in den Abendstunden.",
-            "point_3_title":"Unabhängiger bei Preisschwankungen",
-            "point_3_text":"– du nutzt deinen eigenen Strom."
+            "media_alt":"Energiefluss mit VENUS E Speicher"
           }
         },
         "compare_without": {
@@ -84,30 +84,15 @@
             "tag":"OHNE SPEICHER",
             "heading":"Überschuss wird ungenutzt eingespeist.",
             "text":"<p>Mittags produzierst du häufig mehr als du brauchst – der Überschuss fließt ins Netz.</p>",
-            "media_alt":"Energiefluss ohne Batteriespeicher",
-            "point_1_title":"Strom wird ins Netz gespeist",
-            "point_1_text":"– statt im Haushalt genutzt zu werden.",
-            "point_2_title":"Abhängigkeit vom Strompreis",
-            "point_2_text":"– besonders in Zeiten hoher Nachfrage.",
-            "point_3_title":"Keine Reserve am Abend",
-            "point_3_text":"– wenn die Sonne nicht mehr scheint."
+            "media_alt":"Energiefluss ohne Batteriespeicher"
           }
         }
       },
-      "block_order": ["compare_with","compare_without"],
+      "block_order": ["compare_with","compare_with_1","compare_with_2","compare_with_3","compare_without","compare_without_1","compare_without_2","compare_without_3"],
       "settings": {}
     },
     "venus_energy_flow": {
       "type": "bw-storage-energy-flow",
-      "blocks": {
-        "flow_day_solar": {"type":"flow_node","settings":{"period":"day","icon":"solar","title":"PV-Anlage","text":"Erzeugt Solarstrom"}},
-        "flow_day_battery": {"type":"flow_node","settings":{"period":"day","icon":"battery","title":"VENUS E","text":"Speichert den Überschuss","highlight":true}},
-        "flow_day_home": {"type":"flow_node","settings":{"period":"day","icon":"home","title":"Haushalt","text":"Nutzt Strom direkt"}},
-        "flow_evening_battery": {"type":"flow_node","settings":{"period":"evening","icon":"battery","title":"VENUS E","text":"Gibt gespeicherten Strom ab"}},
-        "flow_evening_home": {"type":"flow_node","settings":{"period":"evening","icon":"home","title":"Haushalt","text":"Versorgt deine Geräte","highlight":true}},
-        "flow_evening_grid": {"type":"flow_node","settings":{"period":"evening","icon":"grid","title":"Netz","text":"Nur wenn nötig"}}
-      },
-      "block_order": ["flow_day_solar","flow_day_battery","flow_day_home","flow_evening_battery","flow_evening_home","flow_evening_grid"],
       "settings": {}
     },
     "venus_retrofit": {
@@ -124,10 +109,10 @@
     "venus_capacity": {
       "type": "bw-storage-capacity",
       "blocks": {
-        "capacity_5": {"type":"preset","settings":{"capacity":"5.12","badge":"5,12 kWh","title":"1–2 Personen","text":"Wohnung / kleines Balkonkraftwerk – Grundbedarf abends."}},
-        "capacity_10": {"type":"preset","settings":{"capacity":"10.24","badge":"10,24 kWh","title":"3–4 Personen","text":"Einfamilienhaus mit Dach-PV – ganzer Abend versorgt."}},
-        "capacity_15": {"type":"preset","settings":{"capacity":"15.36","badge":"15,36 kWh","title":"4+ Personen","text":"Familie mit hohem Verbrauch – auch bei Schlechtwetter."}},
-        "capacity_30": {"type":"preset","settings":{"capacity":"30","badge":"Erweiterbar","title":"Mit E-Auto oder Wärmepumpe","text":"Bis zu 3 × VENUS E – wächst mit deinem Bedarf."}}
+        "capacity_5": {"type":"preset","settings":{"capacity":"5","badge":"ca. 5 kWh","title":"1 Person · 11 kWp","text":"3.200 kWh/Jahr","people_value":1,"pv_value":11,"annual_value":3200}},
+        "capacity_10": {"type":"preset","settings":{"capacity":"10","badge":"ca. 10 kWh","title":"3 Personen · 6 kWp","text":"6.200 kWh/Jahr","people_value":3,"pv_value":6,"annual_value":6200}},
+        "capacity_15": {"type":"preset","settings":{"capacity":"15","badge":"ca. 15 kWh","title":"4 Personen · 10 kWp","text":"9.000 kWh/Jahr","people_value":4,"pv_value":10,"annual_value":9000}},
+        "capacity_30": {"type":"preset","settings":{"capacity":"30","badge":"ca. 30 kWh","title":"6+ Personen · 20 kWp","text":"20.000 kWh/Jahr","people_value":6,"pv_value":20,"annual_value":20000}}
       },
       "block_order": ["capacity_5","capacity_10","capacity_15","capacity_30"],
       "settings": {}
@@ -135,12 +120,13 @@
     "venus_recommendations": {
       "type": "bw-storage-recommendations",
       "blocks": {
-        "recommend_primary": {"type":"recommendation_card","settings":{"role":"primary","badge":"Empfohlen","title":"3× VENUS E 3.0","capacity":"15,36 kWh","text":"Die passende Kombination für deinen Bedarf – mit direkter Bestellmöglichkeit.","button_label":"In den Warenkorb"}},
-        "recommend_4": {"type":"recommendation_card","settings":{"role":"alt4","title":"3× VENUS E 4.0","capacity":"15 kWh","text":"Mehr Leistung pro Einheit und eine kompakte Alternative.","button_label":"Zur Produktseite"}},
-        "recommend_max": {"type":"recommendation_card","settings":{"role":"altmax","title":"2× VENUS E Max","capacity":"20 kWh","text":"Für größere Haushalte oder wenn du später erweitern möchtest.","button_label":"Zur Produktseite"}}
+        "recommend_primary": {"type":"recommendation_card","settings":{"role":"slot1","badge":"Empfohlen","title":"VENUS E","capacity":"ca. 10 kWh","text":"Die passende Konfiguration für deinen Bedarf.","button_label":"In den Warenkorb"}},
+        "recommend_4": {"type":"recommendation_card","settings":{"role":"slot2","title":"Alternative","capacity":"ca. 10 kWh","text":"Eine weitere passende Konfiguration.","button_label":"In den Warenkorb"}},
+        "recommend_max": {"type":"recommendation_card","settings":{"role":"slot3","title":"Alternative","capacity":"ca. 10 kWh","text":"Eine weitere passende Konfiguration.","button_label":"In den Warenkorb"}}
       },
       "block_order": ["recommend_primary","recommend_4","recommend_max"],
       "settings": {
+        "product_mini": "venus-e-mini",
         "product_3": "venus-e-3",
         "product_4": "venus-e-4",
         "product_max": "venus-e-max"
@@ -149,13 +135,17 @@
     "venus_zero_feed": {
       "type": "bw-storage-zero-feed",
       "blocks": {
-        "zero_meter": {"type":"flow_step","settings":{"icon":"meter","title":"Smart Meter","text":"Misst Verbrauch & Erzeugung in Echtzeit"}},
-        "zero_venus": {"type":"flow_step","settings":{"icon":"battery","title":"VENUS E","text":"≤ 10 ms Steuerung\nKein Watt ins Netz","highlight":true}},
-        "zero_home": {"type":"flow_step","settings":{"icon":"home","title":"Hausnetz","text":"Verbraucht, was gebraucht wird"}},
+        "zero_measure": {"type":"feature_point","settings":{"icon":"measure","title":"Messen","text":"Verbrauch in Echtzeit erfassen"}},
+        "zero_control": {"type":"feature_point","settings":{"icon":"control","title":"Steuern","text":"VENUS E regelt automatisch"}},
+        "zero_store": {"type":"feature_point","settings":{"icon":"battery","title":"Speichern","text":"Überschüsse intelligent nutzen"}},
+        "zero_supply": {"type":"feature_point","settings":{"icon":"home","title":"Versorgen","text":"Dein Zuhause zuerst"}},
         "zero_ct002": {"type":"accessory","settings":{"product_kind":"ct002","title":"CT002"}},
-        "zero_ct003": {"type":"accessory","settings":{"product_kind":"ct003","title":"CT003"}}
+        "zero_ct003": {"type":"accessory","settings":{"product_kind":"ct003","title":"CT003"}},
+        "zero_shipping": {"type":"service_point","settings":{"icon":"shipping","text":"Schneller Versand"}},
+        "zero_return": {"type":"service_point","settings":{"icon":"return","text":"30 Tage Rückgaberecht"}},
+        "zero_payment": {"type":"service_point","settings":{"icon":"payment","text":"Sichere Bezahlung"}}
       },
-      "block_order": ["zero_meter","zero_venus","zero_home","zero_ct002","zero_ct003"],
+      "block_order": ["zero_measure","zero_control","zero_store","zero_supply","zero_ct002","zero_ct003","zero_shipping","zero_return","zero_payment"],
       "settings": {
         "product_ct002": "ct002-smart-meter",
         "product_ct003": "ct003-smart-meter"

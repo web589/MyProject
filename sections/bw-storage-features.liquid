@@ -33,7 +33,10 @@
           </div>
 
           {% if block.settings.video != blank or block.settings.image != blank or request.design_mode %}
-            <div class="bw-feature-grid__media bw-feature-card__media">
+            <div
+              class="bw-feature-grid__media bw-feature-card__media bw-configurable-media bw-media-align--{{ block.settings.media_alignment }}"
+              style="--bw-media-width: {{ block.settings.media_width }}%;"
+            >
               {% if block.settings.video != blank %}
                 {{
                   block.settings.video
@@ -119,6 +122,27 @@
           "type": "text",
           "id": "media_alt",
           "label": "Alternativtext"
+        },
+        {
+          "type": "range",
+          "id": "media_width",
+          "label": "Medienbreite",
+          "min": 50,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 100
+        },
+        {
+          "type": "select",
+          "id": "media_alignment",
+          "label": "Medienausrichtung",
+          "default": "center",
+          "options": [
+            { "value": "left", "label": "Links" },
+            { "value": "center", "label": "Mitte" },
+            { "value": "right", "label": "Rechts" }
+          ]
         },
         {
           "type": "text",

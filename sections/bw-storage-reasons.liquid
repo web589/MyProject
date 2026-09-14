@@ -23,7 +23,10 @@
     </div>
 
     {% if has_media or request.design_mode %}
-      <div class="bw-media bw-reasons__media">
+      <div
+        class="bw-media bw-reasons__media bw-configurable-media bw-media-align--{{ section.settings.media_alignment }}"
+        style="--bw-media-width: {{ section.settings.media_width }}%;"
+      >
         {% if section.settings.video != blank %}
           {{ section.settings.video | video_tag: image_size: '1800x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
         {% elsif section.settings.image != blank %}
@@ -73,6 +76,27 @@
       "type": "image_picker",
       "id": "image",
       "label": "Bild oder GIF"
+    },
+    {
+      "type": "range",
+      "id": "media_width",
+      "label": "Medienbreite",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "media_alignment",
+      "label": "Medienausrichtung",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Links" },
+        { "value": "center", "label": "Mitte" },
+        { "value": "right", "label": "Rechts" }
+      ]
     },
     {
       "type": "text",

@@ -4,6 +4,13 @@
     assign retrofit_anchor = 'nachruesten'
   endif
   assign retrofit_heading_id = 'bw-retrofit-heading-' | append: section.id
+  assign retrofit_copy_width = 100 | minus: section.settings.media_width
+  assign retrofit_first_width = section.settings.media_width
+  assign retrofit_second_width = retrofit_copy_width
+  if section.settings.media_position == 'right'
+    assign retrofit_first_width = retrofit_copy_width
+    assign retrofit_second_width = section.settings.media_width
+  endif
 %}
 
 <section
@@ -12,7 +19,10 @@
   data-bw-module="retrofit"
   aria-labelledby="{{ retrofit_heading_id }}"
 >
-  <div class="bw-container bw-retrofit__layout">
+  <div
+    class="bw-container bw-retrofit__layout{% if section.settings.media_position == 'right' %} bw-retrofit__layout--media-right{% endif %}"
+    style="--bw-retrofit-first-fr: {{ retrofit_first_width }}fr; --bw-retrofit-second-fr: {{ retrofit_second_width }}fr;"
+  >
     {% if section.settings.video != blank or section.settings.image != blank or request.design_mode %}
       <div class="bw-section-media bw-retrofit__media">
         {% if section.settings.video != blank %}
@@ -69,6 +79,8 @@
     {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"nachruesten"},
     {"type":"image_picker","id":"image","label":"Bild oder GIF"},
     {"type":"video","id":"video","label":"Shopify-Video","info":"Wenn ausgewählt, hat das Video Vorrang vor dem Bild."},
+    {"type":"range","id":"media_width","label":"Medienbreite (Desktop)","min":35,"max":65,"step":5,"unit":"%","default":50},
+    {"type":"select","id":"media_position","label":"Medienposition (Desktop)","default":"left","options":[{"value":"left","label":"Links"},{"value":"right","label":"Rechts"}]},
     {"type":"text","id":"heading","label":"Überschrift","default":"Du hast schon ein Balkonkraftwerk? Perfekt."},
     {"type":"richtext","id":"text","label":"Beschreibung","default":"<p>VENUS E wird über eine AC-Kopplung in deine bestehende Anlage integriert – ohne die PV-Seite neu zu verkabeln.</p>"},
     {"type":"text","id":"button_label","label":"Button","default":"Mehr erfahren"},

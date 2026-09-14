@@ -11,15 +11,6 @@
   class="bw-storage bw-storage-section bw-section bw-capacity bw-anchor-target"
   data-bw-module="capacity"
   data-section-id="{{ section.id }}"
-  data-people-tier-5="{{ section.settings.people_tier_5_max }}"
-  data-people-tier-10="{{ section.settings.people_tier_10_max }}"
-  data-people-tier-15="{{ section.settings.people_tier_15_max }}"
-  data-pv-tier-5="{{ section.settings.pv_tier_5_max }}"
-  data-pv-tier-10="{{ section.settings.pv_tier_10_max }}"
-  data-pv-tier-15="{{ section.settings.pv_tier_15_max }}"
-  data-annual-tier-5="{{ section.settings.annual_tier_5_max }}"
-  data-annual-tier-10="{{ section.settings.annual_tier_10_max }}"
-  data-annual-tier-15="{{ section.settings.annual_tier_15_max }}"
   aria-labelledby="{{ capacity_heading_id }}"
 >
   <div class="bw-container">
@@ -33,9 +24,13 @@
         {% for block in section.blocks %}
           <button
             type="button"
-            class="bw-capacity-preset{% if block.settings.capacity == '15.36' %} is-active{% endif %}"
+            class="bw-capacity-preset"
             data-bw-preset="{{ block.settings.capacity }}"
-            aria-pressed="{% if block.settings.capacity == '15.36' %}true{% else %}false{% endif %}"
+            data-bw-preset-people="{{ block.settings.people_value }}"
+            data-bw-preset-pv="{{ block.settings.pv_value }}"
+            data-bw-preset-annual="{{ block.settings.annual_value }}"
+            aria-pressed="false"
+            {% if block.settings.background_image != blank %}style="--bw-capacity-background: url('{{ block.settings.background_image | image_url: width: 1400 }}'); --bw-capacity-overlay: {{ block.settings.background_overlay }}%; --bw-capacity-background-position: {{ block.settings.background_position }};"{% endif %}
             {{ block.shopify_attributes }}
           >
             <span class="bw-capacity-preset__badge">{{ block.settings.badge }}</span>
@@ -56,15 +51,7 @@
         <div class="bw-slider-row">
           <label for="bw-people-{{ section.id }}">{{ section.settings.people_label }}</label>
           <div class="bw-slider-row__control">
-            <input
-              id="bw-people-{{ section.id }}"
-              data-bw-input="people"
-              type="range"
-              min="1"
-              max="6"
-              step="1"
-              value="{{ section.settings.people_default }}"
-            >
+            <input id="bw-people-{{ section.id }}" data-bw-input="people" type="range" min="1" max="6" step="1" value="{{ section.settings.people_default }}">
             <span class="bw-slider-thumb" aria-hidden="true"></span>
             <div class="bw-slider-scale" aria-hidden="true"><span data-bw-scale-value="1">1</span><span data-bw-scale-value="2">2</span><span data-bw-scale-value="3">3</span><span data-bw-scale-value="4">4</span><span data-bw-scale-value="5">5</span><span data-bw-scale-value="6">6+</span></div>
           </div>
@@ -74,17 +61,9 @@
         <div class="bw-slider-row">
           <label for="bw-pv-{{ section.id }}">{{ section.settings.pv_label }}</label>
           <div class="bw-slider-row__control">
-            <input
-              id="bw-pv-{{ section.id }}"
-              data-bw-input="pv"
-              type="range"
-              min="0"
-              max="12"
-              step="0.5"
-              value="{{ section.settings.pv_default }}"
-            >
+            <input id="bw-pv-{{ section.id }}" data-bw-input="pv" type="range" min="0.8" max="20" step="0.2" value="{{ section.settings.pv_default }}">
             <span class="bw-slider-thumb" aria-hidden="true"></span>
-            <div class="bw-slider-scale" aria-hidden="true"><span data-bw-scale-value="0">0</span><span data-bw-scale-value="3">3</span><span data-bw-scale-value="6">6</span><span data-bw-scale-value="9">9</span><span data-bw-scale-value="12">12</span></div>
+            <div class="bw-slider-scale" aria-hidden="true"><span data-bw-scale-value="0.8">0,8</span><span data-bw-scale-value="5">5</span><span data-bw-scale-value="10">10</span><span data-bw-scale-value="15">15</span><span data-bw-scale-value="20">20</span></div>
           </div>
           <output for="bw-pv-{{ section.id }}" data-bw-output="pv">{{ section.settings.pv_default }} kWp</output>
         </div>
@@ -92,17 +71,9 @@
         <div class="bw-slider-row">
           <label for="bw-annual-{{ section.id }}">{{ section.settings.annual_label }}</label>
           <div class="bw-slider-row__control">
-            <input
-              id="bw-annual-{{ section.id }}"
-              data-bw-input="annual"
-              type="range"
-              min="1500"
-              max="8000"
-              step="100"
-              value="{{ section.settings.annual_default }}"
-            >
+            <input id="bw-annual-{{ section.id }}" data-bw-input="annual" type="range" min="1000" max="20000" step="100" value="{{ section.settings.annual_default }}">
             <span class="bw-slider-thumb" aria-hidden="true"></span>
-            <div class="bw-slider-scale" aria-hidden="true"><span data-bw-scale-value="1500">1.500</span><span data-bw-scale-value="3000">3.000</span><span data-bw-scale-value="4500">4.500</span><span data-bw-scale-value="6000">6.000</span><span data-bw-scale-value="8000">8.000</span></div>
+            <div class="bw-slider-scale" aria-hidden="true"><span data-bw-scale-value="1000">1.000</span><span data-bw-scale-value="5000">5.000</span><span data-bw-scale-value="10000">10.000</span><span data-bw-scale-value="15000">15.000</span><span data-bw-scale-value="20000">20.000</span></div>
           </div>
           <output for="bw-annual-{{ section.id }}" data-bw-output="annual">{{ section.settings.annual_default }} kWh/Jahr</output>
         </div>
@@ -110,7 +81,7 @@
 
       <div class="bw-calculator__result" aria-live="polite">
         <p class="bw-eyebrow">{{ section.settings.result_eyebrow }}</p>
-        <strong data-bw-capacity>15,36 kWh</strong>
+        <strong data-bw-capacity>ca. 6 kWh</strong>
         {% if section.settings.result_text != blank %}<p>{{ section.settings.result_text }}</p>{% endif %}
         <div class="bw-result-badges" aria-label="Aktuelle Eingaben">
           <span data-bw-summary="people">{{ section.settings.people_default }} Personen</span>
@@ -121,6 +92,7 @@
           {{ section.settings.result_button_label }} <span aria-hidden="true">→</span>
         </button>
         {% if section.settings.result_note != blank %}<small>{{ section.settings.result_note }}</small>{% endif %}
+        <p class="bw-calculator__warning" data-bw-low-pv-warning role="status" hidden>{{ section.settings.low_pv_warning }}</p>
       </div>
     </div>
   </div>
@@ -135,7 +107,7 @@
   "settings": [
     {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"kapazitaet"},
     {"type":"text","id":"heading","label":"Überschrift","default":"Welche Kapazität passt zu deinem Haushalt?"},
-    {"type":"textarea","id":"text","label":"Beschreibung","default":"Wähle nach deiner Wohnsituation, nicht nach Parametern. Von der Single-Wohnung bis zur Familie mit E-Auto."},
+    {"type":"textarea","id":"text","label":"Beschreibung","default":"Wähle nach deiner Wohnsituation, nicht nach Parametern."},
     {"type":"text","id":"presets_label","label":"Bezeichnung der Auswahl","default":"Kapazitätsstufen"},
     {"type":"header","content":"Rechner"},
     {"type":"text","id":"calculator_heading","label":"Rechner-Überschrift","default":"Nicht sicher, was zu dir passt?"},
@@ -143,34 +115,31 @@
     {"type":"text","id":"people_label","label":"Personen-Bezeichnung","default":"Haushaltsgröße"},
     {"type":"range","id":"people_default","label":"Personen-Startwert","min":1,"max":6,"step":1,"default":3},
     {"type":"text","id":"pv_label","label":"PV-Bezeichnung","default":"PV-Leistung"},
-    {"type":"range","id":"pv_default","label":"PV-Startwert","min":0,"max":12,"step":0.5,"unit":"kWp","default":6},
+    {"type":"range","id":"pv_default","label":"PV-Startwert","min":0.8,"max":20,"step":0.2,"unit":"kWp","default":6},
     {"type":"text","id":"annual_label","label":"Verbrauch-Bezeichnung","default":"Jährlicher Verbrauch"},
-    {"type":"range","id":"annual_default","label":"Verbrauch-Startwert","min":1500,"max":8000,"step":100,"unit":"kWh","default":4000},
+    {"type":"range","id":"annual_default","label":"Verbrauch-Startwert","min":1000,"max":20000,"step":100,"unit":"kWh","default":4000},
     {"type":"header","content":"Ergebnis"},
-    {"type":"text","id":"result_eyebrow","label":"Ergebnis-Kicker","default":"EMPFOHLENE KAPAZITÄT"},
-    {"type":"text","id":"result_text","label":"Ergebnis-Text","default":"Passt zu Familie mit hohem Verbrauch"},
+    {"type":"text","id":"result_eyebrow","label":"Ergebnis-Kicker","default":"EMPFOHLENE SPEICHERKLASSE"},
+    {"type":"text","id":"result_text","label":"Ergebnis-Text","default":"Die Speicherklasse wird aus Verbrauch und PV-Leistung berechnet."},
     {"type":"text","id":"result_button_label","label":"Button","default":"Passende Konfigurationen ansehen"},
     {"type":"textarea","id":"result_note","label":"Hinweis","default":"Die Empfehlung ist eine Orientierung. Für eine genaue Planung berücksichtige bitte deine individuellen Verbrauchsdaten."},
-    {"type":"header","content":"Kapazitätsgrenzen"},
-    {"type":"range","id":"people_tier_5_max","label":"5,12 kWh: max. Personen","min":1,"max":6,"step":1,"default":1},
-    {"type":"range","id":"people_tier_10_max","label":"10,24 kWh: max. Personen","min":1,"max":6,"step":1,"default":2},
-    {"type":"range","id":"people_tier_15_max","label":"15,36 kWh: max. Personen","min":1,"max":6,"step":1,"default":4},
-    {"type":"range","id":"pv_tier_5_max","label":"5,12 kWh: max. PV-Leistung","min":0,"max":12,"step":0.5,"unit":"kWp","default":2},
-    {"type":"range","id":"pv_tier_10_max","label":"10,24 kWh: max. PV-Leistung","min":0,"max":12,"step":0.5,"unit":"kWp","default":5},
-    {"type":"range","id":"pv_tier_15_max","label":"15,36 kWh: max. PV-Leistung","min":0,"max":12,"step":0.5,"unit":"kWp","default":8},
-    {"type":"range","id":"annual_tier_5_max","label":"5,12 kWh: max. Verbrauch","min":1500,"max":8000,"step":100,"unit":"kWh","default":2500},
-    {"type":"range","id":"annual_tier_10_max","label":"10,24 kWh: max. Verbrauch","min":1500,"max":8000,"step":100,"unit":"kWh","default":4500},
-    {"type":"range","id":"annual_tier_15_max","label":"15,36 kWh: max. Verbrauch","min":1500,"max":8000,"step":100,"unit":"kWh","default":6500}
+    {"type":"textarea","id":"low_pv_warning","label":"PV-Hinweis","default":"Deine PV-Leistung ist im Verhältnis zu deinem Jahresverbrauch relativ niedrig. Du kannst die Empfehlung trotzdem ansehen."}
   ],
   "blocks": [
     {
       "type": "preset",
       "name": "Haushaltsszenario",
       "settings": [
-        {"type":"select","id":"capacity","label":"Kapazitätsstufe","options":[{"value":"5.12","label":"5,12 kWh"},{"value":"10.24","label":"10,24 kWh"},{"value":"15.36","label":"15,36 kWh"},{"value":"30","label":"Erweiterbar bis 30 kWh"}],"default":"15.36"},
-        {"type":"text","id":"badge","label":"Badge","default":"15,36 kWh"},
-        {"type":"text","id":"title","label":"Titel","default":"4+ Personen"},
-        {"type":"textarea","id":"text","label":"Beschreibung","default":"Familie mit hohem Verbrauch – auch bei Schlechtwetter."}
+        {"type":"image_picker","id":"background_image","label":"Hintergrundbild"},
+        {"type":"select","id":"background_position","label":"Bildposition","default":"center center","options":[{"value":"left center","label":"Links"},{"value":"center center","label":"Mitte"},{"value":"right center","label":"Rechts"},{"value":"center top","label":"Oben"},{"value":"center bottom","label":"Unten"}]},
+        {"type":"range","id":"background_overlay","label":"Helle Überlagerung","min":0,"max":100,"step":5,"unit":"%","default":75},
+        {"type":"select","id":"capacity","label":"Speicherklasse","options":[{"value":"2","label":"ca. 2 kWh"},{"value":"4","label":"ca. 4 kWh"},{"value":"5","label":"ca. 5 kWh"},{"value":"6","label":"ca. 6 kWh"},{"value":"10","label":"ca. 10 kWh"},{"value":"15","label":"ca. 15 kWh"},{"value":"20","label":"ca. 20 kWh"},{"value":"30","label":"ca. 30 kWh"}],"default":"10"},
+        {"type":"text","id":"badge","label":"Badge","default":"ca. 10 kWh"},
+        {"type":"text","id":"title","label":"Titel","default":"3 Personen · 6 kWp"},
+        {"type":"textarea","id":"text","label":"Beschreibung","default":"6.200 kWh/Jahr"},
+        {"type":"range","id":"people_value","label":"Haushaltsgröße","min":1,"max":6,"step":1,"default":3},
+        {"type":"range","id":"pv_value","label":"PV-Leistung","min":0.8,"max":20,"step":0.2,"unit":"kWp","default":6},
+        {"type":"range","id":"annual_value","label":"Jährlicher Verbrauch","min":1000,"max":20000,"step":100,"unit":"kWh","default":6200}
       ]
     }
   ],
@@ -178,10 +147,10 @@
     {
       "name": "VENUS E · Kapazität",
       "blocks": [
-        {"type":"preset","settings":{"capacity":"5.12","badge":"5,12 kWh","title":"1–2 Personen","text":"Wohnung / kleines Balkonkraftwerk – Grundbedarf abends."}},
-        {"type":"preset","settings":{"capacity":"10.24","badge":"10,24 kWh","title":"3–4 Personen","text":"Einfamilienhaus mit Dach-PV – ganzer Abend versorgt."}},
-        {"type":"preset","settings":{"capacity":"15.36","badge":"15,36 kWh","title":"4+ Personen","text":"Familie mit hohem Verbrauch – auch bei Schlechtwetter."}},
-        {"type":"preset","settings":{"capacity":"30","badge":"Erweiterbar","title":"Mit E-Auto oder Wärmepumpe","text":"Bis zu 3 × VENUS E – wächst mit deinem Bedarf."}}
+        {"type":"preset","settings":{"capacity":"5","badge":"ca. 5 kWh","title":"1 Person · 11 kWp","text":"3.200 kWh/Jahr","people_value":1,"pv_value":11,"annual_value":3200}},
+        {"type":"preset","settings":{"capacity":"10","badge":"ca. 10 kWh","title":"3 Personen · 6 kWp","text":"6.200 kWh/Jahr","people_value":3,"pv_value":6,"annual_value":6200}},
+        {"type":"preset","settings":{"capacity":"15","badge":"ca. 15 kWh","title":"4 Personen · 10 kWp","text":"9.000 kWh/Jahr","people_value":4,"pv_value":10,"annual_value":9000}},
+        {"type":"preset","settings":{"capacity":"30","badge":"ca. 30 kWh","title":"6+ Personen · 20 kWp","text":"20.000 kWh/Jahr","people_value":6,"pv_value":20,"annual_value":20000}}
       ]
     }
   ]

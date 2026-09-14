@@ -9,17 +9,62 @@
 
   var STORAGE_KEY_V1 = 'venusBalkonStorageRecommendation:v1';
   var STORAGE_KEY_V2 = 'venusBalkonStorageRecommendation:v2';
-  var TIER_VALUES = { '5.12': 5.12, '10.24': 10.24, '15.36': 15.36, '30': 30 };
+  var STORAGE_KEY_V3 = 'venusBalkonStorageRecommendation:v3';
+  /* All calculator rules and the capacity-to-product matrix live here. */
+  var CALCULATOR_CONFIG = {
+    coefficients: { annual: 1.5, pv: 1.5, lowPv: 0.5 },
+    classes: [
+      { key: 'below-2', min: null, max: 1.5, value: 2, label: 'bis ca. 2 kWh' },
+      { key: '2', min: 1.5, max: 3, value: 2, label: 'ca. 2 kWh' },
+      { key: '4', min: 3, max: 4.5, value: 4, label: 'ca. 4 kWh' },
+      { key: '5', min: 4.5, max: 5.5, value: 5, label: 'ca. 5 kWh' },
+      { key: '6', min: 5.5, max: 8, value: 6, label: 'ca. 6 kWh' },
+      { key: '10', min: 8, max: 12.5, value: 10, label: 'ca. 10 kWh' },
+      { key: '15', min: 12.5, max: 17.5, value: 15, label: 'ca. 15 kWh' },
+      { key: '20', min: 17.5, max: 25, value: 20, label: 'ca. 20 kWh' },
+      { key: '30', min: 25, max: null, value: 30, label: 'ca. 30 kWh' }
+    ],
+    products: {
+      mini: { label: 'VENUS E Mini' },
+      venus3: { label: 'VENUS E 3.0' },
+      venus4: { label: 'VENUS E 4.0' },
+      max: { label: 'VENUS E Max' }
+    },
+    recommendations: {
+      2: [{ product: 'mini', capacity: 2, count: 1 }],
+      4: [{ product: 'mini', capacity: 4, count: 2 }],
+      5: [{ product: 'venus3', capacity: 5.12, count: 1 }, { product: 'venus4', capacity: 5, count: 1 }, { product: 'mini', capacity: 6, count: 3 }],
+      6: [{ product: 'mini', capacity: 6, count: 3 }, { product: 'venus3', capacity: 5.12, count: 1 }, { product: 'venus4', capacity: 5, count: 1 }],
+      10: [{ product: 'venus3', capacity: 10.24, count: 2 }, { product: 'venus4', capacity: 10, count: 2 }, { product: 'max', capacity: 10, count: 1 }],
+      15: [{ product: 'venus3', capacity: 15.36, count: 3 }, { product: 'venus4', capacity: 15, count: 3 }],
+      20: [{ product: 'max', capacity: 20, count: 2 }],
+      30: [{ product: 'max', capacity: 30, count: 3 }]
+    },
+    presets: {
+      2: { people: 1, pv: 0.8, annual: 1000 },
+      4: { people: 2, pv: 3, annual: 2000 },
+      5: { people: 1, pv: 11, annual: 3200 },
+      6: { people: 3, pv: 6, annual: 4000 },
+      10: { people: 3, pv: 6, annual: 6200 },
+      15: { people: 4, pv: 10, annual: 9000 },
+      20: { people: 5, pv: 14, annual: 12000 },
+      30: { people: 6, pv: 20, annual: 20000 }
+    }
+  };
   var DEFAULT_STATE = {
     people: 3,
     pv: 6,
     annual: 4000,
-    tier: '15.36',
+    tier: '6',
+    storageClass: null,
+    rawCapacity: 6,
+    lowPvWarning: false,
     hasCalculated: false,
     resultsVisible: false
   };
   var state = Object.assign({}, DEFAULT_STATE);
   var products = {};
+  var hasStoredState = false;
   var resolvedRecommendation = null;
   var navigationObserver = null;
   var renderFrame = null;
@@ -74,22 +119,25 @@
   function readStoredState() {
     var stored = null;
     try {
-      stored = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY_V2) || 'null');
+      stored = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY_V3) || 'null');
+      if (!stored) stored = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY_V2) || 'null');
       if (!stored) stored = JSON.parse(window.sessionStorage.getItem(STORAGE_KEY_V1) || 'null');
     } catch (error) {
       stored = null;
     }
 
     if (!stored || stored.people === undefined || stored.pv === undefined || stored.annual === undefined) return;
+    hasStoredState = true;
     state = Object.assign({}, DEFAULT_STATE, stored);
-    if (!TIER_VALUES[state.tier]) state.tier = '15.36';
+    state.tier = null;
+    state.storageClass = null;
     state.hasCalculated = false;
     state.resultsVisible = false;
   }
 
   function saveState() {
     try {
-      window.sessionStorage.setItem(STORAGE_KEY_V2, JSON.stringify(state));
+      window.sessionStorage.setItem(STORAGE_KEY_V3, JSON.stringify(state));
     } catch (error) {
       // Storage can be unavailable in private browsing contexts.
     }
@@ -103,33 +151,29 @@
     return document.querySelector('[data-bw-recommendations], [data-bw-module="recommendations"]');
   }
 
-  function thresholdsFrom(root) {
-    var data = root ? root.dataset : {};
+  function findStorageClass(rawCapacity) {
+    var raw = finiteNumber(rawCapacity, 0);
+    return CALCULATOR_CONFIG.classes.find(function (item) {
+      return (item.min === null || raw >= item.min) && (item.max === null || raw < item.max);
+    }) || CALCULATOR_CONFIG.classes[CALCULATOR_CONFIG.classes.length - 1];
+  }
+
+  function calculateCapacity(people, pv, annual) {
+    var consumptionCapacity = annual / 1000 * CALCULATOR_CONFIG.coefficients.annual;
+    var pvCapacity = pv * CALCULATOR_CONFIG.coefficients.pv;
+    var rawCapacity = Math.min(consumptionCapacity, pvCapacity);
+    var storageClass = findStorageClass(rawCapacity);
     return {
-      people5: finiteNumber(data.peopleTier5, 1),
-      people10: finiteNumber(data.peopleTier10, 2),
-      people15: finiteNumber(data.peopleTier15, 4),
-      pv5: finiteNumber(data.pvTier5, 2),
-      pv10: finiteNumber(data.pvTier10, 5),
-      pv15: finiteNumber(data.pvTier15, 8),
-      annual5: finiteNumber(data.annualTier5, 2500),
-      annual10: finiteNumber(data.annualTier10, 4500),
-      annual15: finiteNumber(data.annualTier15, 6500)
+      consumptionCapacity: consumptionCapacity,
+      pvCapacity: pvCapacity,
+      rawCapacity: rawCapacity,
+      storageClass: storageClass,
+      lowPvWarning: pv < annual / 1000 * CALCULATOR_CONFIG.coefficients.lowPv
     };
   }
 
-  function getTier(people, pv, annual, thresholds) {
-    var peopleTier = people <= thresholds.people5 ? 5.12 : people <= thresholds.people10 ? 10.24 : people <= thresholds.people15 ? 15.36 : 30;
-    var pvTier = pv <= thresholds.pv5 ? 5.12 : pv <= thresholds.pv10 ? 10.24 : pv <= thresholds.pv15 ? 15.36 : 30;
-    var annualTier = annual <= thresholds.annual5 ? 5.12 : annual <= thresholds.annual10 ? 10.24 : annual <= thresholds.annual15 ? 15.36 : 30;
-    return Math.max(peopleTier, pvTier, annualTier).toFixed(2).replace(/\.00$/, '');
-  }
-
   function valuesForTier(tier) {
-    if (tier === '5.12') return { people: 1, pv: 2, annual: 2500 };
-    if (tier === '10.24') return { people: 2, pv: 4, annual: 4000 };
-    if (tier === '30') return { people: 6, pv: 10, annual: 8000 };
-    return { people: 3, pv: 6, annual: 4000 };
+    return CALCULATOR_CONFIG.presets[String(tier)] || CALCULATOR_CONFIG.presets[6];
   }
 
   function findVariant(product, capacity) {
@@ -138,7 +182,7 @@
       var parsed = parseCapacity(variant.title);
       return parsed !== null && Math.abs(parsed - capacity) < 0.08;
     });
-    return matches.find(function (variant) { return variant.available; }) || matches[0] || null;
+    return matches[0] || null;
   }
 
   function readProductData() {
@@ -156,37 +200,42 @@
   }
 
   function recommendationForState() {
-    var tier = state.tier;
-    if (tier === '5.12') return makeItem(products.venus3, 5.12, '1× VENUS E 3.0');
-    if (tier === '10.24') return makeItem(products.venus3, 10.24, '2× VENUS E 3.0');
-    if (tier === '30') return makeItem(products.max, 30, '3× VENUS E Max');
-    return makeItem(products.venus3, 15.36, '3× VENUS E 3.0');
+    return configuredRecommendations()[0] || null;
   }
 
   function alternativeForState(role) {
-    if (role === 'alt4') {
-      var cap4 = state.tier === '5.12' ? 5 : state.tier === '10.24' ? 10 : 15;
-      return makeItem(products.venus4, cap4, (cap4 === 5 ? '1×' : cap4 === 10 ? '2×' : '3×') + ' VENUS E 4.0');
-    }
-    var capMax = state.tier === '5.12' ? 10 : state.tier === '30' ? 30 : 20;
-    return makeItem(products.max, capMax, (capMax === 10 ? '1×' : capMax === 20 ? '2×' : '3×') + ' VENUS E Max');
+    var configured = configuredRecommendations();
+    return role === 'alt4' ? configured[1] || null : configured[2] || null;
   }
 
-  function makeItem(product, capacity, title) {
+  function configuredItem(productKey, capacity, count) {
+    var product = products[productKey];
     var variant = findVariant(product, capacity);
+    var productMeta = CALCULATOR_CONFIG.products[productKey] || { label: productKey };
     return {
+      productKey: productKey,
       product: product || {},
       variant: variant,
       capacity: capacity,
-      title: title,
+      count: count,
+      title: String(count) + '× ' + productMeta.label,
       url: product && product.url ? product.url : '',
       image: variant && variant.image
         ? variant.image
         : product && (product.featured_image || product.image)
           ? (product.featured_image || product.image)
           : '',
-      available: Boolean(variant && variant.available)
+      available: Boolean(variant && variant.available),
+      preorder: Boolean(product && product.preorder_enabled),
+      preorderLabel: product && product.preorder_label ? product.preorder_label : 'Jetzt vormerken'
     };
+  }
+
+  function configuredRecommendations() {
+    var storageClass = state.storageClass || findStorageClass(state.rawCapacity || 0);
+    var specs = CALCULATOR_CONFIG.recommendations[storageClass.value] || [];
+    return specs.map(function (spec) { return configuredItem(spec.product, spec.capacity, spec.count); })
+      .filter(function (item) { return item.product && (item.variant || item.url); });
   }
 
   function inputsFrom(root) {
@@ -203,12 +252,17 @@
     var people = finiteNumber(inputs.people.value, DEFAULT_STATE.people);
     var pv = finiteNumber(inputs.pv.value, DEFAULT_STATE.pv);
     var annual = finiteNumber(inputs.annual.value, DEFAULT_STATE.annual);
-    var tier = getTier(people, pv, annual, thresholdsFrom(root));
+    var calculation = calculateCapacity(people, pv, annual);
+    var tier = String(calculation.storageClass.value);
     var hasCalculated = markCalculated ? true : state.hasCalculated;
     var changed = state.people !== people
       || state.pv !== pv
       || state.annual !== annual
       || state.tier !== tier
+      || !state.storageClass
+      || state.storageClass.key !== calculation.storageClass.key
+      || state.rawCapacity !== calculation.rawCapacity
+      || state.lowPvWarning !== calculation.lowPvWarning
       || state.hasCalculated !== hasCalculated;
 
     if (!changed) return;
@@ -217,6 +271,9 @@
     state.pv = pv;
     state.annual = annual;
     state.tier = tier;
+    state.storageClass = calculation.storageClass;
+    state.rawCapacity = calculation.rawCapacity;
+    state.lowPvWarning = calculation.lowPvWarning;
     state.hasCalculated = hasCalculated;
     scheduleRender();
   }
@@ -303,17 +360,23 @@
     setText(root, '[data-bw-output="people"]', peopleText);
     setText(root, '[data-bw-output="pv"]', pvText);
     setText(root, '[data-bw-output="annual"]', annualText);
-    setAllText(root, '[data-bw-capacity]', formatCapacity(TIER_VALUES[state.tier]));
+    var storageClass = state.storageClass || findStorageClass(state.rawCapacity || 0);
+    setAllText(root, '[data-bw-capacity]', storageClass.label);
     setText(root, '[data-bw-summary="people"]', peopleText);
     setText(root, '[data-bw-summary="pv"]', pvText);
     setText(root, '[data-bw-summary="annual"]', annualText);
     var combined = root.querySelector('[data-bw-summary]:not([data-bw-summary="people"]):not([data-bw-summary="pv"]):not([data-bw-summary="annual"])');
     if (combined) combined.textContent = peopleText + ' · ' + pvText + ' · ' + annualText;
     root.querySelectorAll('[data-bw-preset]').forEach(function (button) {
-      var active = button.dataset.bwPreset === state.tier;
+      var preset = valuesForTier(button.dataset.bwPreset);
+      var active = Number(preset.people) === Number(state.people)
+        && Number(preset.pv) === Number(state.pv)
+        && Number(preset.annual) === Number(state.annual);
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
+    var warning = root.querySelector('[data-bw-low-pv-warning]');
+    if (warning) warning.hidden = !state.lowPvWarning;
   }
 
   function bindRangeResize() {
@@ -411,6 +474,67 @@
   }
 
   function renderRecommendations() {
+    return renderRecommendationsV2();
+  }
+
+  function configureActionV2(action, item, fallbackLabel) {
+    if (!action) return;
+    var directAdd = Boolean(item && item.variant && item.variant.available && !item.preorder);
+    action.dataset.variantId = item && item.variant && item.variant.id ? String(item.variant.id) : '';
+    action.dataset.productUrl = item && item.url ? item.url : '';
+    action.dataset.productHandle = item && item.product && item.product.handle ? item.product.handle : '';
+    action.dataset.productId = item && item.product && item.product.id ? String(item.product.id) : '';
+    action.dataset.directAdd = directAdd ? 'true' : 'false';
+    action.dataset.preorder = item && item.preorder ? 'true' : 'false';
+    action.removeAttribute('aria-disabled');
+    if ('disabled' in action) action.disabled = false;
+    if (directAdd) {
+      action.textContent = fallbackLabel || 'In den Warenkorb';
+    } else if (item && item.preorder) {
+      action.textContent = item.preorderLabel || 'Jetzt vormerken';
+    } else if (item && item.url && !item.variant) {
+      action.textContent = 'Zur Produktseite';
+    } else {
+      action.textContent = 'Nicht verfügbar';
+      action.setAttribute('aria-disabled', 'true');
+      if ('disabled' in action) action.disabled = true;
+    }
+  }
+
+  function renderResultCardV2(root, slot, item) {
+    var card = root.querySelector('[data-bw-result-card="' + slot + '"]');
+    if (!card) return;
+    card.hidden = !item;
+    if (!item) return;
+    setText(card, '[data-bw-result-title]', item.title);
+    setText(card, '[data-bw-result-capacity]', formatCapacity(item.capacity));
+    var price = card.querySelector('[data-bw-result-price]');
+    var compareAt = card.querySelector('[data-bw-result-compare-at]');
+    if (price) {
+      price.textContent = item.variant ? formatMoney(item.variant.price) : '';
+      price.hidden = !item.variant;
+    }
+    if (compareAt) {
+      var showCompare = item.variant && Number(item.variant.compare_at_price) > Number(item.variant.price);
+      compareAt.textContent = showCompare ? formatMoney(item.variant.compare_at_price) : '';
+      compareAt.hidden = !showCompare;
+    }
+    setText(card, '[data-bw-result-availability]', item.preorder ? 'Jetzt vormerken' : item.available ? 'Verfügbar' : 'Nicht verfügbar');
+    updateMedia(card.querySelector('[data-bw-result-media]') || card, item.image, item.title);
+    var mediaWrap = card.querySelector('[data-bw-result-image-wrap]');
+    if (mediaWrap && item.url) mediaWrap.href = item.url;
+    configureActionV2(card.querySelector('[data-bw-product-role], [data-bw-product-action]'), item, 'In den Warenkorb');
+    card.classList.toggle('is-unavailable', !item.available && !item.preorder);
+    card.classList.toggle('is-preorder', item.preorder);
+  }
+
+  function resultSummaryV2() {
+    return state.people + (Number(state.people) >= 6 ? '+ Personen' : ' Personen') + ' · '
+      + String(state.pv).replace('.', ',') + ' kWp · '
+      + formatNumber(state.annual) + ' kWh/Jahr';
+  }
+
+  function renderRecommendationsV2() {
     var root = getRecommendationsRoot();
     if (!root) {
       resolvedRecommendation = null;
@@ -421,29 +545,26 @@
     root.hidden = !resultsVisible;
     root.dataset.bwResultsState = resultsVisible ? 'visible' : 'hidden';
     syncResultsControls(root, resultsVisible);
-    setAllText(root, '[data-bw-capacity-inline]', formatCapacity(TIER_VALUES[state.tier]));
-    setText(root, '[data-bw-results-input-summary], [data-bw-recommendation-summary]', resultSummary());
-
-    var primary = recommendationForState();
-    var alt4 = alternativeForState('alt4');
-    var altMax = alternativeForState('altmax');
-    resolvedRecommendation = primary;
-    renderResultCard(root, 'primary', primary);
-    renderResultCard(root, 'alt4', alt4);
-    renderResultCard(root, 'altmax', altMax);
-
-    var detail = {
+    var storageClass = state.storageClass || findStorageClass(state.rawCapacity || 0);
+    setAllText(root, '[data-bw-capacity-inline]', storageClass.label);
+    setText(root, '[data-bw-results-input-summary], [data-bw-recommendation-summary]', resultSummaryV2());
+    var recommendations = configuredRecommendations();
+    resolvedRecommendation = recommendations[0] || null;
+    ['slot1', 'slot2', 'slot3'].forEach(function (slot, index) {
+      renderResultCardV2(root, slot, recommendations[index] || null);
+    });
+    var primary = resolvedRecommendation;
+    document.dispatchEvent(new CustomEvent('venus:recommendation-resolved', { detail: {
       tier: state.tier,
-      capacityKwh: TIER_VALUES[state.tier],
-      productTitle: primary.title,
-      productUrl: primary.url,
-      variantId: primary.variant && primary.variant.id ? primary.variant.id : null,
-      available: primary.available,
-      image: primary.image,
-      price: primary.variant ? primary.variant.price : null,
-      compareAtPrice: primary.variant ? primary.variant.compare_at_price : null
-    };
-    document.dispatchEvent(new CustomEvent('venus:recommendation-resolved', { detail: detail }));
+      storageClass: storageClass.label,
+      rawCapacity: state.rawCapacity,
+      capacityKwh: storageClass.value,
+      productTitle: primary ? primary.title : '',
+      productUrl: primary ? primary.url : '',
+      variantId: primary && primary.variant ? String(primary.variant.id) : null,
+      available: Boolean(primary && primary.available),
+      recommendations: recommendations
+    }}));
   }
 
   function syncResultsControls(root, expanded) {
@@ -463,23 +584,26 @@
       if (uncalculated) uncalculated.hidden = hasRecommendation;
       if (!hasRecommendation) return;
 
-      setAllText(root, '[data-bw-final-capacity]', formatCapacity(TIER_VALUES[state.tier]));
+      var finalClass = state.storageClass || findStorageClass(state.rawCapacity || 0);
+      setAllText(root, '[data-bw-final-capacity]', finalClass.label);
       setAllText(root, '[data-bw-final-product]', resolvedRecommendation.title);
       setText(root, '[data-bw-final-price]', resolvedRecommendation.variant ? formatMoney(resolvedRecommendation.variant.price) : '');
       updateMedia(root.querySelector('[data-bw-final-media]') || root, resolvedRecommendation.image, resolvedRecommendation.title);
-      configureAction(root.querySelector('[data-bw-final-action]'), resolvedRecommendation, true, 'Jetzt kaufen');
+      configureActionV2(root.querySelector('[data-bw-final-action]'), resolvedRecommendation, 'In den Warenkorb');
     });
   }
 
   function emitCapacityChange() {
-    var primary = resolvedRecommendation || recommendationForState();
+    var primary = resolvedRecommendation || configuredRecommendations()[0] || null;
     document.dispatchEvent(new CustomEvent('venus:capacity-change', {
       detail: {
         people: state.people,
         pvKw: state.pv,
         annualKwh: state.annual,
         tier: state.tier,
-        capacityKwh: TIER_VALUES[state.tier],
+        capacityKwh: state.storageClass ? state.storageClass.value : null,
+        rawCapacity: state.rawCapacity,
+        lowPvWarning: state.lowPvWarning,
         hasCalculated: state.hasCalculated,
         resultsVisible: state.resultsVisible,
         primaryVariantId: primary && primary.variant && primary.variant.id ? primary.variant.id : null
@@ -490,7 +614,7 @@
   function renderAll() {
     readProductData();
     renderCapacity();
-    renderRecommendations();
+    renderRecommendationsV2();
     renderFinalCta();
     emitCapacityChange();
   }
@@ -501,9 +625,14 @@
     root.dataset.bwInitialized = 'true';
     bindRangeResize();
     var inputs = inputsFrom(root);
+    if (!hasStoredState && inputs.people && inputs.pv && inputs.annual) {
+      state.people = finiteNumber(inputs.people.value, DEFAULT_STATE.people);
+      state.pv = finiteNumber(inputs.pv.value, DEFAULT_STATE.pv);
+      state.annual = finiteNumber(inputs.annual.value, DEFAULT_STATE.annual);
+    }
     Object.keys(inputs).forEach(function (key) {
       if (!inputs[key]) return;
-      inputs[key].value = state[key];
+      if (hasStoredState) inputs[key].value = state[key];
       inputs[key].addEventListener('input', function () {
         syncRangeProgress(this);
         syncStateFromInputs(root, true);
@@ -512,11 +641,18 @@
     });
     root.querySelectorAll('[data-bw-preset]').forEach(function (button) {
       button.addEventListener('click', function () {
-        var values = valuesForTier(button.dataset.bwPreset);
+        var configured = valuesForTier(button.dataset.bwPreset);
+        var values = {
+          people: finiteNumber(button.dataset.bwPresetPeople, configured.people),
+          pv: finiteNumber(button.dataset.bwPresetPv, configured.pv),
+          annual: finiteNumber(button.dataset.bwPresetAnnual, configured.annual)
+        };
         Object.keys(values).forEach(function (key) { if (inputs[key]) inputs[key].value = values[key]; });
         syncStateFromInputs(root, true);
       });
     });
+    syncStateFromInputs(root, false);
+    hasStoredState = true;
     root.querySelectorAll('[data-bw-scroll-results]').forEach(function (button) {
       button.addEventListener('click', function () {
         syncStateFromInputs(root, true);
@@ -581,58 +717,6 @@
     });
   }
 
-  function normalizedText(value) {
-    return String(value || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase('de-DE');
-  }
-
-  function prepareHomepageProductSync(mount) {
-    if (!mount || !mount.matches('[data-bw-homepage-product-sync]')) return;
-    var category = normalizedText(mount.dataset.bwSourceCategory);
-
-    mount.querySelectorAll('[class*="ai-carousel-header-"], [class*="ai-tab-nav-"], [class*="ai-cta-card-"]').forEach(function (node) {
-      node.hidden = true;
-    });
-
-    var units = Array.prototype.slice.call(mount.querySelectorAll('.venus-category-unit'));
-    if (units.length) {
-      var selectedUnit = units.find(function (unit) {
-        var tab = unit.querySelector('.venus-category-tab');
-        var label = normalizedText(tab && tab.textContent);
-        return category && (label.indexOf(category) !== -1 || category.indexOf(label) !== -1);
-      }) || units[0];
-      var selectedUnitTab = selectedUnit.querySelector('.venus-category-tab');
-      if (selectedUnitTab && typeof selectedUnitTab.click === 'function') selectedUnitTab.click();
-      units.forEach(function (unit) {
-        var selected = unit === selectedUnit;
-        unit.hidden = !selected;
-        var tab = unit.querySelector('.venus-category-tab');
-        var panel = unit.querySelector('.venus-category-panel, [data-tab-content]');
-        if (tab) tab.hidden = true;
-        if (panel) {
-          panel.hidden = !selected;
-          panel.classList.toggle('active', selected);
-          if (selected) panel.style.removeProperty('display');
-        }
-      });
-    } else {
-      var tabs = Array.prototype.slice.call(mount.querySelectorAll('[data-tab]'));
-      var selectedTab = tabs.find(function (tab) {
-        var label = normalizedText(tab.textContent);
-        return category && (label.indexOf(category) !== -1 || category.indexOf(label) !== -1);
-      });
-      if (selectedTab) {
-        if (typeof selectedTab.click === 'function') selectedTab.click();
-        var selectedKey = selectedTab.dataset.tab;
-        mount.querySelectorAll('[data-tab-content]').forEach(function (panel) {
-          var selected = panel.dataset.tabContent === selectedKey;
-          panel.hidden = !selected;
-          panel.classList.toggle('active', selected);
-        });
-      }
-    }
-    mount.dataset.bwSyncReady = 'true';
-  }
-
   function requestHomepageSection(sectionId) {
     var homepageUrl = new URL(getRootUrl(), window.location.origin);
     var requestUrl = new URL(homepageUrl.toString());
@@ -676,7 +760,6 @@
         mount.innerHTML = markup;
         mount.removeAttribute('aria-busy');
         executeScripts(mount);
-        prepareHomepageProductSync(mount);
         mount.dispatchEvent(new CustomEvent('venus:homepage-sync-ready', { bubbles: true }));
       }).catch(function () {
         mount.removeAttribute('aria-busy');
@@ -766,6 +849,23 @@
   function handleProductAction(event) {
     var action = event.target.closest('[data-bw-product-role], [data-bw-product-action], [data-bw-final-action]');
     if (!action) return;
+    if (action.dataset.preorder === 'true') {
+      event.preventDefault();
+      var triggers = document.querySelectorAll('[data-preorder-open]');
+      var matchingTrigger = Array.prototype.find.call(triggers, function (trigger) {
+        return (!action.dataset.productHandle || trigger.dataset.productHandle === action.dataset.productHandle)
+          && (!action.dataset.productId || trigger.dataset.productId === action.dataset.productId);
+      });
+      if (!matchingTrigger) {
+        matchingTrigger = triggers[0];
+      }
+      if (matchingTrigger && typeof matchingTrigger.click === 'function') {
+        matchingTrigger.click();
+      } else if (action.dataset.productUrl) {
+        window.location.href = action.dataset.productUrl;
+      }
+      return;
+    }
     var directAdd = action.dataset.directAdd === 'true';
     var productUrl = action.dataset.productUrl;
     if (!directAdd) {

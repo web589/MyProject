@@ -15,6 +15,7 @@
   if section.settings.video != blank or section.settings.image != blank
     assign has_media = true
   endif
+  assign hero_copy_width = 100 | minus: section.settings.media_width
 %}
 
 <section
@@ -23,7 +24,10 @@
   data-bw-module="hero"
   data-section-id="{{ section.id }}"
 >
-  <div class="bw-container bw-hero__grid{% unless has_media or request.design_mode %} bw-hero__grid--copy-only{% endunless %}">
+  <div
+    class="bw-container bw-hero__grid{% unless has_media or request.design_mode %} bw-hero__grid--copy-only{% endunless %}{% if section.settings.media_position == 'left' %} bw-hero__grid--media-left{% endif %}"
+    style="--bw-hero-copy-fr: {{ hero_copy_width }}fr; --bw-hero-media-fr: {{ section.settings.media_width }}fr;"
+  >
     <div class="bw-hero__copy">
       {% if section.settings.badge != blank %}
         <p class="bw-hero__pill">{{ section.settings.badge | escape }}</p>
@@ -156,6 +160,26 @@
       "type": "image_picker",
       "id": "image",
       "label": "Bild oder GIF"
+    },
+    {
+      "type": "range",
+      "id": "media_width",
+      "label": "Medienbreite (Desktop)",
+      "min": 35,
+      "max": 65,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Medienposition (Desktop)",
+      "default": "right",
+      "options": [
+        { "value": "left", "label": "Links" },
+        { "value": "right", "label": "Rechts" }
+      ]
     },
     {
       "type": "text",
