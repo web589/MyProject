@@ -439,7 +439,6 @@
 }
 
 .bw-trust__icon,
-.bw-system-flow__icon,
 .bw-stat-card__icon {
   display: inline-flex;
   flex: 0 0 auto;
@@ -751,7 +750,7 @@
 .bw-capacity-preset::before,
 .bw-capacity-preset::after {
   position: absolute;
-  z-index: -2;
+  z-index: 0;
   inset: 0;
   content: "";
   pointer-events: none;
@@ -764,8 +763,12 @@
 }
 
 .bw-capacity-preset::after {
-  z-index: -1;
   background: rgba(244, 246, 248, var(--bw-capacity-overlay, 0));
+}
+
+.bw-capacity-preset > * {
+  position: relative;
+  z-index: 1;
 }
 
 .bw-capacity-preset:hover,
