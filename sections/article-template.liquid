@@ -1140,7 +1140,7 @@
         {%- if article.content != blank -%}
           <div class="article__body rte blog-article__body" data-blog-article-body>
             <nav class="blog-article__toc" data-blog-article-toc hidden aria-label="{{ 'blogs.article.table_of_contents' | t }}">
-              <div class="blog-article__toc-title">{{ 'blogs.article.table_of_contents' | t }}</div>
+              <div class="blog-article__toc-title"><strong>{{ 'blogs.article.table_of_contents' | t }}</strong></div>
               <ol class="blog-article__toc-list" data-blog-article-toc-list></ol>
             </nav>
             {{ article.content }}
