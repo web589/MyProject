@@ -418,6 +418,24 @@
   height: auto;
 }
 
+@media (min-width: 900px) {
+  .bw-hero__grid {
+    grid-template-columns: minmax(390px, var(--bw-hero-copy-fr, 45fr)) minmax(0, var(--bw-hero-media-fr, 55fr));
+  }
+
+  .bw-hero__grid:not(.bw-hero__grid--media-left) .bw-hero__media {
+    width: calc(100% + clamp(80px, 8vw, 140px));
+    max-width: none;
+    aspect-ratio: 16 / 9;
+  }
+
+  .bw-hero__grid:not(.bw-hero__grid--media-left) .bw-hero__media img,
+  .bw-hero__grid:not(.bw-hero__grid--media-left) .bw-hero__media video {
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
 /* Trust strip */
 .bw-trust {
   padding: 24px 0;
