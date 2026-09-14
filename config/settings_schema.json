@@ -1070,6 +1070,45 @@
     ]
   },
   {
+    "name": "Structured data",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Configure verified website operator data here. Product brand data comes from each product vendor. Add the configured exclusion tag to technical products that should not be emitted as the main Product entity."
+      },
+      {
+        "type": "text",
+        "id": "structured_data_organization_name",
+        "label": "Verified operator name",
+        "info": "Use the actual website operator, not a product manufacturer or distributor brand."
+      },
+      {
+        "type": "url",
+        "id": "structured_data_organization_url",
+        "label": "Verified operator URL",
+        "info": "The official URL for the website operator."
+      },
+      {
+        "type": "image_picker",
+        "id": "structured_data_organization_logo",
+        "label": "Verified operator logo"
+      },
+      {
+        "type": "textarea",
+        "id": "structured_data_organization_same_as",
+        "label": "Verified operator social URLs",
+        "info": "Optional. Enter one verified URL per line."
+      },
+      {
+        "type": "text",
+        "id": "structured_data_excluded_product_tag",
+        "label": "Structured data exclusion tag",
+        "default": "structured-data-exclude",
+        "info": "Products with this exact tag will not emit the main Product JSON-LD."
+      }
+    ]
+  },
+  {
     "name": "Technical specification metafields",
     "settings": [
       {

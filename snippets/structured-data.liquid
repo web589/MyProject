@@ -1,0 +1,375 @@
+{%- liquid
+  assign structured_data_context = structured_data_context | default: 'global'
+-%}
+
+{%- if structured_data_context == 'faq' -%}
+  {%- assign structured_data_faq_entity_count = 0 -%}
+  {%- for faq_item in faq_items -%}
+    {%- assign faq_question = blank -%}
+    {%- assign faq_answer = blank -%}
+    {%- if faq_source == 'product' -%}
+      {%- assign faq_question = faq_item.question.value -%}
+      {%- assign faq_answer = faq_item.answer.value -%}
+    {%- elsif faq_source == 'bw_storage' -%}
+      {%- assign faq_question = faq_item.settings.question -%}
+      {%- assign faq_answer = faq_item.settings.answer -%}
+    {%- else -%}
+      {%- assign faq_question = faq_item.settings.title -%}
+      {%- assign faq_answer = faq_item.settings.text -%}
+    {%- endif -%}
+    {%- if faq_question != blank and faq_answer != blank -%}
+      {%- assign structured_data_faq_entity_count = structured_data_faq_entity_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if structured_data_faq_entity_count > 0 -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {%- assign structured_data_faq_emitted_count = 0 -%}
+          {%- for faq_item in faq_items -%}
+            {%- assign faq_question = blank -%}
+            {%- assign faq_answer = blank -%}
+            {%- if faq_source == 'product' -%}
+              {%- assign faq_question = faq_item.question.value -%}
+              {%- assign faq_answer = faq_item.answer.value -%}
+            {%- elsif faq_source == 'bw_storage' -%}
+              {%- assign faq_question = faq_item.settings.question -%}
+              {%- assign faq_answer = faq_item.settings.answer -%}
+            {%- else -%}
+              {%- assign faq_question = faq_item.settings.title -%}
+              {%- assign faq_answer = faq_item.settings.text -%}
+            {%- endif -%}
+            {%- if faq_question != blank and faq_answer != blank -%}
+              {%- if structured_data_faq_emitted_count > 0 -%},{%- endif -%}
+              {
+                "@type": "Question",
+                "name": {{ faq_question | strip_html | strip_newlines | json }},
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": {{ faq_answer | json }}
+                }
+              }
+              {%- assign structured_data_faq_emitted_count = structured_data_faq_emitted_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        ]
+      }
+    </script>
+  {%- endif -%}
+{%- else -%}
+  {%- liquid
+    assign structured_data_shop_url = shop.url
+    assign structured_data_currency = cart.currency.iso_code | default: shop.currency
+    assign structured_data_operator_name = settings.structured_data_organization_name | strip
+    assign structured_data_operator_url = settings.structured_data_organization_url | strip
+    assign structured_data_operator_logo = settings.structured_data_organization_logo
+    assign structured_data_operator_same_as = settings.structured_data_organization_same_as
+    assign structured_data_operator_id = structured_data_shop_url | append: '#organization'
+    assign structured_data_website_id = structured_data_shop_url | append: '#website'
+    assign structured_data_render_product = false
+    assign structured_data_product_exclusion_tag = settings.structured_data_excluded_product_tag | default: 'structured-data-exclude' | strip
+
+    if request.page_type == 'product' and product != blank
+      assign structured_data_render_product = true
+      if structured_data_product_exclusion_tag != blank and product.tags contains structured_data_product_exclusion_tag
+        assign structured_data_render_product = false
+      endif
+    endif
+
+    assign structured_data_product_url = blank
+    if product != blank
+      assign structured_data_product_url = structured_data_shop_url | append: product.url
+    endif
+
+    assign structured_data_current_url = canonical_url
+    if structured_data_current_url == blank
+      if request.page_type == 'index'
+        assign structured_data_current_url = structured_data_shop_url
+      elsif request.page_type == 'product' and product != blank
+        assign structured_data_current_url = structured_data_product_url
+      elsif request.page_type == 'article' and article != blank
+        assign structured_data_current_url = structured_data_shop_url | append: article.url
+      elsif request.page_type == 'page' and page != blank
+        assign structured_data_current_url = structured_data_shop_url | append: page.url
+      elsif request.page_type == 'collection' and collection != blank
+        assign structured_data_current_url = structured_data_shop_url | append: collection.url
+      elsif request.page_type == 'blog' and blog != blank
+        assign structured_data_current_url = structured_data_shop_url | append: blog.url
+      endif
+    endif
+
+    assign structured_data_article_blog = blank
+    assign structured_data_blog_center_page = blank
+    assign structured_data_blog_center_url = blank
+    if request.page_type == 'article' and article != blank
+      assign structured_data_article_blog = article.blog | default: blog
+      assign structured_data_blog_center_page = pages['blogs']
+      if structured_data_blog_center_page != blank
+        assign structured_data_blog_center_url = structured_data_blog_center_page.url
+      endif
+    endif
+
+    assign structured_data_breadcrumb_count = 0
+    if request.page_type == 'product' and product != blank
+      assign structured_data_breadcrumb_count = 2
+      if collection != blank and collection.url != blank
+        assign structured_data_breadcrumb_count = 3
+      endif
+    elsif request.page_type == 'collection' and collection != blank
+      assign structured_data_breadcrumb_count = 2
+    elsif request.page_type == 'blog' and blog != blank
+      assign structured_data_breadcrumb_count = 2
+    elsif request.page_type == 'article' and article != blank
+      assign structured_data_breadcrumb_count = 2
+      if structured_data_blog_center_url != blank
+        assign structured_data_breadcrumb_count = structured_data_breadcrumb_count | plus: 1
+      endif
+      if structured_data_article_blog != blank and structured_data_article_blog.url != blank and structured_data_article_blog.url != structured_data_blog_center_url
+        assign structured_data_breadcrumb_count = structured_data_breadcrumb_count | plus: 1
+      endif
+    elsif request.page_type == 'page' and page != blank
+      assign structured_data_breadcrumb_count = 2
+    endif
+
+    assign structured_data_node_count = 0
+    if request.page_type == 'index'
+      assign structured_data_node_count = structured_data_node_count | plus: 1
+      if structured_data_operator_name != blank
+        assign structured_data_node_count = structured_data_node_count | plus: 1
+      endif
+    elsif structured_data_render_product
+      assign structured_data_node_count = structured_data_node_count | plus: 1
+    elsif request.page_type == 'article' and article != blank
+      assign structured_data_node_count = structured_data_node_count | plus: 1
+    elsif request.page_type == 'page' and page != blank
+      assign structured_data_node_count = structured_data_node_count | plus: 1
+    elsif request.page_type == 'collection' and collection != blank
+      assign structured_data_node_count = structured_data_node_count | plus: 1
+    endif
+    if structured_data_breadcrumb_count >= 2
+      assign structured_data_node_count = structured_data_node_count | plus: 1
+    endif
+  -%}
+
+  {%- if structured_data_node_count > 0 -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {%- assign structured_data_emitted_node_count = 0 -%}
+          {%- if request.page_type == 'index' -%}
+            {
+              "@type": "WebSite",
+              "@id": {{ structured_data_website_id | json }},
+              "url": {{ structured_data_shop_url | json }},
+              "name": {{ shop.name | json }}{% if structured_data_operator_name != blank %},
+              "publisher": { "@id": {{ structured_data_operator_id | json }} }{% endif %}
+            }
+            {%- assign structured_data_emitted_node_count = structured_data_emitted_node_count | plus: 1 -%}
+            {%- if structured_data_operator_name != blank -%}
+              ,{
+                "@type": "Organization",
+                "@id": {{ structured_data_operator_id | json }},
+                "name": {{ structured_data_operator_name | json }},
+                "url": {{ structured_data_operator_url | default: structured_data_shop_url | json }}{% if structured_data_operator_logo != blank %},
+                "logo": {{ structured_data_operator_logo | image_url: width: 600 | json }}{% endif %}{% if structured_data_operator_same_as != blank %},
+                "sameAs": [
+                  {%- assign structured_data_same_as_emitted_count = 0 -%}
+                  {%- assign structured_data_same_as_items = structured_data_operator_same_as | newline_to_br | split: '<br />' -%}
+                  {%- for same_as_item in structured_data_same_as_items -%}
+                    {%- assign same_as_url = same_as_item | strip_html | strip -%}
+                    {%- if same_as_url != blank and same_as_url contains '://' -%}
+                      {%- if structured_data_same_as_emitted_count > 0 -%},{%- endif -%}
+                      {{ same_as_url | json }}
+                      {%- assign structured_data_same_as_emitted_count = structured_data_same_as_emitted_count | plus: 1 -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                ]{% endif %}
+              }
+              {%- assign structured_data_emitted_node_count = structured_data_emitted_node_count | plus: 1 -%}
+            {%- endif -%}
+          {%- elsif structured_data_render_product -%}
+            {
+              "@type": "Product",
+              "@id": {{ structured_data_product_url | append: '#product' | json }},
+              "name": {{ product.title | json }},
+              "url": {{ structured_data_product_url | json }}{% if product.description != blank %},
+              "description": {{ product.description | strip_html | strip_newlines | json }}{% endif %}{% if product.vendor != blank %},
+              "brand": {
+                "@type": "Brand",
+                "name": {{ product.vendor | strip | json }}
+              }{% endif %}{% if product.images != blank %},
+              "image": [
+                {%- for product_image in product.images -%}
+                  {{ product_image | image_url: width: 1200 | json }}{% unless forloop.last %},{% endunless %}
+                {%- endfor -%}
+              ]{% elsif product.featured_media.preview_image != blank %},
+              "image": [{{ product.featured_media.preview_image | image_url: width: 1200 | json }}]{% endif %}{% if product.selected_or_first_available_variant.sku != blank %},
+              "sku": {{ product.selected_or_first_available_variant.sku | strip | json }}{% endif %}{% if product.variants != blank %},
+              "offers": [
+                {%- for product_variant in product.variants -%}
+                  {%- assign variant_path = product_variant.url | default: product.url -%}
+                  {%- assign variant_url = structured_data_shop_url | append: variant_path -%}
+                  {
+                    "@type": "Offer",
+                    "@id": {{ variant_url | append: '#offer' | json }},
+                    "url": {{ variant_url | json }},
+                    "price": {{ product_variant.price | divided_by: 100.0 | json }}{% if structured_data_currency != blank %},
+                    "priceCurrency": {{ structured_data_currency | json }}{% endif %},
+                    "availability": "https://schema.org/{% if product_variant.available %}InStock{% else %}OutOfStock{% endif %}"{% if product_variant.sku != blank %},
+                    "sku": {{ product_variant.sku | strip | json }}{% endif %}{% if structured_data_operator_name != blank %},
+                    "seller": {
+                      "@type": "Organization",
+                      "@id": {{ structured_data_operator_id | json }},
+                      "name": {{ structured_data_operator_name | json }},
+                      "url": {{ structured_data_operator_url | default: structured_data_shop_url | json }}
+                    }{% endif %}
+                  }{% unless forloop.last %},{% endunless %}
+                {%- endfor -%}
+              ]{% endif %}
+            }
+            {%- assign structured_data_emitted_node_count = structured_data_emitted_node_count | plus: 1 -%}
+          {%- elsif request.page_type == 'article' and article != blank -%}
+            {
+              "@type": "BlogPosting",
+              "@id": {{ structured_data_current_url | append: '#article' | json }},
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": {{ structured_data_current_url | json }}
+              },
+              "url": {{ structured_data_current_url | json }},
+              "headline": {{ article.title | json }}{% if article.excerpt != blank %},
+              "description": {{ article.excerpt | strip_html | strip_newlines | json }}{% endif %}{% if article.content != blank %},
+              "articleBody": {{ article.content | strip_html | strip_newlines | json }}{% endif %}{% if article.image != blank %},
+              "image": [{{ article.image | image_url: width: 1600 | json }}]{% endif %}{% if article.published_at != blank %},
+              "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }}{% endif %}{% if article.updated_at != blank %},
+              "dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }}{% endif %}{% if article.author != blank %},
+              "author": {
+                "@type": "Person",
+                "name": {{ article.author | strip | json }}
+              }{% endif %}{% if structured_data_article_blog != blank and structured_data_article_blog.title != blank %},
+              "articleSection": {{ structured_data_article_blog.title | json }}{% endif %}{% if structured_data_operator_name != blank %},
+              "publisher": {
+                "@type": "Organization",
+                "@id": {{ structured_data_operator_id | json }},
+                "name": {{ structured_data_operator_name | json }},
+                "url": {{ structured_data_operator_url | default: structured_data_shop_url | json }}
+              }{% endif %}
+            }
+            {%- assign structured_data_emitted_node_count = structured_data_emitted_node_count | plus: 1 -%}
+          {%- elsif request.page_type == 'page' and page != blank -%}
+            {
+              "@type": "WebPage",
+              "@id": {{ structured_data_current_url | append: '#webpage' | json }},
+              "url": {{ structured_data_current_url | json }},
+              "name": {{ page.title | json }}{% if page.content != blank %},
+              "description": {{ page.content | strip_html | strip_newlines | truncate: 300 | json }}{% endif %},
+              "isPartOf": { "@id": {{ structured_data_website_id | json }} }
+            }
+            {%- assign structured_data_emitted_node_count = structured_data_emitted_node_count | plus: 1 -%}
+          {%- elsif request.page_type == 'collection' and collection != blank -%}
+            {
+              "@type": "CollectionPage",
+              "@id": {{ structured_data_current_url | append: '#collection' | json }},
+              "url": {{ structured_data_current_url | json }},
+              "name": {{ collection.title | json }}{% if collection.description != blank %},
+              "description": {{ collection.description | strip_html | strip_newlines | json }}{% endif %}{% if collection.image != blank %},
+              "image": [{{ collection.image | image_url: width: 1600 | json }}]{% endif %}
+            }
+            {%- assign structured_data_emitted_node_count = structured_data_emitted_node_count | plus: 1 -%}
+          {%- endif -%}
+
+          {%- if structured_data_breadcrumb_count >= 2 -%}
+            {%- if structured_data_emitted_node_count > 0 -%},{%- endif -%}
+            {
+              "@type": "BreadcrumbList",
+              "@id": {{ structured_data_current_url | append: '#breadcrumb' | json }},
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": {{ 'general.breadcrumbs.home' | t | json }},
+                  "item": {{ structured_data_shop_url | json }}
+                }
+                {%- if request.page_type == 'product' and product != blank and collection != blank and collection.url != blank -%}
+                  ,{
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": {{ collection.title | json }},
+                    "item": {{ structured_data_shop_url | append: collection.url | json }}
+                  },{
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": {{ product.title | json }},
+                    "item": {{ structured_data_product_url | json }}
+                  }
+                {%- elsif request.page_type == 'product' and product != blank -%}
+                  ,{
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": {{ product.title | json }},
+                    "item": {{ structured_data_product_url | json }}
+                  }
+                {%- elsif request.page_type == 'collection' and collection != blank -%}
+                  ,{
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": {{ collection.title | json }},
+                    "item": {{ structured_data_shop_url | append: collection.url | json }}
+                  }
+                {%- elsif request.page_type == 'blog' and blog != blank -%}
+                  ,{
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": {{ blog.title | json }},
+                    "item": {{ structured_data_shop_url | append: blog.url | json }}
+                  }
+                {%- elsif request.page_type == 'article' and article != blank -%}
+                  {%- assign breadcrumb_position = 2 -%}
+                  {%- if structured_data_blog_center_url != blank -%}
+                    {%- assign blog_center_breadcrumb_url = structured_data_blog_center_url -%}
+                    {%- unless blog_center_breadcrumb_url contains '://' -%}
+                      {%- assign blog_center_breadcrumb_url = structured_data_shop_url | append: blog_center_breadcrumb_url -%}
+                    {%- endunless -%}
+                    ,{
+                      "@type": "ListItem",
+                      "position": {{ breadcrumb_position }},
+                      "name": {{ structured_data_blog_center_page.title | default: 'Blogs' | json }},
+                      "item": {{ blog_center_breadcrumb_url | json }}
+                    }
+                    {%- assign breadcrumb_position = breadcrumb_position | plus: 1 -%}
+                  {%- endif -%}
+                  {%- if structured_data_article_blog != blank and structured_data_article_blog.url != blank and structured_data_article_blog.url != structured_data_blog_center_url -%}
+                    ,{
+                      "@type": "ListItem",
+                      "position": {{ breadcrumb_position }},
+                      "name": {{ structured_data_article_blog.title | json }},
+                      "item": {{ structured_data_shop_url | append: structured_data_article_blog.url | json }}
+                    }
+                    {%- assign breadcrumb_position = breadcrumb_position | plus: 1 -%}
+                  {%- endif -%}
+                  ,{
+                    "@type": "ListItem",
+                    "position": {{ breadcrumb_position }},
+                    "name": {{ article.title | json }},
+                    "item": {{ structured_data_current_url | json }}
+                  }
+                {%- elsif request.page_type == 'page' and page != blank -%}
+                  ,{
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": {{ page.title | json }},
+                    "item": {{ structured_data_current_url | json }}
+                  }
+                {%- endif -%}
+              ]
+            }
+          {%- endif -%}
+        ]
+      }
+    </script>
+  {%- endif -%}
+{%- endif -%}

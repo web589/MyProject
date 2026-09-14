@@ -40,6 +40,12 @@
   </div>
 </section>
 
+{%- render 'structured-data',
+  structured_data_context: 'faq',
+  faq_items: section.blocks,
+  faq_source: 'bw_storage'
+-%}
+
 {% schema %}
 {
   "name": "VENUS E · FAQ",

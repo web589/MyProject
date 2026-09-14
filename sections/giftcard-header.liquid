@@ -13,11 +13,10 @@
     {%- endstyle -%}
   {%- endif -%}
 
-  <h1 class="site-header__logo{% unless has_logo %} text-center{% endunless %}" itemscope itemtype="http://schema.org/Organization">
+  <h1 class="site-header__logo{% unless has_logo %} text-center{% endunless %}">
     {%- if section.settings.logo -%}
       <a
         href="{{ routes.root_url }}"
-        itemprop="url"
         class="site-header__logo-link">
 
         {%- assign logo_alt = section.settings.logo.alt | default: shop.name -%}
@@ -47,7 +46,6 @@
           classes: 'small--hide',
           loading: 'eager',
           alt: logo_alt,
-          itemprop: 'logo',
         -%}
         {%- render 'image-element',
           img: section.settings.logo,
@@ -63,7 +61,7 @@
         -%}
       </a>
     {%- else -%}
-      <a href="{{ routes.root_url }}" itemprop="url">{{ shop.name }}</a>
+      <a href="{{ routes.root_url }}">{{ shop.name }}</a>
     {%- endif -%}
   </h1>
 

@@ -1375,46 +1375,6 @@
 
 <script src="{{ 'blog-article.js' | asset_url }}" defer="defer"></script>
 
-<script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "Article",
-  "articleBody": {{ article.content | strip_html | json }},
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": {{ shop.url | append: article.url | json }}
-  },
-  "headline": {{ article.title | json }},
-  {% if article.excerpt != blank %}
-    "description": {{ article.excerpt | strip_html | json }},
-  {% endif %}
-  {% if article.image %}
-    "image": [
-      {{ article.image | image_url: width: article.image.width | json }}
-    ],
-  {% endif %}
-  "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
-  "dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
-  "dateCreated": {{ article.created_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
-  "author": {
-    "@type": "Person",
-    "name": "Venus E"
-  },
-  "publisher": {
-    "@type": "Organization",
-    {% if page_image %}
-      "logo": {
-        "@type": "ImageObject",
-        "height": {{ page_image.height | json }},
-        "url": {{ page_image | image_url: width: page_image.width | json }},
-        "width": {{ page_image.width | json }}
-      },
-    {% endif %}
-    "name": {{ shop.name | json }}
-  }
-}
-</script>
-
 {% schema %}
 {
   "name": "t:sections.article-template.name",

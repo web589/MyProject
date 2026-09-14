@@ -35,6 +35,10 @@
       endif
     endif
   endif
+  assign structured_data_faq_source = 'standard'
+  if is_product_faq
+    assign structured_data_faq_source = 'product'
+  endif
   if is_product_page == false or use_theme_editor_content
     assign should_render_faq = true
   elsif is_product_faq == true
@@ -196,38 +200,11 @@
   {%- endif -%}
 
   {%- if faq_items != blank -%}
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {%- assign faq_entity_count = 0 -%}
-          {%- for faq_item in faq_schema_items -%}
-            {% liquid
-              if is_product_faq
-                assign faq_question = faq_item.question.value
-                assign faq_answer = faq_item.answer.value
-              else
-                assign faq_question = faq_item.settings.title
-                assign faq_answer = faq_item.settings.text
-              endif
-            %}
-            {%- if faq_question != blank and faq_answer != blank -%}
-            {%- if faq_entity_count > 0 -%},{%- endif -%}
-            {
-              "@type": "Question",
-              "name": {{ faq_question | json }},
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": {{ faq_answer | json }}
-              }
-            }
-            {%- assign faq_entity_count = faq_entity_count | plus: 1 -%}
-            {%- endif -%}
-          {%- endfor -%}
-        ]
-      }
-    </script>
+    {%- render 'structured-data',
+      structured_data_context: 'faq',
+      faq_items: faq_schema_items,
+      faq_source: structured_data_faq_source
+    -%}
     {%- for faq_item in faq_items -%}
       {% liquid
         assign should_render_faq_item = true

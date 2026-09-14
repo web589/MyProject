@@ -48,12 +48,10 @@
 }
 {%- endstyle -%}
 
-{%- if template == 'index' -%}
-  <div class="h1 site-header__logo{% unless logo %} site-header__logo--text{% endunless %}" itemscope itemtype="http://schema.org/Organization">
+<div class="h1 site-header__logo{% unless logo %} site-header__logo--text{% endunless %}">
+  {%- if template == 'index' -%}
     <span class="visually-hidden">{{ brand_text | escape }}</span>
-{%- else -%}
-  <div class="h1 site-header__logo{% unless logo %} site-header__logo--text{% endunless %}" itemscope itemtype="http://schema.org/Organization">
-{%- endif -%}
+  {%- endif -%}
 
 {%- if logo -%}
   {% comment %}
@@ -61,7 +59,6 @@
   {% endcomment %}
   <a
     href="{{ routes.root_url }}"
-    itemprop="url"
     class="site-header__logo-link{% if logo_inverted %} logo--has-inverted{% endif %}"
     style="padding-top: {{ 100 | divided_by: logo.aspect_ratio }}%">
 
@@ -85,15 +82,13 @@
           loading: 'eager',
           alt: logo_alt,
           sizes: desktop_sizes,
-          widths: desktop_widths,
-          itemprop: 'logo'
+          widths: desktop_widths
       -}}
     </picture>
   </a>
   {%- if logo_inverted -%}
     <a
       href="{{ routes.root_url }}"
-      itemprop="url"
       class="site-header__logo-link logo--inverted"
       style="padding-top: {{ 100 | divided_by: logo_inverted.aspect_ratio }}%">
 
@@ -117,14 +112,13 @@
             loading: 'eager',
             alt: logo_inverted_alt,
             sizes: desktop_sizes,
-            widths: desktop_widths,
-            itemprop: 'logo'
+            widths: desktop_widths
         -}}
       </picture>
     </a>
   {%- endif -%}
 {%- else -%}
-  <a href="{{ routes.root_url }}" itemprop="url" aria-label="{{ brand_text | escape }}">{{ brand_text | escape }}</a>
+  <a href="{{ routes.root_url }}" aria-label="{{ brand_text | escape }}">{{ brand_text | escape }}</a>
 {%- endif -%}
 
   </div>
