@@ -477,11 +477,25 @@
     return renderRecommendationsV2();
   }
 
+  function productVariantUrl(item) {
+    var productUrl = item && item.url ? item.url : '';
+    var variantId = item && item.variant && item.variant.id ? String(item.variant.id) : '';
+    if (!productUrl || !variantId) return productUrl;
+    try {
+      var url = new URL(productUrl, window.location.origin);
+      url.searchParams.set('variant', variantId);
+      return url.pathname + url.search + url.hash;
+    } catch (error) {
+      return productUrl + (productUrl.indexOf('?') === -1 ? '?' : '&') + 'variant=' + encodeURIComponent(variantId);
+    }
+  }
+
   function configureActionV2(action, item, fallbackLabel) {
     if (!action) return;
     var directAdd = Boolean(item && item.variant && item.variant.available && !item.preorder);
+    var productUrl = productVariantUrl(item);
     action.dataset.variantId = item && item.variant && item.variant.id ? String(item.variant.id) : '';
-    action.dataset.productUrl = item && item.url ? item.url : '';
+    action.dataset.productUrl = productUrl;
     action.dataset.productHandle = item && item.product && item.product.handle ? item.product.handle : '';
     action.dataset.productId = item && item.product && item.product.id ? String(item.product.id) : '';
     action.dataset.directAdd = directAdd ? 'true' : 'false';
@@ -492,7 +506,7 @@
       action.textContent = fallbackLabel || 'In den Warenkorb';
     } else if (item && item.preorder) {
       action.textContent = item.preorderLabel || 'Jetzt vormerken';
-    } else if (item && item.url && !item.variant) {
+    } else if (productUrl && !item.variant) {
       action.textContent = 'Zur Produktseite';
     } else {
       action.textContent = 'Nicht verfügbar';
@@ -521,8 +535,11 @@
     }
     setText(card, '[data-bw-result-availability]', item.preorder ? 'Jetzt vormerken' : item.available ? 'Verfügbar' : 'Nicht verfügbar');
     updateMedia(card.querySelector('[data-bw-result-media]') || card, item.image, item.title);
+    var productUrl = productVariantUrl(item);
     var mediaWrap = card.querySelector('[data-bw-result-image-wrap]');
-    if (mediaWrap && item.url) mediaWrap.href = item.url;
+    if (mediaWrap && productUrl) mediaWrap.href = productUrl;
+    var productLink = card.querySelector('[data-bw-result-product-link]');
+    if (productLink && productUrl) productLink.href = productUrl;
     configureActionV2(card.querySelector('[data-bw-product-role], [data-bw-product-action]'), item, 'In den Warenkorb');
     card.classList.toggle('is-unavailable', !item.available && !item.preorder);
     card.classList.toggle('is-preorder', item.preorder);
@@ -679,7 +696,42 @@
       if (root.dataset.bwInitialized === 'true') return;
       root.dataset.bwInitialized = 'true';
       var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-bw-flow-tab]'));
-      function activate(tab) {
+      var panels = Array.prototype.slice.call(root.querySelectorAll('[data-bw-flow-panel]'));
+      var reducedMotion = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var hasPairedVideos = panels.length === 2 && panels.every(function (panel) {
+        return Boolean(panel.querySelector('video'));
+      });
+      var shouldAutoCycle = hasPairedVideos && !reducedMotion;
+      var isInViewport = false;
+
+      function activePanel() {
+        return panels.find(function (panel) { return panel.classList.contains('is-active'); }) || panels[0] || null;
+      }
+
+      function pauseVideos(exceptPanel) {
+        panels.forEach(function (panel) {
+          if (panel === exceptPanel) return;
+          panel.querySelectorAll('video').forEach(function (video) { video.pause(); });
+        });
+      }
+
+      function playPanelVideo(panel, restart, userInitiated) {
+        if (!panel || !isInViewport || (!shouldAutoCycle && !userInitiated)) return;
+        var video = panel.querySelector('video');
+        if (!video) return;
+        pauseVideos(panel);
+        video.muted = true;
+        video.playsInline = true;
+        if (restart) {
+          try { video.currentTime = 0; } catch (error) { /* The stream is not seekable yet. */ }
+        }
+        var playPromise = video.play();
+        if (playPromise && typeof playPromise.catch === 'function') playPromise.catch(function () {});
+      }
+
+      function activate(tab, options) {
+        if (!tab) return;
+        var settings = options || {};
         var target = tab.dataset.bwFlowTab;
         tabs.forEach(function (button) {
           var active = button === tab;
@@ -687,22 +739,60 @@
           button.setAttribute('aria-selected', active ? 'true' : 'false');
           button.tabIndex = active ? 0 : -1;
         });
-        root.querySelectorAll('[data-bw-flow-panel]').forEach(function (panel) {
-          panel.hidden = panel.dataset.bwFlowPanel !== target;
+        panels.forEach(function (panel) {
+          var active = panel.dataset.bwFlowPanel === target;
+          panel.classList.toggle('is-active', active);
+          panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+          if (active) playPanelVideo(panel, Boolean(settings.restart), Boolean(settings.userInitiated));
+          else panel.querySelectorAll('video').forEach(function (video) { video.pause(); });
         });
       }
+
       tabs.forEach(function (tab, index) {
-        tab.addEventListener('click', function () { activate(tab); });
+        tab.addEventListener('click', function () { activate(tab, { restart: true, userInitiated: true }); });
         tab.addEventListener('keydown', function (event) {
           if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
           event.preventDefault();
           var direction = event.key === 'ArrowRight' ? 1 : -1;
           var next = tabs[(index + direction + tabs.length) % tabs.length];
-          activate(next);
+          activate(next, { restart: true, userInitiated: true });
           next.focus();
         });
       });
-      if (tabs[0]) activate(tabs.find(function (tab) { return tab.classList.contains('is-active'); }) || tabs[0]);
+
+      panels.forEach(function (panel) {
+        panel.querySelectorAll('video').forEach(function (video) {
+          video.addEventListener('ended', function () {
+            if (!shouldAutoCycle || !isInViewport || !panel.classList.contains('is-active')) return;
+            var currentIndex = tabs.findIndex(function (tab) {
+              return tab.dataset.bwFlowTab === panel.dataset.bwFlowPanel;
+            });
+            activate(tabs[(currentIndex + 1) % tabs.length], { restart: true });
+          });
+        });
+      });
+
+      var initialTab = tabs.find(function (tab) { return tab.classList.contains('is-active'); }) || tabs[0];
+      if (initialTab) activate(initialTab);
+
+      function updateViewport(isVisible) {
+        isInViewport = isVisible;
+        if (!isInViewport) {
+          pauseVideos(null);
+          return;
+        }
+        if (shouldAutoCycle) playPanelVideo(activePanel(), false, false);
+      }
+
+      if (typeof window.IntersectionObserver === 'function') {
+        var observer = new window.IntersectionObserver(function (entries) {
+          var entry = entries[0];
+          updateViewport(Boolean(entry && entry.isIntersecting && entry.intersectionRatio >= 0.25));
+        }, { threshold: [0, 0.25] });
+        observer.observe(root);
+      } else {
+        updateViewport(true);
+      }
     });
   }
 

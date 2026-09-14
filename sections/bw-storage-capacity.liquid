@@ -34,7 +34,7 @@
             data-bw-preset-pv="{{ block.settings.pv_value }}"
             data-bw-preset-annual="{{ block.settings.annual_value }}"
             aria-pressed="false"
-            {% if block.settings.background_image != blank %}style="--bw-capacity-background: url('{{ block.settings.background_image | image_url: width: 1400 }}'); --bw-capacity-overlay: {{ block.settings.background_overlay }}%; --bw-capacity-background-position: {{ block.settings.background_position }};"{% endif %}
+            style="--bw-capacity-title-color: {{ block.settings.title_color }}; --bw-capacity-text-color: {{ block.settings.text_color }};{% if block.settings.background_image != blank %} --bw-capacity-background: url('{{ block.settings.background_image | image_url: width: 1400 }}'); --bw-capacity-overlay: {{ block.settings.background_overlay }}%; --bw-capacity-background-position: {{ block.settings.background_position }};{% endif %}"
             {{ block.shopify_attributes }}
           >
             <span class="bw-capacity-preset__badge">{{ block.settings.badge }}</span>
@@ -141,6 +141,8 @@
         {"type":"image_picker","id":"background_image","label":"Hintergrundbild"},
         {"type":"select","id":"background_position","label":"Bildposition","default":"center center","options":[{"value":"left center","label":"Links"},{"value":"center center","label":"Mitte"},{"value":"right center","label":"Rechts"},{"value":"center top","label":"Oben"},{"value":"center bottom","label":"Unten"}]},
         {"type":"range","id":"background_overlay","label":"Helle Überlagerung","min":0,"max":100,"step":5,"unit":"%","default":75},
+        {"type":"color","id":"title_color","label":"Titelfarbe","default":"#111827"},
+        {"type":"color","id":"text_color","label":"Beschreibungsfarbe","default":"#596b82"},
         {"type":"select","id":"capacity","label":"Speicherklasse","options":[{"value":"2","label":"ca. 2 kWh"},{"value":"4","label":"ca. 4 kWh"},{"value":"5","label":"ca. 5 kWh"},{"value":"6","label":"ca. 6 kWh"},{"value":"10","label":"ca. 10 kWh"},{"value":"15","label":"ca. 15 kWh"},{"value":"20","label":"ca. 20 kWh"},{"value":"30","label":"ca. 30 kWh"}],"default":"10"},
         {"type":"text","id":"badge","label":"Badge","default":"ca. 10 kWh"},
         {"type":"text","id":"title","label":"Titel","default":"3 Personen · 6 kWp"},

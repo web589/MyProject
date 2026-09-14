@@ -93,7 +93,7 @@
           assign card_product = venus_3
           assign card_variant = card_product.selected_or_first_available_variant | default: card_product.variants.first
           assign card_image = card_variant.featured_image | default: card_product.featured_image
-          assign card_url = card_product.url | default: '/products/venus-e-3'
+          assign card_url = card_variant.url | default: card_product.url | default: '/products/venus-e-3'
           assign slot = block.settings.role
           if slot == blank
             assign slot = 'slot' | append: forloop.index
@@ -125,7 +125,7 @@
           {% if request.design_mode and card_image == blank %}<div class="bw-editor-media-placeholder">Produktbild wird aus Shopify geladen.</div>{% endif %}
 
           <div class="bw-result-card__body">
-            <h3 data-bw-result-title>{{ block.settings.title }}</h3>
+            <h3><a href="{{ card_url }}" data-bw-result-product-link><span data-bw-result-title>{{ block.settings.title }}</span></a></h3>
             <small data-bw-result-capacity>{{ block.settings.capacity }}</small>
             {% if block.settings.text != blank %}<p>{{ block.settings.text }}</p>{% endif %}
             <div class="bw-result-card__price">

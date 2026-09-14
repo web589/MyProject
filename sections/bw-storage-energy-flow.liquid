@@ -34,7 +34,7 @@
             aria-selected="true"
             aria-controls="{{ day_panel_id }}"
             data-bw-flow-tab="day"
-          >{{ section.settings.day_label }}</button>
+          >{% if section.settings.day_icon != blank %}{{ section.settings.day_icon | image_url: width: 64 | image_tag: loading: 'lazy', widths: '32,48,64', sizes: '20px', alt: '', class: 'bw-toggle__icon' }}{% endif %}<span>{{ section.settings.day_label }}</span></button>
           <button
             id="{{ evening_tab_id }}"
             type="button"
@@ -43,39 +43,46 @@
             aria-controls="{{ evening_panel_id }}"
             tabindex="-1"
             data-bw-flow-tab="evening"
-          >{{ section.settings.evening_label }}</button>
+          >{% if section.settings.evening_icon != blank %}{{ section.settings.evening_icon | image_url: width: 64 | image_tag: loading: 'lazy', widths: '32,48,64', sizes: '20px', alt: '', class: 'bw-toggle__icon' }}{% endif %}<span>{{ section.settings.evening_label }}</span></button>
         </div>
       </div>
 
-      <div
-        id="{{ day_panel_id }}"
-        class="bw-flow-media bw-configurable-media bw-media-align--{{ section.settings.media_alignment }}"
-        style="--bw-media-width: {{ section.settings.media_width }}%;"
-        role="tabpanel"
-        aria-labelledby="{{ day_tab_id }}"
-        data-bw-flow-panel="day"
-      >
-        {% if section.settings.day_image != blank %}
-          {{ section.settings.day_image | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '600,900,1200,1500,1800', sizes: '(min-width: 1248px) 1100px, calc(100vw - 64px)', alt: section.settings.day_alt }}
-        {% elsif request.design_mode %}
-          <div class="bw-editor-media-placeholder">GIF für „Tagsüber“ auswählen</div>
-        {% endif %}
-      </div>
+      <div class="bw-energy-flow__media-stack">
+        <div
+          id="{{ day_panel_id }}"
+          class="bw-flow-media bw-configurable-media bw-media-align--{{ section.settings.media_alignment }} is-active"
+          style="--bw-media-width: {{ section.settings.media_width }}%;"
+          role="tabpanel"
+          aria-labelledby="{{ day_tab_id }}"
+          aria-hidden="false"
+          data-bw-flow-panel="day"
+        >
+          {% if section.settings.day_video != blank %}
+            {{ section.settings.day_video | video_tag: image_size: '1800x', muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
+          {% elsif section.settings.day_image != blank %}
+            {{ section.settings.day_image | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '600,900,1200,1500,1800', sizes: '(min-width: 1248px) 1100px, calc(100vw - 64px)', alt: section.settings.day_alt }}
+          {% elsif request.design_mode %}
+            <div class="bw-editor-media-placeholder">Video, GIF oder Bild für Tagsüber auswählen</div>
+          {% endif %}
+        </div>
 
-      <div
-        id="{{ evening_panel_id }}"
-        class="bw-flow-media bw-configurable-media bw-media-align--{{ section.settings.media_alignment }}"
-        style="--bw-media-width: {{ section.settings.media_width }}%;"
-        role="tabpanel"
-        aria-labelledby="{{ evening_tab_id }}"
-        data-bw-flow-panel="evening"
-        hidden
-      >
-        {% if section.settings.evening_image != blank %}
-          {{ section.settings.evening_image | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '600,900,1200,1500,1800', sizes: '(min-width: 1248px) 1100px, calc(100vw - 64px)', alt: section.settings.evening_alt }}
-        {% elsif request.design_mode %}
-          <div class="bw-editor-media-placeholder">GIF für „Abends“ auswählen</div>
-        {% endif %}
+        <div
+          id="{{ evening_panel_id }}"
+          class="bw-flow-media bw-configurable-media bw-media-align--{{ section.settings.media_alignment }}"
+          style="--bw-media-width: {{ section.settings.media_width }}%;"
+          role="tabpanel"
+          aria-labelledby="{{ evening_tab_id }}"
+          aria-hidden="true"
+          data-bw-flow-panel="evening"
+        >
+          {% if section.settings.evening_video != blank %}
+            {{ section.settings.evening_video | video_tag: image_size: '1800x', muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
+          {% elsif section.settings.evening_image != blank %}
+            {{ section.settings.evening_image | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '600,900,1200,1500,1800', sizes: '(min-width: 1248px) 1100px, calc(100vw - 64px)', alt: section.settings.evening_alt }}
+          {% elsif request.design_mode %}
+            <div class="bw-editor-media-placeholder">Video, GIF oder Bild für Abends auswählen</div>
+          {% endif %}
+        </div>
       </div>
 
       {% if section.settings.footer_text != blank %}
@@ -94,10 +101,14 @@
     {"type":"textarea","id":"text","label":"Beschreibung","default":"Dein VENUS E managt den Energiefluss automatisch. Zwei Szenarien, ein System."},
     {"type":"text","id":"tabs_label","label":"Bezeichnung der Umschaltung","default":"Tageszeit auswählen"},
     {"type":"text","id":"day_label","label":"Tab 1","default":"Tagsüber"},
-    {"type":"image_picker","id":"day_image","label":"GIF · Tagsüber"},
+    {"type":"image_picker","id":"day_icon","label":"Icon · Tagsüber"},
+    {"type":"video","id":"day_video","label":"Shopify-Video · Tagsüber","info":"Hat Vorrang vor GIF oder Bild."},
+    {"type":"image_picker","id":"day_image","label":"GIF oder Bild · Tagsüber"},
     {"type":"text","id":"day_alt","label":"Alternativtext · Tagsüber","default":"Energiefluss mit VENUS E am Tag"},
     {"type":"text","id":"evening_label","label":"Tab 2","default":"Abends"},
-    {"type":"image_picker","id":"evening_image","label":"GIF · Abends"},
+    {"type":"image_picker","id":"evening_icon","label":"Icon · Abends"},
+    {"type":"video","id":"evening_video","label":"Shopify-Video · Abends","info":"Hat Vorrang vor GIF oder Bild."},
+    {"type":"image_picker","id":"evening_image","label":"GIF oder Bild · Abends"},
     {"type":"text","id":"evening_alt","label":"Alternativtext · Abends","default":"Energiefluss mit VENUS E am Abend"},
     {"type":"range","id":"media_width","label":"Medienbreite","min":50,"max":100,"step":5,"unit":"%","default":100},
     {"type":"select","id":"media_alignment","label":"Medienausrichtung","default":"center","options":[{"value":"left","label":"Links"},{"value":"center","label":"Mitte"},{"value":"right","label":"Rechts"}]},
