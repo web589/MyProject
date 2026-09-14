@@ -7,7 +7,7 @@
   assign article_blog = article.blog | default: blog
   assign blog_center_menu = linklists['blog-center']
   assign blog_center_home_link = blank
-  assign blog_center_page = pages['blogs']
+  assign blog_center_page = pages.blogs
   assign all_blogs_url = '/blogs/blog-center'
   assign blog_center_url = blank
   if blog_center_page != blank and blog_center_page.url != blank
@@ -383,7 +383,7 @@
 
   .blog-article__toc-title {
     font-size: 18px;
-    font-weight: 800 !important;
+    font-weight: 1000 !important;
     margin: 0 0 10px;
   }
 
@@ -422,20 +422,26 @@
 
   /* Keep article-editor typography scoped to the article and leave the TOC intact. */
   .blog-article__body > :not(.blog-article__toc),
-  .blog-article__body > :not(.blog-article__toc) :is(p, div, span, a, li, td, th, blockquote, figcaption, strong, b, em, i, u, mark) {
+  .blog-article__body
+    > :not(.blog-article__toc)
+    :is(p, div, span, a, li, td, th, blockquote, figcaption, strong, b, em, i, u, mark) {
     font-family: var(--blog-article-body-font-family) !important;
   }
 
   /* Override inline font-size/line-height values saved in Shopify article HTML. */
   .blog-article__body > :not(.blog-article__toc):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6),
-  .blog-article__body > :not(.blog-article__toc) :is(p, div, span, a, li, td, th, blockquote, figcaption, strong, b, em, i, u, mark) {
+  .blog-article__body
+    > :not(.blog-article__toc)
+    :is(p, div, span, a, li, td, th, blockquote, figcaption, strong, b, em, i, u, mark) {
     font-size: var(--blog-article-body-font-size) !important;
     line-height: var(--blog-article-body-line-height) !important;
   }
 
   /* Reset editor-saved font weights for regular text while preserving strong/b emphasis. */
   .blog-article__body > :not(.blog-article__toc):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6):not(strong):not(b),
-  .blog-article__body > :not(.blog-article__toc) :is(p, div, span, a, li, td, th, blockquote, figcaption, em, i, u, mark) {
+  .blog-article__body
+    > :not(.blog-article__toc)
+    :is(p, div, span, a, li, td, th, blockquote, figcaption, em, i, u, mark) {
     font-weight: var(--blog-article-body-font-weight) !important;
   }
 
@@ -662,7 +668,9 @@
 
   .blog-article__recommended-sticky {
     position: sticky;
-    top: calc(var(--site-header-group-height, var(--header-height, 0px)) + var(--blog-center-sticky-height, 0px) + 24px);
+    top: calc(
+      var(--site-header-group-height, var(--header-height, 0px)) + var(--blog-center-sticky-height, 0px) + 24px
+    );
     z-index: 20;
   }
 
@@ -921,7 +929,9 @@
     }
 
     .blog-article__body > :not(.blog-article__toc):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6),
-    .blog-article__body > :not(.blog-article__toc) :is(p, div, span, a, li, td, th, blockquote, figcaption, strong, b, em, i, u, mark),
+    .blog-article__body
+      > :not(.blog-article__toc)
+      :is(p, div, span, a, li, td, th, blockquote, figcaption, strong, b, em, i, u, mark),
     .blog-article__body > table,
     .blog-article__body > :not(.blog-article__toc) table {
       font-size: var(--blog-article-body-font-size-mobile) !important;
@@ -1069,7 +1079,12 @@
 
           {%- if section.settings.social_sharing_blog -%}
             <div class="blog-article__social">
-              {%- render 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image, show_labels: false -%}
+              {%- render 'social-sharing',
+                share_title: article.title,
+                share_permalink: article.url,
+                share_image: article.image,
+                show_labels: false
+              -%}
             </div>
           {%- endif -%}
         </div>
@@ -1092,42 +1107,44 @@
           {%- endif -%}
 
           <nav class="blog-article__category-nav" aria-label="{{ 'blogs.article.blog_center' | t }}">
-          {%- if blog_center_url != blank -%}
-            <a class="blog-article__category-link" href="{{ all_blogs_url }}">
-              {{ 'blogs.article.all' | t }}
-            </a>
-          {%- endif -%}
-
-          {%- for link in blog_center_menu.links offset: 1 -%}
-            {%- assign link_blog_handle = blank -%}
-            {%- assign linked_blog = blank -%}
-            {%- if link.object != blank and link.object.handle != blank -%}
-              {%- assign link_blog_handle = link.object.handle -%}
-              {%- assign linked_blog = link.object -%}
-            {%- endif -%}
-            {%- if link_blog_handle == blank and link.url != blank -%}
-              {%- assign link_url = link.url | split: '?' | first | split: '#' | first -%}
-              {%- assign link_url_parts = link_url | split: '/blogs/' -%}
-              {%- if link_url_parts.size > 1 -%}
-                {%- assign link_blog_handle = link_url_parts[1] | split: '/' | first -%}
-                {%- assign linked_blog = blogs[link_blog_handle] -%}
-              {%- endif -%}
-            {%- endif -%}
-            {%- assign is_current_blog = false -%}
-            {%- if link_blog_handle == article_blog.handle or link.url == article_blog.url -%}
-              {%- assign is_current_blog = true -%}
-            {%- endif -%}
-
-            {%- if linked_blog != blank and linked_blog.articles_count > 0 -%}
-              <a
-                class="blog-article__category-link"
-                href="{{ link.url }}"
-                {% if is_current_blog %}aria-current="page"{% endif %}
-              >
-                {{ link.title | escape }}
+            {%- if blog_center_url != blank -%}
+              <a class="blog-article__category-link" href="{{ all_blogs_url }}">
+                {{ 'blogs.article.all' | t }}
               </a>
             {%- endif -%}
-          {%- endfor -%}
+
+            {%- for link in blog_center_menu.links offset: 1 -%}
+              {%- assign link_blog_handle = blank -%}
+              {%- assign linked_blog = blank -%}
+              {%- if link.object != blank and link.object.handle != blank -%}
+                {%- assign link_blog_handle = link.object.handle -%}
+                {%- assign linked_blog = link.object -%}
+              {%- endif -%}
+              {%- if link_blog_handle == blank and link.url != blank -%}
+                {%- assign link_url = link.url | split: '?' | first | split: '#' | first -%}
+                {%- assign link_url_parts = link_url | split: '/blogs/' -%}
+                {%- if link_url_parts.size > 1 -%}
+                  {%- assign link_blog_handle = link_url_parts[1] | split: '/' | first -%}
+                  {%- assign linked_blog = blogs[link_blog_handle] -%}
+                {%- endif -%}
+              {%- endif -%}
+              {%- assign is_current_blog = false -%}
+              {%- if link_blog_handle == article_blog.handle or link.url == article_blog.url -%}
+                {%- assign is_current_blog = true -%}
+              {%- endif -%}
+
+              {%- if linked_blog != blank and linked_blog.articles_count > 0 -%}
+                <a
+                  class="blog-article__category-link"
+                  href="{{ link.url }}"
+                  {% if is_current_blog %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  {{ link.title | escape }}
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
           </nav>
         </div>
       </div>
@@ -1139,8 +1156,15 @@
       <div class="blog-article__main">
         {%- if article.content != blank -%}
           <div class="article__body rte blog-article__body" data-blog-article-body>
-            <nav class="blog-article__toc" data-blog-article-toc hidden aria-label="{{ 'blogs.article.table_of_contents' | t }}">
-              <div class="blog-article__toc-title"><strong>{{ 'blogs.article.table_of_contents' | t }}</strong></div>
+            <nav
+              class="blog-article__toc"
+              data-blog-article-toc
+              hidden
+              aria-label="{{ 'blogs.article.table_of_contents' | t }}"
+            >
+              <div class="blog-article__toc-title">
+                <strong>{{ 'blogs.article.table_of_contents' | t }}</strong>
+              </div>
               <ol class="blog-article__toc-list" data-blog-article-toc-list></ol>
             </nav>
             {{ article.content }}
@@ -1161,11 +1185,15 @@
                   {%- assign related_count = related_count | plus: 1 -%}
                   <article class="blog-article__related-card">
                     {%- if related_article.image != blank -%}
-                      <a class="blog-article__related-image" href="{{ related_article.url }}" aria-label="{{ related_article.title | escape }}">
+                      <a
+                        class="blog-article__related-image"
+                        href="{{ related_article.url }}"
+                        aria-label="{{ related_article.title | escape }}"
+                      >
                         {%- render 'image-element',
                           img: related_article.image,
                           sizes: '(min-width: 769px) 25vw, 90vw',
-                          widths: '360, 540, 720',
+                          widths: '360, 540, 720'
                         -%}
                       </a>
                     {%- endif -%}
@@ -1197,7 +1225,11 @@
               </a>
             {%- endif -%}
             {%- if article_blog.next_article != blank -%}
-              <a class="blog-article__pagination-link blog-article__pagination-link--next" href="{{ article_blog.next_article.url }}" rel="next">
+              <a
+                class="blog-article__pagination-link blog-article__pagination-link--next"
+                href="{{ article_blog.next_article.url }}"
+                rel="next"
+              >
                 <span class="blog-article__pagination-label">{{ 'blogs.article.next_article' | t }}</span>
                 <span class="blog-article__pagination-title">{{ article_blog.next_article.title | escape }}</span>
               </a>
@@ -1261,19 +1293,43 @@
                   <div class="grid grid--small">
                     <div class="grid__item medium-up--one-half">
                       <label for="CommentAuthor">{{ 'blogs.comments.name' | t }}</label>
-                      <input required class="input-full{% if form.errors contains 'author' %} error{% endif %}" type="text" name="comment[author]" id="CommentAuthor" value="{{ form.author }}" autocapitalize="words">
+                      <input
+                        required
+                        class="input-full{% if form.errors contains 'author' %} error{% endif %}"
+                        type="text"
+                        name="comment[author]"
+                        id="CommentAuthor"
+                        value="{{ form.author }}"
+                        autocapitalize="words"
+                      >
                     </div>
                     <div class="grid__item medium-up--one-half">
                       <label for="CommentEmail">{{ 'blogs.comments.email' | t }}</label>
-                      <input required class="input-full{% if form.errors contains 'email' %} error{% endif %}" type="email" name="comment[email]" id="CommentEmail" value="{{ form.email }}" autocorrect="off" autocapitalize="off">
+                      <input
+                        required
+                        class="input-full{% if form.errors contains 'email' %} error{% endif %}"
+                        type="email"
+                        name="comment[email]"
+                        id="CommentEmail"
+                        value="{{ form.email }}"
+                        autocorrect="off"
+                        autocapitalize="off"
+                      >
                     </div>
                   </div>
 
                   <label for="CommentBody">{{ 'blogs.comments.message' | t }}</label>
-                  <textarea required class="input-full{% if form.errors contains 'body' %} error{% endif %}" name="comment[body]" id="CommentBody">{{ form.body }}</textarea>
+                  <textarea
+                    required
+                    class="input-full{% if form.errors contains 'body' %} error{% endif %}"
+                    name="comment[body]"
+                    id="CommentBody"
+                  >{{ form.body }}</textarea>
 
                   {%- if article_blog.moderated? -%}
-                    <p><small>{{ 'blogs.comments.moderated' | t }}</small></p>
+                    <p>
+                      <small>{{ 'blogs.comments.moderated' | t }}</small>
+                    </p>
                   {%- endif -%}
 
                   <button type="submit" class="btn btn--secondary">
@@ -1295,7 +1351,11 @@
           </h2>
           <div class="blog-article__newsletter-copy">{{ newsletter_text }}</div>
 
-          {%- form 'customer', id: newsletter_form_id, data-blog-newsletter-form: '', data-success-message: newsletter_success -%}
+          {%- form 'customer',
+            id: newsletter_form_id,
+            data-blog-newsletter-form: '',
+            data-success-message: newsletter_success
+          -%}
             {%- if form.posted_successfully? -%}
               <p class="blog-article__form-message note note--success" data-blog-newsletter-success role="status">
                 {{ newsletter_success | escape }}
@@ -1318,8 +1378,17 @@
                 required
               >
               <div class="blog-article__consent">
-                <input id="BlogArticleConsent-{{ section.id }}" type="checkbox" name="contact[accepts_marketing]" value="true" aria-labelledby="BlogArticleConsentText-{{ section.id }}" required>
-                <div class="blog-article__consent-copy" id="BlogArticleConsentText-{{ section.id }}">{{ newsletter_consent }}</div>
+                <input
+                  id="BlogArticleConsent-{{ section.id }}"
+                  type="checkbox"
+                  name="contact[accepts_marketing]"
+                  value="true"
+                  aria-labelledby="BlogArticleConsentText-{{ section.id }}"
+                  required
+                >
+                <div class="blog-article__consent-copy" id="BlogArticleConsentText-{{ section.id }}">
+                  {{ newsletter_consent }}
+                </div>
               </div>
               <button class="blog-article__newsletter-submit" type="submit">
                 {{ newsletter_submit | escape }}
@@ -1354,7 +1423,10 @@
                   {%- endif -%}
                 {%- endfor -%}
               </div>
-              <a class="blog-article__compare-link" href="{{ collections['alle-venus-e-serie'].url | default: '/collections/alle-venus-e-serie' }}">
+              <a
+                class="blog-article__compare-link"
+                href="{{ collections['alle-venus-e-serie'].url | default: '/collections/alle-venus-e-serie' }}"
+              >
                 <span class="blog-article__compare-icon" aria-hidden="true">
                   <svg viewBox="0 0 32 32" fill="none" focusable="false">
                     <path d="M16 4v23M7 8h18M7 8l-4 9h8L7 8ZM25 8l-4 9h8l-4-9ZM4 22h6M22 22h6M2 26h10M20 26h10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
@@ -1367,7 +1439,7 @@
               </a>
             </section>
           {%- endif -%}
-          </div>
+        </div>
       </aside>
     </div>
   </div>
