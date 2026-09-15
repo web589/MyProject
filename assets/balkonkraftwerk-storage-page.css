@@ -675,6 +675,12 @@
   transition: opacity 260ms ease;
 }
 
+.bw-energy-flow__media-stack .bw-flow-media:not(.is-active) {
+  height: 0;
+  min-height: 0;
+  visibility: hidden;
+}
+
 .bw-energy-flow__media-stack .bw-flow-media.is-active {
   z-index: 1;
   opacity: 1;
