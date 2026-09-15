@@ -32,7 +32,7 @@
 
     {% if section.blocks.size > 0 %}
       <div
-        class="bw-capacity-presets"
+        class="bw-capacity-presets{% if section.settings.presets_background_image != blank %} bw-capacity-presets--has-background{% endif %}"
         aria-label="{{ section.settings.presets_label | escape }}"
         style="--bw-capacity-presets-overlay-rgb: {{ presets_overlay_red }}, {{ presets_overlay_green }}, {{ presets_overlay_blue }}; --bw-capacity-presets-overlay-opacity: {{ presets_overlay_opacity | divided_by: 100.0 }}; --bw-capacity-presets-background-position: {{ section.settings.presets_background_position }};{% if section.settings.presets_background_image != blank %} --bw-capacity-presets-background: url('{{ section.settings.presets_background_image | image_url: width: 2200 }}');{% endif %}"
       >

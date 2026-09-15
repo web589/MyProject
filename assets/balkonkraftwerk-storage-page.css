@@ -802,6 +802,11 @@
   );
 }
 
+.bw-capacity-presets:not(.bw-capacity-presets--has-background)::before,
+.bw-capacity-presets:not(.bw-capacity-presets--has-background)::after {
+  display: none;
+}
+
 .bw-capacity-preset {
   position: relative;
   z-index: 1;
