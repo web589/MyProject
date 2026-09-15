@@ -4,6 +4,17 @@
     assign capacity_anchor = 'kapazitaet'
   endif
   assign capacity_heading_id = 'bw-capacity-heading-' | append: section.id
+  assign homepage_overlay_color = settings.color_image_overlay | default: '#000000'
+  assign homepage_overlay_opacity = settings.color_image_overlay_opacity | default: 10
+  assign presets_overlay_color = homepage_overlay_color
+  assign presets_overlay_opacity = homepage_overlay_opacity
+  if section.settings.presets_overlay_use_global == false
+    assign presets_overlay_color = section.settings.presets_overlay_color | default: homepage_overlay_color
+    assign presets_overlay_opacity = section.settings.presets_background_overlay | default: homepage_overlay_opacity
+  endif
+  assign presets_overlay_red = presets_overlay_color | color_extract: 'red'
+  assign presets_overlay_green = presets_overlay_color | color_extract: 'green'
+  assign presets_overlay_blue = presets_overlay_color | color_extract: 'blue'
 %}
 
 <section
@@ -23,9 +34,26 @@
       <div
         class="bw-capacity-presets"
         aria-label="{{ section.settings.presets_label | escape }}"
-        {% if section.settings.presets_background_image != blank %}style="--bw-capacity-presets-background: url('{{ section.settings.presets_background_image | image_url: width: 2200 }}'); --bw-capacity-presets-overlay: {{ section.settings.presets_background_overlay }}%; --bw-capacity-presets-background-position: {{ section.settings.presets_background_position }};"{% endif %}
+        style="--bw-capacity-presets-overlay-rgb: {{ presets_overlay_red }}, {{ presets_overlay_green }}, {{ presets_overlay_blue }}; --bw-capacity-presets-overlay-opacity: {{ presets_overlay_opacity | divided_by: 100.0 }}; --bw-capacity-presets-background-position: {{ section.settings.presets_background_position }};{% if section.settings.presets_background_image != blank %} --bw-capacity-presets-background: url('{{ section.settings.presets_background_image | image_url: width: 2200 }}');{% endif %}"
       >
         {% for block in section.blocks %}
+          {% liquid
+            assign preset_overlay_color = homepage_overlay_color
+            assign preset_overlay_opacity = homepage_overlay_opacity
+            if block.settings.overlay_use_global == false
+              assign preset_overlay_color = block.settings.overlay_color | default: homepage_overlay_color
+              assign preset_overlay_opacity = block.settings.background_overlay | default: homepage_overlay_opacity
+            endif
+            assign preset_overlay_red = preset_overlay_color | color_extract: 'red'
+            assign preset_overlay_green = preset_overlay_color | color_extract: 'green'
+            assign preset_overlay_blue = preset_overlay_color | color_extract: 'blue'
+            assign preset_background = 'rgba(244, 246, 248, 0.84)'
+            assign preset_active_background = 'rgba(238, 248, 255, 0.9)'
+            if block.settings.background_image != blank
+              assign preset_background = 'transparent'
+              assign preset_active_background = 'rgba(238, 248, 255, 0.22)'
+            endif
+          %}
           <button
             type="button"
             class="bw-capacity-preset"
@@ -34,7 +62,7 @@
             data-bw-preset-pv="{{ block.settings.pv_value }}"
             data-bw-preset-annual="{{ block.settings.annual_value }}"
             aria-pressed="false"
-            style="--bw-capacity-title-color: {{ block.settings.title_color }}; --bw-capacity-text-color: {{ block.settings.text_color }};{% if block.settings.background_image != blank %} --bw-capacity-background: url('{{ block.settings.background_image | image_url: width: 1400 }}'); --bw-capacity-overlay: {{ block.settings.background_overlay }}%; --bw-capacity-background-position: {{ block.settings.background_position }};{% endif %}"
+            style="--bw-capacity-title-color: {{ block.settings.title_color }}; --bw-capacity-text-color: {{ block.settings.text_color }}; --bw-capacity-overlay-rgb: {{ preset_overlay_red }}, {{ preset_overlay_green }}, {{ preset_overlay_blue }}; --bw-capacity-overlay-opacity: {{ preset_overlay_opacity | divided_by: 100.0 }}; --bw-capacity-preset-background: {{ preset_background }}; --bw-capacity-preset-active-background: {{ preset_active_background }};{% if block.settings.background_image != blank %} --bw-capacity-background: url('{{ block.settings.background_image | image_url: width: 1400 }}'); --bw-capacity-background-position: {{ block.settings.background_position }};{% endif %}"
             {{ block.shopify_attributes }}
           >
             <span class="bw-capacity-preset__badge">{{ block.settings.badge }}</span>
@@ -116,6 +144,8 @@
     {"type":"header","content":"Hintergrund für den Kartenbereich"},
     {"type":"image_picker","id":"presets_background_image","label":"Hintergrundbild für Kartenbereich"},
     {"type":"select","id":"presets_background_position","label":"Bildposition","default":"center center","options":[{"value":"left center","label":"Links"},{"value":"center center","label":"Mitte"},{"value":"right center","label":"Rechts"},{"value":"center top","label":"Oben"},{"value":"center bottom","label":"Unten"}]},
+    {"type":"checkbox","id":"presets_overlay_use_global","label":"Homepage-Bildmaskierung verwenden","default":true},
+    {"type":"color","id":"presets_overlay_color","label":"Eigene Maskenfarbe für Kartenbereich","default":"#000000"},
     {"type":"range","id":"presets_background_overlay","label":"Helle Überlagerung","min":0,"max":100,"step":5,"unit":"%","default":75},
     {"type":"header","content":"Rechner"},
     {"type":"text","id":"calculator_heading","label":"Rechner-Überschrift","default":"Nicht sicher, was zu dir passt?"},
@@ -140,6 +170,8 @@
       "settings": [
         {"type":"image_picker","id":"background_image","label":"Hintergrundbild"},
         {"type":"select","id":"background_position","label":"Bildposition","default":"center center","options":[{"value":"left center","label":"Links"},{"value":"center center","label":"Mitte"},{"value":"right center","label":"Rechts"},{"value":"center top","label":"Oben"},{"value":"center bottom","label":"Unten"}]},
+        {"type":"checkbox","id":"overlay_use_global","label":"Homepage-Maskierung verwenden","default":true},
+        {"type":"color","id":"overlay_color","label":"Eigene Maskenfarbe","default":"#000000"},
         {"type":"range","id":"background_overlay","label":"Helle Überlagerung","min":0,"max":100,"step":5,"unit":"%","default":75},
         {"type":"color","id":"title_color","label":"Titelfarbe","default":"#111827"},
         {"type":"color","id":"text_color","label":"Beschreibungsfarbe","default":"#596b82"},

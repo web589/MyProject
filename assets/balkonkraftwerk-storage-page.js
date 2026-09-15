@@ -185,6 +185,17 @@
     return matches[0] || null;
   }
 
+  function findBundleImage(productKey, capacity, count) {
+    var mappings = products && Array.isArray(products.bundle_images) ? products.bundle_images : [];
+    return mappings.find(function (mapping) {
+      return mapping
+        && mapping.image
+        && String(mapping.product || '') === String(productKey)
+        && Math.abs(finiteNumber(mapping.capacity, -1) - Number(capacity)) < 0.08
+        && finiteNumber(mapping.quantity, -1) === Number(count);
+    }) || null;
+  }
+
   function readProductData() {
     var root = getRecommendationsRoot();
     var node = root && root.querySelector('[data-bw-product-data]');
@@ -212,6 +223,10 @@
     var product = products[productKey];
     var variant = findVariant(product, capacity);
     var productMeta = CALCULATOR_CONFIG.products[productKey] || { label: productKey };
+    var bundleImage = findBundleImage(productKey, capacity, count);
+    var fallbackImage = product && (product.featured_image || product.image)
+      ? (product.featured_image || product.image)
+      : '';
     return {
       productKey: productKey,
       product: product || {},
@@ -220,11 +235,12 @@
       count: count,
       title: String(count) + '× ' + productMeta.label,
       url: product && product.url ? product.url : '',
-      image: variant && variant.image
-        ? variant.image
-        : product && (product.featured_image || product.image)
-          ? (product.featured_image || product.image)
-          : '',
+      image: bundleImage && bundleImage.image
+        ? bundleImage.image
+        : variant && variant.image
+          ? variant.image
+          : fallbackImage,
+      imageAlt: bundleImage && bundleImage.alt ? bundleImage.alt : productMeta.label,
       available: Boolean(variant && variant.available),
       preorder: Boolean(product && product.preorder_enabled),
       preorderLabel: product && product.preorder_label ? product.preorder_label : 'Jetzt vormerken'
@@ -407,6 +423,7 @@
     if (imageUrl) {
       if (wrapper) wrapper.hidden = false;
       if (image) {
+        image.removeAttribute('srcset');
         image.src = imageUrl;
         image.alt = alt || '';
         image.hidden = false;
@@ -461,7 +478,7 @@
       compareAt.hidden = !showCompare;
     }
     setText(card, '[data-bw-result-availability]', item.available ? 'Verfügbar' : 'Nicht verfügbar');
-    updateMedia(card.querySelector('[data-bw-result-media]') || card, item.image, item.title);
+    updateMedia(card.querySelector('[data-bw-result-media]') || card, item.image, item.imageAlt || item.title);
     var action = card.querySelector('[data-bw-product-role], [data-bw-product-action]');
     configureAction(action, item, role === 'primary', role === 'primary' ? 'In den Warenkorb' : 'Zur Produktseite');
     card.classList.toggle('is-unavailable', !item.available);
@@ -534,7 +551,7 @@
       compareAt.hidden = !showCompare;
     }
     setText(card, '[data-bw-result-availability]', item.preorder ? 'Jetzt vormerken' : item.available ? 'Verfügbar' : 'Nicht verfügbar');
-    updateMedia(card.querySelector('[data-bw-result-media]') || card, item.image, item.title);
+    updateMedia(card.querySelector('[data-bw-result-media]') || card, item.image, item.imageAlt || item.title);
     var productUrl = productVariantUrl(item);
     var mediaWrap = card.querySelector('[data-bw-result-image-wrap]');
     if (mediaWrap && productUrl) mediaWrap.href = productUrl;
@@ -605,7 +622,7 @@
       setAllText(root, '[data-bw-final-capacity]', finalClass.label);
       setAllText(root, '[data-bw-final-product]', resolvedRecommendation.title);
       setText(root, '[data-bw-final-price]', resolvedRecommendation.variant ? formatMoney(resolvedRecommendation.variant.price) : '');
-      updateMedia(root.querySelector('[data-bw-final-media]') || root, resolvedRecommendation.image, resolvedRecommendation.title);
+      updateMedia(root.querySelector('[data-bw-final-media]') || root, resolvedRecommendation.image, resolvedRecommendation.imageAlt || resolvedRecommendation.title);
       configureActionV2(root.querySelector('[data-bw-final-action]'), resolvedRecommendation, 'In den Warenkorb');
     });
   }

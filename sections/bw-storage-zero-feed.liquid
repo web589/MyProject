@@ -14,7 +14,10 @@
   aria-labelledby="bw-zero-feed-heading-{{ section.id }}"
 >
   <div class="bw-container bw-zero-feed__container">
-    <div class="bw-section__intro bw-zero-feed__intro">
+    <div
+      class="bw-section__intro bw-zero-feed__intro bw-configurable-media bw-media-align--{{ section.settings.media_alignment }}"
+      style="--bw-media-width: {{ section.settings.media_width }}%;"
+    >
       <h2 id="bw-zero-feed-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
       {% if section.settings.text != blank %}<p>{{ section.settings.text }}</p>{% endif %}
     </div>

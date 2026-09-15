@@ -407,7 +407,13 @@
     </script>
     {%- sections 'popup-group' -%}
 
-      <main class="main-content" id="MainContent">
+      <main
+        class="main-content{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}"
+        id="MainContent"
+        {% if template.suffix == 'balkonkraftwerk-mit-speicher' %}
+          style="--bw-storage-content-max-width: {{ settings.bw_storage_content_max_width | default: 1500 }}px;"
+        {% endif %}
+      >
         {%- if request.path contains '/policies/' -%}
           {%- assign current_policy = false -%}
           {%- for store_policy in shop.policies -%}

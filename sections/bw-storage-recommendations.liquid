@@ -89,21 +89,22 @@
 
     <div class="bw-results__grid">
       {% for block in section.blocks %}
-        {% liquid
-          assign card_product = venus_3
-          assign card_variant = card_product.selected_or_first_available_variant | default: card_product.variants.first
-          assign card_image = card_variant.featured_image | default: card_product.featured_image
-          assign card_url = card_variant.url | default: card_product.url | default: '/products/venus-e-3'
-          assign slot = block.settings.role
-          if slot == blank
-            assign slot = 'slot' | append: forloop.index
-          endif
-        %}
-        <article
-          class="bw-result-card{% if slot == 'slot1' %} bw-result-card--primary{% endif %}"
-          data-bw-result-card="{{ slot }}"
-          {{ block.shopify_attributes }}
-        >
+        {% if block.type == 'recommendation_card' %}
+          {% liquid
+            assign card_product = venus_3
+            assign card_variant = card_product.selected_or_first_available_variant | default: card_product.variants.first
+            assign card_image = card_variant.featured_image | default: card_product.featured_image
+            assign card_url = card_variant.url | default: card_product.url | default: '/products/venus-e-3'
+            assign slot = block.settings.role
+            if slot == blank
+              assign slot = 'slot' | append: forloop.index
+            endif
+          %}
+          <article
+            class="bw-result-card{% if slot == 'slot1' %} bw-result-card--primary{% endif %}"
+            data-bw-result-card="{{ slot }}"
+            {{ block.shopify_attributes }}
+          >
           {% if block.settings.badge != blank %}<span class="bw-card-badge">{{ block.settings.badge }}</span>{% endif %}
 
           <a class="bw-result-card__media" href="{{ card_url }}" data-bw-result-image-wrap{% if card_image == blank %} hidden{% endif %}>
@@ -142,7 +143,8 @@
               data-direct-add="false"
             >{{ block.settings.button_label }}</button>
           </div>
-        </article>
+          </article>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
@@ -188,7 +190,19 @@
         "preorder_enabled": {{ venus_max_preorder | default: false | json }},
         "preorder_label": {{ venus_max.metafields.custom.preorder_button_label.value | default: 'Jetzt vormerken' | json }},
         "variants": [{% if venus_max != blank %}{% for variant in venus_max.variants %}{% assign variant_image = variant.featured_image | default: venus_max.featured_image %}{"id":{{ variant.id | append: '' | json }},"title":{{ variant.title | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant_image != blank %}{{ variant_image | image_url: width: 1000 | json }}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
-      }
+      },
+      "bundle_images": [
+        {% assign bundle_image_blocks = section.blocks | where: 'type', 'bundle_image' %}
+        {% for block in bundle_image_blocks %}
+          {
+            "product": {{ block.settings.product_role | json }},
+            "capacity": {{ block.settings.capacity | json }},
+            "quantity": {{ block.settings.quantity | json }},
+            "image": {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1000 | json }}{% else %}null{% endif %},
+            "alt": {{ block.settings.alt | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
     }
   </script>
 </section>
@@ -198,7 +212,7 @@
   "name": "VENUS E · Empfehlungen",
   "tag": "section",
   "class": "section-bw-storage-recommendations",
-  "max_blocks": 3,
+  "max_blocks": 50,
   "settings": [
     {"type":"text","id":"anchor_id","label":"Anker-ID","info":"Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.","default":"empfehlungen"},
     {"type":"text","id":"context_label","label":"Eingabe-Zusammenfassung","default":"Basierend auf deiner Eingabe"},
@@ -211,6 +225,7 @@
   "blocks": [
     {
       "type": "recommendation_card",
+      "limit": 3,
       "name": "Empfehlungskarte",
       "settings": [
         {"type":"select","id":"role","label":"Kartenplatz","options":[{"value":"slot1","label":"1. Karte"},{"value":"slot2","label":"2. Karte"},{"value":"slot3","label":"3. Karte"}],"default":"slot1"},
@@ -219,6 +234,17 @@
         {"type":"text","id":"capacity","label":"Startkapazität","info":"Wird nach der Berechnung dynamisch aktualisiert."},
         {"type":"textarea","id":"text","label":"Beschreibung","default":"Die passende Konfiguration für deinen Bedarf."},
         {"type":"text","id":"button_label","label":"Button","default":"In den Warenkorb"}
+      ]
+    },
+    {
+      "type": "bundle_image",
+      "name": "Bundle-Bild",
+      "settings": [
+        {"type":"select","id":"product_role","label":"Produkt","options":[{"value":"mini","label":"VENUS E Mini"},{"value":"venus3","label":"VENUS E 3.0"},{"value":"venus4","label":"VENUS E 4.0"},{"value":"max","label":"VENUS E Max"}],"default":"mini"},
+        {"type":"select","id":"capacity","label":"Kapazitaet","options":[{"value":"2","label":"2 kWh"},{"value":"4","label":"4 kWh"},{"value":"5","label":"5 kWh"},{"value":"5.12","label":"5,12 kWh"},{"value":"6","label":"6 kWh"},{"value":"10","label":"10 kWh"},{"value":"10.24","label":"10,24 kWh"},{"value":"15","label":"15 kWh"},{"value":"15.36","label":"15,36 kWh"},{"value":"20","label":"20 kWh"},{"value":"30","label":"30 kWh"}],"default":"6"},
+        {"type":"range","id":"quantity","label":"Bundle-Anzahl","min":1,"max":3,"step":1,"default":1},
+        {"type":"image_picker","id":"image","label":"Weisses Produktbild"},
+        {"type":"text","id":"alt","label":"Alternativtext","default":"VENUS E Bundle"}
       ]
     }
   ],
