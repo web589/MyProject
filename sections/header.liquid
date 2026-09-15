@@ -891,7 +891,7 @@
     },
     {
       "type": "mega_menu_article",
-      "name": "Mega menu article",
+      "name": "Mega menu content card",
       "limit": 12,
       "settings": [
         {
@@ -899,7 +899,7 @@
           "id": "menu_handle",
           "label": "Top-level menu handle",
           "default": "balkonkraftwerk",
-          "info": "Articles are shown when this handle matches a top-level menu item, for example: balkonkraftwerk."
+          "info": "Content cards are shown when this handle matches a top-level menu item, for example: balkonkraftwerk."
         },
         {
           "type": "text",
@@ -910,31 +910,38 @@
         {
           "type": "article",
           "id": "article",
-          "label": "Blog article"
+          "label": "Blog article (optional)",
+          "info": "Choose a page or a blog article. A selected page takes priority."
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Page (optional)",
+          "info": "Choose a page or a blog article. A selected page takes priority."
         },
         {
           "type": "image_picker",
           "id": "image",
           "label": "Card image",
-          "info": "Optional. If blank, the selected article's image is used."
+          "info": "Optional. If blank, the selected article's image is used. Add an image when using a page."
         },
         {
           "type": "text",
           "id": "title",
           "label": "Card title",
-          "info": "Optional. If blank, the selected article's title is used."
+          "info": "Optional. If blank, the selected page or article title is used."
         },
         {
           "type": "textarea",
           "id": "description",
           "label": "Short description",
-          "info": "Optional. If blank, the article excerpt or first content text is used."
+          "info": "Optional. If blank, the selected page or article content is used."
         },
         {
           "type": "url",
           "id": "link",
           "label": "Link override",
-          "info": "Optional. If blank, the selected article URL is used."
+          "info": "Optional. If blank, the selected page or article URL is used."
         }
       ]
     }

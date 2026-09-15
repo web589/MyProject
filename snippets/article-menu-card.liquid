@@ -1,30 +1,35 @@
 {%- liquid
+  assign card_page = block.settings.page
   assign article = block.settings.article
+  assign content_item = card_page | default: article
 
-  if article != blank
-    assign article_image = block.settings.image | default: article.image
-    assign card_title = block.settings.title | default: article.title
+  if content_item != blank
+    assign card_image = block.settings.image
+    if card_image == blank and card_page == blank and article != blank
+      assign card_image = article.image
+    endif
+    assign card_title = block.settings.title | default: content_item.title
     assign card_description = block.settings.description
-    if card_description == blank
+    if card_description == blank and card_page == blank and article != blank
       assign card_description = article.excerpt | strip_html | truncatewords: 18
     endif
     if card_description == blank
-      assign card_description = article.content | strip_html | truncatewords: 18
+      assign card_description = content_item.content | strip_html | truncatewords: 18
     endif
-    assign article_link = block.settings.link | default: article.url
+    assign card_link = block.settings.link | default: content_item.url
   endif
 -%}
 
-{%- if article != blank -%}
+{%- if content_item != blank -%}
   <a
     class="mega-menu-products__card mega-menu-products__card--article"
-    href="{{ article_link | escape }}"
+    href="{{ card_link | escape }}"
     aria-label="{{ card_title | escape }}"
   >
     <div class="mega-menu-products__card-media">
-      {%- if article_image != blank -%}
+      {%- if card_image != blank -%}
         {%- render 'image-element',
-          img: article_image,
+          img: card_image,
           widths: '300, 500, 700',
           sizeVariable: '25vw',
           alt: card_title,

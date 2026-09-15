@@ -74,17 +74,20 @@
               assign default_menu_category = product_category_handle
             endif
           endif
-        elsif block.type == 'mega_menu_article' and block.settings.article != blank
-          assign article_menu_handle = block.settings.menu_handle | handleize
-          if article_menu_handle == link_handle
-            assign menu_card_block_count = menu_card_block_count | plus: 1
-            assign article_category_handle = block.settings.category_handle
-            if article_category_handle == blank
-              assign article_category_handle = block.settings.article.handle
-            endif
-            assign article_category_handle = article_category_handle | handleize
-            if default_menu_category == blank
-              assign default_menu_category = article_category_handle
+        elsif block.type == 'mega_menu_article'
+          assign content_card = block.settings.page | default: block.settings.article
+          if content_card != blank
+            assign article_menu_handle = block.settings.menu_handle | handleize
+            if article_menu_handle == link_handle
+              assign menu_card_block_count = menu_card_block_count | plus: 1
+              assign article_category_handle = block.settings.category_handle
+              if article_category_handle == blank
+                assign article_category_handle = content_card.handle
+              endif
+              assign article_category_handle = article_category_handle | handleize
+              if default_menu_category == blank
+                assign default_menu_category = article_category_handle
+              endif
             endif
           endif
         endif
@@ -191,17 +194,20 @@
                               break
                             endif
                           endif
-                        elsif menu_block.type == 'mega_menu_article' and menu_block.settings.article != blank
-                          assign block_menu_handle = menu_block.settings.menu_handle | handleize
-                          if block_menu_handle == link_handle
-                            assign menu_category_handle = menu_block.settings.category_handle
-                            if menu_category_handle == blank
-                              assign menu_category_handle = menu_block.settings.article.handle
-                            endif
-                            assign menu_category_handle = menu_category_handle | handleize
-                            if menu_category_handle == category_handle
-                              assign has_menu_category = true
-                              break
+                        elsif menu_block.type == 'mega_menu_article'
+                          assign content_card = menu_block.settings.page | default: menu_block.settings.article
+                          if content_card != blank
+                            assign block_menu_handle = menu_block.settings.menu_handle | handleize
+                            if block_menu_handle == link_handle
+                              assign menu_category_handle = menu_block.settings.category_handle
+                              if menu_category_handle == blank
+                                assign menu_category_handle = content_card.handle
+                              endif
+                              assign menu_category_handle = menu_category_handle | handleize
+                              if menu_category_handle == category_handle
+                                assign has_menu_category = true
+                                break
+                              endif
                             endif
                           endif
                         endif
@@ -274,26 +280,29 @@
                         </div>
                       </div>
                     {%- endif -%}
-                  {%- elsif menu_block.type == 'mega_menu_article' and menu_block.settings.article != blank -%}
-                    {%- assign article_menu_handle = menu_block.settings.menu_handle | handleize -%}
-                    {%- if article_menu_handle == link_handle -%}
-                      {%- assign article_category_handle = menu_block.settings.category_handle -%}
-                      {%- if article_category_handle == blank -%}
-                        {%- assign article_category_handle = menu_block.settings.article.handle -%}
-                      {%- endif -%}
-                      {%- assign article_category_handle = article_category_handle | handleize -%}
-                      <div
-                        id="mega-menu-products-{{ mega_menu_block.id }}-{{ article_category_handle }}"
-                        class="mega-menu-products__panel"
-                        data-mega-menu-category-panel="{{ article_category_handle }}"
-                        {% unless article_category_handle == default_menu_category %}hidden{% endunless %}
-                      >
-                        <div class="mega-menu-products__cards" role="list">
-                          <div role="listitem">
-                            {%- render 'article-menu-card', block: menu_block -%}
+                  {%- elsif menu_block.type == 'mega_menu_article' -%}
+                    {%- assign content_card = menu_block.settings.page | default: menu_block.settings.article -%}
+                    {%- if content_card != blank -%}
+                      {%- assign article_menu_handle = menu_block.settings.menu_handle | handleize -%}
+                      {%- if article_menu_handle == link_handle -%}
+                        {%- assign article_category_handle = menu_block.settings.category_handle -%}
+                        {%- if article_category_handle == blank -%}
+                          {%- assign article_category_handle = content_card.handle -%}
+                        {%- endif -%}
+                        {%- assign article_category_handle = article_category_handle | handleize -%}
+                        <div
+                          id="mega-menu-products-{{ mega_menu_block.id }}-{{ article_category_handle }}"
+                          class="mega-menu-products__panel"
+                          data-mega-menu-category-panel="{{ article_category_handle }}"
+                          {% unless article_category_handle == default_menu_category %}hidden{% endunless %}
+                        >
+                          <div class="mega-menu-products__cards" role="list">
+                            <div role="listitem">
+                              {%- render 'article-menu-card', block: menu_block -%}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      {%- endif -%}
                     {%- endif -%}
                   {%- endif -%}
                 {%- endfor -%}
