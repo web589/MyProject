@@ -69,8 +69,19 @@
     assign structured_data_operator_same_as = settings.structured_data_organization_same_as
     assign structured_data_operator_id = structured_data_shop_url | append: '#organization'
     assign structured_data_website_id = structured_data_shop_url | append: '#website'
+    assign structured_data_website_name = 'VENUS E'
+    assign structured_data_blog_author_name = 'VENUS E Redaktion'
     assign structured_data_render_product = false
     assign structured_data_product_exclusion_tag = settings.structured_data_excluded_product_tag | default: 'structured-data-exclude' | strip
+    assign structured_data_product_brand_name = blank
+
+    if product != blank and product.vendor != blank
+      assign structured_data_product_brand_name = product.vendor | strip
+      assign structured_data_product_brand_handle = structured_data_product_brand_name | downcase
+      if structured_data_product_brand_handle == 'marstek'
+        assign structured_data_product_brand_name = 'MARSTEK'
+      endif
+    endif
 
     if request.page_type == 'product' and product != blank
       assign structured_data_render_product = true
@@ -165,7 +176,7 @@
               "@type": "WebSite",
               "@id": {{ structured_data_website_id | json }},
               "url": {{ structured_data_shop_url | json }},
-              "name": {{ shop.name | json }}{% if structured_data_operator_name != blank %},
+              "name": {{ structured_data_website_name | json }}{% if structured_data_operator_name != blank %},
               "publisher": { "@id": {{ structured_data_operator_id | json }} }{% endif %}
             }
             {%- assign structured_data_emitted_node_count = structured_data_emitted_node_count | plus: 1 -%}
@@ -197,10 +208,10 @@
               "@id": {{ structured_data_product_url | append: '#product' | json }},
               "name": {{ product.title | json }},
               "url": {{ structured_data_product_url | json }}{% if product.description != blank %},
-              "description": {{ product.description | strip_html | strip_newlines | json }}{% endif %}{% if product.vendor != blank %},
+              "description": {{ product.description | strip_html | strip_newlines | json }}{% endif %}{% if structured_data_product_brand_name != blank %},
               "brand": {
                 "@type": "Brand",
-                "name": {{ product.vendor | strip | json }}
+                "name": {{ structured_data_product_brand_name | json }}
               }{% endif %}{% if product.images != blank %},
               "image": [
                 {%- for product_image in product.images -%}
@@ -246,11 +257,11 @@
               "articleBody": {{ article.content | strip_html | strip_newlines | json }}{% endif %}{% if article.image != blank %},
               "image": [{{ article.image | image_url: width: 1600 | json }}]{% endif %}{% if article.published_at != blank %},
               "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }}{% endif %}{% if article.updated_at != blank %},
-              "dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }}{% endif %}{% if article.author != blank %},
+              "dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }}{% endif %},
               "author": {
-                "@type": "Person",
-                "name": {{ article.author | strip | json }}
-              }{% endif %}{% if structured_data_article_blog != blank and structured_data_article_blog.title != blank %},
+                "@type": "Organization",
+                "name": {{ structured_data_blog_author_name | json }}
+              }{% if structured_data_article_blog != blank and structured_data_article_blog.title != blank %},
               "articleSection": {{ structured_data_article_blog.title | json }}{% endif %}{% if structured_data_operator_name != blank %},
               "publisher": {
                 "@type": "Organization",
