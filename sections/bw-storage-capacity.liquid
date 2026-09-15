@@ -56,7 +56,7 @@
           %}
           <button
             type="button"
-            class="bw-capacity-preset"
+            class="bw-capacity-preset{% if block.settings.background_image != blank %} bw-capacity-preset--has-background{% endif %}"
             data-bw-preset="{{ block.settings.capacity }}"
             data-bw-preset-people="{{ block.settings.people_value }}"
             data-bw-preset-pv="{{ block.settings.pv_value }}"

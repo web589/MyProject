@@ -853,6 +853,15 @@
   );
 }
 
+.bw-capacity-preset--has-background::after {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 18%,
+    rgba(255, 255, 255, 0.26) 54%,
+    rgba(255, 255, 255, 0.92) 100%
+  );
+}
+
 .bw-capacity-preset > * {
   position: relative;
   z-index: 1;
@@ -885,6 +894,7 @@
   margin-top: 9px;
   color: var(--bw-capacity-text-color, var(--bw-copy));
   font-size: 0.71rem;
+  font-weight: 500;
   line-height: 1.45;
 }
 
