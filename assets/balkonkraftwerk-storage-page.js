@@ -243,7 +243,7 @@
           : fallbackImage,
       imageAlt: bundleImage && bundleImage.alt ? bundleImage.alt : productMeta.label,
       available: Boolean(variant && variant.available),
-      preorder: Boolean(product && product.preorder_enabled),
+      preorder: Boolean((product && product.preorder_enabled) || (variant && !variant.available)),
       availableLabel: product && product.available_label ? product.available_label : 'Verfügbar',
       availableButtonLabel: product && product.available_button_label ? product.available_button_label : 'In den Warenkorb',
       preorderLabel: product && product.preorder_label ? product.preorder_label : 'Demnächst verfügbar',
