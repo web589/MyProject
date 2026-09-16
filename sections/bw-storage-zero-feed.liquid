@@ -12,6 +12,19 @@
   class="bw-storage bw-storage-section bw-zero-feed bw-anchor-target"
   data-bw-module="zero-feed"
   aria-labelledby="bw-zero-feed-heading-{{ section.id }}"
+  style="
+    --bw-zero-feed-heading-font-size: {{ section.settings.heading_font_size | default: 42 }}px;
+    --bw-zero-feed-intro-font-size: {{ section.settings.intro_font_size | default: 16 }}px;
+    --bw-zero-feed-feature-title-font-size: {{ section.settings.feature_title_font_size | default: 12 }}px;
+    --bw-zero-feed-feature-text-font-size: {{ section.settings.feature_text_font_size | default: 10 }}px;
+    --bw-zero-feed-accessory-title-font-size: {{ section.settings.accessory_title_font_size | default: 16 }}px;
+    --bw-zero-feed-accessory-subtitle-font-size: {{ section.settings.accessory_subtitle_font_size | default: 12 }}px;
+    --bw-zero-feed-accessory-badge-font-size: {{ section.settings.accessory_badge_font_size | default: 10 }}px;
+    --bw-zero-feed-accessory-price-font-size: {{ section.settings.accessory_price_font_size | default: 19 }}px;
+    --bw-zero-feed-accessory-compare-font-size: {{ section.settings.accessory_compare_font_size | default: 12 }}px;
+    --bw-zero-feed-accessory-button-font-size: {{ section.settings.accessory_button_font_size | default: 12 }}px;
+    --bw-zero-feed-service-font-size: {{ section.settings.service_font_size | default: 11 }}px;
+  "
 >
   <div class="bw-container bw-zero-feed__container">
     <div
@@ -40,7 +53,15 @@
     <div class="bw-zero-feed-features" role="list" aria-label="{{ section.settings.feature_label | escape }}">
       {% for block in section.blocks %}
         {% if block.type == 'feature_point' %}
-          <div class="bw-zero-feed-feature" role="listitem" {{ block.shopify_attributes }}>
+          <div
+            class="bw-zero-feed-feature"
+            role="listitem"
+            style="
+              --bw-zero-feed-feature-card-width: {{ block.settings.card_width | default: 100 }}%;
+              --bw-zero-feed-feature-card-height: {{ block.settings.card_height | default: 70 }}px;
+            "
+            {{ block.shopify_attributes }}
+          >
             <span class="bw-zero-feed-feature__icon" aria-hidden="true">
               {% if block.settings.icon_image != blank %}
                 {{ block.settings.icon_image | image_url: width: 64 | image_tag: loading: 'lazy', widths: '32,48,64', sizes: '21px', alt: '' }}
@@ -176,6 +197,18 @@
     {"type":"text","id":"flow_image_alt","label":"Alternativtext","default":"Smart Meter, VENUS E, Hausnetz, Speicher und Stromnetz im Energiefluss"},
     {"type":"range","id":"media_width","label":"Bildbreite","min":50,"max":100,"step":5,"unit":"%","default":100},
     {"type":"select","id":"media_alignment","label":"Bildausrichtung","default":"center","options":[{"value":"left","label":"Links"},{"value":"center","label":"Mitte"},{"value":"right","label":"Rechts"}]},
+    {"type":"header","content":"Schriftgrößen"},
+    {"type":"range","id":"heading_font_size","label":"Modultitel","min":20,"max":64,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"intro_font_size","label":"Modulbeschreibung","min":10,"max":28,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"feature_title_font_size","label":"Funktionskarten Titel","min":10,"max":24,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"feature_text_font_size","label":"Funktionskarten Beschreibung","min":8,"max":20,"step":1,"unit":"px","default":10},
+    {"type":"range","id":"accessory_title_font_size","label":"Produktkarten Titel","min":10,"max":28,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"accessory_subtitle_font_size","label":"Produktkarten Beschreibung","min":8,"max":20,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"accessory_badge_font_size","label":"Produktkarten Badge","min":8,"max":18,"step":1,"unit":"px","default":10},
+    {"type":"range","id":"accessory_price_font_size","label":"Produktkarten Preis","min":12,"max":36,"step":1,"unit":"px","default":19},
+    {"type":"range","id":"accessory_compare_font_size","label":"Produktkarten Vergleichspreis","min":8,"max":20,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"accessory_button_font_size","label":"Produktkarten Button","min":9,"max":22,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"service_font_size","label":"Servicevorteile Text","min":8,"max":20,"step":1,"unit":"px","default":11},
     {"type":"text","id":"feature_label","label":"Bezeichnung der Funktionspunkte","default":"Funktionen der automatischen Steuerung"},
     {"type":"text","id":"accessory_label","label":"Bezeichnung der Zubehörliste","default":"Passende Smart Meter"},
     {"type":"text","id":"service_label","label":"Bezeichnung der Servicevorteile","default":"Servicevorteile"},
@@ -192,7 +225,9 @@
         {"type":"select","id":"icon","label":"Standardsymbol","default":"measure","options":[{"value":"measure","label":"Messen"},{"value":"control","label":"Steuern"},{"value":"battery","label":"Speichern"},{"value":"home","label":"Versorgen"}]},
         {"type":"image_picker","id":"icon_image","label":"Eigenes Symbol (optional)"},
         {"type":"text","id":"title","label":"Titel","default":"Messen"},
-        {"type":"text","id":"text","label":"Beschreibung","default":"Verbrauch in Echtzeit erfassen"}
+        {"type":"text","id":"text","label":"Beschreibung","default":"Verbrauch in Echtzeit erfassen"},
+        {"type":"range","id":"card_width","label":"Kartenbreite (Anteil der Spaltenbreite)","min":60,"max":100,"step":5,"unit":"%","default":100},
+        {"type":"range","id":"card_height","label":"Kartenhöhe (Mindesthöhe)","min":44,"max":180,"step":2,"unit":"px","default":70}
       ]
     },
     {
