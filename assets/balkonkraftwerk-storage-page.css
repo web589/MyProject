@@ -96,7 +96,7 @@
 }
 
 .bw-section__intro {
-  max-width: 920px;
+  max-width: 100%;
   margin-bottom: 40px;
 }
 
@@ -604,6 +604,27 @@
   height: 100%;
 }
 
+.bw-compare__point-copy {
+  min-width: 0;
+}
+
+.bw-compare__point-copy strong,
+.bw-compare__point-description {
+  display: block;
+}
+
+.bw-compare__point-copy strong {
+  font-size: 15.5px;
+  line-height: 1.35;
+}
+
+.bw-compare__point-description {
+  margin-top: 5px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 /* Energy-flow tabs */
 .bw-energy-flow {
   background: #f7f9fb;
@@ -734,7 +755,7 @@
 }
 
 .bw-retrofit__copy h2 {
-  max-width: 520px;
+  max-width: 100%;
 }
 
 .bw-retrofit__benefits {
@@ -933,6 +954,10 @@
   color: #3a4859;
   font-size: 0.78rem;
   font-weight: 650;
+}
+
+.bw-slider-row label {
+  letter-spacing: 0.08em;
 }
 
 .bw-slider-row output {

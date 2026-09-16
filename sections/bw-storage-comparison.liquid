@@ -59,7 +59,10 @@
                           <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M6.5 10h7" stroke="white" stroke-width="1.7" stroke-linecap="round"/></svg>
                         {% endif %}
                       </span>
-                      <span>{% if point_block.settings.title != blank %}<strong>{{ point_block.settings.title | escape }}</strong>{% endif %}{% if point_block.settings.text != blank %} <span>{{ point_block.settings.text | escape }}</span>{% endif %}</span>
+                      <span class="bw-compare__point-copy">
+                        {% if point_block.settings.title != blank %}<strong>{{ point_block.settings.title | escape }}</strong>{% endif %}
+                        {% if point_block.settings.text != blank %}<span class="bw-compare__point-description">{{ point_block.settings.text | escape }}</span>{% endif %}
+                      </span>
                     </li>
                   {% endif %}
                 {% endif %}

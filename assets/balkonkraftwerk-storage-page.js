@@ -234,6 +234,7 @@
       capacity: capacity,
       count: count,
       title: String(count) + '× ' + productMeta.label,
+      description: product && product.description ? product.description : '',
       url: product && product.url ? product.url : '',
       image: bundleImage && bundleImage.image
         ? bundleImage.image
@@ -243,7 +244,10 @@
       imageAlt: bundleImage && bundleImage.alt ? bundleImage.alt : productMeta.label,
       available: Boolean(variant && variant.available),
       preorder: Boolean(product && product.preorder_enabled),
-      preorderLabel: product && product.preorder_label ? product.preorder_label : 'Jetzt vormerken'
+      availableLabel: product && product.available_label ? product.available_label : 'Verfügbar',
+      availableButtonLabel: product && product.available_button_label ? product.available_button_label : 'In den Warenkorb',
+      preorderLabel: product && product.preorder_label ? product.preorder_label : 'Demnächst verfügbar',
+      preorderButtonLabel: product && product.preorder_button_label ? product.preorder_button_label : 'Jetzt vormerken'
     };
   }
 
@@ -520,9 +524,9 @@
     action.removeAttribute('aria-disabled');
     if ('disabled' in action) action.disabled = false;
     if (directAdd) {
-      action.textContent = fallbackLabel || 'In den Warenkorb';
+      action.textContent = item && item.availableButtonLabel ? item.availableButtonLabel : fallbackLabel || 'In den Warenkorb';
     } else if (item && item.preorder) {
-      action.textContent = item.preorderLabel || 'Jetzt vormerken';
+      action.textContent = item.preorderButtonLabel || 'Jetzt vormerken';
     } else if (productUrl && !item.variant) {
       action.textContent = 'Zur Produktseite';
     } else {
@@ -550,7 +554,12 @@
       compareAt.textContent = showCompare ? formatMoney(item.variant.compare_at_price) : '';
       compareAt.hidden = !showCompare;
     }
-    setText(card, '[data-bw-result-availability]', item.preorder ? 'Jetzt vormerken' : item.available ? 'Verfügbar' : 'Nicht verfügbar');
+    var description = card.querySelector('[data-bw-result-description]');
+    if (description) {
+      description.textContent = item.description || '';
+      description.hidden = !item.description;
+    }
+    setText(card, '[data-bw-result-availability]', item.preorder ? item.preorderLabel : item.available ? item.availableLabel : item.preorderLabel || 'Nicht verfügbar');
     updateMedia(card.querySelector('[data-bw-result-media]') || card, item.image, item.imageAlt || item.title);
     var productUrl = productVariantUrl(item);
     var mediaWrap = card.querySelector('[data-bw-result-image-wrap]');
