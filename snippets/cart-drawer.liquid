@@ -1578,6 +1578,15 @@
           this.postcodeRow.hidden = false;
           this.postcodeToggle.hidden = true;
           this.applyCountryUI();
+          if (!this.postcodeInput.value.trim()) {
+            ++this.shippingRequestId;
+            if (this.shippingAbortController) {
+              this.shippingAbortController.abort();
+              this.shippingAbortController = null;
+            }
+            this.setShippingMessage(`Versand nach ${this.countryNames[this.selectedCountry]} · bitte PLZ eingeben`, false);
+            this.setShippingSummary('Im Checkout berechnet', false);
+          }
           this.shippingInputTimer = window.setTimeout(() => {
             this.shippingInputTimer = null;
             this.handleShippingCalculate();
@@ -1987,6 +1996,19 @@
           if (!this.drawer.querySelector('[data-products] .cart__item')) {
             this.setShippingMessage('Lege zuerst ein Produkt in den Warenkorb.', false);
             this.setShippingSummary('—', false);
+            return;
+          }
+
+          const postcode = this.postcodeInput.value.trim();
+          if (!postcode) {
+            // Shopify's shipping-rate endpoint can retain the previous
+            // destination-specific rate in the checkout context. Do not
+            // query it until the postcode is complete, otherwise a stale
+            // amount can survive after the postcode has been cleared.
+            this.postcodeRow.hidden = false;
+            this.postcodeToggle.hidden = true;
+            this.setShippingMessage(`Versand nach ${this.countryNames[this.selectedCountry]} · bitte PLZ eingeben`, false);
+            this.setShippingSummary('Im Checkout berechnet', false);
             return;
           }
 
