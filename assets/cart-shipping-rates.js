@@ -7,6 +7,10 @@
     BE: 'Belgium'
   };
 
+  const completedRates = new Map();
+  const pendingRates = new Map();
+  let activeRequest = null;
+
   function abortError() {
     const error = new Error('Shipping rate request was cancelled.');
     error.name = 'AbortError';
@@ -49,11 +53,15 @@
     }
   }
 
+  function normalizePostcode(postcode) {
+    return String(postcode || '').trim();
+  }
+
   function buildQuery(countryCode, postcode) {
     const params = new URLSearchParams();
     params.set('shipping_address[country]', countryNames[countryCode] || countryCode);
 
-    const normalizedPostcode = String(postcode || '').trim();
+    const normalizedPostcode = normalizePostcode(postcode);
     if (normalizedPostcode) params.set('shipping_address[zip]', normalizedPostcode);
 
     params.set('shipping_address[province]', '');
@@ -78,6 +86,11 @@
     return error;
   }
 
+  function priceToCents(price) {
+    const amount = Number(price);
+    return Number.isFinite(amount) ? Math.round(amount * 100) : null;
+  }
+
   function formatPrice(price, currency) {
     const amount = Number(price);
     if (!Number.isFinite(amount)) return String(price || '');
@@ -89,10 +102,40 @@
     });
   }
 
-  async function getRates(options) {
+  function getCartFingerprint(cart) {
+    if (!cart || typeof cart !== 'object') return 'unknown-cart';
+
+    return JSON.stringify({
+      currency: cart.currency || '',
+      total_price: cart.total_price || 0,
+      total_discount: cart.total_discount || 0,
+      item_count: cart.item_count || 0,
+      discount_codes: (cart.discount_codes || []).map(discount => ({
+        code: discount.code || '',
+        applicable: discount.applicable !== false
+      })),
+      items: (cart.items || []).map(item => ({
+        key: item.key || '',
+        id: item.id || item.variant_id || '',
+        quantity: item.quantity || 0,
+        final_line_price: item.final_line_price || item.line_price || 0,
+        properties: item.properties || {}
+      }))
+    });
+  }
+
+  function buildRequestKey(options) {
+    const config = options || {};
+    return [
+      String(config.countryCode || '').toUpperCase(),
+      normalizePostcode(config.postcode),
+      String(config.cartFingerprint || 'unknown-cart')
+    ].join('|');
+  }
+
+  async function requestRates(options, requestKey, controller) {
     const config = options || {};
     const rootUrl = config.rootUrl || '/';
-    const signal = config.signal;
     const query = buildQuery(config.countryCode, config.postcode);
     const prepareUrl = `${rootUrl}cart/prepare_shipping_rates.json?${query}`;
     const ratesUrl = `${rootUrl}cart/async_shipping_rates.json?${query}`;
@@ -106,7 +149,7 @@
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
       },
-      signal
+      signal: controller.signal
     });
 
     if (!prepareResponse.ok) {
@@ -116,7 +159,7 @@
 
     let shippingData = null;
     for (let attempt = 0; attempt < 8; attempt += 1) {
-      await delay(350 + attempt * 120, signal);
+      await delay(350 + attempt * 120, controller.signal);
 
       const ratesResponse = await fetch(ratesUrl, {
         credentials: 'same-origin',
@@ -125,7 +168,7 @@
           Accept: 'application/json',
           'X-Requested-With': 'XMLHttpRequest'
         },
-        signal
+        signal: controller.signal
       });
 
       if (!ratesResponse.ok) {
@@ -150,18 +193,78 @@
     }
 
     rates.sort((a, b) => Number(a.price) - Number(b.price));
+    const cheapest = rates[0];
+    const amountCents = priceToCents(cheapest.price);
+    if (amountCents === null) {
+      throw shippingError(null, 'Die Versandrate hat keinen gültigen Betrag.');
+    }
 
+    const currency = cheapest.currency || config.currency || 'EUR';
     return {
       rates,
-      formattedPrice: formatPrice(rates[0].price, rates[0].currency || config.currency || 'EUR')
+      amountCents,
+      currency,
+      hasMultipleRates: rates.length > 1,
+      requestKey,
+      formattedPrice: formatPrice(cheapest.price, currency)
     };
+  }
+
+  function getRates(options) {
+    const config = options || {};
+    const postcode = normalizePostcode(config.postcode);
+    if (!postcode) {
+      return Promise.reject(shippingError(null, 'Bitte eine Postleitzahl eingeben.'));
+    }
+
+    const requestKey = buildRequestKey({ ...config, postcode });
+    if (completedRates.has(requestKey)) return Promise.resolve(completedRates.get(requestKey));
+    if (pendingRates.has(requestKey)) return pendingRates.get(requestKey).promise;
+
+    if (activeRequest && activeRequest.requestKey !== requestKey) {
+      activeRequest.controller.abort();
+    }
+
+    const controller = new AbortController();
+    const request = {
+      requestKey,
+      controller,
+      promise: null
+    };
+    request.promise = requestRates(config, requestKey, controller)
+      .then(result => {
+        completedRates.set(requestKey, result);
+        return result;
+      })
+      .finally(() => {
+        pendingRates.delete(requestKey);
+        if (activeRequest === request) activeRequest = null;
+      });
+
+    pendingRates.set(requestKey, request);
+    activeRequest = request;
+    return request.promise;
+  }
+
+  function invalidate(cartFingerprint) {
+    if (!cartFingerprint) {
+      completedRates.clear();
+      return;
+    }
+
+    [...completedRates.keys()].forEach(key => {
+      if (!key.endsWith(`|${cartFingerprint}`)) completedRates.delete(key);
+    });
   }
 
   window.CartShippingRates = {
     countryNames,
     buildQuery,
+    buildRequestKey,
+    getCartFingerprint,
     formatPrice,
-    getRates
+    getRates,
+    invalidate
   };
   window.dispatchEvent(new CustomEvent('cart:shipping-rates-ready'));
 })();

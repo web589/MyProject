@@ -1355,8 +1355,14 @@
           this.cartCurrency = this.dataset.cartCurrency
             || this.drawer.dataset.cartCurrency
             || 'EUR';
+          this.cartTotal = 0;
+          this.cartFingerprint = 'unknown-cart';
+          this.shippingAmountCents = null;
+          this.shippingRequestKey = '';
+          this.shippingHasMultipleRates = false;
           this.hasEligibleProduct = false;
           this.shippingRequestId = 0;
+          this.deliveryRevision = 0;
           this.shippingAbortController = null;
           this.shippingInputTimer = null;
           this.cartRefreshTimer = null;
@@ -1382,9 +1388,10 @@
           this.handleVatChange = this.handleVatChange.bind(this);
           this.handleVatFallback = this.handleVatFallback.bind(this);
           this.handleCartChanged = this.handleCartChanged.bind(this);
-          this.handleExternalContextChange = this.handleExternalContextChange.bind(this);
           this.handleCheckout = this.handleCheckout.bind(this);
           this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
+          this.handleDeliveryStateChanged = this.handleDeliveryStateChanged.bind(this);
+          this.handlePageShow = this.handlePageShow.bind(this);
 
           this.countryButtons.forEach(button => button.addEventListener('click', this.handleCountryClick));
           this.shippingButton.addEventListener('click', this.handleShippingCalculate);
@@ -1396,8 +1403,9 @@
           this.vatFallbackButton && this.vatFallbackButton.addEventListener('click', this.handleVatFallback);
           document.addEventListener('cart:updated', this.handleCartChanged);
           document.addEventListener('ajaxProduct:added', this.handleCartChanged);
-          document.addEventListener('cart:delivery-context-updated', this.handleExternalContextChange);
+          document.addEventListener('cart:delivery-state-changed', this.handleDeliveryStateChanged);
           document.addEventListener('drawerOpen.CartDrawer', this.handleDrawerOpen);
+          window.addEventListener('pageshow', this.handlePageShow);
           this.form.addEventListener('submit', this.handleCheckout, true);
           if (this.productsContainer) {
             this.productsObserver = new MutationObserver(this.handleCartChanged);
@@ -1420,8 +1428,9 @@
           this.vatFallbackButton && this.vatFallbackButton.removeEventListener('click', this.handleVatFallback);
           document.removeEventListener('cart:updated', this.handleCartChanged);
           document.removeEventListener('ajaxProduct:added', this.handleCartChanged);
-          document.removeEventListener('cart:delivery-context-updated', this.handleExternalContextChange);
+          document.removeEventListener('cart:delivery-state-changed', this.handleDeliveryStateChanged);
           document.removeEventListener('drawerOpen.CartDrawer', this.handleDrawerOpen);
+          window.removeEventListener('pageshow', this.handlePageShow);
           this.form && this.form.removeEventListener('submit', this.handleCheckout, true);
           this.productsObserver && this.productsObserver.disconnect();
           if (this.shippingInputTimer) window.clearTimeout(this.shippingInputTimer);
@@ -1429,7 +1438,7 @@
           if (this.shippingAbortController) this.shippingAbortController.abort();
         }
 
-        async loadCartContext() {
+        async loadCartContext(options) {
           this.cartContextReady = false;
           const vatSelectionRevision = this.vatSelectionRevision;
           try {
@@ -1449,7 +1458,7 @@
               cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorbkontext konnte nicht geladen werden.');
               if (!response.ok) throw new Error('Der Warenkorbkontext konnte nicht geladen werden.');
             }
-            this.cartCurrency = cart.currency || 'EUR';
+            this.applyCartState(cart);
             const attributes = cart.attributes || {};
             const savedCountry = attributes['Lieferland ISO'];
             if (this.countryNames[savedCountry]) this.selectedCountry = savedCountry;
@@ -1463,7 +1472,7 @@
               await this.syncLocalization(this.selectedCountry);
             }
             this.cartContextReady = true;
-            if (this.hasOpened) this.refreshForCartChange();
+            if (this.hasOpened || (options && options.forceRefresh)) this.refreshForCartChange();
           } catch (error) {
             this.cartContextReady = true;
             console.warn('Warenkorbkontext konnte nicht geladen werden:', error);
@@ -1482,7 +1491,24 @@
           this.vatConfirm.checked = attributes['DE 0% MwSt. Bestätigung'] === 'Bestätigt';
         }
 
-        handleCartChanged() {
+        applyCartState(cart) {
+          this.cartCurrency = cart.currency || this.cartCurrency || 'EUR';
+          this.cartTotal = Number(cart.total_price) || 0;
+          this.cartFingerprint = window.CartShippingRates && window.CartShippingRates.getCartFingerprint
+            ? window.CartShippingRates.getCartFingerprint(cart)
+            : 'unknown-cart';
+          this.shippingAmountCents = null;
+          this.shippingRequestKey = '';
+          this.shippingHasMultipleRates = false;
+          this.setShippingSummary('Im Checkout berechnet', false);
+          if (window.CartShippingRates && window.CartShippingRates.invalidate) {
+            window.CartShippingRates.invalidate(this.cartFingerprint);
+          }
+          this.renderCartTotal();
+        }
+
+        handleCartChanged(event) {
+          if (event && event.detail && event.detail.cart) this.applyCartState(event.detail.cart);
           if (this.cartRefreshTimer) window.clearTimeout(this.cartRefreshTimer);
           this.cartRefreshTimer = window.setTimeout(() => {
             this.cartRefreshTimer = null;
@@ -1490,15 +1516,27 @@
           }, 450);
         }
 
-        handleExternalContextChange(event) {
-          if (event.detail && event.detail.source === this) return;
-          this.loadCartContext();
+        handleDeliveryStateChanged(event) {
+          if (!event.detail || event.detail.source === this) return;
+          const state = event.detail;
+          if (this.countryNames[state.countryCode]) this.selectedCountry = state.countryCode;
+          if (typeof state.postcode === 'string') this.postcodeInput.value = state.postcode;
+          this.applyCountryUI();
+          this.clearShippingEstimate();
+          if (state.status === 'saved') {
+            this.loadCartContext({ forceRefresh: true });
+            return;
+          }
+          this.setShippingSummary('Im Checkout berechnet', false);
+        }
+
+        handlePageShow() {
+          this.loadCartContext({ forceRefresh: true });
         }
 
         handleDrawerOpen() {
-          if (this.hasOpened) return;
           this.hasOpened = true;
-          this.refreshForCartChange();
+          this.loadCartContext({ forceRefresh: true });
         }
 
         refreshForCartChange() {
@@ -1531,14 +1569,13 @@
         }
 
         async handleCountryClick(event) {
-          if (this.isCountryLoading) return;
-
           const nextCountry = event.currentTarget.dataset.deliveryCountry;
           if (!this.countryNames[nextCountry]) return;
           if (this.shippingInputTimer) {
             window.clearTimeout(this.shippingInputTimer);
             this.shippingInputTimer = null;
           }
+          const revision = ++this.deliveryRevision;
           const countryChanged = nextCountry !== this.selectedCountry;
           this.selectedCountry = nextCountry;
           this.setStatus('');
@@ -1547,18 +1584,29 @@
             this.postcodeRow.hidden = true;
             this.clearVatState();
           }
+          this.clearShippingEstimate();
           this.applyCountryUI();
           this.updateVatUI();
           this.setCountryLoading(true);
+          this.dispatchDeliveryStateChanged('changing');
+          let transitionSucceeded = false;
           try {
             await this.persistAttributes();
+            if (revision !== this.deliveryRevision) return;
             await this.syncVatMerchandise(true);
+            if (revision !== this.deliveryRevision) return;
             await this.syncLocalization(nextCountry);
+            if (revision !== this.deliveryRevision) return;
             await this.loadShippingRates();
+            transitionSucceeded = true;
           } catch (error) {
             this.setStatus(error.message || 'Das Lieferland konnte nicht angewendet werden.');
+            this.loadCartContext({ forceRefresh: true });
           } finally {
-            this.setCountryLoading(false);
+            if (revision === this.deliveryRevision) {
+              this.setCountryLoading(false);
+              if (!transitionSucceeded) this.setShippingSummary('Im Checkout berechnet', false);
+            }
           }
         }
 
@@ -1567,10 +1615,16 @@
             window.clearTimeout(this.shippingInputTimer);
             this.shippingInputTimer = null;
           }
+          const revision = ++this.deliveryRevision;
+          this.clearShippingEstimate();
           this.setStatus('');
+          this.dispatchDeliveryStateChanged('changing');
           this.persistAttributes()
-            .catch(() => {})
-            .finally(() => this.loadShippingRates());
+            .then(() => {
+              if (revision === this.deliveryRevision) return this.loadShippingRates();
+              return null;
+            })
+            .catch(error => this.setStatus(error.message || 'Auswahl konnte nicht gespeichert werden.'));
         }
 
         handlePostcodeInput() {
@@ -1579,13 +1633,15 @@
           this.postcodeToggle.hidden = true;
           this.applyCountryUI();
           if (!this.postcodeInput.value.trim()) {
-            ++this.shippingRequestId;
+            ++this.deliveryRevision;
+            this.clearShippingEstimate();
             if (this.shippingAbortController) {
               this.shippingAbortController.abort();
               this.shippingAbortController = null;
             }
             this.setShippingMessage(`Versand nach ${this.countryNames[this.selectedCountry]} · bitte PLZ eingeben`, false);
             this.setShippingSummary('Im Checkout berechnet', false);
+            this.dispatchDeliveryStateChanged('postcode-cleared');
           }
           this.shippingInputTimer = window.setTimeout(() => {
             this.shippingInputTimer = null;
@@ -1608,6 +1664,10 @@
 
         async handleVatChange(event) {
           const selectionRevision = ++this.vatSelectionRevision;
+          ++this.deliveryRevision;
+          const deliveryRevision = this.deliveryRevision;
+          this.clearShippingEstimate();
+          this.dispatchDeliveryStateChanged('vat-changing');
           if (event.target.matches('[data-vat-choice]') && event.target.value !== 'eligible') {
             this.vatConfirm.checked = false;
           }
@@ -1619,6 +1679,11 @@
             // Keep radio changes local to the cart context. The merchandise
             // switch is performed once, for the final choice, at checkout.
             await this.persistAttributes(selectionRevision);
+            if (selectionRevision === this.vatSelectionRevision
+              && deliveryRevision === this.deliveryRevision
+              && this.hasOpened) {
+              await this.loadShippingRates();
+            }
           } catch (error) {
             // A slower request from an earlier click must not clear a newer
             // selection made while that request was still pending.
@@ -1638,6 +1703,47 @@
           this.postcodeToggle.textContent = this.postcodeInput.value.trim()
             ? `PLZ ${this.postcodeInput.value.trim()} ändern`
             : 'PLZ eingeben';
+        }
+
+        clearShippingEstimate() {
+          ++this.shippingRequestId;
+          if (this.shippingAbortController) {
+            this.shippingAbortController.abort();
+            this.shippingAbortController = null;
+          }
+          this.shippingAmountCents = null;
+          this.shippingRequestKey = '';
+          this.shippingHasMultipleRates = false;
+          this.setShippingSummary('Im Checkout berechnet', false);
+          this.renderCartTotal();
+        }
+
+        applyShippingResult(result) {
+          this.shippingAmountCents = result.amountCents;
+          this.shippingRequestKey = result.requestKey;
+          this.shippingHasMultipleRates = result.hasMultipleRates;
+          this.renderCartTotal();
+        }
+
+        renderCartTotal() {
+          const totalElement = this.drawer.querySelector('[data-subtotal]');
+          if (!totalElement || !window.theme || !theme.Currency) return;
+          const total = this.cartTotal + (Number.isFinite(this.shippingAmountCents) ? this.shippingAmountCents : 0);
+          const formatted = theme.Currency.formatMoney(total, theme.settings.moneyFormat);
+          totalElement.innerHTML = this.shippingHasMultipleRates && Number.isFinite(this.shippingAmountCents)
+            ? `ab ${formatted}`
+            : formatted;
+        }
+
+        dispatchDeliveryStateChanged(status) {
+          document.dispatchEvent(new CustomEvent('cart:delivery-state-changed', {
+            detail: {
+              source: this,
+              status,
+              countryCode: this.selectedCountry,
+              postcode: this.postcodeInput.value.trim()
+            }
+          }));
         }
 
         shouldShowVatQualification() {
@@ -1754,8 +1860,8 @@
             return requestPromise.then(async response => {
               const cart = await window.PVTaxCart.readJsonResponse(response, 'Auswahl konnte nicht gespeichert werden.');
               if (!response.ok) throw new Error(cart.description || cart.message || 'Auswahl konnte nicht gespeichert werden.');
-              this.cartCurrency = cart.currency || this.cartCurrency;
-              document.dispatchEvent(new CustomEvent('cart:delivery-context-updated', { detail: { source: this } }));
+              this.applyCartState(cart);
+              this.dispatchDeliveryStateChanged('saved');
               return cart;
             });
           };
@@ -1994,6 +2100,10 @@
             : null;
 
           if (!this.drawer.querySelector('[data-products] .cart__item')) {
+            this.shippingAmountCents = null;
+            this.shippingRequestKey = '';
+            this.shippingHasMultipleRates = false;
+            this.renderCartTotal();
             this.setShippingMessage('Lege zuerst ein Produkt in den Warenkorb.', false);
             this.setShippingSummary('—', false);
             return;
@@ -2007,6 +2117,10 @@
             // amount can survive after the postcode has been cleared.
             this.postcodeRow.hidden = false;
             this.postcodeToggle.hidden = true;
+            this.shippingAmountCents = null;
+            this.shippingRequestKey = '';
+            this.shippingHasMultipleRates = false;
+            this.renderCartTotal();
             this.setShippingMessage(`Versand nach ${this.countryNames[this.selectedCountry]} · bitte PLZ eingeben`, false);
             this.setShippingSummary('Im Checkout berechnet', false);
             return;
@@ -2016,15 +2130,27 @@
           this.setShippingSummary('Wird berechnet …', true);
           this.postcodeToggle.hidden = true;
 
+          const requestKey = window.CartShippingRates && window.CartShippingRates.buildRequestKey
+            ? window.CartShippingRates.buildRequestKey({
+                countryCode: this.selectedCountry,
+                postcode,
+                cartFingerprint: this.cartFingerprint
+              })
+            : '';
+
           try {
             const result = await this.getShippingRates({
               rootUrl: this.rootUrl,
               countryCode: this.selectedCountry,
-              postcode: this.postcodeInput.value,
+              postcode,
               currency: this.cartCurrency,
+              cartFingerprint: this.cartFingerprint,
               signal: this.shippingAbortController && this.shippingAbortController.signal
             });
-            if (requestId !== this.shippingRequestId) return;
+            if (requestId !== this.shippingRequestId || (requestKey && requestKey !== result.requestKey)) return;
+            if (result.currency && this.cartCurrency && result.currency !== this.cartCurrency) {
+              throw new Error('Die Versandwährung stimmt nicht mit der Warenkorbwährung überein.');
+            }
 
             const cheapest = result.rates[0];
             const formattedPrice = result.formattedPrice;
@@ -2034,11 +2160,16 @@
             const rateName = cheapest.presentment_name || cheapest.name || cheapest.code || 'Versand';
             this.setShippingMessage(`${rateName}: ${formattedPrice}${extraRates}`, false);
             this.setShippingSummary(`${result.rates.length > 1 ? 'ab ' : ''}${formattedPrice}`, false);
+            this.applyShippingResult(result);
             this.postcodeRow.hidden = true;
             this.postcodeToggle.hidden = false;
           } catch (error) {
             if (requestId !== this.shippingRequestId) return;
             if (error && error.name === 'AbortError') return;
+            this.shippingAmountCents = null;
+            this.shippingRequestKey = '';
+            this.shippingHasMultipleRates = false;
+            this.renderCartTotal();
             if (error.needsPostcode && !this.postcodeInput.value.trim()) {
               // A postcode is required for a destination-specific rate. Keep the
               // input visible so the shipping amount can be calculated here,
