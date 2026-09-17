@@ -43,7 +43,7 @@
         {% if section.settings.flow_video != blank %}
           {{ section.settings.flow_video | video_tag: image_size: '2000x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
         {% elsif section.settings.flow_image != blank %}
-          {{ section.settings.flow_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '750,1100,1500,2000', sizes: '(min-width: 1248px) 1200px, calc(100vw - 48px)', alt: section.settings.flow_image_alt }}
+          {{ section.settings.flow_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: '(min-width: 1248px) min(1500px, calc(100vw - 48px)), (min-width: 600px) calc(100vw - 40px), calc(100vw - 32px)', alt: section.settings.flow_image_alt }}
         {% else %}
           <span class="bw-editor-media-placeholder">Großes Energieflussvideo, GIF oder Bild auswählen</span>
         {% endif %}

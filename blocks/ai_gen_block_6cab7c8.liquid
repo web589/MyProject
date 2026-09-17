@@ -423,13 +423,12 @@
 <div class="ai-hero-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
   <div class="ai-hero-bg-{{ ai_gen_id }}" data-scroll-reveal-module-media>
     {% if block.settings.bg_image %}
-      <img
-        src="{{ block.settings.bg_image | image_url: width: 2000 }}"
-        alt="{{ block.settings.bg_image.alt | escape }}"
-        loading="lazy"
-        width="{{ block.settings.bg_image.width }}"
-        height="{{ block.settings.bg_image.height }}"
-      >
+      {% render 'kit.image',
+        src: block.settings.bg_image,
+        widths: '800,1200,1600,2000,2400,3200',
+        sizes: '100vw',
+        loading: 'lazy'
+      %}
     {% endif %}
   </div>
 

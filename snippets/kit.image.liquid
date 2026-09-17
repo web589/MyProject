@@ -9,7 +9,7 @@
   @param {string} [alt] - Alt text override. For Shopify image objects, `image_tag` uses the image's alt automatically if not provided.
   @param {string} [aspect_ratio] - CSS `aspect-ratio` value (e.g. '3/4', '16/9', '1/1'). Default: none (natural ratio)
   @param {string} [sizes] - Responsive sizes attribute. Default: '100vw'
-  @param {string} [widths] - Comma-separated widths for srcset. Default: '200,400,600,800,1000,1200,1400,1600'
+  @param {string} [widths] - Comma-separated widths for srcset. Default: '200,400,600,800,1000,1200,1400,1600,2000,2400,3200'
   @param {string} [fit] - `object-fit` value: 'cover' | 'contain'. With `aspect_ratio`, controls fit within the ratio box. Without `aspect_ratio`, fills the parent container. Default: 'cover' when `aspect_ratio` is set, otherwise none
   @param {string} [loading] - 'lazy' | 'eager'. Default: 'lazy'
   @param {boolean} [preload] - Enable preload link header and `fetchpriority` for above-fold images. Ignored when `mobile_src` is set (Shopify's preload lacks media query support, causing double-downloads). Default: false
@@ -33,7 +33,7 @@
 {%- liquid
   assign loading = loading | default: 'lazy'
   assign sizes = sizes | default: '100vw'
-  assign widths = widths | default: '200,400,600,800,1000,1200,1400,1600'
+  assign widths = widths | default: '200,400,600,800,1000,1200,1400,1600,2000,2400,3200'
   assign preload = preload | default: false, allow_false: true
   
   if mobile_src != blank

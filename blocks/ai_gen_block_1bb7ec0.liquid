@@ -193,6 +193,8 @@
     {% endschema %}
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign delivery_media_width_percent = block.settings.desktop_width_percent | default: 100 %}
+{% assign delivery_media_sizes = delivery_media_width_percent | append: 'vw' %}
 
 {% style %}
   .ai-delivery-slider-{{ ai_gen_id }} {
@@ -311,22 +313,10 @@
       <div class="ai-delivery-slide-{{ ai_gen_id }}">
         {% if block.settings.slide_1_link != blank %}
           <a href="{{ block.settings.slide_1_link }}">
-            <img
-              src="{{ block.settings.slide_1_image | image_url: width: 2000 }}"
-              alt="{{ block.settings.slide_1_alt | escape }}"
-              loading="lazy"
-              width="{{ block.settings.slide_1_image.width }}"
-              height="{{ block.settings.slide_1_image.height }}"
-            >
+            {{ block.settings.slide_1_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: delivery_media_sizes, alt: block.settings.slide_1_alt }}
           </a>
         {% else %}
-          <img
-            src="{{ block.settings.slide_1_image | image_url: width: 2000 }}"
-            alt="{{ block.settings.slide_1_alt | escape }}"
-            loading="lazy"
-            width="{{ block.settings.slide_1_image.width }}"
-            height="{{ block.settings.slide_1_image.height }}"
-          >
+          {{ block.settings.slide_1_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: delivery_media_sizes, alt: block.settings.slide_1_alt }}
         {% endif %}
       </div>
     {% endif %}
@@ -335,22 +325,10 @@
       <div class="ai-delivery-slide-{{ ai_gen_id }}">
         {% if block.settings.slide_2_link != blank %}
           <a href="{{ block.settings.slide_2_link }}">
-            <img
-              src="{{ block.settings.slide_2_image | image_url: width: 2000 }}"
-              alt="{{ block.settings.slide_2_alt | escape }}"
-              loading="lazy"
-              width="{{ block.settings.slide_2_image.width }}"
-              height="{{ block.settings.slide_2_image.height }}"
-            >
+            {{ block.settings.slide_2_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: delivery_media_sizes, alt: block.settings.slide_2_alt }}
           </a>
         {% else %}
-          <img
-            src="{{ block.settings.slide_2_image | image_url: width: 2000 }}"
-            alt="{{ block.settings.slide_2_alt | escape }}"
-            loading="lazy"
-            width="{{ block.settings.slide_2_image.width }}"
-            height="{{ block.settings.slide_2_image.height }}"
-          >
+          {{ block.settings.slide_2_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: delivery_media_sizes, alt: block.settings.slide_2_alt }}
         {% endif %}
       </div>
     {% endif %}
@@ -359,22 +337,10 @@
       <div class="ai-delivery-slide-{{ ai_gen_id }}">
         {% if block.settings.slide_3_link != blank %}
           <a href="{{ block.settings.slide_3_link }}">
-            <img
-              src="{{ block.settings.slide_3_image | image_url: width: 2000 }}"
-              alt="{{ block.settings.slide_3_alt | escape }}"
-              loading="lazy"
-              width="{{ block.settings.slide_3_image.width }}"
-              height="{{ block.settings.slide_3_image.height }}"
-            >
+            {{ block.settings.slide_3_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: delivery_media_sizes, alt: block.settings.slide_3_alt }}
           </a>
         {% else %}
-          <img
-            src="{{ block.settings.slide_3_image | image_url: width: 2000 }}"
-            alt="{{ block.settings.slide_3_alt | escape }}"
-            loading="lazy"
-            width="{{ block.settings.slide_3_image.width }}"
-            height="{{ block.settings.slide_3_image.height }}"
-          >
+          {{ block.settings.slide_3_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: delivery_media_sizes, alt: block.settings.slide_3_alt }}
         {% endif %}
       </div>
     {% endif %}
@@ -383,22 +349,10 @@
       <div class="ai-delivery-slide-{{ ai_gen_id }}">
         {% if block.settings.slide_4_link != blank %}
           <a href="{{ block.settings.slide_4_link }}">
-            <img
-              src="{{ block.settings.slide_4_image | image_url: width: 2000 }}"
-              alt="{{ block.settings.slide_4_alt | escape }}"
-              loading="lazy"
-              width="{{ block.settings.slide_4_image.width }}"
-              height="{{ block.settings.slide_4_image.height }}"
-            >
+            {{ block.settings.slide_4_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: delivery_media_sizes, alt: block.settings.slide_4_alt }}
           </a>
         {% else %}
-          <img
-            src="{{ block.settings.slide_4_image | image_url: width: 2000 }}"
-            alt="{{ block.settings.slide_4_alt | escape }}"
-            loading="lazy"
-            width="{{ block.settings.slide_4_image.width }}"
-            height="{{ block.settings.slide_4_image.height }}"
-          >
+          {{ block.settings.slide_4_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: delivery_media_sizes, alt: block.settings.slide_4_alt }}
         {% endif %}
       </div>
     {% endif %}

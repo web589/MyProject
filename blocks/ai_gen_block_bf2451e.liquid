@@ -286,6 +286,14 @@
     assign smart_energy_description = block.settings.desc_text
     assign smart_energy_image = block.settings.background_image
   endif
+
+  assign power_media_widths = '800,1200,1600,2000,2400,3200'
+  assign power_inner_max_width = block.settings.module_max_width | default: 1600 | minus: 48
+  assign power_media_width_percent = block.settings.desktop_width_percent | default: 100 | divided_by: 100.0
+  assign power_media_max_width = power_inner_max_width | times: power_media_width_percent | round
+  assign power_media_sizes = '(min-width: 750px) min(' | append: power_media_max_width | append: 'px, calc(100vw - 48px)), calc(100vw - 48px)'
+  assign power_media_class = 'power-bg-image-' | append: ai_gen_id
+  assign power_media_alt = smart_energy_title
 %}
 {% if smart_energy_title != blank or smart_energy_description != blank or smart_energy_image != blank %}
 <div{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target power-feature-module-{{ ai_gen_id }}{% if request.page_type == 'product' %} power-feature-module--product{% endif %}" {{ block.shopify_attributes }}>
@@ -301,14 +309,14 @@
     {% if smart_energy_image != blank %}
       <div class="power-img-wrap-{{ ai_gen_id }}">
         {% if smart_energy_image != blank %}
-        <img
-          class="power-bg-image-{{ ai_gen_id }}"
-          src="{{ smart_energy_image | image_url: width: 2000 }}"
-          alt="{{ smart_energy_title | escape }}"
-          loading="lazy"
-          width="{{ smart_energy_image.width }}"
-          height="{{ smart_energy_image.height }}"
-        >
+        {% render 'kit.image',
+          src: smart_energy_image,
+          classes: power_media_class,
+          loading: 'lazy',
+          widths: power_media_widths,
+          sizes: power_media_sizes,
+          alt: power_media_alt
+        %}
         {% else %}
           <div class="power-img-placeholder-{{ ai_gen_id }}">{{ 'hero-apparel-1' | placeholder_svg_tag }}</div>
         {% endif %}

@@ -1035,6 +1035,15 @@
       assign pdp_tab_count = pdp_tab_count | plus: 1
     endif
   endfor
+
+  assign bundle_media_widths = '800,1200,1600,2000,2400,3200' | split: ','
+  assign bundle_max_width = block.settings.max_width | default: 1400
+  assign bundle_padding_x = block.settings.padding_x | default: 24
+  assign bundle_content_max_width = bundle_max_width | minus: bundle_padding_x | minus: bundle_padding_x
+  assign bundle_media_width_percent = block.settings.left_width_percent | default: 40
+  assign bundle_media_max_width = bundle_content_max_width | times: bundle_media_width_percent | divided_by: 100.0 | round
+  assign bundle_horizontal_padding = bundle_padding_x | times: 2
+  assign bundle_media_sizes = '(min-width: 990px) min(' | append: bundle_media_max_width | append: 'px, ' | append: bundle_media_width_percent | append: 'vw), calc(100vw - ' | append: bundle_horizontal_padding | append: 'px)'
 %}
 
 <pdp-bundle-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target pdp-bundle-{{ ai_gen_id }}" data-scroll-reveal="off" data-pdp-bundle data-de-vat-candidate="{{ bundle_is_de_vat_candidate }}" {{ block.shopify_attributes }}>
@@ -1044,7 +1053,12 @@
       
       <div class="pdp-main-img-{{ ai_gen_id }}" data-main-img>
         {% if first_thumb %}
-          <img src="{{ first_thumb | image_url: width: 1200 }}" alt="{{ first_thumb.alt | escape }}" width="1200" height="1200" data-main-img-el>
+          {%- capture bundle_main_srcset -%}
+            {%- for bundle_media_width in bundle_media_widths -%}
+              {{ first_thumb | image_url: width: bundle_media_width }} {{ bundle_media_width }}w{% unless forloop.last %}, {% endunless %}
+            {%- endfor -%}
+          {%- endcapture -%}
+          <img src="{{ first_thumb | image_url: width: 1200 }}" srcset="{{ bundle_main_srcset }}" sizes="{{ bundle_media_sizes }}" alt="{{ first_thumb.alt | escape }}" width="1200" height="1200" data-main-img-el>
           <div class="pdp-zoom-overlay-{{ ai_gen_id }}" data-zoom-overlay style="background-image: url('{{ first_thumb | image_url: width: 2400 }}');"></div>
         {% else %}
           <div class="pdp-img-placeholder-{{ ai_gen_id }}">
@@ -1059,7 +1073,12 @@
           <div class="pdp-thumb-track-{{ ai_gen_id }}" data-thumb-track>
             {% for thumb_img in bundle_product.images limit: 12 %}
               <div class="pdp-thumb-item-{{ ai_gen_id }} {% if forloop.first %}active{% endif %}" data-thumb-item data-thumb-index="{{ forloop.index0 }}">
-                <img src="{{ thumb_img | image_url: width: 200 }}" alt="{{ thumb_img.alt | default: bundle_product.title | escape }}" width="200" height="200" data-thumb-src="{{ thumb_img | image_url: width: 1200 }}" data-thumb-zoom="{{ thumb_img | image_url: width: 2400 }}">
+                {%- capture bundle_thumb_srcset -%}
+                  {%- for bundle_media_width in bundle_media_widths -%}
+                    {{ thumb_img | image_url: width: bundle_media_width }} {{ bundle_media_width }}w{% unless forloop.last %}, {% endunless %}
+                  {%- endfor -%}
+                {%- endcapture -%}
+                <img src="{{ thumb_img | image_url: width: 200 }}" alt="{{ thumb_img.alt | default: bundle_product.title | escape }}" width="200" height="200" data-thumb-src="{{ thumb_img | image_url: width: 1200 }}" data-thumb-srcset="{{ bundle_thumb_srcset | escape }}" data-thumb-zoom="{{ thumb_img | image_url: width: 2400 }}">
               </div>
             {% endfor %}
           </div>
@@ -1766,6 +1785,11 @@
             const mainSrc = img.dataset.thumbSrc || img.src.replace(/width=\d+/, 'width=1200');
             const zoomSrc = img.dataset.thumbZoom || img.src.replace(/width=\d+/, 'width=2400');
             
+            if (img.dataset.thumbSrcset) {
+              this.mainImgEl.srcset = img.dataset.thumbSrcset;
+            } else {
+              this.mainImgEl.removeAttribute('srcset');
+            }
             this.mainImgEl.src = mainSrc;
             this.zoomOverlay.style.backgroundImage = `url('${zoomSrc}')`;
           }

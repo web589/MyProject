@@ -397,6 +397,16 @@
   if right_video_selected or durability_right_image != blank
     assign right_media_available = true
   endif
+
+  assign compare_media_class = 'ai-compare-media-' | append: ai_gen_id
+  assign compare_left_alt = left_card_title | default: durability_title
+  assign compare_right_alt = right_card_title | default: durability_title
+  assign compare_media_widths = '800,1200,1600,2000,2400,3200'
+  assign compare_inner_max_width = block.settings.max_width | default: 1600 | minus: 48
+  assign compare_media_sizes = '(min-width: 769px) min(' | append: compare_inner_max_width | append: 'px, calc(100vw - 48px)), calc(100vw - 48px)'
+  if left_media_available and right_media_available
+    assign compare_media_sizes = '(min-width: 769px) calc((min(' | append: compare_inner_max_width | append: 'px, calc(100vw - 48px)) - ' | append: block.settings.cards_gap | append: 'px) / 2), calc(100vw - 48px)'
+  endif
 %}
 {% if durability_title != blank or durability_description != blank or left_media_available or right_media_available %}
 <dual-compare-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target ai-dual-compare-{{ ai_gen_id }}{% if request.page_type == 'product' %} ai-dual-compare--product{% endif %}" {{ block.shopify_attributes }}>
@@ -425,21 +435,21 @@
               playsinline
               preload="auto"
               src="{{ durability_left_video | escape }}"
-              {% if durability_left_image != blank %}poster="{{ durability_left_image | image_url: width: 1200 }}"{% endif %}
+              {% if durability_left_image != blank %}poster="{{ durability_left_image | image_url: width: 2400 }}"{% endif %}
             >
             </video>
             {% if durability_left_image == blank %}
               <div class="ai-compare-placeholder-{{ ai_gen_id }}" data-video-fallback>{{ 'image' | placeholder_svg_tag }}</div>
             {% endif %}
           {% elsif durability_left_image != blank %}
-            <img
-              class="ai-compare-media-{{ ai_gen_id }}"
-              src="{{ durability_left_image | image_url: width: 1200 }}"
-              alt="{{ left_card_title | default: durability_title | escape }}"
-              loading="lazy"
-              width="{{ durability_left_image.width }}"
-              height="{{ durability_left_image.height }}"
-            >
+            {% render 'kit.image',
+              src: durability_left_image,
+              classes: compare_media_class,
+              loading: 'lazy',
+              widths: compare_media_widths,
+              sizes: compare_media_sizes,
+              alt: compare_left_alt
+            %}
           {% else %}
             <div class="ai-compare-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>
           {% endif %}
@@ -470,21 +480,21 @@
               playsinline
               preload="auto"
               src="{{ durability_right_video | escape }}"
-              {% if durability_right_image != blank %}poster="{{ durability_right_image | image_url: width: 1200 }}"{% endif %}
+              {% if durability_right_image != blank %}poster="{{ durability_right_image | image_url: width: 2400 }}"{% endif %}
             >
             </video>
             {% if durability_right_image == blank %}
               <div class="ai-compare-placeholder-{{ ai_gen_id }}" data-video-fallback>{{ 'image' | placeholder_svg_tag }}</div>
             {% endif %}
           {% elsif durability_right_image != blank %}
-            <img
-              class="ai-compare-media-{{ ai_gen_id }}"
-              src="{{ durability_right_image | image_url: width: 1200 }}"
-              alt="{{ right_card_title | default: durability_title | escape }}"
-              loading="lazy"
-              width="{{ durability_right_image.width }}"
-              height="{{ durability_right_image.height }}"
-            >
+            {% render 'kit.image',
+              src: durability_right_image,
+              classes: compare_media_class,
+              loading: 'lazy',
+              widths: compare_media_widths,
+              sizes: compare_media_sizes,
+              alt: compare_right_alt
+            %}
           {% else %}
             <div class="ai-compare-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>
           {% endif %}

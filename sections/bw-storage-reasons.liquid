@@ -30,7 +30,7 @@
         {% if section.settings.video != blank %}
           {{ section.settings.video | video_tag: image_size: '1800x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
         {% elsif section.settings.image != blank %}
-          {{ section.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '750, 1100, 1500, 2000', sizes: '(min-width: 1248px) 1200px, calc(100vw - 48px)', alt: section.settings.media_alt }}
+          {{ section.settings.image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: '(min-width: 1248px) min(1500px, calc(100vw - 48px)), (min-width: 600px) calc(100vw - 40px), calc(100vw - 32px)', alt: section.settings.media_alt }}
         {% elsif request.design_mode %}
           <div class="bw-editor-placeholder">Breites Bild, GIF oder Shopify-Video auswählen</div>
         {% endif %}

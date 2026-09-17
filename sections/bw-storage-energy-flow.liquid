@@ -60,7 +60,7 @@
           {% if section.settings.day_video != blank %}
             {{ section.settings.day_video | video_tag: image_size: '1800x', muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
           {% elsif section.settings.day_image != blank %}
-            {{ section.settings.day_image | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '600,900,1200,1500,1800', sizes: '(min-width: 1248px) 1100px, calc(100vw - 64px)', alt: section.settings.day_alt }}
+            {{ section.settings.day_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: '(min-width: 1248px) min(1416px, calc(100vw - 132px)), (min-width: 600px) calc(100vw - 96px), calc(100vw - 88px)', alt: section.settings.day_alt }}
           {% elsif request.design_mode %}
             <div class="bw-editor-media-placeholder">Video, GIF oder Bild für Tagsüber auswählen</div>
           {% endif %}
@@ -78,7 +78,7 @@
           {% if section.settings.evening_video != blank %}
             {{ section.settings.evening_video | video_tag: image_size: '1800x', muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
           {% elsif section.settings.evening_image != blank %}
-            {{ section.settings.evening_image | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '600,900,1200,1500,1800', sizes: '(min-width: 1248px) 1100px, calc(100vw - 64px)', alt: section.settings.evening_alt }}
+            {{ section.settings.evening_image | image_url: width: 3200 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000,2400,3200', sizes: '(min-width: 1248px) min(1416px, calc(100vw - 132px)), (min-width: 600px) calc(100vw - 96px), calc(100vw - 88px)', alt: section.settings.evening_alt }}
           {% elsif request.design_mode %}
             <div class="bw-editor-media-placeholder">Video, GIF oder Bild für Abends auswählen</div>
           {% endif %}
