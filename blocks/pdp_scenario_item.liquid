@@ -243,7 +243,7 @@
     {% if has_scenario_media %}
     <div class="pdp-scenario-item__media-{{ scenario_id }}">
       {% if scenario_video != blank %}
-        {{ scenario_video | video_tag: image_size: '1600x', controls: true, playsinline: true, preload: 'metadata', class: 'pdp-scenario-item__video' }}
+        {{ scenario_video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'pdp-scenario-item__video' }}
       {% elsif scenario_image != blank %}
         {{ scenario_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200, 1600', sizes: '(max-width: 768px) 100vw, 50vw', alt: scenario_heading }}
       {% else %}
