@@ -292,11 +292,11 @@
                         {%- assign article_category_handle = article_category_handle | handleize -%}
                         <div
                           id="mega-menu-products-{{ mega_menu_block.id }}-{{ article_category_handle }}"
-                          class="mega-menu-products__panel"
+                          class="mega-menu-products__panel mega-menu-products__panel--content"
                           data-mega-menu-category-panel="{{ article_category_handle }}"
                           {% unless article_category_handle == default_menu_category %}hidden{% endunless %}
                         >
-                          <div class="mega-menu-products__cards" role="list">
+                          <div class="mega-menu-products__cards mega-menu-products__cards--content" role="list">
                             <div role="listitem">
                               {%- render 'article-menu-card', block: menu_block -%}
                             </div>

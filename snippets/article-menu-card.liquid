@@ -11,41 +11,82 @@
     assign card_title = block.settings.title | default: content_item.title
     assign card_description = block.settings.description
     if card_description == blank and card_page == blank and article != blank
-      assign card_description = article.excerpt | strip_html | truncatewords: 18
+      assign card_description = article.excerpt | strip_html | truncatewords: 42
     endif
     if card_description == blank
-      assign card_description = content_item.content | strip_html | truncatewords: 18
+      assign card_description = content_item.content | strip_html | truncatewords: 42
     endif
     assign card_link = block.settings.link | default: content_item.url
   endif
 -%}
 
 {%- if content_item != blank -%}
-  <a
-    class="mega-menu-products__card mega-menu-products__card--article"
-    href="{{ card_link | escape }}"
-    aria-label="{{ card_title | escape }}"
-  >
-    <div class="mega-menu-products__card-media">
-      {%- if card_image != blank -%}
-        {%- render 'image-element',
-          img: card_image,
-          widths: '300, 500, 700',
-          sizeVariable: '25vw',
-          alt: card_title,
-          classes: 'mega-menu-products__card-image',
-          loading: 'lazy',
-        -%}
-      {%- else -%}
-        {{ 'image' | placeholder_svg_tag: 'mega-menu-products__card-image' }}
-      {%- endif -%}
+  <article class="mega-menu-products__card mega-menu-products__card--article">
+    <div class="mega-menu-products__article-main">
+      <a
+        class="mega-menu-products__article-media"
+        href="{{ card_link | escape }}"
+        aria-label="{{ card_title | escape }}"
+      >
+        {%- if card_image != blank -%}
+          {%- render 'image-element',
+            img: card_image,
+            widths: '300, 500, 700',
+            sizeVariable: '25vw',
+            alt: card_title,
+            classes: 'mega-menu-products__card-image',
+            loading: 'lazy',
+          -%}
+        {%- else -%}
+          {{ 'image' | placeholder_svg_tag: 'mega-menu-products__card-image' }}
+        {%- endif -%}
+      </a>
+
+      <div class="mega-menu-products__article-copy">
+        <h3 class="mega-menu-products__article-title">
+          <a href="{{ card_link | escape }}">{{ card_title | escape }}</a>
+        </h3>
+        {%- if card_description != blank -%}
+          <p class="mega-menu-products__article-description">{{ card_description | escape | newline_to_br }}</p>
+        {%- endif -%}
+        {%- if block.settings.button_label != blank -%}
+          <a class="mega-menu-products__article-cta" href="{{ card_link | escape }}">
+            <span>{{ block.settings.button_label | escape }}</span>
+            <span aria-hidden="true">&#8594;</span>
+          </a>
+        {%- endif -%}
+      </div>
     </div>
 
-    <div class="mega-menu-products__card-content">
-      <h3 class="mega-menu-products__card-title">{{ card_title | escape }}</h3>
-      {%- if card_description != blank -%}
-        <p class="mega-menu-products__card-description">{{ card_description | escape | newline_to_br }}</p>
-      {%- endif -%}
-    </div>
-  </a>
+    {%- assign has_metrics = false -%}
+    {%- if block.settings.metric_1_value != blank or block.settings.metric_1_label != blank -%}
+      {%- assign has_metrics = true -%}
+    {%- endif -%}
+    {%- if block.settings.metric_2_value != blank or block.settings.metric_2_label != blank -%}
+      {%- assign has_metrics = true -%}
+    {%- endif -%}
+    {%- if block.settings.metric_3_value != blank or block.settings.metric_3_label != blank -%}
+      {%- assign has_metrics = true -%}
+    {%- endif -%}
+
+    {%- if has_metrics -%}
+      <div class="mega-menu-products__article-metrics" role="list">
+        {%- render 'mega-menu-content-metric',
+          icon: block.settings.metric_1_icon,
+          value: block.settings.metric_1_value,
+          label: block.settings.metric_1_label
+        -%}
+        {%- render 'mega-menu-content-metric',
+          icon: block.settings.metric_2_icon,
+          value: block.settings.metric_2_value,
+          label: block.settings.metric_2_label
+        -%}
+        {%- render 'mega-menu-content-metric',
+          icon: block.settings.metric_3_icon,
+          value: block.settings.metric_3_value,
+          label: block.settings.metric_3_label
+        -%}
+      </div>
+    {%- endif -%}
+  </article>
 {%- endif -%}
