@@ -46,6 +46,14 @@
       assign show_scenario_tags = true
     endif
   endif
+  assign scenario_video = blank
+  if template.suffix == 'venus-e-3' and block.settings.content_source == 'theme_editor'
+    assign scenario_video = block.settings.video
+  endif
+  assign has_scenario_media = false
+  if scenario_image != blank or scenario_video != blank
+    assign has_scenario_media = true
+  endif
 %}
 
 {% style %}
@@ -115,6 +123,13 @@
   }
 
   .pdp-scenario-item__media-{{ scenario_id }} img {
+    aspect-ratio: {{ block.settings.image_ratio }};
+    object-fit: {{ block.settings.image_fit }};
+  }
+
+  .pdp-scenario-item__media-{{ scenario_id }} video {
+    display: block;
+    width: 100%;
     aspect-ratio: {{ block.settings.image_ratio }};
     object-fit: {{ block.settings.image_fit }};
   }
@@ -209,7 +224,7 @@
   }
 {% endstyle %}
 
-{% if scenario_image != blank or scenario_heading != blank or scenario_text != blank %}
+{% if has_scenario_media or scenario_heading != blank or scenario_text != blank %}
 <section{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target pdp-scenario-item-{{ scenario_id }}" data-scenario-item {{ block.shopify_attributes }}>
   {% if block.settings.show_section_header %}
     {% if scenario_section_title != blank or scenario_section_description != blank %}
@@ -224,10 +239,16 @@
     {% endif %}
   {% endif %}
 
-  <div class="pdp-scenario-item__grid-{{ scenario_id }}{% if block.settings.layout == 'image_right' %} pdp-scenario-item__grid-{{ scenario_id }}--image-right{% endif %}{% if scenario_image == blank %} pdp-scenario-item__grid-{{ scenario_id }}--text-only{% endif %}">
-    {% if scenario_image != blank %}
+  <div class="pdp-scenario-item__grid-{{ scenario_id }}{% if block.settings.layout == 'image_right' %} pdp-scenario-item__grid-{{ scenario_id }}--image-right{% endif %}{% unless has_scenario_media %} pdp-scenario-item__grid-{{ scenario_id }}--text-only{% endunless %}">
+    {% if has_scenario_media %}
     <div class="pdp-scenario-item__media-{{ scenario_id }}">
-      {% if scenario_image != blank %}{{ scenario_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200, 1600', sizes: '(max-width: 768px) 100vw, 50vw', alt: scenario_heading }}{% else %}<div class="pdp-scenario-item__placeholder-{{ scenario_id }}">{{ 'product-1' | placeholder_svg_tag }}</div>{% endif %}
+      {% if scenario_video != blank %}
+        {{ scenario_video | video_tag: image_size: '1600x', controls: true, playsinline: true, preload: 'metadata', class: 'pdp-scenario-item__video' }}
+      {% elsif scenario_image != blank %}
+        {{ scenario_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200, 1600', sizes: '(max-width: 768px) 100vw, 50vw', alt: scenario_heading }}
+      {% else %}
+        <div class="pdp-scenario-item__placeholder-{{ scenario_id }}">{{ 'product-1' | placeholder_svg_tag }}</div>
+      {% endif %}
     </div>
     {% endif %}
 
@@ -284,6 +305,7 @@
     { "type": "range", "id": "product_content_index", "label": "Product scenario position", "min": 1, "max": 8, "step": 1, "default": 1, "info": "Reads this position from product metafield custom.pdp_content > scenarios." },
     { "type": "select", "id": "layout", "label": "Desktop layout", "options": [{ "value": "image_left", "label": "Image left" }, { "value": "image_right", "label": "Image right" }], "default": "image_left" },
     { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "video", "id": "video", "label": "Shopify video", "info": "Only used on the VENUS E 3.0 product template. The video takes priority over the image." },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Mehr Leistung für eine stärkere Stromerzeugung" },
     { "type": "textarea", "id": "text", "label": "Description", "default": "Beschreibe hier den Vorteil dieses Szenarios." },
     { "type": "text", "id": "tag_1_value", "label": "Tag 1 value", "default": "4 MPPT" },
