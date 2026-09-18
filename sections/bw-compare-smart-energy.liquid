@@ -1,0 +1,82 @@
+{% liquid
+  assign smart_anchor = section.settings.anchor_id | handle
+  if smart_anchor == blank
+    assign smart_anchor = 'smart-energy'
+  endif
+%}
+
+<section id="{{ smart_anchor }}" class="bw-storage bw-storage-section bw-smart-energy bw-anchor-target" aria-labelledby="bw-smart-energy-heading-{{ section.id }}">
+  <div class="bw-container">
+    <div class="bw-section__intro bw-smart-energy__intro">
+      {% if section.settings.eyebrow != blank %}<p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      <h2 id="bw-smart-energy-heading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.text != blank %}<div class="bw-rte">{{ section.settings.text }}</div>{% endif %}
+    </div>
+
+    <div class="bw-smart-energy__features" role="list">
+      {% for block in section.blocks %}
+        {% if block.type == 'feature' %}
+          <article class="bw-smart-energy__feature" role="listitem" {{ block.shopify_attributes }}>
+            {% if block.settings.number != blank %}<span class="bw-smart-energy__number" aria-hidden="true">{{ block.settings.number | escape }}</span>{% endif %}
+            <div>
+              <h3>{{ block.settings.title | escape }}</h3>
+              {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
+            </div>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="bw-smart-energy__app">
+      <div class="bw-smart-energy__app-copy">
+        <h3>{{ section.settings.app_heading | escape }}</h3>
+        {% if section.settings.app_text != blank %}<div class="bw-rte">{{ section.settings.app_text }}</div>{% endif %}
+        {% if section.settings.app_label != blank and section.settings.app_link != blank %}<a class="bw-button bw-button--primary" href="{{ section.settings.app_link }}">{{ section.settings.app_label | escape }}</a>{% endif %}
+      </div>
+      <div class="bw-smart-energy__app-media">
+        {% if section.settings.app_video != blank %}
+          {{ section.settings.app_video | video_tag: image_size: '1200x', autoplay: false, loop: false, muted: true, controls: true, playsinline: true, preload: 'none' }}
+        {% elsif section.settings.app_image != blank %}
+          {{ section.settings.app_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400', sizes: '(min-width: 900px) 46vw, 92vw', alt: section.settings.app_image_alt }}
+        {% elsif request.design_mode %}
+          <div class="bw-editor-placeholder">App-Bild oder Shopify-Video auswählen</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Smart Energy",
+  "class": "section-bw-compare-smart-energy",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Anker-ID", "default": "smart-energy" },
+    { "type": "text", "id": "eyebrow", "label": "Kleine Überschrift", "default": "Was alle VENUS E können" },
+    { "type": "text", "id": "heading", "label": "Überschrift", "default": "Smart Energy, serienmäßig" },
+    { "type": "richtext", "id": "text", "label": "Beschreibung" },
+    { "type": "header", "content": "App-CTA" },
+    { "type": "text", "id": "app_heading", "label": "Überschrift", "default": "Alles im Blick – mit der Marstek App" },
+    { "type": "richtext", "id": "app_text", "label": "Beschreibung" },
+    { "type": "text", "id": "app_label", "label": "Buttontext" },
+    { "type": "url", "id": "app_link", "label": "Buttonlink" },
+    { "type": "image_picker", "id": "app_image", "label": "Bild" },
+    { "type": "video", "id": "app_video", "label": "Shopify-Video", "info": "Video hat Vorrang vor dem Bild." },
+    { "type": "text", "id": "app_image_alt", "label": "Alternativtext" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Smart-Energy-Funktion",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "number", "label": "Nummer", "default": "01" },
+        { "type": "text", "id": "title", "label": "Titel" },
+        { "type": "textarea", "id": "text", "label": "Beschreibung" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "VENUS E · Smart Energy", "blocks": [{ "type": "feature" }, { "type": "feature" }, { "type": "feature" }, { "type": "feature" }] }]
+}
+{% endschema %}

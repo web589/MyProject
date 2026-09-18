@@ -59,11 +59,15 @@
       </div>
 
       {% if section.blocks.size > 0 %}
-        <div class="bw-hero__stats" aria-label="{{ section.settings.stats_label | escape }}">
+        <div class="bw-hero__stats{% if section.settings.stats_style == 'checklist' %} bw-hero__stats--checklist{% endif %}" aria-label="{{ section.settings.stats_label | escape }}">
           {% for block in section.blocks %}
             <div class="bw-hero__stat" {{ block.shopify_attributes }}>
-              {% if block.settings.value != blank %}<strong>{{ block.settings.value | escape }}</strong>{% endif %}
-              {% if block.settings.detail != blank %}<span>{{ block.settings.detail | escape }}</span>{% endif %}
+              {% if section.settings.stats_style == 'checklist' %}
+                {% if block.settings.value != blank %}<span class="bw-hero__check" aria-hidden="true">✓</span><strong>{{ block.settings.value | escape }}</strong>{% endif %}
+              {% else %}
+                {% if block.settings.value != blank %}<strong>{{ block.settings.value | escape }}</strong>{% endif %}
+                {% if block.settings.detail != blank %}<span>{{ block.settings.detail | escape }}</span>{% endif %}
+              {% endif %}
             </div>
           {% endfor %}
         </div>
@@ -192,6 +196,16 @@
       "id": "stats_label",
       "label": "Bezeichnung der Kennzahlen",
       "default": "Produktvorteile"
+    },
+    {
+      "type": "select",
+      "id": "stats_style",
+      "label": "Darstellung der Kennzahlen",
+      "options": [
+        { "value": "stats", "label": "Kennzahl mit Zusatz" },
+        { "value": "checklist", "label": "Checkliste" }
+      ],
+      "default": "stats"
     }
   ],
   "blocks": [

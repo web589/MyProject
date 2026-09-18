@@ -58,7 +58,7 @@
           {% endif %}
 
           <div class="bw-content-card__body">
-            {% if block.settings.number != blank %}
+            {% if section.settings.show_numbers and block.settings.number != blank %}
               <span class="bw-content-card__number" aria-hidden="true">{{ block.settings.number | escape }}</span>
             {% endif %}
             {% if block.settings.badge != blank %}
@@ -140,6 +140,12 @@
         { "value": "numbered", "label": "Nummerierter Schritt" }
       ],
       "default": "media"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_numbers",
+      "label": "Kartennummern anzeigen",
+      "default": false
     },
     {
       "type": "select",

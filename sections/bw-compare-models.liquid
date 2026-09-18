@@ -28,8 +28,12 @@
         {% liquid
           assign model = block.settings.product
           assign model_image = block.settings.image
+          assign display_title = block.settings.display_title
           if model_image == blank and model != blank
             assign model_image = model.featured_image
+          endif
+          if display_title == blank and model != blank
+            assign display_title = model.title
           endif
         %}
         <article
@@ -59,21 +63,9 @@
 
           <div class="bw-model-card__body">
             {% if model != blank %}
-              <h3>{{ model.title | escape }}</h3>
-              <p class="bw-model-card__price">
-                <span>{{ section.settings.price_prefix | escape }}</span>
-                <strong>{{ model.price_min | money }}</strong>
-              </p>
-              <p class="bw-model-card__availability{% unless model.available %} is-unavailable{% endunless %}">
-                <span aria-hidden="true"></span>
-                {% if model.available %}
-                  {{ section.settings.available_label | escape }}
-                {% else %}
-                  {{ section.settings.unavailable_label | escape }}
-                {% endif %}
-              </p>
+              <h3>{{ display_title | escape }}</h3>
             {% else %}
-              <h3>{{ section.settings.empty_product_title | escape }}</h3>
+              <h3>{{ block.settings.display_title | default: section.settings.empty_product_title | escape }}</h3>
             {% endif %}
 
             {% if block.settings.capacity_range != blank %}
@@ -83,15 +75,29 @@
               <div class="bw-model-card__description">{{ block.settings.description }}</div>
             {% endif %}
 
-            {% if model != blank %}
-              <a class="bw-button bw-button--primary bw-model-card__button" href="{{ model.url }}">
-                {{ section.settings.cta_label | escape }}
-              </a>
-            {% elsif request.design_mode %}
-              <span class="bw-button bw-button--primary bw-model-card__button" aria-disabled="true">
-                {{ section.settings.cta_label | escape }}
-              </span>
-            {% endif %}
+            <div class="bw-model-card__footer">
+              {% if model != blank %}
+                <p class="bw-model-card__price">
+                  <span>{{ section.settings.price_prefix | escape }}</span>
+                  <strong>{{ model.price_min | money }}</strong>
+                </p>
+                <p class="bw-model-card__availability{% unless model.available %} is-unavailable{% endunless %}">
+                  <span aria-hidden="true"></span>
+                  {% if model.available %}
+                    {{ section.settings.available_label | escape }}
+                  {% else %}
+                    {{ section.settings.unavailable_label | escape }}
+                  {% endif %}
+                </p>
+                <a class="bw-button bw-button--primary bw-model-card__button" href="{{ model.url }}">
+                  {{ section.settings.cta_label | escape }}
+                </a>
+              {% elsif request.design_mode %}
+                <span class="bw-button bw-button--primary bw-model-card__button" aria-disabled="true">
+                  {{ section.settings.cta_label | escape }}
+                </span>
+              {% endif %}
+            </div>
           </div>
         </article>
       {% endfor %}
@@ -232,6 +238,12 @@
           "id": "image",
           "label": "Ersatzbild (optional)",
           "info": "Ohne Auswahl wird das Produktbild verwendet."
+        },
+        {
+          "type": "text",
+          "id": "display_title",
+          "label": "Anzeigename (optional)",
+          "info": "Ohne Eingabe wird der Shopify-Produktname verwendet."
         },
         {
           "type": "text",

@@ -12,22 +12,20 @@
   aria-labelledby="bw-capacity-heading-{{ section.id }}"
 >
   <div class="bw-container">
-    <div class="bw-section__intro bw-capacity-map__intro">
+    <div class="bw-capacity-map__heading-row">
+      <div class="bw-section__intro bw-capacity-map__intro">
       {% if section.settings.eyebrow != blank %}
         <p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>
       {% endif %}
-      <h2 id="bw-capacity-heading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+        <h2 id="bw-capacity-heading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+      </div>
       {% if section.settings.text != blank %}
-        <div class="bw-rte">{{ section.settings.text }}</div>
+        <div class="bw-rte bw-capacity-map__text">{{ section.settings.text }}</div>
       {% endif %}
     </div>
 
-    <div class="bw-capacity-map__scale" aria-hidden="true">
-      <span>0</span>
-      <span>{{ section.settings.max_scale }} kWh</span>
-    </div>
-
-    <div class="bw-capacity-map__rows" role="list">
+    <div class="bw-capacity-map__panel">
+      <div class="bw-capacity-map__rows" role="list">
       {% for block in section.blocks %}
         {% assign capacity_points = block.settings.points | split: ',' %}
         <article class="bw-capacity-row" role="listitem" {{ block.shopify_attributes }}>
@@ -65,6 +63,7 @@
           </p>
         </article>
       {% endfor %}
+      </div>
     </div>
 
     {% if section.settings.footnote != blank %}
@@ -111,7 +110,7 @@
       "max": 40,
       "step": 1,
       "unit": "kWh",
-      "default": 12
+      "default": 30
     },
     {
       "type": "textarea",

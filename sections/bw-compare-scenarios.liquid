@@ -1,0 +1,71 @@
+{% liquid
+  assign scenario_anchor = section.settings.anchor_id | handle
+  if scenario_anchor == blank
+    assign scenario_anchor = 'einsatz'
+  endif
+%}
+
+<section id="{{ scenario_anchor }}" class="bw-storage bw-storage-section bw-scenarios bw-anchor-target" aria-labelledby="bw-scenarios-heading-{{ section.id }}">
+  <div class="bw-container">
+    <div class="bw-section__intro bw-scenarios__intro">
+      {% if section.settings.eyebrow != blank %}<p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}
+      <h2 id="bw-scenarios-heading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+    </div>
+
+    <div class="bw-scenarios__grid" role="list">
+      {% for block in section.blocks %}
+        {% assign product = block.settings.product %}
+        <article class="bw-scenario-card{% if block.settings.highlight %} bw-scenario-card--highlight{% endif %}" role="listitem" {{ block.shopify_attributes }}>
+          <div class="bw-scenario-card__media">
+            {% if block.settings.image != blank %}
+              {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400', sizes: '(min-width: 900px) 46vw, 92vw', alt: block.settings.image_alt }}
+            {% elsif request.design_mode %}
+              <div class="bw-editor-placeholder">Szenariobild auswählen</div>
+            {% endif %}
+          </div>
+          <div class="bw-scenario-card__body">
+            <div>
+              <h3>{{ block.settings.title | escape }}</h3>
+              {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
+            </div>
+            {% if product != blank %}
+              <a class="bw-scenario-card__link" href="{{ product.url }}">{{ block.settings.link_label | default: product.title | escape }} <span aria-hidden="true">→</span></a>
+            {% elsif request.design_mode %}
+              <span class="bw-scenario-card__link" aria-disabled="true">{{ block.settings.link_label | default: 'Produkt auswählen' | escape }} <span aria-hidden="true">→</span></span>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Wohnsituation",
+  "class": "section-bw-compare-scenarios",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "Anker-ID", "default": "einsatz" },
+    { "type": "text", "id": "eyebrow", "label": "Kleine Überschrift", "default": "Was passt zu dir?" },
+    { "type": "text", "id": "heading", "label": "Überschrift", "default": "Wähle nach deiner Wohnsituation" }
+  ],
+  "blocks": [
+    {
+      "type": "scenario",
+      "name": "Wohnsituation",
+      "limit": 4,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Bild" },
+        { "type": "text", "id": "image_alt", "label": "Alternativtext" },
+        { "type": "text", "id": "title", "label": "Titel", "default": "Wohnung" },
+        { "type": "textarea", "id": "text", "label": "Beschreibung" },
+        { "type": "product", "id": "product", "label": "Empfohlenes Shopify-Produkt" },
+        { "type": "text", "id": "link_label", "label": "Linktext", "info": "Ohne Eingabe wird der Shopify-Produktname verwendet." },
+        { "type": "checkbox", "id": "highlight", "label": "Blau hervorheben", "default": false }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "VENUS E · Wohnsituation", "blocks": [{ "type": "scenario" }, { "type": "scenario" }, { "type": "scenario" }, { "type": "scenario" }] }]
+}
+{% endschema %}
