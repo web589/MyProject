@@ -1,0 +1,235 @@
+{% liquid
+  assign grid_anchor = section.settings.anchor_id | handle
+  if grid_anchor == blank
+    assign grid_anchor = 'entscheidungshelfer'
+  endif
+%}
+
+<section
+  id="{{ grid_anchor }}"
+  class="bw-storage bw-storage-section bw-content-grid bw-content-grid--{{ section.settings.card_style }} bw-content-grid--surface-{{ section.settings.surface }} bw-anchor-target"
+  data-bw-module="content-grid"
+  aria-labelledby="bw-content-grid-heading-{{ section.id }}"
+  style="--bw-content-columns: {{ section.settings.columns }};"
+>
+  <div class="bw-container">
+    <div class="bw-section__intro bw-content-grid__intro">
+      {% if section.settings.eyebrow != blank %}
+        <p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+      <h2 id="bw-content-grid-heading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.text != blank %}
+        <div class="bw-rte">{{ section.settings.text }}</div>
+      {% endif %}
+    </div>
+
+    <div class="bw-content-grid__items" role="list">
+      {% for block in section.blocks %}
+        <article class="bw-content-card" role="listitem" {{ block.shopify_attributes }}>
+          {% if block.settings.video != blank or block.settings.image != blank %}
+            <div class="bw-content-card__media">
+              {% if block.settings.video != blank %}
+                {{
+                  block.settings.video
+                  | video_tag:
+                    image_size: '900x',
+                    autoplay: false,
+                    loop: false,
+                    muted: true,
+                    controls: true,
+                    playsinline: true,
+                    preload: 'none',
+                    class: 'bw-content-card__video'
+                }}
+              {% else %}
+                {{
+                  block.settings.image
+                  | image_url: width: 1200
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '360, 540, 720, 900, 1200',
+                    sizes: '(min-width: 1100px) 32vw, (min-width: 700px) 48vw, 92vw',
+                    alt: block.settings.image_alt
+                }}
+              {% endif %}
+            </div>
+          {% elsif request.design_mode and section.settings.card_style == 'media' %}
+            <div class="bw-content-card__media bw-editor-placeholder">Bild oder Shopify-Video auswählen</div>
+          {% endif %}
+
+          <div class="bw-content-card__body">
+            {% if block.settings.number != blank %}
+              <span class="bw-content-card__number" aria-hidden="true">{{ block.settings.number | escape }}</span>
+            {% endif %}
+            {% if block.settings.badge != blank %}
+              <p class="bw-content-card__badge">{{ block.settings.badge | escape }}</p>
+            {% endif %}
+            {% if block.settings.title != blank %}
+              <h3>{{ block.settings.title | escape }}</h3>
+            {% endif %}
+            {% if block.settings.text != blank %}
+              <div class="bw-content-card__text">{{ block.settings.text }}</div>
+            {% endif %}
+
+            {% if block.settings.tag_1 != blank or block.settings.tag_2 != blank %}
+              <ul class="bw-content-card__tags" aria-label="Merkmale">
+                {% if block.settings.tag_1 != blank %}<li>{{ block.settings.tag_1 | escape }}</li>{% endif %}
+                {% if block.settings.tag_2 != blank %}<li>{{ block.settings.tag_2 | escape }}</li>{% endif %}
+              </ul>
+            {% endif %}
+
+            {% if block.settings.link_label != blank and block.settings.link_url != blank %}
+              <a class="bw-content-card__link" href="{{ block.settings.link_url }}">
+                {{ block.settings.link_label | escape }}
+                <span aria-hidden="true">→</span>
+              </a>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Inhaltskarten",
+  "class": "section-bw-compare-card-grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anker-ID",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "default": "entscheidungshelfer"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Kleine Überschrift"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Entscheidungshilfe"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Beschreibung"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Spalten auf Desktop",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Kartendarstellung",
+      "options": [
+        { "value": "media", "label": "Mit großem Bild" },
+        { "value": "feature", "label": "Kompakte Vorteilskarte" },
+        { "value": "numbered", "label": "Nummerierter Schritt" }
+      ],
+      "default": "media"
+    },
+    {
+      "type": "select",
+      "id": "surface",
+      "label": "Abschnittshintergrund",
+      "options": [
+        { "value": "white", "label": "Weiß" },
+        { "value": "soft", "label": "Hellgrau" },
+        { "value": "blue", "label": "Hellblau" },
+        { "value": "dark", "label": "Dunkel" }
+      ],
+      "default": "white"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Inhaltskarte",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Bild"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify-Video",
+          "info": "Wenn ausgewählt, hat das Video Vorrang vor dem Bild."
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Alternativtext"
+        },
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Nummer oder Kurzzeichen"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Kennzeichnung"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titel",
+          "default": "Kartentitel"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Ergänze hier eine konkrete, überprüfbare Information.</p>"
+        },
+        {
+          "type": "text",
+          "id": "tag_1",
+          "label": "Merkmal 1"
+        },
+        {
+          "type": "text",
+          "id": "tag_2",
+          "label": "Merkmal 2"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Linktext"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Linkziel"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "VENUS E · Inhaltskarten",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

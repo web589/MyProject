@@ -1,0 +1,707 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "compare_navigation": {
+      "type": "bw-storage-navigation",
+      "blocks": {
+        "nav_models": {
+          "type": "link",
+          "settings": { "label": "Modelle", "target": "#modelle" }
+        },
+        "nav_scenarios": {
+          "type": "link",
+          "settings": { "label": "Einsatz", "target": "#einsatz" }
+        },
+        "nav_comparison": {
+          "type": "link",
+          "settings": { "label": "Datenvergleich", "target": "#vergleich" }
+        },
+        "nav_capacity": {
+          "type": "link",
+          "settings": { "label": "Kapazität", "target": "#kapazitaet" }
+        },
+        "nav_priorities": {
+          "type": "link",
+          "settings": { "label": "Kaufkriterien", "target": "#kaufkriterien" }
+        },
+        "nav_smart": {
+          "type": "link",
+          "settings": { "label": "Smart Energy", "target": "#smart-energy" }
+        },
+        "nav_setup": {
+          "type": "link",
+          "settings": { "label": "Installation", "target": "#installation" }
+        },
+        "nav_faq": {
+          "type": "link",
+          "settings": { "label": "FAQ", "target": "#faq" }
+        }
+      },
+      "block_order": [
+        "nav_models",
+        "nav_scenarios",
+        "nav_comparison",
+        "nav_capacity",
+        "nav_priorities",
+        "nav_smart",
+        "nav_setup",
+        "nav_faq"
+      ],
+      "settings": {
+        "aria_label": "Navigation zum VENUS E Modellvergleich",
+        "anchor_id": "navigation",
+        "cta_label": "Modelle ansehen",
+        "cta_target": "#abschluss"
+      }
+    },
+    "compare_hero": {
+      "type": "bw-storage-hero",
+      "blocks": {
+        "hero_stat_models": {
+          "type": "stat",
+          "settings": { "value": "4 Modelle", "detail": "Mini bis Max" }
+        },
+        "hero_stat_data": {
+          "type": "stat",
+          "settings": { "value": "Live-Daten", "detail": "aus Shopify" }
+        },
+        "hero_stat_route": {
+          "type": "stat",
+          "settings": { "value": "Direkt", "detail": "zur Produktseite" }
+        }
+      },
+      "block_order": ["hero_stat_models", "hero_stat_data", "hero_stat_route"],
+      "settings": {
+        "anchor_id": "start",
+        "badge": "VENUS E Modellvergleich",
+        "heading_line_1": "Welcher VENUS E",
+        "heading_line_2": "passt zu",
+        "heading_accent": "dir?",
+        "text": "<p>Vergleiche VENUS E Mini, 3.0, 4.0 und Max nach Kapazität, Leistung, Notstrom, Erweiterbarkeit und typischem Einsatzbereich.</p>",
+        "primary_label": "Technische Daten vergleichen",
+        "primary_link": "#vergleich",
+        "secondary_label": "Alle Modelle ansehen",
+        "secondary_link": "#modelle",
+        "image": "shopify://shop_images/MARSTEK_VENUS_E_Solarspeicher_Serie_Produkt_bersicht.webp",
+        "media_width": 55,
+        "media_position": "right",
+        "media_alt": "Die vier VENUS E Solarspeicher im Modellvergleich",
+        "stats_label": "Überblick zum Vergleich"
+      }
+    },
+    "compare_trust": {
+      "type": "bw-storage-trust",
+      "blocks": {
+        "trust_tuv": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "shopify://shop_images/c59913950d896d7e7acac35b3f8d2404_28ebcde5-3eab-436b-826c-36ba7ac69369.webp",
+            "fallback_icon": "certificate",
+            "label": "TÜV-zertifiziert"
+          }
+        },
+        "trust_ce": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "shopify://shop_images/2_0c6bda25-e6a4-41dd-b8c9-5cb4e90cece3.webp",
+            "fallback_icon": "shield",
+            "label": "CE-konform"
+          }
+        },
+        "trust_ip65": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "shopify://shop_images/ip_0f84f9b9-380f-444a-8b41-b27b85da009d.webp",
+            "fallback_icon": "shield",
+            "label": "IP65 geschützt"
+          }
+        },
+        "trust_warranty": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "shopify://shop_images/cd95ea4e82301bfe83ec5f03fbfee8db_c294e2ae-94f7-4a28-8c7f-182b452c309f.webp",
+            "fallback_icon": "check",
+            "label": "10 Jahre Herstellergarantie"
+          }
+        },
+        "trust_cells": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "shopify://shop_images/169f0aba0d7816aa4560a1983a58af9e_ec2c3502-9a27-4c42-8f1f-87d8033f9401.webp",
+            "fallback_icon": "battery",
+            "label": "LiFePO4-Zellen"
+          }
+        }
+      },
+      "block_order": ["trust_tuv", "trust_ce", "trust_ip65", "trust_warranty", "trust_cells"],
+      "settings": {
+        "anchor_id": "qualitaet",
+        "aria_label": "Qualität und Produktschutz"
+      }
+    },
+    "compare_models": {
+      "type": "bw-compare-models",
+      "blocks": {
+        "model_mini": {
+          "type": "model",
+          "settings": {
+            "product": "venus-e-mini",
+            "badge": "Kompakter Einstieg",
+            "capacity_range": "Basisvariante: 2 kWh",
+            "description": "<p>Für kleinere Solarüberschüsse und einen kompakten Einstieg in die Stromspeicherung.</p>",
+            "highlight": false
+          }
+        },
+        "model_3": {
+          "type": "model",
+          "settings": {
+            "product": "venus-e-3",
+            "badge": "Flexible Mitte",
+            "capacity_range": "Basisvariante: 5,12 kWh",
+            "description": "<p>Für regelmäßige Überschüsse und einen mittleren Energiebedarf im Haushalt.</p>",
+            "highlight": false
+          }
+        },
+        "model_4": {
+          "type": "model",
+          "settings": {
+            "product": "venus-e-4",
+            "badge": "Im Vergleich hervorgehoben",
+            "capacity_range": "Basisvariante: 5 kWh",
+            "description": "<p>Für Haushalte, die neben Kapazität auch mehr bidirektionale Leistung einplanen.</p>",
+            "highlight": true
+          }
+        },
+        "model_max": {
+          "type": "model",
+          "settings": {
+            "product": "venus-e-max",
+            "badge": "Mehr Reserve",
+            "capacity_range": "Basisvariante: 10 kWh",
+            "description": "<p>Für höheren Energiebedarf, größere Reserven und anspruchsvollere Verbrauchsprofile.</p>",
+            "highlight": false
+          }
+        }
+      },
+      "block_order": ["model_mini", "model_3", "model_4", "model_max"],
+      "settings": {
+        "anchor_id": "modelle",
+        "eyebrow": "Vier Modelle, ein Ziel",
+        "heading": "Welcher VENUS E passt zu deinem Zuhause?",
+        "text": "<p>Nutze die Modellkarten für die erste Einordnung und prüfe anschließend die technischen Werte in der Vergleichstabelle.</p>",
+        "layout": "overview",
+        "price_prefix": "Ab",
+        "available_label": "Verfügbar",
+        "unavailable_label": "Derzeit nicht verfügbar",
+        "empty_product_title": "Produkt auswählen",
+        "cta_label": "Produkt ansehen"
+      }
+    },
+    "compare_scenarios": {
+      "type": "bw-compare-card-grid",
+      "blocks": {
+        "scenario_mini": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/VENUS_E_Solarspeicher_auf_dem_Balkon.webp",
+            "image_alt": "VENUS E Speicher auf einem Balkon",
+            "badge": "VENUS E Mini",
+            "title": "Kompakter Speicherbedarf",
+            "text": "<p>Kann passen, wenn dein täglicher Solarüberschuss überschaubar ist und du vor allem Abendverbrauch verschieben möchtest.</p>",
+            "tag_1": "kleinere PV-Überschüsse",
+            "tag_2": "kompakte Stellfläche"
+          }
+        },
+        "scenario_3": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_f_r_Haushalte_mit_mittlerem_Energiebedarf.webp",
+            "image_alt": "VENUS E 3.0 in einem Haushalt mit mittlerem Energiebedarf",
+            "badge": "VENUS E 3.0",
+            "title": "Regelmäßiger Abendverbrauch",
+            "text": "<p>Eine mögliche Mitte für Haushalte, die tagsüber kontinuierlich Überschuss erzeugen und ihn später nutzen möchten.</p>",
+            "tag_1": "mittlerer Bedarf",
+            "tag_2": "flexible Nutzung"
+          }
+        },
+        "scenario_4": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Venus_E_4.0_Solarspeicher_fur_Einfamilienhauser_5836ef35-e530-4f2c-a139-770f14380145.webp",
+            "image_alt": "VENUS E 4.0 an einem Einfamilienhaus",
+            "badge": "VENUS E 4.0",
+            "title": "Mehr Leistung einplanen",
+            "text": "<p>Interessant, wenn neben der Speichermenge auch Entlade- und Notstromleistung stärker gewichtet werden.</p>",
+            "tag_1": "höherer Leistungsbedarf",
+            "tag_2": "Notstrom prüfen"
+          }
+        },
+        "scenario_max": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/VENUS_E_Max_f_r_Haushalt_und_E-Mobilit_t.webp",
+            "image_alt": "VENUS E Max für Haushalt und Elektromobilität",
+            "badge": "VENUS E Max",
+            "title": "Größere Energieprofile",
+            "text": "<p>Für die Planung mit größerer Reserve, hohem Haushaltsverbrauch oder zusätzlichen Verbrauchern wie E-Mobilität.</p>",
+            "tag_1": "größere Reserve",
+            "tag_2": "E-Mobilität mitdenken"
+          }
+        }
+      },
+      "block_order": ["scenario_mini", "scenario_3", "scenario_4", "scenario_max"],
+      "settings": {
+        "anchor_id": "einsatz",
+        "eyebrow": "Typische Ausgangslagen",
+        "heading": "Vier Modelle für unterschiedliche Energieprofile",
+        "text": "<p>Die Beispiele sind eine Orientierung. Entscheidend bleiben dein tatsächlicher PV-Überschuss, deine Verbrauchszeiten und die benötigte Leistung.</p>",
+        "columns": "4",
+        "card_style": "media",
+        "surface": "soft"
+      }
+    },
+    "compare_table": {
+      "type": "bw-compare-table",
+      "blocks": {
+        "spec_capacity": { "type": "spec", "settings": { "label": "Speicherkapazität", "common_field": "capacity" } },
+        "spec_battery": { "type": "spec", "settings": { "label": "Batterietyp", "common_field": "battery_type" } },
+        "spec_dod": { "type": "spec", "settings": { "label": "Entladetiefe (DoD)", "common_field": "depth_of_discharge" } },
+        "spec_ac_input": { "type": "spec", "settings": { "label": "AC-Eingangsleistung", "common_field": "ac_input" } },
+        "spec_ac_output": { "type": "spec", "settings": { "label": "AC-Ausgangsleistung", "common_field": "ac_output" } },
+        "spec_bidir": { "type": "spec", "settings": { "label": "Bidirektionale Leistung", "common_field": "bidirectional_power" } },
+        "spec_backup": { "type": "spec", "settings": { "label": "Notstromleistung", "common_field": "backup_power" } },
+        "spec_peak": { "type": "spec", "settings": { "label": "Spitzenleistung", "common_field": "peak_power" } },
+        "spec_eps": { "type": "spec", "settings": { "label": "EPS-Umschaltzeit", "common_field": "eps_switch_time" } },
+        "spec_cycles": { "type": "spec", "settings": { "label": "Ladezyklen", "common_field": "cycles" } },
+        "spec_lifespan": { "type": "spec", "settings": { "label": "Ausgelegte Lebensdauer", "common_field": "lifespan" } },
+        "spec_efficiency": { "type": "spec", "settings": { "label": "Wirkungsgrad", "common_field": "efficiency" } },
+        "spec_scalability": { "type": "spec", "settings": { "label": "Erweiterbarkeit", "common_field": "scalability" } },
+        "spec_zero": { "type": "spec", "settings": { "label": "Nulleinspeisung", "common_field": "zero_feed_in" } },
+        "spec_vpp": { "type": "spec", "settings": { "label": "VPP-Fähigkeit", "common_field": "vpp" } },
+        "spec_energy": { "type": "spec", "settings": { "label": "Energiemanagement", "common_field": "ai_energy" } },
+        "spec_ev": { "type": "spec", "settings": { "label": "E-Mobilität", "common_field": "smart_ev" } },
+        "spec_smartbox": { "type": "spec", "settings": { "label": "SmartBox", "common_field": "smartbox" } },
+        "spec_install": { "type": "spec", "settings": { "label": "Installation", "common_field": "installation" } },
+        "spec_ac_coupling": { "type": "spec", "settings": { "label": "AC-Kopplung", "common_field": "ac_coupling" } },
+        "spec_communication": { "type": "spec", "settings": { "label": "Kommunikation", "common_field": "communication" } },
+        "spec_wifi": { "type": "spec", "settings": { "label": "Wi-Fi", "common_field": "wifi" } },
+        "spec_bluetooth": { "type": "spec", "settings": { "label": "Bluetooth", "common_field": "bluetooth" } },
+        "spec_ip": { "type": "spec", "settings": { "label": "Schutzart", "common_field": "ip_rating" } },
+        "spec_cooling": { "type": "spec", "settings": { "label": "Kühlung", "common_field": "cooling" } },
+        "spec_temperature": { "type": "spec", "settings": { "label": "Betriebstemperatur", "common_field": "operating_temperature" } },
+        "spec_dimensions": { "type": "spec", "settings": { "label": "Abmessungen", "common_field": "dimensions" } },
+        "spec_weight": { "type": "spec", "settings": { "label": "Gewicht", "common_field": "weight" } },
+        "spec_warranty": { "type": "spec", "settings": { "label": "Herstellergarantie", "common_field": "warranty" } },
+        "spec_ideal": { "type": "spec", "settings": { "label": "Geeignet für", "common_field": "ideal_for" } }
+      },
+      "block_order": [
+        "spec_capacity",
+        "spec_battery",
+        "spec_dod",
+        "spec_ac_input",
+        "spec_ac_output",
+        "spec_bidir",
+        "spec_backup",
+        "spec_peak",
+        "spec_eps",
+        "spec_cycles",
+        "spec_lifespan",
+        "spec_efficiency",
+        "spec_scalability",
+        "spec_zero",
+        "spec_vpp",
+        "spec_energy",
+        "spec_ev",
+        "spec_smartbox",
+        "spec_install",
+        "spec_ac_coupling",
+        "spec_communication",
+        "spec_wifi",
+        "spec_bluetooth",
+        "spec_ip",
+        "spec_cooling",
+        "spec_temperature",
+        "spec_dimensions",
+        "spec_weight",
+        "spec_warranty",
+        "spec_ideal"
+      ],
+      "settings": {
+        "anchor_id": "vergleich",
+        "eyebrow": "Technische Daten",
+        "heading": "VENUS E Modelle im direkten Vergleich",
+        "text": "<p>Die Tabelle liest die Werte automatisch aus den Produkt-Metafeldern. So bleiben Preis, Verfügbarkeit und technische Angaben mit den ausgewählten Produkten verbunden.</p>",
+        "product_1": "venus-e-mini",
+        "product_2": "venus-e-3",
+        "product_3": "venus-e-4",
+        "product_4": "venus-e-max",
+        "highlight_column": "3",
+        "spec_namespace": "",
+        "variant_option": "1×",
+        "label_heading": "Merkmal",
+        "price_prefix": "Ab",
+        "available_label": "Verfügbar",
+        "unavailable_label": "Derzeit nicht verfügbar",
+        "caption": "Technischer Vergleich von VENUS E Mini, 3.0, 4.0 und Max",
+        "scroll_label": "VENUS E Vergleichstabelle, horizontal scrollbar",
+        "mobile_hint": "Seitlich wischen, um alle Modelle zu vergleichen."
+      }
+    },
+    "compare_capacity": {
+      "type": "bw-compare-capacity",
+      "blocks": {
+        "capacity_mini": {
+          "type": "capacity",
+          "settings": { "product_name": "VENUS E Mini", "note": "Basisvariante 1×", "points": "2" }
+        },
+        "capacity_3": {
+          "type": "capacity",
+          "settings": { "product_name": "VENUS E 3.0", "note": "Basisvariante 1×", "points": "5.12" }
+        },
+        "capacity_4": {
+          "type": "capacity",
+          "settings": { "product_name": "VENUS E 4.0", "note": "Basisvariante 1×", "points": "5" }
+        },
+        "capacity_max": {
+          "type": "capacity",
+          "settings": { "product_name": "VENUS E Max", "note": "Basisvariante 1×", "points": "10" }
+        }
+      },
+      "block_order": ["capacity_mini", "capacity_3", "capacity_4", "capacity_max"],
+      "settings": {
+        "anchor_id": "kapazitaet",
+        "eyebrow": "Kapazität einordnen",
+        "heading": "Basisvarianten auf einer Skala",
+        "text": "<p>Mehr Kapazität ist nicht automatisch besser. Plane nach regelmäßigem Solarüberschuss, Abend- und Nachtverbrauch sowie der gewünschten Reserve.</p>",
+        "max_scale": 12,
+        "footnote": "Die Marker zeigen die derzeit für die 1× Basisvarianten hinterlegten Werte. Maßgeblich sind die aktuelle Vergleichstabelle und die jeweilige Produktseite."
+      }
+    },
+    "compare_priorities": {
+      "type": "bw-compare-card-grid",
+      "blocks": {
+        "priority_capacity": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/VENUS_E_Max_Solarspeicher_f_r_hohen_Energiebedarf.webp",
+            "image_alt": "VENUS E Max für einen höheren Energiebedarf",
+            "number": "01",
+            "title": "Kapazität passend dimensionieren",
+            "text": "<p>Orientiere dich an regelmäßigem Überschuss und dem Verbrauch außerhalb der Sonnenstunden, nicht nur an der Haushaltsgröße.</p>"
+          }
+        },
+        "priority_power": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/VENUS_E_4.0_mit_3_kW_bidirektionaler_Leistung.webp",
+            "image_alt": "VENUS E 4.0 mit Darstellung der bidirektionalen Leistung",
+            "number": "02",
+            "title": "Leistung getrennt vergleichen",
+            "text": "<p>Kapazität beschreibt die Energiemenge. Entlade- und Notstromleistung bestimmen, welche Lasten gleichzeitig versorgt werden können.</p>"
+          }
+        },
+        "priority_protection": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/MARSTEK_VENUS_E_3.0_Betrieb_bis_-20_C_und_IP65-1.png",
+            "image_alt": "VENUS E 3.0 mit Hinweis auf Schutzart und Einsatztemperatur",
+            "number": "03",
+            "title": "Aufstellort mitdenken",
+            "text": "<p>Prüfe Schutzart, zulässigen Temperaturbereich, Abmessungen und Gewicht für den geplanten Standort.</p>"
+          }
+        },
+        "priority_control": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/elecway-smart-solar-app.webp",
+            "image_alt": "App zur Anzeige von Energieflüssen",
+            "number": "04",
+            "title": "Steuerung und Zubehör prüfen",
+            "text": "<p>Für Nulleinspeisung oder verbrauchsabhängige Regelung kann ein kompatibler Smart Meter erforderlich sein.</p>"
+          }
+        }
+      },
+      "block_order": ["priority_capacity", "priority_power", "priority_protection", "priority_control"],
+      "settings": {
+        "anchor_id": "kaufkriterien",
+        "eyebrow": "Vor dem Kauf",
+        "heading": "Vier Kriterien, die wichtiger sind als nur die kWh-Zahl",
+        "text": "<p>Ein guter Modellvergleich verbindet Energiemenge, Leistung, Einbauort und gewünschte Steuerungsfunktionen.</p>",
+        "columns": "4",
+        "card_style": "media",
+        "surface": "white"
+      }
+    },
+    "compare_smart": {
+      "type": "bw-compare-card-grid",
+      "blocks": {
+        "smart_zero": {
+          "type": "card",
+          "settings": {
+            "number": "01",
+            "badge": "Verbrauchsabhängige Regelung",
+            "title": "Nulleinspeisung gezielt unterstützen",
+            "text": "<p>Ein kompatibler Smart Meter kann Erzeugung und Haushaltsverbrauch erfassen, damit das System seine Lade- und Entladeleistung bedarfsgerecht regelt.</p>",
+            "tag_1": "Smart Meter prüfen",
+            "tag_2": "modellabhängig"
+          }
+        },
+        "smart_vpp": {
+          "type": "card",
+          "settings": {
+            "number": "02",
+            "badge": "Vernetzte Energie",
+            "title": "VPP-Fähigkeit richtig einordnen",
+            "text": "<p>Ob Dienste eines virtuellen Kraftwerks verfügbar sind, hängt von Region, Anbieter, Tarif und der konkreten Systemkonfiguration ab.</p>",
+            "tag_1": "regionabhängig",
+            "tag_2": "keine pauschale Vergütung"
+          }
+        },
+        "smart_app": {
+          "type": "card",
+          "settings": {
+            "number": "03",
+            "badge": "Transparenz",
+            "title": "Energieflüsse im Blick behalten",
+            "text": "<p>Je nach Modell und Zubehör lassen sich Speicherstatus und Energieflüsse überwachen. Vergleiche die konkret hinterlegten Funktionen pro Produkt.</p>",
+            "tag_1": "Produktdaten vergleichen",
+            "tag_2": "Zubehör beachten"
+          }
+        }
+      },
+      "block_order": ["smart_zero", "smart_vpp", "smart_app"],
+      "settings": {
+        "anchor_id": "smart-energy",
+        "eyebrow": "Smart Energy",
+        "heading": "Steuerung, Nulleinspeisung und VPP ohne pauschale Versprechen",
+        "text": "<p>Welche Smart-Energy-Funktion nutzbar ist, ergibt sich aus Modell, Zubehör, Region und Anbieter. Die Tabelle zeigt die aktuell gepflegten Produktangaben.</p>",
+        "columns": "3",
+        "card_style": "feature",
+        "surface": "dark"
+      }
+    },
+    "compare_setup": {
+      "type": "bw-compare-card-grid",
+      "blocks": {
+        "setup_existing": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png",
+            "image_alt": "VENUS E Speicher an einem Haus mit Photovoltaikanlage",
+            "number": "01",
+            "title": "Bestehendes PV-System prüfen",
+            "text": "<p>Viele Anlagen lassen sich nachrüsten. Entscheidend sind die vorhandene Systemarchitektur, Anschlüsse und die gewählte VENUS E Konfiguration.</p>"
+          }
+        },
+        "setup_meter": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/9c2acda4908392328e960a828f3170ba.png",
+            "image_alt": "Schematische Darstellung eines Energieflusses am Tag",
+            "number": "02",
+            "title": "Smart Meter nach Funktion wählen",
+            "text": "<p>Für bestimmte Regelungsfunktionen ist ein kompatibler Smart Meter nötig. Arbeiten am Verteilerkasten gehören in die Hände einer Elektrofachkraft.</p>"
+          }
+        },
+        "setup_backup": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/elecway-speicher-ip65-wetterfest-regen-schnee.jpg",
+            "image_alt": "Wettergeschützt aufgestellter Solarspeicher",
+            "number": "03",
+            "title": "Notstrom und Standort planen",
+            "text": "<p>Nicht jeder Speicher versorgt im Ausfall dieselben Verbraucher. Prüfe Notstromleistung, Umschaltzeit und Aufstellbedingungen je Modell.</p>"
+          }
+        }
+      },
+      "block_order": ["setup_existing", "setup_meter", "setup_backup"],
+      "settings": {
+        "anchor_id": "installation",
+        "eyebrow": "Installation und Betrieb",
+        "heading": "Kompatibilität zuerst, Einbauweg danach",
+        "text": "<p>Der konkrete Installationsaufwand hängt von Modell, Zubehör und vorhandener Elektroinstallation ab. Deshalb gibt es keine pauschale Installationszeit.</p>",
+        "columns": "3",
+        "card_style": "media",
+        "surface": "blue"
+      }
+    },
+    "compare_durability": {
+      "type": "bw-storage-durability",
+      "blocks": {
+        "durability_warranty": {
+          "type": "stat",
+          "settings": {
+            "icon": "shield",
+            "icon_image": "shopify://shop_images/cd95ea4e82301bfe83ec5f03fbfee8db_c294e2ae-94f7-4a28-8c7f-182b452c309f.webp",
+            "metric": "10 Jahre",
+            "label": "Herstellergarantie",
+            "text": "Langfristige Herstellergarantie für die VENUS E Produktreihe."
+          }
+        },
+        "durability_life": {
+          "type": "stat",
+          "settings": {
+            "icon": "battery",
+            "metric": "LiFePO4",
+            "label": "Batterietechnologie",
+            "text": "Zellchemie für den regelmäßigen Einsatz in stationären Speichersystemen."
+          }
+        },
+        "durability_weather": {
+          "type": "stat",
+          "settings": {
+            "icon": "check",
+            "icon_image": "shopify://shop_images/ip_d437fd0c-d453-4c97-8bc7-9654d3c81b48.webp",
+            "metric": "IP65",
+            "label": "Geschützt",
+            "text": "Schutz vor Staub und Strahlwasser; zulässige Aufstellbedingungen je Produkt beachten."
+          }
+        },
+        "durability_tuv": {
+          "type": "stat",
+          "settings": {
+            "icon": "ribbon",
+            "icon_image": "shopify://shop_images/c59913950d896d7e7acac35b3f8d2404_28ebcde5-3eab-436b-826c-36ba7ac69369.webp",
+            "metric": "TÜV",
+            "label": "Geprüft & zertifiziert",
+            "text": "Produktprüfung und Konformität gemäß den für das jeweilige Modell geltenden Angaben."
+          }
+        }
+      },
+      "block_order": ["durability_warranty", "durability_life", "durability_weather", "durability_tuv"],
+      "settings": {
+        "anchor_id": "vertrauen",
+        "heading": "Verifizierbare Produktmerkmale statt pauschaler Versprechen",
+        "text": "Vergleiche neben Leistung und Kapazität auch Garantie, Schutzart, Zellchemie und die modellbezogenen Zertifizierungsangaben.",
+        "list_label": "Garantie, Technologie und Schutz"
+      }
+    },
+    "compare_faq": {
+      "type": "bw-storage-faq",
+      "blocks": {
+        "faq_difference": {
+          "type": "question",
+          "settings": {
+            "question": "Worin unterscheiden sich VENUS E Mini, 3.0, 4.0 und Max?",
+            "answer": "<p>Die Modelle unterscheiden sich unter anderem bei Speicherkapazität, bidirektionaler Leistung, Notstromleistung, EPS-Umschaltzeit und Erweiterbarkeit. Die Vergleichstabelle liest die aktuell gepflegten Werte direkt aus den ausgewählten Shopify-Produkten.</p>"
+          }
+        },
+        "faq_size": {
+          "type": "question",
+          "settings": {
+            "question": "Welche Speicherkapazität passt zu meinem Haushalt?",
+            "answer": "<p>Die passende Größe hängt vor allem von regelmäßigem PV-Überschuss, Verbrauch außerhalb der Sonnenstunden und gewünschter Reserve ab. Die Haushaltsgröße allein reicht für eine belastbare Auswahl nicht aus.</p>"
+          }
+        },
+        "faq_power": {
+          "type": "question",
+          "settings": {
+            "question": "Warum sollte ich neben der Kapazität auch die Leistung vergleichen?",
+            "answer": "<p>Kapazität beschreibt, wie viel Energie gespeichert werden kann. Die Entlade- beziehungsweise Notstromleistung bestimmt, welche Verbraucher gleichzeitig versorgt werden können. Beide Werte beantworten unterschiedliche Fragen.</p>"
+          }
+        },
+        "faq_retrofit": {
+          "type": "question",
+          "settings": {
+            "question": "Kann ich VENUS E an einem bestehenden Balkonkraftwerk nachrüsten?",
+            "answer": "<p>Viele bestehende Balkonkraftwerke und PV-Anlagen lassen sich um einen Speicher ergänzen. Ob und wie das bei dir möglich ist, hängt von der vorhandenen Systemarchitektur und der gewählten Konfiguration ab.</p>"
+          }
+        },
+        "faq_meter": {
+          "type": "question",
+          "settings": {
+            "question": "Brauche ich einen Smart Meter?",
+            "answer": "<p>Nicht für jede Grundfunktion. Für verbrauchsabhängige Regelung und Nulleinspeisung ist jedoch in der Regel ein kompatibler Smart Meter erforderlich. Prüfe die Kompatibilität des konkreten Modells und deines Stromzählers.</p>"
+          }
+        },
+        "faq_backup": {
+          "type": "question",
+          "settings": {
+            "question": "Bietet jedes VENUS E Modell dieselbe Notstromleistung?",
+            "answer": "<p>Nein. Notstromleistung und Umschaltzeit sind modellabhängig. Überlege vorab, welche Verbraucher im Ausfall versorgt werden sollen, und vergleiche dafür die aktuellen Produktwerte.</p>"
+          }
+        },
+        "faq_electrician": {
+          "type": "question",
+          "settings": {
+            "question": "Brauche ich für die Installation eine Elektrofachkraft?",
+            "answer": "<p>Das hängt von Modell, Zubehör und vorhandener Installation ab. Plug-&-Play-Komponenten können teilweise ohne aufwendige Elektroarbeiten genutzt werden. Arbeiten am Verteilerkasten müssen von einer Elektrofachkraft durchgeführt werden.</p>"
+          }
+        },
+        "faq_vpp": {
+          "type": "question",
+          "settings": {
+            "question": "Was bedeutet VPP-fähig?",
+            "answer": "<p>VPP-fähig bezeichnet die technische Vorbereitung für die Einbindung in ein virtuelles Kraftwerk. Ob ein entsprechender Dienst nutzbar ist, hängt von Region, Anbieter, Tarif und Systemkonfiguration ab; eine bestimmte Vergütung lässt sich nicht pauschal zusagen.</p>"
+          }
+        }
+      },
+      "block_order": ["faq_difference", "faq_size", "faq_power", "faq_retrofit", "faq_meter", "faq_backup", "faq_electrician", "faq_vpp"],
+      "settings": {
+        "anchor_id": "faq",
+        "heading": "FAQ zum VENUS E Modellvergleich",
+        "text": "Antworten zu Auswahl, Leistung, Installation, Smart Meter, Notstrom und VPP.",
+        "initial_state": "none"
+      }
+    },
+    "compare_final": {
+      "type": "bw-compare-models",
+      "blocks": {
+        "final_mini": {
+          "type": "model",
+          "settings": { "product": "venus-e-mini", "capacity_range": "Basisvariante: 2 kWh", "description": "<p>Kompakter Einstieg für kleinere Überschüsse.</p>", "highlight": false }
+        },
+        "final_3": {
+          "type": "model",
+          "settings": { "product": "venus-e-3", "capacity_range": "Basisvariante: 5,12 kWh", "description": "<p>Flexible Mitte für regelmäßigen Speicherbedarf.</p>", "highlight": false }
+        },
+        "final_4": {
+          "type": "model",
+          "settings": { "product": "venus-e-4", "capacity_range": "Basisvariante: 5 kWh", "description": "<p>Mehr Leistung für anspruchsvollere Lastprofile.</p>", "highlight": true }
+        },
+        "final_max": {
+          "type": "model",
+          "settings": { "product": "venus-e-max", "capacity_range": "Basisvariante: 10 kWh", "description": "<p>Größere Reserve für einen höheren Energiebedarf.</p>", "highlight": false }
+        }
+      },
+      "block_order": ["final_mini", "final_3", "final_4", "final_max"],
+      "settings": {
+        "anchor_id": "abschluss",
+        "eyebrow": "Nächster Schritt",
+        "heading": "Modell auswählen und aktuelle Konfiguration prüfen",
+        "text": "<p>Auf der Produktseite findest du die verfügbaren Varianten, den aktuellen Preis und die jeweils gepflegten Produktdetails.</p>",
+        "layout": "final",
+        "price_prefix": "Ab",
+        "available_label": "Verfügbar",
+        "unavailable_label": "Derzeit nicht verfügbar",
+        "empty_product_title": "Produkt auswählen",
+        "cta_label": "Zur Produktseite",
+        "support_heading": "Noch unsicher?",
+        "support_text": "Vergleiche zuerst Solarüberschuss, Verbrauchszeiten und die benötigte Leistung; unser Support hilft anschließend bei offenen Kompatibilitätsfragen."
+      }
+    }
+  },
+  "order": [
+    "compare_navigation",
+    "compare_hero",
+    "compare_trust",
+    "compare_models",
+    "compare_scenarios",
+    "compare_table",
+    "compare_capacity",
+    "compare_priorities",
+    "compare_smart",
+    "compare_setup",
+    "compare_durability",
+    "compare_faq",
+    "compare_final"
+  ]
+}

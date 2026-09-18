@@ -1,0 +1,49 @@
+{%- liquid
+  assign header_image = compare_product.featured_image
+  assign is_visual_only = visual_only | default: false
+-%}
+
+<div class="bw-table-product{% if highlighted %} bw-table-product--highlight{% endif %}">
+  <div class="bw-table-product__image">
+    {%- if header_image != blank -%}
+      {{-
+        header_image
+        | image_url: width: 260
+        | image_tag:
+          loading: 'lazy',
+          widths: '100, 160, 220, 260',
+          sizes: '(min-width: 900px) 128px, 96px',
+          alt: header_image.alt | default: compare_product.title
+      -}}
+    {%- else -%}
+      <span class="bw-table-product__image-placeholder" aria-hidden="true"></span>
+    {%- endif -%}
+  </div>
+
+  <div class="bw-table-product__copy">
+    {%- if compare_product != blank -%}
+      {%- if is_visual_only -%}
+        <span class="bw-table-product__name">{{ compare_product.title | escape }}</span>
+      {%- else -%}
+        <a class="bw-table-product__name" href="{{ compare_product.url }}">
+          {{ compare_product.title | escape }}
+        </a>
+      {%- endif -%}
+      <span class="bw-table-product__price">
+        {{ price_prefix | escape }} {{ compare_product.price_min | money }}
+      </span>
+      {%- if show_status -%}
+        <span class="bw-table-product__status{% unless compare_product.available %} is-unavailable{% endunless %}">
+          <span aria-hidden="true"></span>
+          {%- if compare_product.available -%}
+            {{ available_label | escape }}
+          {%- else -%}
+            {{ unavailable_label | escape }}
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+    {%- else -%}
+      <span class="bw-table-product__name">—</span>
+    {%- endif -%}
+  </div>
+</div>

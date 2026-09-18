@@ -1,0 +1,163 @@
+{% liquid
+  assign capacity_anchor = section.settings.anchor_id | handle
+  if capacity_anchor == blank
+    assign capacity_anchor = 'kapazitaet'
+  endif
+%}
+
+<section
+  id="{{ capacity_anchor }}"
+  class="bw-storage bw-storage-section bw-capacity-map bw-anchor-target"
+  data-bw-module="capacity-map"
+  aria-labelledby="bw-capacity-heading-{{ section.id }}"
+>
+  <div class="bw-container">
+    <div class="bw-section__intro bw-capacity-map__intro">
+      {% if section.settings.eyebrow != blank %}
+        <p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+      <h2 id="bw-capacity-heading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.text != blank %}
+        <div class="bw-rte">{{ section.settings.text }}</div>
+      {% endif %}
+    </div>
+
+    <div class="bw-capacity-map__scale" aria-hidden="true">
+      <span>0</span>
+      <span>{{ section.settings.max_scale }} kWh</span>
+    </div>
+
+    <div class="bw-capacity-map__rows" role="list">
+      {% for block in section.blocks %}
+        {% assign capacity_points = block.settings.points | split: ',' %}
+        <article class="bw-capacity-row" role="listitem" {{ block.shopify_attributes }}>
+          <div class="bw-capacity-row__label">
+            <h3>{{ block.settings.product_name | escape }}</h3>
+            {% if block.settings.note != blank %}<p>{{ block.settings.note | escape }}</p>{% endif %}
+          </div>
+          <div class="bw-capacity-row__visual" aria-hidden="true">
+            <span class="bw-capacity-row__line"></span>
+            {% for point in capacity_points %}
+              {% liquid
+                assign clean_point = point | strip
+                assign display_point = clean_point | replace: '.', ','
+                assign numeric_point = clean_point | replace: ',', '.' | plus: 0
+                assign point_position = numeric_point | times: 100.0 | divided_by: section.settings.max_scale
+                if point_position > 100
+                  assign point_position = 100
+                elsif point_position < 0
+                  assign point_position = 0
+                endif
+              %}
+              {% if clean_point != blank %}
+                <span class="bw-capacity-row__point" style="--bw-capacity-position: {{ point_position }}%;">
+                  <strong>{{ display_point | escape }}</strong>
+                  <small>kWh</small>
+                </span>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <p class="visually-hidden">
+            {{ block.settings.product_name | escape }}:
+            {% for point in capacity_points %}
+              {{ point | strip | replace: '.', ',' | escape }} kWh{% unless forloop.last %}, {% endunless %}
+            {% endfor %}
+          </p>
+        </article>
+      {% endfor %}
+    </div>
+
+    {% if section.settings.footnote != blank %}
+      <p class="bw-capacity-map__footnote">{{ section.settings.footnote | escape }}</p>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Kapazität",
+  "class": "section-bw-compare-capacity",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anker-ID",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "default": "kapazitaet"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Kleine Überschrift",
+      "default": "Kapazität einordnen"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Vom Einstieg bis zum größeren Energiebedarf"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Beschreibung",
+      "default": "<p>Die passende Kapazität hängt unter anderem von PV-Ertrag, Verbrauchsprofil und gewünschter Reserve ab. Die Skala hilft bei der ersten Einordnung.</p>"
+    },
+    {
+      "type": "range",
+      "id": "max_scale",
+      "label": "Maximalwert der Skala",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "kWh",
+      "default": 12
+    },
+    {
+      "type": "textarea",
+      "id": "footnote",
+      "label": "Hinweis",
+      "default": "Die dargestellten Werte dienen der Modellübersicht. Verfügbare Varianten und aktuelle Produktdaten findest du auf der jeweiligen Produktseite."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "capacity",
+      "name": "Kapazitätszeile",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "product_name",
+          "label": "Modellname",
+          "default": "VENUS E"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Zusatz"
+        },
+        {
+          "type": "text",
+          "id": "points",
+          "label": "Kapazitätswerte in kWh",
+          "info": "Mehrere Werte mit Komma trennen und Dezimalstellen mit Punkt schreiben, zum Beispiel 2.56,5.12.",
+          "default": "5.12"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "VENUS E · Kapazität",
+      "blocks": [
+        { "type": "capacity", "settings": { "product_name": "VENUS E Mini", "points": "2" } },
+        { "type": "capacity", "settings": { "product_name": "VENUS E 3.0", "points": "5.12" } },
+        { "type": "capacity", "settings": { "product_name": "VENUS E 4.0", "points": "5" } },
+        { "type": "capacity", "settings": { "product_name": "VENUS E Max", "points": "10" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

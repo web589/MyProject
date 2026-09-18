@@ -34,6 +34,11 @@
     {{ 'balkonkraftwerk-storage-page.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'balkonkraftwerk-storage-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
+  {%- if template.suffix == 'venus-e-vergleich' -%}
+    {{ 'balkonkraftwerk-storage-page.css' | asset_url | stylesheet_tag }}
+    {{ 'venus-e-comparison-page.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'venus-e-comparison-page.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
   {%- render 'css-variables' -%}
 
   <script>

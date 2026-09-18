@@ -1,0 +1,419 @@
+{% liquid
+  assign table_anchor = section.settings.anchor_id | handle
+  if table_anchor == blank
+    assign table_anchor = 'vergleich'
+  endif
+
+  assign product_1 = section.settings.product_1
+  assign product_2 = section.settings.product_2
+  assign product_3 = section.settings.product_3
+  assign product_4 = section.settings.product_4
+  assign highlight_1 = false
+  assign highlight_2 = false
+  assign highlight_3 = false
+  assign highlight_4 = false
+  case section.settings.highlight_column
+    when '1'
+      assign highlight_1 = true
+    when '2'
+      assign highlight_2 = true
+    when '3'
+      assign highlight_3 = true
+    when '4'
+      assign highlight_4 = true
+  endcase
+%}
+
+<section
+  id="{{ table_anchor }}"
+  class="bw-storage bw-storage-section bw-specs bw-anchor-target"
+  data-bw-module="comparison-table"
+  data-bw-compare-table
+  aria-labelledby="bw-specs-heading-{{ section.id }}"
+>
+  <div class="bw-container">
+    <div class="bw-section__intro bw-specs__intro">
+      {% if section.settings.eyebrow != blank %}
+        <p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+      <h2 id="bw-specs-heading-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+      {% if section.settings.text != blank %}
+        <div class="bw-rte">{{ section.settings.text }}</div>
+      {% endif %}
+    </div>
+
+    <div class="bw-specs__sticky" data-bw-compare-sticky aria-hidden="true" inert>
+      <div class="bw-specs__sticky-label" data-bw-compare-sticky-label>
+        {{ section.settings.label_heading | escape }}
+      </div>
+      <div class="bw-specs__sticky-viewport" data-bw-compare-sticky-viewport>
+        <div class="bw-specs__sticky-products" data-bw-compare-sticky-products>
+          <div class="bw-specs__sticky-product{% if highlight_1 %} is-highlighted{% endif %}" data-bw-compare-sticky-product>
+            {% render 'bw-compare-product-header', compare_product: product_1, highlighted: highlight_1, visual_only: true, price_prefix: section.settings.price_prefix %}
+          </div>
+          <div class="bw-specs__sticky-product{% if highlight_2 %} is-highlighted{% endif %}" data-bw-compare-sticky-product>
+            {% render 'bw-compare-product-header', compare_product: product_2, highlighted: highlight_2, visual_only: true, price_prefix: section.settings.price_prefix %}
+          </div>
+          <div class="bw-specs__sticky-product{% if highlight_3 %} is-highlighted{% endif %}" data-bw-compare-sticky-product>
+            {% render 'bw-compare-product-header', compare_product: product_3, highlighted: highlight_3, visual_only: true, price_prefix: section.settings.price_prefix %}
+          </div>
+          <div class="bw-specs__sticky-product{% if highlight_4 %} is-highlighted{% endif %}" data-bw-compare-sticky-product>
+            {% render 'bw-compare-product-header', compare_product: product_4, highlighted: highlight_4, visual_only: true, price_prefix: section.settings.price_prefix %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="bw-specs__scroller"
+      data-bw-compare-scroller
+      tabindex="0"
+      role="region"
+      aria-label="{{ section.settings.scroll_label | escape }}"
+    >
+      <table class="bw-specs__table" data-bw-compare-table-element>
+        <caption class="visually-hidden">{{ section.settings.caption | escape }}</caption>
+        <colgroup>
+          <col class="bw-specs__label-column">
+          <col>
+          <col>
+          <col>
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="bw-specs__label-cell" scope="col">{{ section.settings.label_heading | escape }}</th>
+            <th class="bw-specs__product-cell{% if highlight_1 %} is-highlighted{% endif %}" scope="col">
+              {% render 'bw-compare-product-header', compare_product: product_1, highlighted: highlight_1, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
+            </th>
+            <th class="bw-specs__product-cell{% if highlight_2 %} is-highlighted{% endif %}" scope="col">
+              {% render 'bw-compare-product-header', compare_product: product_2, highlighted: highlight_2, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
+            </th>
+            <th class="bw-specs__product-cell{% if highlight_3 %} is-highlighted{% endif %}" scope="col">
+              {% render 'bw-compare-product-header', compare_product: product_3, highlighted: highlight_3, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
+            </th>
+            <th class="bw-specs__product-cell{% if highlight_4 %} is-highlighted{% endif %}" scope="col">
+              {% render 'bw-compare-product-header', compare_product: product_4, highlighted: highlight_4, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for block in section.blocks %}
+            {% liquid
+              assign spec_namespace = section.settings.spec_namespace
+              assign spec_keys = ''
+              assign spec_source = 'product'
+              assign row_label = block.settings.label
+
+              case block.settings.common_field
+                when 'capacity'
+                  assign spec_keys = 'capacity,storage_capacity,speicherkapazitaet,speicherkapazitat,speicherkapazität'
+                  assign spec_source = 'variant'
+                when 'battery_type'
+                  assign spec_keys = 'battery_type,batterietyp,cell_type,zelltyp,battery_chemistry'
+                when 'nominal_voltage'
+                  assign spec_keys = 'nominal_voltage,rated_voltage,nennspannung,spannung'
+                when 'cell_capacity'
+                  assign spec_keys = 'cell_capacity,cell_capacity_per_cell,zellkapazitaet,zellkapazitat'
+                when 'depth_of_discharge'
+                  assign spec_keys = 'dod,depth_of_discharge,entladetiefe'
+                when 'cycles'
+                  assign spec_keys = 'cycles,charging_cycles,cycle_life,ladezyklen,lebenszyklen'
+                when 'lifespan'
+                  assign spec_keys = 'lifespan,lifetime,service_life,lebensdauer'
+                when 'ac_input'
+                  assign spec_keys = 'ac_input,ac_input_power,ac_eingangsleistung,pv_input_power,pv_eingangsleistung,input_power'
+                when 'ac_output'
+                  assign spec_keys = 'ac_output,ac_output_power,ac_ausgangsleistung,output_power'
+                when 'bidirectional_power'
+                  assign spec_keys = 'bidirectional_power,bidirektionale_leistung,leistung'
+                when 'backup_power'
+                  assign spec_keys = 'backup_power,emergency_power,notstromleistung,notstrom'
+                when 'peak_power'
+                  assign spec_keys = 'peak_power,peak_output_power,spitzenleistung'
+                when 'eps_switch_time'
+                  assign spec_keys = 'eps_switch_time,eps_switching_time,eps_transfer_time,eps_umschaltzeit,umschaltzeit'
+                when 'efficiency'
+                  assign spec_keys = 'efficiency,conversion_efficiency,wirkungsgrad'
+                when 'installation'
+                  assign spec_keys = 'installation,installation_type,installationstyp'
+                when 'ac_coupling'
+                  assign spec_keys = 'ac_coupling,ac_gekoppelt,ac_kopplung'
+                when 'scalability'
+                  assign spec_keys = 'scalability,expandability,erweiterbarkeit,max_erweiterung,skalierbarkeit'
+                when 'smartbox'
+                  assign spec_keys = 'smartbox_compatible,smartbox_compatibility,smartbox_kompatibel,smartbox,smart_box'
+                when 'zero_feed_in'
+                  assign spec_keys = 'zero_feed_in,zero_export,zero_injection,nulleinspeisung,zero_feed'
+                when 'vpp'
+                  assign spec_keys = 'vpp,vpp_support,vpp_unterstuetzung,vpp_unterstutzung,virtuelles_kraftwerk'
+                when 'ai_energy'
+                  assign spec_keys = 'ai_energy_management,ai_energy_manager,ki_energiemanagement,ki_energiemanagementsystem,ai_energy,energy_management'
+                when 'smart_ev'
+                  assign spec_keys = 'smart_ev_charging,ev_charging,smart_ev_laden,smart_ev,e_mobility'
+                when 'communication'
+                  assign spec_keys = 'communication,kommunikation'
+                when 'wifi'
+                  assign spec_keys = 'wi_fi,wifi,wlan'
+                when 'bluetooth'
+                  assign spec_keys = 'bluetooth'
+                when 'ip_rating'
+                  assign spec_keys = 'ip_rating,ingress_protection,schutzart'
+                when 'cooling'
+                  assign spec_keys = 'cooling,cooling_type,kuehlung'
+                when 'operating_temperature'
+                  assign spec_keys = 'operating_temperature,operating_temp,betriebstemperatur'
+                when 'dimensions'
+                  assign spec_keys = 'dimensions,abmessungen'
+                when 'weight'
+                  assign spec_keys = 'device_weight,weight,geraetegewicht,gerategewicht,gewicht'
+                when 'warranty'
+                  assign spec_keys = 'warranty,garantie'
+                when 'compatibility'
+                  assign spec_keys = 'compatibility,kompatibilitat,kompatibilitaet'
+                when 'ideal_for'
+                  assign spec_keys = 'ideal_fur,ideal_fuer,ideal_for,recommended_for,geeignet_fur,geeignet_fuer'
+                when 'custom'
+                  assign spec_namespace = block.settings.custom_namespace
+                  assign spec_keys = block.settings.custom_keys
+                  assign spec_source = block.settings.custom_source
+              endcase
+
+              if row_label == blank
+                assign row_label = block.settings.common_field | replace: '_', ' ' | capitalize
+              endif
+            %}
+            <tr {{ block.shopify_attributes }}>
+              <th class="bw-specs__label-cell" scope="row">{{ row_label | escape }}</th>
+              <td class="bw-specs__value{% if highlight_1 %} is-highlighted{% endif %}">
+                {% capture value_1 %}{% render 'product-comparison-value', spec_product: product_1, spec_source: spec_source, spec_variant_option: section.settings.variant_option, spec_keys: spec_keys, spec_namespace: spec_namespace %}{% endcapture %}
+                {% assign value_1 = value_1 | strip %}{{ value_1 | default: '—' }}
+              </td>
+              <td class="bw-specs__value{% if highlight_2 %} is-highlighted{% endif %}">
+                {% capture value_2 %}{% render 'product-comparison-value', spec_product: product_2, spec_source: spec_source, spec_variant_option: section.settings.variant_option, spec_keys: spec_keys, spec_namespace: spec_namespace %}{% endcapture %}
+                {% assign value_2 = value_2 | strip %}{{ value_2 | default: '—' }}
+              </td>
+              <td class="bw-specs__value{% if highlight_3 %} is-highlighted{% endif %}">
+                {% capture value_3 %}{% render 'product-comparison-value', spec_product: product_3, spec_source: spec_source, spec_variant_option: section.settings.variant_option, spec_keys: spec_keys, spec_namespace: spec_namespace %}{% endcapture %}
+                {% assign value_3 = value_3 | strip %}{{ value_3 | default: '—' }}
+              </td>
+              <td class="bw-specs__value{% if highlight_4 %} is-highlighted{% endif %}">
+                {% capture value_4 %}{% render 'product-comparison-value', spec_product: product_4, spec_source: spec_source, spec_variant_option: section.settings.variant_option, spec_keys: spec_keys, spec_namespace: spec_namespace %}{% endcapture %}
+                {% assign value_4 = value_4 | strip %}{{ value_4 | default: '—' }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="bw-specs__mobile-hint">{{ section.settings.mobile_hint | escape }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "VENUS E · Datentabelle",
+  "class": "section-bw-compare-table",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anker-ID",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "default": "vergleich"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Kleine Überschrift",
+      "default": "Technische Daten"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "VENUS E Modelle im direkten Vergleich"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Beschreibung",
+      "default": "<p>Die Werte werden automatisch aus den Produkt-Metafeldern ausgelesen. Nicht gepflegte Angaben erscheinen als Gedankenstrich.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Produkte"
+    },
+    { "type": "product", "id": "product_1", "label": "Produkt 1" },
+    { "type": "product", "id": "product_2", "label": "Produkt 2" },
+    { "type": "product", "id": "product_3", "label": "Produkt 3" },
+    { "type": "product", "id": "product_4", "label": "Produkt 4" },
+    {
+      "type": "select",
+      "id": "highlight_column",
+      "label": "Blau hervorgehobene Spalte",
+      "options": [
+        { "value": "none", "label": "Keine" },
+        { "value": "1", "label": "Produkt 1" },
+        { "value": "2", "label": "Produkt 2" },
+        { "value": "3", "label": "Produkt 3" },
+        { "value": "4", "label": "Produkt 4" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "header",
+      "content": "Metafelder"
+    },
+    {
+      "type": "text",
+      "id": "spec_namespace",
+      "label": "Standard-Namespace (optional)",
+      "info": "Leer lassen, um die globale Einstellung und die bekannten Ersatz-Namespaces zu verwenden."
+    },
+    {
+      "type": "text",
+      "id": "variant_option",
+      "label": "Basisvariante für Variantenwerte",
+      "default": "1×"
+    },
+    {
+      "type": "header",
+      "content": "Beschriftungen"
+    },
+    {
+      "type": "text",
+      "id": "label_heading",
+      "label": "Überschrift der Merkmals-Spalte",
+      "default": "Merkmal"
+    },
+    {
+      "type": "text",
+      "id": "price_prefix",
+      "label": "Text vor dem Preis",
+      "default": "Ab"
+    },
+    {
+      "type": "text",
+      "id": "available_label",
+      "label": "Verfügbarkeitsstatus",
+      "default": "Verfügbar"
+    },
+    {
+      "type": "text",
+      "id": "unavailable_label",
+      "label": "Status bei Nichtverfügbarkeit",
+      "default": "Derzeit nicht verfügbar"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Barrierefreie Tabellenbeschreibung",
+      "default": "Technischer Vergleich der vier VENUS E Modelle"
+    },
+    {
+      "type": "text",
+      "id": "scroll_label",
+      "label": "Barrierefreie Bezeichnung des Scrollbereichs",
+      "default": "Vergleichstabelle, horizontal scrollbar"
+    },
+    {
+      "type": "text",
+      "id": "mobile_hint",
+      "label": "Hinweis auf Mobilgeräten",
+      "default": "Seitlich wischen, um alle Modelle zu vergleichen."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "spec",
+      "name": "Parameterzeile",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Anzeigename links",
+          "default": "Speicherkapazität"
+        },
+        {
+          "type": "select",
+          "id": "common_field",
+          "label": "Datenfeld",
+          "options": [
+            { "value": "capacity", "label": "Speicherkapazität (1× Variante)" },
+            { "value": "battery_type", "label": "Batterietyp" },
+            { "value": "nominal_voltage", "label": "Nennspannung" },
+            { "value": "cell_capacity", "label": "Zellkapazität" },
+            { "value": "depth_of_discharge", "label": "Entladetiefe (DoD)" },
+            { "value": "cycles", "label": "Ladezyklen" },
+            { "value": "lifespan", "label": "Lebensdauer" },
+            { "value": "ac_input", "label": "AC-Eingangsleistung" },
+            { "value": "ac_output", "label": "AC-Ausgangsleistung" },
+            { "value": "bidirectional_power", "label": "Bidirektionale Leistung" },
+            { "value": "backup_power", "label": "Notstromleistung" },
+            { "value": "peak_power", "label": "Spitzenleistung" },
+            { "value": "eps_switch_time", "label": "EPS-Umschaltzeit" },
+            { "value": "efficiency", "label": "Wirkungsgrad" },
+            { "value": "installation", "label": "Installation" },
+            { "value": "ac_coupling", "label": "AC-Kopplung" },
+            { "value": "scalability", "label": "Erweiterbarkeit" },
+            { "value": "smartbox", "label": "SmartBox" },
+            { "value": "zero_feed_in", "label": "Nulleinspeisung" },
+            { "value": "vpp", "label": "VPP" },
+            { "value": "ai_energy", "label": "Energiemanagement" },
+            { "value": "smart_ev", "label": "E-Mobilität" },
+            { "value": "communication", "label": "Kommunikation" },
+            { "value": "wifi", "label": "Wi-Fi" },
+            { "value": "bluetooth", "label": "Bluetooth" },
+            { "value": "ip_rating", "label": "Schutzart" },
+            { "value": "cooling", "label": "Kühlung" },
+            { "value": "operating_temperature", "label": "Betriebstemperatur" },
+            { "value": "dimensions", "label": "Abmessungen" },
+            { "value": "weight", "label": "Gewicht" },
+            { "value": "warranty", "label": "Garantie" },
+            { "value": "compatibility", "label": "Kompatibilität" },
+            { "value": "ideal_for", "label": "Geeignet für" },
+            { "value": "custom", "label": "Benutzerdefiniertes Metafeld" }
+          ],
+          "default": "capacity"
+        },
+        {
+          "type": "text",
+          "id": "custom_namespace",
+          "label": "Eigenes Namespace",
+          "default": "custom",
+          "info": "Wird nur bei benutzerdefiniertem Metafeld verwendet."
+        },
+        {
+          "type": "text",
+          "id": "custom_keys",
+          "label": "Eigener Key oder Aliasse",
+          "info": "Mehrere mögliche Keys mit Komma trennen; der erste vorhandene Wert wird verwendet."
+        },
+        {
+          "type": "select",
+          "id": "custom_source",
+          "label": "Quelle des eigenen Metafelds",
+          "options": [
+            { "value": "product", "label": "Produkt" },
+            { "value": "variant", "label": "1× Variante" }
+          ],
+          "default": "product"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 30,
+  "presets": [
+    {
+      "name": "VENUS E · Datentabelle",
+      "blocks": [
+        { "type": "spec", "settings": { "label": "Speicherkapazität", "common_field": "capacity" } },
+        { "type": "spec", "settings": { "label": "Bidirektionale Leistung", "common_field": "bidirectional_power" } },
+        { "type": "spec", "settings": { "label": "Notstromleistung", "common_field": "backup_power" } },
+        { "type": "spec", "settings": { "label": "EPS-Umschaltzeit", "common_field": "eps_switch_time" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
