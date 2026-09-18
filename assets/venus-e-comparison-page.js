@@ -67,7 +67,7 @@
       }
 
       if (link.classList.contains('bw-anchor-nav__link')) {
-        activeLinks.push({ link: link, target: target });
+        activeLinks.push({ link: link });
       }
     });
 
@@ -94,7 +94,8 @@
       var activeItem = activeLinks[0];
 
       activeLinks.forEach(function (item) {
-        if (item.target.getBoundingClientRect().top <= activationLine) {
+        var target = getHashTarget(item.link);
+        if (target && target.getBoundingClientRect().top <= activationLine) {
           activeItem = item;
         }
       });
