@@ -8,218 +8,94 @@
  */
 {
   "sections": {
-    "e-auto-page": {
-      "type": "e-auto-page",
+    "e-auto-hero": {"type": "e-auto-hero"},
+    "e-auto-problem": {"type": "e-auto-problem"},
+    "e-auto-flow": {"type": "e-auto-flow"},
+    "e-auto-timeline": {
+      "type": "e-auto-timeline",
+      "blocks": {
+        "timeline_morning": {"type":"timeline","settings":{"time":"08:00","heading":"Auto unterwegs","text":"Das Auto fährt los, die PV-Anlage startet in den Tag. Zu Hause wird nur wenig Energie benötigt.","badge":""}},
+        "timeline_noon": {"type":"timeline","settings":{"time":"12:30","heading":"PV-Überschuss speichern","text":"Statt den Überschuss direkt einzuspeisen, lädt der VENUS E mit deiner Solarenergie.","badge":"→ Speicher füllt sich"}},
+        "timeline_evening": {"type":"timeline","settings":{"time":"18:00","heading":"Auto zurück","text":"Du kommst nach Hause und steckst dein Auto an die Wallbox – genau dann geht die Sonne unter.","badge":""}},
+        "timeline_night": {"type":"timeline","settings":{"time":"19:00","heading":"Gespeicherten Solarstrom nutzen","text":"Der VENUS E liefert Solarstrom an das Hausnetz und damit zur Wallbox. Das Netz ergänzt nur den Rest.","badge":"→ Solarstrom im Auto"}}
+      },
+      "block_order": ["timeline_morning","timeline_noon","timeline_evening","timeline_night"]
+    },
+    "e-auto-profile": {
+      "type": "e-auto-profile",
+      "blocks": {
+        "profile_commuter": {"type":"profile","settings":{"title":"Pendler","summary":"Jeden Tag ins Büro, ca. 30–60 km hin und zurück.","focus":"Mittelgroße Kapazität, damit abends Reichweite für den nächsten Tag aus Solarstrom kommt."}},
+        "profile_homeoffice": {"type":"profile","settings":{"title":"Homeoffice","summary":"Das Auto steht tagsüber zu Hause, Laden tagsüber ist möglich.","focus":"Ein kleinerer Speicher reicht oft, weil überschüssige PV direkt zum Laden genutzt werden kann."}},
+        "profile_high-mileage": {"type":"profile","settings":{"title":"Hohe Fahrleistung","summary":"Viel unterwegs, über 80 km am Tag und tägliches Laden.","focus":"Große Kapazität oder Modulerweiterung – die genaue Auswahl hängt vom PV-Überschuss ab."}},
+        "profile_weekend": {"type":"profile","settings":{"title":"Wochenendfahrer","summary":"Unter der Woche steht das Auto, am Wochenende wird gefahren.","focus":"Flexibel planen: Ladezeit und tatsächlicher Überschuss sind wichtiger als die maximale Tagesstrecke."}}
+      },
+      "block_order": ["profile_commuter","profile_homeoffice","profile_high-mileage","profile_weekend"]
+    },
+    "e-auto-calculator": {"type": "e-auto-calculator"},
+    "e-auto-recommendations": {
+      "type": "e-auto-recommendations",
       "settings": {
         "product_mini": "venus-e-mini",
         "product_3": "venus-e-3",
         "product_4": "venus-e-4",
         "product_max": "venus-e-max"
-      },
+      }
+    },
+    "e-auto-smart-energy": {"type": "e-auto-smart-energy"},
+    "e-auto-installation": {
+      "type": "e-auto-installation",
       "blocks": {
-        "timeline_morning": {
-          "type": "timeline",
-          "settings": {
-            "time": "08:00",
-            "heading": "Auto unterwegs",
-            "text": "Das Auto fährt los, die PV-Anlage startet in den Tag. Zu Hause wird nur wenig Energie benötigt.",
-            "badge": ""
-          }
-        },
-        "timeline_noon": {
-          "type": "timeline",
-          "settings": {
-            "time": "12:30",
-            "heading": "PV-Überschuss speichern",
-            "text": "Statt den Überschuss direkt einzuspeisen, lädt der VENUS E mit deiner Solarenergie.",
-            "badge": "→ Speicher füllt sich"
-          }
-        },
-        "timeline_evening": {
-          "type": "timeline",
-          "settings": {
-            "time": "18:00",
-            "heading": "Auto zurück",
-            "text": "Du kommst nach Hause und steckst dein Auto an die Wallbox – genau dann geht die Sonne unter.",
-            "badge": ""
-          }
-        },
-        "timeline_night": {
-          "type": "timeline",
-          "settings": {
-            "time": "19:00",
-            "heading": "Gespeicherten Solarstrom nutzen",
-            "text": "Der VENUS E liefert Solarstrom an das Hausnetz und damit zur Wallbox. Das Netz ergänzt nur den Rest.",
-            "badge": "→ Solarstrom im Auto"
-          }
-        },
-        "profile_commuter": {
-          "type": "profile",
-          "settings": {
-            "title": "Pendler",
-            "summary": "Jeden Tag ins Büro, ca. 30–60 km hin und zurück.",
-            "focus": "Mittelgroße Kapazität, damit abends Reichweite für den nächsten Tag aus Solarstrom kommt."
-          }
-        },
-        "profile_homeoffice": {
-          "type": "profile",
-          "settings": {
-            "title": "Homeoffice",
-            "summary": "Das Auto steht tagsüber zu Hause, Laden tagsüber ist möglich.",
-            "focus": "Ein kleinerer Speicher reicht oft, weil überschüssige PV direkt zum Laden genutzt werden kann."
-          }
-        },
-        "profile_high-mileage": {
-          "type": "profile",
-          "settings": {
-            "title": "Hohe Fahrleistung",
-            "summary": "Viel unterwegs, über 80 km am Tag und tägliches Laden.",
-            "focus": "Große Kapazität oder Modulerweiterung – die genaue Auswahl hängt vom PV-Überschuss ab."
-          }
-        },
-        "profile_weekend": {
-          "type": "profile",
-          "settings": {
-            "title": "Wochenendfahrer",
-            "summary": "Unter der Woche steht das Auto, am Wochenende wird gefahren.",
-            "focus": "Flexibel planen: Ladezeit und tatsächlicher Überschuss sind wichtiger als die maximale Tagesstrecke."
-          }
-        },
-        "install_existing-pv": {
-          "type": "install_step",
-          "settings": {
-            "title": "Bestehende PV bleibt",
-            "text": "Module und Wechselrichter bleiben unangetastet."
-          }
-        },
-        "install_ac-side": {
-          "type": "install_step",
-          "settings": {
-            "title": "VENUS E auf AC-Seite ergänzen",
-            "text": "Der Speicher wird auf der Hausnetzseite ergänzt."
-          }
-        },
-        "install-smart-meter": {
-          "type": "install_step",
-          "settings": {
-            "title": "Smart Meter einrichten",
-            "text": "Überschuss und Verbrauch werden passend zur Konfiguration erfasst."
-          }
-        },
-        "benefit-self-use": {
-          "type": "benefit",
-          "settings": {
-            "value": "Mehr",
-            "title": "Eigenverbrauch",
-            "text": "Ein größerer Teil deines Solarstroms bleibt im eigenen Haushalt und steht später für das Laden zur Verfügung."
-          }
-        },
-        "benefit-grid": {
-          "type": "benefit",
-          "settings": {
-            "value": "Weniger",
-            "title": "Netzbezug",
-            "text": "Haushalt und E-Auto greifen seltener auf Netzstrom zurück, wenn gespeicherte Energie verfügbar ist."
-          }
-        },
-        "benefit-time": {
-          "type": "benefit",
-          "settings": {
-            "value": "24 h",
-            "title": "Solarstrom später nutzen",
-            "text": "Tagsüber produziert, abends gefahren: Der Speicher verschiebt Solarstrom in den passenden Moment."
-          }
-        },
-        "trust-warranty": {
-          "type": "trust",
-          "settings": {
-            "value": "10 Jahre",
-            "text": "Herstellergarantie gemäß den Bedingungen des gewählten VENUS E Modells."
-          }
-        },
-        "trust-chemistry": {
-          "type": "trust",
-          "settings": {
-            "value": "LiFePO₄",
-            "text": "Phosphat-Zellchemie für eine langlebige und robuste Speicherlösung."
-          }
-        },
-        "trust-daily": {
-          "type": "trust",
-          "settings": {
-            "value": "AC",
-            "text": "Für die Nachrüstung an der Hausnetzseite und die Verbindung mit bestehender PV und Wallbox."
-          }
-        },
-        "faq-direct": {
-          "type": "faq",
-          "settings": {
-            "question": "Kann der VENUS E mein Auto direkt laden?",
-            "answer": "<p>Nein – und das ist Absicht. Der VENUS E ist AC-gekoppelt an dein Hausnetz angeschlossen. Geladen wird dein Auto weiterhin über die Wallbox.</p>"
-          }
-        },
-        "faq-wallbox": {
-          "type": "faq",
-          "settings": {
-            "question": "Brauche ich eine bestimmte Wallbox?",
-            "answer": "<p>Der VENUS E arbeitet über das Hausnetz. Ob deine bestehende Wallbox passt, hängt von ihrer Installation und der konkreten Systemkonfiguration ab.</p>"
-          }
-        },
-        "faq-smart-meter": {
-          "type": "faq",
-          "settings": {
-            "question": "Brauche ich ein Smart Meter?",
-            "answer": "<p>Für eine zuverlässige Erfassung von PV-Überschuss und Verbrauch wird ein kompatibles Smart Meter empfohlen. Prüfe die Anforderungen des gewählten Modells und deines Stromzählers.</p>"
-          }
-        },
-        "faq-size": {
-          "type": "faq",
-          "settings": {
-            "question": "Wie groß sollte der Speicher für mein E-Auto sein?",
-            "answer": "<p>Das hängt vor allem von Tagesstrecke, Fahrzeugverbrauch, PV-Überschuss und Ladezeit ab. Nutze den Rechner auf dieser Seite als erste Orientierung.</p>"
-          }
-        },
-        "faq-pv": {
-          "type": "faq",
-          "settings": {
-            "question": "Funktioniert das mit meiner bestehenden PV-Anlage?",
-            "answer": "<p>Der VENUS E wird AC-gekoppelt nachgerüstet. Ob deine Anlage und der vorhandene Hausanschluss kompatibel sind, sollte vor der Installation geprüft werden.</p>"
-          }
-        },
-        "faq-night": {
-          "type": "faq",
-          "settings": {
-            "question": "Lädt mein Auto nachts komplett aus dem Speicher?",
-            "answer": "<p>Das hängt von Speicherkapazität, Fahrprofil, Ladeleistung und dem verfügbaren Solarüberschuss ab. Bei höherem Bedarf ergänzt das Netz den fehlenden Anteil.</p>"
-          }
-        }
+        "install_existing-pv": {"type":"install_step","settings":{"title":"Bestehende PV bleibt","text":"Module und Wechselrichter bleiben unangetastet."}},
+        "install_ac-side": {"type":"install_step","settings":{"title":"VENUS E auf AC-Seite ergänzen","text":"Der Speicher wird auf der Hausnetzseite ergänzt."}},
+        "install-smart-meter": {"type":"install_step","settings":{"title":"Smart Meter einrichten","text":"Überschuss und Verbrauch werden passend zur Konfiguration erfasst."}}
       },
-      "block_order": [
-        "timeline_morning",
-        "timeline_noon",
-        "timeline_evening",
-        "timeline_night",
-        "profile_commuter",
-        "profile_homeoffice",
-        "profile_high-mileage",
-        "profile_weekend",
-        "install_existing-pv",
-        "install_ac-side",
-        "install-smart-meter",
-        "benefit-self-use",
-        "benefit-grid",
-        "benefit-time",
-        "trust-warranty",
-        "trust-chemistry",
-        "trust-daily",
-        "faq-direct",
-        "faq-wallbox",
-        "faq-smart-meter",
-        "faq-size",
-        "faq-pv",
-        "faq-night"
-      ]
-    }
+      "block_order": ["install_existing-pv","install_ac-side","install-smart-meter"]
+    },
+    "e-auto-benefits": {
+      "type": "e-auto-benefits",
+      "blocks": {
+        "benefit-self-use": {"type":"benefit","settings":{"value":"Mehr","title":"Eigenverbrauch","text":"Ein größerer Teil deines Solarstroms bleibt im eigenen Haushalt und steht später für das Laden zur Verfügung."}},
+        "benefit-grid": {"type":"benefit","settings":{"value":"Weniger","title":"Netzbezug","text":"Haushalt und E-Auto greifen seltener auf Netzstrom zurück, wenn gespeicherte Energie verfügbar ist."}},
+        "benefit-time": {"type":"benefit","settings":{"value":"24 h","title":"Solarstrom später nutzen","text":"Tagsüber produziert, abends gefahren: Der Speicher verschiebt Solarstrom in den passenden Moment."}}
+      },
+      "block_order": ["benefit-self-use","benefit-grid","benefit-time"]
+    },
+    "e-auto-trust": {
+      "type": "e-auto-trust",
+      "blocks": {
+        "trust-warranty": {"type":"trust","settings":{"value":"10 Jahre","text":"Herstellergarantie gemäß den Bedingungen des gewählten VENUS E Modells."}},
+        "trust-chemistry": {"type":"trust","settings":{"value":"LiFePO₄","text":"Phosphat-Zellchemie für eine langlebige und robuste Speicherlösung."}},
+        "trust-daily": {"type":"trust","settings":{"value":"AC","text":"Für die Nachrüstung an der Hausnetzseite und die Verbindung mit bestehender PV und Wallbox."}}
+      },
+      "block_order": ["trust-warranty","trust-chemistry","trust-daily"]
+    },
+    "e-auto-faq": {
+      "type": "e-auto-faq",
+      "blocks": {
+        "faq-direct": {"type":"faq","settings":{"question":"Kann der VENUS E mein Auto direkt laden?","answer":"<p>Nein – und das ist Absicht. Der VENUS E ist AC-gekoppelt an dein Hausnetz angeschlossen. Geladen wird dein Auto weiterhin über die Wallbox.</p>"}},
+        "faq-wallbox": {"type":"faq","settings":{"question":"Brauche ich eine bestimmte Wallbox?","answer":"<p>Der VENUS E arbeitet über das Hausnetz. Ob deine bestehende Wallbox passt, hängt von ihrer Installation und der konkreten Systemkonfiguration ab.</p>"}},
+        "faq-smart-meter": {"type":"faq","settings":{"question":"Brauche ich ein Smart Meter?","answer":"<p>Für eine zuverlässige Erfassung von PV-Überschuss und Verbrauch wird ein kompatibles Smart Meter empfohlen. Prüfe die Anforderungen des gewählten Modells und deines Stromzählers.</p>"}},
+        "faq-size": {"type":"faq","settings":{"question":"Wie groß sollte der Speicher für mein E-Auto sein?","answer":"<p>Das hängt vor allem von Tagesstrecke, Fahrzeugverbrauch, PV-Überschuss und Ladezeit ab. Nutze den Rechner auf dieser Seite als erste Orientierung.</p>"}},
+        "faq-pv": {"type":"faq","settings":{"question":"Funktioniert das mit meiner bestehenden PV-Anlage?","answer":"<p>Der VENUS E wird AC-gekoppelt nachgerüstet. Ob deine Anlage und der vorhandene Hausanschluss kompatibel sind, sollte vor der Installation geprüft werden.</p>"}},
+        "faq-night": {"type":"faq","settings":{"question":"Lädt mein Auto nachts komplett aus dem Speicher?","answer":"<p>Das hängt von Speicherkapazität, Fahrprofil, Ladeleistung und dem verfügbaren Solarüberschuss ab. Bei höherem Bedarf ergänzt das Netz den fehlenden Anteil.</p>"}}
+      },
+      "block_order": ["faq-direct","faq-wallbox","faq-smart-meter","faq-size","faq-pv","faq-night"]
+    },
+    "e-auto-final": {"type": "e-auto-final"}
   },
-  "order": ["e-auto-page"]
+  "order": [
+    "e-auto-hero",
+    "e-auto-problem",
+    "e-auto-flow",
+    "e-auto-timeline",
+    "e-auto-profile",
+    "e-auto-calculator",
+    "e-auto-recommendations",
+    "e-auto-smart-energy",
+    "e-auto-installation",
+    "e-auto-benefits",
+    "e-auto-trust",
+    "e-auto-faq",
+    "e-auto-final"
+  ]
 }
