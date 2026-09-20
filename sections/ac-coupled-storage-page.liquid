@@ -1,0 +1,377 @@
+{%- liquid
+  assign page_id = 'ac-storage-' | append: section.id
+  assign compare_url = section.settings.compare_url | default: '/pages/venus-e-vergleich'
+  assign storage_url = section.settings.storage_url | default: '/pages/balkonkraftwerk-mit-speicher'
+  assign eauto_url = section.settings.eauto_url | default: '/pages/e-auto'
+  assign blog_url = section.settings.blog_url | default: '/blogs/balkonkraftwerk-mit-speicher'
+  assign smart_meter_url = section.settings.smart_meter_url | default: '/products/ct002-smart-meter'
+
+  assign product_mini = section.settings.product_mini
+  assign product_3 = section.settings.product_3
+  assign product_4 = section.settings.product_4
+  assign product_max = section.settings.product_max
+  if product_mini == blank
+    assign product_mini = all_products['venus-e-mini']
+  endif
+  if product_3 == blank
+    assign product_3 = all_products['venus-e-3']
+  endif
+  if product_4 == blank
+    assign product_4 = all_products['venus-e-4']
+  endif
+  if product_max == blank
+    assign product_max = all_products['venus-e-max']
+  endif
+
+  assign ct002_product = section.settings.ct002_product
+  assign ct003_product = section.settings.ct003_product
+  if ct002_product == blank
+    assign ct002_product = all_products['ct002-smart-meter']
+  endif
+  if ct003_product == blank
+    assign ct003_product = all_products['ct003-smart-meter']
+  endif
+
+  assign faq_1_q = 'Was bedeutet AC-gekoppelter Speicher?'
+  assign faq_1_a = 'Ein AC-gekoppelter Speicher wird über das Hausnetz in dein Energiesystem eingebunden. Er eignet sich besonders dann, wenn du ein bestehendes System erweitern möchtest.'
+  assign faq_2_q = 'Kann ich einen AC-Speicher mit einer bestehenden PV-Anlage kombinieren?'
+  assign faq_2_a = 'In vielen Fällen ja. Weil der Speicher über das Hausnetz eingebunden wird, lässt er sich häufig ergänzen, ohne die bestehende PV-Anlage umzubauen. Wie gut das im Einzelfall funktioniert, hängt von deinem Hausanschluss und deiner bisherigen Konfiguration ab.'
+  assign faq_3_q = 'Ist ein AC-gekoppelter Speicher gut für die Nachrüstung geeignet?'
+  assign faq_3_a = 'Ja, genau dafür ist dieses Konzept oft besonders interessant. Vor allem bestehende Haushalte mit PV oder Balkonkraftwerk profitieren von der flexibleren Einbindung.'
+  assign faq_4_q = 'Was ist der Unterschied zwischen AC- und DC-Speicher?'
+  assign faq_4_a = 'AC-Speicher werden über das Hausnetz integriert, DC-Speicher direkt auf der Gleichstromseite der PV-Anlage. AC ist oft spannender für Nachrüstung, DC eher für Neuplanung.'
+  assign faq_5_q = 'Kann ich mit einem AC-gekoppelten Speicher meinen Eigenverbrauch erhöhen?'
+  assign faq_5_a = 'Ja. Genau darin liegt einer der größten Vorteile: Überschüssiger Solarstrom kann später im Haushalt genutzt werden, statt sofort eingespeist zu werden.'
+  assign faq_6_q = 'Brauche ich dafür ein Smart Meter?'
+  assign faq_6_a = 'Für eine intelligentere Steuerung und mehr Transparenz über Energieflüsse ist ein passender Smart Meter sehr sinnvoll.'
+  assign faq_7_q = 'Ist ein AC-gekoppelter Speicher auch für Balkonkraftwerke relevant?'
+  assign faq_7_a = 'Ja, besonders dann, wenn du deinen selbst erzeugten Solarstrom zeitversetzt nutzen möchtest und eine flexible Erweiterung suchst.'
+-%}
+
+<div id="{{ page_id }}" class="ac-storage-page" data-ac-storage-page>
+  <section class="ac-storage-page__section ac-storage-page__hero" aria-labelledby="{{ page_id }}-hero-title">
+    <div class="ac-storage-page__wrap ac-storage-page__hero-grid">
+      <div class="ac-storage-page__hero-copy">
+        <p class="ac-storage-page__eyebrow">Technologie einfach erklärt</p>
+        <h1 id="{{ page_id }}-hero-title">AC-gekoppelter Speicher: Solarstrom speichern und bestehende Systeme flexibel erweitern</h1>
+        <p class="ac-storage-page__lead">Ein AC-gekoppelter Speicher wird über dein Hausnetz eingebunden. Das macht ihn besonders interessant, wenn du bestehenden Solarstrom besser speichern und deinen Eigenverbrauch steigern möchtest – ohne deine bestehende PV-Lösung grundsätzlich ersetzen zu müssen.</p>
+        <div class="ac-storage-page__actions">
+          <a class="ac-storage-page__button ac-storage-page__button--primary" href="#modelle">Modelle ansehen</a>
+          <a class="ac-storage-page__button ac-storage-page__button--secondary" href="#funktion">So funktioniert es</a>
+        </div>
+      </div>
+      <div class="ac-storage-page__media ac-storage-page__media--hero">
+        {% if section.settings.hero_image != blank %}
+          {{ section.settings.hero_image | image_url: width: 1600 | image_tag: loading: 'eager', widths: '600, 900, 1200, 1600', sizes: '(min-width: 1000px) 50vw, 100vw', alt: 'VENUS E Speicher an einem modernen Zuhause mit Photovoltaikanlage' }}
+        {% else %}
+          <div class="ac-storage-page__placeholder" role="img" aria-label="VENUS E Speicher an einem modernen Zuhause mit Photovoltaikanlage">Hero-Bild auswählen: PV-Anlage, modernes Zuhause und VENUS E Speicher</div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-storage-page__section ac-storage-page__answer" aria-labelledby="{{ page_id }}-answer-title">
+    <div class="ac-storage-page__wrap">
+      <p class="ac-storage-page__eyebrow">Definition</p>
+      <h2 id="{{ page_id }}-answer-title">Was ist ein <span>AC-gekoppelter Speicher?</span></h2>
+      <div class="ac-storage-page__answer-box">
+        <p><strong>Kurz gesagt:</strong> Ein AC-gekoppelter Speicher wird nicht direkt auf der DC-Seite der Solarmodule eingebunden, sondern über das Hausnetz integriert. Dadurch eignet er sich besonders für die Nachrüstung in bestehenden Haushalten und PV-Setups.</p>
+      </div>
+      <div class="ac-storage-page__feature-grid">
+        <article class="ac-storage-page__feature-card">
+          <span class="ac-storage-page__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"></path><circle cx="12" cy="12" r="4"></circle></svg>
+          </span>
+          <h3>Einfach nachrüstbar</h3>
+          <p>Ideal, wenn du bereits ein Balkonkraftwerk oder eine bestehende PV-Lösung nutzt und später einen Speicher ergänzen möchtest.</p>
+        </article>
+        <article class="ac-storage-page__feature-card">
+          <span class="ac-storage-page__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="m3 11 9-8 9 8v9H3z"></path><path d="M9 20v-6h6v6M12 7v3M9 10h6"></path></svg>
+          </span>
+          <h3>Flexibel im Haushalt einsetzbar</h3>
+          <p>Der gespeicherte Strom steht dort zur Verfügung, wo dein Haushalt ihn braucht – zum Beispiel abends, nachts oder bei höherem Verbrauch.</p>
+        </article>
+        <article class="ac-storage-page__feature-card">
+          <span class="ac-storage-page__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 17.5 9 12l3 3 7-8"></path><path d="M15 7h4v4"></path></svg>
+          </span>
+          <h3>Mehr Eigenverbrauch im Alltag</h3>
+          <p>Überschüssiger Solarstrom kann zeitversetzt genutzt werden, wenn dein Haushalt ihn wirklich braucht.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="funktion" class="ac-storage-page__section ac-storage-page__function" aria-labelledby="{{ page_id }}-function-title">
+    <div class="ac-storage-page__wrap">
+      <p class="ac-storage-page__eyebrow">Funktionsweise</p>
+      <h2 id="{{ page_id }}-function-title">So arbeitet ein AC-gekoppelter Speicher im Haushalt</h2>
+      <p class="ac-storage-page__subtext">Der Solarstrom wird im Haushalt verteilt und bei Überschuss gespeichert. Wenn später mehr Strom gebraucht wird, kann der Speicher Energie wieder über das Hausnetz bereitstellen.</p>
+
+      <div class="ac-storage-page__flow-toggle" role="tablist" aria-label="Energiefluss nach Tageszeit">
+        <button type="button" class="is-active" data-ac-flow-toggle="day" role="tab" aria-selected="true" aria-controls="{{ page_id }}-flow-day">☀ Tag · Speichern</button>
+        <button type="button" data-ac-flow-toggle="evening" role="tab" aria-selected="false" aria-controls="{{ page_id }}-flow-evening">☾ Abend · Nutzen</button>
+      </div>
+
+      <div id="{{ page_id }}-flow-day" class="ac-storage-page__flow-panel is-active" data-ac-flow-panel="day" role="tabpanel">
+        <div class="ac-storage-page__media ac-storage-page__media--flow">
+          {% if section.settings.flow_day_image != blank %}
+            {{ section.settings.flow_day_image | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '720, 1080, 1440, 1800', sizes: '100vw', alt: 'PV-Anlage, Hausnetz, Haushalt und Speicher beim Laden am Tag' }}
+          {% else %}
+            <div class="ac-storage-page__placeholder" role="img" aria-label="PV-Anlage, Hausnetz, Haushalt und Speicher beim Laden am Tag">Erklärbild auswählen: PV → Hausnetz → Haushalt / Speicher</div>
+          {% endif %}
+        </div>
+        <div class="ac-storage-page__flow-nodes" aria-label="Energiefluss tagsüber">
+          <span><i></i>PV-Anlage</span><span><i></i>Hausnetz</span><span><i></i>Haushalt</span><span><i></i>Speicher</span><span><i></i>Smart Meter / CT</span>
+        </div>
+      </div>
+
+      <div id="{{ page_id }}-flow-evening" class="ac-storage-page__flow-panel" data-ac-flow-panel="evening" role="tabpanel" hidden>
+        <div class="ac-storage-page__media ac-storage-page__media--flow">
+          {% if section.settings.flow_evening_image != blank %}
+            {{ section.settings.flow_evening_image | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '720, 1080, 1440, 1800', sizes: '100vw', alt: 'Gespeicherte Energie versorgt den Haushalt am Abend über das Hausnetz' }}
+          {% else %}
+            <div class="ac-storage-page__placeholder" role="img" aria-label="Gespeicherte Energie versorgt den Haushalt am Abend über das Hausnetz">Erklärbild auswählen: Speicher → Hausnetz → Haushalt / weitere Verbraucher</div>
+          {% endif %}
+        </div>
+        <div class="ac-storage-page__flow-nodes" aria-label="Energiefluss am Abend">
+          <span><i></i>Speicher</span><span><i></i>Hausnetz</span><span><i></i>Haushalt</span><span><i></i>Weitere Verbraucher</span>
+        </div>
+      </div>
+
+      <div class="ac-storage-page__steps">
+        <article class="ac-storage-page__step"><span class="ac-storage-page__step-number">SCHRITT 01</span><h3>Strom erzeugen</h3><p>Die PV-Anlage produziert tagsüber Energie für den Haushalt.</p></article>
+        <article class="ac-storage-page__step"><span class="ac-storage-page__step-number">SCHRITT 02</span><h3>Überschüsse speichern</h3><p>Wird nicht alles sofort verbraucht, kann der Überschuss im Speicher landen.</p></article>
+        <article class="ac-storage-page__step"><span class="ac-storage-page__step-number">SCHRITT 03</span><h3>Später nutzen</h3><p>Abends, nachts oder bei höherem Bedarf unterstützt der Speicher dein Hausnetz mit zuvor gespeicherter Energie.</p></article>
+      </div>
+      <a class="ac-storage-page__link" href="{{ eauto_url }}">Mehr über E-Auto laden mit Speicher →</a>
+    </div>
+  </section>
+
+  <section class="ac-storage-page__section ac-storage-page__why" aria-labelledby="{{ page_id }}-why-title">
+    <div class="ac-storage-page__wrap">
+      <p class="ac-storage-page__eyebrow">Vorteile im Alltag</p>
+      <h2 id="{{ page_id }}-why-title">Warum AC-gekoppelt für viele Haushalte besonders praktisch ist</h2>
+      <p class="ac-storage-page__subtext">Viele Haushalte wollen Solarstrom besser nutzen, ohne ihr bestehendes System komplett umzubauen. Genau hier spielt ein AC-gekoppelter Speicher seine Stärken aus.</p>
+      <div class="ac-storage-page__why-grid">
+        <article class="ac-storage-page__why-card">
+          <div class="ac-storage-page__media ac-storage-page__media--why">
+            {% if section.settings.why_image_1 != blank %}{{ section.settings.why_image_1 | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '480, 720, 1000', sizes: '(min-width: 900px) 50vw, 100vw', alt: 'Bestehende PV-Anlage mit nachgerüstetem VENUS E Speicher' }}{% else %}<div class="ac-storage-page__placeholder" role="img" aria-label="Bestehende PV-Anlage mit nachgerüstetem VENUS E Speicher">Familien-Szenenbild auswählen: bestehende PV und nachgerüsteter Speicher</div>{% endif %}
+          </div>
+          <div class="ac-storage-page__card-body"><h3>Sinnvoll für Nachrüstung</h3><p>Wenn bereits eine PV-Anlage oder ein Balkonkraftwerk vorhanden ist, lässt sich ein Speicher oft deutlich einfacher ergänzen.</p></div>
+        </article>
+        <article class="ac-storage-page__why-card">
+          <div class="ac-storage-page__media ac-storage-page__media--why">
+            {% if section.settings.why_image_2 != blank %}{{ section.settings.why_image_2 | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '480, 720, 1000', sizes: '(min-width: 900px) 50vw, 100vw', alt: 'Haushalt nutzt gespeicherten Solarstrom am Abend' }}{% else %}<div class="ac-storage-page__placeholder" role="img" aria-label="Haushalt nutzt gespeicherten Solarstrom am Abend">Familien-Szenenbild auswählen: abendlicher Stromverbrauch</div>{% endif %}
+          </div>
+          <div class="ac-storage-page__card-body"><h3>Mehr Flexibilität im Alltag</h3><p>Du nutzt Solarstrom dann, wenn du ihn brauchst – nicht nur dann, wenn er erzeugt wird.</p></div>
+        </article>
+        <article class="ac-storage-page__why-stat"><span class="ac-storage-page__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 19V9M10 19V5M15 19v-7M20 19V3"></path></svg></span><h3>Weniger Abhängigkeit vom Stromnetz</h3><p>Je höher dein Eigenverbrauch, desto weniger Strom musst du aus dem Netz beziehen.</p><span class="ac-storage-page__tag">Netzbezug reduzieren</span></article>
+        <article class="ac-storage-page__why-stat"><span class="ac-storage-page__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 7h6M12 11v6M9 14h6"></path></svg></span><h3>Passend für verschiedene Haushaltsgrößen</h3><p>Von kleineren Setups bis zu höherem Verbrauch lässt sich das Prinzip flexibel einsetzen.</p><span class="ac-storage-page__tag">Modular erweiterbar</span></article>
+      </div>
+      <div class="ac-storage-page__center-cta"><a class="ac-storage-page__link" href="#modelle">Passende Modelle entdecken</a></div>
+    </div>
+  </section>
+
+  <section class="ac-storage-page__section ac-storage-page__comparison" aria-labelledby="{{ page_id }}-comparison-title">
+    <div class="ac-storage-page__wrap">
+      <p class="ac-storage-page__eyebrow">Einordnung</p>
+      <h2 id="{{ page_id }}-comparison-title">AC- oder DC-Speicher – was ist der Unterschied?</h2>
+      <p class="ac-storage-page__subtext">Beide Konzepte haben ihre Berechtigung. Für viele Haushalte ist jedoch entscheidend, ob ein Speicher in ein bestehendes System integriert oder von Anfang an mitgeplant wird.</p>
+      <div class="ac-storage-page__table-wrap">
+        <table>
+          <caption class="visually-hidden">Vergleich zwischen AC-gekoppeltem und DC-gekoppeltem Speicher</caption>
+          <thead><tr><th scope="col">Punkt</th><th scope="col" class="is-highlight">AC-gekoppelter Speicher</th><th scope="col">DC-gekoppelter Speicher</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Typischer Einsatz</th><td>Nachrüstung und schrittweise Erweiterung</td><td>Neue PV-Planung von Anfang an</td></tr>
+            <tr><th scope="row">Integration</th><td>Über das Hausnetz</td><td>Direkt auf der DC-Seite der PV-Anlage</td></tr>
+            <tr><th scope="row">Eignung für bestehende Systeme</th><td>Besonders interessant für Nachrüstung</td><td>Häufig bei neuer PV-Planung integriert</td></tr>
+            <tr><th scope="row">Flexibilität</th><td>Hohe Flexibilität bei Standort und Erweiterung</td><td>Flexibilität abhängig von der Systemplanung</td></tr>
+            <tr><th scope="row">Fokus</th><td>Bestehendes System einfacher ergänzen</td><td>Von Anfang an im Gesamtsystem mitplanen</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="ac-storage-page__comparison-note">Wenn du bereits eine PV-Lösung nutzt oder schrittweise erweitern möchtest, ist ein AC-gekoppelter Speicher oft der naheliegendere Weg.</p>
+      <a class="ac-storage-page__link" href="{{ compare_url }}">Mehr zu AC vs. DC Speicher →</a>
+    </div>
+  </section>
+
+  <section class="ac-storage-page__section ac-storage-page__smart" aria-labelledby="{{ page_id }}-smart-title">
+    <div class="ac-storage-page__wrap">
+      <p class="ac-storage-page__eyebrow">Intelligente Steuerung</p>
+      <h2 id="{{ page_id }}-smart-title">Nicht nur speichern – sondern intelligent steuern</h2>
+      <p class="ac-storage-page__subtext">Ein moderner Speicher ist dann besonders sinnvoll, wenn er nicht nur Energie puffert, sondern sich am tatsächlichen Bedarf im Haushalt orientiert.</p>
+      <div class="ac-storage-page__smart-grid">
+        <div class="ac-storage-page__smart-steps">
+          <article class="ac-storage-page__smart-step"><span class="ac-storage-page__smart-number">01</span><div><h3>Verbrauch erkennen</h3><p>Mit passendem Smart Meter lassen sich Energieflüsse im Haushalt transparenter erfassen.</p></div></article>
+          <article class="ac-storage-page__smart-step"><span class="ac-storage-page__smart-number">02</span><div><h3>Leistung anpassen</h3><p>So kann das System besser darauf reagieren, wann Strom im Haushalt gebraucht wird.</p></div></article>
+          <article class="ac-storage-page__smart-step"><span class="ac-storage-page__smart-number">03</span><div><h3>Eigenverbrauch optimieren</h3><p>Das Ziel ist nicht nur Speichern, sondern den selbst erzeugten Solarstrom möglichst sinnvoll im Alltag zu nutzen.</p></div></article>
+          <a class="ac-storage-page__link" href="{{ smart_meter_url }}">Smart Meter &amp; Energiefluss ansehen</a>
+        </div>
+        <div class="ac-storage-page__smart-visuals">
+          <div class="ac-storage-page__media ac-storage-page__media--smart-main">
+            {% if section.settings.smart_main_image != blank %}{{ section.settings.smart_main_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '720, 1000, 1400', sizes: '(min-width: 1000px) 40vw, 100vw', alt: 'VENUS E Speicher und Smart Energy im Zuhause' }}{% else %}<div class="ac-storage-page__placeholder" role="img" aria-label="VENUS E Speicher und Smart Energy im Zuhause">Smart-Control-Bild auswählen: VENUS E und modernes Zuhause</div>{% endif %}
+          </div>
+          <div class="ac-storage-page__smart-small-grid">
+            <div class="ac-storage-page__media ac-storage-page__media--smart-small">
+              {% if section.settings.smart_app_image != blank %}{{ section.settings.smart_app_image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '360, 540, 700', sizes: '(min-width: 1000px) 20vw, 50vw', alt: 'Energiefluss und Speicherstatus in der App' }}{% else %}<div class="ac-storage-page__placeholder" role="img" aria-label="Energiefluss und Speicherstatus in der App">App-Energiedaten auswählen</div>{% endif %}
+            </div>
+            <div class="ac-storage-page__media ac-storage-page__media--smart-small">
+              {% if section.settings.smart_meter_image != blank %}{{ section.settings.smart_meter_image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '360, 540, 700', sizes: '(min-width: 1000px) 20vw, 50vw', alt: 'MARSTEK Smart Meter CT002 oder CT003' }}{% elsif ct002_product != blank and ct002_product.featured_image != blank %}{{ ct002_product.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '360, 540, 700', sizes: '(min-width: 1000px) 20vw, 50vw', alt: 'MARSTEK CT002 Smart Meter' }}{% else %}<div class="ac-storage-page__placeholder" role="img" aria-label="MARSTEK Smart Meter CT002 oder CT003">Smart Meter CT002 / CT003 auswählen</div>{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-storage-page__section ac-storage-page__audience" aria-labelledby="{{ page_id }}-audience-title">
+    <div class="ac-storage-page__wrap">
+      <p class="ac-storage-page__eyebrow">Zielgruppen</p>
+      <h2 id="{{ page_id }}-audience-title">Für wen ist ein AC-gekoppelter Speicher besonders interessant?</h2>
+      <div class="ac-storage-page__audience-grid">
+        <article class="ac-storage-page__audience-card"><div class="ac-storage-page__media ac-storage-page__media--audience">{% if section.settings.audience_image_1 != blank %}{{ section.settings.audience_image_1 | image_url: width: 900 | image_tag: loading: 'lazy', widths: '420, 680, 900', sizes: '(min-width: 1000px) 25vw, 100vw', alt: 'Modernes Zuhause mit bestehender Dach-Photovoltaikanlage' }}{% else %}<div class="ac-storage-page__placeholder" role="img" aria-label="Modernes Zuhause mit bestehender Dach-Photovoltaikanlage">Szenenbild auswählen: Haus mit bestehender PV</div>{% endif %}</div><div class="ac-storage-page__card-body"><h3>Für Haushalte mit bestehender PV-Lösung</h3><p>Wenn du bereits Solarstrom erzeugst, aber mehr davon selbst nutzen möchtest, ist ein Speicher eine logische Erweiterung.</p></div></article>
+        <article class="ac-storage-page__audience-card"><div class="ac-storage-page__media ac-storage-page__media--audience">{% if section.settings.audience_image_2 != blank %}{{ section.settings.audience_image_2 | image_url: width: 900 | image_tag: loading: 'lazy', widths: '420, 680, 900', sizes: '(min-width: 1000px) 25vw, 100vw', alt: 'Balkonkraftwerk und nachrüstbarer Speicher' }}{% else %}<div class="ac-storage-page__placeholder" role="img" aria-label="Balkonkraftwerk und nachrüstbarer Speicher">Szenenbild auswählen: Balkonkraftwerk und Speicher</div>{% endif %}</div><div class="ac-storage-page__card-body"><h3>Für Balkonkraftwerk-Nutzer mit wachsendem Bedarf</h3><p>Wer klein startet und später mehr Unabhängigkeit will, kann schrittweise aufrüsten.</p></div></article>
+        <article class="ac-storage-page__audience-card"><div class="ac-storage-page__media ac-storage-page__media--audience">{% if section.settings.audience_image_3 != blank %}{{ section.settings.audience_image_3 | image_url: width: 900 | image_tag: loading: 'lazy', widths: '420, 680, 900', sizes: '(min-width: 1000px) 25vw, 100vw', alt: 'Haushalt mit Stromverbrauch am Abend' }}{% else %}<div class="ac-storage-page__placeholder" role="img" aria-label="Haushalt mit Stromverbrauch am Abend">Szenenbild auswählen: abendlicher oder nächtlicher Verbrauch</div>{% endif %}</div><div class="ac-storage-page__card-body"><h3>Für Haushalte mit Verbrauch am Abend oder in der Nacht</h3><p>Wenn Strom vor allem dann gebraucht wird, wenn die Sonne nicht mehr scheint, wird ein Speicher besonders relevant.</p></div></article>
+        <article class="ac-storage-page__audience-card"><div class="ac-storage-page__media ac-storage-page__media--audience">{% if section.settings.audience_image_4 != blank %}{{ section.settings.audience_image_4 | image_url: width: 900 | image_tag: loading: 'lazy', widths: '420, 680, 900', sizes: '(min-width: 1000px) 25vw, 100vw', alt: 'Wallbox und E-Auto an einem Wohnhaus' }}{% else %}<div class="ac-storage-page__placeholder" role="img" aria-label="Wallbox und E-Auto an einem Wohnhaus">Szenenbild auswählen: Wallbox und E-Auto</div>{% endif %}</div><div class="ac-storage-page__card-body"><h3>Für Haushalte mit Wallbox oder E-Auto</h3><p>Wer zusätzliche Verbraucher im Haushalt hat, profitiert oft stärker von einer intelligenten Nutzung des gespeicherten Stroms.</p></div></article>
+      </div>
+      <a class="ac-storage-page__link" href="{{ eauto_url }}">Zur Lösung für E-Auto &amp; Speicher →</a>
+    </div>
+  </section>
+
+  <section id="modelle" class="ac-storage-page__section ac-storage-page__models" aria-labelledby="{{ page_id }}-models-title">
+    <div class="ac-storage-page__wrap">
+      <p class="ac-storage-page__eyebrow">Lösungen</p>
+      <h2 id="{{ page_id }}-models-title">Passende VENUS E Lösungen</h2>
+      <p class="ac-storage-page__subtext">Je nach Haushaltsgröße, Verbrauch und Ausbauziel kommen unterschiedliche Speicherlösungen infrage.</p>
+      <div class="ac-storage-page__models-grid">
+        {% assign model_products = 'mini|3|4|max' | split: '|' %}
+        {% for model_key in model_products %}
+          {% case model_key %}
+            {% when 'mini' %}{% assign model_product = product_mini %}{% assign model_name = 'VENUS E Mini' %}{% assign model_copy = 'Für kleinere Haushalte und den Einstieg in mehr Eigenverbrauch.' %}{% assign model_fallback = '/products/venus-e-mini' %}
+            {% when '3' %}{% assign model_product = product_3 %}{% assign model_name = 'VENUS E 3.0' %}{% assign model_copy = 'Für flexible Speicherlösungen im Alltag.' %}{% assign model_fallback = '/products/venus-e-3' %}
+            {% when '4' %}{% assign model_product = product_4 %}{% assign model_name = 'VENUS E 4.0' %}{% assign model_copy = 'Für höheren Energiebedarf und größere Haushalte.' %}{% assign model_fallback = '/products/venus-e-4' %}
+            {% when 'max' %}{% assign model_product = product_max %}{% assign model_name = 'VENUS E Max' %}{% assign model_copy = 'Für maximale Speicherkapazität und Ausbaupläne.' %}{% assign model_fallback = '/products/venus-e-max' %}
+          {% endcase %}
+          {% assign model_url = model_product.url | default: model_fallback %}
+          <article class="ac-storage-page__model-card">
+            <a class="ac-storage-page__media ac-storage-page__media--model" href="{{ model_url }}" aria-label="{{ model_name }} ansehen">
+              {% if model_product != blank and model_product.featured_image != blank %}{{ model_product.featured_image | image_url: width: 720 | image_tag: loading: 'lazy', widths: '360, 540, 720', sizes: '(min-width: 1000px) 25vw, 100vw', alt: model_name }}{% else %}<span class="ac-storage-page__placeholder">Produktbild auswählen: {{ model_name }}</span>{% endif %}
+            </a>
+            <div class="ac-storage-page__card-body"><h3>{{ model_name }}</h3><p>{{ model_copy }}</p><a class="ac-storage-page__link" href="{{ model_url }}">{{ model_name }} ansehen →</a></div>
+          </article>
+        {% endfor %}
+      </div>
+      <div class="ac-storage-page__models-actions"><a class="ac-storage-page__button ac-storage-page__button--primary" href="{{ compare_url }}">Modelle im Überblick</a><a class="ac-storage-page__button ac-storage-page__button--secondary" href="{{ storage_url }}">Balkonkraftwerk mit Speicher ansehen</a></div>
+    </div>
+  </section>
+
+  <section class="ac-storage-page__section ac-storage-page__faq" aria-labelledby="{{ page_id }}-faq-title">
+    <div class="ac-storage-page__wrap">
+      <p class="ac-storage-page__eyebrow">Häufige Fragen</p>
+      <h2 id="{{ page_id }}-faq-title">Fragen zum <span>AC-gekoppelten Speicher</span></h2>
+      <div class="ac-storage-page__faq-list">
+        {% for faq_index in (1..7) %}
+          {% case faq_index %}
+            {% when 1 %}{% assign faq_q = faq_1_q %}{% assign faq_a = faq_1_a %}
+            {% when 2 %}{% assign faq_q = faq_2_q %}{% assign faq_a = faq_2_a %}
+            {% when 3 %}{% assign faq_q = faq_3_q %}{% assign faq_a = faq_3_a %}
+            {% when 4 %}{% assign faq_q = faq_4_q %}{% assign faq_a = faq_4_a %}
+            {% when 5 %}{% assign faq_q = faq_5_q %}{% assign faq_a = faq_5_a %}
+            {% when 6 %}{% assign faq_q = faq_6_q %}{% assign faq_a = faq_6_a %}
+            {% when 7 %}{% assign faq_q = faq_7_q %}{% assign faq_a = faq_7_a %}
+          {% endcase %}
+          <div class="ac-storage-page__faq-item" data-ac-faq-item>
+            <button type="button" class="ac-storage-page__faq-question" data-ac-faq-question aria-expanded="false" aria-controls="{{ page_id }}-faq-answer-{{ faq_index }}">{{ faq_q }}<span aria-hidden="true">+</span></button>
+            <div id="{{ page_id }}-faq-answer-{{ faq_index }}" class="ac-storage-page__faq-answer" data-ac-faq-answer hidden><p>{{ faq_a }}</p></div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="ac-storage-page__section ac-storage-page__blog" aria-labelledby="{{ page_id }}-blog-title">
+    <div class="ac-storage-page__wrap">
+      <p class="ac-storage-page__eyebrow">Mehr erfahren</p>
+      <h2 id="{{ page_id }}-blog-title">Ratgeber &amp; Wissen</h2>
+      <div class="ac-storage-page__blog-grid">
+        <article class="ac-storage-page__blog-card"><div class="ac-storage-page__media ac-storage-page__media--blog">{% if section.settings.blog_image_1 != blank %}{{ section.settings.blog_image_1 | image_url: width: 900 | image_tag: loading: 'lazy', widths: '420, 680, 900', sizes: '(min-width: 900px) 33vw, 100vw', alt: 'Solarspeicher Kosten und Dimensionierung' }}{% else %}<div class="ac-storage-page__placeholder">Artikelbild auswählen: Speicherkosten und Dimensionierung</div>{% endif %}</div><div class="ac-storage-page__card-body"><span class="ac-storage-page__tag">RATGEBER</span><h3>Solarspeicher Kosten: Was kostet ein Speicher wirklich?</h3><p>Von der Kapazität über die Installation bis zur Lebensdauer: welche Faktoren den Preis bestimmen.</p><a class="ac-storage-page__link" href="{{ section.settings.article_1_url | default: blog_url }}">Weiterlesen →</a></div></article>
+        <article class="ac-storage-page__blog-card"><div class="ac-storage-page__media ac-storage-page__media--blog">{% if section.settings.blog_image_2 != blank %}{{ section.settings.blog_image_2 | image_url: width: 900 | image_tag: loading: 'lazy', widths: '420, 680, 900', sizes: '(min-width: 900px) 33vw, 100vw', alt: 'Vergleich von AC- und DC-Speicher' }}{% else %}<div class="ac-storage-page__placeholder">Artikelbild auswählen: AC- und DC-Speicher</div>{% endif %}</div><div class="ac-storage-page__card-body"><span class="ac-storage-page__tag">RATGEBER</span><h3>AC- oder DC-Speicher: Was ist der Unterschied?</h3><p>Beide Konzepte im direkten Vergleich – und wann welches Prinzip sinnvoller ist.</p><a class="ac-storage-page__link" href="{{ section.settings.article_2_url | default: compare_url }}">Weiterlesen →</a></div></article>
+        <article class="ac-storage-page__blog-card"><div class="ac-storage-page__media ac-storage-page__media--blog">{% if section.settings.blog_image_3 != blank %}{{ section.settings.blog_image_3 | image_url: width: 900 | image_tag: loading: 'lazy', widths: '420, 680, 900', sizes: '(min-width: 900px) 33vw, 100vw', alt: 'Solarspeicher in einer bestehenden PV-Anlage nachrüsten' }}{% else %}<div class="ac-storage-page__placeholder">Artikelbild auswählen: Speicher nachrüsten</div>{% endif %}</div><div class="ac-storage-page__card-body"><span class="ac-storage-page__tag">RATGEBER</span><h3>Solarspeicher nachrüsten: Was ist möglich?</h3><p>Was beim nachträglichen Einbau wichtig ist und welche Voraussetzungen du prüfen solltest.</p><a class="ac-storage-page__link" href="{{ section.settings.article_3_url | default: blog_url }}">Weiterlesen →</a></div></article>
+      </div>
+      <div class="ac-storage-page__center-cta"><a class="ac-storage-page__link" href="{{ blog_url }}">Alle Ratgeber ansehen →</a></div>
+    </div>
+  </section>
+
+  <section class="ac-storage-page__section ac-storage-page__final" aria-labelledby="{{ page_id }}-final-title">
+    <div class="ac-storage-page__wrap">
+      <div class="ac-storage-page__final-card">
+        <h2 id="{{ page_id }}-final-title">Du möchtest herausfinden, welche Lösung zu deinem Haushalt passt?</h2>
+        <p>Sieh dir die VENUS E Modelle an, vergleiche typische Einsatzbereiche oder entdecke passende Lösungen für mehr Eigenverbrauch im Alltag.</p>
+        <div class="ac-storage-page__actions"><a class="ac-storage-page__button ac-storage-page__button--primary" href="{{ compare_url }}">VENUS E Modelle ansehen</a><a class="ac-storage-page__button ac-storage-page__button--secondary" href="{{ storage_url }}">Balkonkraftwerk mit Speicher</a><a class="ac-storage-page__link" href="{{ eauto_url }}">E-Auto laden mit Speicher →</a></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":{{ faq_1_q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ faq_1_a | json }}}},
+    {"@type":"Question","name":{{ faq_2_q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ faq_2_a | json }}}},
+    {"@type":"Question","name":{{ faq_3_q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ faq_3_a | json }}}},
+    {"@type":"Question","name":{{ faq_4_q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ faq_4_a | json }}}},
+    {"@type":"Question","name":{{ faq_5_q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ faq_5_a | json }}}},
+    {"@type":"Question","name":{{ faq_6_q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ faq_6_a | json }}}},
+    {"@type":"Question","name":{{ faq_7_q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ faq_7_a | json }}}}
+  ]
+}
+</script>
+
+{% schema %}
+{
+  "name": "AC-gekoppelter Speicher",
+  "class": "section-ac-coupled-storage-page",
+  "settings": [
+    {"type":"header","content":"Hero"},
+    {"type":"image_picker","id":"hero_image","label":"Hero-Bild"},
+    {"type":"header","content":"Energiefluss"},
+    {"type":"image_picker","id":"flow_day_image","label":"Tag-Bild"},
+    {"type":"image_picker","id":"flow_evening_image","label":"Abend-Bild"},
+    {"type":"header","content":"Vorteile und Zielgruppen"},
+    {"type":"image_picker","id":"why_image_1","label":"Nachrüstung Szenenbild"},
+    {"type":"image_picker","id":"why_image_2","label":"Abendverbrauch Szenenbild"},
+    {"type":"image_picker","id":"audience_image_1","label":"Bestehende PV Szenenbild"},
+    {"type":"image_picker","id":"audience_image_2","label":"Balkonkraftwerk Szenenbild"},
+    {"type":"image_picker","id":"audience_image_3","label":"Abend Szenenbild"},
+    {"type":"image_picker","id":"audience_image_4","label":"E-Auto Szenenbild"},
+    {"type":"header","content":"Intelligente Steuerung"},
+    {"type":"image_picker","id":"smart_main_image","label":"Smart-Control Hauptbild"},
+    {"type":"image_picker","id":"smart_app_image","label":"App-Bild"},
+    {"type":"image_picker","id":"smart_meter_image","label":"Smart-Meter-Bild"},
+    {"type":"header","content":"Ratgeber-Bilder"},
+    {"type":"image_picker","id":"blog_image_1","label":"Ratgeber-Bild 1"},
+    {"type":"image_picker","id":"blog_image_2","label":"Ratgeber-Bild 2"},
+    {"type":"image_picker","id":"blog_image_3","label":"Ratgeber-Bild 3"},
+    {"type":"header","content":"Produkte und Links"},
+    {"type":"product","id":"product_mini","label":"VENUS E Mini"},
+    {"type":"product","id":"product_3","label":"VENUS E 3.0"},
+    {"type":"product","id":"product_4","label":"VENUS E 4.0"},
+    {"type":"product","id":"product_max","label":"VENUS E Max"},
+    {"type":"product","id":"ct002_product","label":"CT002 Produkt"},
+    {"type":"product","id":"ct003_product","label":"CT003 Produkt"},
+    {"type":"url","id":"compare_url","label":"Vergleichsseite"},
+    {"type":"url","id":"storage_url","label":"Balkonkraftwerk-Seite"},
+    {"type":"url","id":"eauto_url","label":"E-Auto-Seite"},
+    {"type":"url","id":"smart_meter_url","label":"Smart-Meter-Ziel"},
+    {"type":"url","id":"blog_url","label":"Ratgeber-Übersicht"},
+    {"type":"url","id":"article_1_url","label":"Ratgeber-Link 1"},
+    {"type":"url","id":"article_2_url","label":"Ratgeber-Link 2"},
+    {"type":"url","id":"article_3_url","label":"Ratgeber-Link 3"}
+  ],
+  "presets": [{"name":"AC-gekoppelter Speicher"}]
+}
+{% endschema %}
