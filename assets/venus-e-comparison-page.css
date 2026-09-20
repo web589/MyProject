@@ -963,6 +963,20 @@ a.bw-table-product__name:hover {
   gap: 26px;
 }
 
+@media (min-width: 900px) {
+  .bw-capacity-map__panel {
+    padding: 16px 48px;
+    border-radius: 16px;
+  }
+
+  .bw-capacity-row {
+    min-height: 110px;
+    padding: 16px 0;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
 .bw-capacity-row:last-child {
   border-bottom: 0;
 }
