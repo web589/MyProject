@@ -39,6 +39,11 @@
     {{ 'venus-e-comparison-page.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'venus-e-comparison-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
+  {%- if template.suffix == 'e-auto' -%}
+    {{ 'balkonkraftwerk-storage-page.css' | asset_url | stylesheet_tag }}
+    {{ 'e-auto-page.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'e-auto-page.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
   {%- render 'css-variables' -%}
 
   <script>
@@ -413,7 +418,7 @@
     {%- sections 'popup-group' -%}
 
       <main
-        class="main-content{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}"
+        class="main-content{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}{% if template.suffix == 'e-auto' %} main-content--e-auto{% endif %}"
         id="MainContent"
         {% if template.suffix == 'balkonkraftwerk-mit-speicher' %}
           style="--bw-storage-content-max-width: {{ settings.bw_storage_content_max_width | default: 1500 }}px;"
