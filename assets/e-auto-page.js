@@ -143,6 +143,10 @@
     }
   }
 
+  function readPageMarker() {
+    return document.querySelector('[data-eauto-page]') || document.documentElement;
+  }
+
   function familyOrderFor(result) {
     if (result.upper <= 6) return ['mini', 'venus3', 'venus4', 'max'];
     if (result.lower >= 20) return ['max', 'venus3', 'venus4', 'mini'];
@@ -303,13 +307,14 @@
     var result = calculateCapacity(state);
     var recommendations = selectRecommendations(result, products);
     var primary = recommendations[0];
+    var pageMarker = readPageMarker();
     var copy = {
-      availableLabel: root.dataset.eautoAvailableLabel || 'Verfügbar',
-      unavailableLabel: root.dataset.eautoUnavailableLabel || 'Derzeit nicht verfügbar',
-      preorderLabel: root.dataset.eautoPreorderLabel || 'Demnächst verfügbar',
-      variantUnavailableLabel: root.dataset.eautoVariantUnavailableLabel || 'Variante nicht gefunden',
-      primaryLabel: root.dataset.eautoPrimaryLabel || 'EMPFOHLENE KONFIGURATION',
-      alternativeLabel: root.dataset.eautoAlternativeLabel || 'ALTERNATIVE KONFIGURATION'
+      availableLabel: pageMarker.dataset.eautoAvailableLabel || 'Verfügbar',
+      unavailableLabel: pageMarker.dataset.eautoUnavailableLabel || 'Derzeit nicht verfügbar',
+      preorderLabel: pageMarker.dataset.eautoPreorderLabel || 'Demnächst verfügbar',
+      variantUnavailableLabel: pageMarker.dataset.eautoVariantUnavailableLabel || 'Variante nicht gefunden',
+      primaryLabel: pageMarker.dataset.eautoPrimaryLabel || 'EMPFOHLENE KONFIGURATION',
+      alternativeLabel: pageMarker.dataset.eautoAlternativeLabel || 'ALTERNATIVE KONFIGURATION'
     };
 
     setText(root, '[data-eauto-result-range]', formatRange(result.lower, result.upper));
@@ -328,6 +333,8 @@
 
   function bindOptions(root, state, products) {
     root.querySelectorAll('[data-eauto-option]').forEach(function (button) {
+      if (button.dataset.eautoBound === 'true') return;
+      button.dataset.eautoBound = 'true';
       button.addEventListener('click', function () {
         var group = button.closest('[data-eauto-option-group]');
         if (!group) return;
@@ -345,6 +352,8 @@
 
   function bindFlow(root) {
     root.querySelectorAll('[data-eauto-flow-toggle]').forEach(function (button) {
+      if (button.dataset.eautoBound === 'true') return;
+      button.dataset.eautoBound = 'true';
       button.addEventListener('click', function () {
         var mode = button.dataset.eautoFlowToggle;
         root.querySelectorAll('[data-eauto-flow-toggle]').forEach(function (toggle) {
@@ -363,6 +372,8 @@
 
   function bindProfiles(root) {
     root.querySelectorAll('[data-eauto-profile-tab]').forEach(function (button) {
+      if (button.dataset.eautoBound === 'true') return;
+      button.dataset.eautoBound = 'true';
       button.addEventListener('click', function () {
         var profileId = button.dataset.eautoProfileTab;
         root.querySelectorAll('[data-eauto-profile-tab]').forEach(function (tab) {
@@ -381,6 +392,8 @@
 
   function bindFaq(root) {
     root.querySelectorAll('[data-eauto-faq-question]').forEach(function (button) {
+      if (button.dataset.eautoBound === 'true') return;
+      button.dataset.eautoBound = 'true';
       button.addEventListener('click', function () {
         var answer = button.parentElement && button.parentElement.querySelector('[data-eauto-faq-answer]');
         var wasOpen = button.getAttribute('aria-expanded') === 'true';
@@ -399,17 +412,17 @@
   }
 
   function boot() {
-    document.querySelectorAll('[data-eauto-page]').forEach(function (root) {
-      if (root.dataset.eautoInitialized === 'true') return;
-      root.dataset.eautoInitialized = 'true';
-      var state = Object.assign({}, DEFAULT_STATE);
-      var products = readProductData(root);
-      bindOptions(root, state, products);
-      bindFlow(root);
-      bindProfiles(root);
-      bindFaq(root);
-      render(root, state, products);
-    });
+    var pageMarker = document.querySelector('[data-eauto-page]');
+    if (!pageMarker) return;
+    var root = document;
+    var state = window.__eAutoState || Object.assign({}, DEFAULT_STATE);
+    var products = readProductData(root);
+    window.__eAutoState = state;
+    bindOptions(root, state, products);
+    bindFlow(root);
+    bindProfiles(root);
+    bindFaq(root);
+    render(root, state, products);
   }
 
   window.theme = window.theme || {};
