@@ -304,6 +304,69 @@
   aspect-ratio: 16 / 10;
 }
 
+.bw-models--final .bw-models__support {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.95fr) minmax(300px, 1.25fr) minmax(240px, 0.8fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 72px);
+  padding: 34px 0 28px;
+  border: 0;
+  border-top: 1px solid #dce7ee;
+  border-radius: 0;
+  background: transparent;
+}
+
+.bw-models--final .bw-models__support h3 {
+  max-width: 430px;
+  margin: 0;
+  font-size: clamp(1.55rem, 2.25vw, 1.95rem);
+  line-height: 1.16;
+}
+
+.bw-models--final .bw-models__support p {
+  max-width: 480px;
+  color: var(--bw-copy);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.bw-models--final .bw-models__support-points {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #dce7ee;
+  list-style: none;
+}
+
+.bw-models--final .bw-models__support-points li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 9px 0;
+  border-bottom: 1px solid #dce7ee;
+  color: var(--bw-ink);
+  font-size: 0.9rem;
+}
+
+.bw-models--final .bw-models__support-check {
+  flex: 0 0 auto;
+  color: var(--bw-blue);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.bw-models--final .bw-models__support-actions {
+  display: grid;
+  gap: 12px;
+}
+
+.bw-models--final .bw-models__support-actions .bw-button {
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  justify-content: center;
+}
+
 /* Wohnsituation */
 .bw-scenarios {
   padding: clamp(58px, 7vw, 88px) 0;
@@ -1213,6 +1276,18 @@ a.bw-table-product__name:hover {
   .bw-models__support {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .bw-models--final .bw-models__support {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    gap: 24px;
+    padding: 28px 0 0;
+  }
+
+  .bw-models--final .bw-models__support h3,
+  .bw-models--final .bw-models__support p {
+    max-width: none;
   }
 
   .bw-capacity-map__heading-row,

@@ -103,9 +103,10 @@
       {% endfor %}
     </div>
 
-    {% if section.settings.support_heading != blank or section.settings.support_text != blank %}
+    {% assign support_point_keys = 'support_point_1,support_point_2,support_point_3' | split: ',' %}
+    {% if section.settings.support_heading != blank or section.settings.support_text != blank or section.settings.support_label != blank or section.settings.support_compare_label != blank %}
       <aside class="bw-models__support">
-        <div>
+        <div class="bw-models__support-copy">
           {% if section.settings.support_heading != blank %}
             <h3>{{ section.settings.support_heading | escape }}</h3>
           {% endif %}
@@ -113,11 +114,31 @@
             <p>{{ section.settings.support_text | escape }}</p>
           {% endif %}
         </div>
-        {% if section.settings.support_label != blank and section.settings.support_link != blank %}
-          <a class="bw-button bw-button--secondary" href="{{ section.settings.support_link }}">
-            {{ section.settings.support_label | escape }}
-          </a>
-        {% endif %}
+
+        <ul class="bw-models__support-points" role="list">
+          {% for point_key in support_point_keys %}
+            {% assign point_text = section.settings[point_key] %}
+            {% if point_text != blank %}
+              <li>
+                <span class="bw-models__support-check" aria-hidden="true">✓</span>
+                <span>{{ point_text | escape }}</span>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+
+        <div class="bw-models__support-actions">
+          {% if section.settings.support_label != blank and section.settings.support_link != blank %}
+            <a class="bw-button bw-button--primary" href="{{ section.settings.support_link }}">
+              {{ section.settings.support_label | escape }} <span aria-hidden="true">&rarr;</span>
+            </a>
+          {% endif %}
+          {% if section.settings.support_compare_label != blank and section.settings.support_compare_link != blank %}
+            <a class="bw-button bw-button--secondary" href="{{ section.settings.support_compare_link }}">
+              {{ section.settings.support_compare_label | escape }} <span aria-hidden="true">&rarr;</span>
+            </a>
+          {% endif %}
+        </div>
       </aside>
     {% endif %}
   </div>
@@ -220,6 +241,31 @@
       "type": "url",
       "id": "support_link",
       "label": "Buttonlink"
+    },
+    {
+      "type": "text",
+      "id": "support_compare_label",
+      "label": "Vergleichsbuttontext"
+    },
+    {
+      "type": "url",
+      "id": "support_compare_link",
+      "label": "Vergleichsbuttonlink"
+    },
+    {
+      "type": "text",
+      "id": "support_point_1",
+      "label": "Beratungspunkt 1"
+    },
+    {
+      "type": "text",
+      "id": "support_point_2",
+      "label": "Beratungspunkt 2"
+    },
+    {
+      "type": "text",
+      "id": "support_point_3",
+      "label": "Beratungspunkt 3"
     }
   ],
   "blocks": [
