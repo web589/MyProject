@@ -1,0 +1,22 @@
+{% render 'ac-storage-module', module: 'hero', section: section %}
+
+{% schema %}
+{
+  "name": "01 Hero – AC-Speicher",
+  "tag": "section",
+  "class": "ac-storage-hero-section",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Technologie einfach erklärt"},
+    {"type":"text","id":"heading","label":"Überschrift","default":"AC-gekoppelter Speicher: Solarstrom speichern und bestehende Systeme flexibel erweitern"},
+    {"type":"textarea","id":"lead","label":"Einleitung","default":"Ein AC-gekoppelter Speicher wird über dein Hausnetz eingebunden. Das macht ihn besonders interessant, wenn du bestehenden Solarstrom besser speichern und deinen Eigenverbrauch steigern möchtest – ohne deine bestehende PV-Lösung grundsätzlich ersetzen zu müssen."},
+    {"type":"text","id":"primary_label","label":"Primärer Button","default":"Modelle ansehen"},
+    {"type":"url","id":"primary_url","label":"Primärer Link","default":"#modelle"},
+    {"type":"text","id":"secondary_label","label":"Sekundärer Button","default":"So funktioniert es"},
+    {"type":"url","id":"secondary_url","label":"Sekundärer Link","default":"#funktion"},
+    {"type":"image_picker","id":"hero_image","label":"Hero-Bild"},
+    {"type":"text","id":"hero_image_alt","label":"Hero-Bild Alt-Text","default":"Solarspeicher an einem Haus mit Photovoltaikanlage"},
+    {"type":"textarea","id":"hero_placeholder","label":"Hero-Bild Platzhalter","default":"Hero-Bild auswählen: Haus mit Photovoltaikanlage und Speicher"}
+  ],
+  "presets":[{"name":"01 Hero – AC-Speicher"}]
+}
+{% endschema %}

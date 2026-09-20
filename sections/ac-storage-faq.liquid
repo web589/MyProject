@@ -1,0 +1,28 @@
+{% render 'ac-storage-module', module: 'faq', section: section %}
+
+{% schema %}
+{
+  "name": "09 FAQ",
+  "tag": "section",
+  "class": "ac-storage-faq-section",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Häufige Fragen"},
+    {"type":"text","id":"heading","label":"Überschrift","default":"Fragen zum AC-gekoppelten Speicher"},
+    {"type":"text","id":"question_1","label":"Frage 1","default":"Was bedeutet AC-gekoppelter Speicher?"},
+    {"type":"textarea","id":"answer_1","label":"Antwort 1","default":"Ein AC-gekoppelter Speicher wird über das Hausnetz in dein Energiesystem eingebunden. Er eignet sich besonders dann, wenn du ein bestehendes System erweitern möchtest."},
+    {"type":"text","id":"question_2","label":"Frage 2","default":"Kann ich einen AC-Speicher mit einer bestehenden PV-Anlage kombinieren?"},
+    {"type":"textarea","id":"answer_2","label":"Antwort 2","default":"In vielen Fällen ja. Weil der Speicher über das Hausnetz eingebunden wird, lässt er sich häufig ergänzen, ohne die bestehende PV-Anlage umzubauen. Wie gut das im Einzelfall funktioniert, hängt von deinem Hausanschluss und deiner bisherigen Konfiguration ab."},
+    {"type":"text","id":"question_3","label":"Frage 3","default":"Ist ein AC-gekoppelter Speicher gut für die Nachrüstung geeignet?"},
+    {"type":"textarea","id":"answer_3","label":"Antwort 3","default":"Ja, genau dafür ist dieses Konzept oft besonders interessant. Vor allem bestehende Haushalte mit PV oder Balkonkraftwerk profitieren von der flexibleren Einbindung."},
+    {"type":"text","id":"question_4","label":"Frage 4","default":"Was ist der Unterschied zwischen AC- und DC-Speicher?"},
+    {"type":"textarea","id":"answer_4","label":"Antwort 4","default":"AC-Speicher werden über das Hausnetz integriert, DC-Speicher direkt auf der Gleichstromseite der PV-Anlage. AC ist oft spannender für Nachrüstung, DC eher für Neuplanung."},
+    {"type":"text","id":"question_5","label":"Frage 5","default":"Kann ich mit einem AC-gekoppelten Speicher meinen Eigenverbrauch erhöhen?"},
+    {"type":"textarea","id":"answer_5","label":"Antwort 5","default":"Ja. Genau darin liegt einer der größten Vorteile: Überschüssiger Solarstrom kann später im Haushalt genutzt werden, statt sofort eingespeist zu werden."},
+    {"type":"text","id":"question_6","label":"Frage 6","default":"Brauche ich dafür ein Smart Meter?"},
+    {"type":"textarea","id":"answer_6","label":"Antwort 6","default":"Für eine intelligentere Steuerung und mehr Transparenz über Energieflüsse ist ein passender Smart Meter sehr sinnvoll."},
+    {"type":"text","id":"question_7","label":"Frage 7","default":"Ist ein AC-gekoppelter Speicher auch für Balkonkraftwerke relevant?"},
+    {"type":"textarea","id":"answer_7","label":"Antwort 7","default":"Ja, besonders dann, wenn du deinen selbst erzeugten Solarstrom zeitversetzt nutzen möchtest und eine flexible Erweiterung suchst."}
+  ],
+  "presets":[{"name":"09 FAQ"}]
+}
+{% endschema %}

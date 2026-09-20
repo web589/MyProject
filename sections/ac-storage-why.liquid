@@ -1,0 +1,33 @@
+{% render 'ac-storage-module', module: 'why', section: section %}
+
+{% schema %}
+{
+  "name": "04 Vorteile",
+  "tag": "section",
+  "class": "ac-storage-why-section",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Vorteile im Alltag"},
+    {"type":"text","id":"heading","label":"Überschrift","default":"Warum AC-gekoppelt für viele Haushalte besonders praktisch ist"},
+    {"type":"textarea","id":"subtext","label":"Beschreibung","default":"Viele Haushalte wollen Solarstrom besser nutzen, ohne ihr bestehendes System komplett umzubauen. Genau hier spielt ein AC-gekoppelter Speicher seine Stärken aus."},
+    {"type":"text","id":"card_1_title","label":"Karte 1 Titel","default":"Sinnvoll für Nachrüstung"},
+    {"type":"textarea","id":"card_1_body","label":"Karte 1 Text","default":"Wenn bereits eine PV-Anlage oder ein Balkonkraftwerk vorhanden ist, lässt sich ein Speicher oft deutlich einfacher ergänzen."},
+    {"type":"image_picker","id":"card_1_image","label":"Karte 1 Bild"},
+    {"type":"text","id":"card_1_alt","label":"Karte 1 Alt-Text","default":"Haus mit bestehender PV-Anlage und nachgerüstetem Speicher"},
+    {"type":"textarea","id":"card_1_placeholder","label":"Karte 1 Bild Platzhalter","default":"Familien-Szenenbild auswählen: bestehende PV und nachgerüsteter Speicher"},
+    {"type":"text","id":"card_2_title","label":"Karte 2 Titel","default":"Mehr Flexibilität im Alltag"},
+    {"type":"textarea","id":"card_2_body","label":"Karte 2 Text","default":"Du nutzt Solarstrom dann, wenn du ihn brauchst – nicht nur dann, wenn er erzeugt wird."},
+    {"type":"image_picker","id":"card_2_image","label":"Karte 2 Bild"},
+    {"type":"text","id":"card_2_alt","label":"Karte 2 Alt-Text","default":"Familie nutzt am Abend den gespeicherten Solarstrom"},
+    {"type":"textarea","id":"card_2_placeholder","label":"Karte 2 Bild Platzhalter","default":"Familien-Szenenbild auswählen: abendlicher Stromverbrauch"},
+    {"type":"text","id":"stat_1_title","label":"Statistik 1 Titel","default":"Weniger Abhängigkeit vom Stromnetz"},
+    {"type":"textarea","id":"stat_1_body","label":"Statistik 1 Text","default":"Je höher dein Eigenverbrauch, desto weniger Strom musst du aus dem Netz beziehen."},
+    {"type":"text","id":"stat_1_tag","label":"Statistik 1 Tag","default":"Netzbezug reduzieren"},
+    {"type":"text","id":"stat_2_title","label":"Statistik 2 Titel","default":"Passend für verschiedene Haushaltsgrößen"},
+    {"type":"textarea","id":"stat_2_body","label":"Statistik 2 Text","default":"Von kleineren Setups bis zu höherem Verbrauch lässt sich das Prinzip flexibel einsetzen."},
+    {"type":"text","id":"stat_2_tag","label":"Statistik 2 Tag","default":"Modular erweiterbar"},
+    {"type":"text","id":"cta_label","label":"CTA-Link","default":"Passende Modelle entdecken"},
+    {"type":"url","id":"cta_url","label":"CTA-Link Ziel","default":"#modelle"}
+  ],
+  "presets":[{"name":"04 Vorteile"}]
+}
+{% endschema %}

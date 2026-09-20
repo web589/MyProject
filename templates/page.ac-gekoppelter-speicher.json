@@ -1,59 +1,68 @@
 {
   "sections": {
-    "ac_storage_main": {
-      "type": "ac-coupled-storage-page",
-      "blocks": {
-        "hero": {
-          "type": "hero",
-          "settings": {
-            "hero_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png",
-            "primary_url": "#modelle",
-            "secondary_url": "#funktion"
-          }
-        },
-        "definition": {"type":"definition","settings":{}},
-        "function": {"type":"function","settings":{}},
-        "why": {"type":"why","settings":{}},
-        "comparison": {"type":"comparison","settings":{}},
-        "smart": {"type":"smart","settings":{}},
-        "audience": {"type":"audience","settings":{}},
-        "models": {"type":"models","settings":{}},
-        "faq": {"type":"faq","settings":{}},
-        "blog": {"type":"blog","settings":{}},
-        "final": {"type":"final","settings":{}}
-      },
-      "block_order": [
-        "hero",
-        "definition",
-        "function",
-        "why",
-        "comparison",
-        "smart",
-        "audience",
-        "models",
-        "faq",
-        "blog",
-        "final"
-      ],
+    "ac_hero": {
+      "type": "ac-storage-hero",
+      "settings": {
+        "hero_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png"
+      }
+    },
+    "ac_definition": {
+      "type": "ac-storage-definition",
+      "settings": {}
+    },
+    "ac_function": {
+      "type": "ac-storage-function",
+      "settings": {}
+    },
+    "ac_why": {
+      "type": "ac-storage-why",
+      "settings": {}
+    },
+    "ac_comparison": {
+      "type": "ac-storage-comparison",
+      "settings": {}
+    },
+    "ac_smart": {
+      "type": "ac-storage-smart",
+      "settings": {}
+    },
+    "ac_audience": {
+      "type": "ac-storage-audience",
+      "settings": {}
+    },
+    "ac_models": {
+      "type": "ac-storage-models",
       "settings": {
         "product_mini": "venus-e-mini",
         "product_3": "venus-e-3",
         "product_4": "venus-e-4",
-        "product_max": "venus-e-max",
-        "ct002_product": "ct002-smart-meter",
-        "ct003_product": "ct003-smart-meter",
-        "compare_url": "/pages/venus-e-vergleich",
-        "storage_url": "/pages/balkonkraftwerk-mit-speicher",
-        "eauto_url": "/pages/e-auto",
-        "smart_meter_url": "/products/ct002-smart-meter",
-        "blog_url": "/blogs/balkonkraftwerk-mit-speicher",
-        "article_1_url": "/blogs/balkonkraftwerk-mit-speicher",
-        "article_2_url": "/pages/venus-e-vergleich",
-        "article_3_url": "/blogs/balkonkraftwerk-mit-speicher"
+        "product_max": "venus-e-max"
       }
+    },
+    "ac_faq": {
+      "type": "ac-storage-faq",
+      "settings": {}
+    },
+    "ac_blog": {
+      "type": "ac-storage-blog",
+      "settings": {}
+    },
+    "ac_final": {
+      "type": "ac-storage-final",
+      "settings": {}
     }
   },
   "order": [
-    "ac_storage_main"
+    "ac_hero",
+    "ac_definition",
+    "ac_function",
+    "ac_why",
+    "ac_comparison",
+    "ac_smart",
+    "ac_audience",
+    "ac_models",
+    "ac_faq",
+    "ac_blog",
+    "ac_final"
   ]
 }

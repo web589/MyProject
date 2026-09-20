@@ -1,0 +1,38 @@
+{% render 'ac-storage-module', module: 'models', section: section %}
+
+{% schema %}
+{
+  "name": "08 Modelle",
+  "tag": "section",
+  "class": "ac-storage-models-section",
+  "settings": [
+    {"type":"header","content":"Produkte"},
+    {"type":"product","id":"product_mini","label":"VENUS E Mini"},
+    {"type":"product","id":"product_3","label":"VENUS E 3.0"},
+    {"type":"product","id":"product_4","label":"VENUS E 4.0"},
+    {"type":"product","id":"product_max","label":"VENUS E Max"},
+    {"type":"header","content":"Inhalt"},
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Lösungen"},
+    {"type":"text","id":"heading","label":"Überschrift","default":"Passende VENUS E Lösungen"},
+    {"type":"textarea","id":"subtext","label":"Beschreibung","default":"Je nach Haushaltsgröße, Verbrauch und Ausbauziel kommen unterschiedliche Speicherlösungen infrage."},
+    {"type":"text","id":"model_1_name","label":"Modell 1 Name","default":"VENUS E Mini"},
+    {"type":"textarea","id":"model_1_copy","label":"Modell 1 Text","default":"Für kleinere Haushalte und den Einstieg in mehr Eigenverbrauch."},
+    {"type":"text","id":"model_1_alt","label":"Modell 1 Alt-Text","default":"VENUS E Mini Solarspeicher"},
+    {"type":"text","id":"model_2_name","label":"Modell 2 Name","default":"VENUS E 3.0"},
+    {"type":"textarea","id":"model_2_copy","label":"Modell 2 Text","default":"Für flexible Speicherlösungen im Alltag."},
+    {"type":"text","id":"model_2_alt","label":"Modell 2 Alt-Text","default":"VENUS E 3.0 Solarspeicher"},
+    {"type":"text","id":"model_3_name","label":"Modell 3 Name","default":"VENUS E 4.0"},
+    {"type":"textarea","id":"model_3_copy","label":"Modell 3 Text","default":"Für höheren Energiebedarf und größere Haushalte."},
+    {"type":"text","id":"model_3_alt","label":"Modell 3 Alt-Text","default":"VENUS E 4.0 Solarspeicher"},
+    {"type":"text","id":"model_4_name","label":"Modell 4 Name","default":"VENUS E Max"},
+    {"type":"textarea","id":"model_4_copy","label":"Modell 4 Text","default":"Für maximale Speicherkapazität und Ausbaupläne."},
+    {"type":"text","id":"model_4_alt","label":"Modell 4 Alt-Text","default":"VENUS E Max Solarspeicher"},
+    {"type":"text","id":"card_link_label","label":"Modellkarten-Link","default":"Modell ansehen →"},
+    {"type":"text","id":"compare_label","label":"Vergleichsbutton","default":"Modelle im Überblick"},
+    {"type":"url","id":"compare_url","label":"Vergleichsbutton Ziel","default":"/pages/venus-e-vergleich"},
+    {"type":"text","id":"storage_label","label":"Balkonkraftwerk-Button","default":"Balkonkraftwerk mit Speicher ansehen"},
+    {"type":"url","id":"storage_url","label":"Balkonkraftwerk-Button Ziel","default":"/pages/balkonkraftwerk-mit-speicher"}
+  ],
+  "presets":[{"name":"08 Modelle"}]
+}
+{% endschema %}

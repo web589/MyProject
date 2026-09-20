@@ -1,0 +1,40 @@
+{% render 'ac-storage-module', module: 'blog', section: section %}
+
+{% schema %}
+{
+  "name": "10 Ratgeber",
+  "tag": "section",
+  "class": "ac-storage-blog-section",
+  "settings": [
+    {"type":"header","content":"Zielseiten"},
+    {"type":"url","id":"article_1_url","label":"Artikel 1 Ziel","default":"/blogs/balkonkraftwerk-mit-speicher"},
+    {"type":"url","id":"article_2_url","label":"Artikel 2 Ziel","default":"/pages/venus-e-vergleich"},
+    {"type":"url","id":"article_3_url","label":"Artikel 3 Ziel","default":"/blogs/balkonkraftwerk-mit-speicher"},
+    {"type":"url","id":"blog_url","label":"Ratgeber-Übersicht Ziel","default":"/blogs/balkonkraftwerk-mit-speicher"},
+    {"type":"header","content":"Inhalt"},
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Mehr erfahren"},
+    {"type":"text","id":"heading","label":"Überschrift","default":"Ratgeber & Wissen"},
+    {"type":"text","id":"article_1_tag","label":"Artikel 1 Tag","default":"RATGEBER"},
+    {"type":"text","id":"article_1_title","label":"Artikel 1 Titel","default":"Solarspeicher Kosten: Was kostet ein Speicher wirklich?"},
+    {"type":"textarea","id":"article_1_copy","label":"Artikel 1 Text","default":"Von der Kapazität über die Installation bis zur Lebensdauer: welche Faktoren den Preis bestimmen."},
+    {"type":"image_picker","id":"article_1_image","label":"Artikel 1 Bild"},
+    {"type":"text","id":"article_1_alt","label":"Artikel 1 Alt-Text","default":"Solarspeicher Kosten und Dimensionierung"},
+    {"type":"textarea","id":"article_1_placeholder","label":"Artikel 1 Bild Platzhalter","default":"Artikelbild auswählen: Speicherkosten und Dimensionierung"},
+    {"type":"text","id":"article_2_tag","label":"Artikel 2 Tag","default":"RATGEBER"},
+    {"type":"text","id":"article_2_title","label":"Artikel 2 Titel","default":"AC- oder DC-Speicher: Was ist der Unterschied?"},
+    {"type":"textarea","id":"article_2_copy","label":"Artikel 2 Text","default":"Beide Konzepte im direkten Vergleich – und wann welches Prinzip sinnvoller ist."},
+    {"type":"image_picker","id":"article_2_image","label":"Artikel 2 Bild"},
+    {"type":"text","id":"article_2_alt","label":"Artikel 2 Alt-Text","default":"AC- und DC-Speicher im Vergleich"},
+    {"type":"textarea","id":"article_2_placeholder","label":"Artikel 2 Bild Platzhalter","default":"Artikelbild auswählen: AC- und DC-Speicher"},
+    {"type":"text","id":"article_3_tag","label":"Artikel 3 Tag","default":"RATGEBER"},
+    {"type":"text","id":"article_3_title","label":"Artikel 3 Titel","default":"Solarspeicher nachrüsten: Was ist möglich?"},
+    {"type":"textarea","id":"article_3_copy","label":"Artikel 3 Text","default":"Was beim nachträglichen Einbau wichtig ist und welche Voraussetzungen du prüfen solltest."},
+    {"type":"image_picker","id":"article_3_image","label":"Artikel 3 Bild"},
+    {"type":"text","id":"article_3_alt","label":"Artikel 3 Alt-Text","default":"Solarspeicher nachrüsten"},
+    {"type":"textarea","id":"article_3_placeholder","label":"Artikel 3 Bild Platzhalter","default":"Artikelbild auswählen: Speicher nachrüsten"},
+    {"type":"text","id":"card_link_label","label":"Artikelkarten-Link","default":"Artikel lesen →"},
+    {"type":"text","id":"blog_link_label","label":"Ratgeber-Übersicht Link","default":"Alle Ratgeber ansehen →"}
+  ],
+  "presets":[{"name":"10 Ratgeber"}]
+}
+{% endschema %}
