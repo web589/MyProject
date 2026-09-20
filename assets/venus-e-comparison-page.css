@@ -85,8 +85,9 @@
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
-.bw-model-card:hover {
-  border-color: rgba(0, 153, 254, 0.42);
+.bw-model-card:hover,
+.bw-model-card:focus-within {
+  border-color: var(--bw-blue);
   box-shadow: 0 16px 34px rgba(0, 111, 183, 0.12);
   transform: translateY(-3px);
 }
@@ -140,6 +141,12 @@
   height: 100%;
   object-fit: contain;
   mix-blend-mode: multiply;
+  transition: transform 350ms ease;
+}
+
+.bw-model-card:hover .bw-model-card__media img,
+.bw-model-card:focus-within .bw-model-card__media img {
+  transform: scale(1.025);
 }
 
 .bw-model-card__body {
@@ -303,6 +310,15 @@
   border: 1px solid #dbe5ed;
   border-radius: 12px;
   background: #fff;
+  box-shadow: 0 8px 24px rgba(36, 63, 83, 0.05);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.bw-scenario-card:hover,
+.bw-scenario-card:focus-within {
+  border-color: var(--bw-blue);
+  box-shadow: 0 12px 30px rgba(0, 111, 183, 0.1);
+  transform: translateY(-2px);
 }
 
 .bw-scenario-card--highlight {
@@ -319,6 +335,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 350ms ease;
+}
+
+.bw-scenario-card:hover .bw-scenario-card__media img,
+.bw-scenario-card:focus-within .bw-scenario-card__media img {
+  transform: scale(1.03);
 }
 
 .bw-scenario-card__body {
@@ -395,6 +417,14 @@
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 8px 24px rgba(36, 63, 83, 0.05);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.bw-content-card:hover,
+.bw-content-card:focus-within {
+  border-color: var(--bw-blue);
+  box-shadow: 0 12px 30px rgba(0, 111, 183, 0.1);
+  transform: translateY(-2px);
 }
 
 .bw-content-grid--surface-dark .bw-content-card {
@@ -417,7 +447,8 @@
   transition: transform 350ms ease;
 }
 
-.bw-content-card:hover .bw-content-card__media img {
+.bw-content-card:hover .bw-content-card__media img,
+.bw-content-card:focus-within .bw-content-card__media img {
   transform: scale(1.025);
 }
 
@@ -601,7 +632,8 @@
   background: #f9fbfc;
 }
 
-.bw-specs__product-cell.is-highlighted {
+.bw-specs__product-cell.is-highlighted,
+.bw-specs__product-cell.is-selected {
   border-top: 4px solid var(--bw-blue);
   background: #edf8ff;
 }
@@ -615,10 +647,24 @@
   line-height: 1.45;
 }
 
-.bw-specs__value.is-highlighted {
+.bw-specs__value.is-highlighted,
+.bw-specs__value.is-selected {
   background: #f2faff;
   color: #075f92;
   font-weight: 700;
+}
+
+.bw-specs__product-cell[data-bw-compare-product-select],
+.bw-specs__sticky-product[data-bw-compare-product-select] {
+  cursor: pointer;
+  transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.bw-specs__product-cell[data-bw-compare-product-select]:hover,
+.bw-specs__product-cell[data-bw-compare-product-select]:focus-visible,
+.bw-specs__sticky-product[data-bw-compare-product-select]:hover,
+.bw-specs__sticky-product[data-bw-compare-product-select]:focus-visible {
+  box-shadow: inset 0 0 0 1px var(--bw-blue);
 }
 
 .bw-table-product {
@@ -714,6 +760,7 @@ a.bw-table-product__name:hover {
 .bw-specs__sticky.is-stuck {
   display: grid;
   opacity: 1;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
@@ -751,7 +798,8 @@ a.bw-table-product__name:hover {
   background: #f9fbfc;
 }
 
-.bw-specs__sticky-product.is-highlighted {
+.bw-specs__sticky-product.is-highlighted,
+.bw-specs__sticky-product.is-selected {
   border-top: 3px solid var(--bw-blue);
   background: #edf8ff;
 }
@@ -1296,14 +1344,33 @@ a.bw-table-product__name:hover {
 
 @media (prefers-reduced-motion: reduce) {
   .bw-model-card,
+  .bw-model-card__media img,
+  .bw-scenario-card,
+  .bw-scenario-card__media img,
+  .bw-content-card,
   .bw-content-card__media img,
   .bw-content-card__link span,
+  .bw-specs__product-cell[data-bw-compare-product-select],
+  .bw-specs__sticky-product[data-bw-compare-product-select],
   .bw-specs__sticky {
     transition: none;
   }
 
   .bw-model-card:hover,
-  .bw-content-card:hover .bw-content-card__media img {
+  .bw-model-card:focus-within,
+  .bw-scenario-card:hover,
+  .bw-scenario-card:focus-within,
+  .bw-content-card:hover,
+  .bw-content-card:focus-within {
+    transform: none;
+  }
+
+  .bw-model-card:hover .bw-model-card__media img,
+  .bw-model-card:focus-within .bw-model-card__media img,
+  .bw-scenario-card:hover .bw-scenario-card__media img,
+  .bw-scenario-card:focus-within .bw-scenario-card__media img,
+  .bw-content-card:hover .bw-content-card__media img,
+  .bw-content-card:focus-within .bw-content-card__media img {
     transform: none;
   }
 }

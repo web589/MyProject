@@ -129,6 +129,8 @@
     var table = section.querySelector('[data-bw-compare-table-element]');
     var stickyProducts = section.querySelector('[data-bw-compare-sticky-products]');
     var stickyProductItems = Array.prototype.slice.call(section.querySelectorAll('[data-bw-compare-sticky-product]'));
+    var selectableProducts = Array.prototype.slice.call(section.querySelectorAll('[data-bw-compare-product-select]'));
+    var comparisonColumns = Array.prototype.slice.call(section.querySelectorAll('[data-bw-compare-column]'));
     if (!sticky || !scroller || !table || !stickyProducts || !table.tHead) return;
 
     initializedTables.add(section);
@@ -141,6 +143,44 @@
       if (!nav || nav.hidden) return 0;
       return Math.max(0, Math.round(nav.getBoundingClientRect().bottom));
     }
+
+    function selectProductColumn(column) {
+      var selectedColumn = String(column);
+
+      comparisonColumns.forEach(function (cell) {
+        cell.classList.toggle('is-selected', cell.getAttribute('data-bw-compare-column') === selectedColumn);
+      });
+
+      selectableProducts.forEach(function (product) {
+        var selected = product.getAttribute('data-bw-compare-column') === selectedColumn;
+        product.setAttribute('aria-pressed', selected ? 'true' : 'false');
+      });
+    }
+
+    function setStickyAccessibility(active) {
+      sticky.setAttribute('aria-hidden', active ? 'false' : 'true');
+      if (active) sticky.removeAttribute('inert');
+      else sticky.setAttribute('inert', '');
+
+      stickyProductItems.forEach(function (item) {
+        item.setAttribute('tabindex', active ? '0' : '-1');
+      });
+    }
+
+    selectableProducts.forEach(function (product) {
+      product.addEventListener('click', function (event) {
+        if (event.target.closest && event.target.closest('a')) return;
+        selectProductColumn(product.getAttribute('data-bw-compare-column'));
+      });
+
+      product.addEventListener('keydown', function (event) {
+        if (event.target.closest && event.target.closest('a')) return;
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+
+        event.preventDefault();
+        selectProductColumn(product.getAttribute('data-bw-compare-column'));
+      });
+    });
 
     function syncHorizontalPosition() {
       stickyProducts.style.transform = 'translate3d(' + (-scroller.scrollLeft) + 'px, 0, 0)';
@@ -182,6 +222,7 @@
 
       sticky.style.setProperty('--bw-compare-sticky-top', stickyTop + 'px');
       sticky.classList.toggle('is-stuck', shouldStick);
+      setStickyAccessibility(shouldStick);
 
       if (shouldStick) measureColumns();
     }

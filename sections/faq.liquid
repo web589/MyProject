@@ -286,11 +286,14 @@
 
   #shopify-section-{{ section.id }} .faq-category-nav {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    max-width: 100%;
-    margin: 0 0 56px;
+    width: calc(100% + 80px);
+    max-width: none;
+    margin: 0 -40px 56px;
     padding: 0 0 6px;
-    overflow-x: auto;
+    justify-content: center;
+    overflow: visible;
     overscroll-behavior-inline: contain;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -430,11 +433,16 @@
     width: 14px;
     height: 14px;
     color: currentColor;
-    transition: transform 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger.is-open .collapsible-trigger__icon {
-    transform: rotate(180deg);
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger__icon .icon-chevron-down {
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger.is-open .collapsible-trigger__icon .icon-chevron-down {
+    transform: translate(-50%, -50%) rotate(180deg);
   }
 
   #shopify-section-{{ section.id }} .rte.collapsible-content__inner--faq {
@@ -468,6 +476,12 @@
     #shopify-section-{{ section.id }} .faq-page-layout {
       padding-left: 20px;
       padding-right: 20px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category-nav {
+      width: calc(100% + 40px);
+      margin-right: -20px;
+      margin-left: -20px;
     }
   }
 
@@ -522,7 +536,13 @@
     }
 
     #shopify-section-{{ section.id }} .faq-category-nav {
+      width: auto;
+      margin-right: 0;
       margin-bottom: 40px;
+      margin-left: 0;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
     }
 
     #shopify-section-{{ section.id }} .faq-category {
