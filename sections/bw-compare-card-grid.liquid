@@ -25,8 +25,28 @@
 
     <div class="bw-content-grid__items" role="list">
       {% for block in section.blocks %}
+        {% liquid
+          assign card_product = block.settings.product
+          assign card_variant = card_product.selected_or_first_available_variant | default: card_product.variants.first
+          assign card_image = block.settings.image
+          if card_image == blank and card_variant != blank
+            assign card_image = card_variant.featured_image
+          endif
+          if card_image == blank and card_product != blank
+            assign card_image = card_product.featured_image
+          endif
+          assign card_image_alt = block.settings.image_alt | default: card_image.alt | default: card_product.title | default: block.settings.title
+          assign card_link = block.settings.link_url
+          if card_link == blank and card_product != blank
+            assign card_link = card_product.url
+          endif
+          assign card_link_label = block.settings.link_label
+          if card_link_label == blank and card_product != blank
+            assign card_link_label = card_product.title
+          endif
+        %}
         <article class="bw-content-card" role="listitem" {{ block.shopify_attributes }}>
-          {% if block.settings.video != blank or block.settings.image != blank %}
+          {% if block.settings.video != blank or card_image != blank %}
             <div class="bw-content-card__media">
               {% if block.settings.video != blank %}
                 {{
@@ -43,13 +63,13 @@
                 }}
               {% else %}
                 {{
-                  block.settings.image
+                  card_image
                   | image_url: width: 1200
                   | image_tag:
                     loading: 'lazy',
                     widths: '360, 540, 720, 900, 1200',
                     sizes: '(min-width: 1100px) 32vw, (min-width: 700px) 48vw, 92vw',
-                    alt: block.settings.image_alt
+                    alt: card_image_alt
                 }}
               {% endif %}
             </div>
@@ -78,9 +98,9 @@
               </ul>
             {% endif %}
 
-            {% if block.settings.link_label != blank and block.settings.link_url != blank %}
-              <a class="bw-content-card__link" href="{{ block.settings.link_url }}">
-                {{ block.settings.link_label | escape }}
+            {% if card_link_label != blank and card_link != blank %}
+              <a class="bw-content-card__link" href="{{ card_link }}">
+                {{ card_link_label | escape }}
                 <span aria-hidden="true">→</span>
               </a>
             {% endif %}
@@ -168,7 +188,14 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Bild"
+          "label": "Bild (optional)",
+          "info": "Ohne eigenes Bild wird automatisch das Bild des ausgewählten Produkts verwendet."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Shopify-Produkt (optional)",
+          "info": "Lädt bei leerem Bildfeld das Produktbild und verwendet bei leerem Linkziel die Produktseite."
         },
         {
           "type": "video",

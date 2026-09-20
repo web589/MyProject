@@ -7,6 +7,13 @@
   assign faq_schema_items = section.blocks | where: 'type', 'question'
   assign should_render_faq = false
   assign use_theme_editor_content = false
+  assign is_faq_page = false
+  if template.name == 'page' and template.suffix == 'faq'
+    assign is_faq_page = true
+    if faq_title == blank
+      assign faq_title = 'FAQs'
+    endif
+  endif
   if section.settings.content_source == 'theme_editor'
     assign use_theme_editor_content = true
   endif
@@ -56,51 +63,147 @@
     max-width: 1680px;
   }
 
-  @media only screen and (min-width: 769px) and (max-width: 1680px) {
-    #shopify-section-{{ section.id }} .page-width--narrow {
-      max-width: 1640px;
-      padding-left: 20px;
-      padding-right: 20px;
-    }
+  #shopify-section-{{ section.id }} .faq-page-layout {
+    max-width: 1080px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: 72px;
+    padding-bottom: 96px;
+    overflow: hidden;
   }
 
-  @media only screen and (max-width: 768px) {
-    #shopify-section-{{ section.id }} .page-width--narrow {
-      padding-left: 16px;
-      padding-right: 16px;
-    }
+  #shopify-section-{{ section.id }} .faq-page-shell {
+    width: 100%;
+    overflow: hidden;
   }
 
-  #shopify-section-{{ section.id }} .faq-section-header {
+  #shopify-section-{{ section.id }} .faq-page-banner-wrap {
+    width: 100%;
+    max-width: 1640px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    min-height: 360px;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(115deg, #071b35 0%, #0c3f6c 52%, #078ed0 100%);
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner::after {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(circle at 78% 18%, rgba(111, 214, 255, 0.22), transparent 34%),
+      linear-gradient(135deg, rgba(4, 24, 48, 0.24), transparent 62%);
+    content: '';
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner__media,
+  #shopify-section-{{ section.id }} .faq-page-banner__media img,
+  #shopify-section-{{ section.id }} .faq-page-banner__scrim {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner__media {
+    z-index: -2;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner__media img {
+    display: block;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner__scrim {
+    z-index: -1;
+    background: linear-gradient(90deg, rgba(4, 24, 48, 0.84) 0%, rgba(4, 24, 48, 0.48) 48%, rgba(4, 24, 48, 0.08) 100%);
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: min(100%, 560px);
+    min-height: 360px;
+    padding: 52px 64px;
+    box-sizing: border-box;
+    color: #ffffff;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner__eyebrow {
+    margin: 0 0 12px;
+    color: #8edcff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner__title {
+    max-width: 520px;
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(32px, 4vw, 54px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner__text {
+    max-width: 480px;
+    margin: 18px 0 0;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner__text > :first-child {
+    margin-top: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-banner__text > :last-child {
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-section-generic .faq-section-header {
     margin: 0 0 40px;
     text-align: left;
   }
 
-  #shopify-section-{{ section.id }} .faq-section-title {
+  #shopify-section-{{ section.id }} .faq-section-generic .faq-section-title {
     margin: 0;
     color: #242424;
     font-size: 32px;
     font-weight: 700;
     line-height: 1.2;
-    letter-spacing: 0;
   }
 
-  #shopify-section-{{ section.id }} .faq-section-subtitle {
+  #shopify-section-{{ section.id }} .faq-section-generic .faq-section-subtitle {
     max-width: 760px;
     margin: 12px 0 0;
     color: #596b82;
     font-size: 16px;
     line-height: 1.6;
-    letter-spacing: 0;
   }
 
-  #shopify-section-{{ section.id }} .faq-view-all {
+  #shopify-section-{{ section.id }} .faq-section-generic .faq-view-all {
     display: flex;
     justify-content: center;
     margin-top: 28px;
   }
 
-  #shopify-section-{{ section.id }} .faq-view-all__link {
+  #shopify-section-{{ section.id }} .faq-section-generic .faq-view-all__link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -111,85 +214,455 @@
     text-decoration: none;
   }
 
-  #shopify-section-{{ section.id }} .faq-view-all__link:hover {
-    color: #007dcc;
-  }
-
-  #shopify-section-{{ section.id }} .faq-view-all__arrow {
+  #shopify-section-{{ section.id }} .faq-section-generic .faq-view-all__arrow {
     width: 18px;
     height: 18px;
     transition: transform 0.2s ease;
   }
 
-  #shopify-section-{{ section.id }} .faq-view-all__link:hover .faq-view-all__arrow,
-  #shopify-section-{{ section.id }} .faq-view-all__link:focus-visible .faq-view-all__arrow {
-    transform: translateX(3px);
-  }
-
-  #shopify-section-{{ section.id }} .faq-item {
-    background: #f5f7f9;
-    border-radius: 12px;
+  #shopify-section-{{ section.id }} .faq-section-generic .faq-item {
     margin-bottom: 20px;
-    overflow: hidden;
+    border: 0;
+    border-radius: 12px;
+    background: #f5f7f9;
   }
 
-  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger {
+  #shopify-section-{{ section.id }} .faq-section-generic .faq-item .collapsible-trigger {
+    display: block;
     min-height: 84px;
     padding: 24px 64px 24px 24px;
+    color: #000000;
     font-size: 20px;
     font-weight: 800;
     line-height: 1.35;
-    color: #000000;
   }
 
-  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger__icon {
+  #shopify-section-{{ section.id }} .faq-section-generic .faq-item .collapsible-trigger__icon {
+    position: absolute;
     inset-inline-end: 24px;
+    width: 12px;
+    height: 12px;
   }
 
-  #shopify-section-{{ section.id }} .rte.collapsible-content__inner--faq {
+  #shopify-section-{{ section.id }} .faq-section-generic .rte.collapsible-content__inner--faq {
     padding: 0 24px 28px;
     color: #2f3f5b;
     font-size: 18px;
     line-height: 1.7;
   }
 
-  @media only screen and (max-width: 640px) {
-    #shopify-section-{{ section.id }} .faq-section-header {
-      margin-bottom: 28px;
+  #shopify-section-{{ section.id }} .faq-page-kicker {
+    margin: 0 0 12px;
+    color: #0099fe;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-layout .faq-section-header {
+    max-width: 760px;
+    margin: 0 auto 36px;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-layout .faq-section-title {
+    margin: 0;
+    color: #122033;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-layout .faq-section-subtitle {
+    max-width: 680px;
+    margin: 16px auto 0;
+    color: #596b82;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-nav {
+    display: flex;
+    gap: 10px;
+    max-width: 100%;
+    margin: 0 0 56px;
+    padding: 0 0 6px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-nav__link {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 9px 14px;
+    border: 1px solid #dce4ec;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #52647a;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-nav__link:hover,
+  #shopify-section-{{ section.id }} .faq-category-nav__link:focus-visible {
+    border-color: #0099fe;
+    background: #f2f9ff;
+    color: #007dcc;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-nav__number,
+  #shopify-section-{{ section.id }} .faq-category__number {
+    color: #0099fe;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category {
+    scroll-margin-top: 32px;
+    margin: 0 0 56px;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category:last-child {
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 0 0 18px;
+    padding: 0 0 16px;
+    border-bottom: 1px solid #dce4ec;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category__heading {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    min-width: 0;
+    margin: 0;
+    color: #122033;
+    font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category__number {
+    flex: 0 0 auto;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category__count {
+    flex: 0 0 auto;
+    color: #77869a;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  #shopify-section-{{ section.id }} .faq-question-list {
+    display: grid;
+    gap: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .faq-item {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid #dce4ec;
+    border-radius: 10px;
+    background: #ffffff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .faq-item:has(.collapsible-trigger.is-open),
+  #shopify-section-{{ section.id }} .faq-item:has(.collapsible-trigger:focus-visible) {
+    border-color: #0099fe;
+    box-shadow: 0 8px 24px rgba(0, 153, 254, 0.08);
+  }
+
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 72px;
+    padding: 20px 22px;
+    color: #122033;
+    font-size: 17px;
+    font-weight: 650;
+    line-height: 1.45;
+    text-align: left;
+  }
+
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger > span:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger:hover,
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger:focus-visible,
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger.is-open {
+    color: #007dcc;
+  }
+
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger__icon {
+    position: relative;
+    inset: auto;
+    flex: 0 0 auto;
+    width: 14px;
+    height: 14px;
+    color: currentColor;
+    transition: transform 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .faq-item .collapsible-trigger.is-open .collapsible-trigger__icon {
+    transform: rotate(180deg);
+  }
+
+  #shopify-section-{{ section.id }} .rte.collapsible-content__inner--faq {
+    padding: 0 22px 24px;
+    color: #52647a;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  #shopify-section-{{ section.id }} .rte.collapsible-content__inner--faq > :first-child {
+    margin-top: 0;
+  }
+
+  #shopify-section-{{ section.id }} .rte.collapsible-content__inner--faq > :last-child {
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-layout .faq-view-all {
+    margin-top: 40px;
+  }
+
+  @media only screen and (min-width: 769px) and (max-width: 1680px) {
+    #shopify-section-{{ section.id }} .faq-section-generic.page-width--narrow {
+      max-width: 1640px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  @media only screen and (min-width: 769px) and (max-width: 1120px) {
+    #shopify-section-{{ section.id }} .faq-page-layout {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    #shopify-section-{{ section.id }} .faq-section-generic.page-width--narrow {
+      padding-left: 16px;
+      padding-right: 16px;
     }
 
-    #shopify-section-{{ section.id }} .faq-section-title {
-      font-size: 28px;
+    #shopify-section-{{ section.id }} .faq-page-layout {
+      max-width: none;
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
-    #shopify-section-{{ section.id }} .faq-section-subtitle {
+    #shopify-section-{{ section.id }} .faq-page-banner-wrap {
+      padding: 0 12px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-banner {
+      min-height: 300px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-banner__content {
+      min-height: 300px;
+      padding: 40px 28px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-banner__title {
+      font-size: 36px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-banner__text {
       font-size: 15px;
     }
 
+    #shopify-section-{{ section.id }} .faq-page-banner__scrim {
+      background: linear-gradient(90deg, rgba(4, 24, 48, 0.82) 0%, rgba(4, 24, 48, 0.36) 100%);
+    }
+    #shopify-section-{{ section.id }} .faq-page-layout {
+      padding-top: 48px;
+      padding-bottom: 64px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-layout .faq-section-header {
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-layout .faq-section-title {
+      font-size: 38px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category-nav {
+      margin-bottom: 40px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category {
+      margin-bottom: 42px;
+      scroll-margin-top: 20px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category__header {
+      align-items: flex-start;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category__heading {
+      gap: 9px;
+      font-size: 23px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category__count {
+      padding-top: 4px;
+      font-size: 12px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-question-list {
+      gap: 10px;
+    }
+
     #shopify-section-{{ section.id }} .faq-item .collapsible-trigger {
+      min-height: 64px;
+      padding: 17px 18px;
+      font-size: 16px;
+    }
+
+    #shopify-section-{{ section.id }} .rte.collapsible-content__inner--faq {
+      padding: 0 18px 20px;
+      font-size: 15px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-item .collapsible-trigger__icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-section-generic .faq-section-header {
+      margin-bottom: 28px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-section-generic .faq-section-title {
+      font-size: 28px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-section-generic .faq-section-subtitle {
+      font-size: 15px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-section-generic .faq-item .collapsible-trigger {
       min-height: 68px;
       padding: 18px 52px 18px 18px;
       font-size: 16px;
     }
 
-    #shopify-section-{{ section.id }} .faq-item .collapsible-trigger__icon {
+    #shopify-section-{{ section.id }} .faq-section-generic .faq-item .collapsible-trigger__icon {
       inset-inline-end: 18px;
     }
 
-    #shopify-section-{{ section.id }} .rte.collapsible-content__inner--faq {
+    #shopify-section-{{ section.id }} .faq-section-generic .rte.collapsible-content__inner--faq {
       padding: 0 18px 22px;
       font-size: 15px;
     }
   }
 </style>
 
-<div{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handle }}"{% endif %} class="pdp-anchor-target page-width page-width--narrow">
-  {%- if faq_title != blank or faq_subtitle != blank -%}
+{%- assign faq_has_categories = false -%}
+{%- if is_product_faq == false -%}
+  {%- for faq_nav_item in faq_items -%}
+    {%- if faq_nav_item.type == 'rich-text' and faq_nav_item.settings.text contains '<h2' -%}
+      {%- assign faq_has_categories = true -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<div{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handle }}"{% endif %} class="pdp-anchor-target{% if is_faq_page %} faq-page-shell{% else %} page-width page-width--narrow faq-section-generic{% endif %}">
+  {%- if is_faq_page -%}
+    {%- assign faq_banner_image = section.settings.banner_image | default: section.settings.banner_image_mobile -%}
+    {%- assign faq_banner_image_mobile = section.settings.banner_image_mobile | default: faq_banner_image -%}
+    {%- assign faq_banner_alt = faq_banner_image.alt | default: section.settings.banner_title | default: 'FAQ' -%}
+    <div class="faq-page-banner-wrap">
+      <section class="faq-page-banner" aria-label="{{ section.settings.banner_title | default: 'FAQ' | escape }}">
+        {%- if faq_banner_image != blank -%}
+          <picture class="faq-page-banner__media">
+            {%- if faq_banner_image_mobile != blank -%}
+              <source
+                media="(max-width: 768px)"
+                srcset="
+                  {{ faq_banner_image_mobile | image_url: width: 768 }} 768w,
+                  {{ faq_banner_image_mobile | image_url: width: 1080 }} 1080w
+                "
+                sizes="100vw"
+              >
+            {%- endif -%}
+            <img
+              src="{{ faq_banner_image | image_url: width: 1640 }}"
+              srcset="
+                {{ faq_banner_image | image_url: width: 960 }} 960w,
+                {{ faq_banner_image | image_url: width: 1280 }} 1280w,
+                {{ faq_banner_image | image_url: width: 1640 }} 1640w
+              "
+              sizes="(max-width: 768px) 100vw, min(100vw, 1640px)"
+              width="{{ faq_banner_image.width }}"
+              height="{{ faq_banner_image.height }}"
+              alt="{{ faq_banner_alt | escape }}"
+              loading="eager"
+              fetchpriority="high"
+            >
+          </picture>
+          <div class="faq-page-banner__scrim" aria-hidden="true"></div>
+        {%- endif -%}
+        <div class="faq-page-banner__content">
+          {%- if section.settings.banner_eyebrow != blank -%}
+            <p class="faq-page-banner__eyebrow">{{ section.settings.banner_eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.banner_title != blank -%}
+            <p class="faq-page-banner__title">{{ section.settings.banner_title | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.banner_text != blank -%}
+            <div class="faq-page-banner__text rte">{{ section.settings.banner_text }}</div>
+          {%- endif -%}
+        </div>
+      </section>
+    </div>
+    <div class="page-width page-width--narrow faq-page-layout">
+  {%- endif -%}
+  {%- if faq_title != blank or faq_subtitle != blank or is_faq_page -%}
     <header class="faq-section-header">
       {%- if faq_title != blank -%}
-        <h2 class="faq-section-title">
-          {{ faq_title | escape }}
-        </h2>
+        {%- if is_faq_page -%}
+          <h1 class="faq-section-title">{{ faq_title | escape }}</h1>
+        {%- else -%}
+          <h2 class="faq-section-title">{{ faq_title | escape }}</h2>
+        {%- endif -%}
       {%- endif -%}
       {%- if faq_subtitle != blank -%}
         <div class="faq-section-subtitle rte">
@@ -205,79 +678,147 @@
       faq_items: faq_schema_items,
       faq_source: structured_data_faq_source
     -%}
-    {%- for faq_item in faq_items -%}
-      {% liquid
-        assign should_render_faq_item = true
-        if is_product_faq
-          assign faq_question = faq_item.question.value
-          assign faq_answer = faq_item.answer.value
-          assign faq_item_id = faq_item.system.handle | default: forloop.index
-        else
-          assign faq_question = faq_item.settings.title
-          assign faq_answer = faq_item.settings.text
-          assign faq_item_id = faq_item.id
-          if faq_item.type == 'question'
-            if faq_question == blank or faq_answer == blank
-              assign should_render_faq_item = false
-            endif
-          endif
-        endif
-      %}
-      {% if should_render_faq_item %}
-        <div {% unless is_product_faq %}{{ faq_item.shopify_attributes }}{% endunless %}>
-        {% if is_product_faq %}
-          {% if faq_question != blank and faq_answer != blank %}
-            <div class="faq-item">
-              <button type="button" class="collapsible-trigger collapsible-trigger--inline collapsible-trigger--icon-right collapsible--auto-height text-left" aria-controls="FAQ-content-{{ faq_item_id }}">
-                <span>{{ faq_question }}</span>
-                {%- render 'collapsible-icons-alt', no_circle: true -%}
-              </button>
-              <div id="FAQ-content-{{ faq_item_id }}" class="collapsible-content collapsible-content--all">
-                <div class="collapsible-content__inner collapsible-content__inner--faq rte">{{ faq_answer }}</div>
-              </div>
-            </div>
-          {% endif %}
-        {% else %}
-        {% case faq_item.type %}
-          {% when 'rich-text' %}
-            <div class="index-section index-section--faq">
-              <div class="text-{{ faq_item.settings.align_text }}">
-                {%- if faq_item.settings.title != blank -%}
-                  <p class="h2">
-                    {{ faq_item.settings.title | escape }}
-                  </p>
-                {%- endif -%}
-                {%- if faq_item.settings.text != blank -%}
-                  <div class="rte">
-                    {%- if faq_item.settings.enlarge_text %}<div class="enlarge-text">{% endif -%}
-                    {{ faq_item.settings.text }}
-                    {%- if faq_item.settings.enlarge_text %}</div>{% endif -%}
-                  </div>
-                {%- endif -%}
-              </div>
-            </div>
 
-          {% when 'question' %}
-            <div class="faq-item">
+    {%- if faq_has_categories -%}
+      <nav class="faq-category-nav" aria-label="FAQ Kategorien">
+        {%- assign faq_nav_index = 0 -%}
+        {%- for faq_nav_item in faq_items -%}
+          {%- if faq_nav_item.type == 'rich-text' and faq_nav_item.settings.text contains '<h2' -%}
+            {%- assign faq_nav_index = faq_nav_index | plus: 1 -%}
+            {%- assign faq_nav_label = faq_nav_item.settings.text | strip_html | strip -%}
+            {%- assign faq_nav_parts = faq_nav_label | split: '、' -%}
+            {%- assign faq_nav_number = faq_nav_parts[0] | strip | plus: 0 -%}
+            {%- assign faq_nav_title = faq_nav_parts[1] | default: faq_nav_label | strip -%}
+            {%- if faq_nav_number < 10 -%}
+              {%- assign faq_nav_number = faq_nav_number | prepend: '0' -%}
+            {%- endif -%}
+            <a class="faq-category-nav__link" href="#faq-category-{{ faq_nav_index }}">
+              <span class="faq-category-nav__number">{{ faq_nav_number }}</span>
+              <span>{{ faq_nav_title | escape }}</span>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+
+    {%- if is_product_faq -%}
+      {%- for faq_item in faq_items -%}
+        {%- assign faq_question = faq_item.question.value -%}
+        {%- assign faq_answer = faq_item.answer.value -%}
+        {%- assign faq_item_id = faq_item.system.handle | default: forloop.index -%}
+        {%- if faq_question != blank and faq_answer != blank -%}
+          <div class="faq-item">
+            <button
+              id="FAQ-question-{{ faq_item_id }}"
+              type="button"
+              class="collapsible-trigger collapsible-trigger--inline collapsible-trigger--icon-right collapsible--auto-height text-left"
+              aria-controls="FAQ-content-{{ faq_item_id }}"
+              aria-expanded="false"
+            >
+              <span>{{ faq_question }}</span>
+              {%- render 'collapsible-icons-alt', no_circle: true -%}
+            </button>
+            <div id="FAQ-content-{{ faq_item_id }}" class="collapsible-content collapsible-content--all" role="region" aria-labelledby="FAQ-question-{{ faq_item_id }}">
+              <div class="collapsible-content__inner collapsible-content__inner--faq rte">{{ faq_answer }}</div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- elsif faq_has_categories -%}
+      {%- assign faq_category_index = 0 -%}
+      {%- assign faq_category_title = blank -%}
+      {%- assign faq_category_number = blank -%}
+      {%- assign faq_category_count = 0 -%}
+      {%- assign faq_category_content = blank -%}
+      {%- assign faq_category_shopify_attributes = blank -%}
+      {%- assign faq_category_open = false -%}
+      {%- for faq_item in faq_items -%}
+        {%- if faq_item.type == 'rich-text' and faq_item.settings.text contains '<h2' -%}
+          {%- if faq_category_open -%}
+            <section id="faq-category-{{ faq_category_index }}" class="faq-category" {{ faq_category_shopify_attributes }}>
+              <header class="faq-category__header">
+                <h2 class="faq-category__heading">
+                  <span class="faq-category__number">{{ faq_category_number }}</span>
+                  <span>{{ faq_category_title | escape }}</span>
+                </h2>
+                <span class="faq-category__count">{{ faq_category_count }} Fragen</span>
+              </header>
+              <div class="faq-question-list">{{ faq_category_content }}</div>
+            </section>
+          {%- endif -%}
+          {%- assign faq_category_index = faq_category_index | plus: 1 -%}
+          {%- assign faq_category_label = faq_item.settings.text | strip_html | strip -%}
+          {%- assign faq_category_parts = faq_category_label | split: '、' -%}
+          {%- assign faq_category_number_value = faq_category_parts[0] | strip | plus: 0 -%}
+          {%- assign faq_category_title = faq_category_parts[1] | default: faq_category_label | strip -%}
+          {%- if faq_category_number_value < 10 -%}
+            {%- assign faq_category_number = faq_category_number_value | prepend: '0' -%}
+          {%- else -%}
+            {%- assign faq_category_number = faq_category_number_value -%}
+          {%- endif -%}
+          {%- assign faq_category_count = 0 -%}
+          {%- assign faq_category_content = blank -%}
+          {%- assign faq_category_shopify_attributes = faq_item.shopify_attributes -%}
+          {%- assign faq_category_open = true -%}
+        {%- elsif faq_item.type == 'question' and faq_item.settings.title != blank and faq_item.settings.text != blank -%}
+          {%- assign faq_category_count = faq_category_count | plus: 1 -%}
+          {%- capture faq_question_markup -%}
+            <div class="faq-item" {{ faq_item.shopify_attributes }}>
               <button
+                id="FAQ-question-{{ faq_item.id }}"
                 type="button"
                 class="collapsible-trigger collapsible-trigger--inline collapsible-trigger--icon-right collapsible--auto-height text-left"
                 aria-controls="FAQ-content-{{ faq_item.id }}"
+                aria-expanded="false"
               >
                 <span>{{ faq_item.settings.title }}</span>
                 {%- render 'collapsible-icons-alt', no_circle: true -%}
               </button>
-              <div id="FAQ-content-{{ faq_item.id }}" class="collapsible-content collapsible-content--all">
-                <div class="collapsible-content__inner collapsible-content__inner--faq rte">
-                  {{ faq_item.settings.text }}
-                </div>
+              <div id="FAQ-content-{{ faq_item.id }}" class="collapsible-content collapsible-content--all" role="region" aria-labelledby="FAQ-question-{{ faq_item.id }}">
+                <div class="collapsible-content__inner collapsible-content__inner--faq rte">{{ faq_item.settings.text }}</div>
               </div>
             </div>
-        {% endcase %}
-        {% endif %}
-        </div>
-      {% endif %}
-    {%- endfor -%}
+          {%- endcapture -%}
+          {%- assign faq_category_content = faq_category_content | append: faq_question_markup -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if faq_category_open -%}
+        <section id="faq-category-{{ faq_category_index }}" class="faq-category" {{ faq_category_shopify_attributes }}>
+          <header class="faq-category__header">
+            <h2 class="faq-category__heading">
+              <span class="faq-category__number">{{ faq_category_number }}</span>
+              <span>{{ faq_category_title | escape }}</span>
+            </h2>
+            <span class="faq-category__count">{{ faq_category_count }} Fragen</span>
+          </header>
+          <div class="faq-question-list">{{ faq_category_content }}</div>
+        </section>
+      {%- endif -%}
+    {%- else -%}
+      {%- for faq_item in faq_items -%}
+        {%- if faq_item.type == 'rich-text' -%}
+          <div class="index-section index-section--faq">
+            <div class="text-{{ faq_item.settings.align_text }} rte">{{ faq_item.settings.text }}</div>
+          </div>
+        {%- elsif faq_item.type == 'question' and faq_item.settings.title != blank and faq_item.settings.text != blank -%}
+          <div class="faq-item" {{ faq_item.shopify_attributes }}>
+            <button
+              id="FAQ-question-{{ faq_item.id }}"
+              type="button"
+              class="collapsible-trigger collapsible-trigger--inline collapsible-trigger--icon-right collapsible--auto-height text-left"
+              aria-controls="FAQ-content-{{ faq_item.id }}"
+              aria-expanded="false"
+            >
+              <span>{{ faq_item.settings.title }}</span>
+              {%- render 'collapsible-icons-alt', no_circle: true -%}
+            </button>
+            <div id="FAQ-content-{{ faq_item.id }}" class="collapsible-content collapsible-content--all" role="region" aria-labelledby="FAQ-question-{{ faq_item.id }}">
+              <div class="collapsible-content__inner collapsible-content__inner--faq rte">{{ faq_item.settings.text }}</div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
   {%- endif -%}
 
   {%- if section.settings.view_all_text != blank and section.settings.view_all_link != blank -%}
@@ -296,6 +837,7 @@
       {{ 'home_page.onboarding.no_content' | t }}
     </div>
   {%- endif -%}
+  {%- if is_faq_page -%}</div>{%- endif -%}
 </div>
 
 {%- if section.settings.divider -%}</div>{%- endif -%}
@@ -328,6 +870,36 @@
       "id": "anchor_id",
       "label": "Anchor ID",
       "info": "Use the same value in navigation links, without the # symbol."
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "FAQ Banner desktop image",
+      "info": "Recommended size: 1640 × 360 px. The blue gradient is used when no image is selected."
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image_mobile",
+      "label": "FAQ Banner mobile image",
+      "info": "Optional. Recommended size: 768 × 520 px. Falls back to the desktop image when empty."
+    },
+    {
+      "type": "text",
+      "id": "banner_eyebrow",
+      "label": "FAQ Banner eyebrow",
+      "default": "Hilfe & Support"
+    },
+    {
+      "type": "text",
+      "id": "banner_title",
+      "label": "FAQ Banner title",
+      "default": "Wir helfen dir weiter"
+    },
+    {
+      "type": "richtext",
+      "id": "banner_text",
+      "label": "FAQ Banner text",
+      "default": "<p>Antworten auf die wichtigsten Fragen zur VENUS E.</p>"
     },
     {
       "type": "text",

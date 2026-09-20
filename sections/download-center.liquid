@@ -1,0 +1,528 @@
+{%- liquid
+  assign download_center_id = 'download-center-' | append: section.id
+  assign download_center_hero_class = download_center_id | append: '__hero-image'
+  assign download_categories = 'storage,accessories' | split: ','
+-%}
+
+{%- style -%}
+  .{{ download_center_id }} {
+    --download-blue: #0099fe;
+    --download-blue-soft: #e8f4ff;
+    --download-purple: #7a3ff2;
+    --download-purple-soft: #f1ecfd;
+    --download-ink: #0e1b2c;
+    --download-gray: #5b6b7c;
+    --download-muted: #8a97a6;
+    --download-border: #e3e8ee;
+    --download-line: #edf0f4;
+    color: var(--download-ink);
+    padding: 0 0 72px;
+  }
+
+  .{{ download_center_id }}__hero {
+    width: min(100%, 1640px);
+    margin: 0 auto 72px;
+  }
+
+  .{{ download_center_id }}__hero-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 180px;
+    max-height: 300px;
+    object-fit: cover;
+  }
+
+  .{{ download_center_id }}__container {
+    width: calc(100% - 48px);
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .{{ download_center_id }}__intro {
+    padding-bottom: 38px;
+    border-bottom: 1px solid var(--download-line);
+  }
+
+  .{{ download_center_id }}__eyebrow {
+    margin: 0 0 12px;
+    color: var(--download-blue);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+
+  .{{ download_center_id }}__title {
+    margin: 0;
+    color: var(--download-ink);
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .{{ download_center_id }}__description {
+    max-width: 980px;
+    margin: 18px 0 0;
+    color: var(--download-gray);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .{{ download_center_id }}__category {
+    margin-top: 62px;
+  }
+
+  .{{ download_center_id }}__category-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 22px;
+  }
+
+  .{{ download_center_id }}__category-title {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 0;
+    color: var(--download-ink);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .{{ download_center_id }}__category-number {
+    color: var(--download-blue);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .{{ download_center_id }}__category-meta {
+    margin: 0;
+    color: var(--download-muted);
+    font-size: 13px;
+  }
+
+  .{{ download_center_id }}__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .{{ download_center_id }}__card {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 26px;
+    min-width: 0;
+    padding: 26px 28px;
+    background: #fff;
+    border: 1px solid var(--download-border);
+    border-radius: 10px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .{{ download_center_id }}__card:hover {
+    border-color: #bfd9f2;
+    box-shadow: 0 8px 24px rgba(14, 27, 44, .04);
+  }
+
+  .{{ download_center_id }}__product {
+    min-width: 0;
+  }
+
+  .{{ download_center_id }}__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 170px;
+    overflow: hidden;
+    background: #f7f9fc;
+    border-radius: 8px;
+  }
+
+  .{{ download_center_id }}__image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .{{ download_center_id }}__product-name {
+    margin: 14px 0 0;
+    color: var(--download-ink);
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .{{ download_center_id }}__spec,
+  .{{ download_center_id }}__tagline {
+    margin: 4px 0 0;
+    color: var(--download-gray);
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+
+  .{{ download_center_id }}__badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 9px;
+    color: var(--download-blue);
+    background: var(--download-blue-soft);
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .{{ download_center_id }}__documents {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .{{ download_center_id }}__document {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 60px;
+    padding: 13px 0;
+    border-top: 1px solid var(--download-line);
+  }
+
+  .{{ download_center_id }}__document:first-child {
+    border-top: 0;
+  }
+
+  .{{ download_center_id }}__type {
+    flex: 0 0 auto;
+    min-width: 52px;
+    padding: 3px 8px;
+    color: var(--download-blue);
+    background: var(--download-blue-soft);
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .{{ download_center_id }}__type--video {
+    color: var(--download-purple);
+    background: var(--download-purple-soft);
+  }
+
+  .{{ download_center_id }}__document-title {
+    min-width: 0;
+    color: var(--download-ink);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .{{ download_center_id }}__language {
+    margin-left: 8px;
+    color: var(--download-gray);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .{{ download_center_id }}__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    margin-left: auto;
+    color: var(--download-blue);
+    background: var(--download-blue-soft);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color .15s ease, color .15s ease;
+  }
+
+  .{{ download_center_id }}__link:hover,
+  .{{ download_center_id }}__link:focus-visible {
+    color: #fff;
+    background: var(--download-blue);
+  }
+
+  .{{ download_center_id }}__link:focus-visible {
+    outline: 2px solid var(--download-blue);
+    outline-offset: 3px;
+  }
+
+  .{{ download_center_id }}__link svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media screen and (max-width: 990px) {
+    .{{ download_center_id }}__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .{{ download_center_id }} {
+      padding-bottom: 48px;
+    }
+
+    .{{ download_center_id }}__hero {
+      margin-bottom: 44px;
+    }
+
+    .{{ download_center_id }}__container {
+      width: calc(100% - 32px);
+    }
+
+    .{{ download_center_id }}__intro {
+      padding-bottom: 28px;
+    }
+
+    .{{ download_center_id }}__category {
+      margin-top: 44px;
+    }
+
+    .{{ download_center_id }}__category-heading {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .{{ download_center_id }}__category-title {
+      font-size: 21px;
+    }
+
+    .{{ download_center_id }}__card {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .{{ download_center_id }}__image {
+      width: 100%;
+      height: 180px;
+    }
+
+    .{{ download_center_id }}__document {
+      gap: 10px;
+    }
+
+    .{{ download_center_id }}__document-title {
+      font-size: 13px;
+    }
+
+    .{{ download_center_id }}__language {
+      display: inline-block;
+      margin-left: 4px;
+    }
+  }
+{%- endstyle -%}
+
+<section class="{{ download_center_id }}" aria-labelledby="{{ download_center_id }}-title">
+  {%- if section.settings.hero_image != blank -%}
+    <div class="{{ download_center_id }}__hero">
+      {{
+        section.settings.hero_image
+        | image_url: width: 1640
+        | image_tag:
+          class: download_center_hero_class,
+          loading: 'eager',
+          widths: '640, 960, 1280, 1640',
+          sizes: '100vw',
+          alt: section.settings.hero_alt
+      }}
+    </div>
+  {%- endif -%}
+
+  <div class="{{ download_center_id }}__container">
+    <header class="{{ download_center_id }}__intro">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="{{ download_center_id }}__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h1 id="{{ download_center_id }}-title" class="{{ download_center_id }}__title">{{ section.settings.title | escape }}</h1>
+      {%- if section.settings.description != blank -%}
+        <p class="{{ download_center_id }}__description">{{ section.settings.description | escape }}</p>
+      {%- endif -%}
+    </header>
+
+    {%- for category in download_categories -%}
+      {%- assign category_block_count = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.category == category -%}
+          {%- assign category_block_count = category_block_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if category_block_count > 0 -%}
+        {%- if category == 'storage' -%}
+          {%- assign category_number = '01' -%}
+          {%- assign category_title = section.settings.storage_heading -%}
+          {%- assign category_meta = category_block_count | append: ' Modelle' -%}
+        {%- else -%}
+          {%- assign category_number = '02' -%}
+          {%- assign category_title = section.settings.accessories_heading -%}
+          {%- assign category_meta = category_block_count | append: ' Artikel' -%}
+        {%- endif -%}
+
+        <section class="{{ download_center_id }}__category" aria-labelledby="{{ download_center_id }}-{{ category }}-title">
+          <div class="{{ download_center_id }}__category-heading">
+            <h2 id="{{ download_center_id }}-{{ category }}-title" class="{{ download_center_id }}__category-title">
+              <span class="{{ download_center_id }}__category-number">{{ category_number }}</span>
+              <span>{{ category_title | escape }}</span>
+            </h2>
+            <p class="{{ download_center_id }}__category-meta">{{ category_meta }}</p>
+          </div>
+
+          <div class="{{ download_center_id }}__grid">
+            {%- for block in section.blocks -%}
+              {%- if block.settings.category != category -%}
+                {%- continue -%}
+              {%- endif -%}
+              {%- assign product = block.settings.product -%}
+              {%- assign card_title = block.settings.title | default: product.title -%}
+              {%- assign card_image = block.settings.image | default: product.featured_image -%}
+              {%- assign document_count = 0 -%}
+              {%- for document_index in (1..8) -%}
+                {%- assign document_url_key = 'file_' | append: document_index | append: '_url' -%}
+                {%- if block.settings[document_url_key] != blank -%}
+                  {%- assign document_count = document_count | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              <article class="{{ download_center_id }}__card" {{ block.shopify_attributes }}>
+                <div class="{{ download_center_id }}__product">
+                  {%- if card_image != blank -%}
+                    <div class="{{ download_center_id }}__image">
+                      {{
+                        card_image
+                        | image_url: width: 800
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '240, 360, 480, 640, 800',
+                          sizes: '(max-width: 600px) calc(100vw - 72px), 200px',
+                          alt: card_title
+                      }}
+                    </div>
+                  {%- endif -%}
+                  {%- if card_title != blank -%}<h3 class="{{ download_center_id }}__product-name">{{ card_title | escape }}</h3>{%- endif -%}
+                  {%- if block.settings.spec != blank -%}<p class="{{ download_center_id }}__spec">{{ block.settings.spec | escape }}</p>{%- endif -%}
+                  {%- if block.settings.tagline != blank -%}<p class="{{ download_center_id }}__tagline">{{ block.settings.tagline | escape }}</p>{%- endif -%}
+                  {%- if block.settings.badge != blank -%}<span class="{{ download_center_id }}__badge">{{ block.settings.badge | escape }}</span>{%- endif -%}
+                </div>
+
+                {%- if document_count > 0 -%}
+                  <div class="{{ download_center_id }}__documents">
+                    {%- for document_index in (1..8) -%}
+                      {%- assign document_url_key = 'file_' | append: document_index | append: '_url' -%}
+                      {%- assign document_type_key = 'file_' | append: document_index | append: '_type' -%}
+                      {%- assign document_title_key = 'file_' | append: document_index | append: '_title' -%}
+                      {%- assign document_language_key = 'file_' | append: document_index | append: '_language' -%}
+                      {%- assign document_url = block.settings[document_url_key] -%}
+                      {%- if document_url == blank -%}{%- continue -%}{%- endif -%}
+                      {%- assign document_type = block.settings[document_type_key] -%}
+                      {%- assign document_label = 'PDF' -%}
+                      {%- if document_type == 'video' -%}{%- assign document_label = 'VIDEO' -%}{%- endif -%}
+                      {%- assign document_title = block.settings[document_title_key] | default: document_label -%}
+                      {%- assign document_language = block.settings[document_language_key] -%}
+                      <div class="{{ download_center_id }}__document">
+                        <span class="{{ download_center_id }}__type{% if document_type == 'video' %} {{ download_center_id }}__type--video{% endif %}">{{ document_label }}</span>
+                        <span class="{{ download_center_id }}__document-title">
+                          {{ document_title | escape }}{% if document_language != blank %}<span class="{{ download_center_id }}__language">{{ document_language | escape }}</span>{% endif %}
+                        </span>
+                        <a class="{{ download_center_id }}__link" href="{{ document_url | escape }}"{% if document_type == 'video' %} target="_blank" rel="noopener noreferrer"{% else %} download{% endif %} aria-label="{{ document_title | escape }}{% if document_language != blank %} {{ document_language | escape }}{% endif %} {{ document_label | escape }}">
+                          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>
+                        </a>
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+              </article>
+            {%- endfor -%}
+          </div>
+        </section>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Download-Center",
+  "tag": "section",
+  "class": "section-download-center",
+  "settings": [
+    {"type":"image_picker","id":"hero_image","label":"Banner image"},
+    {"type":"text","id":"hero_alt","label":"Banner alt text","default":"VENUS E Download-Center"},
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Support & Ressourcen"},
+    {"type":"text","id":"title","label":"Title","default":"Download-Center"},
+    {"type":"textarea","id":"description","label":"Description","default":"Hier findest du alle Broschüren, Datenblätter, Bedienungs- und Installationsanleitungen für deinen VENUS E Speicher – als PDF zum Download bereit."},
+    {"type":"text","id":"storage_heading","label":"Storage category heading","default":"VENUS E Speicher"},
+    {"type":"text","id":"accessories_heading","label":"Accessories category heading","default":"Zubehör & Smart Meter"}
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Product download card",
+      "limit": 6,
+      "settings": [
+        {"type":"select","id":"category","label":"Category","default":"storage","options":[{"value":"storage","label":"VENUS E Speicher"},{"value":"accessories","label":"Zubehör & Smart Meter"}]},
+        {"type":"product","id":"product","label":"Shopify product"},
+        {"type":"image_picker","id":"image","label":"Card image override"},
+        {"type":"text","id":"title","label":"Card title"},
+        {"type":"text","id":"spec","label":"Specification"},
+        {"type":"text","id":"tagline","label":"Tagline"},
+        {"type":"text","id":"badge","label":"Badge","default":"Plug-in ESS"},
+        {"type":"header","content":"Document 1"},
+        {"type":"select","id":"file_1_type","label":"Type","default":"pdf","options":[{"value":"pdf","label":"PDF"},{"value":"video","label":"Video"}]},
+        {"type":"text","id":"file_1_title","label":"Name"},
+        {"type":"text","id":"file_1_language","label":"Language"},
+        {"type":"url","id":"file_1_url","label":"URL"},
+        {"type":"header","content":"Document 2"},
+        {"type":"select","id":"file_2_type","label":"Type","default":"pdf","options":[{"value":"pdf","label":"PDF"},{"value":"video","label":"Video"}]},
+        {"type":"text","id":"file_2_title","label":"Name"},
+        {"type":"text","id":"file_2_language","label":"Language"},
+        {"type":"url","id":"file_2_url","label":"URL"},
+        {"type":"header","content":"Document 3"},
+        {"type":"select","id":"file_3_type","label":"Type","default":"pdf","options":[{"value":"pdf","label":"PDF"},{"value":"video","label":"Video"}]},
+        {"type":"text","id":"file_3_title","label":"Name"},
+        {"type":"text","id":"file_3_language","label":"Language"},
+        {"type":"url","id":"file_3_url","label":"URL"},
+        {"type":"header","content":"Document 4"},
+        {"type":"select","id":"file_4_type","label":"Type","default":"pdf","options":[{"value":"pdf","label":"PDF"},{"value":"video","label":"Video"}]},
+        {"type":"text","id":"file_4_title","label":"Name"},
+        {"type":"text","id":"file_4_language","label":"Language"},
+        {"type":"url","id":"file_4_url","label":"URL"},
+        {"type":"header","content":"Document 5"},
+        {"type":"select","id":"file_5_type","label":"Type","default":"pdf","options":[{"value":"pdf","label":"PDF"},{"value":"video","label":"Video"}]},
+        {"type":"text","id":"file_5_title","label":"Name"},
+        {"type":"text","id":"file_5_language","label":"Language"},
+        {"type":"url","id":"file_5_url","label":"URL"},
+        {"type":"header","content":"Document 6"},
+        {"type":"select","id":"file_6_type","label":"Type","default":"pdf","options":[{"value":"pdf","label":"PDF"},{"value":"video","label":"Video"}]},
+        {"type":"text","id":"file_6_title","label":"Name"},
+        {"type":"text","id":"file_6_language","label":"Language"},
+        {"type":"url","id":"file_6_url","label":"URL"},
+        {"type":"header","content":"Document 7"},
+        {"type":"select","id":"file_7_type","label":"Type","default":"pdf","options":[{"value":"pdf","label":"PDF"},{"value":"video","label":"Video"}]},
+        {"type":"text","id":"file_7_title","label":"Name"},
+        {"type":"text","id":"file_7_language","label":"Language"},
+        {"type":"url","id":"file_7_url","label":"URL"},
+        {"type":"header","content":"Document 8"},
+        {"type":"select","id":"file_8_type","label":"Type","default":"pdf","options":[{"value":"pdf","label":"PDF"},{"value":"video","label":"Video"}]},
+        {"type":"text","id":"file_8_title","label":"Name"},
+        {"type":"text","id":"file_8_language","label":"Language"},
+        {"type":"url","id":"file_8_url","label":"URL"}
+      ]
+    }
+  ],
+  "presets": [{"name":"Download-Center"}]
+}
+{% endschema %}

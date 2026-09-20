@@ -14,13 +14,21 @@
 
     <div class="bw-scenarios__grid" role="list">
       {% for block in section.blocks %}
-        {% assign product = block.settings.product %}
+        {% liquid
+          assign product = block.settings.product
+          assign scenario_image = block.settings.image
+          if scenario_image == blank and product != blank
+            assign scenario_variant = product.selected_or_first_available_variant | default: product.variants.first
+            assign scenario_image = scenario_variant.featured_image | default: product.featured_image
+          endif
+          assign scenario_image_alt = block.settings.image_alt | default: scenario_image.alt | default: product.title | default: block.settings.title
+        %}
         <article class="bw-scenario-card{% if block.settings.highlight %} bw-scenario-card--highlight{% endif %}" role="listitem" {{ block.shopify_attributes }}>
           <div class="bw-scenario-card__media">
-            {% if block.settings.image != blank %}
-              {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400', sizes: '(min-width: 900px) 46vw, 92vw', alt: block.settings.image_alt }}
+            {% if scenario_image != blank %}
+              {{ scenario_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400', sizes: '(min-width: 900px) 46vw, 92vw', alt: scenario_image_alt }}
             {% elsif request.design_mode %}
-              <div class="bw-editor-placeholder">Szenariobild auswählen</div>
+              <div class="bw-editor-placeholder">Szenariobild auswählen oder Produktbild verwenden</div>
             {% endif %}
           </div>
           <div class="bw-scenario-card__body">
@@ -55,7 +63,7 @@
       "name": "Wohnsituation",
       "limit": 4,
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Bild" },
+        { "type": "image_picker", "id": "image", "label": "Bild (optional)", "info": "Ohne eigenes Bild wird automatisch das Bild des ausgewählten Produkts verwendet." },
         { "type": "text", "id": "image_alt", "label": "Alternativtext" },
         { "type": "text", "id": "title", "label": "Titel", "default": "Wohnung" },
         { "type": "textarea", "id": "text", "label": "Beschreibung" },
