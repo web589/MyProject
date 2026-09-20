@@ -1,0 +1,99 @@
+{{ '404-page.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign contact_page = pages['contact']
+  assign faq_page = pages['faq']
+  assign contact_url = contact_page.url | default: '/pages/contact'
+  assign faq_url = faq_page.url | default: '/pages/faq'
+  assign support_primary_link = section.settings.primary_link | default: contact_url
+  assign support_secondary_link = section.settings.secondary_link | default: faq_url
+  assign support_background = section.settings.background_color | default: '#F5F7F9'
+-%}
+
+<section
+  class="venus-404 venus-404__section venus-404__support"
+  style="--venus-404-section-background: {{ support_background | escape }};"
+  aria-labelledby="venus-404-support-title-{{ section.id }}"
+>
+  <div class="venus-404__section-inner venus-404__support-inner">
+    <div>
+      <p class="venus-404__eyebrow">{{ section.settings.eyebrow | default: 'Wir helfen weiter' | escape }}</p>
+      <h2 id="venus-404-support-title-{{ section.id }}">{{ section.settings.heading | default: 'Du suchst etwas Bestimmtes?' | escape }}</h2>
+      <p class="venus-404__support-copy">{{ section.settings.text | default: 'Wenn du eine bestimmte Seite, ein Produkt oder Zubehör suchst, hilft dir unser Support gerne weiter.' | escape }}</p>
+    </div>
+
+    <div class="venus-404__support-actions">
+      <a class="venus-404__button venus-404__button--primary" href="{{ support_primary_link | escape }}">
+        {{ section.settings.primary_label | default: 'Kontakt aufnehmen' | escape }}
+      </a>
+      <a class="venus-404__button venus-404__button--ghost" href="{{ support_secondary_link | escape }}">
+        {{ section.settings.secondary_label | default: 'FAQ ansehen' | escape }}
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 · Support",
+  "tag": "section",
+  "class": "section-404-support",
+  "settings": [
+    {
+      "type": "header",
+      "content": "支持区域"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "Wir helfen weiter"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题",
+      "default": "Du suchst etwas Bestimmtes?"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "说明",
+      "default": "Wenn du eine bestimmte Seite, ein Produkt oder Zubehör suchst, hilft dir unser Support gerne weiter."
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "主按钮文字",
+      "default": "Kontakt aufnehmen"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "主按钮链接"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "次按钮文字",
+      "default": "FAQ ansehen"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "次按钮链接"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "背景颜色",
+      "default": "#F5F7F9"
+    }
+  ],
+  "presets": [
+    {
+      "name": "404 · Support"
+    }
+  ]
+}
+{% endschema %}

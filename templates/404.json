@@ -1,20 +1,142 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
-      "type": "main-404",
+    "hero": {
+      "type": "404-hero",
+      "settings": {}
+    },
+    "search": {
+      "type": "404-search",
+      "blocks": {
+        "query-1": {
+          "type": "query",
+          "settings": {
+            "label": "VENUS E Mini",
+            "term": "VENUS E Mini"
+          }
+        },
+        "query-2": {
+          "type": "query",
+          "settings": {
+            "label": "VENUS E 3.0",
+            "term": "VENUS E 3.0"
+          }
+        },
+        "query-3": {
+          "type": "query",
+          "settings": {
+            "label": "VENUS E 4.0",
+            "term": "VENUS E 4.0"
+          }
+        },
+        "query-4": {
+          "type": "query",
+          "settings": {
+            "label": "VENUS E Max",
+            "term": "VENUS E Max"
+          }
+        },
+        "query-5": {
+          "type": "query",
+          "settings": {
+            "label": "Smart Meter CT002",
+            "term": "Smart Meter CT002"
+          }
+        },
+        "query-6": {
+          "type": "query",
+          "settings": {
+            "label": "Smart Meter CT003 (P1)",
+            "term": "Smart Meter CT003 (P1)"
+          }
+        },
+        "query-7": {
+          "type": "query",
+          "settings": {
+            "label": "Support",
+            "term": "Support"
+          }
+        },
+        "query-8": {
+          "type": "query",
+          "settings": {
+            "label": "Ratgeber",
+            "term": "Ratgeber"
+          }
+        }
+      },
+      "block_order": [
+        "query-1",
+        "query-2",
+        "query-3",
+        "query-4",
+        "query-5",
+        "query-6",
+        "query-7",
+        "query-8"
+      ],
+      "settings": {}
+    },
+    "quick-links": {
+      "type": "404-quick-links",
+      "blocks": {
+        "card-1": {
+          "type": "card",
+          "settings": {
+            "icon": "battery",
+            "title": "Solarspeicher entdecken",
+            "text": "Finde den passenden VENUS E Speicher für dein Zuhause.",
+            "link_label": "Speicher ansehen",
+            "destination": "models"
+          }
+        },
+        "card-2": {
+          "type": "card",
+          "settings": {
+            "icon": "plug",
+            "title": "Passendes Zubehör finden",
+            "text": "Smart Meter und weiteres Zubehör für dein VENUS E System entdecken.",
+            "link_label": "Zum Zubehör",
+            "destination": "accessory"
+          }
+        },
+        "card-3": {
+          "type": "card",
+          "settings": {
+            "icon": "document",
+            "title": "Energie-Wissen entdecken",
+            "text": "Erfahre mehr über Balkonkraftwerk mit Speicher, Nachrüstung und Energieverbrauch.",
+            "link_label": "Zum Energie-Wissen",
+            "destination": "guide"
+          }
+        },
+        "card-4": {
+          "type": "card",
+          "settings": {
+            "icon": "headset",
+            "title": "Hilfe & Support",
+            "text": "Wir helfen dir bei Auswahl, Installation und Fragen zu deinem System.",
+            "link_label": "Support öffnen",
+            "destination": "support"
+          }
+        }
+      },
+      "block_order": [
+        "card-1",
+        "card-2",
+        "card-3",
+        "card-4"
+      ],
+      "settings": {}
+    },
+    "support": {
+      "type": "404-support",
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "hero",
+    "search",
+    "quick-links",
+    "support"
   ]
 }

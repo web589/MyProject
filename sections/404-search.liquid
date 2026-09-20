@@ -1,0 +1,203 @@
+{{ '404-page.css' | asset_url | stylesheet_tag }}
+<script src="{{ '404-page.js' | asset_url }}" defer="defer"></script>
+
+{%- assign search_background = section.settings.background_color | default: '#F5F7F9' -%}
+
+<section
+  class="venus-404 venus-404__section venus-404__search"
+  style="--venus-404-section-background: {{ search_background | escape }};"
+  data-venus-404-search
+  aria-labelledby="venus-404-search-title-{{ section.id }}"
+>
+  <div class="venus-404__section-inner">
+    <p class="venus-404__eyebrow">{{ section.settings.eyebrow | default: 'Suche' | escape }}</p>
+    <h2 id="venus-404-search-title-{{ section.id }}">
+      {{ section.settings.heading_before | default: 'Wohin möchtest du' | escape }}
+      <span class="venus-404__accent">{{ section.settings.heading_accent | default: 'weitergehen?' | escape }}</span>
+    </h2>
+
+    <form class="venus-404__search-form" action="{{ routes.search_url }}" method="get" role="search">
+      <svg class="venus-404__search-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="M21 21l-4.5-4.5"></path>
+      </svg>
+      <label class="visually-hidden" for="venus-404-search-{{ section.id }}">
+        {{ section.settings.input_label | default: 'Suche nach Produkten, Zubehör oder Hilfe' | escape }}
+      </label>
+      <input
+        id="venus-404-search-{{ section.id }}"
+        name="q"
+        type="search"
+        placeholder="{{ section.settings.placeholder | default: 'Suche nach Produkten, Zubehör oder Hilfe' | escape }}"
+        value="{{ search.terms | escape }}"
+        autocomplete="off"
+      >
+      <button class="venus-404__button venus-404__button--primary" type="submit">
+        {{ section.settings.button_label | default: 'Suchen' | escape }}
+      </button>
+    </form>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="venus-404__chips" aria-label="{{ section.settings.chips_label | default: 'Beliebte Suchbegriffe' | escape }}">
+        <span class="venus-404__chips-label">{{ section.settings.chips_label | default: 'Beliebt:' | escape }}</span>
+        {%- for block in section.blocks -%}
+          {%- assign chip_label = block.settings.label | default: block.settings.term -%}
+          {%- assign chip_term = block.settings.term | default: chip_label -%}
+          <button
+            class="venus-404__chip"
+            type="button"
+            data-venus-404-chip
+            data-search-term="{{ chip_term | escape }}"
+            {{ block.shopify_attributes }}
+          >
+            {{ chip_label | escape }}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 · Suche",
+  "tag": "section",
+  "class": "section-404-search",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "搜索区域"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "Suche"
+    },
+    {
+      "type": "text",
+      "id": "heading_before",
+      "label": "标题前半段",
+      "default": "Wohin möchtest du"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题高亮段",
+      "default": "weitergehen?"
+    },
+    {
+      "type": "text",
+      "id": "input_label",
+      "label": "输入框无障碍标签",
+      "default": "Suche nach Produkten, Zubehör oder Hilfe"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "输入框占位文字",
+      "default": "Suche nach Produkten, Zubehör oder Hilfe"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "搜索按钮文字",
+      "default": "Suchen"
+    },
+    {
+      "type": "text",
+      "id": "chips_label",
+      "label": "热门标签标题",
+      "default": "Beliebt:"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "背景颜色",
+      "default": "#F5F7F9"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "query",
+      "name": "热门搜索标签",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "显示文字"
+        },
+        {
+          "type": "text",
+          "id": "term",
+          "label": "搜索词"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "404 · Suche",
+      "blocks": [
+        {
+          "type": "query",
+          "settings": {
+            "label": "VENUS E Mini",
+            "term": "VENUS E Mini"
+          }
+        },
+        {
+          "type": "query",
+          "settings": {
+            "label": "VENUS E 3.0",
+            "term": "VENUS E 3.0"
+          }
+        },
+        {
+          "type": "query",
+          "settings": {
+            "label": "VENUS E 4.0",
+            "term": "VENUS E 4.0"
+          }
+        },
+        {
+          "type": "query",
+          "settings": {
+            "label": "VENUS E Max",
+            "term": "VENUS E Max"
+          }
+        },
+        {
+          "type": "query",
+          "settings": {
+            "label": "Smart Meter CT002",
+            "term": "Smart Meter CT002"
+          }
+        },
+        {
+          "type": "query",
+          "settings": {
+            "label": "Smart Meter CT003 (P1)",
+            "term": "Smart Meter CT003 (P1)"
+          }
+        },
+        {
+          "type": "query",
+          "settings": {
+            "label": "Support",
+            "term": "Support"
+          }
+        },
+        {
+          "type": "query",
+          "settings": {
+            "label": "Ratgeber",
+            "term": "Ratgeber"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,559 @@
+  .venus-404 {
+    --venus-404-blue: #0099FE;
+    --venus-404-blue-soft: #E8F4FF;
+    --venus-404-ink: #0E1B2C;
+    --venus-404-gray: #8A97A6;
+    --venus-404-gray-dark: #5B6B7C;
+    --venus-404-border: #E3E8EE;
+    --venus-404-bg: #F5F7F9;
+    --venus-404-radius: 10px;
+    width: 100%;
+    max-width: 1640px;
+    margin: 0 auto;
+    overflow: hidden;
+    color: var(--venus-404-ink);
+    background: #fff;
+    font-family: 'Inter', var(--typeBasePrimary), var(--typeBaseFallback), sans-serif;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .venus-404,
+  .venus-404 * {
+    box-sizing: border-box;
+  }
+
+  .venus-404__hero {
+    padding: 64px 100px 68px;
+    background: var(--venus-404-section-background, #fff);
+  }
+
+  .venus-404__hero-inner,
+  .venus-404__section-inner {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .venus-404__hero-inner {
+    text-align: center;
+  }
+
+  .venus-404__number {
+    font-size: 140px;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--venus-404-ink);
+  }
+
+  .venus-404__accent {
+    color: var(--venus-404-blue);
+  }
+
+  .venus-404 h1,
+  .venus-404 h2,
+  .venus-404 h3,
+  .venus-404 p {
+    margin: 0;
+    opacity: 1 !important;
+  }
+
+  .venus-404 h1 {
+    margin-top: 16px;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.28;
+  }
+
+  .venus-404 h2 {
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .venus-404__path {
+    margin-top: 16px;
+    color: var(--venus-404-gray-dark);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .venus-404__path .venus-404__accent {
+    font-weight: 500;
+  }
+
+  .venus-404__hero-actions,
+  .venus-404__support-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .venus-404__hero-actions {
+    margin-top: 30px;
+  }
+
+  .venus-404__button {
+    display: inline-flex;
+    min-height: 47px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 14px 30px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .venus-404__button--primary {
+    border-color: var(--venus-404-blue);
+    background: var(--venus-404-blue);
+    color: #fff;
+  }
+
+  .venus-404__button--primary:hover,
+  .venus-404__button--primary:focus-visible {
+    border-color: #0089e4;
+    background: #0089e4;
+    box-shadow: 0 4px 14px rgba(0, 153, 254, 0.18);
+  }
+
+  .venus-404__button--ghost {
+    border-color: #9BD8FF;
+    background: #fff;
+    color: var(--venus-404-blue);
+  }
+
+  .venus-404__button--ghost:hover,
+  .venus-404__button--ghost:focus-visible {
+    border-color: var(--venus-404-blue);
+    background: var(--venus-404-blue-soft);
+  }
+
+  .venus-404__button:focus-visible,
+  .venus-404__chip:focus-visible,
+  .venus-404__card-link:focus-visible {
+    outline: 2px solid var(--venus-404-blue);
+    outline-offset: 3px;
+  }
+
+  .venus-404__breakline {
+    display: block;
+    width: 380px;
+    max-width: 100%;
+    margin: 30px auto 0;
+    color: var(--venus-404-blue);
+    overflow: visible;
+  }
+
+  .venus-404__breakline-number {
+    fill: var(--venus-404-blue);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
+  .venus-404__breakline-segment--first {
+    stroke-dasharray: 170;
+    animation: venus404DrawFirst 3.6s ease-in-out infinite;
+  }
+
+  .venus-404__breakline-segment--second {
+    stroke-dasharray: 146;
+    stroke-dashoffset: 146;
+    animation: venus404DrawSecond 3.6s ease-in-out infinite;
+  }
+
+  .venus-404__breakline-mark {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: venus404ShowMark 3.6s ease-in-out infinite;
+  }
+
+  .venus-404__breakline-arrow {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: venus404ShowArrow 3.6s ease-in-out infinite;
+  }
+
+  @keyframes venus404DrawFirst {
+    0% { stroke-dashoffset: 170; opacity: 1; }
+    25% { stroke-dashoffset: 0; }
+    88% { stroke-dashoffset: 0; opacity: 1; }
+    96%, 100% { opacity: 0; }
+  }
+
+  @keyframes venus404ShowMark {
+    0%, 20% { opacity: 0; transform: scale(0.6); }
+    32% { opacity: 1; transform: scale(1); }
+    88% { opacity: 1; }
+    96%, 100% { opacity: 0; }
+  }
+
+  @keyframes venus404DrawSecond {
+    0%, 40% { stroke-dashoffset: 146; opacity: 1; }
+    62% { stroke-dashoffset: 0; }
+    88% { stroke-dashoffset: 0; opacity: 1; }
+    96%, 100% { opacity: 0; }
+  }
+
+  @keyframes venus404ShowArrow {
+    0%, 62% { opacity: 0; transform: translateX(-4px); }
+    74% { opacity: 1; transform: translateX(0); }
+    88% { opacity: 1; }
+    96%, 100% { opacity: 0; }
+  }
+
+  .venus-404__section {
+    padding: 72px 100px;
+  }
+
+  .venus-404__search,
+  .venus-404__support {
+    background: var(--venus-404-section-background, var(--venus-404-bg));
+  }
+
+  .venus-404__quick {
+    background: var(--venus-404-section-background, #fff);
+  }
+
+  .venus-404__eyebrow {
+    margin-bottom: 14px;
+    color: var(--venus-404-blue);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+
+  .venus-404__search-form {
+    display: flex;
+    height: 72px;
+    align-items: center;
+    margin-top: 28px;
+    overflow: hidden;
+    border: 1px solid var(--venus-404-border);
+    border-radius: var(--venus-404-radius);
+    background: #fff;
+    transition: border-color 0.15s ease;
+  }
+
+  .venus-404__search-form:focus-within {
+    border-color: var(--venus-404-blue);
+  }
+
+  .venus-404__search-icon {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    margin-left: 26px;
+    fill: none;
+    stroke: var(--venus-404-gray);
+    stroke-width: 1.6;
+  }
+
+  .venus-404__search-form input {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+    border: 0;
+    outline: 0;
+    padding: 0 18px;
+    background: transparent;
+    color: var(--venus-404-ink);
+    font: inherit;
+    font-size: 16px;
+  }
+
+  .venus-404__search-form input::placeholder {
+    color: var(--venus-404-gray);
+  }
+
+  .venus-404__search-form .venus-404__button {
+    height: 56px;
+    flex: 0 0 auto;
+    margin-right: 8px;
+  }
+
+  .venus-404__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .venus-404__chips-label {
+    align-self: center;
+    margin-right: 6px;
+    color: var(--venus-404-gray-dark);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  .venus-404__chip {
+    border: 1px solid var(--venus-404-border);
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    background: #fff;
+    color: var(--venus-404-gray-dark);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .venus-404__chip:hover {
+    border-color: var(--venus-404-blue);
+    background: var(--venus-404-blue-soft);
+    color: var(--venus-404-blue);
+  }
+
+  .venus-404__quick-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--venus-404-quick-columns, 4), minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+  }
+
+  .venus-404__card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    padding: 28px 26px 26px;
+    border: 1px solid var(--venus-404-border);
+    border-radius: var(--venus-404-radius);
+    background: var(--venus-404-card-background, #fff);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .venus-404__card:hover {
+    border-color: #9BD8FF;
+    box-shadow: 0 4px 18px rgba(0, 153, 254, 0.06);
+  }
+
+  .venus-404__card-icon {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: var(--venus-404-blue);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.6;
+  }
+
+  .venus-404__card h3 {
+    margin-top: 22px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .venus-404__card p {
+    margin-top: 10px;
+    color: var(--venus-404-gray-dark);
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  .venus-404__card-link {
+    display: inline-flex;
+    width: fit-content;
+    gap: 4px;
+    margin-top: 22px;
+    color: var(--venus-404-blue);
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .venus-404__card-link:hover {
+    text-decoration: underline;
+  }
+
+  .venus-404__support-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+  }
+
+  .venus-404__support-copy {
+    max-width: 900px;
+    margin-top: 12px;
+    color: var(--venus-404-gray-dark);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .venus-404__support-actions {
+    flex: 0 0 auto;
+  }
+
+  @media only screen and (max-width: 1100px) {
+    .venus-404__hero,
+    .venus-404__section {
+      padding-right: 48px;
+      padding-left: 48px;
+    }
+
+    .venus-404__quick-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media only screen and (max-width: 640px) {
+    .venus-404__hero,
+    .venus-404__section {
+      padding: 56px 24px;
+    }
+
+    .venus-404__hero {
+      padding-top: 54px;
+      padding-bottom: 60px;
+    }
+
+    .venus-404__number {
+      font-size: clamp(88px, 25vw, 120px);
+    }
+
+    .venus-404 h1 {
+      font-size: 24px;
+    }
+
+    .venus-404__path {
+      font-size: 15px;
+    }
+
+    .venus-404__hero-actions,
+    .venus-404__support-actions {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .venus-404__button {
+      width: 100%;
+    }
+
+    .venus-404__breakline {
+      margin-top: 28px;
+    }
+
+    .venus-404 h2 {
+      font-size: 30px;
+    }
+
+    .venus-404__search-form {
+      height: 64px;
+    }
+
+    .venus-404__search-form .venus-404__button {
+      height: 50px;
+      margin-right: 6px;
+      padding-right: 18px;
+      padding-left: 18px;
+    }
+
+    .venus-404__search-icon {
+      margin-left: 18px;
+    }
+
+    .venus-404__search-form input {
+      padding-right: 10px;
+      padding-left: 12px;
+      font-size: 15px;
+    }
+
+    .venus-404__chips {
+      gap: 8px;
+    }
+
+    .venus-404__chips-label {
+      width: 100%;
+      margin-right: 0;
+    }
+
+    .venus-404__chip {
+      padding: 8px 12px;
+    }
+
+    .venus-404__quick-grid {
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .venus-404__card {
+      padding: 22px 18px 20px;
+    }
+
+    .venus-404__card h3 {
+      margin-top: 18px;
+      font-size: 17px;
+    }
+
+    .venus-404__card p,
+    .venus-404__card-link {
+      font-size: 13px;
+    }
+
+    .venus-404__support-inner {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .venus-404__support-copy {
+      font-size: 15px;
+    }
+
+    .venus-404__support-actions {
+      align-items: stretch;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .venus-404 * {
+      scroll-behavior: auto;
+      transition-duration: 0.01ms;
+      animation-duration: 0.01ms;
+      animation-iteration-count: 1;
+    }
+
+    .venus-404__breakline-segment--first,
+    .venus-404__breakline-segment--second {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+
+    .venus-404__breakline-mark,
+    .venus-404__breakline-arrow {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  body[data-disable-animations="true"] .venus-404__breakline-segment--first,
+  body[data-disable-animations="true"] .venus-404__breakline-segment--second,
+  body[data-disable-animations="true"] .venus-404__breakline-mark,
+  body[data-disable-animations="true"] .venus-404__breakline-arrow {
+    animation: none;
+    opacity: 1;
+    stroke-dashoffset: 0;
+    transform: none;
+  }

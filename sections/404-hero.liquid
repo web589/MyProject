@@ -1,0 +1,139 @@
+{{ '404-page.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign models_collection = collections['venus-e']
+  assign models_url = models_collection.url | default: '/collections/venus-e'
+  assign hero_primary_link = section.settings.primary_link | default: routes.root_url
+  assign hero_secondary_link = section.settings.secondary_link | default: models_url
+  assign hero_background = section.settings.background_color | default: '#ffffff'
+-%}
+
+<section
+  class="venus-404 venus-404__hero"
+  style="--venus-404-section-background: {{ hero_background | escape }};"
+  aria-labelledby="venus-404-hero-title-{{ section.id }}"
+>
+  <div class="venus-404__hero-inner">
+    <div class="venus-404__number" aria-hidden="true">
+      <span>{{ section.settings.number_prefix | default: '40' }}</span><span class="venus-404__accent">{{ section.settings.number_accent | default: '4' }}</span>
+    </div>
+
+    <h1 id="venus-404-hero-title-{{ section.id }}">{{ section.settings.heading | default: 'Diese Seite wurde nicht gefunden.' | escape }}</h1>
+
+    <p class="venus-404__path">
+      {{ section.settings.description | default: 'Der Link ist nicht mehr verfügbar oder die Seite wurde verschoben.' | escape }}<br>
+      <span class="venus-404__accent">{{ section.settings.highlight_description | default: 'Wir bringen dich schnell zurück zu den richtigen Inhalten.' | escape }}</span>
+    </p>
+
+    <div class="venus-404__hero-actions">
+      <a class="venus-404__button venus-404__button--primary" href="{{ hero_primary_link | escape }}">
+        {{ section.settings.primary_label | default: 'Zur Startseite' | escape }}
+      </a>
+      <a class="venus-404__button venus-404__button--ghost" href="{{ hero_secondary_link | escape }}">
+        {{ section.settings.secondary_label | default: 'VENUS E Modelle ansehen' | escape }}
+      </a>
+    </div>
+
+    {%- if section.settings.show_breakline -%}
+      <svg class="venus-404__breakline" width="380" height="38" viewBox="0 0 380 38" aria-hidden="true">
+        <text class="venus-404__breakline-number" x="190" y="11" text-anchor="middle">{{ section.settings.breakline_label | default: '404' | escape }}</text>
+        <line class="venus-404__breakline-segment venus-404__breakline-segment--first" x1="0" y1="26" x2="170" y2="26" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+        <g class="venus-404__breakline-mark" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="185" y1="21" x2="195" y2="31"></line>
+          <line x1="195" y1="21" x2="185" y2="31"></line>
+        </g>
+        <line class="venus-404__breakline-segment venus-404__breakline-segment--second" x1="210" y1="26" x2="356" y2="26" stroke="#C9E7FF" stroke-width="2" stroke-linecap="round"></line>
+        <path class="venus-404__breakline-arrow" d="M352 22.5l5 3.5-5 3.5" fill="none" stroke="#C9E7FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 · Hero",
+  "tag": "section",
+  "class": "section-404-hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "错误页主视觉"
+    },
+    {
+      "type": "text",
+      "id": "number_prefix",
+      "label": "数字前缀",
+      "default": "40"
+    },
+    {
+      "type": "text",
+      "id": "number_accent",
+      "label": "蓝色数字",
+      "default": "4"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题",
+      "default": "Diese Seite wurde nicht gefunden."
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "说明",
+      "default": "Der Link ist nicht mehr verfügbar oder die Seite wurde verschoben."
+    },
+    {
+      "type": "text",
+      "id": "highlight_description",
+      "label": "高亮说明",
+      "default": "Wir bringen dich schnell zurück zu den richtigen Inhalten."
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "主按钮文字",
+      "default": "Zur Startseite"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "主按钮链接"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "次按钮文字",
+      "default": "VENUS E Modelle ansehen"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "次按钮链接"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breakline",
+      "label": "显示断线动画",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "breakline_label",
+      "label": "动画标签",
+      "default": "404"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "背景颜色",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "404 · Hero"
+    }
+  ]
+}
+{% endschema %}
