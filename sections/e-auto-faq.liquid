@@ -1,0 +1,44 @@
+{% liquid
+  assign page_id = 'eauto-' | append: section.id
+%}
+
+<section id="eauto-faq" class="e-auto-page e-auto-page__section e-auto-page__faq" aria-labelledby="{{ page_id }}-faq-heading">
+  <div class="e-auto-page__container e-auto-page__faq-container">
+    <div class="e-auto-page__section-heading">
+      <p class="e-auto-page__eyebrow">{{ section.settings.faq_eyebrow }}</p>
+      <h2 id="{{ page_id }}-faq-heading">{{ section.settings.faq_heading }}</h2>
+      <p>{{ section.settings.faq_text }}</p>
+    </div>
+    <div class="e-auto-page__faq-list">
+      {% for block in section.blocks %}
+        <div class="e-auto-page__faq-item" {{ block.shopify_attributes }}>
+          <button type="button" class="e-auto-page__faq-question" data-eauto-faq-question aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
+            <span>{{ block.settings.question }}</span><span aria-hidden="true">+</span>
+          </button>
+          <div class="e-auto-page__faq-answer" data-eauto-faq-answer{% unless forloop.first %} hidden{% endunless %}>{{ block.settings.answer }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% assign eauto_faq_blocks = section.blocks %}
+{% render 'structured-data', structured_data_context: 'faq', faq_items: eauto_faq_blocks, faq_source: 'bw_storage' %}
+
+{% schema %}
+{
+  "name": "E-Auto FAQ",
+  "tag": "section",
+  "class": "section-e-auto-faq",
+  "settings": [
+    {"type":"text","id":"faq_eyebrow","label":"FAQ Kicker","default":"Häufige Fragen"},
+    {"type":"text","id":"faq_heading","label":"FAQ Überschrift","default":"Fragen rund ums E-Auto laden mit Speicher"},
+    {"type":"textarea","id":"faq_text","label":"FAQ Text","default":"Die wichtigsten Antworten zur Verbindung von PV, Hausnetz, Speicher und Wallbox."}
+  ],
+  "blocks": [
+    {"type":"faq","name":"FAQ Frage","settings":[{"type":"text","id":"question","label":"Frage","default":"Kann der VENUS E mein Auto direkt laden?"},{"type":"richtext","id":"answer","label":"Antwort","default":"<p>Nein. Der VENUS E ist AC-gekoppelt an dein Hausnetz angeschlossen. Geladen wird dein Auto weiterhin über die Wallbox.</p>"}]}
+  ],
+  "max_blocks": 6,
+  "presets": [{"name":"E-Auto FAQ","blocks":[{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"}] }]
+}
+{% endschema %}

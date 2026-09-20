@@ -1,0 +1,41 @@
+{% liquid
+  assign page_id = 'eauto-' | append: section.id
+  assign final_primary_link = section.settings.final_primary_link | default: '#eauto-calculator'
+%}
+
+<section id="eauto-final" class="e-auto-page e-auto-page__final" aria-labelledby="{{ page_id }}-final-heading">
+  <div class="e-auto-page__container e-auto-page__final-inner">
+    <div>
+      <p class="e-auto-page__eyebrow">{{ section.settings.final_eyebrow }}</p>
+      <h2 id="{{ page_id }}-final-heading">{{ section.settings.final_heading }}</h2>
+      <p>{{ section.settings.final_text }}</p>
+      <a class="e-auto-page__button e-auto-page__button--primary" href="{{ final_primary_link }}">{{ section.settings.final_primary_label }} <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="e-auto-page__media e-auto-page__media--final">
+      {% if section.settings.final_image != blank %}
+        {{ section.settings.final_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 960px) 50vw, 100vw', alt: section.settings.final_image_alt }}
+      {% elsif request.design_mode %}
+        <div class="e-auto-page__placeholder">{{ section.settings.final_image_placeholder }}</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "E-Auto Abschluss",
+  "tag": "section",
+  "class": "section-e-auto-final",
+  "settings": [
+    {"type":"text","id":"final_eyebrow","label":"Abschluss Kicker","default":"Bereit?"},
+    {"type":"text","id":"final_heading","label":"Abschluss Überschrift","default":"Finde den Speicher, der zu deinem Auto passt"},
+    {"type":"textarea","id":"final_text","label":"Abschluss Text","default":"Von der kompakten Lösung bis zur großen Konfiguration: Starte mit deinem Fahrprofil und vergleiche die passenden VENUS E Modelle."},
+    {"type":"text","id":"final_primary_label","label":"Abschluss Button","default":"Passenden Speicher finden"},
+    {"type":"url","id":"final_primary_link","label":"Abschluss Link"},
+    {"type":"image_picker","id":"final_image","label":"Abschluss Bild"},
+    {"type":"text","id":"final_image_alt","label":"Abschluss Bild Alt-Text","default":"VENUS E Produktreihe für unterschiedliche E-Auto Fahrprofile"},
+    {"type":"text","id":"final_image_placeholder","label":"Abschluss Bild Platzhalter","default":"Produktreihe-Bild auswählen"}
+  ],
+  "presets": [{"name":"E-Auto Abschluss"}]
+}
+{% endschema %}
