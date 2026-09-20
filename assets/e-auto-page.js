@@ -164,7 +164,7 @@
       image: variant && variant.image ? variant.image : product.featured_image || '',
       url: variant && variant.url ? variant.url : product.url || '',
       available: Boolean(variant && variant.available),
-      preorder: Boolean(product.preorder_enabled)
+      preorder: Boolean(variant && product.preorder_enabled)
     };
   }
 
