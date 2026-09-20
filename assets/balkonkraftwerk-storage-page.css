@@ -300,8 +300,9 @@
 }
 
 @media only screen and (min-width: 1200px) {
-  .bw-anchor-nav__inner {
+  .main-content--bw-storage .bw-anchor-nav__inner {
     position: relative;
+    left: clamp(-80px, -5vw, -48px);
     width: min(1500px, calc(100% - 48px));
     justify-content: center;
     gap: clamp(24px, 2.7vw, 48px);
