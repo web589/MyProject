@@ -17,11 +17,31 @@
       assign card_description = content_item.content | strip_html | truncatewords: 42
     endif
     assign card_link = block.settings.link | default: content_item.url
+    assign content_image_width = block.settings.content_image_width | default: 58
+    assign title_font_size = block.settings.title_font_size | default: 32
+    assign description_font_size = block.settings.description_font_size | default: 18
+    assign button_font_size = block.settings.button_font_size | default: 16
+    assign metric_icon_box_size = block.settings.metric_icon_box_size | default: 56
+    assign metric_icon_size = block.settings.metric_icon_size | default: 28
+    assign metric_value_font_size = block.settings.metric_value_font_size | default: 17
+    assign metric_label_font_size = block.settings.metric_label_font_size | default: 14
   endif
 -%}
 
 {%- if content_item != blank -%}
-  <article class="mega-menu-products__card mega-menu-products__card--article">
+  <article
+    class="mega-menu-products__card mega-menu-products__card--article"
+    style="
+      --mega-menu-article-image-width: {{ content_image_width }}%;
+      --mega-menu-article-title-size: {{ title_font_size }}px;
+      --mega-menu-article-description-size: {{ description_font_size }}px;
+      --mega-menu-article-button-size: {{ button_font_size }}px;
+      --mega-menu-article-icon-box-size: {{ metric_icon_box_size }}px;
+      --mega-menu-article-icon-size: {{ metric_icon_size }}px;
+      --mega-menu-article-metric-value-size: {{ metric_value_font_size }}px;
+      --mega-menu-article-metric-label-size: {{ metric_label_font_size }}px;
+    "
+  >
     <div class="mega-menu-products__article-main">
       <a
         class="mega-menu-products__article-media"

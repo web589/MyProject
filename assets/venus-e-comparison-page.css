@@ -1016,6 +1016,111 @@ a.bw-table-product__name:hover {
   background: #f2f7fa;
 }
 
+/* Guarantee and lifetime banner */
+.bw-compare-trust {
+  background: #f4f7f9;
+}
+
+.bw-compare-trust__panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr);
+  min-height: 356px;
+  overflow: hidden;
+  background: #142c44;
+}
+
+.bw-compare-trust__copy {
+  padding: clamp(32px, 4vw, 48px);
+}
+
+.bw-compare-trust__eyebrow {
+  margin-bottom: 12px !important;
+  color: #55dff0 !important;
+  font-size: 0.68rem !important;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+}
+
+.bw-compare-trust__copy h2 {
+  max-width: 600px;
+  margin-bottom: 14px;
+  color: #f7fbff;
+  font-size: clamp(1.7rem, 2.8vw, 2.35rem);
+  line-height: 1.13;
+}
+
+.bw-compare-trust__intro {
+  max-width: 610px;
+  margin-bottom: 24px !important;
+  color: #b9c7d8 !important;
+  font-size: 0.76rem !important;
+  line-height: 1.55 !important;
+}
+
+.bw-compare-trust__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 24px;
+}
+
+.bw-compare-trust__stat {
+  min-width: 0;
+  padding: 11px 0 10px;
+  border-top: 1px solid rgba(186, 213, 232, 0.22);
+}
+
+.bw-compare-trust__stat strong,
+.bw-compare-trust__stat-label,
+.bw-compare-trust__stat p {
+  display: block;
+}
+
+.bw-compare-trust__stat strong {
+  color: #f7fbff;
+  font-size: clamp(1.35rem, 2.1vw, 1.75rem);
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.bw-compare-trust__stat-label {
+  margin-top: 3px;
+  color: #55dff0;
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.bw-compare-trust__stat p {
+  margin: 3px 0 0;
+  color: #b9c7d8 !important;
+  font-size: 0.57rem !important;
+  line-height: 1.35 !important;
+}
+
+.bw-compare-trust__media {
+  display: flex;
+  min-height: 100%;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px dashed rgba(186, 213, 232, 0.3);
+  background: #203a55;
+}
+
+.bw-compare-trust__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bw-compare-trust__placeholder {
+  padding: 24px;
+  color: #a7c1d5;
+  font-size: 0.63rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
 .bw-faq-section .bw-faq {
   max-width: min(940px, calc(100% - 48px));
 }
@@ -1052,6 +1157,16 @@ a.bw-table-product__name:hover {
     grid-template-columns: 1fr;
   }
 
+  .bw-compare-trust__panel {
+    grid-template-columns: 1fr;
+  }
+
+  .bw-compare-trust__media {
+    min-height: 230px;
+    border-top: 1px dashed rgba(186, 213, 232, 0.3);
+    border-left: 0;
+  }
+
   .bw-capacity-row {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -1086,6 +1201,14 @@ a.bw-table-product__name:hover {
   .bw-models__grid,
   .bw-content-grid__items {
     grid-template-columns: 1fr;
+  }
+
+  .bw-compare-trust__stats {
+    column-gap: 16px;
+  }
+
+  .bw-compare-trust__copy {
+    padding: 30px 22px;
   }
 
   .bw-model-card__media {
