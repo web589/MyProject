@@ -16,6 +16,7 @@
   assign highlight_2 = false
   assign highlight_3 = false
   assign highlight_4 = false
+  assign default_selected_column = '1'
   case section.settings.highlight_column
     when '1'
       assign highlight_1 = true
@@ -53,49 +54,49 @@
       <div class="bw-specs__sticky-viewport" data-bw-compare-sticky-viewport>
         <div class="bw-specs__sticky-products" data-bw-compare-sticky-products>
           <div
-            class="bw-specs__sticky-product{% if highlight_1 %} is-highlighted{% endif %}"
+            class="bw-specs__sticky-product{% if highlight_1 %} is-highlighted{% endif %}{% if default_selected_column == '1' %} is-selected{% endif %}"
             data-bw-compare-sticky-product
             data-bw-compare-column="1"
             data-bw-compare-product-select
             tabindex="-1"
             role="button"
-            aria-pressed="false"
+            aria-pressed="{% if default_selected_column == '1' %}true{% else %}false{% endif %}"
             aria-label="{{ product_1_label | append: ' auswählen' | escape }}"
           >
             {% render 'bw-compare-product-header', compare_product: product_1, highlighted: highlight_1, visual_only: true, price_prefix: section.settings.price_prefix %}
           </div>
           <div
-            class="bw-specs__sticky-product{% if highlight_2 %} is-highlighted{% endif %}"
+            class="bw-specs__sticky-product{% if highlight_2 %} is-highlighted{% endif %}{% if default_selected_column == '2' %} is-selected{% endif %}"
             data-bw-compare-sticky-product
             data-bw-compare-column="2"
             data-bw-compare-product-select
             tabindex="-1"
             role="button"
-            aria-pressed="false"
+            aria-pressed="{% if default_selected_column == '2' %}true{% else %}false{% endif %}"
             aria-label="{{ product_2_label | append: ' auswählen' | escape }}"
           >
             {% render 'bw-compare-product-header', compare_product: product_2, highlighted: highlight_2, visual_only: true, price_prefix: section.settings.price_prefix %}
           </div>
           <div
-            class="bw-specs__sticky-product{% if highlight_3 %} is-highlighted{% endif %}"
+            class="bw-specs__sticky-product{% if highlight_3 %} is-highlighted{% endif %}{% if default_selected_column == '3' %} is-selected{% endif %}"
             data-bw-compare-sticky-product
             data-bw-compare-column="3"
             data-bw-compare-product-select
             tabindex="-1"
             role="button"
-            aria-pressed="false"
+            aria-pressed="{% if default_selected_column == '3' %}true{% else %}false{% endif %}"
             aria-label="{{ product_3_label | append: ' auswählen' | escape }}"
           >
             {% render 'bw-compare-product-header', compare_product: product_3, highlighted: highlight_3, visual_only: true, price_prefix: section.settings.price_prefix %}
           </div>
           <div
-            class="bw-specs__sticky-product{% if highlight_4 %} is-highlighted{% endif %}"
+            class="bw-specs__sticky-product{% if highlight_4 %} is-highlighted{% endif %}{% if default_selected_column == '4' %} is-selected{% endif %}"
             data-bw-compare-sticky-product
             data-bw-compare-column="4"
             data-bw-compare-product-select
             tabindex="-1"
             role="button"
-            aria-pressed="false"
+            aria-pressed="{% if default_selected_column == '4' %}true{% else %}false{% endif %}"
             aria-label="{{ product_4_label | append: ' auswählen' | escape }}"
           >
             {% render 'bw-compare-product-header', compare_product: product_4, highlighted: highlight_4, visual_only: true, price_prefix: section.settings.price_prefix %}
@@ -124,49 +125,49 @@
           <tr>
             <th class="bw-specs__label-cell" scope="col">{{ section.settings.label_heading | escape }}</th>
             <th
-              class="bw-specs__product-cell{% if highlight_1 %} is-highlighted{% endif %}"
+              class="bw-specs__product-cell{% if highlight_1 %} is-highlighted{% endif %}{% if default_selected_column == '1' %} is-selected{% endif %}"
               scope="col"
               data-bw-compare-column="1"
               data-bw-compare-product-select
               tabindex="0"
               role="button"
-              aria-pressed="false"
+              aria-pressed="{% if default_selected_column == '1' %}true{% else %}false{% endif %}"
               aria-label="{{ product_1_label | append: ' auswählen' | escape }}"
             >
               {% render 'bw-compare-product-header', compare_product: product_1, highlighted: highlight_1, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
             </th>
             <th
-              class="bw-specs__product-cell{% if highlight_2 %} is-highlighted{% endif %}"
+              class="bw-specs__product-cell{% if highlight_2 %} is-highlighted{% endif %}{% if default_selected_column == '2' %} is-selected{% endif %}"
               scope="col"
               data-bw-compare-column="2"
               data-bw-compare-product-select
               tabindex="0"
               role="button"
-              aria-pressed="false"
+              aria-pressed="{% if default_selected_column == '2' %}true{% else %}false{% endif %}"
               aria-label="{{ product_2_label | append: ' auswählen' | escape }}"
             >
               {% render 'bw-compare-product-header', compare_product: product_2, highlighted: highlight_2, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
             </th>
             <th
-              class="bw-specs__product-cell{% if highlight_3 %} is-highlighted{% endif %}"
+              class="bw-specs__product-cell{% if highlight_3 %} is-highlighted{% endif %}{% if default_selected_column == '3' %} is-selected{% endif %}"
               scope="col"
               data-bw-compare-column="3"
               data-bw-compare-product-select
               tabindex="0"
               role="button"
-              aria-pressed="false"
+              aria-pressed="{% if default_selected_column == '3' %}true{% else %}false{% endif %}"
               aria-label="{{ product_3_label | append: ' auswählen' | escape }}"
             >
               {% render 'bw-compare-product-header', compare_product: product_3, highlighted: highlight_3, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
             </th>
             <th
-              class="bw-specs__product-cell{% if highlight_4 %} is-highlighted{% endif %}"
+              class="bw-specs__product-cell{% if highlight_4 %} is-highlighted{% endif %}{% if default_selected_column == '4' %} is-selected{% endif %}"
               scope="col"
               data-bw-compare-column="4"
               data-bw-compare-product-select
               tabindex="0"
               role="button"
-              aria-pressed="false"
+              aria-pressed="{% if default_selected_column == '4' %}true{% else %}false{% endif %}"
               aria-label="{{ product_4_label | append: ' auswählen' | escape }}"
             >
               {% render 'bw-compare-product-header', compare_product: product_4, highlighted: highlight_4, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
@@ -261,19 +262,19 @@
             %}
             <tr {{ block.shopify_attributes }}>
               <th class="bw-specs__label-cell" scope="row">{{ row_label | escape }}</th>
-              <td class="bw-specs__value{% if highlight_1 %} is-highlighted{% endif %}" data-bw-compare-column="1">
+              <td class="bw-specs__value{% if highlight_1 %} is-highlighted{% endif %}{% if default_selected_column == '1' %} is-selected{% endif %}" data-bw-compare-column="1">
                 {% capture value_1 %}{% render 'product-comparison-value', spec_product: product_1, spec_source: spec_source, spec_variant_option: section.settings.variant_option, spec_keys: spec_keys, spec_namespace: spec_namespace %}{% endcapture %}
                 {% assign value_1 = value_1 | strip %}{{ value_1 | default: '—' }}
               </td>
-              <td class="bw-specs__value{% if highlight_2 %} is-highlighted{% endif %}" data-bw-compare-column="2">
+              <td class="bw-specs__value{% if highlight_2 %} is-highlighted{% endif %}{% if default_selected_column == '2' %} is-selected{% endif %}" data-bw-compare-column="2">
                 {% capture value_2 %}{% render 'product-comparison-value', spec_product: product_2, spec_source: spec_source, spec_variant_option: section.settings.variant_option, spec_keys: spec_keys, spec_namespace: spec_namespace %}{% endcapture %}
                 {% assign value_2 = value_2 | strip %}{{ value_2 | default: '—' }}
               </td>
-              <td class="bw-specs__value{% if highlight_3 %} is-highlighted{% endif %}" data-bw-compare-column="3">
+              <td class="bw-specs__value{% if highlight_3 %} is-highlighted{% endif %}{% if default_selected_column == '3' %} is-selected{% endif %}" data-bw-compare-column="3">
                 {% capture value_3 %}{% render 'product-comparison-value', spec_product: product_3, spec_source: spec_source, spec_variant_option: section.settings.variant_option, spec_keys: spec_keys, spec_namespace: spec_namespace %}{% endcapture %}
                 {% assign value_3 = value_3 | strip %}{{ value_3 | default: '—' }}
               </td>
-              <td class="bw-specs__value{% if highlight_4 %} is-highlighted{% endif %}" data-bw-compare-column="4">
+              <td class="bw-specs__value{% if highlight_4 %} is-highlighted{% endif %}{% if default_selected_column == '4' %} is-selected{% endif %}" data-bw-compare-column="4">
                 {% capture value_4 %}{% render 'product-comparison-value', spec_product: product_4, spec_source: spec_source, spec_variant_option: section.settings.variant_option, spec_keys: spec_keys, spec_namespace: spec_namespace %}{% endcapture %}
                 {% assign value_4 = value_4 | strip %}{{ value_4 | default: '—' }}
               </td>

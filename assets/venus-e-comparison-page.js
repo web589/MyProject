@@ -182,6 +182,8 @@
       });
     });
 
+    selectProductColumn('1');
+
     function syncHorizontalPosition() {
       stickyProducts.style.transform = 'translate3d(' + (-scroller.scrollLeft) + 'px, 0, 0)';
     }
