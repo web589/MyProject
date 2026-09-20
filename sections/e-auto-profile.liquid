@@ -1,0 +1,63 @@
+{% liquid
+  assign page_id = 'eauto-' | append: section.id
+%}
+
+<section id="eauto-profile" class="e-auto-page e-auto-page__section e-auto-page__profiles" aria-labelledby="{{ page_id }}-profile-heading">
+  <div class="e-auto-page__container">
+    <div class="e-auto-page__section-heading">
+      <p class="e-auto-page__eyebrow">{{ section.settings.profile_eyebrow }}</p>
+      <h2 id="{{ page_id }}-profile-heading">{{ section.settings.profile_heading }}</h2>
+      <p>{{ section.settings.profile_text }}</p>
+    </div>
+    <div class="e-auto-page__profile-layout">
+      <div class="e-auto-page__profile-tabs" role="tablist" aria-label="{{ section.settings.profile_tab_label }}">
+        {% for block in section.blocks %}
+          <button type="button" class="e-auto-page__profile-tab{% if forloop.first %} is-active{% endif %}" data-eauto-profile-tab="{{ block.id }}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" {{ block.shopify_attributes }}>
+            <strong>{{ block.settings.title }}</strong>
+            <span>{{ block.settings.summary }}</span>
+          </button>
+        {% endfor %}
+      </div>
+      <div class="e-auto-page__profile-details">
+        {% for block in section.blocks %}
+          <div class="e-auto-page__profile-detail{% if forloop.first %} is-active{% endif %}" data-eauto-profile-panel="{{ block.id }}" role="tabpanel"{% unless forloop.first %} hidden{% endunless %}>
+            <div class="e-auto-page__media e-auto-page__media--profile">
+              {% if block.settings.image != blank %}
+                {{ block.settings.image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1100', sizes: '(min-width: 960px) 55vw, 100vw', alt: block.settings.image_alt }}
+              {% elsif request.design_mode %}
+                <div class="e-auto-page__placeholder">{{ block.settings.image_placeholder }}</div>
+              {% endif %}
+            </div>
+            <div>
+              <h3>{{ block.settings.title }}</h3>
+              <p>{{ block.settings.summary }}</p>
+              <p class="e-auto-page__profile-focus"><strong>{{ section.settings.profile_focus_label }}</strong> {{ block.settings.focus }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% if section.settings.profile_note != blank %}<p class="e-auto-page__note">{{ section.settings.profile_note }}</p>{% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "E-Auto Fahrprofile",
+  "tag": "section",
+  "class": "section-e-auto-profile",
+  "settings": [
+    {"type":"text","id":"profile_eyebrow","label":"Profil Kicker","default":"Dein Fahrprofil"},
+    {"type":"text","id":"profile_heading","label":"Profil Überschrift","default":"Welches Ladeprofil passt zu dir?"},
+    {"type":"textarea","id":"profile_text","label":"Profil Text","default":"Vier typische Alltage. Wähle ein Profil und sieh, worauf es bei deinem Speicher ankommt."},
+    {"type":"text","id":"profile_tab_label","label":"Profil Tab Label","default":"Fahrprofile auswählen"},
+    {"type":"text","id":"profile_focus_label","label":"Profil Fokus Label","default":"Speicher-Fokus:"},
+    {"type":"textarea","id":"profile_note","label":"Profil Hinweis","default":"Kein Profil passt exakt? Die Kapazitätswahl berücksichtigt deine tatsächlichen Angaben."}
+  ],
+  "blocks": [
+    {"type":"profile","name":"Fahrprofil","settings":[{"type":"text","id":"title","label":"Titel","default":"Pendler"},{"type":"textarea","id":"summary","label":"Kurzbeschreibung","default":"Jeden Tag ins Büro, ca. 30–60 km hin und zurück."},{"type":"textarea","id":"focus","label":"Speicher-Fokus","default":"Mittelgroße Kapazität für das Laden am Abend."},{"type":"image_picker","id":"image","label":"Bild"},{"type":"text","id":"image_alt","label":"Bild Alt-Text","default":"E-Auto Fahrprofil"},{"type":"text","id":"image_placeholder","label":"Bild Platzhalter","default":"Profilbild auswählen"}]}
+  ],
+  "max_blocks": 4,
+  "presets": [{"name":"E-Auto Fahrprofile","blocks":[{"type":"profile"},{"type":"profile"},{"type":"profile"},{"type":"profile"}] }]
+}
+{% endschema %}

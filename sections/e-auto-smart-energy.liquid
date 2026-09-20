@@ -1,0 +1,50 @@
+{% liquid
+  assign page_id = 'eauto-' | append: section.id
+%}
+
+<section id="eauto-smart-energy" class="e-auto-page e-auto-page__section e-auto-page__smart" aria-labelledby="{{ page_id }}-smart-heading">
+  <div class="e-auto-page__container">
+    <div class="e-auto-page__section-heading">
+      <p class="e-auto-page__eyebrow">{{ section.settings.smart_eyebrow }}</p>
+      <h2 id="{{ page_id }}-smart-heading">{{ section.settings.smart_heading }}</h2>
+      <p>{{ section.settings.smart_text }}</p>
+    </div>
+    <div class="e-auto-page__smart-grid">
+      {% for index in (1..3) %}
+        {% assign title_key = 'smart_' | append: index | append: '_title' %}
+        {% assign text_key = 'smart_' | append: index | append: '_text' %}
+        <article><span>0{{ index }}</span><h3>{{ section.settings[title_key] }}</h3><p>{{ section.settings[text_key] }}</p></article>
+      {% endfor %}
+      <div class="e-auto-page__media e-auto-page__media--smart">
+        {% if section.settings.smart_image != blank %}
+          {{ section.settings.smart_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200', sizes: '(min-width: 960px) 50vw, 100vw', alt: section.settings.smart_image_alt }}
+        {% elsif request.design_mode %}
+          <div class="e-auto-page__placeholder">{{ section.settings.smart_image_placeholder }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "E-Auto Smart Energy",
+  "tag": "section",
+  "class": "section-e-auto-smart-energy",
+  "settings": [
+    {"type":"text","id":"smart_eyebrow","label":"Smart Energy Kicker","default":"Smart Energy"},
+    {"type":"text","id":"smart_heading","label":"Smart Energy Überschrift","default":"Intelligent steuern statt einfach entladen"},
+    {"type":"textarea","id":"smart_text","label":"Smart Energy Text","default":"Der VENUS E beobachtet Produktion, Haushalt und Ladebedarf und unterstützt eine passendere Nutzung deines Solarstroms."},
+    {"type":"image_picker","id":"smart_image","label":"Smart Energy Bild"},
+    {"type":"text","id":"smart_image_alt","label":"Smart Energy Bild Alt-Text","default":"App, Smart Meter und VENUS E im Alltag"},
+    {"type":"text","id":"smart_image_placeholder","label":"Smart Energy Bild Platzhalter","default":"Smart-Energy-Bild auswählen"},
+    {"type":"text","id":"smart_1_title","label":"Smart Punkt 1 Überschrift","default":"Verbrauch erkennen"},
+    {"type":"textarea","id":"smart_1_text","label":"Smart Punkt 1 Text","default":"Das Smart Meter erfasst, was PV, Haushalt und Wallbox gerade benötigen."},
+    {"type":"text","id":"smart_2_title","label":"Smart Punkt 2 Überschrift","default":"Leistung anpassen"},
+    {"type":"textarea","id":"smart_2_text","label":"Smart Punkt 2 Text","default":"Das System passt Lade- und Entladevorgänge an den tatsächlichen Bedarf an."},
+    {"type":"text","id":"smart_3_title","label":"Smart Punkt 3 Überschrift","default":"Netzbezug reduzieren"},
+    {"type":"textarea","id":"smart_3_text","label":"Smart Punkt 3 Text","default":"Gespeicherter Solarstrom steht auch dann zur Verfügung, wenn die PV gerade wenig produziert."}
+  ],
+  "presets": [{"name":"E-Auto Smart Energy"}]
+}
+{% endschema %}

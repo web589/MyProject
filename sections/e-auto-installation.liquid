@@ -1,0 +1,62 @@
+{% liquid
+  assign page_id = 'eauto-' | append: section.id
+%}
+
+<section id="eauto-installation" class="e-auto-page e-auto-page__section e-auto-page__installation" aria-labelledby="{{ page_id }}-installation-heading">
+  <div class="e-auto-page__container">
+    <div class="e-auto-page__section-heading">
+      <p class="e-auto-page__eyebrow">{{ section.settings.installation_eyebrow }}</p>
+      <h2 id="{{ page_id }}-installation-heading">{{ section.settings.installation_heading }}</h2>
+      <p>{{ section.settings.installation_text }}</p>
+    </div>
+    <div class="e-auto-page__installation-grid">
+      <div class="e-auto-page__media e-auto-page__media--installation">
+        {% if section.settings.installation_image != blank %}
+          {{ section.settings.installation_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '540, 800, 1100, 1400', sizes: '(min-width: 960px) 55vw, 100vw', alt: section.settings.installation_image_alt }}
+        {% elsif request.design_mode %}
+          <div class="e-auto-page__placeholder">{{ section.settings.installation_image_placeholder }}</div>
+        {% endif %}
+      </div>
+      <div class="e-auto-page__installation-copy">
+        <h3>{{ section.settings.installation_card_heading }}</h3>
+        <p>{{ section.settings.installation_card_text }}</p>
+        <ul>
+          <li>{{ section.settings.installation_point_1 }}</li>
+          <li>{{ section.settings.installation_point_2 }}</li>
+          <li>{{ section.settings.installation_point_3 }}</li>
+        </ul>
+        <div class="e-auto-page__install-steps">
+          {% for block in section.blocks %}
+            <div {{ block.shopify_attributes }}><span>{{ forloop.index }}</span><strong>{{ block.settings.title }}</strong><small>{{ block.settings.text }}</small></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "E-Auto Installation",
+  "tag": "section",
+  "class": "section-e-auto-installation",
+  "settings": [
+    {"type":"text","id":"installation_eyebrow","label":"Installation Kicker","default":"Installation & Nachrüstung"},
+    {"type":"text","id":"installation_heading","label":"Installation Überschrift","default":"Wallbox, Hausnetz & bestehende PV – alles bleibt wie es ist"},
+    {"type":"textarea","id":"installation_text","label":"Installation Text","default":"Der VENUS E wird AC-gekoppelt auf der Haushaltsseite ergänzt. Die Wallbox regelt weiterhin die Ladeleistung am Fahrzeug."},
+    {"type":"image_picker","id":"installation_image","label":"Installation Bild"},
+    {"type":"text","id":"installation_image_alt","label":"Installation Bild Alt-Text","default":"Bestehende PV-Anlage, Hausnetz und Wallbox mit VENUS E"},
+    {"type":"text","id":"installation_image_placeholder","label":"Installation Bild Platzhalter","default":"Installationsbild auswählen"},
+    {"type":"text","id":"installation_card_heading","label":"Installation Karte Überschrift","default":"Alles läuft über dein Hausnetz"},
+    {"type":"textarea","id":"installation_card_text","label":"Installation Karte Text","default":"Bestehende PV, Hausnetz und Wallbox bleiben als getrennte Komponenten erhalten."},
+    {"type":"text","id":"installation_point_1","label":"Installation Punkt 1","default":"Keine direkte Verbindung vom Speicher zum Auto"},
+    {"type":"text","id":"installation_point_2","label":"Installation Punkt 2","default":"Die Ladeleistung wird weiterhin von der Wallbox geregelt"},
+    {"type":"text","id":"installation_point_3","label":"Installation Punkt 3","default":"Für die Messung und Regelung kann ein kompatibles Smart Meter erforderlich sein"}
+  ],
+  "blocks": [
+    {"type":"install_step","name":"Installationsschritt","settings":[{"type":"text","id":"title","label":"Titel","default":"Bestehende PV bleibt"},{"type":"text","id":"text","label":"Text","default":"Module und Wechselrichter bleiben unangetastet."}]}
+  ],
+  "max_blocks": 3,
+  "presets": [{"name":"E-Auto Installation","blocks":[{"type":"install_step"},{"type":"install_step"},{"type":"install_step"}] }]
+}
+{% endschema %}

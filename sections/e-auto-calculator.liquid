@@ -1,0 +1,84 @@
+{% liquid
+  assign page_id = 'eauto-' | append: section.id
+%}
+
+<section id="eauto-calculator" class="e-auto-page e-auto-page__section e-auto-page__calculator-section" aria-labelledby="{{ page_id }}-calculator-heading">
+  <div class="e-auto-page__container">
+    <div class="e-auto-page__section-heading">
+      <p class="e-auto-page__eyebrow">{{ section.settings.calculator_eyebrow }}</p>
+      <h2 id="{{ page_id }}-calculator-heading">{{ section.settings.calculator_heading }}</h2>
+      <p>{{ section.settings.calculator_text }}</p>
+    </div>
+    <div class="e-auto-page__calculator" data-eauto-calculator>
+      <div class="e-auto-page__calculator-steps">
+        <div class="e-auto-page__calculator-step">
+          <span class="e-auto-page__step-number">01</span>
+          <h3>{{ section.settings.distance_heading }}</h3>
+          <div class="e-auto-page__option-grid" data-eauto-option-group="distance">
+            <button type="button" class="is-active" data-eauto-option data-eauto-value="under20" aria-pressed="true">Unter 20 km</button>
+            <button type="button" data-eauto-option data-eauto-value="20to40" aria-pressed="false">20–40 km</button>
+            <button type="button" data-eauto-option data-eauto-value="40to80" aria-pressed="false">40–80 km</button>
+            <button type="button" data-eauto-option data-eauto-value="over80" aria-pressed="false">Über 80 km</button>
+          </div>
+        </div>
+        <div class="e-auto-page__calculator-step">
+          <span class="e-auto-page__step-number">02</span>
+          <h3>{{ section.settings.efficiency_heading }}</h3>
+          <div class="e-auto-page__option-grid" data-eauto-option-group="efficiency">
+            <button type="button" class="is-active" data-eauto-option data-eauto-value="efficient" aria-pressed="true">Effizient <small>(bis 16)</small></button>
+            <button type="button" data-eauto-option data-eauto-value="average" aria-pressed="false">Durchschnitt <small>(17–21)</small></button>
+            <button type="button" data-eauto-option data-eauto-value="high" aria-pressed="false">Verbrauchsstark <small>(über 21)</small></button>
+          </div>
+        </div>
+        <div class="e-auto-page__calculator-step">
+          <span class="e-auto-page__step-number">03</span>
+          <h3>{{ section.settings.pv_heading }}</h3>
+          <div class="e-auto-page__option-grid" data-eauto-option-group="pv">
+            <button type="button" data-eauto-option data-eauto-value="low" aria-pressed="false">Wenig / unbekannt</button>
+            <button type="button" class="is-active" data-eauto-option data-eauto-value="medium" aria-pressed="true">Mittel <small>(ca. 5–15 kWh)</small></button>
+            <button type="button" data-eauto-option data-eauto-value="high" aria-pressed="false">Viel <small>(über 15 kWh)</small></button>
+          </div>
+        </div>
+        <div class="e-auto-page__calculator-step">
+          <span class="e-auto-page__step-number">04</span>
+          <h3>{{ section.settings.charge_heading }}</h3>
+          <div class="e-auto-page__option-grid" data-eauto-option-group="chargeWindow">
+            <button type="button" class="is-active" data-eauto-option data-eauto-value="evening" aria-pressed="true">Abends / nachts</button>
+            <button type="button" data-eauto-option data-eauto-value="daytime" aria-pressed="false">Tagsüber zu Hause</button>
+          </div>
+        </div>
+      </div>
+      <aside class="e-auto-page__calculator-result" aria-live="polite">
+        <span class="e-auto-page__eyebrow">{{ section.settings.result_eyebrow }}</span>
+        <strong data-eauto-result-range>2–5 kWh</strong>
+        <h3 data-eauto-result-model>{{ section.settings.result_loading_model }}</h3>
+        <p data-eauto-result-copy>{{ section.settings.result_loading_copy }}</p>
+        <a class="e-auto-page__button e-auto-page__button--primary" href="#eauto-recommendations">{{ section.settings.result_button_label }} <span aria-hidden="true">→</span></a>
+        {% if section.settings.result_note != blank %}<small>{{ section.settings.result_note }}</small>{% endif %}
+      </aside>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "E-Auto Kapazitätsrechner",
+  "tag": "section",
+  "class": "section-e-auto-calculator",
+  "settings": [
+    {"type":"text","id":"calculator_eyebrow","label":"Rechner Kicker","default":"Schnell-Ermittlung"},
+    {"type":"text","id":"calculator_heading","label":"Rechner Überschrift","default":"Wie viel Speicher braucht dein E-Auto?"},
+    {"type":"textarea","id":"calculator_text","label":"Rechner Text","default":"Vier feste Angaben – wir zeigen dir, in welchem Kapazitätsbereich dein VENUS E liegen sollte."},
+    {"type":"text","id":"distance_heading","label":"Schritt 1","default":"Wie weit fährst du am Tag? ø km / Tag"},
+    {"type":"text","id":"efficiency_heading","label":"Schritt 2","default":"Wie viel Verbrauch hat dein Auto? kWh / 100 km"},
+    {"type":"text","id":"pv_heading","label":"Schritt 3","default":"Wie viel PV-Überschuss hast du? geschätzt pro Tag"},
+    {"type":"text","id":"charge_heading","label":"Schritt 4","default":"Wann lädst du meistens? Ladefenster"},
+    {"type":"text","id":"result_eyebrow","label":"Ergebnis Kicker","default":"Dein Ergebnis"},
+    {"type":"text","id":"result_loading_model","label":"Ergebnis Startmodell","default":"Deine passende VENUS E Konfiguration"},
+    {"type":"textarea","id":"result_loading_copy","label":"Ergebnis Starttext","default":"Wähle deine vier Angaben, um eine passende Kapazität und Produktkonfiguration zu sehen."},
+    {"type":"text","id":"result_button_label","label":"Ergebnis Button","default":"Passende Modelle ansehen"},
+    {"type":"textarea","id":"result_note","label":"Ergebnis Hinweis","default":"Orientierungswert auf Basis deiner Angaben. Die genaue Auslegung hängt auch von Haushaltsverbrauch, Jahreszeit und Wallbox-Leistung ab."}
+  ],
+  "presets": [{"name":"E-Auto Kapazitätsrechner"}]
+}
+{% endschema %}

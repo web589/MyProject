@@ -1,0 +1,36 @@
+{% liquid
+  assign page_id = 'eauto-' | append: section.id
+%}
+
+<section id="eauto-trust" class="e-auto-page e-auto-page__section e-auto-page__trust" aria-labelledby="{{ page_id }}-trust-heading">
+  <div class="e-auto-page__container">
+    <div class="e-auto-page__section-heading">
+      <p class="e-auto-page__eyebrow">{{ section.settings.trust_eyebrow }}</p>
+      <h2 id="{{ page_id }}-trust-heading">{{ section.settings.trust_heading }}</h2>
+      <p>{{ section.settings.trust_text }}</p>
+    </div>
+    <div class="e-auto-page__trust-grid">
+      {% for block in section.blocks %}
+        <article {{ block.shopify_attributes }}><strong>{{ block.settings.value }}</strong><p>{{ block.settings.text }}</p></article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "E-Auto Vertrauen",
+  "tag": "section",
+  "class": "section-e-auto-trust",
+  "settings": [
+    {"type":"text","id":"trust_eyebrow","label":"Vertrauen Kicker","default":"Vertrauen & Alltagstauglichkeit"},
+    {"type":"text","id":"trust_heading","label":"Vertrauen Überschrift","default":"Gebaut für den täglichen Einsatz"},
+    {"type":"textarea","id":"trust_text","label":"Vertrauen Text","default":"Tägliches Laden und Entladen ist ein anspruchsvoller Einsatz. Prüfe die aktuellen Produktdaten und Garantiebedingungen deines gewählten Modells."}
+  ],
+  "blocks": [
+    {"type":"trust","name":"Vertrauenssignal","settings":[{"type":"text","id":"value","label":"Wert","default":"10 Jahre"},{"type":"textarea","id":"text","label":"Text","default":"Herstellergarantie gemäß den Bedingungen des gewählten Modells."}]}
+  ],
+  "max_blocks": 3,
+  "presets": [{"name":"E-Auto Vertrauen","blocks":[{"type":"trust"},{"type":"trust"},{"type":"trust"}] }]
+}
+{% endschema %}

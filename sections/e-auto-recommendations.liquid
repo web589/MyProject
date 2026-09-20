@@ -1,0 +1,146 @@
+{% liquid
+  assign page_id = 'eauto-' | append: section.id
+  assign product_mini = section.settings.product_mini
+  assign product_3 = section.settings.product_3
+  assign product_4 = section.settings.product_4
+  assign product_max = section.settings.product_max
+
+  if product_mini == blank
+    assign product_mini = all_products['venus-e-mini']
+  endif
+  if product_3 == blank
+    assign product_3 = all_products['venus-e-3']
+  endif
+  if product_4 == blank
+    assign product_4 = all_products['venus-e-4']
+  endif
+  if product_max == blank
+    assign product_max = all_products['venus-e-max']
+  endif
+
+  assign mini_preorder = false
+  assign product_3_preorder = false
+  assign product_4_preorder = false
+  assign max_preorder = false
+  if product_mini != blank
+    assign mini_preorder = product_mini.metafields.custom.preorder_enabled.value
+  endif
+  if product_3 != blank
+    assign product_3_preorder = product_3.metafields.custom.preorder_enabled.value
+  endif
+  if product_4 != blank
+    assign product_4_preorder = product_4.metafields.custom.preorder_enabled.value
+  endif
+  if product_max != blank
+    assign max_preorder = product_max.metafields.custom.preorder_enabled.value
+  endif
+%}
+
+<section
+  id="eauto-recommendations"
+  class="e-auto-page e-auto-page__section e-auto-page__recommendations"
+  data-eauto-page
+  data-section-id="{{ section.id }}"
+  data-eauto-available-label="{{ section.settings.available_label | escape }}"
+  data-eauto-unavailable-label="{{ section.settings.unavailable_label | escape }}"
+  data-eauto-preorder-label="{{ section.settings.preorder_label | escape }}"
+  data-eauto-primary-label="{{ section.settings.card_recommendation_label | escape }}"
+  data-eauto-alternative-label="ALTERNATIVE KONFIGURATION"
+  data-eauto-variant-unavailable-label="Variante nicht gefunden"
+  aria-labelledby="{{ page_id }}-recommendations-heading"
+>
+  <div class="e-auto-page__container">
+    <div class="e-auto-page__section-heading">
+      <p class="e-auto-page__eyebrow">{{ section.settings.recommendations_eyebrow }}</p>
+      <h2 id="{{ page_id }}-recommendations-heading">{{ section.settings.recommendations_heading }}</h2>
+      <p data-eauto-recommendations-summary>{{ section.settings.recommendations_text }}</p>
+    </div>
+    <div class="e-auto-page__recommendation-grid" data-eauto-recommendation-grid>
+      {% for index in (0..2) %}
+        <article class="e-auto-page__product-card" data-eauto-card="{{ index }}">
+          <a class="e-auto-page__product-card-media" data-eauto-card-link href="#">
+            <img data-eauto-card-image hidden loading="lazy" width="720" height="720" alt="">
+            <span data-eauto-card-placeholder>{{ section.settings.card_loading_label }}</span>
+          </a>
+          <div class="e-auto-page__product-card-body">
+            <span class="e-auto-page__product-card-badge" data-eauto-card-badge>{{ section.settings.card_recommendation_label }}</span>
+            <h3><a data-eauto-card-title-link href="#"><span data-eauto-card-title>{{ section.settings.card_loading_label }}</span></a></h3>
+            <p class="e-auto-page__product-card-variant" data-eauto-card-variant></p>
+            <p class="e-auto-page__product-card-capacity" data-eauto-card-capacity></p>
+            <div class="e-auto-page__product-card-meta">
+              <strong data-eauto-card-price>–</strong>
+              <span data-eauto-card-availability>{{ section.settings.card_loading_label }}</span>
+            </div>
+            <a class="e-auto-page__button e-auto-page__button--secondary" data-eauto-card-action href="#">{{ section.settings.card_cta_label }}</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    {% if section.settings.recommendations_note != blank %}<p class="e-auto-page__note">{{ section.settings.recommendations_note }}</p>{% endif %}
+  </div>
+  <script type="application/json" data-eauto-product-data>
+    {
+      "mini": {
+        "id": {{ product_mini.id | append: '' | json }},
+        "handle": {{ product_mini.handle | json }},
+        "title": {{ product_mini.title | json }},
+        "url": {{ product_mini.url | json }},
+        "featured_image": {% if product_mini.featured_image != blank %}{{ product_mini.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
+        "preorder_enabled": {{ mini_preorder | default: false | json }},
+        "variants": [{% if product_mini != blank %}{% for variant in product_mini.variants %}{"id":{{ variant.id | append: '' | json }},"title":{{ variant.title | json }},"options":{{ variant.options | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant.featured_image != blank %}{{ variant.featured_image | image_url: width: 1000 | json }}{% elsif product_mini.featured_image != blank %}{{ product_mini.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},"url":{{ product_mini.url | append: '?variant=' | append: variant.id | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
+      },
+      "venus3": {
+        "id": {{ product_3.id | append: '' | json }},
+        "handle": {{ product_3.handle | json }},
+        "title": {{ product_3.title | json }},
+        "url": {{ product_3.url | json }},
+        "featured_image": {% if product_3.featured_image != blank %}{{ product_3.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
+        "preorder_enabled": {{ product_3_preorder | default: false | json }},
+        "variants": [{% if product_3 != blank %}{% for variant in product_3.variants %}{"id":{{ variant.id | append: '' | json }},"title":{{ variant.title | json }},"options":{{ variant.options | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant.featured_image != blank %}{{ variant.featured_image | image_url: width: 1000 | json }}{% elsif product_3.featured_image != blank %}{{ product_3.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},"url":{{ product_3.url | append: '?variant=' | append: variant.id | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
+      },
+      "venus4": {
+        "id": {{ product_4.id | append: '' | json }},
+        "handle": {{ product_4.handle | json }},
+        "title": {{ product_4.title | json }},
+        "url": {{ product_4.url | json }},
+        "featured_image": {% if product_4.featured_image != blank %}{{ product_4.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
+        "preorder_enabled": {{ product_4_preorder | default: false | json }},
+        "variants": [{% if product_4 != blank %}{% for variant in product_4.variants %}{"id":{{ variant.id | append: '' | json }},"title":{{ variant.title | json }},"options":{{ variant.options | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant.featured_image != blank %}{{ variant.featured_image | image_url: width: 1000 | json }}{% elsif product_4.featured_image != blank %}{{ product_4.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},"url":{{ product_4.url | append: '?variant=' | append: variant.id | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
+      },
+      "max": {
+        "id": {{ product_max.id | append: '' | json }},
+        "handle": {{ product_max.handle | json }},
+        "title": {{ product_max.title | json }},
+        "url": {{ product_max.url | json }},
+        "featured_image": {% if product_max.featured_image != blank %}{{ product_max.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
+        "preorder_enabled": {{ max_preorder | default: false | json }},
+        "variants": [{% if product_max != blank %}{% for variant in product_max.variants %}{"id":{{ variant.id | append: '' | json }},"title":{{ variant.title | json }},"options":{{ variant.options | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant.featured_image != blank %}{{ variant.featured_image | image_url: width: 1000 | json }}{% elsif product_max.featured_image != blank %}{{ product_max.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},"url":{{ product_max.url | append: '?variant=' | append: variant.id | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
+      }
+    }
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "E-Auto Empfehlungen",
+  "tag": "section",
+  "class": "section-e-auto-recommendations",
+  "settings": [
+    {"type":"product","id":"product_mini","label":"VENUS E Mini Produkt"},
+    {"type":"product","id":"product_3","label":"VENUS E 3.0 Produkt"},
+    {"type":"product","id":"product_4","label":"VENUS E 4.0 Produkt"},
+    {"type":"product","id":"product_max","label":"VENUS E Max Produkt"},
+    {"type":"text","id":"recommendations_eyebrow","label":"Empfehlungen Kicker","default":"Deine Optionen"},
+    {"type":"text","id":"recommendations_heading","label":"Empfehlungen Überschrift","default":"Welche VENUS E Lösung passt dazu?"},
+    {"type":"textarea","id":"recommendations_text","label":"Empfehlungen Text","default":"Die drei Konfigurationen werden direkt aus deiner Auswahl und den aktuellen Shopify-Produktdaten zusammengestellt."},
+    {"type":"textarea","id":"recommendations_note","label":"Empfehlungen Hinweis","default":"Preise, Varianten, Bilder und Verfügbarkeit werden direkt aus Shopify gelesen."},
+    {"type":"text","id":"card_recommendation_label","label":"Karten Badge","default":"EMPFOHLENE KONFIGURATION"},
+    {"type":"text","id":"card_loading_label","label":"Karten Ladezustand","default":"Konfiguration wird geladen"},
+    {"type":"text","id":"card_cta_label","label":"Karten CTA","default":"Produkt ansehen"},
+    {"type":"text","id":"available_label","label":"Verfügbar Label","default":"Verfügbar"},
+    {"type":"text","id":"unavailable_label","label":"Nicht verfügbar Label","default":"Derzeit nicht verfügbar"},
+    {"type":"text","id":"preorder_label","label":"Vormerkung Label","default":"Demnächst verfügbar"}
+  ],
+  "presets": [{"name":"E-Auto Empfehlungen"}]
+}
+{% endschema %}

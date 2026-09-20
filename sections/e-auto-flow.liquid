@@ -1,0 +1,93 @@
+{% liquid
+  assign page_id = 'eauto-' | append: section.id
+%}
+
+<section id="eauto-flow" class="e-auto-page e-auto-page__section e-auto-page__flow" aria-labelledby="{{ page_id }}-flow-heading">
+  <div class="e-auto-page__container">
+    <div class="e-auto-page__section-heading">
+      <p class="e-auto-page__eyebrow">{{ section.settings.flow_eyebrow }}</p>
+      <h2 id="{{ page_id }}-flow-heading">{{ section.settings.flow_heading }}</h2>
+      <p>{{ section.settings.flow_text }}</p>
+    </div>
+    <div class="e-auto-page__toggle" role="tablist" aria-label="{{ section.settings.flow_toggle_label }}">
+      <button type="button" class="is-active" data-eauto-flow-toggle="day" role="tab" aria-selected="true">{{ section.settings.flow_day_label }}</button>
+      <button type="button" data-eauto-flow-toggle="evening" role="tab" aria-selected="false">{{ section.settings.flow_evening_label }}</button>
+    </div>
+    <div class="e-auto-page__flow-panel is-active" data-eauto-flow-panel="day" role="tabpanel">
+      <div class="e-auto-page__flow-copy">
+        <h3>{{ section.settings.flow_day_heading }}</h3>
+        <p>{{ section.settings.flow_day_text }}</p>
+        <ul>
+          <li>{{ section.settings.flow_day_point_1 }}</li>
+          <li>{{ section.settings.flow_day_point_2 }}</li>
+          <li>{{ section.settings.flow_day_point_3 }}</li>
+        </ul>
+      </div>
+      <div class="e-auto-page__media e-auto-page__media--flow">
+        {% if section.settings.flow_day_video != blank %}
+          {{ section.settings.flow_day_video | video_tag: controls: false, autoplay: false, loop: true, muted: true, playsinline: true, preload: 'metadata' }}
+        {% elsif section.settings.flow_day_image != blank %}
+          {{ section.settings.flow_day_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 960px) 58vw, 100vw', alt: section.settings.flow_day_image_alt }}
+        {% elsif request.design_mode %}
+          <div class="e-auto-page__placeholder">{{ section.settings.flow_image_placeholder }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="e-auto-page__flow-panel" data-eauto-flow-panel="evening" role="tabpanel" hidden>
+      <div class="e-auto-page__flow-copy">
+        <h3>{{ section.settings.flow_evening_heading }}</h3>
+        <p>{{ section.settings.flow_evening_text }}</p>
+        <ul>
+          <li>{{ section.settings.flow_evening_point_1 }}</li>
+          <li>{{ section.settings.flow_evening_point_2 }}</li>
+          <li>{{ section.settings.flow_evening_point_3 }}</li>
+        </ul>
+      </div>
+      <div class="e-auto-page__media e-auto-page__media--flow">
+        {% if section.settings.flow_evening_video != blank %}
+          {{ section.settings.flow_evening_video | video_tag: controls: false, autoplay: false, loop: true, muted: true, playsinline: true, preload: 'metadata' }}
+        {% elsif section.settings.flow_evening_image != blank %}
+          {{ section.settings.flow_evening_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 960px) 58vw, 100vw', alt: section.settings.flow_evening_image_alt }}
+        {% elsif request.design_mode %}
+          <div class="e-auto-page__placeholder">{{ section.settings.flow_image_placeholder }}</div>
+        {% endif %}
+      </div>
+    </div>
+    {% if section.settings.flow_note != blank %}<p class="e-auto-page__note">{{ section.settings.flow_note }}</p>{% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "E-Auto Energiefluss",
+  "tag": "section",
+  "class": "section-e-auto-flow",
+  "settings": [
+    {"type":"text","id":"flow_eyebrow","label":"Energiefluss Kicker","default":"So funktioniert es"},
+    {"type":"text","id":"flow_heading","label":"Energiefluss Überschrift","default":"Energiefluss: AC-gekoppelt über dein Hausnetz"},
+    {"type":"textarea","id":"flow_text","label":"Energiefluss Text","default":"Der VENUS E wird an dein Hausnetz angeschlossen – nicht an dein Auto. PV-Überschuss landet zuerst im Speicher, abends fließt er über das Hausnetz zu Wallbox und E-Auto."},
+    {"type":"text","id":"flow_toggle_label","label":"Energiefluss Tab Label","default":"Tageszeit auswählen"},
+    {"type":"text","id":"flow_day_label","label":"Tag Tab","default":"☀ Tag · Speichern"},
+    {"type":"text","id":"flow_evening_label","label":"Abend Tab","default":"☾ Abend · Laden"},
+    {"type":"text","id":"flow_day_heading","label":"Tag Überschrift","default":"PV-Überschuss wird gespeichert"},
+    {"type":"textarea","id":"flow_day_text","label":"Tag Text","default":"Am Tag fließt überschüssige Energie über das Hausnetz in den VENUS E. Der Speicher nimmt sie auf, statt sie ungenutzt einzuspeisen."},
+    {"type":"text","id":"flow_day_point_1","label":"Tag Punkt 1","default":"PV → Hausnetz → VENUS E"},
+    {"type":"text","id":"flow_day_point_2","label":"Tag Punkt 2","default":"Das E-Auto ist unterwegs"},
+    {"type":"text","id":"flow_day_point_3","label":"Tag Punkt 3","default":"Überschuss bleibt für den Abend verfügbar"},
+    {"type":"text","id":"flow_evening_heading","label":"Abend Überschrift","default":"Gespeicherter Solarstrom lädt das Auto"},
+    {"type":"textarea","id":"flow_evening_text","label":"Abend Text","default":"Am Abend liefert der VENUS E Energie zurück ins Hausnetz. Deine Wallbox regelt weiterhin die Ladeleistung am Fahrzeug."},
+    {"type":"text","id":"flow_evening_point_1","label":"Abend Punkt 1","default":"VENUS E → Hausnetz → Wallbox"},
+    {"type":"text","id":"flow_evening_point_2","label":"Abend Punkt 2","default":"Die PV produziert kaum noch"},
+    {"type":"text","id":"flow_evening_point_3","label":"Abend Punkt 3","default":"Das Netz ergänzt nur, wenn Speicherenergie fehlt"},
+    {"type":"image_picker","id":"flow_day_image","label":"Tag Bild"},
+    {"type":"image_picker","id":"flow_evening_image","label":"Abend Bild"},
+    {"type":"video","id":"flow_day_video","label":"Tag Video"},
+    {"type":"video","id":"flow_evening_video","label":"Abend Video"},
+    {"type":"text","id":"flow_day_image_alt","label":"Tag Bild Alt-Text","default":"PV-Überschuss lädt den VENUS E Speicher"},
+    {"type":"text","id":"flow_evening_image_alt","label":"Abend Bild Alt-Text","default":"VENUS E liefert Solarstrom über das Hausnetz zur Wallbox"},
+    {"type":"text","id":"flow_image_placeholder","label":"Energiefluss Platzhalter","default":"Energiefluss-Bild oder Video auswählen"},
+    {"type":"textarea","id":"flow_note","label":"Energiefluss Hinweis","default":"Wichtig: Der VENUS E speichert und liefert Energie über das Hausnetz. Er wird nicht direkt mit dem Auto verbunden."}
+  ],
+  "presets": [{"name":"E-Auto Energiefluss"}]
+}
+{% endschema %}

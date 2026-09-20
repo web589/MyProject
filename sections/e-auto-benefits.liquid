@@ -1,0 +1,36 @@
+{% liquid
+  assign page_id = 'eauto-' | append: section.id
+%}
+
+<section id="eauto-benefits" class="e-auto-page e-auto-page__section e-auto-page__benefits" aria-labelledby="{{ page_id }}-benefits-heading">
+  <div class="e-auto-page__container">
+    <div class="e-auto-page__section-heading">
+      <p class="e-auto-page__eyebrow">{{ section.settings.benefits_eyebrow }}</p>
+      <h2 id="{{ page_id }}-benefits-heading">{{ section.settings.benefits_heading }}</h2>
+      <p>{{ section.settings.benefits_text }}</p>
+    </div>
+    <div class="e-auto-page__benefits-grid">
+      {% for block in section.blocks %}
+        <article {{ block.shopify_attributes }}><strong>{{ block.settings.value }}</strong><h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p></article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "E-Auto Vorteile",
+  "tag": "section",
+  "class": "section-e-auto-benefits",
+  "settings": [
+    {"type":"text","id":"benefits_eyebrow","label":"Vorteile Kicker","default":"Dein Nutzen"},
+    {"type":"text","id":"benefits_heading","label":"Vorteile Überschrift","default":"Was der Speicher beim Laden wirklich bringt"},
+    {"type":"textarea","id":"benefits_text","label":"Vorteile Text","default":"Solarstrom wird zeitlich verschoben und steht dann zur Verfügung, wenn Haushalt und E-Auto ihn brauchen."}
+  ],
+  "blocks": [
+    {"type":"benefit","name":"Vorteil","settings":[{"type":"text","id":"value","label":"Wert","default":"24 h"},{"type":"text","id":"title","label":"Titel","default":"Solarstrom später nutzen"},{"type":"textarea","id":"text","label":"Text","default":"Tagsüber produziert, abends geladen – der Speicher verschiebt Solarstrom in den passenden Moment."}]}
+  ],
+  "max_blocks": 3,
+  "presets": [{"name":"E-Auto Vorteile","blocks":[{"type":"benefit"},{"type":"benefit"},{"type":"benefit"}] }]
+}
+{% endschema %}
