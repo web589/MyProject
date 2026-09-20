@@ -356,7 +356,10 @@
         "mega-product-ct002",
         "mega-product-ct003"
       ],
-      "custom_css": [],
+      "custom_css": [
+        "@media(min-width:600px){.mega-menu-products__panels:has([data-mega-menu-category-panel=\"zubehoer\"]:not([hidden])){display:grid;grid-template-columns:repeat(2,1fr);gap:24px}.mega-menu-products__panel[data-mega-menu-category-panel=\"zubehoer\"]:not([hidden]) .mega-menu-products__cards{grid-template-columns:1fr!important}}",
+        "@media(min-width:1101px){.mega-menu-products__panels:has([data-mega-menu-category-panel=\"zubehoer\"]:not([hidden])){grid-template-columns:repeat(3,1fr)}}"
+      ],
       "settings": {
         "brand_text": "VENUS E",
         "desktop_logo_width": 180,
