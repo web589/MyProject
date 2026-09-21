@@ -40,16 +40,16 @@
       navigationObserver = null;
     }
 
-    var nav = document.querySelector('[data-ac-storage-anchor-nav]');
+    var nav = document.querySelector('[data-ac-storage-anchor-nav], [data-bw-anchor-nav]');
     if (!nav) return;
 
-    var navScroller = nav.querySelector('.ac-storage-anchor-nav__links');
-    var links = Array.prototype.slice.call(nav.querySelectorAll('[data-ac-anchor-link]'));
+    var navScroller = nav.querySelector('.bw-anchor-nav__inner, .ac-storage-anchor-nav__links');
+    var links = Array.prototype.slice.call(nav.querySelectorAll('[data-ac-anchor-link], [data-bw-anchor-link]'));
     var targets = [];
     var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function revealActiveLink(link) {
-      if (!navScroller || !link || link.classList.contains('ac-storage-anchor-nav__cta')) return;
+      if (!navScroller || !link || link.classList.contains('bw-anchor-nav__cta') || link.classList.contains('ac-storage-anchor-nav__cta')) return;
       var scrollerRect = navScroller.getBoundingClientRect();
       var linkRect = link.getBoundingClientRect();
       if (linkRect.left < scrollerRect.left) {

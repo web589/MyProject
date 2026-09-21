@@ -5,36 +5,37 @@
 
 <nav
   id="{{ navigation_anchor }}"
-  class="ac-storage-anchor-nav"
+  class="ac-storage-anchor-nav bw-storage bw-storage-section bw-anchor-nav bw-anchor-target"
   data-ac-storage-anchor-nav
+  data-bw-anchor-nav
   data-section-id="{{ section.id }}"
   aria-label="{{ section.settings.aria_label | escape }}"
   {{ section.shopify_attributes }}
 >
-  <div class="ac-storage-anchor-nav__inner">
-    <div class="ac-storage-anchor-nav__links" role="list">
-      {% for block in section.blocks %}
-        {% assign link_target = block.settings.target | remove_first: '#' | handle %}
-        {% if block.settings.label != blank and link_target != blank and block.type == 'link' %}
-          <a
-            class="ac-storage-anchor-nav__link"
-            href="#{{ link_target }}"
-            data-ac-anchor-link
-            {{ block.shopify_attributes }}
-          >
-            {{ block.settings.label | escape }}
-          </a>
-        {% endif %}
-      {% endfor %}
-    </div>
+  <div class="bw-container bw-anchor-nav__inner">
+    {% for block in section.blocks %}
+      {% assign link_target = block.settings.target | remove_first: '#' | handle %}
+      {% if block.type == 'link' and block.settings.label != blank and link_target != blank %}
+        <a
+          class="bw-anchor-nav__link"
+          href="#{{ link_target }}"
+          data-ac-anchor-link
+          data-bw-anchor-link
+          {{ block.shopify_attributes }}
+        >
+          {{ block.settings.label | escape }}
+        </a>
+      {% endif %}
+    {% endfor %}
 
     {% for block in section.blocks %}
       {% assign cta_target = block.settings.target | remove_first: '#' | handle %}
       {% if block.type == 'cta' and block.settings.label != blank and cta_target != blank %}
         <a
-          class="ac-storage-anchor-nav__cta"
+          class="bw-anchor-nav__cta"
           href="#{{ cta_target }}"
           data-ac-anchor-link
+          data-bw-anchor-link
           {{ block.shopify_attributes }}
         >
           {{ block.settings.label | escape }}

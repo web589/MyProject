@@ -25,10 +25,14 @@
   scroll-margin-top: 76px;
 }
 
+.site-header-group:has(#SiteHeader[data-native-sticky="true"]) {
+  position: static;
+}
+
 .ac-storage-anchor-nav-section {
   position: sticky;
   top: 0;
-  z-index: 30;
+  z-index: 20;
 }
 
 .ac-storage-anchor-nav,
@@ -39,60 +43,56 @@
 }
 
 .ac-storage-anchor-nav {
+  position: relative;
+  z-index: 20;
   width: 100%;
-  border-bottom: 1px solid rgba(14, 27, 44, 0.08);
+  border-bottom: 1px solid rgba(17, 24, 39, 0.07);
   background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 3px 10px rgba(14, 27, 44, 0.04);
+  box-shadow: 0 3px 10px rgba(17, 24, 39, 0.03);
   backdrop-filter: blur(12px);
-  color: var(--ac-ink);
+  color: #444;
   font-family: Inter, var(--typeBasePrimary), var(--typeBaseFallback), sans-serif;
 }
 
-.ac-storage-anchor-nav__inner {
-  display: flex;
-  width: min(1440px, calc(100% - 48px));
-  min-height: 60px;
-  align-items: center;
-  gap: 24px;
-  margin: 0 auto;
+.ac-storage-anchor-nav .bw-container {
+  width: min(1500px, calc(100% - 48px));
+  margin-inline: auto;
 }
 
-.ac-storage-anchor-nav__links {
+.ac-storage-anchor-nav .bw-anchor-nav__inner {
   display: flex;
-  min-width: 0;
-  flex: 1 1 auto;
-  align-self: stretch;
+  min-height: 60px;
   align-items: center;
-  gap: clamp(18px, 2.5vw, 34px);
+  gap: clamp(18px, 3vw, 38px);
   overflow-x: auto;
   scrollbar-width: none;
 }
 
-.ac-storage-anchor-nav__links::-webkit-scrollbar {
+.ac-storage-anchor-nav .bw-anchor-nav__inner::-webkit-scrollbar {
   display: none;
 }
 
-.ac-storage-anchor-nav__link,
-.ac-storage-anchor-nav__cta {
+.ac-storage-anchor-nav .bw-anchor-nav__link,
+.ac-storage-anchor-nav .bw-anchor-nav__cta {
   flex: 0 0 auto;
-  color: var(--ac-gray-dark);
-  font-size: 13px;
-  font-weight: 500;
+  color: #444;
+  font-size: 0.82rem;
+  font-weight: 520;
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
 }
 
-.ac-storage-anchor-nav__link {
+.ac-storage-anchor-nav .bw-anchor-nav__link {
   position: relative;
   display: inline-flex;
-  min-height: 60px;
+  align-self: stretch;
   align-items: center;
   padding: 0 2px;
   transition: color 180ms ease;
 }
 
-.ac-storage-anchor-nav__link::after {
+.ac-storage-anchor-nav .bw-anchor-nav__link::after {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -101,41 +101,83 @@
   background: var(--ac-blue);
   content: "";
   transform: scaleX(0);
+  transform-origin: center;
   transition: transform 180ms ease;
 }
 
-.ac-storage-anchor-nav__link:hover,
-.ac-storage-anchor-nav__link.is-active {
+.ac-storage-anchor-nav .bw-anchor-nav__link.is-active {
   color: var(--ac-blue);
-}
-
-.ac-storage-anchor-nav__link.is-active {
   font-weight: 700;
 }
 
-.ac-storage-anchor-nav__link.is-active::after {
+.ac-storage-anchor-nav .bw-anchor-nav__link.is-active::after {
   transform: scaleX(1);
 }
 
-.ac-storage-anchor-nav__cta {
-  min-width: 132px;
-  padding: 12px 20px;
-  border-radius: 8px;
-  background: var(--ac-blue);
+.ac-storage-anchor-nav .bw-anchor-nav__cta {
+  min-width: 121px;
+  margin-left: auto;
+  min-height: 38px;
+  padding: 9px 17px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: linear-gradient(90deg, #0099fe 0%, #00c6ff 100%);
+  background-position: left center;
+  background-size: 160% 100%;
   color: #fff;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.2;
   text-align: center;
-  transition: background-color 180ms ease, transform 180ms ease;
+  transition: box-shadow 180ms ease, transform 180ms ease, background-position 180ms ease;
 }
 
-.ac-storage-anchor-nav__cta:hover {
-  background: #0088e3;
+.ac-storage-anchor-nav .bw-anchor-nav__link:hover,
+.ac-storage-anchor-nav .bw-anchor-nav__link.is-active {
+  color: var(--ac-blue);
+}
+
+.ac-storage-anchor-nav .bw-anchor-nav__cta:hover {
+  background-position: right center;
   color: #fff;
+  box-shadow: 0 9px 20px rgba(0, 153, 252, 0.2);
   transform: translateY(-1px);
 }
 
+.ac-storage-anchor-nav .bw-anchor-nav__cta:active {
+  box-shadow: 0 4px 11px rgba(0, 153, 252, 0.16);
+  transform: translateY(0) scale(0.98);
+}
+
 .ac-storage-anchor-nav a:focus-visible {
-  outline: 2px solid var(--ac-blue);
+  outline: 3px solid rgba(0, 153, 254, 0.35);
   outline-offset: 3px;
+}
+
+@media only screen and (min-width: 1200px) {
+  .ac-storage-anchor-nav .bw-anchor-nav__inner {
+    position: relative;
+    left: clamp(-80px, -5vw, -48px);
+    width: min(1500px, calc(100% - 48px));
+    justify-content: center;
+    gap: clamp(24px, 2.7vw, 48px);
+  }
+
+  .ac-storage-anchor-nav .bw-anchor-nav__cta {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    margin-left: 0;
+    transform: translateY(-50%);
+  }
+
+  .ac-storage-anchor-nav .bw-anchor-nav__cta:hover {
+    transform: translateY(calc(-50% - 1px));
+  }
+
+  .ac-storage-anchor-nav .bw-anchor-nav__cta:active {
+    transform: translateY(-50%) scale(0.98);
+  }
 }
 
 .ac-storage-page,
@@ -925,6 +967,10 @@
 }
 
 @media only screen and (max-width: 1200px) {
+  .ac-storage-anchor-nav .bw-anchor-nav__inner {
+    gap: 23px;
+  }
+
   .ac-storage-page__hero-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 40px;
@@ -967,26 +1013,33 @@
   }
 }
 
+@media only screen and (max-width: 899px) {
+  .ac-storage-anchor-nav .bw-anchor-nav__inner {
+    min-height: 54px;
+    padding-right: 0;
+  }
+
+  .ac-storage-anchor-nav .bw-anchor-nav__cta {
+    position: sticky;
+    right: 0;
+    box-shadow: -15px 0 16px #fff;
+  }
+}
+
 @media only screen and (max-width: 760px) {
-  .ac-storage-anchor-nav__inner {
-    width: calc(100% - 32px);
-    min-height: 52px;
-    gap: 14px;
+  .ac-storage-anchor-nav .bw-container,
+  .ac-storage-anchor-nav .bw-anchor-nav__inner {
+    width: calc(100% - 20px);
+    gap: 18px;
   }
 
-  .ac-storage-anchor-nav__links {
-    gap: 22px;
+  .ac-storage-anchor-nav .bw-anchor-nav__link {
+    font-size: 0.76rem;
   }
 
-  .ac-storage-anchor-nav__link {
-    min-height: 52px;
-    font-size: 12px;
-  }
-
-  .ac-storage-anchor-nav__cta {
-    min-width: 118px;
-    padding: 11px 14px;
-    font-size: 12px;
+  .ac-storage-anchor-nav .bw-anchor-nav__cta {
+    min-width: 104px;
+    padding-inline: 15px;
   }
 
   .ac-storage-page__section {
