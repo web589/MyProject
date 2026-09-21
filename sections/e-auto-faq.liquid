@@ -7,15 +7,23 @@
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.faq_eyebrow }}</p>
       <h2 id="{{ page_id }}-faq-heading">{{ section.settings.faq_heading }}{% if section.settings.faq_heading_accent != blank %} <span>{{ section.settings.faq_heading_accent }}</span>{% endif %}</h2>
-      <p>{{ section.settings.faq_text }}</p>
+      {% if section.settings.faq_text != blank %}
+        <p class="e-auto-page__faq-description">{{ section.settings.faq_text }}</p>
+      {% endif %}
     </div>
     <div class="e-auto-page__faq-list">
       {% for block in section.blocks %}
-        <div class="e-auto-page__faq-item" {{ block.shopify_attributes }}>
-          <button type="button" class="e-auto-page__faq-question" data-eauto-faq-question aria-expanded="false">
-            <span>{{ block.settings.question }}</span><span aria-hidden="true">+</span>
+        {%- assign faq_item_id = page_id | append: '-item-' | append: forloop.index -%}
+        <div id="{{ faq_item_id }}" class="e-auto-page__faq-item" {{ block.shopify_attributes }}>
+          <button id="{{ faq_item_id }}-question" type="button" class="e-auto-page__faq-question" data-eauto-faq-question aria-controls="{{ faq_item_id }}-answer" aria-expanded="false">
+            <span>{{ block.settings.question }}</span>
+            <span class="e-auto-page__faq-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 8" focusable="false"><path d="m1 1.5 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" /></svg>
+            </span>
           </button>
-          <div class="e-auto-page__faq-answer" data-eauto-faq-answer hidden>{{ block.settings.answer }}</div>
+          <div id="{{ faq_item_id }}-answer" class="e-auto-page__faq-answer" data-eauto-faq-answer aria-hidden="true" role="region" aria-labelledby="{{ faq_item_id }}-question">
+            <div class="e-auto-page__faq-answer-inner">{{ block.settings.answer }}</div>
+          </div>
         </div>
       {% endfor %}
     </div>
@@ -34,7 +42,7 @@
     {"type":"text","id":"faq_eyebrow","label":"FAQ Kicker","default":"Häufige Fragen"},
     {"type":"text","id":"faq_heading","label":"FAQ Überschrift – Hauptteil","default":"Fragen rund ums"},
     {"type":"text","id":"faq_heading_accent","label":"FAQ Überschrift – blauer Akzent","default":"E-Auto laden mit Speicher"},
-    {"type":"textarea","id":"faq_text","label":"FAQ Text","default":"Die wichtigsten Antworten zur Verbindung von PV, Hausnetz, Speicher und Wallbox."},
+    {"type":"textarea","id":"faq_text","label":"FAQ Text","default":""},
     {"type":"header","content":"Typography"},
     {"type":"range","id":"eyebrow_size","label":"Kicker Größe","min":9,"max":18,"step":1,"unit":"px","default":11},
     {"type":"range","id":"item_heading_size","label":"Frage Größe","min":13,"max":24,"step":1,"unit":"px","default":16},
@@ -45,7 +53,7 @@
     {"type":"header","content":"Layout und Größen"},
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":38},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
-    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":72}
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":54}
   ],
   "blocks": [
     {"type":"faq","name":"FAQ Frage","settings":[{"type":"text","id":"question","label":"Frage","default":"Kann der VENUS E mein Auto direkt laden?"},{"type":"richtext","id":"answer","label":"Antwort","default":"<p>Nein. Der VENUS E ist AC-gekoppelt an dein Hausnetz angeschlossen. Geladen wird dein Auto weiterhin über die Wallbox.</p>"}]}

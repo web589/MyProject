@@ -15,14 +15,27 @@
     --download-muted: #8a97a6;
     --download-border: #e3e8ee;
     --download-line: #edf0f4;
+    --download-heading-size: {{ section.settings.heading_size | default: 52 }}px;
+    --download-body-size: {{ section.settings.body_size | default: 16 }}px;
+    --download-eyebrow-size: {{ section.settings.eyebrow_size | default: 14 }}px;
+    --download-category-heading-size: {{ section.settings.category_heading_size | default: 24 }}px;
+    --download-card-title-size: {{ section.settings.card_title_size | default: 17 }}px;
+    --download-card-text-size: {{ section.settings.card_text_size | default: 13 }}px;
+    --download-control-size: {{ section.settings.control_size | default: 14 }}px;
+    --download-note-size: {{ section.settings.note_size | default: 12 }}px;
+    --download-section-spacing: {{ section.settings.section_spacing | default: 72 }}px;
+    --download-hero-height: {{ section.settings.hero_image_height | default: 360 }}px;
+    --download-hero-width: {{ section.settings.hero_image_width | default: 100 }}%;
+    --download-card-image-height: {{ section.settings.card_image_height | default: 170 }}px;
+    --download-card-image-width: {{ section.settings.card_image_width | default: 100 }}%;
     color: var(--download-ink);
-    padding: 0 0 72px;
+    padding: 0 0 var(--download-section-spacing, 72px);
   }
 
   .{{ download_center_id }}__hero {
-    width: min(100%, 1520px);
-    aspect-ratio: 1520 / 360;
-    margin: 0 auto 72px;
+    width: min(1520px, var(--download-hero-width, 100%));
+    height: clamp(180px, 23.684vw, var(--download-hero-height, 360px));
+    margin: 0 auto var(--download-section-spacing, 72px);
   }
 
   .{{ download_center_id }}__hero-image {
@@ -46,7 +59,7 @@
   .{{ download_center_id }}__eyebrow {
     margin: 0 0 12px;
     color: var(--download-blue);
-    font-size: 14px;
+    font-size: var(--download-eyebrow-size, 14px);
     font-weight: 700;
     letter-spacing: .02em;
   }
@@ -54,7 +67,7 @@
   .{{ download_center_id }}__title {
     margin: 0;
     color: var(--download-ink);
-    font-size: clamp(36px, 4vw, 52px);
+    font-size: clamp(32px, 4vw, var(--download-heading-size, 52px));
     font-weight: 600;
     line-height: 1.15;
   }
@@ -63,7 +76,7 @@
     max-width: 1200px;
     margin: 18px 0 0;
     color: var(--download-gray);
-    font-size: 16px;
+    font-size: var(--download-body-size, 16px);
     line-height: 1.65;
   }
 
@@ -85,21 +98,21 @@
     gap: 14px;
     margin: 0;
     color: var(--download-ink);
-    font-size: 24px;
+    font-size: var(--download-category-heading-size, 24px);
     font-weight: 600;
     line-height: 1.25;
   }
 
   .{{ download_center_id }}__category-number {
     color: var(--download-blue);
-    font-size: 14px;
+    font-size: var(--download-eyebrow-size, 14px);
     font-weight: 700;
   }
 
   .{{ download_center_id }}__category-meta {
     margin: 0;
     color: var(--download-muted);
-    font-size: 13px;
+    font-size: var(--download-note-size, 13px);
   }
 
   .{{ download_center_id }}__grid {
@@ -133,8 +146,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 200px;
-    height: 170px;
+    width: min(200px, var(--download-card-image-width, 100%));
+    height: var(--download-card-image-height, 170px);
+    margin-inline: auto;
     overflow: hidden;
     background: #fff !important;
     border-radius: 8px;
@@ -151,7 +165,7 @@
   .{{ download_center_id }}__product-name {
     margin: 14px 0 0;
     color: var(--download-ink);
-    font-size: 17px;
+    font-size: var(--download-card-title-size, 17px);
     font-weight: 600;
     line-height: 1.35;
   }
@@ -160,7 +174,7 @@
   .{{ download_center_id }}__tagline {
     margin: 4px 0 0;
     color: var(--download-gray);
-    font-size: 12.5px;
+    font-size: var(--download-card-text-size, 12.5px);
     line-height: 1.55;
   }
 
@@ -171,7 +185,7 @@
     color: var(--download-blue);
     background: var(--download-blue-soft);
     border-radius: 3px;
-    font-size: 11px;
+    font-size: var(--download-control-size, 11px);
     font-weight: 600;
   }
 
@@ -201,7 +215,7 @@
     color: var(--download-blue);
     background: var(--download-blue-soft);
     border-radius: 3px;
-    font-size: 11px;
+    font-size: var(--download-control-size, 11px);
     font-weight: 600;
     text-align: center;
   }
@@ -214,7 +228,7 @@
   .{{ download_center_id }}__document-title {
     min-width: 0;
     color: var(--download-ink);
-    font-size: 14px;
+    font-size: var(--download-card-text-size, 14px);
     font-weight: 500;
     line-height: 1.4;
   }
@@ -222,7 +236,7 @@
   .{{ download_center_id }}__language {
     margin-left: 8px;
     color: var(--download-gray);
-    font-size: 12px;
+    font-size: var(--download-note-size, 12px);
     white-space: nowrap;
   }
 
@@ -297,7 +311,7 @@
     }
 
     .{{ download_center_id }}__category-title {
-      font-size: 21px;
+      font-size: min(var(--download-category-heading-size, 24px), 21px);
     }
 
     .{{ download_center_id }}__card {
@@ -307,8 +321,8 @@
     }
 
     .{{ download_center_id }}__image {
-      width: 100%;
-      height: 180px;
+      width: min(100%, var(--download-card-image-width, 100%));
+      height: var(--download-card-image-height, 170px);
     }
 
     .{{ download_center_id }}__document {
@@ -316,7 +330,7 @@
     }
 
     .{{ download_center_id }}__document-title {
-      font-size: 13px;
+      font-size: var(--download-card-text-size, 13px);
     }
 
     .{{ download_center_id }}__language {
@@ -465,7 +479,22 @@
     {"type":"text","id":"title","label":"Title","default":"Download-Center"},
     {"type":"textarea","id":"description","label":"Description","default":"Hier findest du alle Broschüren, Datenblätter, Bedienungs- und Installationsanleitungen für deinen VENUS E Speicher – als PDF zum Download bereit."},
     {"type":"text","id":"storage_heading","label":"Storage category heading","default":"VENUS E Speicher"},
-    {"type":"text","id":"accessories_heading","label":"Accessories category heading","default":"Zubehör & Smart Meter"}
+    {"type":"text","id":"accessories_heading","label":"Accessories category heading","default":"Zubehör & Smart Meter"},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Eyebrow Größe","min":10,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":32,"max":72,"step":1,"unit":"px","default":52},
+    {"type":"range","id":"body_size","label":"Textgröße","min":12,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"category_heading_size","label":"Kategorieüberschrift Größe","min":18,"max":36,"step":1,"unit":"px","default":24},
+    {"type":"range","id":"card_title_size","label":"Kartentitel Größe","min":14,"max":24,"step":1,"unit":"px","default":17},
+    {"type":"range","id":"card_text_size","label":"Kartentext Größe","min":11,"max":20,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"control_size","label":"Dokumentlabel Größe","min":10,"max":18,"step":1,"unit":"px","default":11},
+    {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":16,"step":1,"unit":"px","default":12},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"section_spacing","label":"Abstand unten","min":40,"max":120,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"hero_image_height","label":"Banner Bildhöhe","min":180,"max":520,"step":10,"unit":"px","default":360},
+    {"type":"range","id":"hero_image_width","label":"Banner Bildbreite","min":60,"max":100,"step":1,"unit":"%","default":100},
+    {"type":"range","id":"card_image_height","label":"Produktbild Höhe","min":120,"max":280,"step":10,"unit":"px","default":170},
+    {"type":"range","id":"card_image_width","label":"Produktbild Breite","min":60,"max":100,"step":1,"unit":"%","default":100}
   ],
   "blocks": [
     {

@@ -10,7 +10,7 @@
 
 <section
   class="venus-404 venus-404__hero"
-  style="--venus-404-section-background: {{ hero_background | escape }};"
+  style="{% render '404-page-style', section: section %} --venus-404-section-background: {{ hero_background | escape }}; --venus-404-breakline-width: {{ section.settings.breakline_width | default: 380 }}px;"
   aria-labelledby="venus-404-hero-title-{{ section.id }}"
 >
   <div class="venus-404__hero-inner">
@@ -128,6 +128,70 @@
       "id": "background_color",
       "label": "背景颜色",
       "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "字体和尺寸"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "标题大小",
+      "min": 24,
+      "max": 56,
+      "step": 1,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "label": "正文大小",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "control_size",
+      "label": "按钮文字大小",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "number_size",
+      "label": "404 数字大小",
+      "min": 80,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "section_spacing",
+      "label": "上下间距",
+      "min": 40,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "breakline_width",
+      "label": "断线动画宽度",
+      "min": 240,
+      "max": 520,
+      "step": 10,
+      "unit": "px",
+      "default": 380
     }
   ],
   "presets": [

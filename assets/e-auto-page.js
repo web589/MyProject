@@ -65,6 +65,30 @@
     }
   };
 
+  var PRODUCT_COPY = {
+    mini: {
+      title: 'VENUS E Mini',
+      badge: 'KOMPAKT & EINSTEIGER',
+      capacityRange: '2 – 6 kWh',
+      description: 'Für kurze Strecken und wenig Fahrleistung – speichert den Tagesüberschuss für die ersten Abendstunden.',
+      ctaLabel: 'VENUS E Mini ansehen →'
+    },
+    venus3: {
+      title: 'VENUS E 3.0',
+      badge: 'FLEXIBEL & ERWEITERBAR',
+      capacityRange: '5,12 – 15,36 kWh',
+      description: 'Modular erweiterbar – wächst mit deinem Fahrprofil und deinem Haushalt mit.',
+      ctaLabel: 'VENUS E 3.0 ansehen →'
+    },
+    venus4: {
+      title: 'VENUS E 4.0',
+      badge: 'EMPFOHLEN FÜR E-AUTO',
+      capacityRange: '5 – 15 kWh',
+      description: 'Der Ausgleich zwischen Tagesüberschuss und Abend-Laden – die häufigste Konfiguration für Pendler.',
+      ctaLabel: 'VENUS E 4.0 ansehen →'
+    }
+  };
+
   var DEFAULT_STATE = {
     distance: 'under20',
     efficiency: 'efficient',
@@ -409,17 +433,22 @@
     var overrides = readCardOverrides(card);
     var productUrl = productVariantUrl(item);
     var title = (item.quantity > 1 ? item.quantity + '× ' : '') + item.title;
-    var renderedTitle = overrides.title || title;
+    var productCopy = PRODUCT_COPY[item.productKey] || {};
+    var renderedTitle = overrides.title || productCopy.title || title;
     var image = card.querySelector('[data-eauto-card-image]');
     var placeholder = card.querySelector('[data-eauto-card-placeholder]');
     var titleLink = card.querySelector('[data-eauto-card-title-link]');
     var mediaLink = card.querySelector('[data-eauto-card-link]');
     var action = card.querySelector('[data-eauto-card-action]');
     var actionUrl = overrides.ctaLink || productUrl;
-
     setText(card, '[data-eauto-card-title]', renderedTitle);
     setText(card, '[data-eauto-card-variant]', overrides.variant || (item.variant ? item.variant.title : copy.variantUnavailableLabel));
-    setText(card, '[data-eauto-card-capacity]', overrides.capacity || formatCapacity(item.capacity, unit));
+    setText(card, '[data-eauto-card-capacity]', overrides.capacity || productCopy.capacityRange || formatCapacity(item.capacity, unit));
+    var description = card.querySelector('[data-eauto-card-description]');
+    if (description) {
+      description.textContent = productCopy.description || '';
+      description.hidden = !productCopy.description;
+    }
     setText(card, '[data-eauto-card-price]', overrides.price || (item.variant ? formatMoney(item.variant.price) : '—'));
 
     var availability = item.preorder
@@ -428,8 +457,8 @@
         ? copy.availableLabel
         : copy.unavailableLabel;
     setText(card, '[data-eauto-card-availability]', overrides.availability || availability);
-    setText(card, '[data-eauto-card-badge]', overrides.badge || (index === 0 ? copy.primaryLabel : copy.alternativeLabel));
-    setText(card, '[data-eauto-card-action]', overrides.ctaLabel || card.dataset.eautoCardDefaultCtaLabel || '');
+    setText(card, '[data-eauto-card-badge]', overrides.badge || productCopy.badge || (index === 0 ? copy.primaryLabel : copy.alternativeLabel));
+    setText(card, '[data-eauto-card-action]', overrides.ctaLabel || productCopy.ctaLabel || card.dataset.eautoCardDefaultCtaLabel || '');
 
     if (item.image) {
       image.src = item.image;
@@ -577,19 +606,34 @@
       if (button.dataset.eautoBound === 'true') return;
       button.dataset.eautoBound = 'true';
       button.addEventListener('click', function () {
-        var answer = button.parentElement && button.parentElement.querySelector('[data-eauto-faq-answer]');
+        var answerId = button.getAttribute('aria-controls');
+        var answer = answerId ? document.getElementById(answerId) : null;
+        if (!answer) answer = button.parentElement && button.parentElement.querySelector('[data-eauto-faq-answer]');
         var wasOpen = button.getAttribute('aria-expanded') === 'true';
         root.querySelectorAll('[data-eauto-faq-question]').forEach(function (question) {
           question.setAttribute('aria-expanded', 'false');
-        });
-        root.querySelectorAll('[data-eauto-faq-answer]').forEach(function (panel) {
-          panel.hidden = true;
+          var questionAnswerId = question.getAttribute('aria-controls');
+          var questionAnswer = questionAnswerId ? document.getElementById(questionAnswerId) : null;
+          if (!questionAnswer) questionAnswer = question.parentElement && question.parentElement.querySelector('[data-eauto-faq-answer]');
+          if (questionAnswer) {
+            questionAnswer.classList.remove('is-open');
+            questionAnswer.setAttribute('aria-hidden', 'true');
+            questionAnswer.style.maxHeight = '0px';
+          }
         });
         if (!wasOpen && answer) {
           button.setAttribute('aria-expanded', 'true');
-          answer.hidden = false;
+          answer.classList.add('is-open');
+          answer.setAttribute('aria-hidden', 'false');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
         }
       });
+    });
+
+    root.querySelectorAll('[data-eauto-faq-answer]').forEach(function (answer) {
+      answer.classList.remove('is-open');
+      answer.setAttribute('aria-hidden', 'true');
+      answer.style.maxHeight = '0px';
     });
   }
 
