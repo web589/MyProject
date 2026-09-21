@@ -43,27 +43,27 @@
 
 {% schema %}
 {
-  "name": "E-Auto 用车画像",
+  "name": "E-Auto Fahrprofile",
   "tag": "section",
   "class": "section-e-auto-profile",
   "settings": [
-    {"type":"text","id":"profile_eyebrow","label":"用车画像小标题","default":"Dein Fahrprofil"},
-    {"type":"text","id":"profile_heading","label":"用车画像标题（主体）","default":"Welches Ladeprofil"},
-    {"type":"text","id":"profile_heading_accent","label":"用车画像标题（蓝色强调）","default":"passt zu dir?"},
-    {"type":"textarea","id":"profile_text","label":"用车画像说明","default":"Vier typische Alltage. Wähle ein Profil und sieh, worauf es bei deinem Speicher ankommt."},
-    {"type":"text","id":"profile_tab_label","label":"画像标签说明","default":"Fahrprofile auswählen"},
-    {"type":"text","id":"profile_focus_label","label":"画像重点标签","default":"Speicher-Fokus:"},
-    {"type":"textarea","id":"profile_note","label":"画像提示","default":"Kein Profil passt exakt? Die Kapazitätswahl berücksichtigt deine tatsächlichen Angaben."},
-    {"type":"header","content":"布局与尺寸"},
-    {"type":"range","id":"heading_size","label":"标题字号","min":28,"max":60,"step":1,"unit":"px","default":42},
-    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
-    {"type":"range","id":"profile_media_height","label":"画像图片高度","min":260,"max":560,"step":10,"unit":"px","default":410},
-    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
+    {"type":"text","id":"profile_eyebrow","label":"Profil Kicker","default":"Dein Fahrprofil"},
+    {"type":"text","id":"profile_heading","label":"Profil Überschrift – Hauptteil","default":"Welches Ladeprofil"},
+    {"type":"text","id":"profile_heading_accent","label":"Profil Überschrift – blauer Akzent","default":"passt zu dir?"},
+    {"type":"textarea","id":"profile_text","label":"Profil Text","default":"Vier typische Alltage. Wähle ein Profil und sieh, worauf es bei deinem Speicher ankommt."},
+    {"type":"text","id":"profile_tab_label","label":"Profil Tab Label","default":"Fahrprofile auswählen"},
+    {"type":"text","id":"profile_focus_label","label":"Profil Fokus Label","default":"Speicher-Fokus:"},
+    {"type":"textarea","id":"profile_note","label":"Profil Hinweis","default":"Kein Profil passt exakt? Die Kapazitätswahl berücksichtigt deine tatsächlichen Angaben."},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"profile_media_height","label":"Fahrprofil Bildhöhe","min":260,"max":560,"step":10,"unit":"px","default":410},
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "blocks": [
-    {"type":"profile","name":"用车画像项","settings":[{"type":"text","id":"title","label":"标题","default":"Pendler"},{"type":"textarea","id":"summary","label":"简短说明","default":"Jeden Tag ins Büro, ca. 30–60 km hin und zurück."},{"type":"textarea","id":"focus","label":"储能重点","default":"Mittelgroße Kapazität für das Laden am Abend."},{"type":"image_picker","id":"image","label":"图片"},{"type":"text","id":"image_alt","label":"图片替代文本","default":"E-Auto Fahrprofil"},{"type":"text","id":"image_placeholder","label":"图片占位提示","default":"Profilbild auswählen"}]}
+    {"type":"profile","name":"Fahrprofil","settings":[{"type":"text","id":"title","label":"Titel","default":"Pendler"},{"type":"textarea","id":"summary","label":"Kurzbeschreibung","default":"Jeden Tag ins Büro, ca. 30–60 km hin und zurück."},{"type":"textarea","id":"focus","label":"Speicher-Fokus","default":"Mittelgroße Kapazität für das Laden am Abend."},{"type":"image_picker","id":"image","label":"Bild"},{"type":"text","id":"image_alt","label":"Bild Alt-Text","default":"E-Auto Fahrprofil"},{"type":"text","id":"image_placeholder","label":"Bild Platzhalter","default":"Profilbild auswählen"}]}
   ],
   "max_blocks": 4,
-  "presets": [{"name":"E-Auto 用车画像","blocks":[{"type":"profile"},{"type":"profile"},{"type":"profile"},{"type":"profile"}] }]
+  "presets": [{"name":"E-Auto Fahrprofile","blocks":[{"type":"profile"},{"type":"profile"},{"type":"profile"},{"type":"profile"}] }]
 }
 {% endschema %}
