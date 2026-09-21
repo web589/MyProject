@@ -1477,3 +1477,290 @@ a.bw-table-product__name:hover {
     transform: none;
   }
 }
+
+/* Theme Editor controls for the VENUS E comparison page. */
+.section-bw-storage-navigation .bw-anchor-nav__link,
+.section-bw-storage-navigation .bw-anchor-nav__cta {
+  font-size: var(--bw-nav-text-size, 0.82rem);
+}
+
+.section-bw-storage-hero .bw-hero {
+  padding-block: var(--bw-compare-section-spacing, 72px);
+}
+
+.section-bw-storage-hero .bw-hero__pill,
+.section-bw-compare-models .bw-eyebrow,
+.section-bw-compare-scenarios .bw-eyebrow,
+.section-bw-compare-card-grid .bw-eyebrow,
+.section-bw-compare-table .bw-eyebrow,
+.section-bw-compare-capacity .bw-eyebrow,
+.section-bw-compare-smart-energy .bw-eyebrow,
+.section-bw-compare-trust .bw-compare-trust__eyebrow {
+  font-size: var(--bw-compare-eyebrow-size, 0.74rem) !important;
+}
+
+.section-bw-storage-hero .bw-hero h1,
+.section-bw-compare-models .bw-models__intro h2,
+.section-bw-compare-scenarios .bw-scenarios__intro h2,
+.section-bw-compare-card-grid .bw-content-grid__intro h2,
+.section-bw-compare-table .bw-specs__intro h2,
+.section-bw-compare-capacity .bw-capacity-map__intro h2,
+.section-bw-compare-smart-energy .bw-smart-energy__intro h2,
+.section-bw-compare-trust .bw-compare-trust__copy h2,
+.section-bw-storage-faq .bw-faq__intro h2 {
+  font-size: var(--bw-compare-heading-size, 38px);
+}
+
+.section-bw-storage-hero .bw-lead,
+.section-bw-compare-models .bw-models__intro .bw-rte,
+.section-bw-compare-scenarios .bw-scenarios__intro,
+.section-bw-compare-card-grid .bw-content-grid__intro .bw-rte,
+.section-bw-compare-table .bw-specs__intro .bw-rte,
+.section-bw-compare-capacity .bw-capacity-map__text,
+.section-bw-compare-smart-energy .bw-smart-energy__intro .bw-rte,
+.section-bw-storage-faq .bw-faq__intro p {
+  font-size: var(--bw-compare-body-size, 16px);
+}
+
+.section-bw-storage-hero .bw-actions .bw-button,
+.section-bw-compare-models .bw-model-card__button,
+.section-bw-compare-models .bw-models__support .bw-button,
+.section-bw-compare-scenarios .bw-scenario-card__link,
+.section-bw-compare-card-grid .bw-content-card__link,
+.section-bw-compare-smart-energy .bw-smart-energy__app .bw-button,
+.section-bw-storage-navigation .bw-anchor-nav__cta {
+  font-size: var(--bw-compare-control-size, 13px);
+}
+
+.section-bw-storage-hero .bw-hero__stats--checklist .bw-hero__stat strong,
+.section-bw-storage-hero .bw-hero__stat strong {
+  font-size: var(--bw-compare-card-title-size, 20px);
+}
+
+.section-bw-storage-hero .bw-hero__stat span {
+  font-size: var(--bw-compare-card-text-size, 14px);
+}
+
+@media (min-width: 900px) {
+  .section-bw-storage-hero .bw-hero__media {
+    width: var(--bw-compare-image-width, 110%);
+    max-width: none;
+    height: var(--bw-compare-image-height, 440px);
+    aspect-ratio: auto;
+  }
+
+  .section-bw-storage-hero .bw-hero__media img,
+  .section-bw-storage-hero .bw-hero__media video {
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.section-bw-compare-models .bw-models,
+.section-bw-compare-scenarios .bw-scenarios,
+.section-bw-compare-card-grid .bw-content-grid,
+.section-bw-compare-table .bw-specs,
+.section-bw-compare-capacity .bw-capacity-map,
+.section-bw-compare-smart-energy .bw-smart-energy,
+.section-bw-compare-trust .bw-compare-trust,
+.section-bw-storage-faq .bw-faq-section {
+  padding-block: var(--bw-compare-section-spacing, 72px);
+}
+
+.section-bw-compare-models .bw-model-card__media {
+  width: var(--bw-compare-image-width, 100%);
+  height: var(--bw-compare-image-height, 240px);
+  margin-inline: auto;
+  aspect-ratio: auto;
+}
+
+.section-bw-compare-models .bw-model-card__media img {
+  width: 100%;
+  height: 100%;
+}
+
+.section-bw-compare-models .bw-model-card__body h3,
+.section-bw-compare-models .bw-models__support h3 {
+  font-size: var(--bw-compare-card-title-size, 22px);
+}
+
+.section-bw-compare-models .bw-model-card__capacity,
+.section-bw-compare-models .bw-model-card__description,
+.section-bw-compare-models .bw-model-card__price,
+.section-bw-compare-models .bw-model-card__availability,
+.section-bw-compare-models .bw-models__support p,
+.section-bw-compare-models .bw-models__support-points li {
+  font-size: var(--bw-compare-card-text-size, 14px);
+}
+
+.section-bw-compare-models .bw-model-card__price strong {
+  font-size: var(--bw-compare-card-title-size, 22px);
+}
+
+.section-bw-compare-scenarios .bw-scenario-card__media {
+  width: var(--bw-compare-image-width, 100%);
+  height: var(--bw-compare-image-height, 300px);
+  margin-inline: auto;
+  aspect-ratio: auto;
+}
+
+.section-bw-compare-scenarios .bw-scenario-card__media img {
+  height: 100%;
+}
+
+.section-bw-compare-scenarios .bw-scenario-card__body h3 {
+  font-size: var(--bw-compare-card-title-size, 20px);
+}
+
+.section-bw-compare-scenarios .bw-scenario-card__body p {
+  font-size: var(--bw-compare-card-text-size, 14px);
+}
+
+.section-bw-compare-card-grid .bw-content-card__media {
+  width: var(--bw-compare-image-width, 100%);
+  height: var(--bw-compare-image-height, 300px);
+  margin-inline: auto;
+  aspect-ratio: auto;
+}
+
+.section-bw-compare-card-grid .bw-content-card h3 {
+  font-size: var(--bw-compare-card-title-size, 20px);
+}
+
+.section-bw-compare-card-grid .bw-content-card__text,
+.section-bw-compare-card-grid .bw-content-card__tags li {
+  font-size: var(--bw-compare-card-text-size, 14px);
+}
+
+.section-bw-compare-card-grid .bw-content-card__link {
+  font-size: var(--bw-compare-control-size, 13px);
+}
+
+.section-bw-compare-table .bw-specs__label-cell,
+.section-bw-compare-table .bw-specs__value,
+.section-bw-compare-table .bw-specs__mobile-hint {
+  font-size: var(--bw-compare-body-size, 16px);
+}
+
+.section-bw-compare-table .bw-table-product__image {
+  width: var(--bw-compare-table-image-width, 112px);
+  height: var(--bw-compare-table-image-height, 82px);
+}
+
+.section-bw-compare-table .bw-table-product__name {
+  font-size: var(--bw-compare-card-text-size, 14px);
+}
+
+.section-bw-compare-table .bw-table-product__price,
+.section-bw-compare-table .bw-table-product__status {
+  font-size: var(--bw-compare-control-size, 13px) !important;
+}
+
+.section-bw-compare-table .bw-specs__sticky .bw-table-product__image {
+  width: min(var(--bw-compare-table-image-width, 112px), 58px);
+  height: min(var(--bw-compare-table-image-height, 82px), 58px);
+}
+
+.section-bw-compare-capacity .bw-capacity-row__label h3 {
+  font-size: var(--bw-compare-card-title-size, 18px);
+}
+
+.section-bw-compare-capacity .bw-capacity-row__label p,
+.section-bw-compare-capacity .bw-capacity-row__point strong,
+.section-bw-compare-capacity .bw-capacity-map__footnote {
+  font-size: var(--bw-compare-card-text-size, 14px) !important;
+}
+
+.section-bw-compare-smart-energy .bw-smart-energy__feature h3,
+.section-bw-compare-smart-energy .bw-smart-energy__app-copy h3 {
+  font-size: var(--bw-compare-feature-title-size, 18px);
+}
+
+.section-bw-compare-smart-energy .bw-smart-energy__feature p,
+.section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-rte {
+  font-size: var(--bw-compare-feature-text-size, 14px);
+}
+
+.section-bw-compare-smart-energy .bw-smart-energy__app-media {
+  width: var(--bw-compare-image-width, 100%);
+  height: var(--bw-compare-image-height, 260px);
+  min-height: 0;
+  margin-inline: auto;
+}
+
+.section-bw-compare-smart-energy .bw-smart-energy__app-media img,
+.section-bw-compare-smart-energy .bw-smart-energy__app-media video {
+  height: 100%;
+}
+
+.section-bw-compare-trust .bw-compare-trust__media {
+  width: var(--bw-compare-image-width, 100%);
+  height: var(--bw-compare-image-height, 356px);
+  min-height: 0;
+  margin-inline: auto;
+}
+
+.section-bw-compare-trust .bw-compare-trust__stat strong {
+  font-size: var(--bw-compare-stat-size, 24px);
+}
+
+.section-bw-compare-trust .bw-compare-trust__stat-label,
+.section-bw-compare-trust .bw-compare-trust__stat p {
+  font-size: var(--bw-compare-stat-text-size, 13px) !important;
+}
+
+.section-bw-storage-faq .bw-faq__intro p {
+  font-size: var(--bw-compare-body-size, 16px);
+}
+
+.section-bw-storage-faq .bw-faq__item summary {
+  font-size: var(--bw-compare-question-size, 16px);
+}
+
+.section-bw-storage-faq .bw-faq__answer {
+  font-size: var(--bw-compare-answer-size, 14px);
+}
+
+@media (max-width: 899px) {
+  .section-bw-storage-hero .bw-hero__media,
+  .section-bw-compare-smart-energy .bw-smart-energy__app-media,
+  .section-bw-compare-trust .bw-compare-trust__media {
+    width: 100%;
+  }
+
+  .section-bw-storage-hero .bw-hero__media {
+    height: min(var(--bw-compare-image-height, 440px), 420px);
+  }
+
+  .section-bw-compare-smart-energy .bw-smart-energy__app-media {
+    height: min(var(--bw-compare-image-height, 260px), 420px);
+  }
+
+  .section-bw-compare-trust .bw-compare-trust__media {
+    height: min(var(--bw-compare-image-height, 356px), 360px);
+  }
+}
+
+@media (max-width: 599px) {
+  .section-bw-compare-models .bw-models,
+  .section-bw-compare-scenarios .bw-scenarios,
+  .section-bw-compare-card-grid .bw-content-grid,
+  .section-bw-compare-table .bw-specs,
+  .section-bw-compare-capacity .bw-capacity-map,
+  .section-bw-compare-smart-energy .bw-smart-energy,
+  .section-bw-compare-trust .bw-compare-trust,
+  .section-bw-storage-faq .bw-faq-section {
+    padding-block: min(var(--bw-compare-section-spacing, 72px), 48px);
+  }
+
+  .section-bw-compare-models .bw-model-card__media {
+    width: 100%;
+    height: min(var(--bw-compare-image-height, 240px), 280px);
+  }
+
+  .section-bw-compare-scenarios .bw-scenario-card__media,
+  .section-bw-compare-card-grid .bw-content-card__media {
+    width: 100%;
+    height: min(var(--bw-compare-image-height, 300px), 320px);
+  }
+}

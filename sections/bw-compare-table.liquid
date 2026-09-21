@@ -35,7 +35,7 @@
   data-bw-module="comparison-table"
   data-bw-compare-table
   aria-labelledby="bw-specs-heading-{{ section.id }}"
-  style="{% render 'bw-comparison-section-style', section: section %}"
+  style="{% render 'bw-comparison-section-style', section: section %} --bw-compare-table-image-width: {{ section.settings.image_width | default: 112 }}px; --bw-compare-table-image-height: {{ section.settings.image_height | default: 82 }}px;"
 >
   <div class="bw-container">
     <div class="bw-section__intro bw-specs__intro">
@@ -400,6 +400,80 @@
       "id": "mobile_hint",
       "label": "Hinweis auf Mobilgeräten",
       "default": "Seitlich wischen, um alle Modelle zu vergleichen."
+    },
+    {
+      "type": "header",
+      "content": "Layout und Größen"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "Kleine Überschrift Größe",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Überschrift Größe",
+      "min": 24,
+      "max": 56,
+      "step": 1,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "label": "Textgröße",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "control_size",
+      "label": "Tabellenhinweis Größe",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "section_spacing",
+      "label": "Abstand oben und unten",
+      "min": 40,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "产品图宽度",
+      "min": 60,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "default": 112
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "产品图高度",
+      "min": 50,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 82
     }
   ],
   "blocks": [

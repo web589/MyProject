@@ -602,31 +602,56 @@
   }
 
   function bindFaq(root) {
+    function getAnswer(question) {
+      var answerId = question.getAttribute('aria-controls');
+      var answer = answerId ? document.getElementById(answerId) : null;
+      return answer || (question.parentElement && question.parentElement.querySelector('[data-eauto-faq-answer]'));
+    }
+
+    function scheduleFrame(callback) {
+      if (window.requestAnimationFrame) window.requestAnimationFrame(callback);
+      else window.setTimeout(callback, 0);
+    }
+
+    function closeAnswer(question, answer) {
+      question.setAttribute('aria-expanded', 'false');
+      if (!answer) return;
+
+      answer.classList.remove('is-open');
+      answer.setAttribute('aria-hidden', 'true');
+      answer.style.maxHeight = '0px';
+      if (answer._eAutoFaqHideTimer) window.clearTimeout(answer._eAutoFaqHideTimer);
+      answer._eAutoFaqHideTimer = window.setTimeout(function () {
+        if (!answer.classList.contains('is-open')) answer.hidden = true;
+      }, 340);
+    }
+
+    function openAnswer(question, answer) {
+      if (!answer) return;
+
+      if (answer._eAutoFaqHideTimer) window.clearTimeout(answer._eAutoFaqHideTimer);
+      question.setAttribute('aria-expanded', 'true');
+      answer.hidden = false;
+      answer.classList.add('is-open');
+      answer.setAttribute('aria-hidden', 'false');
+      answer.style.maxHeight = '0px';
+      scheduleFrame(function () {
+        if (question.getAttribute('aria-expanded') === 'true') {
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+      });
+    }
+
     root.querySelectorAll('[data-eauto-faq-question]').forEach(function (button) {
       if (button.dataset.eautoBound === 'true') return;
       button.dataset.eautoBound = 'true';
       button.addEventListener('click', function () {
-        var answerId = button.getAttribute('aria-controls');
-        var answer = answerId ? document.getElementById(answerId) : null;
-        if (!answer) answer = button.parentElement && button.parentElement.querySelector('[data-eauto-faq-answer]');
+        var answer = getAnswer(button);
         var wasOpen = button.getAttribute('aria-expanded') === 'true';
         root.querySelectorAll('[data-eauto-faq-question]').forEach(function (question) {
-          question.setAttribute('aria-expanded', 'false');
-          var questionAnswerId = question.getAttribute('aria-controls');
-          var questionAnswer = questionAnswerId ? document.getElementById(questionAnswerId) : null;
-          if (!questionAnswer) questionAnswer = question.parentElement && question.parentElement.querySelector('[data-eauto-faq-answer]');
-          if (questionAnswer) {
-            questionAnswer.classList.remove('is-open');
-            questionAnswer.setAttribute('aria-hidden', 'true');
-            questionAnswer.style.maxHeight = '0px';
-          }
+          closeAnswer(question, getAnswer(question));
         });
-        if (!wasOpen && answer) {
-          button.setAttribute('aria-expanded', 'true');
-          answer.classList.add('is-open');
-          answer.setAttribute('aria-hidden', 'false');
-          answer.style.maxHeight = answer.scrollHeight + 'px';
-        }
+        if (!wasOpen) openAnswer(button, answer);
       });
     });
 
@@ -634,10 +659,12 @@
       answer.classList.remove('is-open');
       answer.setAttribute('aria-hidden', 'true');
       answer.style.maxHeight = '0px';
+      answer.hidden = true;
     });
   }
 
   function boot() {
+    bindFaq(document);
     var pageMarker = document.querySelector('[data-eauto-page]');
     if (!pageMarker) return;
     var root = document;
@@ -649,7 +676,6 @@
     bindOptions(root, state, products);
     bindFlow(root);
     bindProfiles(root);
-    bindFaq(root);
     render(root, state, products);
   }
 
