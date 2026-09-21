@@ -27,11 +27,34 @@
     var answer = item.querySelector('[data-ac-faq-answer]');
     if (!question || !answer) return;
 
+    if (answer._acFaqHideTimer) {
+      window.clearTimeout(answer._acFaqHideTimer);
+      answer._acFaqHideTimer = null;
+    }
+
+    if (!open && !answer.classList.contains('is-open') && answer.hidden) return;
+
     item.classList.toggle('is-open', open);
     question.setAttribute('aria-expanded', open ? 'true' : 'false');
+    answer.setAttribute('aria-hidden', open ? 'false' : 'true');
     var marker = question.querySelector('span');
     if (marker) marker.textContent = open ? '–' : '+';
-    answer.hidden = !open;
+    if (open) {
+      answer.hidden = false;
+      window.requestAnimationFrame(function () {
+        if (question.getAttribute('aria-expanded') === 'true') answer.classList.add('is-open');
+      });
+      return;
+    }
+
+    answer.classList.remove('is-open');
+    answer.hidden = false;
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var hideDelay = reducedMotion ? 0 : 320;
+    answer._acFaqHideTimer = window.setTimeout(function () {
+      if (!answer.classList.contains('is-open')) answer.hidden = true;
+      answer._acFaqHideTimer = null;
+    }, hideDelay);
   }
 
   function setupAnchorNavigation() {
