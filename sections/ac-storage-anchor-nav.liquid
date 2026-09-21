@@ -1,0 +1,120 @@
+{%- comment -%} AC storage editor section: anchor navigation {%- endcomment -%}
+{% liquid
+  assign navigation_anchor = section.settings.anchor_id | default: 'ac-storage-navigation' | handle
+%}
+
+<nav
+  id="{{ navigation_anchor }}"
+  class="ac-storage-anchor-nav"
+  data-ac-storage-anchor-nav
+  data-section-id="{{ section.id }}"
+  aria-label="{{ section.settings.aria_label | escape }}"
+  {{ section.shopify_attributes }}
+>
+  <div class="ac-storage-anchor-nav__inner">
+    <div class="ac-storage-anchor-nav__links" role="list">
+      {% for block in section.blocks %}
+        {% assign link_target = block.settings.target | remove_first: '#' | handle %}
+        {% if block.settings.label != blank and link_target != blank %}
+          <a
+            class="ac-storage-anchor-nav__link"
+            href="#{{ link_target }}"
+            data-ac-anchor-link
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.label | escape }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% assign cta_target = section.settings.cta_target | remove_first: '#' | handle %}
+    {% if section.settings.cta_label != blank and cta_target != blank %}
+      <a
+        class="ac-storage-anchor-nav__cta"
+        href="#{{ cta_target }}"
+        data-ac-anchor-link
+      >
+        {{ section.settings.cta_label | escape }}
+      </a>
+    {% endif %}
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "AC-Speicher – Ankernavigation",
+  "tag": "section",
+  "class": "ac-storage-anchor-nav-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Barrierefreie Bezeichnung",
+      "default": "Seitennavigation"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anker-ID der Navigation",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "default": "ac-storage-navigation"
+    },
+    {
+      "type": "header",
+      "content": "Hervorgehobener Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Beschriftung",
+      "default": "Modelle ansehen"
+    },
+    {
+      "type": "text",
+      "id": "cta_target",
+      "label": "Sprungziel",
+      "info": "Anker-ID mit oder ohne # eingeben.",
+      "default": "#modelle"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Navigationslink",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Beschriftung",
+          "default": "Navigation"
+        },
+        {
+          "type": "text",
+          "id": "target",
+          "label": "Sprungziel",
+          "info": "Anker-ID mit oder ohne # eingeben.",
+          "default": "#definition"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "AC-Speicher – Ankernavigation",
+      "blocks": [
+        { "type": "link", "settings": { "label": "Was ist AC-Speicher?", "target": "#definition" } },
+        { "type": "link", "settings": { "label": "Funktionsweise", "target": "#funktion" } },
+        { "type": "link", "settings": { "label": "Vorteile", "target": "#vorteile" } },
+        { "type": "link", "settings": { "label": "AC oder DC?", "target": "#vergleich" } },
+        { "type": "link", "settings": { "label": "Intelligente Steuerung", "target": "#steuerung" } },
+        { "type": "link", "settings": { "label": "Zielgruppen", "target": "#zielgruppen" } },
+        { "type": "link", "settings": { "label": "Modelle", "target": "#modelle" } },
+        { "type": "link", "settings": { "label": "FAQ", "target": "#faq" } },
+        { "type": "link", "settings": { "label": "Ratgeber", "target": "#ratgeber" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

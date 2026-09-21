@@ -21,6 +21,123 @@
   -webkit-font-smoothing: antialiased;
 }
 
+.ac-storage-page[id] {
+  scroll-margin-top: 76px;
+}
+
+.ac-storage-anchor-nav-section {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.ac-storage-anchor-nav,
+.ac-storage-anchor-nav * ,
+.ac-storage-anchor-nav *::before,
+.ac-storage-anchor-nav *::after {
+  box-sizing: border-box;
+}
+
+.ac-storage-anchor-nav {
+  width: 100%;
+  border-bottom: 1px solid rgba(14, 27, 44, 0.08);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 3px 10px rgba(14, 27, 44, 0.04);
+  backdrop-filter: blur(12px);
+  color: var(--ac-ink);
+  font-family: Inter, var(--typeBasePrimary), var(--typeBaseFallback), sans-serif;
+}
+
+.ac-storage-anchor-nav__inner {
+  display: flex;
+  width: min(1440px, calc(100% - 48px));
+  min-height: 60px;
+  align-items: center;
+  gap: 24px;
+  margin: 0 auto;
+}
+
+.ac-storage-anchor-nav__links {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  align-self: stretch;
+  align-items: center;
+  gap: clamp(18px, 2.5vw, 34px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.ac-storage-anchor-nav__links::-webkit-scrollbar {
+  display: none;
+}
+
+.ac-storage-anchor-nav__link,
+.ac-storage-anchor-nav__cta {
+  flex: 0 0 auto;
+  color: var(--ac-gray-dark);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ac-storage-anchor-nav__link {
+  position: relative;
+  display: inline-flex;
+  min-height: 60px;
+  align-items: center;
+  padding: 0 2px;
+  transition: color 180ms ease;
+}
+
+.ac-storage-anchor-nav__link::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--ac-blue);
+  content: "";
+  transform: scaleX(0);
+  transition: transform 180ms ease;
+}
+
+.ac-storage-anchor-nav__link:hover,
+.ac-storage-anchor-nav__link.is-active {
+  color: var(--ac-blue);
+}
+
+.ac-storage-anchor-nav__link.is-active {
+  font-weight: 700;
+}
+
+.ac-storage-anchor-nav__link.is-active::after {
+  transform: scaleX(1);
+}
+
+.ac-storage-anchor-nav__cta {
+  min-width: 132px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: var(--ac-blue);
+  color: #fff;
+  text-align: center;
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+
+.ac-storage-anchor-nav__cta:hover {
+  background: #0088e3;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.ac-storage-anchor-nav a:focus-visible {
+  outline: 2px solid var(--ac-blue);
+  outline-offset: 3px;
+}
+
 .ac-storage-page,
 .ac-storage-page *,
 .ac-storage-page *::before,

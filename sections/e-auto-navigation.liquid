@@ -1,0 +1,126 @@
+{% liquid
+  assign navigation_anchor = section.settings.anchor_id | handle
+  if navigation_anchor == blank
+    assign navigation_anchor = 'eauto-navigation'
+  endif
+%}
+
+<nav
+  id="{{ navigation_anchor }}"
+  class="bw-storage bw-storage-section bw-anchor-nav bw-anchor-target"
+  data-eauto-anchor-nav
+  data-section-id="{{ section.id }}"
+  aria-label="{{ section.settings.aria_label | escape }}"
+>
+  <div class="bw-container bw-anchor-nav__inner">
+    {% for block in section.blocks %}
+      {% assign link_target = block.settings.target | remove_first: '#' | handle %}
+      {% if block.settings.label != blank and link_target != blank %}
+        <a
+          class="bw-anchor-nav__link"
+          href="#{{ link_target }}"
+          data-eauto-anchor-link
+          {{ block.shopify_attributes }}
+        >
+          {{ block.settings.label | escape }}
+        </a>
+      {% endif %}
+    {% endfor %}
+
+    {% assign cta_target = section.settings.cta_target | remove_first: '#' | handle %}
+    {% if section.settings.cta_label != blank and cta_target != blank %}
+      <a
+        class="bw-anchor-nav__cta"
+        href="#{{ cta_target }}"
+        data-eauto-anchor-link
+      >
+        {{ section.settings.cta_label | escape }}
+      </a>
+    {% endif %}
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "E-Auto Navigation",
+  "tag": "section",
+  "class": "section-e-auto-navigation",
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Barrierefreie Bezeichnung",
+      "default": "E-Auto Seitennavigation"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anker-ID",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "default": "eauto-navigation"
+    },
+    {
+      "type": "header",
+      "content": "Hervorgehobener Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA Beschriftung",
+      "default": "Passenden Speicher finden"
+    },
+    {
+      "type": "text",
+      "id": "cta_target",
+      "label": "CTA Sprungziel",
+      "info": "Anker-ID mit oder ohne # eingeben.",
+      "default": "#eauto-calculator"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Navigationslink",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Beschriftung",
+          "default": "Navigation"
+        },
+        {
+          "type": "text",
+          "id": "target",
+          "label": "Sprungziel",
+          "info": "Anker-ID mit oder ohne # eingeben.",
+          "default": "#eauto-start"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "E-Auto Navigation",
+      "settings": {
+        "anchor_id": "eauto-navigation",
+        "aria_label": "E-Auto Seitennavigation",
+        "cta_label": "Passenden Speicher finden",
+        "cta_target": "#eauto-calculator"
+      },
+      "blocks": [
+        { "type": "link", "settings": { "label": "Start", "target": "#eauto-start" } },
+        { "type": "link", "settings": { "label": "Problem", "target": "#eauto-problem" } },
+        { "type": "link", "settings": { "label": "Energiefluss", "target": "#eauto-flow" } },
+        { "type": "link", "settings": { "label": "Typischer Tag", "target": "#eauto-day" } },
+        { "type": "link", "settings": { "label": "Fahrprofile", "target": "#eauto-profile" } },
+        { "type": "link", "settings": { "label": "Rechner", "target": "#eauto-calculator" } },
+        { "type": "link", "settings": { "label": "Empfehlungen", "target": "#eauto-recommendations" } },
+        { "type": "link", "settings": { "label": "Smart Energy", "target": "#eauto-smart-energy" } },
+        { "type": "link", "settings": { "label": "Installation", "target": "#eauto-installation" } },
+        { "type": "link", "settings": { "label": "FAQ", "target": "#eauto-faq" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

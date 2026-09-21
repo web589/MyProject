@@ -9,6 +9,39 @@
  */
 {
   "sections": {
+    "e-auto-navigation": {
+      "type": "e-auto-navigation",
+      "settings": {
+        "aria_label": "E-Auto Seitennavigation",
+        "anchor_id": "eauto-navigation",
+        "cta_label": "Passenden Speicher finden",
+        "cta_target": "#eauto-calculator"
+      },
+      "blocks": {
+        "eauto-nav-start": { "type": "link", "settings": { "label": "Start", "target": "#eauto-start" } },
+        "eauto-nav-problem": { "type": "link", "settings": { "label": "Problem", "target": "#eauto-problem" } },
+        "eauto-nav-flow": { "type": "link", "settings": { "label": "Energiefluss", "target": "#eauto-flow" } },
+        "eauto-nav-day": { "type": "link", "settings": { "label": "Typischer Tag", "target": "#eauto-day" } },
+        "eauto-nav-profile": { "type": "link", "settings": { "label": "Fahrprofile", "target": "#eauto-profile" } },
+        "eauto-nav-calculator": { "type": "link", "settings": { "label": "Rechner", "target": "#eauto-calculator" } },
+        "eauto-nav-recommendations": { "type": "link", "settings": { "label": "Empfehlungen", "target": "#eauto-recommendations" } },
+        "eauto-nav-smart-energy": { "type": "link", "settings": { "label": "Smart Energy", "target": "#eauto-smart-energy" } },
+        "eauto-nav-installation": { "type": "link", "settings": { "label": "Installation", "target": "#eauto-installation" } },
+        "eauto-nav-faq": { "type": "link", "settings": { "label": "FAQ", "target": "#eauto-faq" } }
+      },
+      "block_order": [
+        "eauto-nav-start",
+        "eauto-nav-problem",
+        "eauto-nav-flow",
+        "eauto-nav-day",
+        "eauto-nav-profile",
+        "eauto-nav-calculator",
+        "eauto-nav-recommendations",
+        "eauto-nav-smart-energy",
+        "eauto-nav-installation",
+        "eauto-nav-faq"
+      ]
+    },
     "e-auto-hero": {
       "type": "e-auto-hero",
       "settings": {}
@@ -58,8 +91,8 @@
             "heading": "Gespeicherten Solarstrom nutzen",
             "text": "Der VENUS E liefert Solarstrom an das Hausnetz und damit zur Wallbox. Das Netz ergänzt nur den Rest.",
             "badge": "→ Solarstrom im Auto"
-          }
-        }
+  }
+}
       },
       "block_order": [
         "timeline_morning",
@@ -291,6 +324,7 @@
     }
   },
   "order": [
+    "e-auto-navigation",
     "e-auto-hero",
     "e-auto-problem",
     "e-auto-flow",

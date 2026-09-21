@@ -40,7 +40,7 @@
   {% when 'hero' %}
     {% assign hero_primary_url = section.settings.primary_url | default: '#modelle' %}
     {% assign hero_secondary_url = section.settings.secondary_url | default: '#funktion' %}
-    <section id="{{ page_id }}" class="ac-storage-page ac-storage-page__hero" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="ac-speicher" class="ac-storage-page ac-storage-page__hero" data-ac-storage-page {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap ac-storage-page__hero-grid">
         <div class="ac-storage-page__hero-copy">
           <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
@@ -62,7 +62,7 @@
     </section>
 
   {% when 'definition' %}
-    <section id="{{ page_id }}" class="ac-storage-page ac-storage-page__section ac-storage-page__answer" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="definition" class="ac-storage-page ac-storage-page__section ac-storage-page__answer" data-ac-storage-page {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -147,7 +147,7 @@
 
   {% when 'why' %}
     {% assign why_cta_url = section.settings.cta_url | default: '#modelle' %}
-    <section id="{{ page_id }}" class="ac-storage-page ac-storage-page__section ac-storage-page__why" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="vorteile" class="ac-storage-page ac-storage-page__section ac-storage-page__why" data-ac-storage-page {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -193,7 +193,7 @@
 
   {% when 'comparison' %}
     {% assign comparison_link_url = section.settings.link_url | default: compare_url %}
-    <section id="{{ page_id }}" class="ac-storage-page ac-storage-page__section ac-storage-page__comparison" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="vergleich" class="ac-storage-page ac-storage-page__section ac-storage-page__comparison" data-ac-storage-page {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -228,7 +228,7 @@
 
   {% when 'smart' %}
     {% assign smart_link_url = section.settings.link_url | default: smart_meter_url %}
-    <section id="{{ page_id }}" class="ac-storage-page ac-storage-page__section ac-storage-page__smart" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="steuerung" class="ac-storage-page ac-storage-page__section ac-storage-page__smart" data-ac-storage-page {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -283,7 +283,7 @@
 
   {% when 'audience' %}
     {% assign audience_link_url = section.settings.link_url | default: eauto_url %}
-    <section id="{{ page_id }}" class="ac-storage-page ac-storage-page__section ac-storage-page__audience" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="zielgruppen" class="ac-storage-page ac-storage-page__section ac-storage-page__audience" data-ac-storage-page {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -356,7 +356,7 @@
     </section>
 
   {% when 'faq' %}
-    <section id="{{ page_id }}" class="ac-storage-page ac-storage-page__section ac-storage-page__faq" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="faq" class="ac-storage-page ac-storage-page__section ac-storage-page__faq" data-ac-storage-page {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -398,7 +398,7 @@
     </script>
 
   {% when 'blog' %}
-    <section id="{{ page_id }}" class="ac-storage-page ac-storage-page__section ac-storage-page__blog" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="ratgeber" class="ac-storage-page ac-storage-page__section ac-storage-page__blog" data-ac-storage-page {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -437,7 +437,7 @@
     </section>
 
   {% when 'final' %}
-    <section id="{{ page_id }}" class="ac-storage-page ac-storage-page__section ac-storage-page__final" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="abschluss" class="ac-storage-page ac-storage-page__section ac-storage-page__final" data-ac-storage-page {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <div class="ac-storage-page__final-card">
           <h2>{{ section.settings.heading }}</h2>

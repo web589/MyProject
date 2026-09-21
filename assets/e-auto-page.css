@@ -22,6 +22,30 @@
   box-sizing: inherit;
 }
 
+/* E-Auto in-page navigation */
+.section-e-auto-navigation {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.main-content--e-auto .e-auto-page,
+.main-content--e-auto [data-eauto-anchor-nav] {
+  scroll-margin-top: 72px;
+}
+
+.section-e-auto-navigation .bw-anchor-nav__inner {
+  flex-wrap: nowrap;
+}
+
+@media (max-width: 760px) {
+  .section-e-auto-navigation .bw-anchor-nav__inner {
+    width: 100%;
+    max-width: 100%;
+    padding-inline: 16px;
+  }
+}
+
 .e-auto-page [hidden] {
   display: none !important;
 }

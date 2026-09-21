@@ -16,6 +16,91 @@
         "hero_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png"
       }
     },
+    "ac_anchor_nav": {
+      "type": "ac-storage-anchor-nav",
+      "blocks": {
+        "anchor_definition": {
+          "type": "link",
+          "settings": {
+            "label": "Was ist AC-Speicher?",
+            "target": "#definition"
+          }
+        },
+        "anchor_function": {
+          "type": "link",
+          "settings": {
+            "label": "Funktionsweise",
+            "target": "#funktion"
+          }
+        },
+        "anchor_why": {
+          "type": "link",
+          "settings": {
+            "label": "Vorteile",
+            "target": "#vorteile"
+          }
+        },
+        "anchor_comparison": {
+          "type": "link",
+          "settings": {
+            "label": "AC oder DC?",
+            "target": "#vergleich"
+          }
+        },
+        "anchor_smart": {
+          "type": "link",
+          "settings": {
+            "label": "Intelligente Steuerung",
+            "target": "#steuerung"
+          }
+        },
+        "anchor_audience": {
+          "type": "link",
+          "settings": {
+            "label": "Zielgruppen",
+            "target": "#zielgruppen"
+          }
+        },
+        "anchor_models": {
+          "type": "link",
+          "settings": {
+            "label": "Modelle",
+            "target": "#modelle"
+          }
+        },
+        "anchor_faq": {
+          "type": "link",
+          "settings": {
+            "label": "FAQ",
+            "target": "#faq"
+          }
+        },
+        "anchor_blog": {
+          "type": "link",
+          "settings": {
+            "label": "Ratgeber",
+            "target": "#ratgeber"
+          }
+        }
+      },
+      "block_order": [
+        "anchor_definition",
+        "anchor_function",
+        "anchor_why",
+        "anchor_comparison",
+        "anchor_smart",
+        "anchor_audience",
+        "anchor_models",
+        "anchor_faq",
+        "anchor_blog"
+      ],
+      "settings": {
+        "aria_label": "Seitennavigation",
+        "anchor_id": "ac-storage-navigation",
+        "cta_label": "Modelle ansehen",
+        "cta_target": "#modelle"
+      }
+    },
     "ac_definition": {
       "type": "ac-storage-definition",
       "settings": {}
@@ -64,6 +149,7 @@
   },
   "order": [
     "ac_hero",
+    "ac_anchor_nav",
     "ac_definition",
     "ac_function",
     "ac_why",
