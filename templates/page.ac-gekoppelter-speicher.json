@@ -9,146 +9,775 @@
  */
 {
   "sections": {
-    "ac_hero": {
-      "type": "ac-storage-hero",
-      "blocks": {
-        "hero_primary": {"type":"button","settings":{"label":"Modelle ansehen","url":"#modelle","style":"primary"}},
-        "hero_secondary": {"type":"button","settings":{"label":"So funktioniert es","url":"#funktion","style":"secondary"}}
-      },
-      "block_order": ["hero_primary","hero_secondary"],
-      "settings": {
-        "hero_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png"
-      }
-    },
     "ac_anchor_nav": {
       "type": "ac-storage-anchor-nav",
       "blocks": {
-        "anchor_definition": {"type":"link","settings":{"label":"Was ist AC-Speicher?","target":"#definition"}},
-        "anchor_function": {"type":"link","settings":{"label":"Funktionsweise","target":"#funktion"}},
-        "anchor_why": {"type":"link","settings":{"label":"Vorteile","target":"#vorteile"}},
-        "anchor_comparison": {"type":"link","settings":{"label":"AC oder DC?","target":"#vergleich"}},
-        "anchor_smart": {"type":"link","settings":{"label":"Intelligente Steuerung","target":"#steuerung"}},
-        "anchor_audience": {"type":"link","settings":{"label":"Zielgruppen","target":"#zielgruppen"}},
-        "anchor_models": {"type":"link","settings":{"label":"Modelle","target":"#modelle"}},
-        "anchor_faq": {"type":"link","settings":{"label":"FAQ","target":"#faq"}},
-        "anchor_blog": {"type":"link","settings":{"label":"Ratgeber","target":"#ratgeber"}}
+        "anchor_definition": {
+          "type": "link",
+          "settings": {
+            "label": "Was ist AC-Speicher?",
+            "target": "#definition"
+          }
+        },
+        "anchor_function": {
+          "type": "link",
+          "settings": {
+            "label": "Funktionsweise",
+            "target": "#funktion"
+          }
+        },
+        "anchor_why": {
+          "type": "link",
+          "settings": {
+            "label": "Vorteile",
+            "target": "#vorteile"
+          }
+        },
+        "anchor_comparison": {
+          "type": "link",
+          "settings": {
+            "label": "AC oder DC?",
+            "target": "#vergleich"
+          }
+        },
+        "anchor_smart": {
+          "type": "link",
+          "settings": {
+            "label": "Intelligente Steuerung",
+            "target": "#steuerung"
+          }
+        },
+        "anchor_audience": {
+          "type": "link",
+          "settings": {
+            "label": "Zielgruppen",
+            "target": "#zielgruppen"
+          }
+        },
+        "anchor_models": {
+          "type": "link",
+          "settings": {
+            "label": "Modelle",
+            "target": "#modelle"
+          }
+        },
+        "anchor_faq": {
+          "type": "link",
+          "settings": {
+            "label": "FAQ",
+            "target": "#faq"
+          }
+        },
+        "anchor_blog": {
+          "type": "link",
+          "settings": {
+            "label": "Ratgeber",
+            "target": "#ratgeber"
+          }
+        }
       },
-      "block_order": ["anchor_definition","anchor_function","anchor_why","anchor_comparison","anchor_smart","anchor_audience","anchor_models","anchor_faq","anchor_blog"],
+      "block_order": [
+        "anchor_definition",
+        "anchor_function",
+        "anchor_why",
+        "anchor_comparison",
+        "anchor_smart",
+        "anchor_audience",
+        "anchor_models",
+        "anchor_faq",
+        "anchor_blog"
+      ],
       "settings": {
         "aria_label": "Seitennavigation",
-        "anchor_id": "ac-storage-navigation"
+        "anchor_id": "ac-storage-navigation",
+        "nav_height": 60,
+        "nav_text_size": 13
+      }
+    },
+    "ac_hero": {
+      "type": "ac-storage-hero",
+      "blocks": {
+        "hero_primary": {
+          "type": "button",
+          "settings": {
+            "label": "Modelle ansehen",
+            "url": "#modelle",
+            "style": "primary"
+          }
+        },
+        "hero_secondary": {
+          "type": "button",
+          "settings": {
+            "label": "So funktioniert es",
+            "url": "#funktion",
+            "style": "secondary"
+          }
+        }
+      },
+      "block_order": [
+        "hero_primary",
+        "hero_secondary"
+      ],
+      "settings": {
+        "eyebrow": "Technologie einfach erklärt",
+        "heading": "AC-gekoppelter Speicher: Solarstrom speichern und bestehende Systeme flexibel erweitern",
+        "lead": "Ein AC-gekoppelter Speicher wird über dein Hausnetz eingebunden. Das macht ihn besonders interessant, wenn du bestehenden Solarstrom besser speichern und deinen Eigenverbrauch steigern möchtest – ohne deine bestehende PV-Lösung grundsätzlich ersetzen zu müssen.",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "hero_heading_size": 48,
+        "hero_lead_size": 16,
+        "hero_copy_width": 640,
+        "hero_media_height": 480,
+        "hero_image_fit": "cover",
+        "hero_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png",
+        "hero_image_alt": "Solarspeicher an einem Haus mit Photovoltaikanlage",
+        "hero_placeholder": "Hero-Bild auswählen: Haus mit Photovoltaikanlage und Speicher"
       }
     },
     "ac_definition": {
       "type": "ac-storage-definition",
       "blocks": {
-        "definition_feature_1": {"type":"feature","settings":{"title":"Einfach nachrüstbar","body":"Ideal, wenn du bereits ein Balkonkraftwerk oder eine bestehende PV-Lösung nutzt und später einen Speicher ergänzen möchtest."}},
-        "definition_feature_2": {"type":"feature","settings":{"title":"Flexibel im Haushalt einsetzbar","body":"Der gespeicherte Strom steht dort zur Verfügung, wo dein Haushalt ihn braucht – zum Beispiel abends, nachts oder bei höherem Verbrauch."}},
-        "definition_feature_3": {"type":"feature","settings":{"title":"Mehr Eigenverbrauch im Alltag","body":"Überschüssiger Solarstrom kann zeitversetzt genutzt werden, wenn dein Haushalt ihn wirklich braucht."}}
+        "definition_feature_1": {
+          "type": "feature",
+          "settings": {
+            "title": "Einfach nachrüstbar",
+            "body": "Ideal, wenn du bereits ein Balkonkraftwerk oder eine bestehende PV-Lösung nutzt und später einen Speicher ergänzen möchtest.",
+            "icon_image": "shopify://shop_images/3133a07fd30c6e53e15f505f42135574.png",
+            "title_size": 18,
+            "body_size": 13,
+            "card_height": 200,
+            "icon_size": 24
+          }
+        },
+        "definition_feature_2": {
+          "type": "feature",
+          "settings": {
+            "title": "Flexibel im Haushalt einsetzbar",
+            "body": "Der gespeicherte Strom steht dort zur Verfügung, wo dein Haushalt ihn braucht – zum Beispiel abends, nachts oder bei höherem Verbrauch.",
+            "icon_image": "shopify://shop_images/e77d2a17c1f36fd81a477a7a0d8efcf0.png",
+            "title_size": 18,
+            "body_size": 13,
+            "card_height": 200,
+            "icon_size": 24
+          }
+        },
+        "definition_feature_3": {
+          "type": "feature",
+          "settings": {
+            "title": "Mehr Eigenverbrauch im Alltag",
+            "body": "Überschüssiger Solarstrom kann zeitversetzt genutzt werden, wenn dein Haushalt ihn wirklich braucht.",
+            "icon_image": "shopify://shop_images/73dd5c7adb9746d3c072d381c79e7aa8.png",
+            "title_size": 18,
+            "body_size": 13,
+            "card_height": 200,
+            "icon_size": 24
+          }
+        }
       },
-      "block_order": ["definition_feature_1","definition_feature_2","definition_feature_3"],
-      "settings": {}
+      "block_order": [
+        "definition_feature_1",
+        "definition_feature_2",
+        "definition_feature_3"
+      ],
+      "settings": {
+        "eyebrow": "Definition",
+        "heading": "Was ist ein AC-gekoppelter Speicher?",
+        "answer_label": "Kurz gesagt:",
+        "answer": "Ein AC-gekoppelter Speicher wird nicht direkt auf der DC-Seite der Solarmodule eingebunden, sondern über das Hausnetz integriert. Dadurch eignet er sich besonders für die Nachrüstung in bestehenden Haushalten und PV-Setups.",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 15,
+        "answer_size": 18
+      }
     },
     "ac_function": {
       "type": "ac-storage-function",
       "blocks": {
-        "function_step_1": {"type":"step","settings":{"title":"Strom erzeugen","body":"Die PV-Anlage produziert tagsüber Energie für den Haushalt."}},
-        "function_step_2": {"type":"step","settings":{"title":"Überschüsse speichern","body":"Wird nicht alles sofort verbraucht, kann der Überschuss im Speicher landen."}},
-        "function_step_3": {"type":"step","settings":{"title":"Später nutzen","body":"Abends, nachts oder bei höherem Bedarf unterstützt der Speicher dein Hausnetz mit zuvor gespeicherter Energie."}}
+        "function_step_1": {
+          "type": "step",
+          "settings": {
+            "title": "Strom erzeugen",
+            "body": "Die PV-Anlage produziert tagsüber Energie für den Haushalt.",
+            "title_size": 19,
+            "body_size": 14
+          }
+        },
+        "function_step_2": {
+          "type": "step",
+          "settings": {
+            "title": "Überschüsse speichern",
+            "body": "Wird nicht alles sofort verbraucht, kann der Überschuss im Speicher landen.",
+            "title_size": 19,
+            "body_size": 14
+          }
+        },
+        "function_step_3": {
+          "type": "step",
+          "settings": {
+            "title": "Später nutzen",
+            "body": "Abends, nachts oder bei höherem Bedarf unterstützt der Speicher dein Hausnetz mit zuvor gespeicherter Energie.",
+            "title_size": 19,
+            "body_size": 14
+          }
+        }
       },
-      "block_order": ["function_step_1","function_step_2","function_step_3"],
-      "settings": {}
+      "block_order": [
+        "function_step_1",
+        "function_step_2",
+        "function_step_3"
+      ],
+      "settings": {
+        "eyebrow": "Funktionsweise",
+        "heading": "So arbeitet ein AC-gekoppelter Speicher im Haushalt",
+        "subtext": "Der Solarstrom wird im Haushalt verteilt und bei Überschuss gespeichert. Wenn später mehr Strom gebraucht wird, kann der Speicher Energie wieder über das Hausnetz bereitstellen.",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 15,
+        "flow_image_height": 460,
+        "flow_node_size": 13,
+        "toggle_aria_label": "Tageszeit für Energiefluss auswählen",
+        "toggle_day_label": "☀ Tag · Speichern",
+        "toggle_evening_label": "☾ Abend · Nutzen",
+        "day_image_alt": "Energiefluss von PV-Anlage über das Hausnetz zum Haushalt und Speicher",
+        "day_placeholder": "Erklärbild auswählen: PV → Hausnetz → Haushalt / Speicher",
+        "day_nodes": "PV-Anlage|Hausnetz|Haushalt|Speicher|Smart Meter / CT",
+        "evening_image_alt": "Energiefluss vom Speicher über das Hausnetz zum Haushalt und weiteren Verbrauchern",
+        "evening_placeholder": "Erklärbild auswählen: Speicher → Hausnetz → Haushalt / weitere Verbraucher",
+        "evening_nodes": "Speicher|Hausnetz|Haushalt|Weitere Verbraucher",
+        "link_label": "Mehr über E-Auto laden mit Speicher →",
+        "link_url": ""
+      }
     },
     "ac_why": {
       "type": "ac-storage-why",
       "blocks": {
-        "why_card_1": {"type":"image_card","settings":{"title":"Sinnvoll für Nachrüstung","body":"Wenn bereits eine PV-Anlage oder ein Balkonkraftwerk vorhanden ist, lässt sich ein Speicher oft deutlich einfacher ergänzen.","alt":"Haus mit bestehender PV-Anlage und nachgerüstetem Speicher","placeholder":"Familien-Szenenbild auswählen: bestehende PV und nachgerüsteter Speicher"}},
-        "why_card_2": {"type":"image_card","settings":{"title":"Mehr Flexibilität im Alltag","body":"Du nutzt Solarstrom dann, wenn du ihn brauchst – nicht nur dann, wenn er erzeugt wird.","alt":"Familie nutzt am Abend den gespeicherten Solarstrom","placeholder":"Familien-Szenenbild auswählen: abendlicher Stromverbrauch"}},
-        "why_stat_1": {"type":"stat","settings":{"title":"Weniger Abhängigkeit vom Stromnetz","body":"Je höher dein Eigenverbrauch, desto weniger Strom musst du aus dem Netz beziehen.","tag":"Netzbezug reduzieren"}},
-        "why_stat_2": {"type":"stat","settings":{"title":"Passend für verschiedene Haushaltsgrößen","body":"Von kleineren Setups bis zu höherem Verbrauch lässt sich das Prinzip flexibel einsetzen.","tag":"Modular erweiterbar"}}
+        "why_card_1": {
+          "type": "image_card",
+          "settings": {
+            "title": "Sinnvoll für Nachrüstung",
+            "body": "Wenn bereits eine PV-Anlage oder ein Balkonkraftwerk vorhanden ist, lässt sich ein Speicher oft deutlich einfacher ergänzen.",
+            "alt": "Haus mit bestehender PV-Anlage und nachgerüstetem Speicher",
+            "placeholder": "Familien-Szenenbild auswählen: bestehende PV und nachgerüsteter Speicher",
+            "title_size": 18,
+            "body_size": 13,
+            "image_height": 210
+          }
+        },
+        "why_card_2": {
+          "type": "image_card",
+          "settings": {
+            "title": "Mehr Flexibilität im Alltag",
+            "body": "Du nutzt Solarstrom dann, wenn du ihn brauchst – nicht nur dann, wenn er erzeugt wird.",
+            "alt": "Familie nutzt am Abend den gespeicherten Solarstrom",
+            "placeholder": "Familien-Szenenbild auswählen: abendlicher Stromverbrauch",
+            "title_size": 18,
+            "body_size": 13,
+            "image_height": 210
+          }
+        },
+        "why_stat_1": {
+          "type": "stat",
+          "settings": {
+            "title": "Weniger Abhängigkeit vom Stromnetz",
+            "body": "Je höher dein Eigenverbrauch, desto weniger Strom musst du aus dem Netz beziehen.",
+            "tag": "Netzbezug reduzieren",
+            "title_size": 18,
+            "body_size": 13,
+            "card_height": 190
+          }
+        },
+        "why_stat_2": {
+          "type": "stat",
+          "settings": {
+            "title": "Passend für verschiedene Haushaltsgrößen",
+            "body": "Von kleineren Setups bis zu höherem Verbrauch lässt sich das Prinzip flexibel einsetzen.",
+            "tag": "Modular erweiterbar",
+            "title_size": 18,
+            "body_size": 13,
+            "card_height": 190
+          }
+        }
       },
-      "block_order": ["why_card_1","why_card_2","why_stat_1","why_stat_2"],
-      "settings": {}
+      "block_order": [
+        "why_card_1",
+        "why_card_2",
+        "why_stat_1",
+        "why_stat_2"
+      ],
+      "settings": {
+        "eyebrow": "Vorteile im Alltag",
+        "heading": "Warum AC-gekoppelt für viele Haushalte besonders praktisch ist",
+        "subtext": "Viele Haushalte wollen Solarstrom besser nutzen, ohne ihr bestehendes System komplett umzubauen. Genau hier spielt ein AC-gekoppelter Speicher seine Stärken aus.",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 15,
+        "cta_label": "Passende Modelle entdecken",
+        "cta_url": ""
+      }
     },
     "ac_comparison": {
       "type": "ac-storage-comparison",
       "blocks": {
-        "comparison_row_1": {"type":"row","settings":{"label":"Typischer Einsatz","ac":"Nachrüstung und schrittweise Erweiterung","dc":"Neue PV-Planung von Anfang an"}},
-        "comparison_row_2": {"type":"row","settings":{"label":"Integration","ac":"Über das Hausnetz","dc":"Direkt auf der DC-Seite der PV-Anlage"}},
-        "comparison_row_3": {"type":"row","settings":{"label":"Eignung für bestehende Systeme","ac":"Besonders interessant für Nachrüstung","dc":"Häufig bei neuer PV-Planung integriert"}},
-        "comparison_row_4": {"type":"row","settings":{"label":"Flexibilität","ac":"Hohe Flexibilität bei Standort und Erweiterung","dc":"Flexibilität abhängig von der Systemplanung"}},
-        "comparison_row_5": {"type":"row","settings":{"label":"Fokus","ac":"Bestehendes System einfacher ergänzen","dc":"Von Anfang an im Gesamtsystem mitplanen"}}
+        "comparison_row_1": {
+          "type": "row",
+          "settings": {
+            "label": "Typischer Einsatz",
+            "ac": "Nachrüstung und schrittweise Erweiterung",
+            "dc": "Neue PV-Planung von Anfang an"
+          }
+        },
+        "comparison_row_2": {
+          "type": "row",
+          "settings": {
+            "label": "Integration",
+            "ac": "Über das Hausnetz",
+            "dc": "Direkt auf der DC-Seite der PV-Anlage"
+          }
+        },
+        "comparison_row_3": {
+          "type": "row",
+          "settings": {
+            "label": "Eignung für bestehende Systeme",
+            "ac": "Besonders interessant für Nachrüstung",
+            "dc": "Häufig bei neuer PV-Planung integriert"
+          }
+        },
+        "comparison_row_4": {
+          "type": "row",
+          "settings": {
+            "label": "Flexibilität",
+            "ac": "Hohe Flexibilität bei Standort und Erweiterung",
+            "dc": "Flexibilität abhängig von der Systemplanung"
+          }
+        },
+        "comparison_row_5": {
+          "type": "row",
+          "settings": {
+            "label": "Fokus",
+            "ac": "Bestehendes System einfacher ergänzen",
+            "dc": "Von Anfang an im Gesamtsystem mitplanen"
+          }
+        }
       },
-      "block_order": ["comparison_row_1","comparison_row_2","comparison_row_3","comparison_row_4","comparison_row_5"],
-      "settings": {}
+      "block_order": [
+        "comparison_row_1",
+        "comparison_row_2",
+        "comparison_row_3",
+        "comparison_row_4",
+        "comparison_row_5"
+      ],
+      "settings": {
+        "eyebrow": "Einordnung",
+        "heading": "AC- oder DC-Speicher – was ist der Unterschied?",
+        "subtext": "Beide Konzepte haben ihre Berechtigung. Für viele Haushalte ist jedoch entscheidend, ob ein Speicher in ein bestehendes System integriert oder von Anfang an mitgeplant wird.",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 15,
+        "table_text_size": 15,
+        "table_feature_heading": "Merkmal",
+        "table_ac_heading": "AC-gekoppelt",
+        "table_dc_heading": "DC-gekoppelt",
+        "note": "Wenn du bereits eine PV-Lösung nutzt oder schrittweise erweitern möchtest, ist ein AC-gekoppelter Speicher oft der naheliegendere Weg.",
+        "link_label": "Mehr zu AC vs. DC Speicher →",
+        "link_url": ""
+      }
     },
     "ac_smart": {
       "type": "ac-storage-smart",
       "blocks": {
-        "smart_step_1": {"type":"step","settings":{"title":"Verbrauch erkennen","body":"Mit passendem Smart Meter lassen sich Energieflüsse im Haushalt transparenter erfassen."}},
-        "smart_step_2": {"type":"step","settings":{"title":"Leistung anpassen","body":"So kann das System besser darauf reagieren, wann Strom im Haushalt gebraucht wird."}},
-        "smart_step_3": {"type":"step","settings":{"title":"Eigenverbrauch optimieren","body":"Das Ziel ist nicht nur Speichern, sondern den selbst erzeugten Solarstrom möglichst sinnvoll im Alltag zu nutzen."}}
+        "smart_step_1": {
+          "type": "step",
+          "settings": {
+            "title": "Verbrauch erkennen",
+            "body": "Mit passendem Smart Meter lassen sich Energieflüsse im Haushalt transparenter erfassen.",
+            "title_size": 19,
+            "body_size": 14
+          }
+        },
+        "smart_step_2": {
+          "type": "step",
+          "settings": {
+            "title": "Leistung anpassen",
+            "body": "So kann das System besser darauf reagieren, wann Strom im Haushalt gebraucht wird.",
+            "title_size": 19,
+            "body_size": 14
+          }
+        },
+        "smart_step_3": {
+          "type": "step",
+          "settings": {
+            "title": "Eigenverbrauch optimieren",
+            "body": "Das Ziel ist nicht nur Speichern, sondern den selbst erzeugten Solarstrom möglichst sinnvoll im Alltag zu nutzen.",
+            "title_size": 19,
+            "body_size": 14
+          }
+        }
       },
-      "block_order": ["smart_step_1","smart_step_2","smart_step_3"],
-      "settings": {}
+      "block_order": [
+        "smart_step_1",
+        "smart_step_2",
+        "smart_step_3"
+      ],
+      "settings": {
+        "eyebrow": "Intelligente Steuerung",
+        "heading": "Nicht nur speichern – sondern intelligent steuern",
+        "subtext": "Ein moderner Speicher ist dann besonders sinnvoll, wenn er nicht nur Energie puffert, sondern sich am tatsächlichen Bedarf im Haushalt orientiert.",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 15,
+        "main_image_height": 300,
+        "small_image_height": 150,
+        "link_label": "Smart Meter & Energiefluss ansehen",
+        "link_url": "",
+        "main_image_alt": "VENUS E Speicher in einem modernen Zuhause",
+        "main_placeholder": "Smart-Control-Bild auswählen: VENUS E und modernes Zuhause",
+        "app_image_alt": "Energiedaten in der Speicher-App",
+        "app_placeholder": "App-Energiedaten auswählen",
+        "meter_image_alt": "CT002 oder CT003 Smart Meter",
+        "meter_placeholder": "Smart Meter CT002 / CT003 auswählen"
+      }
     },
     "ac_audience": {
       "type": "ac-storage-audience",
       "blocks": {
-        "audience_card_1": {"type":"audience_card","settings":{"title":"Für Haushalte mit bestehender PV-Lösung","body":"Wenn du bereits Solarstrom erzeugst, aber mehr davon selbst nutzen möchtest, ist ein Speicher eine logische Erweiterung.","alt":"Haus mit bestehender Photovoltaikanlage","placeholder":"Szenenbild auswählen: Haus mit bestehender PV"}},
-        "audience_card_2": {"type":"audience_card","settings":{"title":"Für Balkonkraftwerk-Nutzer mit wachsendem Bedarf","body":"Wer klein startet und später mehr Unabhängigkeit will, kann schrittweise aufrüsten.","alt":"Balkonkraftwerk und Speicher an einem Wohnhaus","placeholder":"Szenenbild auswählen: Balkonkraftwerk und Speicher"}},
-        "audience_card_3": {"type":"audience_card","settings":{"title":"Für Haushalte mit Verbrauch am Abend oder in der Nacht","body":"Wenn Strom vor allem dann gebraucht wird, wenn die Sonne nicht mehr scheint, wird ein Speicher besonders relevant.","alt":"Abendlicher Stromverbrauch in einem Haushalt","placeholder":"Szenenbild auswählen: abendlicher oder nächtlicher Verbrauch"}},
-        "audience_card_4": {"type":"audience_card","settings":{"title":"Für Haushalte mit Wallbox oder E-Auto","body":"Wer zusätzliche Verbraucher im Haushalt hat, profitiert oft stärker von einer intelligenten Nutzung des gespeicherten Stroms.","alt":"Wallbox und E-Auto an einem Haus","placeholder":"Szenenbild auswählen: Wallbox und E-Auto"}}
+        "audience_card_1": {
+          "type": "audience_card",
+          "settings": {
+            "title": "Für Haushalte mit bestehender PV-Lösung",
+            "body": "Wenn du bereits Solarstrom erzeugst, aber mehr davon selbst nutzen möchtest, ist ein Speicher eine logische Erweiterung.",
+            "alt": "Haus mit bestehender Photovoltaikanlage",
+            "placeholder": "Szenenbild auswählen: Haus mit bestehender PV",
+            "title_size": 17,
+            "body_size": 13,
+            "image_height": 190
+          }
+        },
+        "audience_card_2": {
+          "type": "audience_card",
+          "settings": {
+            "title": "Für Balkonkraftwerk-Nutzer mit wachsendem Bedarf",
+            "body": "Wer klein startet und später mehr Unabhängigkeit will, kann schrittweise aufrüsten.",
+            "alt": "Balkonkraftwerk und Speicher an einem Wohnhaus",
+            "placeholder": "Szenenbild auswählen: Balkonkraftwerk und Speicher",
+            "title_size": 17,
+            "body_size": 13,
+            "image_height": 190
+          }
+        },
+        "audience_card_3": {
+          "type": "audience_card",
+          "settings": {
+            "title": "Für Haushalte mit Verbrauch am Abend oder in der Nacht",
+            "body": "Wenn Strom vor allem dann gebraucht wird, wenn die Sonne nicht mehr scheint, wird ein Speicher besonders relevant.",
+            "alt": "Abendlicher Stromverbrauch in einem Haushalt",
+            "placeholder": "Szenenbild auswählen: abendlicher oder nächtlicher Verbrauch",
+            "title_size": 17,
+            "body_size": 13,
+            "image_height": 190
+          }
+        },
+        "audience_card_4": {
+          "type": "audience_card",
+          "settings": {
+            "title": "Für Haushalte mit Wallbox oder E-Auto",
+            "body": "Wer zusätzliche Verbraucher im Haushalt hat, profitiert oft stärker von einer intelligenten Nutzung des gespeicherten Stroms.",
+            "alt": "Wallbox und E-Auto an einem Haus",
+            "placeholder": "Szenenbild auswählen: Wallbox und E-Auto",
+            "title_size": 17,
+            "body_size": 13,
+            "image_height": 190
+          }
+        }
       },
-      "block_order": ["audience_card_1","audience_card_2","audience_card_3","audience_card_4"],
-      "settings": {}
+      "block_order": [
+        "audience_card_1",
+        "audience_card_2",
+        "audience_card_3",
+        "audience_card_4"
+      ],
+      "settings": {
+        "eyebrow": "Zielgruppen",
+        "heading": "Für wen ist ein AC-gekoppelter Speicher besonders interessant?",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 15,
+        "link_label": "Zur Lösung für E-Auto & Speicher →",
+        "link_url": ""
+      }
     },
     "ac_models": {
       "type": "ac-storage-models",
       "blocks": {
-        "model_mini": {"type":"product_card","settings":{"product":"venus-e-mini","name":"VENUS E Mini","copy":"Für kleinere Haushalte und den Einstieg in mehr Eigenverbrauch.","alt":"VENUS E Mini Solarspeicher","link_label":"Modell ansehen →"}},
-        "model_3": {"type":"product_card","settings":{"product":"venus-e-3","name":"VENUS E 3.0","copy":"Für flexible Speicherlösungen im Alltag.","alt":"VENUS E 3.0 Solarspeicher","link_label":"Modell ansehen →"}},
-        "model_4": {"type":"product_card","settings":{"product":"venus-e-4","name":"VENUS E 4.0","copy":"Für höheren Energiebedarf und größere Haushalte.","alt":"VENUS E 4.0 Solarspeicher","link_label":"Modell ansehen →"}},
-        "model_max": {"type":"product_card","settings":{"product":"venus-e-max","name":"VENUS E Max","copy":"Für maximale Speicherkapazität und Ausbaupläne.","alt":"VENUS E Max Solarspeicher","link_label":"Modell ansehen →"}}
+        "model_mini": {
+          "type": "product_card",
+          "settings": {
+            "product": "venus-e-mini",
+            "name": "VENUS E Mini",
+            "copy": "Für kleinere Haushalte und den Einstieg in mehr Eigenverbrauch.",
+            "alt": "VENUS E Mini Solarspeicher",
+            "link_label": "Modell ansehen →",
+            "title_size": 18,
+            "body_size": 13,
+            "image_height": 210
+          }
+        },
+        "model_3": {
+          "type": "product_card",
+          "settings": {
+            "product": "venus-e-3",
+            "name": "VENUS E 3.0",
+            "copy": "Für flexible Speicherlösungen im Alltag.",
+            "alt": "VENUS E 3.0 Solarspeicher",
+            "link_label": "Modell ansehen →",
+            "title_size": 18,
+            "body_size": 13,
+            "image_height": 210
+          }
+        },
+        "model_4": {
+          "type": "product_card",
+          "settings": {
+            "product": "venus-e-4",
+            "name": "VENUS E 4.0",
+            "copy": "Für höheren Energiebedarf und größere Haushalte.",
+            "alt": "VENUS E 4.0 Solarspeicher",
+            "link_label": "Modell ansehen →",
+            "title_size": 18,
+            "body_size": 13,
+            "image_height": 210
+          }
+        },
+        "model_max": {
+          "type": "product_card",
+          "settings": {
+            "product": "venus-e-max",
+            "name": "VENUS E Max",
+            "copy": "Für maximale Speicherkapazität und Ausbaupläne.",
+            "alt": "VENUS E Max Solarspeicher",
+            "link_label": "Modell ansehen →",
+            "title_size": 18,
+            "body_size": 13,
+            "image_height": 210
+          }
+        }
       },
-      "block_order": ["model_mini","model_3","model_4","model_max"],
-      "settings": {}
+      "block_order": [
+        "model_mini",
+        "model_3",
+        "model_4",
+        "model_max"
+      ],
+      "settings": {
+        "eyebrow": "Lösungen",
+        "heading": "Passende VENUS E Lösungen",
+        "subtext": "Je nach Haushaltsgröße, Verbrauch und Ausbauziel kommen unterschiedliche Speicherlösungen infrage.",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 15,
+        "card_link_label": "Modell ansehen →",
+        "compare_label": "Modelle im Überblick",
+        "compare_url": "",
+        "storage_label": "Balkonkraftwerk mit Speicher ansehen",
+        "storage_url": ""
+      }
     },
     "ac_faq": {
       "type": "ac-storage-faq",
       "blocks": {
-        "faq_1": {"type":"faq","settings":{"question":"Was bedeutet AC-gekoppelter Speicher?","answer":"Ein AC-gekoppelter Speicher wird über das Hausnetz in dein Energiesystem eingebunden. Er eignet sich besonders dann, wenn du ein bestehendes System erweitern möchtest."}},
-        "faq_2": {"type":"faq","settings":{"question":"Kann ich einen AC-Speicher mit einer bestehenden PV-Anlage kombinieren?","answer":"In vielen Fällen ja. Weil der Speicher über das Hausnetz eingebunden wird, lässt er sich häufig ergänzen, ohne die bestehende PV-Anlage umzubauen. Wie gut das im Einzelfall funktioniert, hängt von deinem Hausanschluss und deiner bisherigen Konfiguration ab."}},
-        "faq_3": {"type":"faq","settings":{"question":"Ist ein AC-gekoppelter Speicher gut für die Nachrüstung geeignet?","answer":"Ja, genau dafür ist dieses Konzept oft besonders interessant. Vor allem bestehende Haushalte mit PV oder Balkonkraftwerk profitieren von der flexibleren Einbindung."}},
-        "faq_4": {"type":"faq","settings":{"question":"Was ist der Unterschied zwischen AC- und DC-Speicher?","answer":"AC-Speicher werden über das Hausnetz integriert, DC-Speicher direkt auf der Gleichstromseite der PV-Anlage. AC ist oft spannender für Nachrüstung, DC eher für Neuplanung."}},
-        "faq_5": {"type":"faq","settings":{"question":"Kann ich mit einem AC-gekoppelten Speicher meinen Eigenverbrauch erhöhen?","answer":"Ja. Genau darin liegt einer der größten Vorteile: Überschüssiger Solarstrom kann später im Haushalt genutzt werden, statt sofort eingespeist zu werden."}},
-        "faq_6": {"type":"faq","settings":{"question":"Brauche ich dafür ein Smart Meter?","answer":"Für eine intelligentere Steuerung und mehr Transparenz über Energieflüsse ist ein passender Smart Meter sehr sinnvoll."}},
-        "faq_7": {"type":"faq","settings":{"question":"Ist ein AC-gekoppelter Speicher auch für Balkonkraftwerke relevant?","answer":"Ja, besonders dann, wenn du deinen selbst erzeugten Solarstrom zeitversetzt nutzen möchtest und eine flexible Erweiterung suchst."}}
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "Was bedeutet AC-gekoppelter Speicher?",
+            "answer": "Ein AC-gekoppelter Speicher wird über das Hausnetz in dein Energiesystem eingebunden. Er eignet sich besonders dann, wenn du ein bestehendes System erweitern möchtest."
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Kann ich einen AC-Speicher mit einer bestehenden PV-Anlage kombinieren?",
+            "answer": "In vielen Fällen ja. Weil der Speicher über das Hausnetz eingebunden wird, lässt er sich häufig ergänzen, ohne die bestehende PV-Anlage umzubauen. Wie gut das im Einzelfall funktioniert, hängt von deinem Hausanschluss und deiner bisherigen Konfiguration ab."
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "Ist ein AC-gekoppelter Speicher gut für die Nachrüstung geeignet?",
+            "answer": "Ja, genau dafür ist dieses Konzept oft besonders interessant. Vor allem bestehende Haushalte mit PV oder Balkonkraftwerk profitieren von der flexibleren Einbindung."
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "Was ist der Unterschied zwischen AC- und DC-Speicher?",
+            "answer": "AC-Speicher werden über das Hausnetz integriert, DC-Speicher direkt auf der Gleichstromseite der PV-Anlage. AC ist oft spannender für Nachrüstung, DC eher für Neuplanung."
+          }
+        },
+        "faq_5": {
+          "type": "faq",
+          "settings": {
+            "question": "Kann ich mit einem AC-gekoppelten Speicher meinen Eigenverbrauch erhöhen?",
+            "answer": "Ja. Genau darin liegt einer der größten Vorteile: Überschüssiger Solarstrom kann später im Haushalt genutzt werden, statt sofort eingespeist zu werden."
+          }
+        },
+        "faq_6": {
+          "type": "faq",
+          "settings": {
+            "question": "Brauche ich dafür ein Smart Meter?",
+            "answer": "Für eine intelligentere Steuerung und mehr Transparenz über Energieflüsse ist ein passender Smart Meter sehr sinnvoll."
+          }
+        },
+        "faq_7": {
+          "type": "faq",
+          "settings": {
+            "question": "Ist ein AC-gekoppelter Speicher auch für Balkonkraftwerke relevant?",
+            "answer": "Ja, besonders dann, wenn du deinen selbst erzeugten Solarstrom zeitversetzt nutzen möchtest und eine flexible Erweiterung suchst."
+          }
+        }
       },
-      "block_order": ["faq_1","faq_2","faq_3","faq_4","faq_5","faq_6","faq_7"],
-      "settings": {}
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5",
+        "faq_6",
+        "faq_7"
+      ],
+      "settings": {
+        "eyebrow": "Häufige Fragen",
+        "heading": "Fragen zum AC-gekoppelten Speicher",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 15,
+        "question_size": 16,
+        "answer_size": 14
+      }
     },
     "ac_blog": {
       "type": "ac-storage-blog",
       "blocks": {
-        "article_1": {"type":"article","settings":{"url":"/blogs/balkonkraftwerk-mit-speicher","tag":"RATGEBER","title":"Solarspeicher Kosten: Was kostet ein Speicher wirklich?","copy":"Von der Kapazität über die Installation bis zur Lebensdauer: welche Faktoren den Preis bestimmen.","alt":"Solarspeicher Kosten und Dimensionierung","placeholder":"Artikelbild auswählen: Speicherkosten und Dimensionierung","link_label":"Artikel lesen →"}},
-        "article_2": {"type":"article","settings":{"url":"/pages/venus-e-vergleich","tag":"RATGEBER","title":"AC- oder DC-Speicher: Was ist der Unterschied?","copy":"Beide Konzepte im direkten Vergleich – und wann welches Prinzip sinnvoller ist.","alt":"AC- und DC-Speicher im Vergleich","placeholder":"Artikelbild auswählen: AC- und DC-Speicher","link_label":"Artikel lesen →"}},
-        "article_3": {"type":"article","settings":{"url":"/blogs/balkonkraftwerk-mit-speicher","tag":"RATGEBER","title":"Solarspeicher nachrüsten: Was ist möglich?","copy":"Was beim nachträglichen Einbau wichtig ist und welche Voraussetzungen du prüfen solltest.","alt":"Solarspeicher nachrüsten","placeholder":"Artikelbild auswählen: Speicher nachrüsten","link_label":"Artikel lesen →"}}
+        "article_1": {
+          "type": "article",
+          "settings": {
+            "url": "/blogs/balkonkraftwerk-mit-speicher",
+            "tag": "RATGEBER",
+            "title": "Solarspeicher Kosten: Was kostet ein Speicher wirklich?",
+            "copy": "Von der Kapazität über die Installation bis zur Lebensdauer: welche Faktoren den Preis bestimmen.",
+            "alt": "Solarspeicher Kosten und Dimensionierung",
+            "placeholder": "Artikelbild auswählen: Speicherkosten und Dimensionierung",
+            "link_label": "Artikel lesen →",
+            "title_size": 17,
+            "body_size": 13,
+            "image_height": 170
+          }
+        },
+        "article_2": {
+          "type": "article",
+          "settings": {
+            "url": "/pages/venus-e-vergleich",
+            "tag": "RATGEBER",
+            "title": "AC- oder DC-Speicher: Was ist der Unterschied?",
+            "copy": "Beide Konzepte im direkten Vergleich – und wann welches Prinzip sinnvoller ist.",
+            "alt": "AC- und DC-Speicher im Vergleich",
+            "placeholder": "Artikelbild auswählen: AC- und DC-Speicher",
+            "link_label": "Artikel lesen →",
+            "title_size": 17,
+            "body_size": 13,
+            "image_height": 170
+          }
+        },
+        "article_3": {
+          "type": "article",
+          "settings": {
+            "url": "/blogs/balkonkraftwerk-mit-speicher",
+            "tag": "RATGEBER",
+            "title": "Solarspeicher nachrüsten: Was ist möglich?",
+            "copy": "Was beim nachträglichen Einbau wichtig ist und welche Voraussetzungen du prüfen solltest.",
+            "alt": "Solarspeicher nachrüsten",
+            "placeholder": "Artikelbild auswählen: Speicher nachrüsten",
+            "link_label": "Artikel lesen →",
+            "title_size": 17,
+            "body_size": 13,
+            "image_height": 170
+          }
+        }
       },
-      "block_order": ["article_1","article_2","article_3"],
+      "block_order": [
+        "article_1",
+        "article_2",
+        "article_3"
+      ],
       "settings": {
-        "blog_url": "/blogs/balkonkraftwerk-mit-speicher"
+        "blog_url": "/blogs/balkonkraftwerk-mit-speicher",
+        "eyebrow": "Mehr erfahren",
+        "heading": "Ratgeber & Wissen",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 15,
+        "card_link_label": "Artikel lesen →",
+        "blog_link_label": "Alle Ratgeber ansehen →"
       }
     },
     "ac_final": {
       "type": "ac-storage-final",
       "blocks": {
-        "final_primary": {"type":"action","settings":{"label":"VENUS E Modelle ansehen","url":"/pages/venus-e-vergleich","style":"primary"}},
-        "final_secondary": {"type":"action","settings":{"label":"Balkonkraftwerk mit Speicher","url":"/pages/balkonkraftwerk-mit-speicher","style":"secondary"}},
-        "final_link": {"type":"action","settings":{"label":"E-Auto laden mit Speicher →","url":"/pages/e-auto","style":"link"}}
+        "final_primary": {
+          "type": "action",
+          "settings": {
+            "label": "VENUS E Modelle ansehen",
+            "url": "/pages/venus-e-vergleich",
+            "style": "primary"
+          }
+        },
+        "final_secondary": {
+          "type": "action",
+          "settings": {
+            "label": "Balkonkraftwerk mit Speicher",
+            "url": "/pages/balkonkraftwerk-mit-speicher",
+            "style": "secondary"
+          }
+        },
+        "final_link": {
+          "type": "action",
+          "settings": {
+            "label": "E-Auto laden mit Speicher →",
+            "url": "/pages/e-auto",
+            "style": "link"
+          }
+        }
       },
-      "block_order": ["final_primary","final_secondary","final_link"],
-      "settings": {}
+      "block_order": [
+        "final_primary",
+        "final_secondary",
+        "final_link"
+      ],
+      "settings": {
+        "heading": "Du möchtest herausfinden, welche Lösung zu deinem Haushalt passt?",
+        "copy": "Sieh dir die VENUS E Modelle an, vergleiche typische Einsatzbereiche oder entdecke passende Lösungen für mehr Eigenverbrauch im Alltag.",
+        "section_padding": 72,
+        "content_width": 1440,
+        "final_heading_size": 30,
+        "final_copy_size": 15
+      }
     }
   },
   "order": [
