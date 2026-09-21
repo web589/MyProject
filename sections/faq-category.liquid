@@ -1,0 +1,283 @@
+{%- if template.name == 'page' and template.suffix == 'faq' -%}
+<style>
+  #shopify-section-{{ section.id }} .faq-category-section {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 0 56px;
+    box-sizing: border-box;
+    scroll-margin-top: 32px;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 0 0 18px;
+    padding: 0 0 16px;
+    border-bottom: 1px solid #dce4ec;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__heading {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    min-width: 0;
+    margin: 0;
+    color: #122033;
+    font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__number {
+    flex: 0 0 auto;
+    color: #0099fe;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__count {
+    flex: 0 0 auto;
+    color: #77869a;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__questions {
+    display: grid;
+    gap: 12px;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__item {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid #dce4ec;
+    border-radius: 10px;
+    background: #ffffff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__item:has(.collapsible-trigger.is-open),
+  #shopify-section-{{ section.id }} .faq-category-section__item:has(.collapsible-trigger:focus-visible) {
+    border-color: #0099fe;
+    box-shadow: 0 8px 24px rgba(0, 153, 254, 0.08);
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    min-height: 72px;
+    padding: 20px 22px;
+    color: #122033;
+    font-size: 17px;
+    font-weight: 650;
+    line-height: 1.45;
+    text-align: left;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__trigger > span:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__trigger:hover,
+  #shopify-section-{{ section.id }} .faq-category-section__trigger:focus-visible,
+  #shopify-section-{{ section.id }} .faq-category-section__trigger.is-open {
+    color: #007dcc;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__trigger .collapsible-trigger__icon {
+    position: relative;
+    inset: auto;
+    flex: 0 0 auto;
+    width: 14px;
+    height: 14px;
+    color: currentColor;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__trigger .icon-chevron-down {
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__trigger.is-open .icon-chevron-down {
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__answer {
+    padding: 0 22px 24px;
+    color: #52647a;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__answer > :first-child {
+    margin-top: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__answer > :last-child {
+    margin-bottom: 0;
+  }
+
+  @media only screen and (max-width: 768px) {
+    #shopify-section-{{ section.id }} .faq-category-section {
+      max-width: none;
+      padding: 0 20px 42px;
+      scroll-margin-top: 20px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category-section__header {
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category-section__heading {
+      gap: 9px;
+      font-size: 23px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category-section__count {
+      padding-top: 4px;
+      font-size: 12px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category-section__questions {
+      gap: 10px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category-section__trigger {
+      min-height: 64px;
+      padding: 17px 18px;
+      font-size: 16px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-category-section__answer {
+      padding: 0 18px 20px;
+      font-size: 15px;
+    }
+  }
+</style>
+
+{%- liquid
+  assign faq_anchor_id = section.settings.anchor_id | default: section.id | handle
+  assign faq_category_title = section.settings.category_title | default: 'FAQ'
+  assign faq_question_count = section.blocks | where: 'type', 'question' | size
+-%}
+
+<section id="{{ faq_anchor_id }}" class="faq-category-section" aria-labelledby="FAQ-category-title-{{ section.id }}">
+  <header class="faq-category-section__header">
+    <h2 id="FAQ-category-title-{{ section.id }}" class="faq-category-section__heading">
+      {%- if section.settings.category_number != blank -%}
+        <span class="faq-category-section__number">{{ section.settings.category_number | escape }}</span>
+      {%- endif -%}
+      <span>{{ faq_category_title | escape }}</span>
+    </h2>
+    <span class="faq-category-section__count">{{ faq_question_count }} Fragen</span>
+  </header>
+
+  <div class="faq-category-section__questions">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'question' and block.settings.title != blank and block.settings.text != blank -%}
+        {%- assign faq_question_id = 'FAQ-question-' | append: section.id | append: '-' | append: block.id -%}
+        {%- assign faq_answer_id = 'FAQ-content-' | append: section.id | append: '-' | append: block.id -%}
+        <div class="faq-category-section__item" {{ block.shopify_attributes }}>
+          <button
+            id="{{ faq_question_id }}"
+            type="button"
+            class="faq-category-section__trigger collapsible-trigger collapsible-trigger--inline collapsible-trigger--icon-right collapsible--auto-height text-left"
+            aria-controls="{{ faq_answer_id }}"
+            aria-expanded="false"
+          >
+            <span>{{ block.settings.title }}</span>
+            {%- render 'collapsible-icons-alt', no_circle: true -%}
+          </button>
+          <div id="{{ faq_answer_id }}" class="collapsible-content collapsible-content--all" role="region" aria-labelledby="{{ faq_question_id }}">
+            <div class="faq-category-section__answer rte">{{ block.settings.text }}</div>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{%- render 'structured-data',
+  structured_data_context: 'faq',
+  faq_items: section.blocks,
+  faq_source: 'standard'
+-%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FAQ category",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "category_number",
+      "label": "Category number",
+      "default": "01"
+    },
+    {
+      "type": "text",
+      "id": "category_title",
+      "label": "Category title",
+      "default": "Produkt-Grundwissen"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value as the corresponding FAQ navigation link, without the # symbol.",
+      "default": "faq-produkt-grundwissen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Question",
+          "default": "How long does shipping take?"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Answer",
+          "default": "<p>Orders are typically processed within 1–2 business days.</p>"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "FAQ category",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "title": "How long does shipping take?",
+            "text": "<p>Orders are typically processed within 1–2 business days.</p>"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["footer", "header", "custom.popups"]
+  }
+}
+{% endschema %}

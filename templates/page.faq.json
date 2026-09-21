@@ -14,17 +14,70 @@
       "disabled": true,
       "settings": {}
     },
-    "faq": {
-      "type": "faq",
+    "faq-page-header": {
+      "type": "faq-page-header",
       "blocks": {
-        "rich-text-1": {
-          "type": "rich-text",
+        "nav-1": {
+          "type": "category_link",
           "settings": {
-            "title": "FAQs",
-            "text": "<h2>1、Produkt-Grundwissen</h2>",
-            "align_text": "left"
+            "number": "01",
+            "label": "Produkt-Grundwissen",
+            "anchor_id": "faq-produkt-grundwissen"
           }
         },
+        "nav-2": {
+          "type": "category_link",
+          "settings": {
+            "number": "02",
+            "label": "Installation & Kompatibilität",
+            "anchor_id": "faq-installation-kompatibilitaet"
+          }
+        },
+        "nav-3": {
+          "type": "category_link",
+          "settings": {
+            "number": "03",
+            "label": "Kauf & Lieferung",
+            "anchor_id": "faq-kauf-lieferung"
+          }
+        },
+        "nav-4": {
+          "type": "category_link",
+          "settings": {
+            "number": "04",
+            "label": "Garantie & Kundenservice",
+            "anchor_id": "faq-garantie-kundenservice"
+          }
+        },
+        "nav-5": {
+          "type": "category_link",
+          "settings": {
+            "number": "05",
+            "label": "Technische Daten & Anwendung",
+            "anchor_id": "faq-technische-daten-anwendung"
+          }
+        }
+      },
+      "block_order": [
+        "nav-1",
+        "nav-2",
+        "nav-3",
+        "nav-4",
+        "nav-5"
+      ],
+      "settings": {
+        "banner_image": "",
+        "banner_image_mobile": "",
+        "banner_eyebrow": "Hilfe & Support",
+        "banner_title": "Wir helfen dir weiter",
+        "banner_text": "<p>Antworten auf die wichtigsten Fragen zur VENUS E.</p>",
+        "title": "FAQs",
+        "subtitle": ""
+      }
+    },
+    "faq-category-1": {
+      "type": "faq-category",
+      "blocks": {
         "question-1": {
           "type": "question",
           "settings": {
@@ -52,15 +105,23 @@
             "title": "Q4. Passt die VENUS E als Balkonspeicher zu meinem Balkonkraftwerk?",
             "text": "<p>Ja, die VENUS E ist als AC-gekoppelter Solarspeicher für die Nachrüstung vieler bestehender Balkonkraftwerke und PV-Anlagen ausgelegt. Da der Speicher auf der AC-Seite arbeitet, muss die bestehende PV-Anlage in vielen Fällen nicht grundlegend umgebaut werden. Der VENUS E Mini ist mit 2 kWh Speicherkapazität und 22 kg besonders kompakt und eignet sich unter anderem für Balkonkraftwerke, Wohnungen und flexible Einsatzorte. Vor dem Kauf solltest du trotzdem prüfen, ob Anschluss, Zählertechnik und gewünschte Funktionen zu deinem vorhandenen System passen.</p>"
           }
-        },
-        "rich-text-2": {
-          "type": "rich-text",
-          "settings": {
-            "title": "",
-            "text": "<h2>2、Installation & Kompatibilität</h2>",
-            "align_text": "left"
-          }
-        },
+        }
+      },
+      "block_order": [
+        "question-1",
+        "question-2",
+        "question-3",
+        "question-4"
+      ],
+      "settings": {
+        "category_number": "01",
+        "category_title": "Produkt-Grundwissen",
+        "anchor_id": "faq-produkt-grundwissen"
+      }
+    },
+    "faq-category-2": {
+      "type": "faq-category",
+      "blocks": {
         "question-5": {
           "type": "question",
           "settings": {
@@ -88,15 +149,23 @@
             "title": "Q8. Funktioniert der MARSTEK VENUS-E-Steckerspeicher mit meiner PVAnlage – und welchen Stromzähler braucht der Batteriespeicher?",
             "text": "<p>Ja, die VENUS E kann viele bestehende PV-Anlagen als AC-gekoppelter Solarspeicher ergänzen. Für Funktionen wie eine lastgeführte Leistungsregelung oder Nulleinspeisung wird ein kompatibler Smart Meter verwendet. Der Smart Meter ist beim VENUS E 3.0 nicht automatisch im Lieferumfang enthalten, sondern wird separat ausgewählt. Je nach vorhandener Zähler- und Elektroinstallation kommen beispielsweise der dreiphasige MARSTEK CT002 oder der MARSTEK CT003 mit P1-Anschluss infrage. Prüfe vor dem Kauf, welcher Smart Meter zu deinem Stromzähler und deiner Installation passt.</p>"
           }
-        },
-        "rich-text-3": {
-          "type": "rich-text",
-          "settings": {
-            "title": "",
-            "text": "<h2>3、Kauf & Lieferung</h2>",
-            "align_text": "left"
-          }
-        },
+        }
+      },
+      "block_order": [
+        "question-5",
+        "question-6",
+        "question-7",
+        "question-8"
+      ],
+      "settings": {
+        "category_number": "02",
+        "category_title": "Installation & Kompatibilität",
+        "anchor_id": "faq-installation-kompatibilitaet"
+      }
+    },
+    "faq-category-3": {
+      "type": "faq-category",
+      "blocks": {
         "question-9": {
           "type": "question",
           "settings": {
@@ -124,15 +193,23 @@
             "title": "Q12. Kann ich den Steckerspeicher zurückgeben? Widerruf beim VENUS-EBatteriespeicher",
             "text": "<p>Für Widerruf und Rücksendung gelten die jeweils aktuellen Bedingungen unserer Widerrufsbelehrung. Informationen zu Fristen, Rücksendekosten und dem Ablauf einer Rückgabe findest du auf der entsprechenden Seite unseres Shops. Bei beschädigten oder falsch gelieferten Produkten wende dich bitte direkt an unseren Kundenservice.</p>"
           }
-        },
-        "rich_text_bWPmQr": {
-          "type": "rich-text",
-          "settings": {
-            "title": "",
-            "text": "<h2>4、Garantie & Kundenservice</h2>",
-            "align_text": "left"
-          }
-        },
+        }
+      },
+      "block_order": [
+        "question-9",
+        "question-10",
+        "question-11",
+        "question_tfWPaK"
+      ],
+      "settings": {
+        "category_number": "03",
+        "category_title": "Kauf & Lieferung",
+        "anchor_id": "faq-kauf-lieferung"
+      }
+    },
+    "faq-category-4": {
+      "type": "faq-category",
+      "blocks": {
         "question_cCrPaW": {
           "type": "question",
           "settings": {
@@ -160,15 +237,23 @@
             "title": "Q16. Wie erhalte ich Support für meinen Steckerspeicher in Deutschland?",
             "text": "<p>Für den deutschen Markt ist ein deutschsprachiger Kundenservice über das Kontaktformular auf der Website vorgesehen; Anfragen zu Installation, Geräteeinstellungen oder Produktfunktionen werden in der Regel innerhalb von 1–2 Werktagen beantwortet. Zusätzlich kannst du den Speicher über die MARSTEK-App konfigurieren, den Lade- und Entladestand in Echtzeit überwachen und zwischen Betriebsmodi wechseln – etwa Selbstverbrauch, manuellen Betrieb, KI-gestützte Optimierung oder UPS-Modus. Die konkreten Servicezeiten und weiteren Kontaktwege werden mit dem Shop-Launch veröffentlicht.<br/><br/></p>"
           }
-        },
-        "rich_text_ikqKHU": {
-          "type": "rich-text",
-          "settings": {
-            "title": "",
-            "text": "<h2>5、Technische Daten & Anwendung</h2>",
-            "align_text": "left"
-          }
-        },
+        }
+      },
+      "block_order": [
+        "question_cCrPaW",
+        "question_zr7txm",
+        "question_8jNkJ8",
+        "question_RqeDTD"
+      ],
+      "settings": {
+        "category_number": "04",
+        "category_title": "Garantie & Kundenservice",
+        "anchor_id": "faq-garantie-kundenservice"
+      }
+    },
+    "faq-category-5": {
+      "type": "faq-category",
+      "blocks": {
         "question_bA8zgD": {
           "type": "question",
           "settings": {
@@ -199,45 +284,15 @@
         }
       },
       "block_order": [
-        "rich-text-1",
-        "question-1",
-        "question-2",
-        "question-3",
-        "question-4",
-        "rich-text-2",
-        "question-5",
-        "question-6",
-        "question-7",
-        "question-8",
-        "rich-text-3",
-        "question-9",
-        "question-10",
-        "question-11",
-        "question_tfWPaK",
-        "rich_text_bWPmQr",
-        "question_cCrPaW",
-        "question_zr7txm",
-        "question_8jNkJ8",
-        "question_RqeDTD",
-        "rich_text_ikqKHU",
         "question_bA8zgD",
         "question_wHt6j3",
         "question_bTQwtL",
         "question_L9MW34"
       ],
       "settings": {
-        "content_source": "theme_editor",
-        "anchor_id": "",
-        "banner_image": "",
-        "banner_image_mobile": "",
-        "banner_eyebrow": "Hilfe & Support",
-        "banner_title": "Wir helfen dir weiter",
-        "banner_text": "<p>Antworten auf die wichtigsten Fragen zur VENUS E.</p>",
-        "title": "FAQs",
-        "subtitle": "",
-        "view_all_text": "Alle Fragen ansehen",
-        "view_all_link": "",
-        "heading_size": "h2"
+        "category_number": "05",
+        "category_title": "Technische Daten & Anwendung",
+        "anchor_id": "faq-technische-daten-anwendung"
       }
     },
     "homepage-newsletter": {
@@ -296,7 +351,12 @@
   },
   "order": [
     "main",
-    "faq",
+    "faq-page-header",
+    "faq-category-1",
+    "faq-category-2",
+    "faq-category-3",
+    "faq-category-4",
+    "faq-category-5",
     "homepage-newsletter",
     "form"
   ]

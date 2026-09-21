@@ -1,0 +1,467 @@
+{%- if template.name == 'page' and template.suffix == 'faq' -%}
+<style>
+  #shopify-section-{{ section.id }} .faq-page-header {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__banner-wrap {
+    width: 100%;
+    max-width: 1640px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__banner {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    min-height: 360px;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(115deg, #071b35 0%, #0c3f6c 52%, #078ed0 100%);
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__banner::after {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(circle at 78% 18%, rgba(111, 214, 255, 0.22), transparent 34%),
+      linear-gradient(135deg, rgba(4, 24, 48, 0.24), transparent 62%);
+    content: '';
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__media,
+  #shopify-section-{{ section.id }} .faq-page-header__media img,
+  #shopify-section-{{ section.id }} .faq-page-header__scrim {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__media {
+    z-index: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__media img {
+    display: block;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__scrim {
+    z-index: 1;
+    background: linear-gradient(90deg, rgba(4, 24, 48, 0.84) 0%, rgba(4, 24, 48, 0.48) 48%, rgba(4, 24, 48, 0.08) 100%);
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__banner-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: min(100%, 560px);
+    min-height: 360px;
+    padding: 52px 64px;
+    box-sizing: border-box;
+    color: #ffffff;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__eyebrow {
+    margin: 0 0 12px;
+    color: #8edcff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__banner-title {
+    max-width: 520px;
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(32px, 4vw, 54px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__banner-text {
+    max-width: 480px;
+    margin: 18px 0 0;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__banner-text > :first-child {
+    margin-top: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__banner-text > :last-child {
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__body {
+    width: 100%;
+    max-width: 1080px;
+    padding-top: 72px;
+    box-sizing: border-box;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__title-wrap {
+    max-width: 760px;
+    margin: 0 auto 36px;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__title {
+    margin: 0;
+    color: #122033;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__subtitle {
+    max-width: 680px;
+    margin: 16px auto 0;
+    color: #596b82;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__subtitle > :first-child {
+    margin-top: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__subtitle > :last-child {
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__nav {
+    width: 100%;
+    margin: 0 0 48px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    min-width: min-content;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__nav-link {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 9px 14px;
+    border: 1px solid #dce4ec;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #52647a;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__nav-link:hover,
+  #shopify-section-{{ section.id }} .faq-page-header__nav-link:focus-visible {
+    border-color: #0099fe;
+    background: #f2f9ff;
+    color: #007dcc;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__nav-number {
+    color: #0099fe;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+
+  @media only screen and (max-width: 768px) {
+    #shopify-section-{{ section.id }} .faq-page-header__banner-wrap {
+      padding: 0;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-header__banner,
+    #shopify-section-{{ section.id }} .faq-page-header__banner-content {
+      min-height: 320px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-header__banner-content {
+      width: 100%;
+      padding: 40px 24px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-header__banner-title {
+      font-size: 36px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-header__banner-text {
+      font-size: 15px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-header__body {
+      max-width: none;
+      padding-top: 48px;
+      padding-right: 20px;
+      padding-bottom: 0;
+      padding-left: 20px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-header__title-wrap {
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-header__title {
+      font-size: 38px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-header__nav {
+      width: calc(100% + 40px);
+      margin-right: -20px;
+      margin-bottom: 40px;
+      padding: 0 20px 6px;
+      box-sizing: border-box;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-header__nav-list {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+    }
+  }
+</style>
+
+{%- liquid
+  assign faq_banner_image = section.settings.banner_image | default: section.settings.banner_image_mobile
+  assign faq_banner_image_mobile = section.settings.banner_image_mobile | default: faq_banner_image
+  assign faq_banner_alt = faq_banner_image.alt | default: section.settings.banner_title | default: 'FAQ'
+  assign faq_page_title = section.settings.title | default: 'FAQs'
+-%}
+
+<section class="faq-page-header" aria-labelledby="FAQ-page-title-{{ section.id }}">
+  <div class="faq-page-header__banner-wrap">
+    <div class="faq-page-header__banner">
+      {%- if faq_banner_image != blank -%}
+        <picture class="faq-page-header__media">
+          {%- if faq_banner_image_mobile != blank -%}
+            <source
+              media="(max-width: 768px)"
+              srcset="
+                {{ faq_banner_image_mobile | image_url: width: 768 }} 768w,
+                {{ faq_banner_image_mobile | image_url: width: 1080 }} 1080w
+              "
+              sizes="100vw"
+            >
+          {%- endif -%}
+          <img
+            src="{{ faq_banner_image | image_url: width: 1640 }}"
+            srcset="
+              {{ faq_banner_image | image_url: width: 960 }} 960w,
+              {{ faq_banner_image | image_url: width: 1280 }} 1280w,
+              {{ faq_banner_image | image_url: width: 1640 }} 1640w
+            "
+            sizes="(max-width: 768px) 100vw, min(100vw, 1640px)"
+            width="{{ faq_banner_image.width }}"
+            height="{{ faq_banner_image.height }}"
+            alt="{{ faq_banner_alt | escape }}"
+            loading="eager"
+            fetchpriority="high"
+          >
+        </picture>
+        <div class="faq-page-header__scrim" aria-hidden="true"></div>
+      {%- endif -%}
+      <div class="faq-page-header__banner-content">
+        {%- if section.settings.banner_eyebrow != blank -%}
+          <p class="faq-page-header__eyebrow">{{ section.settings.banner_eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.banner_title != blank -%}
+          <p class="faq-page-header__banner-title">{{ section.settings.banner_title | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.banner_text != blank -%}
+          <div class="faq-page-header__banner-text rte">{{ section.settings.banner_text }}</div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="page-width page-width--narrow faq-page-header__body">
+    <header class="faq-page-header__title-wrap">
+      <h1 id="FAQ-page-title-{{ section.id }}" class="faq-page-header__title">{{ faq_page_title | escape }}</h1>
+      {%- if section.settings.subtitle != blank -%}
+        <div class="faq-page-header__subtitle rte">{{ section.settings.subtitle }}</div>
+      {%- endif -%}
+    </header>
+
+    {%- if section.blocks != blank -%}
+      <nav class="faq-page-header__nav" aria-label="FAQ Kategorien">
+        <ul class="faq-page-header__nav-list">
+          {%- for block in section.blocks -%}
+            {%- assign faq_nav_anchor = block.settings.anchor_id | default: block.id | handle -%}
+            {%- if block.settings.label != blank -%}
+              <li {{ block.shopify_attributes }}>
+                <a class="faq-page-header__nav-link" href="#{{ faq_nav_anchor }}">
+                  {%- if block.settings.number != blank -%}
+                    <span class="faq-page-header__nav-number">{{ block.settings.number | escape }}</span>
+                  {%- endif -%}
+                  <span>{{ block.settings.label | escape }}</span>
+                </a>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FAQ page header",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "FAQ Banner desktop image",
+      "info": "Recommended size: 1640 × 360 px. The blue gradient is used when no image is selected."
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image_mobile",
+      "label": "FAQ Banner mobile image",
+      "info": "Optional. Recommended size: 768 × 520 px. Falls back to the desktop image when empty."
+    },
+    {
+      "type": "text",
+      "id": "banner_eyebrow",
+      "label": "FAQ Banner eyebrow",
+      "default": "Hilfe & Support"
+    },
+    {
+      "type": "text",
+      "id": "banner_title",
+      "label": "FAQ Banner title",
+      "default": "Wir helfen dir weiter"
+    },
+    {
+      "type": "richtext",
+      "id": "banner_text",
+      "label": "FAQ Banner text",
+      "default": "<p>Antworten auf die wichtigsten Fragen zur VENUS E.</p>"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "FAQ page title",
+      "default": "FAQs"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "FAQ page subtitle"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category_link",
+      "name": "FAQ category link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Produkt-Grundwissen"
+        },
+        {
+          "type": "text",
+          "id": "anchor_id",
+          "label": "Anchor ID",
+          "info": "Use the same value as the corresponding FAQ category section, without the # symbol.",
+          "default": "faq-produkt-grundwissen"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "FAQ page header",
+      "blocks": [
+        {
+          "type": "category_link",
+          "settings": {
+            "number": "01",
+            "label": "Produkt-Grundwissen",
+            "anchor_id": "faq-produkt-grundwissen"
+          }
+        },
+        {
+          "type": "category_link",
+          "settings": {
+            "number": "02",
+            "label": "Installation & Kompatibilität",
+            "anchor_id": "faq-installation-kompatibilitaet"
+          }
+        },
+        {
+          "type": "category_link",
+          "settings": {
+            "number": "03",
+            "label": "Kauf & Lieferung",
+            "anchor_id": "faq-kauf-lieferung"
+          }
+        },
+        {
+          "type": "category_link",
+          "settings": {
+            "number": "04",
+            "label": "Garantie & Kundenservice",
+            "anchor_id": "faq-garantie-kundenservice"
+          }
+        },
+        {
+          "type": "category_link",
+          "settings": {
+            "number": "05",
+            "label": "Technische Daten & Anwendung",
+            "anchor_id": "faq-technische-daten-anwendung"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["footer", "header", "custom.popups"]
+  }
+}
+{% endschema %}
