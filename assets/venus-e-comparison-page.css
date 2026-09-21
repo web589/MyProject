@@ -1512,12 +1512,18 @@ a.bw-table-product__name:hover {
 }
 
 .section-bw-storage-hero .bw-lead,
+.section-bw-storage-hero .bw-lead p,
 .section-bw-compare-models .bw-models__intro .bw-rte,
+.section-bw-compare-models .bw-models__intro .bw-rte p,
 .section-bw-compare-scenarios .bw-scenarios__intro,
 .section-bw-compare-card-grid .bw-content-grid__intro .bw-rte,
+.section-bw-compare-card-grid .bw-content-grid__intro .bw-rte p,
 .section-bw-compare-table .bw-specs__intro .bw-rte,
+.section-bw-compare-table .bw-specs__intro .bw-rte p,
 .section-bw-compare-capacity .bw-capacity-map__text,
+.section-bw-compare-capacity .bw-capacity-map__text p,
 .section-bw-compare-smart-energy .bw-smart-energy__intro .bw-rte,
+.section-bw-compare-smart-energy .bw-smart-energy__intro .bw-rte p,
 .section-bw-storage-faq .bw-faq__intro p {
   font-size: var(--bw-compare-body-size, 16px);
 }
@@ -1586,6 +1592,7 @@ a.bw-table-product__name:hover {
 
 .section-bw-compare-models .bw-model-card__capacity,
 .section-bw-compare-models .bw-model-card__description,
+.section-bw-compare-models .bw-model-card__description p,
 .section-bw-compare-models .bw-model-card__price,
 .section-bw-compare-models .bw-model-card__availability,
 .section-bw-compare-models .bw-models__support p,
@@ -1628,6 +1635,7 @@ a.bw-table-product__name:hover {
 }
 
 .section-bw-compare-card-grid .bw-content-card__text,
+.section-bw-compare-card-grid .bw-content-card__text p,
 .section-bw-compare-card-grid .bw-content-card__tags li {
   font-size: var(--bw-compare-card-text-size, 14px);
 }
@@ -1677,7 +1685,8 @@ a.bw-table-product__name:hover {
 }
 
 .section-bw-compare-smart-energy .bw-smart-energy__feature p,
-.section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-rte {
+.section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-rte,
+.section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-rte p {
   font-size: var(--bw-compare-feature-text-size, 14px);
 }
 
@@ -1719,6 +1728,10 @@ a.bw-table-product__name:hover {
 
 .section-bw-storage-faq .bw-faq__answer {
   font-size: var(--bw-compare-answer-size, 14px);
+}
+
+.section-bw-storage-faq .bw-faq__answer p {
+  font-size: inherit;
 }
 
 @media (max-width: 899px) {

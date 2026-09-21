@@ -615,11 +615,14 @@
 
     function closeAnswer(question, answer) {
       question.setAttribute('aria-expanded', 'false');
+      var item = question.closest('.e-auto-page__faq-item');
+      if (item) item.classList.remove('is-open');
       if (!answer) return;
 
       answer.classList.remove('is-open');
       answer.setAttribute('aria-hidden', 'true');
       answer.style.maxHeight = '0px';
+      answer.style.opacity = '0';
       if (answer._eAutoFaqHideTimer) window.clearTimeout(answer._eAutoFaqHideTimer);
       answer._eAutoFaqHideTimer = window.setTimeout(function () {
         if (!answer.classList.contains('is-open')) answer.hidden = true;
@@ -631,13 +634,17 @@
 
       if (answer._eAutoFaqHideTimer) window.clearTimeout(answer._eAutoFaqHideTimer);
       question.setAttribute('aria-expanded', 'true');
+      var item = question.closest('.e-auto-page__faq-item');
+      if (item) item.classList.add('is-open');
       answer.hidden = false;
       answer.classList.add('is-open');
       answer.setAttribute('aria-hidden', 'false');
       answer.style.maxHeight = '0px';
+      answer.style.opacity = '0';
       scheduleFrame(function () {
         if (question.getAttribute('aria-expanded') === 'true') {
           answer.style.maxHeight = answer.scrollHeight + 'px';
+          answer.style.opacity = '1';
         }
       });
     }
@@ -656,9 +663,12 @@
     });
 
     root.querySelectorAll('[data-eauto-faq-answer]').forEach(function (answer) {
+      var item = answer.closest('.e-auto-page__faq-item');
+      if (item) item.classList.remove('is-open');
       answer.classList.remove('is-open');
       answer.setAttribute('aria-hidden', 'true');
       answer.style.maxHeight = '0px';
+      answer.style.opacity = '0';
       answer.hidden = true;
     });
   }

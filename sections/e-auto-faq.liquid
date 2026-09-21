@@ -7,9 +7,6 @@
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.faq_eyebrow }}</p>
       <h2 id="{{ page_id }}-faq-heading">{{ section.settings.faq_heading }}{% if section.settings.faq_heading_accent != blank %} <span>{{ section.settings.faq_heading_accent }}</span>{% endif %}</h2>
-      {% if section.settings.faq_text != blank %}
-        <p class="e-auto-page__faq-description">{{ section.settings.faq_text }}</p>
-      {% endif %}
     </div>
     <div class="e-auto-page__faq-list">
       {% for block in section.blocks %}
@@ -21,7 +18,7 @@
               <svg viewBox="0 0 12 8" focusable="false"><path d="m1 1.5 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" /></svg>
             </span>
           </button>
-          <div id="{{ faq_item_id }}-answer" class="e-auto-page__faq-answer" data-eauto-faq-answer aria-hidden="true" role="region" aria-labelledby="{{ faq_item_id }}-question">
+          <div id="{{ faq_item_id }}-answer" class="e-auto-page__faq-answer" data-eauto-faq-answer aria-hidden="true" hidden role="region" aria-labelledby="{{ faq_item_id }}-question">
             <div class="e-auto-page__faq-answer-inner">{{ block.settings.answer }}</div>
           </div>
         </div>
