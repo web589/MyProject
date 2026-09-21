@@ -31,24 +31,24 @@
 
 {% schema %}
 {
-  "name": "E-Auto 典型日",
+  "name": "E-Auto Typischer Tag",
   "tag": "section",
   "class": "section-e-auto-timeline",
   "settings": [
-    {"type":"text","id":"timeline_eyebrow","label":"典型日小标题","default":"Ein typischer Tag"},
-    {"type":"text","id":"timeline_heading","label":"典型日标题（主体）","default":"So sieht ein Tag"},
-    {"type":"text","id":"timeline_heading_accent","label":"典型日标题（蓝色强调）","default":"mit PV, Speicher und E-Auto aus"},
-    {"type":"textarea","id":"timeline_text","label":"典型日说明","default":"Vier Momente zeigen, wie dein Solarstrom vom Mittag bis zum Laden am Abend verschoben wird."},
-    {"type":"header","content":"布局与尺寸"},
-    {"type":"range","id":"heading_size","label":"标题字号","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"text","id":"timeline_eyebrow","label":"Timeline Kicker","default":"Ein typischer Tag"},
+    {"type":"text","id":"timeline_heading","label":"Timeline Überschrift – Hauptteil","default":"So sieht ein Tag"},
+    {"type":"text","id":"timeline_heading_accent","label":"Timeline Überschrift – blauer Akzent","default":"mit PV, Speicher und E-Auto aus"},
+    {"type":"textarea","id":"timeline_text","label":"Timeline Text","default":"Vier Momente zeigen, wie dein Solarstrom vom Mittag bis zum Laden am Abend verschoben wird."},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
     {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"timeline_media_height","label":"时间线图片高度","min":150,"max":360,"step":10,"unit":"px","default":220},
     {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "blocks": [
-    {"type":"timeline","name":"典型日节点","settings":[{"type":"text","id":"time","label":"时间","default":"08:00"},{"type":"image_picker","id":"image","label":"图片"},{"type":"text","id":"image_alt","label":"图片替代文本","default":"E-Auto im Tagesverlauf"},{"type":"text","id":"image_placeholder","label":"图片占位提示","default":"Timeline-Bild auswählen"},{"type":"text","id":"heading","label":"标题","default":"Auto unterwegs"},{"type":"textarea","id":"text","label":"文案","default":"Das Auto fährt los, die PV-Anlage startet in den Tag."},{"type":"text","id":"badge","label":"标签","default":"PV-Überschuss"}]}
+    {"type":"timeline","name":"Typischer Tag","settings":[{"type":"text","id":"time","label":"Uhrzeit","default":"08:00"},{"type":"image_picker","id":"image","label":"Bild"},{"type":"text","id":"image_alt","label":"Bild Alt-Text","default":"E-Auto im Tagesverlauf"},{"type":"text","id":"image_placeholder","label":"Bild Platzhalter","default":"Timeline-Bild auswählen"},{"type":"text","id":"heading","label":"Überschrift","default":"Auto unterwegs"},{"type":"textarea","id":"text","label":"Text","default":"Das Auto fährt los, die PV-Anlage startet in den Tag."},{"type":"text","id":"badge","label":"Badge","default":"PV-Überschuss"}]}
   ],
   "max_blocks": 4,
-  "presets": [{"name":"E-Auto 典型日","blocks":[{"type":"timeline"},{"type":"timeline"},{"type":"timeline"},{"type":"timeline"}] }]
+  "presets": [{"name":"E-Auto Typischer Tag","blocks":[{"type":"timeline"},{"type":"timeline"},{"type":"timeline"},{"type":"timeline"}] }]
 }
 {% endschema %}
