@@ -11,6 +11,7 @@
   data-bw-module="navigation"
   data-bw-anchor-nav
   data-section-id="{{ section.id }}"
+  style="--bw-nav-text-size: {{ section.settings.nav_text_size | default: 13 }}px;"
   aria-label="{{ section.settings.aria_label | escape }}"
 >
   <div class="bw-container bw-anchor-nav__inner">
@@ -58,6 +59,16 @@
       "label": "Anker-ID",
       "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
       "default": "navigation"
+    },
+    {
+      "type": "range",
+      "id": "nav_text_size",
+      "label": "Navigationsschriftgröße",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 13
     },
     {
       "type": "header",
