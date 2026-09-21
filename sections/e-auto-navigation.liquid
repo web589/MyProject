@@ -42,57 +42,57 @@
 
 {% schema %}
 {
-  "name": "E-Auto 导航",
+  "name": "E-Auto Navigation",
   "tag": "section",
   "class": "section-e-auto-navigation",
   "settings": [
     {
       "type": "text",
       "id": "aria_label",
-      "label": "无障碍名称",
+      "label": "Barrierefreie Bezeichnung",
       "default": "E-Auto Seitennavigation"
     },
     {
       "type": "text",
       "id": "anchor_id",
-      "label": "锚点 ID",
-      "info": "请输入不带 # 的 ID，并确保它在本页面中唯一。",
+      "label": "Anker-ID",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
       "default": "eauto-navigation"
     },
     {
       "type": "header",
-      "content": "高亮按钮"
+      "content": "Hervorgehobener Button"
     },
     {
       "type": "text",
       "id": "cta_label",
-      "label": "CTA 按钮文案",
+      "label": "CTA Beschriftung",
       "default": "Passenden Speicher finden"
     },
     {
       "type": "text",
       "id": "cta_target",
-      "label": "CTA 跳转目标",
-      "info": "请输入锚点 ID，可带或不带 #。",
+      "label": "CTA Sprungziel",
+      "info": "Anker-ID mit oder ohne # eingeben.",
       "default": "#eauto-calculator"
     }
   ],
   "blocks": [
     {
       "type": "link",
-      "name": "导航链接",
+      "name": "Navigationslink",
       "settings": [
         {
           "type": "text",
           "id": "label",
-          "label": "链接文案",
+          "label": "Beschriftung",
           "default": "Navigation"
         },
         {
           "type": "text",
           "id": "target",
-          "label": "跳转目标",
-          "info": "请输入锚点 ID，可带或不带 #。",
+          "label": "Sprungziel",
+          "info": "Anker-ID mit oder ohne # eingeben.",
           "default": "#eauto-start"
         }
       ]
@@ -101,7 +101,7 @@
   "max_blocks": 20,
   "presets": [
     {
-      "name": "E-Auto 导航",
+      "name": "E-Auto Navigation",
       "settings": {
         "anchor_id": "eauto-navigation",
         "aria_label": "E-Auto Seitennavigation",

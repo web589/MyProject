@@ -78,7 +78,11 @@
               {% if block.settings.title != blank or block.settings.body != blank %}
                 <article class="ac-storage-page__feature-card" style="--ac-card-title-size: {{ block.settings.title_size | default: 18 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-height: {{ block.settings.card_height | default: 202 }}px; --ac-icon-size: {{ block.settings.icon_size | default: 24 }}px;" {{ block.shopify_attributes }}>
                   <span class="ac-storage-page__icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13"/></svg>
+                    {% if block.settings.icon_image != blank %}
+                      {{ block.settings.icon_image | image_url: width: 96 | image_tag: class: 'ac-storage-page__icon-image', widths: '48, 72, 96', sizes: 'var(--ac-icon-size, 24px)', alt: '', loading: 'lazy' }}
+                    {% else %}
+                      <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13"/></svg>
+                    {% endif %}
                   </span>
                   <h3>{{ block.settings.title }}</h3>
                   <p>{{ block.settings.body }}</p>

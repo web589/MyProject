@@ -27,23 +27,23 @@
 
 {% schema %}
 {
-  "name": "E-Auto 常见问题",
+  "name": "E-Auto FAQ",
   "tag": "section",
   "class": "section-e-auto-faq",
   "settings": [
-    {"type":"text","id":"faq_eyebrow","label":"FAQ 小标题","default":"Häufige Fragen"},
-    {"type":"text","id":"faq_heading","label":"FAQ 标题（主体）","default":"Fragen rund ums"},
-    {"type":"text","id":"faq_heading_accent","label":"FAQ 标题（蓝色强调）","default":"E-Auto laden mit Speicher"},
-    {"type":"textarea","id":"faq_text","label":"FAQ 说明","default":"Die wichtigsten Antworten zur Verbindung von PV, Hausnetz, Speicher und Wallbox."},
-    {"type":"header","content":"布局与尺寸"},
-    {"type":"range","id":"heading_size","label":"标题字号","min":28,"max":60,"step":1,"unit":"px","default":38},
-    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
-    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72}
+    {"type":"text","id":"faq_eyebrow","label":"FAQ Kicker","default":"Häufige Fragen"},
+    {"type":"text","id":"faq_heading","label":"FAQ Überschrift – Hauptteil","default":"Fragen rund ums"},
+    {"type":"text","id":"faq_heading_accent","label":"FAQ Überschrift – blauer Akzent","default":"E-Auto laden mit Speicher"},
+    {"type":"textarea","id":"faq_text","label":"FAQ Text","default":"Die wichtigsten Antworten zur Verbindung von PV, Hausnetz, Speicher und Wallbox."},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":38},
+    {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":72}
   ],
   "blocks": [
-    {"type":"faq","name":"FAQ 问题","settings":[{"type":"text","id":"question","label":"问题","default":"Kann der VENUS E mein Auto direkt laden?"},{"type":"richtext","id":"answer","label":"答案","default":"<p>Nein. Der VENUS E ist AC-gekoppelt an dein Hausnetz angeschlossen. Geladen wird dein Auto weiterhin über die Wallbox.</p>"}]}
+    {"type":"faq","name":"FAQ Frage","settings":[{"type":"text","id":"question","label":"Frage","default":"Kann der VENUS E mein Auto direkt laden?"},{"type":"richtext","id":"answer","label":"Antwort","default":"<p>Nein. Der VENUS E ist AC-gekoppelt an dein Hausnetz angeschlossen. Geladen wird dein Auto weiterhin über die Wallbox.</p>"}]}
   ],
   "max_blocks": 6,
-  "presets": [{"name":"E-Auto 常见问题","blocks":[{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"}] }]
+  "presets": [{"name":"E-Auto FAQ","blocks":[{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"}] }]
 }
 {% endschema %}

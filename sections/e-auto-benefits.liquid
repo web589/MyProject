@@ -22,24 +22,24 @@
 
 {% schema %}
 {
-  "name": "E-Auto 使用收益",
+  "name": "E-Auto Vorteile",
   "tag": "section",
   "class": "section-e-auto-benefits",
   "settings": [
-    {"type":"text","id":"benefits_eyebrow","label":"收益区小标题","default":"Dein Nutzen"},
-    {"type":"text","id":"benefits_heading","label":"收益区标题（主体）","default":"Was der Speicher beim Laden"},
-    {"type":"text","id":"benefits_heading_accent","label":"收益区标题（蓝色强调）","default":"wirklich bringt"},
-    {"type":"textarea","id":"benefits_text","label":"收益区说明","default":"Solarstrom wird zeitlich verschoben und steht dann zur Verfügung, wenn Haushalt und E-Auto ihn brauchen."},
-    {"type":"textarea","id":"benefits_note","label":"收益区脚注","default":"* Orientierungswerte, abhängig von Anlagengröße, Verbrauchsprofil und Speicherkapazität."},
-    {"type":"header","content":"布局与尺寸"},
-    {"type":"range","id":"heading_size","label":"标题字号","min":28,"max":60,"step":1,"unit":"px","default":42},
-    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
-    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72}
+    {"type":"text","id":"benefits_eyebrow","label":"Vorteile Kicker","default":"Dein Nutzen"},
+    {"type":"text","id":"benefits_heading","label":"Vorteile Überschrift – Hauptteil","default":"Was der Speicher beim Laden"},
+    {"type":"text","id":"benefits_heading_accent","label":"Vorteile Überschrift – blauer Akzent","default":"wirklich bringt"},
+    {"type":"textarea","id":"benefits_text","label":"Vorteile Text","default":"Solarstrom wird zeitlich verschoben und steht dann zur Verfügung, wenn Haushalt und E-Auto ihn brauchen."},
+    {"type":"textarea","id":"benefits_note","label":"Vorteile Fußnote","default":"* Orientierungswerte, abhängig von Anlagengröße, Verbrauchsprofil und Speicherkapazität."},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":72}
   ],
   "blocks": [
-    {"type":"benefit","name":"收益项","settings":[{"type":"text","id":"value","label":"数值","default":"24"},{"type":"text","id":"value_accent","label":"数值强调"},{"type":"text","id":"title","label":"标题","default":"Solarstrom später nutzen"},{"type":"textarea","id":"text","label":"文案","default":"Tagsüber produziert, abends geladen – der Speicher verschiebt Solarstrom in den passenden Moment."}]}
+    {"type":"benefit","name":"Vorteil","settings":[{"type":"text","id":"value","label":"Wert","default":"24"},{"type":"text","id":"value_accent","label":"Wert Akzent"},{"type":"text","id":"title","label":"Titel","default":"Solarstrom später nutzen"},{"type":"textarea","id":"text","label":"Text","default":"Tagsüber produziert, abends geladen – der Speicher verschiebt Solarstrom in den passenden Moment."}]}
   ],
   "max_blocks": 3,
-  "presets": [{"name":"E-Auto 使用收益","blocks":[{"type":"benefit"},{"type":"benefit"},{"type":"benefit"}] }]
+  "presets": [{"name":"E-Auto Vorteile","blocks":[{"type":"benefit"},{"type":"benefit"},{"type":"benefit"}] }]
 }
 {% endschema %}
