@@ -10,6 +10,11 @@
     {"type":"url","id":"blog_url","label":"Ratgeber-Übersicht Ziel"},
     {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Mehr erfahren"},
     {"type":"text","id":"heading","label":"Überschrift","default":"Ratgeber & Wissen"},
+    {"type":"range","id":"section_padding","label":"Innenabstand Abschnitt","min":40,"max":120,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"content_width","label":"Maximale Inhaltsbreite","min":960,"max":1600,"step":20,"unit":"px","default":1440},
+    {"type":"range","id":"eyebrow_size","label":"Eyebrow-Schriftgröße","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"heading_size","label":"Überschrift Schriftgröße","min":24,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"Grundtext Schriftgröße","min":12,"max":22,"step":1,"unit":"px","default":15},
     {"type":"text","id":"card_link_label","label":"Fallback-Artikelkarten-Link","default":"Artikel lesen →"},
     {"type":"text","id":"blog_link_label","label":"Ratgeber-Übersicht Link","default":"Alle Ratgeber ansehen →"}
   ],
@@ -25,7 +30,10 @@
         {"type":"image_picker","id":"image","label":"Bild"},
         {"type":"text","id":"alt","label":"Alt-Text","default":"Ratgeber-Artikelbild"},
         {"type":"textarea","id":"placeholder","label":"Bild-Platzhalter","default":"Artikelbild auswählen"},
-        {"type":"text","id":"link_label","label":"Artikel-Link","default":"Artikel lesen →"}
+        {"type":"text","id":"link_label","label":"Artikel-Link","default":"Artikel lesen →"},
+        {"type":"range","id":"title_size","label":"Titel Schriftgröße","min":14,"max":24,"step":1,"unit":"px","default":17},
+        {"type":"range","id":"body_size","label":"Text Schriftgröße","min":12,"max":20,"step":1,"unit":"px","default":13},
+        {"type":"range","id":"image_height","label":"Bildhöhe","min":120,"max":280,"step":10,"unit":"px","default":170}
       ]
     }
   ],

@@ -10,6 +10,13 @@
     {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Funktionsweise"},
     {"type":"text","id":"heading","label":"Überschrift","default":"So arbeitet ein AC-gekoppelter Speicher im Haushalt"},
     {"type":"textarea","id":"subtext","label":"Beschreibung","default":"Der Solarstrom wird im Haushalt verteilt und bei Überschuss gespeichert. Wenn später mehr Strom gebraucht wird, kann der Speicher Energie wieder über das Hausnetz bereitstellen."},
+    {"type":"range","id":"section_padding","label":"Innenabstand Abschnitt","min":40,"max":120,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"content_width","label":"Maximale Inhaltsbreite","min":960,"max":1600,"step":20,"unit":"px","default":1440},
+    {"type":"range","id":"eyebrow_size","label":"Eyebrow-Schriftgröße","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"heading_size","label":"Überschrift Schriftgröße","min":24,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"Grundtext Schriftgröße","min":12,"max":22,"step":1,"unit":"px","default":15},
+    {"type":"range","id":"flow_image_height","label":"Energiefluss-Bildhöhe","min":240,"max":640,"step":10,"unit":"px","default":460},
+    {"type":"range","id":"flow_node_size","label":"Energiefluss-Legende Schriftgröße","min":11,"max":18,"step":1,"unit":"px","default":13},
     {"type":"text","id":"toggle_aria_label","label":"Tab-Label für Screenreader","default":"Tageszeit für Energiefluss auswählen"},
     {"type":"text","id":"toggle_day_label","label":"Tag-Tab","default":"☀ Tag · Speichern"},
     {"type":"text","id":"toggle_evening_label","label":"Abend-Tab","default":"☾ Abend · Nutzen"},
@@ -30,7 +37,9 @@
       "name":"Funktionsschritt",
       "settings":[
         {"type":"text","id":"title","label":"Titel","default":"Schritt"},
-        {"type":"textarea","id":"body","label":"Text","default":"Beschreibung des Schritts."}
+        {"type":"textarea","id":"body","label":"Text","default":"Beschreibung des Schritts."},
+        {"type":"range","id":"title_size","label":"Titel Schriftgröße","min":14,"max":24,"step":1,"unit":"px","default":19},
+        {"type":"range","id":"body_size","label":"Text Schriftgröße","min":12,"max":20,"step":1,"unit":"px","default":14}
       ]
     }
   ],

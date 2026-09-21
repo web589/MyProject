@@ -39,6 +39,7 @@
 <section
   id="eauto-recommendations"
   class="e-auto-page e-auto-page__section e-auto-page__recommendations"
+  style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-recommendation-media-height: {{ section.settings.recommendation_media_height }}px;"
   data-eauto-page
   data-section-id="{{ section.id }}"
   data-eauto-available-label="{{ section.settings.available_label | escape }}"
@@ -53,7 +54,7 @@
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.recommendations_eyebrow }}</p>
-      <h2 id="{{ page_id }}-recommendations-heading">{{ section.settings.recommendations_heading }}</h2>
+      <h2 id="{{ page_id }}-recommendations-heading">{{ section.settings.recommendations_heading }}{% if section.settings.recommendations_heading_accent != blank %} <span>{{ section.settings.recommendations_heading_accent }}</span>{% endif %}</h2>
       <p data-eauto-recommendations-summary>{{ section.settings.recommendations_text }}</p>
     </div>
     <div class="e-auto-page__recommendation-grid" data-eauto-recommendation-grid>
@@ -132,7 +133,8 @@
     {"type":"product","id":"product_4","label":"VENUS E 4.0 Produkt"},
     {"type":"product","id":"product_max","label":"VENUS E Max Produkt"},
     {"type":"text","id":"recommendations_eyebrow","label":"Empfehlungen Kicker","default":"Deine Optionen"},
-    {"type":"text","id":"recommendations_heading","label":"Empfehlungen Überschrift","default":"Welche VENUS E Lösung passt dazu?"},
+    {"type":"text","id":"recommendations_heading","label":"Empfehlungen Überschrift – Hauptteil","default":"Welche VENUS E Lösung"},
+    {"type":"text","id":"recommendations_heading_accent","label":"Empfehlungen Überschrift – blauer Akzent","default":"passt dazu?"},
     {"type":"textarea","id":"recommendations_text","label":"Empfehlungen Text","default":"Die drei Konfigurationen werden direkt aus deiner Auswahl und den aktuellen Shopify-Produktdaten zusammengestellt."},
     {"type":"textarea","id":"recommendations_summary_template","label":"Dynamische Empfehlung Zusammenfassung","info":"Verfügbare Variablen: {{range}}, {{lower}}, {{upper}}, {{unit}}.","default":"Kapazitätsbereich: {{range}}. Preise und Verfügbarkeit werden direkt aus Shopify geladen."},
     {"type":"textarea","id":"recommendations_note","label":"Empfehlungen Hinweis","default":"Preise, Varianten, Bilder und Verfügbarkeit werden direkt aus Shopify gelesen."},
@@ -143,7 +145,12 @@
     {"type":"text","id":"card_cta_label","label":"Karten CTA","default":"Produkt ansehen"},
     {"type":"text","id":"available_label","label":"Verfügbar Label","default":"Verfügbar"},
     {"type":"text","id":"unavailable_label","label":"Nicht verfügbar Label","default":"Derzeit nicht verfügbar"},
-    {"type":"text","id":"preorder_label","label":"Vormerkung Label","default":"Demnächst verfügbar"}
+    {"type":"text","id":"preorder_label","label":"Vormerkung Label","default":"Demnächst verfügbar"},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"recommendation_media_height","label":"产品图片高度","min":180,"max":420,"step":10,"unit":"px","default":240},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "presets": [{"name":"E-Auto Empfehlungen"}]
 }

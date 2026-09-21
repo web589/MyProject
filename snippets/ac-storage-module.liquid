@@ -15,11 +15,23 @@
     assign ct003_product = all_products['ct003-smart-meter']
   endif
   assign smart_meter_image = ct002_product.featured_image | default: ct003_product.featured_image
+  assign ac_section_padding = section.settings.section_padding | default: 72
+  assign ac_heading_size = section.settings.heading_size | default: 34
+  assign ac_body_size = section.settings.body_size | default: 15
+  assign ac_eyebrow_size = section.settings.eyebrow_size | default: 13
+  assign ac_content_width = section.settings.content_width | default: 1440
+  capture ac_storage_style
+    echo '--ac-section-padding: ' | append: ac_section_padding | append: 'px; '
+    echo '--ac-heading-size: ' | append: ac_heading_size | append: 'px; '
+    echo '--ac-body-size: ' | append: ac_body_size | append: 'px; '
+    echo '--ac-eyebrow-size: ' | append: ac_eyebrow_size | append: 'px; '
+    echo '--ac-content-width: ' | append: ac_content_width | append: 'px;'
+  endcapture
 -%}
 
 {% case module %}
   {% when 'hero' %}
-    <section id="ac-speicher" class="ac-storage-page ac-storage-page__hero" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="ac-speicher" class="ac-storage-page ac-storage-page__hero" data-ac-storage-page style="{{ ac_storage_style }} --ac-hero-heading-size: {{ section.settings.hero_heading_size | default: 48 }}px; --ac-hero-lead-size: {{ section.settings.hero_lead_size | default: 16 }}px; --ac-hero-media-height: {{ section.settings.hero_media_height | default: 480 }}px; --ac-hero-copy-width: {{ section.settings.hero_copy_width | default: 640 }}px; --ac-image-fit: {{ section.settings.hero_image_fit | default: 'cover' }};" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap ac-storage-page__hero-grid">
         <div class="ac-storage-page__hero-copy">
           <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
@@ -64,7 +76,7 @@
           {% for block in section.blocks %}
             {% if block.type == 'feature' %}
               {% if block.settings.title != blank or block.settings.body != blank %}
-                <article class="ac-storage-page__feature-card" {{ block.shopify_attributes }}>
+                <article class="ac-storage-page__feature-card" style="--ac-card-title-size: {{ block.settings.title_size | default: 18 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-height: {{ block.settings.card_height | default: 202 }}px; --ac-icon-size: {{ block.settings.icon_size | default: 24 }}px;" {{ block.shopify_attributes }}>
                   <span class="ac-storage-page__icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13"/></svg>
                   </span>
@@ -82,7 +94,7 @@
     {% assign function_link_url = section.settings.link_url | default: eauto_url %}
     {% assign day_nodes = section.settings.day_nodes | split: '|' %}
     {% assign evening_nodes = section.settings.evening_nodes | split: '|' %}
-    <section id="funktion" class="ac-storage-page ac-storage-page__section ac-storage-page__function" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="funktion" class="ac-storage-page ac-storage-page__section ac-storage-page__function" data-ac-storage-page style="{{ ac_storage_style }} --ac-flow-image-height: {{ section.settings.flow_image_height | default: 460 }}px; --ac-flow-node-size: {{ section.settings.flow_node_size | default: 13 }}px;" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -126,7 +138,7 @@
           {% for block in section.blocks %}
             {% if block.type == 'step' %}
               {% assign function_step_index = function_step_index | plus: 1 %}
-              <article class="ac-storage-page__step" {{ block.shopify_attributes }}>
+              <article class="ac-storage-page__step" style="--ac-step-title-size: {{ block.settings.title_size | default: 19 }}px; --ac-step-body-size: {{ block.settings.body_size | default: 14 }}px;" {{ block.shopify_attributes }}>
                 <span class="ac-storage-page__step-number">{{ function_step_index | prepend: '0' }}</span>
                 <h3>{{ block.settings.title }}</h3>
                 <p>{{ block.settings.body }}</p>
@@ -140,7 +152,7 @@
 
   {% when 'why' %}
     {% assign why_cta_url = section.settings.cta_url | default: '#modelle' %}
-    <section id="vorteile" class="ac-storage-page ac-storage-page__section ac-storage-page__why" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="vorteile" class="ac-storage-page ac-storage-page__section ac-storage-page__why" data-ac-storage-page style="{{ ac_storage_style }}" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -149,7 +161,7 @@
           {% assign why_stat_index = 0 %}
           {% for block in section.blocks %}
             {% if block.type == 'image_card' %}
-              <article class="ac-storage-page__why-card" {{ block.shopify_attributes }}>
+              <article class="ac-storage-page__why-card" style="--ac-card-title-size: {{ block.settings.title_size | default: 18 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-image-height: {{ block.settings.image_height | default: 210 }}px;" {{ block.shopify_attributes }}>
                 <div class="ac-storage-page__media ac-storage-page__media--why">
                   {% if block.settings.image != blank %}
                     {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1000', sizes: '(min-width: 1000px) 50vw, 100vw', alt: block.settings.alt }}
@@ -164,7 +176,7 @@
               </article>
             {% elsif block.type == 'stat' %}
               {% assign why_stat_index = why_stat_index | plus: 1 %}
-              <article class="ac-storage-page__why-stat" {{ block.shopify_attributes }}>
+              <article class="ac-storage-page__why-stat" style="--ac-card-title-size: {{ block.settings.title_size | default: 18 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-min-height: {{ block.settings.card_height | default: 188 }}px;" {{ block.shopify_attributes }}>
                 <span class="ac-storage-page__step-number">{{ why_stat_index | prepend: '0' }}</span>
                 <h3>{{ block.settings.title }}</h3>
                 <p>{{ block.settings.body }}</p>
@@ -181,7 +193,7 @@
 
   {% when 'comparison' %}
     {% assign comparison_link_url = section.settings.link_url | default: compare_url %}
-    <section id="vergleich" class="ac-storage-page ac-storage-page__section ac-storage-page__comparison" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="vergleich" class="ac-storage-page ac-storage-page__section ac-storage-page__comparison" data-ac-storage-page style="{{ ac_storage_style }} --ac-table-size: {{ section.settings.table_text_size | default: 15 }}px;" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -215,7 +227,7 @@
 
   {% when 'smart' %}
     {% assign smart_link_url = section.settings.link_url | default: smart_meter_url %}
-    <section id="steuerung" class="ac-storage-page ac-storage-page__section ac-storage-page__smart" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="steuerung" class="ac-storage-page ac-storage-page__section ac-storage-page__smart" data-ac-storage-page style="{{ ac_storage_style }} --ac-smart-main-height: {{ section.settings.main_image_height | default: 296 }}px; --ac-smart-small-height: {{ section.settings.small_image_height | default: 150 }}px;" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -227,7 +239,7 @@
               {% for block in section.blocks %}
                 {% if block.type == 'step' %}
                   {% assign smart_step_index = smart_step_index | plus: 1 %}
-                  <article class="ac-storage-page__smart-step" {{ block.shopify_attributes }}>
+                  <article class="ac-storage-page__smart-step" style="--ac-smart-title-size: {{ block.settings.title_size | default: 19 }}px; --ac-smart-body-size: {{ block.settings.body_size | default: 14 }}px;" {{ block.shopify_attributes }}>
                     <span class="ac-storage-page__smart-number">{{ smart_step_index | prepend: '0' }}</span>
                     <div>
                       <h3>{{ block.settings.title }}</h3>
@@ -272,14 +284,14 @@
 
   {% when 'audience' %}
     {% assign audience_link_url = section.settings.link_url | default: eauto_url %}
-    <section id="zielgruppen" class="ac-storage-page ac-storage-page__section ac-storage-page__audience" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="zielgruppen" class="ac-storage-page ac-storage-page__section ac-storage-page__audience" data-ac-storage-page style="{{ ac_storage_style }}" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
         <div class="ac-storage-page__audience-grid">
           {% for block in section.blocks %}
             {% if block.type == 'audience_card' %}
-              <article class="ac-storage-page__audience-card" {{ block.shopify_attributes }}>
+              <article class="ac-storage-page__audience-card" style="--ac-card-title-size: {{ block.settings.title_size | default: 17 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-image-height: {{ block.settings.image_height | default: 190 }}px;" {{ block.shopify_attributes }}>
                 <div class="ac-storage-page__media ac-storage-page__media--audience">
                   {% if block.settings.image != blank %}
                     {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '360, 560, 800', sizes: '(min-width: 1000px) 25vw, 100vw', alt: block.settings.alt }}
@@ -300,7 +312,7 @@
     </section>
 
   {% when 'models' %}
-    <section id="modelle" class="ac-storage-page ac-storage-page__section ac-storage-page__models" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="modelle" class="ac-storage-page ac-storage-page__section ac-storage-page__models" data-ac-storage-page style="{{ ac_storage_style }}" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -311,7 +323,7 @@
               {% assign model_product = block.settings.product %}
               {% assign model_name = block.settings.name | default: model_product.title | default: 'VENUS E' %}
               {% assign model_url = model_product.url | default: storage_url %}
-              <article class="ac-storage-page__model-card" {{ block.shopify_attributes }}>
+              <article class="ac-storage-page__model-card" style="--ac-card-title-size: {{ block.settings.title_size | default: 18 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-image-height: {{ block.settings.image_height | default: 210 }}px;" {{ block.shopify_attributes }}>
                 <a class="ac-storage-page__media ac-storage-page__media--model" href="{{ model_url }}">
                   {% if model_product.featured_image != blank %}
                     {{ model_product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '360, 560, 800', sizes: '(min-width: 1000px) 25vw, 100vw', alt: block.settings.alt | default: model_name }}
@@ -336,7 +348,7 @@
     </section>
 
   {% when 'faq' %}
-    <section id="faq" class="ac-storage-page ac-storage-page__section ac-storage-page__faq" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="faq" class="ac-storage-page ac-storage-page__section ac-storage-page__faq" data-ac-storage-page style="{{ ac_storage_style }} --ac-faq-question-size: {{ section.settings.question_size | default: 16 }}px; --ac-faq-answer-size: {{ section.settings.answer_size | default: 14 }}px;" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -378,7 +390,7 @@
     {% endif %}
 
   {% when 'blog' %}
-    <section id="ratgeber" class="ac-storage-page ac-storage-page__section ac-storage-page__blog" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="ratgeber" class="ac-storage-page ac-storage-page__section ac-storage-page__blog" data-ac-storage-page style="{{ ac_storage_style }}" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
         <h2>{{ section.settings.heading }}</h2>
@@ -386,7 +398,7 @@
           {% for block in section.blocks %}
             {% if block.type == 'article' %}
               {% assign article_url = block.settings.url | default: blog_url %}
-              <article class="ac-storage-page__blog-card" {{ block.shopify_attributes }}>
+              <article class="ac-storage-page__blog-card" style="--ac-card-title-size: {{ block.settings.title_size | default: 17 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-image-height: {{ block.settings.image_height | default: 170 }}px;" {{ block.shopify_attributes }}>
                 <a class="ac-storage-page__media ac-storage-page__media--blog" href="{{ article_url }}">
                   {% if block.settings.image != blank %}
                     {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '420, 640, 900', sizes: '(min-width: 1000px) 33vw, 100vw', alt: block.settings.alt }}
@@ -409,7 +421,7 @@
     </section>
 
   {% when 'final' %}
-    <section id="abschluss" class="ac-storage-page ac-storage-page__section ac-storage-page__final" data-ac-storage-page {{ section.shopify_attributes }}>
+    <section id="abschluss" class="ac-storage-page ac-storage-page__section ac-storage-page__final" data-ac-storage-page style="{{ ac_storage_style }} --ac-final-heading-size: {{ section.settings.final_heading_size | default: 30 }}px; --ac-final-copy-size: {{ section.settings.final_copy_size | default: 15 }}px;" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <div class="ac-storage-page__final-card">
           <h2>{{ section.settings.heading }}</h2>

@@ -2,11 +2,11 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-benefits" class="e-auto-page e-auto-page__section e-auto-page__benefits" aria-labelledby="{{ page_id }}-benefits-heading">
+<section id="eauto-benefits" class="e-auto-page e-auto-page__section e-auto-page__benefits" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px;" aria-labelledby="{{ page_id }}-benefits-heading">
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.benefits_eyebrow }}</p>
-      <h2 id="{{ page_id }}-benefits-heading">{{ section.settings.benefits_heading }}</h2>
+      <h2 id="{{ page_id }}-benefits-heading">{{ section.settings.benefits_heading }}{% if section.settings.benefits_heading_accent != blank %} <span>{{ section.settings.benefits_heading_accent }}</span>{% endif %}</h2>
       <p>{{ section.settings.benefits_text }}</p>
     </div>
     <div class="e-auto-page__benefits-grid">
@@ -24,8 +24,13 @@
   "class": "section-e-auto-benefits",
   "settings": [
     {"type":"text","id":"benefits_eyebrow","label":"Vorteile Kicker","default":"Dein Nutzen"},
-    {"type":"text","id":"benefits_heading","label":"Vorteile Überschrift","default":"Was der Speicher beim Laden wirklich bringt"},
-    {"type":"textarea","id":"benefits_text","label":"Vorteile Text","default":"Solarstrom wird zeitlich verschoben und steht dann zur Verfügung, wenn Haushalt und E-Auto ihn brauchen."}
+    {"type":"text","id":"benefits_heading","label":"Vorteile Überschrift – Hauptteil","default":"Was der Speicher beim Laden"},
+    {"type":"text","id":"benefits_heading_accent","label":"Vorteile Überschrift – blauer Akzent","default":"wirklich bringt"},
+    {"type":"textarea","id":"benefits_text","label":"Vorteile Text","default":"Solarstrom wird zeitlich verschoben und steht dann zur Verfügung, wenn Haushalt und E-Auto ihn brauchen."},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72}
   ],
   "blocks": [
     {"type":"benefit","name":"Vorteil","settings":[{"type":"text","id":"value","label":"Wert","default":"24 h"},{"type":"text","id":"title","label":"Titel","default":"Solarstrom später nutzen"},{"type":"textarea","id":"text","label":"Text","default":"Tagsüber produziert, abends geladen – der Speicher verschiebt Solarstrom in den passenden Moment."}]}

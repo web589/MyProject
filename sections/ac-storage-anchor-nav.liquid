@@ -9,6 +9,7 @@
   data-ac-storage-anchor-nav
   data-bw-anchor-nav
   data-section-id="{{ section.id }}"
+  style="--ac-nav-height: {{ section.settings.nav_height | default: 60 }}px; --ac-nav-text-size: {{ section.settings.nav_text_size | default: 13 }}px;"
   aria-label="{{ section.settings.aria_label | escape }}"
   {{ section.shopify_attributes }}
 >
@@ -63,6 +64,26 @@
       "label": "Anker-ID der Navigation",
       "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
       "default": "ac-storage-navigation"
+    },
+    {
+      "type": "range",
+      "id": "nav_height",
+      "label": "导航高度",
+      "min": 44,
+      "max": 84,
+      "step": 2,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "nav_text_size",
+      "label": "导航文字大小",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 13
     }
   ],
   "blocks": [

@@ -3,11 +3,11 @@
   assign result_button_target = section.settings.result_button_target | default: 'eauto-recommendations' | remove_first: '#' | handle | prepend: '#'
 %}
 
-<section id="eauto-calculator" class="e-auto-page e-auto-page__section e-auto-page__calculator-section" aria-labelledby="{{ page_id }}-calculator-heading">
+<section id="eauto-calculator" class="e-auto-page e-auto-page__section e-auto-page__calculator-section" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px;" aria-labelledby="{{ page_id }}-calculator-heading">
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.calculator_eyebrow }}</p>
-      <h2 id="{{ page_id }}-calculator-heading">{{ section.settings.calculator_heading }}</h2>
+      <h2 id="{{ page_id }}-calculator-heading">{{ section.settings.calculator_heading }}{% if section.settings.calculator_heading_accent != blank %} <span>{{ section.settings.calculator_heading_accent }}</span>{% endif %}</h2>
       <p>{{ section.settings.calculator_text }}</p>
     </div>
     <div
@@ -41,7 +41,7 @@
           <span class="e-auto-page__step-number">03</span>
           <h3>{{ section.settings.pv_heading }}</h3>
           <div class="e-auto-page__option-grid" data-eauto-option-group="pv">
-            <button type="button" data-eauto-option data-eauto-value="low" aria-pressed="false">{{ section.settings.pv_option_low_label }}{% if section.settings.pv_option_low_note != blank %} <small>({{ section.settings.pv_option_low_note }})</small>{% endif %}</button>
+            <button type="button" data-eauto-option data-eauto-value="low" aria-pressed="false">{{ section.settings.pv_option_low_label }}</button>
             <button type="button" class="is-active" data-eauto-option data-eauto-value="medium" aria-pressed="true">{{ section.settings.pv_option_medium_label }}{% if section.settings.pv_option_medium_note != blank %} <small>({{ section.settings.pv_option_medium_note }})</small>{% endif %}</button>
             <button type="button" data-eauto-option data-eauto-value="high" aria-pressed="false">{{ section.settings.pv_option_high_label }}{% if section.settings.pv_option_high_note != blank %} <small>({{ section.settings.pv_option_high_note }})</small>{% endif %}</button>
           </div>
@@ -59,7 +59,7 @@
         <span class="e-auto-page__eyebrow">{{ section.settings.result_eyebrow }}</span>
         <strong data-eauto-result-range>{{ section.settings.result_initial_range }}</strong>
         <h3 data-eauto-result-model>{{ section.settings.result_loading_model }}</h3>
-        <p data-eauto-result-copy>{{ section.settings.result_loading_copy }}</p>
+        <p data-eauto-result-copy>Wähle deine vier Angaben, um eine passende Kapazität und Produktkonfiguration zu sehen.</p>
         <a class="e-auto-page__button e-auto-page__button--primary" href="{{ result_button_target }}">{{ section.settings.result_button_label }} <span aria-hidden="true">→</span></a>
         {% if section.settings.result_note != blank %}<small>{{ section.settings.result_note }}</small>{% endif %}
       </aside>
@@ -74,7 +74,8 @@
   "class": "section-e-auto-calculator",
   "settings": [
     {"type":"text","id":"calculator_eyebrow","label":"Rechner Kicker","default":"Schnell-Ermittlung"},
-    {"type":"text","id":"calculator_heading","label":"Rechner Überschrift","default":"Wie viel Speicher braucht dein E-Auto?"},
+    {"type":"text","id":"calculator_heading","label":"Rechner Überschrift – Hauptteil","default":"Wie viel Speicher braucht dein"},
+    {"type":"text","id":"calculator_heading_accent","label":"Rechner Überschrift – blauer Akzent","default":"E-Auto?"},
     {"type":"textarea","id":"calculator_text","label":"Rechner Text","default":"Vier feste Angaben – wir zeigen dir, in welchem Kapazitätsbereich dein VENUS E liegen sollte."},
     {"type":"text","id":"distance_heading","label":"Schritt 1","default":"Wie weit fährst du am Tag? ø km / Tag"},
     {"type":"text","id":"efficiency_heading","label":"Schritt 2","default":"Wie viel Verbrauch hat dein Auto? kWh / 100 km"},
@@ -92,7 +93,6 @@
     {"type":"text","id":"efficiency_option_high_label","label":"Verbrauch: Verbrauchsstark","default":"Verbrauchsstark"},
     {"type":"text","id":"efficiency_option_high_note","label":"Verbrauch: Verbrauchsstark Zusatz","default":"über 21"},
     {"type":"text","id":"pv_option_low_label","label":"PV: Wenig","default":"Wenig / unbekannt"},
-    {"type":"text","id":"pv_option_low_note","label":"PV: Wenig Zusatz","default":""},
     {"type":"text","id":"pv_option_medium_label","label":"PV: Mittel","default":"Mittel"},
     {"type":"text","id":"pv_option_medium_note","label":"PV: Mittel Zusatz","default":"ca. 5–15 kWh"},
     {"type":"text","id":"pv_option_high_label","label":"PV: Viel","default":"Viel"},
@@ -102,14 +102,17 @@
     {"type":"header","content":"Dynamisches Ergebnis"},
     {"type":"text","id":"result_eyebrow","label":"Ergebnis Kicker","default":"Dein Ergebnis"},
     {"type":"text","id":"result_loading_model","label":"Ergebnis Startmodell","default":"Deine passende VENUS E Konfiguration"},
-    {"type":"textarea","id":"result_loading_copy","label":"Ergebnis Starttext","default":"Wähle deine vier Angaben, um eine passende Kapazität und Produktkonfiguration zu sehen."},
     {"type":"text","id":"result_initial_range","label":"Ergebnis Startbereich","default":"2–5 kWh"},
     {"type":"text","id":"capacity_unit_label","label":"Kapazität Einheit","default":"kWh"},
     {"type":"textarea","id":"result_model_template","label":"Ergebnis Modellvorlage","info":"Verfügbare Variablen: {{product_title}}, {{product_capacity}}, {{range}}, {{lower}}, {{upper}}, {{unit}}.","default":"Passt zu {{product_title}}"},
     {"type":"textarea","id":"result_copy_template","label":"Ergebnis Textvorlage","info":"Verfügbare Variablen: {{product_title}}, {{product_capacity}}, {{range}}, {{lower}}, {{upper}}, {{unit}}.","default":"Mit deiner Auswahl liegt der sinnvolle Orientierungsbereich bei {{range}}."},
     {"type":"text","id":"result_button_label","label":"Ergebnis Button","default":"Passende Modelle ansehen"},
     {"type":"text","id":"result_button_target","label":"Ergebnis Button Ziel","info":"Anker-ID mit oder ohne # eingeben.","default":"#eauto-recommendations"},
-    {"type":"textarea","id":"result_note","label":"Ergebnis Hinweis","default":"Orientierungswert auf Basis deiner Angaben. Die genaue Auslegung hängt auch von Haushaltsverbrauch, Jahreszeit und Wallbox-Leistung ab."}
+    {"type":"textarea","id":"result_note","label":"Ergebnis Hinweis","default":"Orientierungswert auf Basis deiner Angaben. Die genaue Auslegung hängt auch von Haushaltsverbrauch, Jahreszeit und Wallbox-Leistung ab."},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "presets": [{"name":"E-Auto Kapazitätsrechner"}]
 }

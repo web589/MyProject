@@ -2,11 +2,11 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-flow" class="e-auto-page e-auto-page__section e-auto-page__flow" aria-labelledby="{{ page_id }}-flow-heading">
+<section id="eauto-flow" class="e-auto-page e-auto-page__section e-auto-page__flow" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-flow-media-height: {{ section.settings.flow_media_height }}px;" aria-labelledby="{{ page_id }}-flow-heading">
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.flow_eyebrow }}</p>
-      <h2 id="{{ page_id }}-flow-heading">{{ section.settings.flow_heading }}</h2>
+      <h2 id="{{ page_id }}-flow-heading">{{ section.settings.flow_heading }}{% if section.settings.flow_heading_accent != blank %} <span>{{ section.settings.flow_heading_accent }}</span>{% endif %}</h2>
       <p>{{ section.settings.flow_text }}</p>
     </div>
     <div class="e-auto-page__toggle" role="tablist" aria-label="{{ section.settings.flow_toggle_label }}">
@@ -64,7 +64,8 @@
   "class": "section-e-auto-flow",
   "settings": [
     {"type":"text","id":"flow_eyebrow","label":"Energiefluss Kicker","default":"So funktioniert es"},
-    {"type":"text","id":"flow_heading","label":"Energiefluss Überschrift","default":"Energiefluss: AC-gekoppelt über dein Hausnetz"},
+    {"type":"text","id":"flow_heading","label":"Energiefluss Überschrift – Hauptteil","default":"Energiefluss:"},
+    {"type":"text","id":"flow_heading_accent","label":"Energiefluss Überschrift – blauer Akzent","default":"AC-gekoppelt über dein Hausnetz"},
     {"type":"textarea","id":"flow_text","label":"Energiefluss Text","default":"Der VENUS E wird an dein Hausnetz angeschlossen – nicht an dein Auto. PV-Überschuss landet zuerst im Speicher, abends fließt er über das Hausnetz zu Wallbox und E-Auto."},
     {"type":"text","id":"flow_toggle_label","label":"Energiefluss Tab Label","default":"Tageszeit auswählen"},
     {"type":"text","id":"flow_day_label","label":"Tag Tab","default":"☀ Tag · Speichern"},
@@ -86,7 +87,12 @@
     {"type":"text","id":"flow_day_image_alt","label":"Tag Bild Alt-Text","default":"PV-Überschuss lädt den VENUS E Speicher"},
     {"type":"text","id":"flow_evening_image_alt","label":"Abend Bild Alt-Text","default":"VENUS E liefert Solarstrom über das Hausnetz zur Wallbox"},
     {"type":"text","id":"flow_image_placeholder","label":"Energiefluss Platzhalter","default":"Energiefluss-Bild oder Video auswählen"},
-    {"type":"textarea","id":"flow_note","label":"Energiefluss Hinweis","default":"Wichtig: Der VENUS E speichert und liefert Energie über das Hausnetz. Er wird nicht direkt mit dem Auto verbunden."}
+    {"type":"textarea","id":"flow_note","label":"Energiefluss Hinweis","default":"Wichtig: Der VENUS E speichert und liefert Energie über das Hausnetz. Er wird nicht direkt mit dem Auto verbunden."},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"flow_media_height","label":"能量流图片高度","min":320,"max":720,"step":10,"unit":"px","default":520},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "presets": [{"name":"E-Auto Energiefluss"}]
 }

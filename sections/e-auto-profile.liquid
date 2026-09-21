@@ -2,11 +2,11 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-profile" class="e-auto-page e-auto-page__section e-auto-page__profiles" aria-labelledby="{{ page_id }}-profile-heading">
+<section id="eauto-profile" class="e-auto-page e-auto-page__section e-auto-page__profiles" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-profile-media-height: {{ section.settings.profile_media_height }}px;" aria-labelledby="{{ page_id }}-profile-heading">
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.profile_eyebrow }}</p>
-      <h2 id="{{ page_id }}-profile-heading">{{ section.settings.profile_heading }}</h2>
+      <h2 id="{{ page_id }}-profile-heading">{{ section.settings.profile_heading }}{% if section.settings.profile_heading_accent != blank %} <span>{{ section.settings.profile_heading_accent }}</span>{% endif %}</h2>
       <p>{{ section.settings.profile_text }}</p>
     </div>
     <div class="e-auto-page__profile-layout">
@@ -48,11 +48,17 @@
   "class": "section-e-auto-profile",
   "settings": [
     {"type":"text","id":"profile_eyebrow","label":"Profil Kicker","default":"Dein Fahrprofil"},
-    {"type":"text","id":"profile_heading","label":"Profil Überschrift","default":"Welches Ladeprofil passt zu dir?"},
+    {"type":"text","id":"profile_heading","label":"Profil Überschrift – Hauptteil","default":"Welches Ladeprofil"},
+    {"type":"text","id":"profile_heading_accent","label":"Profil Überschrift – blauer Akzent","default":"passt zu dir?"},
     {"type":"textarea","id":"profile_text","label":"Profil Text","default":"Vier typische Alltage. Wähle ein Profil und sieh, worauf es bei deinem Speicher ankommt."},
     {"type":"text","id":"profile_tab_label","label":"Profil Tab Label","default":"Fahrprofile auswählen"},
     {"type":"text","id":"profile_focus_label","label":"Profil Fokus Label","default":"Speicher-Fokus:"},
-    {"type":"textarea","id":"profile_note","label":"Profil Hinweis","default":"Kein Profil passt exakt? Die Kapazitätswahl berücksichtigt deine tatsächlichen Angaben."}
+    {"type":"textarea","id":"profile_note","label":"Profil Hinweis","default":"Kein Profil passt exakt? Die Kapazitätswahl berücksichtigt deine tatsächlichen Angaben."},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"profile_media_height","label":" Fahrprofil图片高度","min":260,"max":560,"step":10,"unit":"px","default":410},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "blocks": [
     {"type":"profile","name":"Fahrprofil","settings":[{"type":"text","id":"title","label":"Titel","default":"Pendler"},{"type":"textarea","id":"summary","label":"Kurzbeschreibung","default":"Jeden Tag ins Büro, ca. 30–60 km hin und zurück."},{"type":"textarea","id":"focus","label":"Speicher-Fokus","default":"Mittelgroße Kapazität für das Laden am Abend."},{"type":"image_picker","id":"image","label":"Bild"},{"type":"text","id":"image_alt","label":"Bild Alt-Text","default":"E-Auto Fahrprofil"},{"type":"text","id":"image_placeholder","label":"Bild Platzhalter","default":"Profilbild auswählen"}]}

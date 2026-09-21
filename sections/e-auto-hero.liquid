@@ -4,11 +4,11 @@
   assign hero_secondary_link = section.settings.hero_secondary_link | default: '#eauto-flow'
 %}
 
-<section id="eauto-start" class="e-auto-page e-auto-page__hero" aria-labelledby="{{ page_id }}-hero-heading">
+<section id="eauto-start" class="e-auto-page e-auto-page__hero" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-hero-media-height: {{ section.settings.hero_media_height }}px; --eauto-hero-image-width: {{ section.settings.hero_image_width }}%;" aria-labelledby="{{ page_id }}-hero-heading">
   <div class="e-auto-page__container e-auto-page__hero-grid">
     <div class="e-auto-page__hero-copy">
       {% if section.settings.hero_eyebrow != blank %}<p class="e-auto-page__eyebrow">{{ section.settings.hero_eyebrow }}</p>{% endif %}
-      <h1 id="{{ page_id }}-hero-heading">{{ section.settings.hero_heading }}</h1>
+      <h1 id="{{ page_id }}-hero-heading">{{ section.settings.hero_heading }}{% if section.settings.hero_heading_accent != blank %} <span>{{ section.settings.hero_heading_accent }}</span>{% endif %}</h1>
       {% if section.settings.hero_text != blank %}<p class="e-auto-page__lead">{{ section.settings.hero_text }}</p>{% endif %}
       <div class="e-auto-page__actions">
         <a class="e-auto-page__button e-auto-page__button--primary" href="{{ hero_primary_link }}">{{ section.settings.hero_primary_label }} <span aria-hidden="true">→</span></a>
@@ -37,7 +37,8 @@
   "class": "section-e-auto-hero",
   "settings": [
     {"type":"text","id":"hero_eyebrow","label":"Hero Kicker","default":"E-Auto & Photovoltaik"},
-    {"type":"text","id":"hero_heading","label":"Hero Überschrift","default":"E-Auto laden mit Speicher: Mehr Solarstrom für dein Auto"},
+    {"type":"text","id":"hero_heading","label":"Hero Überschrift – Hauptteil","default":"E-Auto laden mit Speicher: Mehr Solarstrom"},
+    {"type":"text","id":"hero_heading_accent","label":"Hero Überschrift – blauer Akzent","default":"für dein Auto"},
     {"type":"textarea","id":"hero_text","label":"Hero Text","default":"Deine PV-Anlage produziert am Tag, dein Auto lädt abends. Mit einem VENUS E Speicher passt das endlich zusammen: Überschuss speichern – später fahren."},
     {"type":"text","id":"hero_primary_label","label":"Hero Hauptbutton","default":"Passenden Speicher finden"},
     {"type":"url","id":"hero_primary_link","label":"Hero Hauptlink"},
@@ -52,7 +53,13 @@
     {"type":"text","id":"hero_stat_2_value","label":"Kennzahl 2 Wert","default":"bis zu 3,6 kW"},
     {"type":"text","id":"hero_stat_2_label","label":"Kennzahl 2 Label","default":"Ausgangsleistung"},
     {"type":"text","id":"hero_stat_3_value","label":"Kennzahl 3 Wert","default":"10 Jahre"},
-    {"type":"text","id":"hero_stat_3_label","label":"Kennzahl 3 Label","default":"Herstellergarantie"}
+    {"type":"text","id":"hero_stat_3_label","label":"Kennzahl 3 Label","default":"Herstellergarantie"},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":36,"max":72,"step":1,"unit":"px","default":52},
+    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"hero_media_height","label":"Hero 图片高度","min":360,"max":620,"step":10,"unit":"px","default":480},
+    {"type":"range","id":"hero_image_width","label":"Hero 图片宽度","min":40,"max":65,"step":1,"unit":"%","default":52},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "presets": [{"name":"E-Auto Hero"}]
 }

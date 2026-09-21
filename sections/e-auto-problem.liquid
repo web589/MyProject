@@ -2,11 +2,11 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-problem" class="e-auto-page e-auto-page__section e-auto-page__problem" aria-labelledby="{{ page_id }}-problem-heading">
+<section id="eauto-problem" class="e-auto-page e-auto-page__section e-auto-page__problem" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-problem-media-height: {{ section.settings.problem_media_height }}px;" aria-labelledby="{{ page_id }}-problem-heading">
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.problem_eyebrow }}</p>
-      <h2 id="{{ page_id }}-problem-heading">{{ section.settings.problem_heading }}</h2>
+      <h2 id="{{ page_id }}-problem-heading">{{ section.settings.problem_heading }}{% if section.settings.problem_heading_accent != blank %} <span>{{ section.settings.problem_heading_accent }}</span>{% endif %}</h2>
       <p>{{ section.settings.problem_text }}</p>
     </div>
     <div class="e-auto-page__problem-grid">
@@ -40,7 +40,8 @@
   "class": "section-e-auto-problem",
   "settings": [
     {"type":"text","id":"problem_eyebrow","label":"Problem Kicker","default":"Das Problem"},
-    {"type":"text","id":"problem_heading","label":"Problem Überschrift","default":"Deine PV produziert am Tag. Dein Auto lädt abends."},
+    {"type":"text","id":"problem_heading","label":"Problem Überschrift – Hauptteil","default":"Deine PV produziert am Tag. Dein Auto lädt"},
+    {"type":"text","id":"problem_heading_accent","label":"Problem Überschrift – blauer Akzent","default":"abends."},
     {"type":"textarea","id":"problem_text","label":"Problem Text","default":"Die Lösung ist nicht mehr Sonne. Es ist der richtige Zeitpunkt – gespeichert."},
     {"type":"image_picker","id":"problem_image","label":"Problem Bild"},
     {"type":"text","id":"problem_image_alt","label":"Problem Bild Alt-Text","default":"PV-Anlage am Mittag und E-Auto an der Wallbox am Abend"},
@@ -50,7 +51,12 @@
     {"type":"textarea","id":"problem_card_1_text","label":"Problem Karte 1 Text","default":"Sonne, volle Produktion. Aber das Auto steht nicht zu Hause – ein Teil deines Solarstroms geht ins Netz."},
     {"type":"text","id":"problem_card_2_kicker","label":"Problem Karte 2 Kicker","default":"ABEND · 19:00"},
     {"type":"text","id":"problem_card_2_heading","label":"Problem Karte 2 Überschrift","default":"E-Auto laden – die Sonne ist schon weg"},
-    {"type":"textarea","id":"problem_card_2_text","label":"Problem Karte 2 Text","default":"Du kommst nach Hause und steckst dein Auto an. Ohne Speicher lädt dein Solar-Auto dann mit Netzstrom."}
+    {"type":"textarea","id":"problem_card_2_text","label":"Problem Karte 2 Text","default":"Du kommst nach Hause und steckst dein Auto an. Ohne Speicher lädt dein Solar-Auto dann mit Netzstrom."},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"problem_media_height","label":"问题图片高度","min":260,"max":620,"step":10,"unit":"px","default":430},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "presets": [{"name":"E-Auto Problem"}]
 }

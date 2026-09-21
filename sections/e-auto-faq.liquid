@@ -2,11 +2,11 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-faq" class="e-auto-page e-auto-page__section e-auto-page__faq" aria-labelledby="{{ page_id }}-faq-heading">
+<section id="eauto-faq" class="e-auto-page e-auto-page__section e-auto-page__faq" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px;" aria-labelledby="{{ page_id }}-faq-heading">
   <div class="e-auto-page__container e-auto-page__faq-container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.faq_eyebrow }}</p>
-      <h2 id="{{ page_id }}-faq-heading">{{ section.settings.faq_heading }}</h2>
+      <h2 id="{{ page_id }}-faq-heading">{{ section.settings.faq_heading }}{% if section.settings.faq_heading_accent != blank %} <span>{{ section.settings.faq_heading_accent }}</span>{% endif %}</h2>
       <p>{{ section.settings.faq_text }}</p>
     </div>
     <div class="e-auto-page__faq-list">
@@ -32,8 +32,13 @@
   "class": "section-e-auto-faq",
   "settings": [
     {"type":"text","id":"faq_eyebrow","label":"FAQ Kicker","default":"Häufige Fragen"},
-    {"type":"text","id":"faq_heading","label":"FAQ Überschrift","default":"Fragen rund ums E-Auto laden mit Speicher"},
-    {"type":"textarea","id":"faq_text","label":"FAQ Text","default":"Die wichtigsten Antworten zur Verbindung von PV, Hausnetz, Speicher und Wallbox."}
+    {"type":"text","id":"faq_heading","label":"FAQ Überschrift – Hauptteil","default":"Fragen rund ums"},
+    {"type":"text","id":"faq_heading_accent","label":"FAQ Überschrift – blauer Akzent","default":"E-Auto laden mit Speicher"},
+    {"type":"textarea","id":"faq_text","label":"FAQ Text","default":"Die wichtigsten Antworten zur Verbindung von PV, Hausnetz, Speicher und Wallbox."},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":38},
+    {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72}
   ],
   "blocks": [
     {"type":"faq","name":"FAQ Frage","settings":[{"type":"text","id":"question","label":"Frage","default":"Kann der VENUS E mein Auto direkt laden?"},{"type":"richtext","id":"answer","label":"Antwort","default":"<p>Nein. Der VENUS E ist AC-gekoppelt an dein Hausnetz angeschlossen. Geladen wird dein Auto weiterhin über die Wallbox.</p>"}]}
