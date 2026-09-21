@@ -11,23 +11,77 @@
   "sections": {
     "e-auto-navigation": {
       "type": "e-auto-navigation",
-      "settings": {
-        "aria_label": "E-Auto Seitennavigation",
-        "anchor_id": "eauto-navigation",
-        "cta_label": "Passenden Speicher finden",
-        "cta_target": "#eauto-calculator"
-      },
       "blocks": {
-        "eauto-nav-start": { "type": "link", "settings": { "label": "Start", "target": "#eauto-start" } },
-        "eauto-nav-problem": { "type": "link", "settings": { "label": "Problem", "target": "#eauto-problem" } },
-        "eauto-nav-flow": { "type": "link", "settings": { "label": "Energiefluss", "target": "#eauto-flow" } },
-        "eauto-nav-day": { "type": "link", "settings": { "label": "Typischer Tag", "target": "#eauto-day" } },
-        "eauto-nav-profile": { "type": "link", "settings": { "label": "Fahrprofile", "target": "#eauto-profile" } },
-        "eauto-nav-calculator": { "type": "link", "settings": { "label": "Rechner", "target": "#eauto-calculator" } },
-        "eauto-nav-recommendations": { "type": "link", "settings": { "label": "Empfehlungen", "target": "#eauto-recommendations" } },
-        "eauto-nav-smart-energy": { "type": "link", "settings": { "label": "Smart Energy", "target": "#eauto-smart-energy" } },
-        "eauto-nav-installation": { "type": "link", "settings": { "label": "Installation", "target": "#eauto-installation" } },
-        "eauto-nav-faq": { "type": "link", "settings": { "label": "FAQ", "target": "#eauto-faq" } }
+        "eauto-nav-start": {
+          "type": "link",
+          "settings": {
+            "label": "Start",
+            "target": "#eauto-start"
+          }
+        },
+        "eauto-nav-problem": {
+          "type": "link",
+          "settings": {
+            "label": "Problem",
+            "target": "#eauto-problem"
+          }
+        },
+        "eauto-nav-flow": {
+          "type": "link",
+          "settings": {
+            "label": "Energiefluss",
+            "target": "#eauto-flow"
+          }
+        },
+        "eauto-nav-day": {
+          "type": "link",
+          "settings": {
+            "label": "Typischer Tag",
+            "target": "#eauto-day"
+          }
+        },
+        "eauto-nav-profile": {
+          "type": "link",
+          "settings": {
+            "label": "Fahrprofile",
+            "target": "#eauto-profile"
+          }
+        },
+        "eauto-nav-calculator": {
+          "type": "link",
+          "settings": {
+            "label": "Rechner",
+            "target": "#eauto-calculator"
+          }
+        },
+        "eauto-nav-recommendations": {
+          "type": "link",
+          "settings": {
+            "label": "Empfehlungen",
+            "target": "#eauto-recommendations"
+          }
+        },
+        "eauto-nav-smart-energy": {
+          "type": "link",
+          "settings": {
+            "label": "Smart Energy",
+            "target": "#eauto-smart-energy"
+          }
+        },
+        "eauto-nav-installation": {
+          "type": "link",
+          "settings": {
+            "label": "Installation",
+            "target": "#eauto-installation"
+          }
+        },
+        "eauto-nav-faq": {
+          "type": "link",
+          "settings": {
+            "label": "FAQ",
+            "target": "#eauto-faq"
+          }
+        }
       },
       "block_order": [
         "eauto-nav-start",
@@ -40,7 +94,13 @@
         "eauto-nav-smart-energy",
         "eauto-nav-installation",
         "eauto-nav-faq"
-      ]
+      ],
+      "settings": {
+        "aria_label": "E-Auto Seitennavigation",
+        "anchor_id": "eauto-navigation",
+        "cta_label": "Passenden Speicher finden",
+        "cta_target": "#eauto-calculator"
+      }
     },
     "e-auto-hero": {
       "type": "e-auto-hero",
@@ -91,8 +151,8 @@
             "heading": "Gespeicherten Solarstrom nutzen",
             "text": "Der VENUS E liefert Solarstrom an das Hausnetz und damit zur Wallbox. Das Netz ergänzt nur den Rest.",
             "badge": "→ Solarstrom im Auto"
-  }
-}
+          }
+        }
       },
       "block_order": [
         "timeline_morning",
@@ -202,7 +262,6 @@
           "type": "benefit",
           "settings": {
             "value": "bis 80",
-            "value_accent": "%*",
             "title": "Mehr Eigenverbrauch",
             "text": "Mehr Solarstrom bleibt im eigenen Haushalt und steht später für das Laden zur Verfügung."
           }
@@ -211,7 +270,6 @@
           "type": "benefit",
           "settings": {
             "value": "−30",
-            "value_accent": "%*",
             "title": "Weniger Netzbezug",
             "text": "Haushalt und E-Auto greifen seltener auf Netzstrom zurück, wenn gespeicherte Energie verfügbar ist."
           }
@@ -220,7 +278,6 @@
           "type": "benefit",
           "settings": {
             "value": "24",
-            "value_accent": "h",
             "title": "Solarstrom später nutzen",
             "text": "Tagsüber produziert, abends gefahren: Der Speicher verschiebt Solarstrom in den passenden Moment."
           }
@@ -231,9 +288,7 @@
         "benefit-grid",
         "benefit-time"
       ],
-      "settings": {
-        "benefits_note": "* Orientierungswerte, abhängig von Anlagengröße, Verbrauchsprofil und Speicherkapazität."
-      }
+      "settings": {}
     },
     "e-auto-trust": {
       "type": "e-auto-trust",
@@ -242,7 +297,6 @@
           "type": "trust",
           "settings": {
             "value": "10",
-            "value_label": "Jahre",
             "text": "Herstellergarantie gemäß den Bedingungen des gewählten VENUS E Modells."
           }
         },
@@ -250,7 +304,6 @@
           "type": "trust",
           "settings": {
             "value": "LiFePO₄",
-            "value_label": "",
             "text": "Phosphat-Zellchemie für eine langlebige und robuste Speicherlösung."
           }
         },
@@ -258,7 +311,6 @@
           "type": "trust",
           "settings": {
             "value": "6.000+",
-            "value_label": "Zyklen",
             "text": "Hohe Zyklenfestigkeit – gemacht für tägliches Speichern und Entladen."
           }
         }
