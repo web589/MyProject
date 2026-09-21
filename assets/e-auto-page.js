@@ -71,6 +71,7 @@
     pv: 'medium',
     chargeWindow: 'evening'
   };
+  var navigationObserver = null;
 
   function parseNumber(value, fallback) {
     var number = Number(value);
@@ -145,6 +146,104 @@
 
   function readPageMarker() {
     return document.querySelector('[data-eauto-page]') || document.documentElement;
+  }
+
+  function prefersReducedMotion() {
+    return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  function scrollToElement(element) {
+    if (!element) return;
+    element.scrollIntoView({
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      block: 'start'
+    });
+  }
+
+  function setActiveAnchor(links, targetId, navScroller) {
+    links.forEach(function (link) {
+      var active = link.getAttribute('href') === '#' + targetId;
+      link.classList.toggle('is-active', active);
+      if (active) {
+        link.setAttribute('aria-current', 'location');
+        if (navScroller && link.classList.contains('bw-anchor-nav__link')) {
+          var scrollerRect = navScroller.getBoundingClientRect();
+          var linkRect = link.getBoundingClientRect();
+          if (linkRect.left < scrollerRect.left) {
+            navScroller.scrollLeft -= scrollerRect.left - linkRect.left;
+          } else if (linkRect.right > scrollerRect.right) {
+            navScroller.scrollLeft += linkRect.right - scrollerRect.right;
+          }
+        }
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+  }
+
+  function bindAnchorLinks() {
+    document.querySelectorAll('[data-eauto-anchor-link]').forEach(function (link) {
+      if (link.dataset.eautoAnchorInitialized === 'true') return;
+      link.dataset.eautoAnchorInitialized = 'true';
+      link.addEventListener('click', function (event) {
+        var href = link.getAttribute('href');
+        if (!href || href.charAt(0) !== '#') return;
+        var target = document.getElementById(href.slice(1));
+        if (!target) return;
+        event.preventDefault();
+        scrollToElement(target);
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', href);
+        }
+        var nav = link.closest('[data-eauto-anchor-nav]');
+        var navLinks = nav
+          ? Array.prototype.slice.call(nav.querySelectorAll('[data-eauto-anchor-link]'))
+          : [link];
+        setActiveAnchor(navLinks, href.slice(1), link.closest('.bw-anchor-nav__inner'));
+      });
+    });
+  }
+
+  function refreshAnchorNavigation() {
+    if (navigationObserver) {
+      navigationObserver.disconnect();
+      navigationObserver = null;
+    }
+
+    var nav = document.querySelector('[data-eauto-anchor-nav]');
+    if (!nav) return;
+
+    var navScroller = nav.querySelector('.bw-anchor-nav__inner');
+    var links = Array.prototype.slice.call(nav.querySelectorAll('[data-eauto-anchor-link]'));
+    var targets = [];
+
+    links.forEach(function (link) {
+      var href = link.getAttribute('href');
+      var target = href && href.charAt(0) === '#' ? document.getElementById(href.slice(1)) : null;
+      var targetExists = Boolean(target && !target.hidden && target.getClientRects().length);
+      link.hidden = !targetExists;
+
+      if (!targetExists) {
+        link.classList.remove('is-active');
+        link.removeAttribute('aria-current');
+        return;
+      }
+
+      if (!targets.includes(target)) targets.push(target);
+    });
+
+    if (!('IntersectionObserver' in window) || !targets.length) return;
+
+    navigationObserver = new IntersectionObserver(function (entries) {
+      var visibleEntries = entries.filter(function (entry) { return entry.isIntersecting; });
+      if (!visibleEntries.length) return;
+      visibleEntries.sort(function (a, b) {
+        return Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top);
+      });
+      setActiveAnchor(links, visibleEntries[0].target.id, navScroller);
+    }, { rootMargin: '-25% 0px -65% 0px', threshold: 0 });
+
+    targets.forEach(function (target) { navigationObserver.observe(target); });
   }
 
   function familyOrderFor(result) {
@@ -418,6 +517,8 @@
     var state = window.__eAutoState || Object.assign({}, DEFAULT_STATE);
     var products = readProductData(root);
     window.__eAutoState = state;
+    bindAnchorLinks();
+    refreshAnchorNavigation();
     bindOptions(root, state, products);
     bindFlow(root);
     bindProfiles(root);

@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  var navigationObserver = null;
+
   function setFlowState(root, state) {
     var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-ac-flow-toggle]'));
     var panels = Array.prototype.slice.call(root.querySelectorAll('[data-ac-flow-panel]'));
@@ -30,6 +32,78 @@
     var marker = question.querySelector('span');
     if (marker) marker.textContent = open ? '–' : '+';
     answer.hidden = !open;
+  }
+
+  function setupAnchorNavigation() {
+    if (navigationObserver) {
+      navigationObserver.disconnect();
+      navigationObserver = null;
+    }
+
+    var nav = document.querySelector('[data-ac-storage-anchor-nav]');
+    if (!nav) return;
+
+    var navScroller = nav.querySelector('.ac-storage-anchor-nav__links');
+    var links = Array.prototype.slice.call(nav.querySelectorAll('[data-ac-anchor-link]'));
+    var targets = [];
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function revealActiveLink(link) {
+      if (!navScroller || !link || link.classList.contains('ac-storage-anchor-nav__cta')) return;
+      var scrollerRect = navScroller.getBoundingClientRect();
+      var linkRect = link.getBoundingClientRect();
+      if (linkRect.left < scrollerRect.left) {
+        navScroller.scrollLeft -= scrollerRect.left - linkRect.left;
+      } else if (linkRect.right > scrollerRect.right) {
+        navScroller.scrollLeft += linkRect.right - scrollerRect.right;
+      }
+    }
+
+    links.forEach(function (link) {
+      var href = link.getAttribute('href');
+      var targetId = href && href.charAt(0) === '#' ? href.slice(1) : '';
+      var target = targetId ? document.getElementById(targetId) : null;
+
+      link.hidden = !target || target.hidden;
+      if (link.hidden) {
+        link.classList.remove('is-active');
+        link.removeAttribute('aria-current');
+      }
+      if (target && !target.hidden && !targets.includes(target)) targets.push(target);
+
+      if (link.dataset.acAnchorInitialized === 'true') return;
+      link.dataset.acAnchorInitialized = 'true';
+      link.addEventListener('click', function (event) {
+        if (!target || target.hidden) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', href);
+        }
+      });
+    });
+
+    if (!('IntersectionObserver' in window) || !targets.length) return;
+    navigationObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var activeId = entry.target.id;
+        links.forEach(function (link) {
+          var active = link.getAttribute('href') === '#' + activeId;
+          link.classList.toggle('is-active', active);
+          if (active) {
+            link.setAttribute('aria-current', 'location');
+            revealActiveLink(link);
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      });
+    }, { rootMargin: '-20% 0px -65% 0px', threshold: 0 });
+
+    targets.forEach(function (target) {
+      navigationObserver.observe(target);
+    });
   }
 
   function init(root) {
@@ -70,6 +144,7 @@
 
   function boot() {
     document.querySelectorAll('[data-ac-storage-page]').forEach(init);
+    setupAnchorNavigation();
   }
 
   if (window.__acStoragePageInstalled) {
