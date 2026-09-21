@@ -145,8 +145,10 @@
   }
 
   #shopify-section-{{ section.id }} .faq-page-header__nav {
-    width: 100%;
+    width: min(1640px, calc(100vw - 40px));
     margin: 0 0 48px;
+    margin-left: 50%;
+    transform: translateX(-50%);
     overflow-x: auto;
     overscroll-behavior-inline: contain;
     scrollbar-width: none;
@@ -160,10 +162,11 @@
   #shopify-section-{{ section.id }} .faq-page-header__nav-list {
     display: flex;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: space-between;
     gap: 8px;
+    max-width: 1280px;
     min-width: min-content;
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     list-style: none;
   }
@@ -182,6 +185,7 @@
     font-size: 13px;
     font-weight: 600;
     line-height: 1.25;
+    white-space: nowrap;
     text-decoration: none;
     transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
   }
@@ -202,7 +206,7 @@
 
   @media only screen and (min-width: 769px) and (max-width: 1120px) {
     #shopify-section-{{ section.id }} .faq-page-header__nav-list {
-      justify-content: flex-start;
+      justify-content: space-between;
       gap: 6px;
     }
 
@@ -256,10 +260,12 @@
 
     #shopify-section-{{ section.id }} .faq-page-header__nav {
       width: calc(100% + 40px);
+      margin-left: -20px;
       margin-right: -20px;
       margin-bottom: 40px;
       padding: 0 20px 6px;
       box-sizing: border-box;
+      transform: none;
     }
 
     #shopify-section-{{ section.id }} .faq-page-header__nav-list {
@@ -444,7 +450,7 @@
 {% schema %}
 {
   "name": "FAQ page header",
-  "class": "index-section",
+  "class": "index-section--flush",
   "settings": [
     {
       "type": "image_picker",

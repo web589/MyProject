@@ -1,6 +1,6 @@
 {%- assign page_id = 'ai-energy-hero-' | append: section.id -%}
 
-<div class="ai-energy-page" data-ai-energy-page>
+<div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-hero-image-height: {{ section.settings.hero_image_height | default: 480 }}px; --ai-hero-image-width: {{ section.settings.hero_image_width | default: 100 }}%;">
   <section class="ai-energy__section ai-energy__hero" aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container ai-energy__hero-grid">
       <div class="ai-energy__hero-copy">
@@ -31,7 +31,19 @@
     {"type":"text","id":"heading_highlight","label":"Titel Hervorhebung","default":"intelligent nutzen"},
     {"type":"textarea","id":"subtext","label":"Untertitel","default":"VENUS E verbindet Energieerzeugung, Verbrauch und Speicher zu einem intelligenten System. So kannst du deinen Eigenverbrauch erhöhen und Solarstrom gezielter nutzen."},
     {"type":"image_picker","id":"hero_image","label":"Hero Bild"},
-    {"type":"text","id":"hero_alt","label":"Hero Bild Alt-Text","default":"VENUS E Solarspeicher mit Photovoltaikanlage und Smart Energy System"}
+    {"type":"text","id":"hero_alt","label":"Hero Bild Alt-Text","default":"VENUS E Solarspeicher mit Photovoltaikanlage und Smart Energy System"},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Kicker und Label Größe","min":9,"max":18,"step":1,"unit":"px","default":11},
+    {"type":"range","id":"item_heading_size","label":"Elementüberschrift Größe","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"Elementtext Größe","min":10,"max":20,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":36,"max":72,"step":1,"unit":"px","default":70},
+    {"type":"range","id":"body_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":17},
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80},
+    {"type":"range","id":"hero_image_height","label":"Hero Bildhöhe","min":320,"max":620,"step":10,"unit":"px","default":480},
+    {"type":"range","id":"hero_image_width","label":"Hero Bildbreite","min":40,"max":100,"step":1,"unit":"%","default":100}
   ],
   "blocks":[{"type":"button","name":"Hero Button","settings":[
     {"type":"text","id":"label","label":"Text","default":"Smart Energy entdecken"},

@@ -1,6 +1,6 @@
 {%- assign page_id = 'ai-energy-function-' | append: section.id -%}
 
-<div class="ai-energy-page" data-ai-energy-page>
+<div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-function-image-height: {{ section.settings.function_image_height | default: 340 }}px; --ai-function-image-width: {{ section.settings.function_image_width | default: 100 }}%;">
   <section id="funktion" class="ai-energy__section ai-energy__function" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
@@ -65,7 +65,19 @@
     {"type":"text","id":"function_app_alt","label":"App Bild Alt-Text","default":"VENUS E App mit Energiefluss und Speicherstatus"},
     {"type":"textarea","id":"note","label":"Abschlusstext","default":"Der Kreislauf läuft dauerhaft: Neue Messwerte führen zu neuen Entscheidungen. So entsteht Schritt für Schritt ein System, das deinen Haushalt und deine Erzeugung besser aufeinander abstimmt."},
     {"type":"text","id":"note_link_label","label":"Abschlusslink Text","default":"Welche Datenbasis dafür nötig ist →"},
-    {"type":"url","id":"note_link_url","label":"Abschlusslink URL"}
+    {"type":"url","id":"note_link_url","label":"Abschlusslink URL"},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Kicker und Label Größe","min":9,"max":18,"step":1,"unit":"px","default":11},
+    {"type":"range","id":"item_heading_size","label":"Elementüberschrift Größe","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"Elementtext Größe","min":10,"max":20,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":52},
+    {"type":"range","id":"body_size","label":"Textgröße","min":12,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80},
+    {"type":"range","id":"function_image_height","label":"Funktionsbilder Höhe","min":220,"max":520,"step":10,"unit":"px","default":340},
+    {"type":"range","id":"function_image_width","label":"Funktionsbilder Breite","min":40,"max":100,"step":1,"unit":"%","default":100}
   ],
   "blocks":[
     {"type":"data","name":"Datenkarte","settings":[

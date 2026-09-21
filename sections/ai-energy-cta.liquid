@@ -1,6 +1,6 @@
 {%- assign page_id = 'ai-energy-cta-' | append: section.id -%}
 
-<div class="ai-energy-page" data-ai-energy-page>
+<div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %}">
   <section class="ai-energy__section ai-energy__guides" aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <div class="ai-energy__final-cta">
@@ -30,7 +30,17 @@
     {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Nächster Schritt"},
     {"type":"text","id":"heading_before","label":"Titel Hauptsatz","default":"Nutze deinen Solarstrom intelligenter"},
     {"type":"text","id":"heading_highlight","label":"Titel Hervorhebung"},
-    {"type":"textarea","id":"subtext","label":"Untertitel","default":"Ob Einstieg oder Ausbau: Wenn du Erzeugung, Verbrauch und Speicher als ein System betrachtest, holst du mehr aus deinem Solarstrom heraus."}
+    {"type":"textarea","id":"subtext","label":"Untertitel","default":"Ob Einstieg oder Ausbau: Wenn du Erzeugung, Verbrauch und Speicher als ein System betrachtest, holst du mehr aus deinem Solarstrom heraus."},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Kicker und Label Größe","min":9,"max":18,"step":1,"unit":"px","default":11},
+    {"type":"range","id":"item_heading_size","label":"Elementüberschrift Größe","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"Elementtext Größe","min":10,"max":20,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":48},
+    {"type":"range","id":"body_size","label":"Textgröße","min":12,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "blocks":[{"type":"button","name":"Button","settings":[
     {"type":"text","id":"label","label":"Button Text","default":"VENUS E Modelle ansehen"},

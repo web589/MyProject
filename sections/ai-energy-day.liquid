@@ -1,7 +1,7 @@
 {%- assign page_id = 'ai-energy-day-' | append: section.id -%}
 {%- assign eauto_url = '/pages/e-auto' -%}
 
-<div class="ai-energy-page" data-ai-energy-page>
+<div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-day-image-height: {{ section.settings.day_image_height | default: 330 }}px; --ai-day-image-width: {{ section.settings.day_image_width | default: 100 }}%;">
   <section id="alltag" class="ai-energy__section ai-energy__day" data-ai-anchor aria-labelledby="{{ page_id }}-heading" data-ai-tabs>
     <div class="ai-energy__container">
       <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
@@ -45,7 +45,19 @@
     {"type":"textarea","id":"subtext","label":"Untertitel","default":"Was bedeutet das konkret über den Tag verteilt? Vier typische Situationen – und was das System daraus macht."},
     {"type":"text","id":"timeline_label","label":"Tab-Navigation Label","default":"Tageszeiten"},
     {"type":"text","id":"cta_label","label":"CTA Text","default":"Mehr zum Thema E-Auto laden mit Speicher →"},
-    {"type":"url","id":"cta_url","label":"CTA Link"}
+    {"type":"url","id":"cta_url","label":"CTA Link"},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Kicker und Label Größe","min":9,"max":18,"step":1,"unit":"px","default":11},
+    {"type":"range","id":"item_heading_size","label":"Elementüberschrift Größe","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"Elementtext Größe","min":10,"max":20,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
+    {"type":"header","content":"Layout und Größen"},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":52},
+    {"type":"range","id":"body_size","label":"Textgröße","min":12,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80},
+    {"type":"range","id":"day_image_height","label":"Szenenbild Höhe","min":240,"max":520,"step":10,"unit":"px","default":330},
+    {"type":"range","id":"day_image_width","label":"Szenenbild Breite","min":40,"max":100,"step":1,"unit":"%","default":100}
   ],
   "blocks":[{"type":"scenario","name":"Alltagsszenario","settings":[
     {"type":"text","id":"time_label","label":"Zeit Label","default":"06–10 UHR"},
