@@ -71,7 +71,8 @@
     pv: 'medium',
     chargeWindow: 'evening'
   };
-  var navigationObserver = null;
+  var navigationScrollHandler = null;
+  var navigationResizeHandler = null;
 
   function parseNumber(value, fallback) {
     var number = Number(value);
@@ -222,9 +223,13 @@
   }
 
   function refreshAnchorNavigation() {
-    if (navigationObserver) {
-      navigationObserver.disconnect();
-      navigationObserver = null;
+    if (navigationScrollHandler) {
+      window.removeEventListener('scroll', navigationScrollHandler);
+      navigationScrollHandler = null;
+    }
+    if (navigationResizeHandler) {
+      window.removeEventListener('resize', navigationResizeHandler);
+      navigationResizeHandler = null;
     }
 
     var nav = document.querySelector('[data-eauto-anchor-nav]');
@@ -249,18 +254,35 @@
       if (!targets.includes(target)) targets.push(target);
     });
 
-    if (!('IntersectionObserver' in window) || !targets.length) return;
+    if (!targets.length) return;
 
-    navigationObserver = new IntersectionObserver(function (entries) {
-      var visibleEntries = entries.filter(function (entry) { return entry.isIntersecting; });
-      if (!visibleEntries.length) return;
-      visibleEntries.sort(function (a, b) {
-        return Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top);
+    var scheduled = false;
+    function updateActiveAnchor() {
+      scheduled = false;
+
+      var navBottom = nav.getBoundingClientRect().bottom;
+      var activationLine = Math.max(0, navBottom) + 36;
+      var activeTarget = targets[0];
+
+      targets.forEach(function (target) {
+        if (target.getBoundingClientRect().top <= activationLine) activeTarget = target;
       });
-      setActiveAnchor(links, visibleEntries[0].target.id, navScroller);
-    }, { rootMargin: '-25% 0px -65% 0px', threshold: 0 });
 
-    targets.forEach(function (target) { navigationObserver.observe(target); });
+      setActiveAnchor(links, activeTarget.id, navScroller);
+    }
+
+    function scheduleActiveAnchorUpdate() {
+      if (scheduled) return;
+      scheduled = true;
+      if (window.requestAnimationFrame) window.requestAnimationFrame(updateActiveAnchor);
+      else window.setTimeout(updateActiveAnchor, 0);
+    }
+
+    navigationScrollHandler = scheduleActiveAnchorUpdate;
+    navigationResizeHandler = scheduleActiveAnchorUpdate;
+    window.addEventListener('scroll', navigationScrollHandler, { passive: true });
+    window.addEventListener('resize', navigationResizeHandler);
+    updateActiveAnchor();
   }
 
   function familyOrderFor(result) {

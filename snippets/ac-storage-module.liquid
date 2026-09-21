@@ -253,7 +253,7 @@
                 {% endif %}
               {% endfor %}
             </div>
-            <a class="ac-storage-page__link" href="{{ smart_link_url }}">{{ section.settings.link_label }}</a>
+            <a class="ac-storage-page__link ac-storage-page__link--button" href="{{ smart_link_url }}">{{ section.settings.link_label }}</a>
           </div>
           <div class="ac-storage-page__smart-visuals">
             <div class="ac-storage-page__media ac-storage-page__media--smart-main">
@@ -397,12 +397,15 @@
     <section id="ratgeber" class="ac-storage-page ac-storage-page__section ac-storage-page__blog" data-ac-storage-page style="{{ ac_storage_style }}" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
-        <h2>{{ section.settings.heading }}</h2>
+        {% assign blog_heading_words = section.settings.heading | split: ' ' %}
+        {% assign blog_heading_accent = blog_heading_words | last %}
+        {% assign blog_heading_before_accent = section.settings.heading | remove_last: blog_heading_accent | strip %}
+        <h2>{{ blog_heading_before_accent }}{% if blog_heading_before_accent != blank %} {% endif %}<span>{{ blog_heading_accent }}</span></h2>
         <div class="ac-storage-page__blog-grid">
           {% for block in section.blocks %}
             {% if block.type == 'article' %}
               {% assign article_url = block.settings.url | default: blog_url %}
-              <article class="ac-storage-page__blog-card" style="--ac-card-title-size: {{ block.settings.title_size | default: 17 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-image-height: {{ block.settings.image_height | default: 170 }}px;" {{ block.shopify_attributes }}>
+              <article class="ac-storage-page__blog-card" style="--ac-card-title-size: {{ block.settings.title_size | default: 17 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-image-height: {{ block.settings.image_height | default: 140 }}px;" {{ block.shopify_attributes }}>
                 <a class="ac-storage-page__media ac-storage-page__media--blog" href="{{ article_url }}">
                   {% if block.settings.image != blank %}
                     {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '420, 640, 900', sizes: '(min-width: 1000px) 33vw, 100vw', alt: block.settings.alt }}
@@ -420,7 +423,7 @@
             {% endif %}
           {% endfor %}
         </div>
-        <a class="ac-storage-page__link" href="{{ section.settings.blog_url | default: blog_url }}">{{ section.settings.blog_link_label }}</a>
+        <a class="ac-storage-page__link ac-storage-page__blog-cta" href="{{ section.settings.blog_url | default: blog_url }}">{{ section.settings.blog_link_label }}</a>
       </div>
     </section>
 
