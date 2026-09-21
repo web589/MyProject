@@ -1,22 +1,43 @@
-{%- liquid
-  assign page_id = 'ai-energy-cta-' | append: section.id
-  assign smart_meter_url = '/products/ct002-smart-meter'
-  assign storage_url = '/pages/balkonkraftwerk-mit-speicher'
--%}
+{%- assign page_id = 'ai-energy-cta-' | append: section.id -%}
 
 <div class="ai-energy-page" data-ai-energy-page>
   <section class="ai-energy__section ai-energy__guides" aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <div class="ai-energy__final-cta">
-        <p class="ai-energy__eyebrow">Nächster Schritt</p>
-        <h2 id="{{ page_id }}-heading">Nutze deinen Solarstrom intelligenter</h2>
-        <p>Ob Einstieg oder Ausbau: Wenn du Erzeugung, Verbrauch und Speicher als ein System betrachtest, holst du mehr aus deinem Solarstrom heraus.</p>
-        <div class="ai-energy__actions"><a class="ai-energy__button ai-energy__button--primary" href="#modelle">VENUS E Modelle ansehen</a><a class="ai-energy__button ai-energy__button--secondary" href="{{ smart_meter_url }}">Smart Meter entdecken</a><a class="ai-energy__text-link" href="{{ storage_url }}">Balkonkraftwerk mit Speicher →</a></div>
+        <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span>{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+        <p>{{ section.settings.subtext }}</p>
+        <div class="ai-energy__actions">
+          {% for block in section.blocks %}
+            {% if block.settings.style == 'link' %}
+              <a class="ai-energy__text-link" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+            {% else %}
+              <a class="ai-energy__button ai-energy__button--{{ block.settings.style }}" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   </section>
 </div>
 
 {% schema %}
-{"name":"AI Energie – CTA","tag":"section","class":"section-ai-energy-cta","settings":[]}
+{
+  "name":"AI Energie – CTA",
+  "tag":"section",
+  "class":"section-ai-energy-cta",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Nächster Schritt"},
+    {"type":"text","id":"heading_before","label":"Titel Hauptsatz","default":"Nutze deinen Solarstrom intelligenter"},
+    {"type":"text","id":"heading_highlight","label":"Titel Hervorhebung"},
+    {"type":"textarea","id":"subtext","label":"Untertitel","default":"Ob Einstieg oder Ausbau: Wenn du Erzeugung, Verbrauch und Speicher als ein System betrachtest, holst du mehr aus deinem Solarstrom heraus."}
+  ],
+  "blocks":[{"type":"button","name":"Button","settings":[
+    {"type":"text","id":"label","label":"Button Text","default":"VENUS E Modelle ansehen"},
+    {"type":"url","id":"url","label":"Button Link"},
+    {"type":"select","id":"style","label":"Button Stil","options":[{"value":"primary","label":"Primär"},{"value":"secondary","label":"Sekundär"},{"value":"link","label":"Textlink"}],"default":"primary"}
+  ]}],
+  "max_blocks":4,
+  "presets":[{"name":"AI Energie – CTA","blocks":[{"type":"button"},{"type":"button"},{"type":"button"}]}]
+}
 {% endschema %}

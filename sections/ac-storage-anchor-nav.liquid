@@ -15,7 +15,7 @@
     <div class="ac-storage-anchor-nav__links" role="list">
       {% for block in section.blocks %}
         {% assign link_target = block.settings.target | remove_first: '#' | handle %}
-        {% if block.settings.label != blank and link_target != blank %}
+        {% if block.settings.label != blank and link_target != blank and block.type == 'link' %}
           <a
             class="ac-storage-anchor-nav__link"
             href="#{{ link_target }}"
@@ -28,16 +28,19 @@
       {% endfor %}
     </div>
 
-    {% assign cta_target = section.settings.cta_target | remove_first: '#' | handle %}
-    {% if section.settings.cta_label != blank and cta_target != blank %}
-      <a
-        class="ac-storage-anchor-nav__cta"
-        href="#{{ cta_target }}"
-        data-ac-anchor-link
-      >
-        {{ section.settings.cta_label | escape }}
-      </a>
-    {% endif %}
+    {% for block in section.blocks %}
+      {% assign cta_target = block.settings.target | remove_first: '#' | handle %}
+      {% if block.type == 'cta' and block.settings.label != blank and cta_target != blank %}
+        <a
+          class="ac-storage-anchor-nav__cta"
+          href="#{{ cta_target }}"
+          data-ac-anchor-link
+          {{ block.shopify_attributes }}
+        >
+          {{ block.settings.label | escape }}
+        </a>
+      {% endif %}
+    {% endfor %}
   </div>
 </nav>
 
@@ -59,23 +62,6 @@
       "label": "Anker-ID der Navigation",
       "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
       "default": "ac-storage-navigation"
-    },
-    {
-      "type": "header",
-      "content": "Hervorgehobener Button"
-    },
-    {
-      "type": "text",
-      "id": "cta_label",
-      "label": "Beschriftung",
-      "default": "Modelle ansehen"
-    },
-    {
-      "type": "text",
-      "id": "cta_target",
-      "label": "Sprungziel",
-      "info": "Anker-ID mit oder ohne # eingeben.",
-      "default": "#modelle"
     }
   ],
   "blocks": [
@@ -97,6 +83,25 @@
           "default": "#definition"
         }
       ]
+    },
+    {
+      "type": "cta",
+      "name": "Hervorgehobener Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Beschriftung",
+          "default": "Modelle ansehen"
+        },
+        {
+          "type": "text",
+          "id": "target",
+          "label": "Sprungziel",
+          "info": "Anker-ID mit oder ohne # eingeben.",
+          "default": "#modelle"
+        }
+      ]
     }
   ],
   "max_blocks": 12,
@@ -112,7 +117,8 @@
         { "type": "link", "settings": { "label": "Zielgruppen", "target": "#zielgruppen" } },
         { "type": "link", "settings": { "label": "Modelle", "target": "#modelle" } },
         { "type": "link", "settings": { "label": "FAQ", "target": "#faq" } },
-        { "type": "link", "settings": { "label": "Ratgeber", "target": "#ratgeber" } }
+        { "type": "link", "settings": { "label": "Ratgeber", "target": "#ratgeber" } },
+        { "type": "cta", "settings": { "label": "Modelle ansehen", "target": "#modelle" } }
       ]
     }
   ]

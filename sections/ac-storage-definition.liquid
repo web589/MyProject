@@ -10,14 +10,19 @@
     {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Definition"},
     {"type":"text","id":"heading","label":"Überschrift","default":"Was ist ein AC-gekoppelter Speicher?"},
     {"type":"text","id":"answer_label","label":"Antwort-Label","default":"Kurz gesagt:"},
-    {"type":"textarea","id":"answer","label":"Kurzantwort","default":"Ein AC-gekoppelter Speicher wird nicht direkt auf der DC-Seite der Solarmodule eingebunden, sondern über das Hausnetz integriert. Dadurch eignet er sich besonders für die Nachrüstung in bestehenden Haushalten und PV-Setups."},
-    {"type":"text","id":"feature_1_title","label":"Vorteil 1 Titel","default":"Einfach nachrüstbar"},
-    {"type":"textarea","id":"feature_1_body","label":"Vorteil 1 Text","default":"Ideal, wenn du bereits ein Balkonkraftwerk oder eine bestehende PV-Lösung nutzt und später einen Speicher ergänzen möchtest."},
-    {"type":"text","id":"feature_2_title","label":"Vorteil 2 Titel","default":"Flexibel im Haushalt einsetzbar"},
-    {"type":"textarea","id":"feature_2_body","label":"Vorteil 2 Text","default":"Der gespeicherte Strom steht dort zur Verfügung, wo dein Haushalt ihn braucht – zum Beispiel abends, nachts oder bei höherem Verbrauch."},
-    {"type":"text","id":"feature_3_title","label":"Vorteil 3 Titel","default":"Mehr Eigenverbrauch im Alltag"},
-    {"type":"textarea","id":"feature_3_body","label":"Vorteil 3 Text","default":"Überschüssiger Solarstrom kann zeitversetzt genutzt werden, wenn dein Haushalt ihn wirklich braucht."}
+    {"type":"textarea","id":"answer","label":"Kurzantwort","default":"Ein AC-gekoppelter Speicher wird nicht direkt auf der DC-Seite der Solarmodule eingebunden, sondern über das Hausnetz integriert. Dadurch eignet er sich besonders für die Nachrüstung in bestehenden Haushalten und PV-Setups."}
   ],
-  "presets":[{"name":"02 Definition"}]
-}
+  "blocks": [
+    {
+      "type":"feature",
+      "name":"Vorteilskarte",
+      "settings":[
+        {"type":"text","id":"title","label":"Titel","default":"Vorteil"},
+        {"type":"textarea","id":"body","label":"Text","default":"Beschreibung des Vorteils."}
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets":[{"name":"02 Definition","blocks":[{"type":"feature","settings":{"title":"Einfach nachrüstbar","body":"Ideal, wenn du bereits ein Balkonkraftwerk oder eine bestehende PV-Lösung nutzt und später einen Speicher ergänzen möchtest."}},{"type":"feature","settings":{"title":"Flexibel im Haushalt einsetzbar","body":"Der gespeicherte Strom steht dort zur Verfügung, wo dein Haushalt ihn braucht – zum Beispiel abends, nachts oder bei höherem Verbrauch."}},{"type":"feature","settings":{"title":"Mehr Eigenverbrauch im Alltag","body":"Überschüssiger Solarstrom kann zeitversetzt genutzt werden, wenn dein Haushalt ihn wirklich braucht."}}]}
+]}
 {% endschema %}

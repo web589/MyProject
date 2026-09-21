@@ -12,9 +12,11 @@
 
   function bindTabs(root) {
     root.querySelectorAll('[data-ai-tabs]').forEach(function (tabRoot) {
-      if (tabRoot.dataset.aiTabsBound === 'true') return;
-      tabRoot.dataset.aiTabsBound = 'true';
-      tabRoot.querySelectorAll('[data-ai-tab]').forEach(function (button) {
+      var tabs = Array.prototype.slice.call(tabRoot.querySelectorAll('[data-ai-tab]'));
+      if (!tabs.length) return;
+      tabs.forEach(function (button) {
+        if (button.dataset.aiTabBound === 'true') return;
+        button.dataset.aiTabBound = 'true';
         button.addEventListener('click', function () {
           var value = button.dataset.aiTab;
           tabRoot.querySelectorAll('[data-ai-tab]').forEach(function (tab) {
@@ -37,6 +39,20 @@
           tabs[nextIndex].focus();
           tabs[nextIndex].click();
         });
+      });
+      tabRoot.dataset.aiTabsBound = 'true';
+
+      var activeTab = tabs.find(function (tab) { return tab.getAttribute('aria-selected') === 'true'; }) || tabs[0];
+      var activeValue = activeTab.dataset.aiTab;
+      tabs.forEach(function (tab) {
+        var active = tab === activeTab;
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        tab.tabIndex = active ? 0 : -1;
+      });
+      tabRoot.querySelectorAll('[data-ai-panel]').forEach(function (panel) {
+        var active = panel.dataset.aiPanel === activeValue;
+        panel.hidden = !active;
+        panel.classList.toggle('is-active', active);
       });
     });
   }

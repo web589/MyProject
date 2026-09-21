@@ -78,13 +78,13 @@
     return Number.isFinite(number) ? number : fallback;
   }
 
-  function formatCapacity(value) {
+  function formatCapacity(value, unit) {
     var number = parseNumber(value, 0);
-    return (number % 1 ? number.toFixed(2) : number.toFixed(0)).replace('.', ',') + ' kWh';
+    return (number % 1 ? number.toFixed(2) : number.toFixed(0)).replace('.', ',') + ' ' + (unit || 'kWh');
   }
 
-  function formatRange(lower, upper) {
-    return String(lower).replace('.', ',') + '–' + String(upper).replace('.', ',') + ' kWh';
+  function formatRange(lower, upper, unit) {
+    return String(lower).replace('.', ',') + '–' + String(upper).replace('.', ',') + ' ' + (unit || 'kWh');
   }
 
   function formatMoney(cents) {
@@ -146,6 +146,22 @@
 
   function readPageMarker() {
     return document.querySelector('[data-eauto-page]') || document.documentElement;
+  }
+
+  function readCalculatorSettings(root) {
+    var calculator = root.querySelector('[data-eauto-calculator]');
+    return calculator ? calculator.dataset : {};
+  }
+
+  function readDataValue(dataset, key, fallback) {
+    return Object.prototype.hasOwnProperty.call(dataset, key) ? dataset[key] : fallback;
+  }
+
+  function interpolateTemplate(template, values) {
+    var allowedTokens = /\{\{\s*(product_title|product_capacity|range|lower|upper|unit)\s*\}\}/g;
+    return String(template || '').replace(allowedTokens, function (match, token) {
+      return values[token] === undefined || values[token] === null ? '' : String(values[token]);
+    });
   }
 
   function prefersReducedMotion() {
@@ -349,7 +365,7 @@
     if (node) node.textContent = value;
   }
 
-  function renderCard(root, index, item, copy) {
+  function renderCard(root, index, item, copy, unit) {
     var card = root.querySelector('[data-eauto-card="' + index + '"]');
     if (!card) return;
 
@@ -363,7 +379,7 @@
 
     setText(card, '[data-eauto-card-title]', title);
     setText(card, '[data-eauto-card-variant]', item.variant ? item.variant.title : copy.variantUnavailableLabel);
-    setText(card, '[data-eauto-card-capacity]', formatCapacity(item.capacity));
+    setText(card, '[data-eauto-card-capacity]', formatCapacity(item.capacity, unit));
     setText(card, '[data-eauto-card-price]', item.variant ? formatMoney(item.variant.price) : '—');
 
     var availability = item.preorder
@@ -407,26 +423,44 @@
     var recommendations = selectRecommendations(result, products);
     var primary = recommendations[0];
     var pageMarker = readPageMarker();
+    var calculatorSettings = readCalculatorSettings(root);
+    var unit = calculatorSettings.eautoCapacityUnit || 'kWh';
+    var range = formatRange(result.lower, result.upper, unit);
     var copy = {
-      availableLabel: pageMarker.dataset.eautoAvailableLabel || 'Verfügbar',
-      unavailableLabel: pageMarker.dataset.eautoUnavailableLabel || 'Derzeit nicht verfügbar',
-      preorderLabel: pageMarker.dataset.eautoPreorderLabel || 'Demnächst verfügbar',
-      variantUnavailableLabel: pageMarker.dataset.eautoVariantUnavailableLabel || 'Variante nicht gefunden',
-      primaryLabel: pageMarker.dataset.eautoPrimaryLabel || 'EMPFOHLENE KONFIGURATION',
-      alternativeLabel: pageMarker.dataset.eautoAlternativeLabel || 'ALTERNATIVE KONFIGURATION'
+      availableLabel: readDataValue(pageMarker.dataset, 'eautoAvailableLabel', 'Verfügbar'),
+      unavailableLabel: readDataValue(pageMarker.dataset, 'eautoUnavailableLabel', 'Derzeit nicht verfügbar'),
+      preorderLabel: readDataValue(pageMarker.dataset, 'eautoPreorderLabel', 'Demnächst verfügbar'),
+      variantUnavailableLabel: readDataValue(pageMarker.dataset, 'eautoVariantUnavailableLabel', 'Variante nicht gefunden'),
+      primaryLabel: readDataValue(pageMarker.dataset, 'eautoPrimaryLabel', 'EMPFOHLENE KONFIGURATION'),
+      alternativeLabel: readDataValue(pageMarker.dataset, 'eautoAlternativeLabel', 'ALTERNATIVE KONFIGURATION'),
+      summaryTemplate: readDataValue(pageMarker.dataset, 'eautoSummaryTemplate', 'Kapazitätsbereich: {{range}}. Preise und Verfügbarkeit werden direkt aus Shopify geladen.')
+    };
+    var templateValues = {
+      product_title: primary ? primary.title : '',
+      product_capacity: primary ? formatCapacity(primary.capacity, unit) : '',
+      range: range,
+      lower: String(result.lower).replace('.', ','),
+      upper: String(result.upper).replace('.', ','),
+      unit: unit
     };
 
-    setText(root, '[data-eauto-result-range]', formatRange(result.lower, result.upper));
-    setText(root, '[data-eauto-recommendations-summary]', 'Kapazitätsbereich: ' + formatRange(result.lower, result.upper) + '. Preise und Verfügbarkeit werden direkt aus Shopify geladen.');
+    setText(root, '[data-eauto-result-range]', range);
+    setText(root, '[data-eauto-recommendations-summary]', interpolateTemplate(copy.summaryTemplate, templateValues));
 
     if (primary) {
-      setText(root, '[data-eauto-result-model]', 'Passt zu ' + primary.title);
-      setText(root, '[data-eauto-result-copy]', 'Mit deiner Auswahl liegt der sinnvolle Orientierungsbereich bei ' + formatRange(result.lower, result.upper) + '.');
+      setText(root, '[data-eauto-result-model]', interpolateTemplate(
+        readDataValue(calculatorSettings, 'eautoResultModelTemplate', 'Passt zu {{product_title}}'),
+        templateValues
+      ));
+      setText(root, '[data-eauto-result-copy]', interpolateTemplate(
+        readDataValue(calculatorSettings, 'eautoResultCopyTemplate', 'Mit deiner Auswahl liegt der sinnvolle Orientierungsbereich bei {{range}}.'),
+        templateValues
+      ));
     }
 
     for (var index = 0; index < 3; index += 1) {
       var item = recommendations[index] || buildCandidate('mini', PRODUCT_CONFIG.mini.capacities[0], products);
-      renderCard(root, index, item, copy);
+      renderCard(root, index, item, copy, unit);
     }
   }
 

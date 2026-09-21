@@ -6,17 +6,18 @@
 <div class="ai-energy-page" data-ai-energy-page>
   <section id="ratgeber" class="ai-energy__section ai-energy__guides" aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
-      <p class="ai-energy__eyebrow">Mehr erfahren</p>
-      <h2 id="{{ page_id }}-heading">Ratgeber & <span>Energie-Wissen</span></h2>
+      <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>
+      {% if section.settings.subtext != blank %}<p class="ai-energy__subtext">{{ section.settings.subtext }}</p>{% endif %}
       <div class="ai-energy__guide-grid">
         {% for block in section.blocks %}
           <article class="ai-energy__guide-card" {{ block.shopify_attributes }}>
-            <a class="ai-energy__guide-media" href="{{ block.settings.url | default: blog_url }}">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 33vw, 100vw', alt: block.settings.title }}{% endif %}</a>
-            <div class="ai-energy__guide-copy"><p class="ai-energy__tag">{{ block.settings.tag }}</p><h3>{{ block.settings.title }}</h3><p>{{ block.settings.excerpt }}</p><a class="ai-energy__text-link" href="{{ block.settings.url | default: blog_url }}">Weiterlesen →</a></div>
+            <a class="ai-energy__guide-media" href="{{ block.settings.url | default: blog_url }}">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 33vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}{% endif %}</a>
+            <div class="ai-energy__guide-copy"><p class="ai-energy__tag">{{ block.settings.tag }}</p><h3>{{ block.settings.title }}</h3><p>{{ block.settings.excerpt }}</p><a class="ai-energy__text-link" href="{{ block.settings.url | default: blog_url }}">{{ block.settings.link_label }}</a></div>
           </article>
         {% endfor %}
       </div>
-      <a class="ai-energy__button ai-energy__button--secondary ai-energy__center-cta" href="{{ blog_url }}">Alle Ratgeber ansehen →</a>
+      {% if section.settings.cta_label != blank %}<a class="ai-energy__button ai-energy__button--{{ section.settings.cta_style }} ai-energy__center-cta" href="{{ section.settings.cta_url | default: blog_url }}">{{ section.settings.cta_label }}</a>{% endif %}
     </div>
   </section>
 </div>
@@ -26,8 +27,24 @@
   "name":"AI Energie – Ratgeber",
   "tag":"section",
   "class":"section-ai-energy-guides",
-  "settings":[],
-  "blocks":[{"type":"guide","name":"Ratgeber Karte","settings":[{"type":"text","id":"tag","label":"Tag","default":"RATGEBER"},{"type":"text","id":"title","label":"Titel"},{"type":"textarea","id":"excerpt","label":"Kurztext"},{"type":"image_picker","id":"image","label":"Bild"},{"type":"url","id":"url","label":"Link"}]}],
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Mehr erfahren"},
+    {"type":"text","id":"heading_before","label":"Titel Hauptsatz","default":"Ratgeber &"},
+    {"type":"text","id":"heading_highlight","label":"Titel Hervorhebung","default":"Energie-Wissen"},
+    {"type":"textarea","id":"subtext","label":"Untertitel","default":"Praktische Antworten und Hintergrundwissen für deinen nächsten Schritt."},
+    {"type":"text","id":"cta_label","label":"CTA Text","default":"Alle Ratgeber ansehen →"},
+    {"type":"url","id":"cta_url","label":"CTA Link"},
+    {"type":"select","id":"cta_style","label":"CTA Stil","options":[{"value":"primary","label":"Primär"},{"value":"secondary","label":"Sekundär"}],"default":"secondary"}
+  ],
+  "blocks":[{"type":"guide","name":"Ratgeber Karte","settings":[
+    {"type":"text","id":"tag","label":"Tag","default":"RATGEBER"},
+    {"type":"text","id":"title","label":"Titel"},
+    {"type":"textarea","id":"excerpt","label":"Kurztext"},
+    {"type":"image_picker","id":"image","label":"Bild"},
+    {"type":"text","id":"image_alt","label":"Bild Alt-Text"},
+    {"type":"url","id":"url","label":"Link"},
+    {"type":"text","id":"link_label","label":"卡片链接文字","default":"Weiterlesen →"}
+  ]}],
   "max_blocks":12,
   "presets":[{"name":"AI Energie – Ratgeber","blocks":[{"type":"guide"},{"type":"guide"},{"type":"guide"}]}]
 }

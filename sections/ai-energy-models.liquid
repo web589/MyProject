@@ -1,30 +1,29 @@
-{%- liquid
-  assign page_id = 'ai-energy-models-' | append: section.id
-  assign models_compare_url = '/pages/venus-e-vergleich'
-  assign default_products = 'venus-e-mini|venus-e-3|venus-e-4|venus-e-max' | split: '|'
--%}
+{%- assign page_id = 'ai-energy-models-' | append: section.id -%}
+{%- assign models_compare_url = '/pages/venus-e-vergleich' -%}
 
 <div class="ai-energy-page" data-ai-energy-page>
   <section id="modelle" class="ai-energy__section ai-energy__models" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
-      <p class="ai-energy__eyebrow">Lösungen</p>
-      <h2 id="{{ page_id }}-heading">Welche VENUS E Lösung passt zu deinem <span>Energiebedarf?</span></h2>
-      <p class="ai-energy__subtext">Die Entscheidung hängt weniger von technischen Details ab als von deinem Alltag: Wie viel Energie verbrauchst du, wann brauchst du sie, und wie willst du weiter ausbauen?</p>
+      <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>
+      <p class="ai-energy__subtext">{{ section.settings.subtext }}</p>
       <div class="ai-energy__model-grid">
-        {% for index in (1..4) %}
-          {% assign product_key = 'model_' | append: index | append: '_product' %}
-          {% assign product = section.settings[product_key] %}
-          {% if product == blank %}{% assign product = all_products[default_products[forloop.index0]] %}{% endif %}
-          {% assign title_key = 'model_' | append: index | append: '_title' %}
-          {% assign tag_key = 'model_' | append: index | append: '_tag' %}
-          {% assign text_key = 'model_' | append: index | append: '_text' %}
-          <article class="ai-energy__model-card">
-            <a class="ai-energy__model-media" href="{{ product.url | default: '#' }}">{% if product.featured_image != blank %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 25vw, 100vw', alt: product.title }}{% endif %}</a>
-            <div class="ai-energy__model-copy"><p class="ai-energy__tag">{{ section.settings[tag_key] }}</p><h3>{{ section.settings[title_key] | default: product.title }}</h3><p>{{ section.settings[text_key] }}</p><a class="ai-energy__text-link" href="{{ product.url | default: '#' }}">{{ section.settings[title_key] | default: product.title }} ansehen →</a></div>
+        {% for block in section.blocks %}
+          {% assign product = block.settings.product %}
+          <article class="ai-energy__model-card" {{ block.shopify_attributes }}>
+            <a class="ai-energy__model-media" href="{{ block.settings.product_url | default: product.url | default: '#' }}">
+              {% if product.featured_image != blank %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 25vw, 100vw', alt: product.title }}{% elsif block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 25vw, 100vw', alt: block.settings.title }}{% endif %}
+            </a>
+            <div class="ai-energy__model-copy">
+              <p class="ai-energy__tag">{{ block.settings.tag }}</p>
+              <h3>{{ block.settings.title | default: product.title }}</h3>
+              <p>{{ block.settings.text }}</p>
+              <a class="ai-energy__text-link" href="{{ block.settings.product_url | default: product.url | default: '#' }}">{{ block.settings.title | default: product.title }} ansehen →</a>
+            </div>
           </article>
         {% endfor %}
       </div>
-      <a class="ai-energy__button ai-energy__button--secondary ai-energy__center-cta" href="{{ models_compare_url }}">Alle Modelle im Vergleich →</a>
+      {% if section.settings.cta_label != blank %}<a class="ai-energy__button ai-energy__button--{{ section.settings.cta_style }} ai-energy__center-cta" href="{{ section.settings.cta_url | default: models_compare_url }}">{{ section.settings.cta_label }}</a>{% endif %}
     </div>
   </section>
 </div>
@@ -35,22 +34,23 @@
   "tag":"section",
   "class":"section-ai-energy-models",
   "settings":[
-    {"type":"product","id":"model_1_product","label":"Modell 1"},
-    {"type":"text","id":"model_1_tag","label":"Modell 1 Tag","default":"KOMPAKTE LÖSUNG"},
-    {"type":"text","id":"model_1_title","label":"Modell 1 Titel","default":"VENUS E Mini"},
-    {"type":"textarea","id":"model_1_text","label":"Modell 1 Text","default":"Für kleinere Haushalte und einfache Energieoptimierung."},
-    {"type":"product","id":"model_2_product","label":"Modell 2"},
-    {"type":"text","id":"model_2_tag","label":"Modell 2 Tag","default":"ALLTAG & EIGENVERBRAUCH"},
-    {"type":"text","id":"model_2_title","label":"Modell 2 Titel","default":"VENUS E 3.0"},
-    {"type":"textarea","id":"model_2_text","label":"Modell 2 Text","default":"Für Haushalte, die ihren Solarstrom im Alltag flexibler nutzen möchten."},
-    {"type":"product","id":"model_3_product","label":"Modell 3"},
-    {"type":"text","id":"model_3_tag","label":"Modell 3 Tag","default":"MEHR SPEICHERBEDARF"},
-    {"type":"text","id":"model_3_title","label":"Modell 3 Titel","default":"VENUS E 4.0"},
-    {"type":"textarea","id":"model_3_text","label":"Modell 3 Text","default":"Für mehr Speicherreserve bei höherem Energiebedarf."},
-    {"type":"product","id":"model_4_product","label":"Modell 4"},
-    {"type":"text","id":"model_4_tag","label":"Modell 4 Tag","default":"GROSSER ENERGIEBEDARF"},
-    {"type":"text","id":"model_4_title","label":"Modell 4 Titel","default":"VENUS E Max"},
-    {"type":"textarea","id":"model_4_text","label":"Modell 4 Text","default":"Für große Haushalte und umfangreiche Energieanforderungen."}
-  ]
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Lösungen"},
+    {"type":"text","id":"heading_before","label":"Titel Hauptsatz","default":"Welche VENUS E Lösung passt zu deinem"},
+    {"type":"text","id":"heading_highlight","label":"Titel Hervorhebung","default":"Energiebedarf?"},
+    {"type":"textarea","id":"subtext","label":"Untertitel","default":"Die Entscheidung hängt weniger von technischen Details ab als von deinem Alltag: Wie viel Energie verbrauchst du, wann brauchst du sie, und wie willst du weiter ausbauen?"},
+    {"type":"text","id":"cta_label","label":"CTA Text","default":"Alle Modelle im Vergleich →"},
+    {"type":"url","id":"cta_url","label":"CTA Link"},
+    {"type":"select","id":"cta_style","label":"CTA Stil","options":[{"value":"primary","label":"Primär"},{"value":"secondary","label":"Sekundär"}],"default":"secondary"}
+  ],
+  "blocks":[{"type":"model","name":"Modellkarte","settings":[
+    {"type":"product","id":"product","label":"Produkt"},
+    {"type":"image_picker","id":"image","label":"Alternatives Bild"},
+    {"type":"url","id":"product_url","label":"Produktlink (optional)"},
+    {"type":"text","id":"tag","label":"Tag","default":"KOMPAKTE LÖSUNG"},
+    {"type":"text","id":"title","label":"Titel","default":"VENUS E Mini"},
+    {"type":"textarea","id":"text","label":"Beschreibung","default":"Für kleinere Haushalte und einfache Energieoptimierung."}
+  ]}],
+  "max_blocks":8,
+  "presets":[{"name":"AI Energie – Modelle","blocks":[{"type":"model"},{"type":"model"},{"type":"model"},{"type":"model"}]}]
 }
 {% endschema %}

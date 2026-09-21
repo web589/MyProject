@@ -4,24 +4,26 @@
 <div class="ai-energy-page" data-ai-energy-page>
   <section id="smartmeter" class="ai-energy__section ai-energy__smartmeter" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
-      <p class="ai-energy__eyebrow">Datenbasis</p>
-      <h2 id="{{ page_id }}-heading">Smart Meter: Die Grundlage für <span>intelligente Steuerung</span></h2>
+      <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>
       <div class="ai-energy__smart-grid">
         <div class="ai-energy__smart-media">
-          <div class="ai-energy__media ai-energy__media--meter">{% if section.settings.smart_meter_image != blank %}{{ section.settings.smart_meter_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 42vw, 100vw', alt: 'MARSTEK Smart Meter im Verteilerkasten' }}{% endif %}</div>
+          <div class="ai-energy__media ai-energy__media--meter">
+            {% if section.settings.smart_meter_image != blank %}{{ section.settings.smart_meter_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 42vw, 100vw', alt: section.settings.smart_meter_alt }}{% endif %}
+          </div>
           <div class="ai-energy__smart-thumbs">
-            <div class="ai-energy__media">{% if section.settings.ct002_image != blank %}{{ section.settings.ct002_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: 'MARSTEK CT002 Smart Meter' }}{% endif %}</div>
-            <div class="ai-energy__media">{% if section.settings.ct003_image != blank %}{{ section.settings.ct003_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: 'MARSTEK CT003 P1 Smart Meter' }}{% endif %}</div>
+            <div class="ai-energy__media">{% if section.settings.ct002_image != blank %}{{ section.settings.ct002_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: section.settings.ct002_alt }}{% endif %}</div>
+            <div class="ai-energy__media">{% if section.settings.ct003_image != blank %}{{ section.settings.ct003_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: section.settings.ct003_alt }}{% endif %}</div>
           </div>
         </div>
         <div class="ai-energy__smart-copy">
-          <p>Ohne aktuelle Energiedaten kann ein Speicher nur reagieren. Mit Smart Meter erkennt VENUS E, was im Haushalt passiert, und kann Energieflüsse gezielter steuern.</p>
+          <p>{{ section.settings.subtext }}</p>
           <div class="ai-energy__smart-points">
-            <article><strong>01</strong><div><h3>Verbrauch messen</h3><p>Der Smart Meter erfasst, wie viel Energie dein Haushalt aktuell nutzt – und wann diese Nachfrage entsteht.</p></div></article>
-            <article><strong>02</strong><div><h3>Energiefluss erkennen</h3><p>Erzeugung, Verbrauch und Speicher werden nicht getrennt betrachtet, sondern im Zusammenhang: Wo geht Energie hin, wo fehlt sie gerade?</p></div></article>
-            <article><strong>03</strong><div><h3>Speicher intelligent nutzen</h3><p>Auf Basis dieser Messwerte kann das System Laden und Entladen besser an deinen tatsächlichen Bedarf anpassen.</p></div></article>
+            {% for block in section.blocks %}
+              <article {{ block.shopify_attributes }}><strong>{{ block.settings.number }}</strong><div><h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p></div></article>
+            {% endfor %}
           </div>
-          <a class="ai-energy__button ai-energy__button--primary" href="{{ smart_meter_url }}">Mehr über Smart Meter erfahren →</a>
+          {% if section.settings.cta_label != blank %}<a class="ai-energy__button ai-energy__button--{{ section.settings.cta_style }}" href="{{ section.settings.cta_url | default: smart_meter_url }}">{{ section.settings.cta_label }}</a>{% endif %}
         </div>
       </div>
     </div>
@@ -34,9 +36,26 @@
   "tag":"section",
   "class":"section-ai-energy-smartmeter",
   "settings":[
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Datenbasis"},
+    {"type":"text","id":"heading_before","label":"Titel Hauptsatz","default":"Smart Meter: Die Grundlage für"},
+    {"type":"text","id":"heading_highlight","label":"Titel Hervorhebung","default":"intelligente Steuerung"},
+    {"type":"textarea","id":"subtext","label":"Untertitel","default":"Ohne aktuelle Energiedaten kann ein Speicher nur reagieren. Mit Smart Meter erkennt VENUS E, was im Haushalt passiert, und kann Energieflüsse gezielter steuern."},
     {"type":"image_picker","id":"smart_meter_image","label":"Smart Meter Hauptbild"},
+    {"type":"text","id":"smart_meter_alt","label":"Hauptbild Alt-Text","default":"MARSTEK Smart Meter im Verteilerkasten"},
     {"type":"image_picker","id":"ct002_image","label":"CT002 Bild"},
-    {"type":"image_picker","id":"ct003_image","label":"CT003 Bild"}
-  ]
+    {"type":"text","id":"ct002_alt","label":"CT002 Alt-Text","default":"MARSTEK CT002 Smart Meter"},
+    {"type":"image_picker","id":"ct003_image","label":"CT003 Bild"},
+    {"type":"text","id":"ct003_alt","label":"CT003 Alt-Text","default":"MARSTEK CT003 P1 Smart Meter"},
+    {"type":"text","id":"cta_label","label":"CTA Text","default":"Mehr über Smart Meter erfahren →"},
+    {"type":"url","id":"cta_url","label":"CTA Link"},
+    {"type":"select","id":"cta_style","label":"CTA Stil","options":[{"value":"primary","label":"Primär"},{"value":"secondary","label":"Sekundär"}],"default":"primary"}
+  ],
+  "blocks":[{"type":"point","name":"Datenpunkt","settings":[
+    {"type":"text","id":"number","label":"Nummer","default":"01"},
+    {"type":"text","id":"title","label":"Titel","default":"Verbrauch messen"},
+    {"type":"textarea","id":"text","label":"Beschreibung","default":"Der Smart Meter erfasst, wie viel Energie dein Haushalt aktuell nutzt – und wann diese Nachfrage entsteht."}
+  ]}],
+  "max_blocks":8,
+  "presets":[{"name":"AI Energie – Smart Meter","blocks":[{"type":"point"},{"type":"point"},{"type":"point"}]}]
 }
 {% endschema %}

@@ -3,29 +3,48 @@
 <div class="ai-energy-page" data-ai-energy-page>
   <section id="funktion" class="ai-energy__section ai-energy__function" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
-      <p class="ai-energy__eyebrow">Funktionsweise</p>
-      <h2 id="{{ page_id }}-heading">So arbeitet intelligentes <span>Energiemanagement</span></h2>
-      <p class="ai-energy__subtext">Drei Schritte, die sich laufend wiederholen: Daten erfassen, Situation bewerten, Energie gezielt steuern. Entscheidend ist nicht ein einzelner Schritt, sondern der Kreislauf dazwischen.</p>
+      <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>
+      <p class="ai-energy__subtext">{{ section.settings.subtext }}</p>
       <div class="ai-energy__data-grid">
-        <article><p>PV-ERZEUGUNG</p><h3>Solarstrom erkannt</h3><small>Aktuelle Erzeugung wird berücksichtigt</small><span class="ai-energy__sparkline" aria-hidden="true"></span></article>
-        <article><p>VERBRAUCH IM HAUSHALT</p><h3>Verbrauch erkannt</h3><small>Energiebedarf im Haushalt wird erfasst</small><span class="ai-energy__sparkline ai-energy__sparkline--two" aria-hidden="true"></span></article>
-        <article><p>SPEICHERSTAND</p><h3>Speicherstatus berücksichtigt</h3><small>Lade- und Entladefenster</small><span class="ai-energy__sparkline ai-energy__sparkline--three" aria-hidden="true"></span></article>
-        <article><p>NETZBEZUG / EINSPEISUNG</p><h3>Netzfluss erkannt</h3><small>Bezug und Abgabe getrennt</small><span class="ai-energy__sparkline ai-energy__sparkline--four" aria-hidden="true"></span></article>
+        {% for block in section.blocks %}
+          {% if block.type == 'data' %}
+            <article {{ block.shopify_attributes }}>
+              <p>{{ block.settings.label }}</p>
+              <h3>{{ block.settings.title }}</h3>
+              <small>{{ block.settings.description }}</small>
+              <span class="ai-energy__sparkline{% unless block.settings.curve_style == 'one' %} ai-energy__sparkline--{{ block.settings.curve_style }}{% endunless %}" aria-hidden="true"></span>
+            </article>
+          {% endif %}
+        {% endfor %}
       </div>
       <div class="ai-energy__steps">
-        <article><p class="ai-energy__tag">SCHRITT 01</p><h3>Erfassen</h3><p class="ai-energy__tag">DATENINPUT</p><ul><li>PV-Erzeugung</li><li>Verbrauch im Haushalt</li><li>Speicherstatus</li><li>Netzbezug</li></ul></article>
-        <article><p class="ai-energy__tag">SCHRITT 02</p><h3>Bewerten</h3><p class="ai-energy__tag">SYSTEMPRÜFUNG</p><ul><li>Ist gerade Überschuss vorhanden?</li><li>Soll Energie gespeichert werden?</li><li>Wird jetzt Energie benötigt?</li></ul></article>
-        <article><p class="ai-energy__tag">SCHRITT 03</p><h3>Steuern</h3><p class="ai-energy__tag">ERGEBNIS</p><ul><li>Speicher laden</li><li>Speicher entladen</li><li>Energiefluss anpassen</li></ul></article>
+        {% for block in section.blocks %}
+          {% if block.type == 'step' %}
+            {% assign step_items = block.settings.items | newline_to_br | split: '<br />' %}
+            <article {{ block.shopify_attributes }}>
+              <p class="ai-energy__tag">{{ block.settings.step_label }}</p>
+              <h3>{{ block.settings.title }}</h3>
+              <p class="ai-energy__tag">{{ block.settings.data_label }}</p>
+              <ul>
+                {% for item in step_items %}{% if item != blank %}<li>{{ item | strip }}</li>{% endif %}{% endfor %}
+              </ul>
+            </article>
+          {% endif %}
+        {% endfor %}
       </div>
       <div class="ai-energy__function-visuals">
         <div class="ai-energy__visual ai-energy__visual--home">
-          {% if section.settings.function_home_image != blank %}{{ section.settings.function_home_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 960px) 55vw, 100vw', alt: 'Photovoltaikanlage, VENUS E Speicher und Smart Meter im Haushalt' }}{% endif %}
+          {% if section.settings.function_home_image != blank %}{{ section.settings.function_home_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 960px) 55vw, 100vw', alt: section.settings.function_home_alt }}{% endif %}
         </div>
         <div class="ai-energy__visual ai-energy__visual--app">
-          {% if section.settings.function_app_image != blank %}{{ section.settings.function_app_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 960px) 45vw, 100vw', alt: 'VENUS E App mit Energiefluss und Speicherstatus' }}{% endif %}
+          {% if section.settings.function_app_image != blank %}{{ section.settings.function_app_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 960px) 45vw, 100vw', alt: section.settings.function_app_alt }}{% endif %}
         </div>
       </div>
-      <div class="ai-energy__function-note"><p>Der Kreislauf läuft dauerhaft: Neue Messwerte führen zu neuen Entscheidungen. So entsteht Schritt für Schritt ein System, das deinen Haushalt und deine Erzeugung besser aufeinander abstimmt.</p><a href="#smartmeter">Welche Datenbasis dafür nötig ist →</a></div>
+      <div class="ai-energy__function-note">
+        <p>{{ section.settings.note }}</p>
+        {% if section.settings.note_link_label != blank %}<a href="{{ section.settings.note_link_url | default: '#smartmeter' }}">{{ section.settings.note_link_label }}</a>{% endif %}
+      </div>
     </div>
   </section>
 </div>
@@ -36,8 +55,33 @@
   "tag":"section",
   "class":"section-ai-energy-function",
   "settings":[
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Funktionsweise"},
+    {"type":"text","id":"heading_before","label":"Titel Hauptsatz","default":"So arbeitet intelligentes"},
+    {"type":"text","id":"heading_highlight","label":"Titel Hervorhebung","default":"Energiemanagement"},
+    {"type":"textarea","id":"subtext","label":"Untertitel","default":"Drei Schritte, die sich laufend wiederholen: Daten erfassen, Situation bewerten, Energie gezielt steuern. Entscheidend ist nicht ein einzelner Schritt, sondern der Kreislauf dazwischen."},
     {"type":"image_picker","id":"function_home_image","label":"Funktionsweise Haushalt Bild"},
-    {"type":"image_picker","id":"function_app_image","label":"Funktionsweise App Bild"}
-  ]
+    {"type":"text","id":"function_home_alt","label":"Haushalt Bild Alt-Text","default":"Photovoltaikanlage, VENUS E Speicher und Smart Meter im Haushalt"},
+    {"type":"image_picker","id":"function_app_image","label":"Funktionsweise App Bild"},
+    {"type":"text","id":"function_app_alt","label":"App Bild Alt-Text","default":"VENUS E App mit Energiefluss und Speicherstatus"},
+    {"type":"textarea","id":"note","label":"Abschlusstext","default":"Der Kreislauf läuft dauerhaft: Neue Messwerte führen zu neuen Entscheidungen. So entsteht Schritt für Schritt ein System, das deinen Haushalt und deine Erzeugung besser aufeinander abstimmt."},
+    {"type":"text","id":"note_link_label","label":"Abschlusslink Text","default":"Welche Datenbasis dafür nötig ist →"},
+    {"type":"url","id":"note_link_url","label":"Abschlusslink URL"}
+  ],
+  "blocks":[
+    {"type":"data","name":"Datenkarte","settings":[
+      {"type":"text","id":"label","label":"Label","default":"PV-ERZEUGUNG"},
+      {"type":"text","id":"title","label":"Titel","default":"Solarstrom erkannt"},
+      {"type":"text","id":"description","label":"Beschreibung","default":"Aktuelle Erzeugung wird berücksichtigt"},
+      {"type":"select","id":"curve_style","label":"Kurvenstil","options":[{"value":"one","label":"Kurve 1"},{"value":"two","label":"Kurve 2"},{"value":"three","label":"Kurve 3"},{"value":"four","label":"Kurve 4"}],"default":"one"}
+    ]},
+    {"type":"step","name":"Schritt","settings":[
+      {"type":"text","id":"step_label","label":"Schritt Label","default":"SCHRITT 01"},
+      {"type":"text","id":"title","label":"Titel","default":"Erfassen"},
+      {"type":"text","id":"data_label","label":"Daten Label","default":"DATENINPUT"},
+      {"type":"textarea","id":"items","label":"Listenpunkte","default":"PV-Erzeugung\nVerbrauch im Haushalt\nSpeicherstatus\nNetzbezug"}
+    ]}
+  ],
+  "max_blocks":12,
+  "presets":[{"name":"AI Energie – Funktion","blocks":[{"type":"data"},{"type":"data"},{"type":"data"},{"type":"data"},{"type":"step"},{"type":"step"},{"type":"step"}]}]
 }
 {% endschema %}

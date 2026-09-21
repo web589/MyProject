@@ -1,4 +1,4 @@
-{%- comment -%} AC storage editor section: comparison {%- endcomment -%}
+{%- comment -%} AC storage editor section: AC vs DC comparison {%- endcomment -%}
 {% render 'ac-storage-module', module: 'comparison', section: section %}
 
 {% schema %}
@@ -13,25 +13,22 @@
     {"type":"text","id":"table_feature_heading","label":"Tabellenkopf Merkmal","default":"Merkmal"},
     {"type":"text","id":"table_ac_heading","label":"Tabellenkopf AC","default":"AC-gekoppelt"},
     {"type":"text","id":"table_dc_heading","label":"Tabellenkopf DC","default":"DC-gekoppelt"},
-    {"type":"text","id":"row_1_label","label":"Zeile 1 Merkmal","default":"Typischer Einsatz"},
-    {"type":"textarea","id":"row_1_ac","label":"Zeile 1 AC","default":"Nachrüstung und schrittweise Erweiterung"},
-    {"type":"textarea","id":"row_1_dc","label":"Zeile 1 DC","default":"Neue PV-Planung von Anfang an"},
-    {"type":"text","id":"row_2_label","label":"Zeile 2 Merkmal","default":"Integration"},
-    {"type":"textarea","id":"row_2_ac","label":"Zeile 2 AC","default":"Über das Hausnetz"},
-    {"type":"textarea","id":"row_2_dc","label":"Zeile 2 DC","default":"Direkt auf der DC-Seite der PV-Anlage"},
-    {"type":"text","id":"row_3_label","label":"Zeile 3 Merkmal","default":"Eignung für bestehende Systeme"},
-    {"type":"textarea","id":"row_3_ac","label":"Zeile 3 AC","default":"Besonders interessant für Nachrüstung"},
-    {"type":"textarea","id":"row_3_dc","label":"Zeile 3 DC","default":"Häufig bei neuer PV-Planung integriert"},
-    {"type":"text","id":"row_4_label","label":"Zeile 4 Merkmal","default":"Flexibilität"},
-    {"type":"textarea","id":"row_4_ac","label":"Zeile 4 AC","default":"Hohe Flexibilität bei Standort und Erweiterung"},
-    {"type":"textarea","id":"row_4_dc","label":"Zeile 4 DC","default":"Flexibilität abhängig von der Systemplanung"},
-    {"type":"text","id":"row_5_label","label":"Zeile 5 Merkmal","default":"Fokus"},
-    {"type":"textarea","id":"row_5_ac","label":"Zeile 5 AC","default":"Bestehendes System einfacher ergänzen"},
-    {"type":"textarea","id":"row_5_dc","label":"Zeile 5 DC","default":"Von Anfang an im Gesamtsystem mitplanen"},
     {"type":"textarea","id":"note","label":"Hinweis unter der Tabelle","default":"Wenn du bereits eine PV-Lösung nutzt oder schrittweise erweitern möchtest, ist ein AC-gekoppelter Speicher oft der naheliegendere Weg."},
     {"type":"text","id":"link_label","label":"Weiterführender Link","default":"Mehr zu AC vs. DC Speicher →"},
     {"type":"url","id":"link_url","label":"Weiterführender Link Ziel"}
   ],
-  "presets":[{"name":"05 AC oder DC"}]
-}
+  "blocks": [
+    {
+      "type":"row",
+      "name":"Vergleichszeile",
+      "settings":[
+        {"type":"text","id":"label","label":"Merkmal","default":"Merkmal"},
+        {"type":"textarea","id":"ac","label":"AC-gekoppelt","default":"AC-Inhalt"},
+        {"type":"textarea","id":"dc","label":"DC-gekoppelt","default":"DC-Inhalt"}
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets":[{"name":"05 AC oder DC","blocks":[{"type":"row","settings":{"label":"Typischer Einsatz","ac":"Nachrüstung und schrittweise Erweiterung","dc":"Neue PV-Planung von Anfang an"}},{"type":"row","settings":{"label":"Integration","ac":"Über das Hausnetz","dc":"Direkt auf der DC-Seite der PV-Anlage"}},{"type":"row","settings":{"label":"Eignung für bestehende Systeme","ac":"Besonders interessant für Nachrüstung","dc":"Häufig bei neuer PV-Planung integriert"}},{"type":"row","settings":{"label":"Flexibilität","ac":"Hohe Flexibilität bei Standort und Erweiterung","dc":"Flexibilität abhängig von der Systemplanung"}},{"type":"row","settings":{"label":"Fokus","ac":"Bestehendes System einfacher ergänzen","dc":"Von Anfang an im Gesamtsystem mitplanen"}}]}
+]}
 {% endschema %}

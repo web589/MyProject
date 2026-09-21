@@ -1,10 +1,6 @@
 /*
  * ------------------------------------------------------------
  * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
 {
@@ -12,241 +8,138 @@
     "ai_navigation": {
       "type": "bw-storage-navigation",
       "blocks": {
-        "nav_function": {
-          "type": "link",
-          "settings": {
-            "label": "Funktionsweise",
-            "target": "#funktion"
-          }
-        },
-        "nav_meter": {
-          "type": "link",
-          "settings": {
-            "label": "Smart Meter",
-            "target": "#smartmeter"
-          }
-        },
-        "nav_compare": {
-          "type": "link",
-          "settings": {
-            "label": "Vergleich",
-            "target": "#vergleich"
-          }
-        },
-        "nav_day": {
-          "type": "link",
-          "settings": {
-            "label": "Im Alltag",
-            "target": "#alltag"
-          }
-        },
-        "nav_system": {
-          "type": "link",
-          "settings": {
-            "label": "System",
-            "target": "#system"
-          }
-        },
-        "nav_models": {
-          "type": "link",
-          "settings": {
-            "label": "Modelle",
-            "target": "#modelle"
-          }
-        },
-        "nav_faq": {
-          "type": "link",
-          "settings": {
-            "label": "FAQ",
-            "target": "#faq"
-          }
-        }
+        "nav_function": {"type":"link","settings":{"label":"Funktionsweise","target":"#funktion"}},
+        "nav_meter": {"type":"link","settings":{"label":"Smart Meter","target":"#smartmeter"}},
+        "nav_compare": {"type":"link","settings":{"label":"Vergleich","target":"#vergleich"}},
+        "nav_day": {"type":"link","settings":{"label":"Im Alltag","target":"#alltag"}},
+        "nav_system": {"type":"link","settings":{"label":"System","target":"#system"}},
+        "nav_models": {"type":"link","settings":{"label":"Modelle","target":"#modelle"}},
+        "nav_faq": {"type":"link","settings":{"label":"FAQ","target":"#faq"}}
       },
-      "block_order": [
-        "nav_function",
-        "nav_meter",
-        "nav_compare",
-        "nav_day",
-        "nav_system",
-        "nav_models",
-        "nav_faq"
-      ],
-      "settings": {
-        "aria_label": "Navigation zum AI-Energiemanagement",
-        "anchor_id": "navigation",
-        "cta_label": "Modelle ansehen",
-        "cta_target": "#modelle"
-      }
+      "block_order":["nav_function","nav_meter","nav_compare","nav_day","nav_system","nav_models","nav_faq"],
+      "settings":{"aria_label":"Navigation zum AI-Energiemanagement","anchor_id":"navigation","cta_label":"Modelle ansehen","cta_target":"#modelle"}
     },
     "ai_hero": {
-      "type": "ai-energy-hero",
-      "settings": {
-        "hero_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png"
-      }
+      "type":"ai-energy-hero",
+      "blocks": {
+        "hero_button_1":{"type":"button","settings":{"label":"Smart Energy entdecken","url":"#funktion","style":"primary"}},
+        "hero_button_2":{"type":"button","settings":{"label":"VENUS E Modelle ansehen","url":"#modelle","style":"secondary"}}
+      },
+      "block_order":["hero_button_1","hero_button_2"],
+      "settings":{"eyebrow":"Technologie · Smart Energy","heading_before":"AI-Energiemanagement: Solarstrom","heading_highlight":"intelligent nutzen","subtext":"VENUS E verbindet Energieerzeugung, Verbrauch und Speicher zu einem intelligenten System. So kannst du deinen Eigenverbrauch erhöhen und Solarstrom gezielter nutzen.","hero_image":"shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png","hero_alt":"VENUS E Solarspeicher mit Photovoltaikanlage und Smart Energy System"}
     },
     "ai_definition": {
-      "type": "ai-energy-definition",
-      "settings": {}
+      "type":"ai-energy-definition",
+      "blocks": {
+        "feature_1":{"type":"feature","settings":{"icon":"◉","label":"01 · ENERGIE ERKENNEN","title":"Energieflüsse verstehen","text":"Smart Meter und Systemdaten zeigen, wann Energie erzeugt, verbraucht oder gespeichert wird."}},
+        "feature_2":{"type":"feature","settings":{"icon":"✓","label":"02 · ENERGIE ANALYSIEREN","title":"Verbrauchsmuster erkennen","text":"Das System berücksichtigt typische Verbrauchssituationen im Haushalt."}},
+        "feature_3":{"type":"feature","settings":{"icon":"▶","label":"03 · ENERGIE OPTIMIEREN","title":"Solarstrom gezielter nutzen","text":"Solarstrom wird gezielter genutzt, wenn er im Haushalt benötigt wird."}}
+      },
+      "block_order":["feature_1","feature_2","feature_3"],
+      "settings":{"eyebrow":"Definition","heading_before":"Was bedeutet intelligentes","heading_highlight":"Energiemanagement?","answer_label":"Kurz gesagt:","answer":"AI-Energiemanagement beschreibt ein intelligentes System, das Energieflüsse im Haushalt erkennt, analysiert und die Nutzung von Solarstrom optimiert.","subtext":"Es geht dabei nicht um automatisch Geld verdienen, sondern um etwas Nüchternes: die Energie, die dein Haushalt selbst erzeugt, möglichst gut im eigenen Alltag zu nutzen."}
     },
     "ai_function": {
-      "type": "ai-energy-function",
-      "settings": {
-        "function_home_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png",
-        "function_app_image": "shopify://shop_images/elecway-smart-solar-app.webp"
-      }
+      "type":"ai-energy-function",
+      "blocks": {
+        "data_pv":{"type":"data","settings":{"label":"PV-ERZEUGUNG","title":"Solarstrom erkannt","description":"Aktuelle Erzeugung wird berücksichtigt","curve_style":"one"}},
+        "data_load":{"type":"data","settings":{"label":"VERBRAUCH IM HAUSHALT","title":"Verbrauch erkannt","description":"Energiebedarf im Haushalt wird erfasst","curve_style":"two"}},
+        "data_storage":{"type":"data","settings":{"label":"SPEICHERSTAND","title":"Speicherstatus berücksichtigt","description":"Lade- und Entladefenster","curve_style":"three"}},
+        "data_grid":{"type":"data","settings":{"label":"NETZBEZUG / EINSPEISUNG","title":"Netzfluss erkannt","description":"Bezug und Abgabe getrennt","curve_style":"four"}},
+        "step_capture":{"type":"step","settings":{"step_label":"SCHRITT 01","title":"Erfassen","data_label":"DATENINPUT","items":"PV-Erzeugung\nVerbrauch im Haushalt\nSpeicherstatus\nNetzbezug"}},
+        "step_evaluate":{"type":"step","settings":{"step_label":"SCHRITT 02","title":"Bewerten","data_label":"SYSTEMPRÜFUNG","items":"Ist gerade Überschuss vorhanden?\nSoll Energie gespeichert werden?\nWird jetzt Energie benötigt?"}},
+        "step_control":{"type":"step","settings":{"step_label":"SCHRITT 03","title":"Steuern","data_label":"ERGEBNIS","items":"Speicher laden\nSpeicher entladen\nEnergiefluss anpassen"}}
+      },
+      "block_order":["data_pv","data_load","data_storage","data_grid","step_capture","step_evaluate","step_control"],
+      "settings":{"eyebrow":"Funktionsweise","heading_before":"So arbeitet intelligentes","heading_highlight":"Energiemanagement","subtext":"Drei Schritte, die sich laufend wiederholen: Daten erfassen, Situation bewerten, Energie gezielt steuern. Entscheidend ist nicht ein einzelner Schritt, sondern der Kreislauf dazwischen.","function_home_image":"shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png","function_home_alt":"Photovoltaikanlage, VENUS E Speicher und Smart Meter im Haushalt","function_app_image":"shopify://shop_images/elecway-smart-solar-app.webp","function_app_alt":"VENUS E App mit Energiefluss und Speicherstatus","note":"Der Kreislauf läuft dauerhaft: Neue Messwerte führen zu neuen Entscheidungen. So entsteht Schritt für Schritt ein System, das deinen Haushalt und deine Erzeugung besser aufeinander abstimmt.","note_link_label":"Welche Datenbasis dafür nötig ist →","note_link_url":"#smartmeter"}
     },
     "ai_smartmeter": {
-      "type": "ai-energy-smartmeter",
-      "settings": {
-        "smart_meter_image": "shopify://shop_images/MARSTEK_CT002_Smart_Meter_im_Verteilerkasten.webp",
-        "ct002_image": "shopify://shop_images/MARSTEK_CT002_mit_WLAN_und_Bluetooth-1.png",
-        "ct003_image": "shopify://shop_images/MARSTEK_CT003_mit_P1_Plug_Play.webp"
-      }
+      "type":"ai-energy-smartmeter",
+      "blocks": {
+        "point_1":{"type":"point","settings":{"number":"01","title":"Verbrauch messen","text":"Der Smart Meter erfasst, wie viel Energie dein Haushalt aktuell nutzt – und wann diese Nachfrage entsteht."}},
+        "point_2":{"type":"point","settings":{"number":"02","title":"Energiefluss erkennen","text":"Erzeugung, Verbrauch und Speicher werden nicht getrennt betrachtet, sondern im Zusammenhang: Wo geht Energie hin, wo fehlt sie gerade?"}},
+        "point_3":{"type":"point","settings":{"number":"03","title":"Speicher intelligent nutzen","text":"Auf Basis dieser Messwerte kann das System Laden und Entladen besser an deinen tatsächlichen Bedarf anpassen."}}
+      },
+      "block_order":["point_1","point_2","point_3"],
+      "settings":{"eyebrow":"Datenbasis","heading_before":"Smart Meter: Die Grundlage für","heading_highlight":"intelligente Steuerung","subtext":"Ohne aktuelle Energiedaten kann ein Speicher nur reagieren. Mit Smart Meter erkennt VENUS E, was im Haushalt passiert, und kann Energieflüsse gezielter steuern.","smart_meter_image":"shopify://shop_images/MARSTEK_CT002_Smart_Meter_im_Verteilerkasten.webp","smart_meter_alt":"MARSTEK Smart Meter im Verteilerkasten","ct002_image":"shopify://shop_images/MARSTEK_CT002_mit_WLAN_und_Bluetooth-1.png","ct002_alt":"MARSTEK CT002 Smart Meter","ct003_image":"shopify://shop_images/MARSTEK_CT003_mit_P1_Plug_Play.webp","ct003_alt":"MARSTEK CT003 P1 Smart Meter","cta_label":"Mehr über Smart Meter erfahren →","cta_url":"/products/ct002-smart-meter","cta_style":"primary"}
     },
     "ai_comparison": {
-      "type": "ai-energy-comparison",
-      "settings": {}
+      "type":"ai-energy-comparison",
+      "blocks": {
+        "comparison_store":{"type":"comparison_row","settings":{"feature":"Speichern","classic":"✓","smart":"✓","highlight":true}},
+        "comparison_usage":{"type":"comparison_row","settings":{"feature":"Verbrauch erkennen","classic":"begrenzt","smart":"✓","highlight":true}},
+        "comparison_flow":{"type":"comparison_row","settings":{"feature":"Energiefluss analysieren","classic":"–","smart":"✓","highlight":true}},
+        "comparison_adjust":{"type":"comparison_row","settings":{"feature":"Automatische Anpassung","classic":"begrenzt","smart":"✓","highlight":true}},
+        "comparison_meter":{"type":"comparison_row","settings":{"feature":"Smart Meter Integration","classic":"optional","smart":"zentral","highlight":true}}
+      },
+      "block_order":["comparison_store","comparison_usage","comparison_flow","comparison_adjust","comparison_meter"],
+      "settings":{"eyebrow":"Einordnung","heading_before":"Klassischer Speicher oder intelligentes Energiemanagement:","heading_highlight":"Was ist der Unterschied?","subtext":"Ein klassischer Speicher erfüllt seinen Zweck zuverlässig: Energie aufnehmen und wieder abgeben. Ein intelligentes System ergänzt diesen Ansatz um Messdaten und eine laufende Bewertung.","feature_heading":"Funktion","classic_heading":"Klassischer Speicher","smart_heading":"Intelligentes System","note":"Die Gegenüberstellung ist keine Bewertung von gut oder schlecht. Sie zeigt vor allem, welche zusätzlichen Informationen ein System braucht, um Energie nicht nur zu puffern, sondern situationsbezogen einzusetzen.","cta_label":"Mehr zum Thema Eigenverbrauch erhöhen →","cta_url":"/pages/balkonkraftwerk-mit-speicher#warum-speicher"}
     },
     "ai_day": {
-      "type": "ai-energy-day",
-      "settings": {
-        "morning_image": "shopify://shop_images/VENUS_E_Solarspeicher_im_Familienalltag.webp",
-        "noon_image": "shopify://shop_images/VENUS_E_Solarspeicher_im_Wohnbereich.webp",
-        "evening_image": "shopify://shop_images/VENUS_E_Solarspeicher_an_der_Hauswand.webp",
-        "ev_image": "shopify://shop_images/VENUS_E_Max_f_r_Haushalt_und_E-Mobilit_t.webp"
-      }
+      "type":"ai-energy-day",
+      "blocks": {
+        "scenario_morning":{"type":"scenario","settings":{"time_label":"06–10 UHR","title":"Morgens","image":"shopify://shop_images/VENUS_E_Solarspeicher_im_Familienalltag.webp","image_alt":"Morgendlicher Energiebedarf im Haushalt","recognized":"Der Bedarf im Haushalt steigt an, während die PV-Anlage noch wenig Energie liefert.","evaluated":"Das System prüft Speicherstand und Netzbezug und erkennt, dass gerade keine hohen Überschüsse entstehen.","result":"Gespeicherter Solarstrom wird gezielt dort eingesetzt, wo morgens Bedarf entsteht."}},
+        "scenario_noon":{"type":"scenario","settings":{"time_label":"11–15 UHR","title":"Mittags","image":"shopify://shop_images/VENUS_E_Solarspeicher_im_Wohnbereich.webp","image_alt":"Solarstromüberschuss zur Mittagszeit","recognized":"Die PV-Erzeugung erreicht ihren Höhepunkt, der Verbrauch im Haushalt ist vergleichsweise gering.","evaluated":"Der aktuelle Bedarf ist gedeckt – es bleibt Energie übrig, die nicht sofort gebraucht wird.","result":"Überschüssige Energie wird dem Speicher zugeführt, statt direkt ins Netz zu fließen."}},
+        "scenario_evening":{"type":"scenario","settings":{"time_label":"17–22 UHR","title":"Abends","image":"shopify://shop_images/VENUS_E_Solarspeicher_an_der_Hauswand.webp","image_alt":"Abendlicher Energiebedarf im Haushalt","recognized":"Der Verbrauch steigt deutlich, während die PV-Anlage kaum noch Energie liefert.","evaluated":"Es besteht Bedarf, der nicht mehr aus aktueller Erzeugung gedeckt werden kann.","result":"Gespeicherte Energie wird über das Hausnetz bereitgestellt und deckt einen Teil der Abendspitze."}},
+        "scenario_ev":{"type":"scenario","settings":{"time_label":"FLEXIBEL","title":"E-Auto laden","image":"shopify://shop_images/VENUS_E_Max_f_r_Haushalt_und_E-Mobilit_t.webp","image_alt":"E-Auto und Wallbox im Zusammenspiel mit Solarstrom","recognized":"Zusätzliche Verbraucher wie eine Wallbox melden Bedarf an – oft zeitgleich mit verfügbarem Solarstrom.","evaluated":"Das System berücksichtigt diesen zusätzlichen Bedarf bei der Bewertung der aktuellen Energieflüsse.","result":"Du erhältst mehr Transparenz darüber, wann eigener Solarstrom verfügbar ist und wie der Speicher darauf reagiert."}}
+      },
+      "block_order":["scenario_morning","scenario_noon","scenario_evening","scenario_ev"],
+      "settings":{"eyebrow":"Im Alltag","heading_before":"Intelligente Energie im","heading_highlight":"Alltag","subtext":"Was bedeutet das konkret über den Tag verteilt? Vier typische Situationen – und was das System daraus macht.","timeline_label":"Tageszeiten","cta_label":"Mehr zum Thema E-Auto laden mit Speicher →","cta_url":"/pages/e-auto"}
     },
     "ai_system": {
-      "type": "ai-energy-system",
-      "settings": {
-        "system_storage_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_f_r_Balkonkraftwerk_und_PV-Anlage.webp",
-        "system_app_image": "shopify://shop_images/elecway-smart-solar-app.webp",
-        "system_meter_image": "shopify://shop_images/MARSTEK_CT002_Smart_Meter_im_Verteilerkasten.webp"
-      }
+      "type":"ai-energy-system",
+      "blocks": {
+        "bento_storage":{"type":"bento","settings":{"badge":"01 · KERN","title":"VENUS E Speicher","text":"Nimmt Energie auf, hält sie bereit und gibt sie über das Hausnetz wieder ab – abgestimmt auf das, was im Haushalt gerade passiert. Er ist die Hardware, in der alle Entscheidungen des Systems zusammenlaufen.","image":"shopify://shop_images/VENUS_E_3.0_Solarspeicher_f_r_Balkonkraftwerk_und_PV-Anlage.webp","image_alt":"VENUS E Speicher im Zuhause","layout":"main","show_diagram":false}},
+        "bento_app":{"type":"bento","settings":{"badge":"02 · FENSTER ZUM SYSTEM","title":"VENUS E App","text":"Zeigt in Echtzeit, was das System erkennt und wie es entscheidet – Erzeugung, Verbrauch und Speicherstatus auf einen Blick.","image":"shopify://shop_images/elecway-smart-solar-app.webp","image_alt":"VENUS E App Energie-Dashboard","layout":"app","show_diagram":false}},
+        "bento_meter":{"type":"bento","settings":{"badge":"03 · DATEN","title":"Smart Meter","text":"Der Daten-Input des Systems: Er liefert die Messwerte, auf denen jede Entscheidung basiert.","image":"shopify://shop_images/MARSTEK_CT002_Smart_Meter_im_Verteilerkasten.webp","image_alt":"Smart Meter als Datenquelle des Systems","layout":"standard","show_diagram":false}},
+        "bento_vpp":{"type":"bento","settings":{"badge":"04 · PERSPEKTIVE","title":"VPP-ready","text":"Auf Erweiterung ausgelegt: perspektivisch für die Einbindung in größere Energieverbände. Verfügbarkeit je nach Region und Anbieter.","layout":"standard","show_diagram":true}}
+      },
+      "block_order":["bento_storage","bento_app","bento_meter","bento_vpp"],
+      "settings":{"eyebrow":"VENUS E System","heading_before":"Ein System, das mit deinem","heading_highlight":"Energiebedarf mitdenkt","subtext":"Vier Rollen, ein System: der Speicher als Kern, die App als Fenster zum System, der Smart Meter als Datenquelle – und eine Architektur, die für mehr ausgelegt ist. Sie arbeiten nicht nebeneinander, sondern greifen ineinander.","cta_label":"Passende VENUS E Lösung finden","cta_url":"#modelle","cta_style":"primary"}
     },
     "ai_models": {
-      "type": "ai-energy-models",
-      "settings": {
-        "model_1_product": "venus-e-mini",
-        "model_2_product": "venus-e-3",
-        "model_3_product": "venus-e-4",
-        "model_4_product": "venus-e-max"
-      }
+      "type":"ai-energy-models",
+      "blocks": {
+        "model_1":{"type":"model","settings":{"product":"venus-e-mini","tag":"KOMPAKTE LÖSUNG","title":"VENUS E Mini","text":"Für kleinere Haushalte und einfache Energieoptimierung."}},
+        "model_2":{"type":"model","settings":{"product":"venus-e-3","tag":"ALLTAG & EIGENVERBRAUCH","title":"VENUS E 3.0","text":"Für Haushalte, die ihren Solarstrom im Alltag flexibler nutzen möchten."}},
+        "model_3":{"type":"model","settings":{"product":"venus-e-4","tag":"MEHR SPEICHERBEDARF","title":"VENUS E 4.0","text":"Für mehr Speicherreserve bei höherem Energiebedarf."}},
+        "model_4":{"type":"model","settings":{"product":"venus-e-max","tag":"GROSSER ENERGIEBEDARF","title":"VENUS E Max","text":"Für große Haushalte und umfangreiche Energieanforderungen."}}
+      },
+      "block_order":["model_1","model_2","model_3","model_4"],
+      "settings":{"eyebrow":"Lösungen","heading_before":"Welche VENUS E Lösung passt zu deinem","heading_highlight":"Energiebedarf?","subtext":"Die Entscheidung hängt weniger von technischen Details ab als von deinem Alltag: Wie viel Energie verbrauchst du, wann brauchst du sie, und wie willst du weiter ausbauen?","cta_label":"Alle Modelle im Vergleich →","cta_url":"/pages/venus-e-vergleich","cta_style":"secondary"}
     },
     "ai_faq": {
-      "type": "ai-energy-faq",
+      "type":"ai-energy-faq",
       "blocks": {
-        "faq_1": {
-          "type": "faq",
-          "settings": {
-            "question": "Was ist AI-Energiemanagement?",
-            "answer": "<p>Ein System, das Energieflüsse im Haushalt laufend erfasst, daraus typische Situationen ableitet und die Nutzung von Solarstrom entsprechend anpasst. Der Kern ist ein wiederholter Kreislauf aus Erfassen, Bewerten und Steuern – kein einmaliges Setup.</p>"
-          }
-        },
-        "faq_2": {
-          "type": "faq",
-          "settings": {
-            "question": "Brauche ich ein Smart Meter?",
-            "answer": "<p>Für eine gezielte Steuerung ist ein Smart Meter sehr sinnvoll. Ohne Messwerte kann der Speicher nur auf grobe Signale reagieren; mit CT002 oder CT003 (P1) erkennt er, wie viel Energie dein Haushalt gerade braucht und ob Überschüsse vorhanden sind.</p>"
-          }
-        },
-        "faq_3": {
-          "type": "faq",
-          "settings": {
-            "question": "Kann VENUS E meinen Stromverbrauch automatisch steuern?",
-            "answer": "<p>VENUS E steuert sein eigenes Lade- und Entladeverhalten automatisch auf Basis der gemessenen Daten. Einzelne Haushaltsgeräte schaltet das System dagegen nicht – es entscheidet, wann gespeicherte Energie sinnvoll bereitgestellt wird.</p>"
-          }
-        },
-        "faq_4": {
-          "type": "faq",
-          "settings": {
-            "question": "Wie erhöht intelligentes Energiemanagement den Eigenverbrauch?",
-            "answer": "<p>Indem Energie dann genutzt wird, wenn im Haushalt Bedarf entsteht, statt stur nach Sonnenstand. Wenn morgens oder abends mehr verbraucht wird als erzeugt, kann gespeicherter Solarstrom diese Lücke schließen.</p>"
-          }
-        },
-        "faq_5": {
-          "type": "faq",
-          "settings": {
-            "question": "Ist AI-Energiemanagement nur für große PV-Anlagen sinnvoll?",
-            "answer": "<p>Nein. Entscheidend ist nicht die Anlagengröße, sondern das Verhältnis von Erzeugung und Verbrauch. Auch bei kleineren Anlagen oder Balkonkraftwerken kann eine intelligente Nutzung des verfügbaren Stroms einen Unterschied machen.</p>"
-          }
-        },
-        "faq_6": {
-          "type": "faq",
-          "settings": {
-            "question": "Funktioniert Smart Energy auch mit Balkonkraftwerken?",
-            "answer": "<p>Ja. Gerade bei kleineren Erzeugungsmengen lohnt es sich, den erzeugten Strom nicht ungenutzt zu lassen, sondern gezielt in Zeiten mit Nachfrage zu verschieben.</p>"
-          }
-        }
+        "faq_1":{"type":"faq","settings":{"question":"Was ist AI-Energiemanagement?","answer":"<p>Ein System, das Energieflüsse im Haushalt laufend erfasst, daraus typische Situationen ableitet und die Nutzung von Solarstrom entsprechend anpasst. Der Kern ist ein wiederholter Kreislauf aus Erfassen, Bewerten und Steuern – kein einmaliges Setup.</p>"}},
+        "faq_2":{"type":"faq","settings":{"question":"Brauche ich ein Smart Meter?","answer":"<p>Für eine gezielte Steuerung ist ein Smart Meter sehr sinnvoll. Ohne Messwerte kann der Speicher nur auf grobe Signale reagieren; mit CT002 oder CT003 (P1) erkennt er, wie viel Energie dein Haushalt gerade braucht und ob Überschüsse vorhanden sind.</p>"}},
+        "faq_3":{"type":"faq","settings":{"question":"Kann VENUS E meinen Stromverbrauch automatisch steuern?","answer":"<p>VENUS E steuert sein eigenes Lade- und Entladeverhalten automatisch auf Basis der gemessenen Daten. Einzelne Haushaltsgeräte schaltet das System dagegen nicht – es entscheidet, wann gespeicherte Energie sinnvoll bereitgestellt wird.</p>"}},
+        "faq_4":{"type":"faq","settings":{"question":"Wie erhöht intelligentes Energiemanagement den Eigenverbrauch?","answer":"<p>Indem Energie dann genutzt wird, wenn im Haushalt Bedarf entsteht, statt stur nach Sonnenstand. Wenn morgens oder abends mehr verbraucht wird als erzeugt, kann gespeicherter Solarstrom diese Lücke schließen.</p>"}},
+        "faq_5":{"type":"faq","settings":{"question":"Ist AI-Energiemanagement nur für große PV-Anlagen sinnvoll?","answer":"<p>Nein. Entscheidend ist nicht die Anlagengröße, sondern das Verhältnis von Erzeugung und Verbrauch. Auch bei kleineren Anlagen oder Balkonkraftwerken kann eine intelligente Nutzung des verfügbaren Stroms einen Unterschied machen.</p>"}},
+        "faq_6":{"type":"faq","settings":{"question":"Funktioniert Smart Energy auch mit Balkonkraftwerken?","answer":"<p>Ja. Gerade bei kleineren Erzeugungsmengen lohnt es sich, den erzeugten Strom nicht ungenutzt zu lassen, sondern gezielt in Zeiten mit Nachfrage zu verschieben.</p>"}}
       },
-      "block_order": [
-        "faq_1",
-        "faq_2",
-        "faq_3",
-        "faq_4",
-        "faq_5",
-        "faq_6"
-      ],
-      "settings": {}
+      "block_order":["faq_1","faq_2","faq_3","faq_4","faq_5","faq_6"],
+      "settings":{"eyebrow":"Häufige Fragen","heading_before":"Fragen zum","heading_highlight":"Energiemanagement","subtext":"Klare Antworten zu Daten, Speicher und intelligenter Nutzung von Solarstrom."}
     },
     "ai_guides": {
-      "type": "ai-energy-guides",
+      "type":"ai-energy-guides",
       "blocks": {
-        "guide_1": {
-          "type": "guide",
-          "settings": {
-            "tag": "RATGEBER",
-            "title": "Smart Meter: Warum ist er für Speicher wichtig?",
-            "excerpt": "Welche Daten ein Smart Meter liefert und warum Messwerte die Basis jeder intelligenten Steuerung sind.",
-            "image": "shopify://shop_images/MARSTEK_CT002_Smart_Meter_im_Verteilerkasten.webp",
-            "url": "/blogs/solarspeicher/zero-export-speicher"
-          }
-        },
-        "guide_2": {
-          "type": "guide",
-          "settings": {
-            "tag": "RATGEBER",
-            "title": "Eigenverbrauch erhöhen: Die wichtigsten Möglichkeiten",
-            "excerpt": "Vom Verbrauchsverhalten bis zur Speichergröße: welche Stellschrauben im Alltag wirklich zählen.",
-            "image": "shopify://shop_images/Energiedaten_in_der_App_mit_MARSTEK_CT002.webp",
-            "url": "/blogs/solarspeicher/ki-eigenverbrauch"
-          }
-        },
-        "guide_3": {
-          "type": "guide",
-          "settings": {
-            "tag": "RATGEBER",
-            "title": "Dynamischer Stromtarif und Speicher: Wie funktioniert das?",
-            "excerpt": "Was variable Strompreise bedeuten und wann ein Speicher im Zusammenspiel interessant werden kann.",
-            "image": "shopify://shop_images/elecway-smart-solar-app.webp",
-            "url": "/blogs/blog-center"
-          }
-        }
+        "guide_1":{"type":"guide","settings":{"tag":"RATGEBER","title":"Smart Meter: Warum ist er für Speicher wichtig?","excerpt":"Welche Daten ein Smart Meter liefert und warum Messwerte die Basis jeder intelligenten Steuerung sind.","image":"shopify://shop_images/MARSTEK_CT002_Smart_Meter_im_Verteilerkasten.webp","image_alt":"Smart Meter im Verteilerkasten","url":"/blogs/solarspeicher/zero-export-speicher","link_label":"Weiterlesen →"}},
+        "guide_2":{"type":"guide","settings":{"tag":"RATGEBER","title":"Eigenverbrauch erhöhen: Die wichtigsten Möglichkeiten","excerpt":"Vom Verbrauchsverhalten bis zur Speichergröße: welche Stellschrauben im Alltag wirklich zählen.","image":"shopify://shop_images/Energiedaten_in_der_App_mit_MARSTEK_CT002.webp","image_alt":"Energiedaten in der App","url":"/blogs/solarspeicher/ki-eigenverbrauch","link_label":"Weiterlesen →"}},
+        "guide_3":{"type":"guide","settings":{"tag":"RATGEBER","title":"Dynamischer Stromtarif und Speicher: Wie funktioniert das?","excerpt":"Was variable Strompreise bedeuten und wann ein Speicher im Zusammenspiel interessant werden kann.","image":"shopify://shop_images/elecway-smart-solar-app.webp","image_alt":"Smart Solar App","url":"/blogs/blog-center","link_label":"Weiterlesen →"}}
       },
-      "block_order": [
-        "guide_1",
-        "guide_2",
-        "guide_3"
-      ],
-      "settings": {}
+      "block_order":["guide_1","guide_2","guide_3"],
+      "settings":{"eyebrow":"Mehr erfahren","heading_before":"Ratgeber &","heading_highlight":"Energie-Wissen","subtext":"Praktische Antworten und Hintergrundwissen für deinen nächsten Schritt.","cta_label":"Alle Ratgeber ansehen →","cta_url":"/blogs/blog-center","cta_style":"secondary"}
     },
     "ai_cta": {
-      "type": "ai-energy-cta",
-      "settings": {}
+      "type":"ai-energy-cta",
+      "blocks": {
+        "cta_button_1":{"type":"button","settings":{"label":"VENUS E Modelle ansehen","url":"#modelle","style":"primary"}},
+        "cta_button_2":{"type":"button","settings":{"label":"Smart Meter entdecken","url":"/products/ct002-smart-meter","style":"secondary"}},
+        "cta_button_3":{"type":"button","settings":{"label":"Balkonkraftwerk mit Speicher →","url":"/pages/balkonkraftwerk-mit-speicher","style":"link"}}
+      },
+      "block_order":["cta_button_1","cta_button_2","cta_button_3"],
+      "settings":{"eyebrow":"Nächster Schritt","heading_before":"Nutze deinen Solarstrom intelligenter","heading_highlight":"","subtext":"Ob Einstieg oder Ausbau: Wenn du Erzeugung, Verbrauch und Speicher als ein System betrachtest, holst du mehr aus deinem Solarstrom heraus."}
     }
   },
-  "order": [
-    "ai_navigation",
-    "ai_hero",
-    "ai_definition",
-    "ai_function",
-    "ai_smartmeter",
-    "ai_comparison",
-    "ai_day",
-    "ai_system",
-    "ai_models",
-    "ai_faq",
-    "ai_guides",
-    "ai_cta"
-  ]
+  "order":["ai_navigation","ai_hero","ai_definition","ai_function","ai_smartmeter","ai_comparison","ai_day","ai_system","ai_models","ai_faq","ai_guides","ai_cta"]
 }

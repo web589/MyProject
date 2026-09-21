@@ -10,12 +10,6 @@
     {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Intelligente Steuerung"},
     {"type":"text","id":"heading","label":"Überschrift","default":"Nicht nur speichern – sondern intelligent steuern"},
     {"type":"textarea","id":"subtext","label":"Beschreibung","default":"Ein moderner Speicher ist dann besonders sinnvoll, wenn er nicht nur Energie puffert, sondern sich am tatsächlichen Bedarf im Haushalt orientiert."},
-    {"type":"text","id":"step_1_title","label":"Schritt 1 Titel","default":"Verbrauch erkennen"},
-    {"type":"textarea","id":"step_1_body","label":"Schritt 1 Text","default":"Mit passendem Smart Meter lassen sich Energieflüsse im Haushalt transparenter erfassen."},
-    {"type":"text","id":"step_2_title","label":"Schritt 2 Titel","default":"Leistung anpassen"},
-    {"type":"textarea","id":"step_2_body","label":"Schritt 2 Text","default":"So kann das System besser darauf reagieren, wann Strom im Haushalt gebraucht wird."},
-    {"type":"text","id":"step_3_title","label":"Schritt 3 Titel","default":"Eigenverbrauch optimieren"},
-    {"type":"textarea","id":"step_3_body","label":"Schritt 3 Text","default":"Das Ziel ist nicht nur Speichern, sondern den selbst erzeugten Solarstrom möglichst sinnvoll im Alltag zu nutzen."},
     {"type":"text","id":"link_label","label":"Weiterführender Link","default":"Smart Meter & Energiefluss ansehen"},
     {"type":"url","id":"link_url","label":"Weiterführender Link Ziel"},
     {"type":"image_picker","id":"main_image","label":"Hauptbild"},
@@ -28,6 +22,17 @@
     {"type":"text","id":"meter_image_alt","label":"Smart-Meter Alt-Text","default":"CT002 oder CT003 Smart Meter"},
     {"type":"textarea","id":"meter_placeholder","label":"Smart-Meter Platzhalter","default":"Smart Meter CT002 / CT003 auswählen"}
   ],
-  "presets":[{"name":"06 Intelligente Steuerung"}]
-}
+  "blocks": [
+    {
+      "type":"step",
+      "name":"Steuerungsschritt",
+      "settings":[
+        {"type":"text","id":"title","label":"Titel","default":"Schritt"},
+        {"type":"textarea","id":"body","label":"Text","default":"Beschreibung des Schritts."}
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets":[{"name":"06 Intelligente Steuerung","blocks":[{"type":"step","settings":{"title":"Verbrauch erkennen","body":"Mit passendem Smart Meter lassen sich Energieflüsse im Haushalt transparenter erfassen."}},{"type":"step","settings":{"title":"Leistung anpassen","body":"So kann das System besser darauf reagieren, wann Strom im Haushalt gebraucht wird."}},{"type":"step","settings":{"title":"Eigenverbrauch optimieren","body":"Das Ziel ist nicht nur Speichern, sondern den selbst erzeugten Solarstrom möglichst sinnvoll im Alltag zu nutzen."}}]}
+]}
 {% endschema %}

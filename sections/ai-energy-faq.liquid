@@ -3,8 +3,9 @@
 <div class="ai-energy-page" data-ai-energy-page>
   <section id="faq" class="ai-energy__section ai-energy__faq" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
-      <p class="ai-energy__eyebrow">Häufige Fragen</p>
-      <h2 id="{{ page_id }}-heading">Fragen zum <span>Energiemanagement</span></h2>
+      <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>
+      {% if section.settings.subtext != blank %}<p class="ai-energy__subtext">{{ section.settings.subtext }}</p>{% endif %}
       <div class="ai-energy__faq-list">
         {% for block in section.blocks %}
           <article class="ai-energy__faq-item" {{ block.shopify_attributes }}>
@@ -13,6 +14,7 @@
           </article>
         {% endfor %}
       </div>
+      {% if section.settings.cta_label != blank %}<a class="ai-energy__text-link" href="{{ section.settings.cta_url | default: '#modelle' }}">{{ section.settings.cta_label }}</a>{% endif %}
     </div>
   </section>
 </div>
@@ -22,7 +24,14 @@
   "name":"AI Energie – FAQ",
   "tag":"section",
   "class":"section-ai-energy-faq",
-  "settings":[],
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Häufige Fragen"},
+    {"type":"text","id":"heading_before","label":"Titel Hauptsatz","default":"Fragen zum"},
+    {"type":"text","id":"heading_highlight","label":"Titel Hervorhebung","default":"Energiemanagement"},
+    {"type":"textarea","id":"subtext","label":"Untertitel","default":"Klare Antworten zu Daten, Speicher und intelligenter Nutzung von Solarstrom."},
+    {"type":"text","id":"cta_label","label":"CTA Text"},
+    {"type":"url","id":"cta_url","label":"CTA Link"}
+  ],
   "blocks":[{"type":"faq","name":"FAQ Frage","settings":[{"type":"text","id":"question","label":"Frage"},{"type":"richtext","id":"answer","label":"Antwort"}]}],
   "max_blocks":12,
   "presets":[{"name":"AI Energie – FAQ","blocks":[{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"}]}]

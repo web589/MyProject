@@ -45,8 +45,9 @@
   data-eauto-unavailable-label="{{ section.settings.unavailable_label | escape }}"
   data-eauto-preorder-label="{{ section.settings.preorder_label | escape }}"
   data-eauto-primary-label="{{ section.settings.card_recommendation_label | escape }}"
-  data-eauto-alternative-label="ALTERNATIVE KONFIGURATION"
-  data-eauto-variant-unavailable-label="Variante nicht gefunden"
+  data-eauto-alternative-label="{{ section.settings.alternative_label | escape }}"
+  data-eauto-variant-unavailable-label="{{ section.settings.variant_unavailable_label | escape }}"
+  data-eauto-summary-template="{{ section.settings.recommendations_summary_template | escape }}"
   aria-labelledby="{{ page_id }}-recommendations-heading"
 >
   <div class="e-auto-page__container">
@@ -133,8 +134,11 @@
     {"type":"text","id":"recommendations_eyebrow","label":"Empfehlungen Kicker","default":"Deine Optionen"},
     {"type":"text","id":"recommendations_heading","label":"Empfehlungen Überschrift","default":"Welche VENUS E Lösung passt dazu?"},
     {"type":"textarea","id":"recommendations_text","label":"Empfehlungen Text","default":"Die drei Konfigurationen werden direkt aus deiner Auswahl und den aktuellen Shopify-Produktdaten zusammengestellt."},
+    {"type":"textarea","id":"recommendations_summary_template","label":"Dynamische Empfehlung Zusammenfassung","info":"Verfügbare Variablen: {{range}}, {{lower}}, {{upper}}, {{unit}}.","default":"Kapazitätsbereich: {{range}}. Preise und Verfügbarkeit werden direkt aus Shopify geladen."},
     {"type":"textarea","id":"recommendations_note","label":"Empfehlungen Hinweis","default":"Preise, Varianten, Bilder und Verfügbarkeit werden direkt aus Shopify gelesen."},
     {"type":"text","id":"card_recommendation_label","label":"Karten Badge","default":"EMPFOHLENE KONFIGURATION"},
+    {"type":"text","id":"alternative_label","label":"Alternatives Karten Badge","default":"ALTERNATIVE KONFIGURATION"},
+    {"type":"text","id":"variant_unavailable_label","label":"Variante fehlt Label","default":"Variante nicht gefunden"},
     {"type":"text","id":"card_loading_label","label":"Karten Ladezustand","default":"Konfiguration wird geladen"},
     {"type":"text","id":"card_cta_label","label":"Karten CTA","default":"Produkt ansehen"},
     {"type":"text","id":"available_label","label":"Verfügbar Label","default":"Verfügbar"},

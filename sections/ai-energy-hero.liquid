@@ -1,23 +1,20 @@
-{%- liquid
-  assign page_id = 'ai-energy-hero-' | append: section.id
--%}
+{%- assign page_id = 'ai-energy-hero-' | append: section.id -%}
 
 <div class="ai-energy-page" data-ai-energy-page>
   <section class="ai-energy__section ai-energy__hero" aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container ai-energy__hero-grid">
       <div class="ai-energy__hero-copy">
-        <p class="ai-energy__eyebrow">{{ section.settings.hero_eyebrow }}</p>
-        <h1 id="{{ page_id }}-heading">{{ section.settings.hero_heading }}</h1>
-        <p class="ai-energy__lead">{{ section.settings.hero_text }}</p>
+        <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h1 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span>{{ section.settings.heading_highlight }}</span>{% endif %}</h1>
+        <p class="ai-energy__lead">{{ section.settings.subtext }}</p>
         <div class="ai-energy__actions">
-          <a class="ai-energy__button ai-energy__button--primary" href="#funktion">{{ section.settings.hero_function_label }}</a>
-          <a class="ai-energy__button ai-energy__button--secondary" href="#modelle">{{ section.settings.hero_models_label }}</a>
+          {% for block in section.blocks %}
+            {% if block.type == 'button' %}<a class="ai-energy__button ai-energy__button--{{ block.settings.style }}" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>{% endif %}
+          {% endfor %}
         </div>
       </div>
       <div class="ai-energy__media ai-energy__media--hero">
-        {% if section.settings.hero_image != blank %}
-          {{ section.settings.hero_image | image_url: width: 1800 | image_tag: loading: 'eager', widths: '640, 960, 1280, 1600, 1800', sizes: '(min-width: 960px) 50vw, 100vw', alt: 'VENUS E Solarspeicher mit Photovoltaikanlage und Smart Energy System' }}
-        {% endif %}
+        {% if section.settings.hero_image != blank %}{{ section.settings.hero_image | image_url: width: 1800 | image_tag: loading: 'eager', widths: '640, 960, 1280, 1600, 1800', sizes: '(min-width: 960px) 50vw, 100vw', alt: section.settings.hero_alt }}{% endif %}
       </div>
     </div>
   </section>
@@ -25,16 +22,23 @@
 
 {% schema %}
 {
-  "name": "AI Energie – Hero",
-  "tag": "section",
-  "class": "section-ai-energy-hero",
-  "settings": [
-    {"type":"text","id":"hero_eyebrow","label":"Hero Eyebrow","default":"Technologie · Smart Energy"},
-    {"type":"text","id":"hero_heading","label":"Hero Überschrift","default":"AI-Energiemanagement: Solarstrom intelligent nutzen"},
-    {"type":"textarea","id":"hero_text","label":"Hero Text","default":"VENUS E verbindet Energieerzeugung, Verbrauch und Speicher zu einem intelligenten System. So kannst du deinen Eigenverbrauch erhöhen und Solarstrom gezielter nutzen."},
-    {"type":"text","id":"hero_function_label","label":"Hero Hauptbutton","default":"Smart Energy entdecken"},
-    {"type":"text","id":"hero_models_label","label":"Hero Nebenbutton","default":"VENUS E Modelle ansehen"},
-    {"type":"image_picker","id":"hero_image","label":"Hero Bild"}
-  ]
+  "name":"AI Energie – Hero",
+  "tag":"section",
+  "class":"section-ai-energy-hero",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Technologie · Smart Energy"},
+    {"type":"text","id":"heading_before","label":"Titel Hauptsatz","default":"AI-Energiemanagement: Solarstrom"},
+    {"type":"text","id":"heading_highlight","label":"Titel Hervorhebung","default":"intelligent nutzen"},
+    {"type":"textarea","id":"subtext","label":"Untertitel","default":"VENUS E verbindet Energieerzeugung, Verbrauch und Speicher zu einem intelligenten System. So kannst du deinen Eigenverbrauch erhöhen und Solarstrom gezielter nutzen."},
+    {"type":"image_picker","id":"hero_image","label":"Hero Bild"},
+    {"type":"text","id":"hero_alt","label":"Hero Bild Alt-Text","default":"VENUS E Solarspeicher mit Photovoltaikanlage und Smart Energy System"}
+  ],
+  "blocks":[{"type":"button","name":"Hero Button","settings":[
+    {"type":"text","id":"label","label":"Text","default":"Smart Energy entdecken"},
+    {"type":"url","id":"url","label":"Link"},
+    {"type":"select","id":"style","label":"Stil","options":[{"value":"primary","label":"Primär"},{"value":"secondary","label":"Sekundär"}],"default":"primary"}
+  ]}],
+  "max_blocks":4,
+  "presets":[{"name":"AI Energie – Hero","blocks":[{"type":"button"},{"type":"button"}]}]
 }
 {% endschema %}

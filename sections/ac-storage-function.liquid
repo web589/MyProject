@@ -21,15 +21,20 @@
     {"type":"text","id":"evening_image_alt","label":"Abend-Bild Alt-Text","default":"Energiefluss vom Speicher über das Hausnetz zum Haushalt und weiteren Verbrauchern"},
     {"type":"textarea","id":"evening_placeholder","label":"Abend-Bild Platzhalter","default":"Erklärbild auswählen: Speicher → Hausnetz → Haushalt / weitere Verbraucher"},
     {"type":"textarea","id":"evening_nodes","label":"Abend-Knoten","info":"Einträge mit | trennen","default":"Speicher|Hausnetz|Haushalt|Weitere Verbraucher"},
-    {"type":"text","id":"step_1_title","label":"Schritt 1 Titel","default":"Strom erzeugen"},
-    {"type":"textarea","id":"step_1_body","label":"Schritt 1 Text","default":"Die PV-Anlage produziert tagsüber Energie für den Haushalt."},
-    {"type":"text","id":"step_2_title","label":"Schritt 2 Titel","default":"Überschüsse speichern"},
-    {"type":"textarea","id":"step_2_body","label":"Schritt 2 Text","default":"Wird nicht alles sofort verbraucht, kann der Überschuss im Speicher landen."},
-    {"type":"text","id":"step_3_title","label":"Schritt 3 Titel","default":"Später nutzen"},
-    {"type":"textarea","id":"step_3_body","label":"Schritt 3 Text","default":"Abends, nachts oder bei höherem Bedarf unterstützt der Speicher dein Hausnetz mit zuvor gespeicherter Energie."},
     {"type":"text","id":"link_label","label":"Weiterführender Link","default":"Mehr über E-Auto laden mit Speicher →"},
     {"type":"url","id":"link_url","label":"Weiterführender Link Ziel"}
   ],
-  "presets":[{"name":"03 Funktionsweise"}]
-}
+  "blocks": [
+    {
+      "type":"step",
+      "name":"Funktionsschritt",
+      "settings":[
+        {"type":"text","id":"title","label":"Titel","default":"Schritt"},
+        {"type":"textarea","id":"body","label":"Text","default":"Beschreibung des Schritts."}
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets":[{"name":"03 Funktionsweise","blocks":[{"type":"step","settings":{"title":"Strom erzeugen","body":"Die PV-Anlage produziert tagsüber Energie für den Haushalt."}},{"type":"step","settings":{"title":"Überschüsse speichern","body":"Wird nicht alles sofort verbraucht, kann der Überschuss im Speicher landen."}},{"type":"step","settings":{"title":"Später nutzen","body":"Abends, nachts oder bei höherem Bedarf unterstützt der Speicher dein Hausnetz mit zuvor gespeicherter Energie."}}]}
+]}
 {% endschema %}

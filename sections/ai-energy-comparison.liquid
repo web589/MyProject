@@ -4,16 +4,49 @@
 <div class="ai-energy-page" data-ai-energy-page>
   <section id="vergleich" class="ai-energy__section ai-energy__comparison" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
-      <p class="ai-energy__eyebrow">Einordnung</p>
-      <h2 id="{{ page_id }}-heading">Klassischer Speicher oder intelligentes Energiemanagement: <span>Was ist der Unterschied?</span></h2>
-      <p class="ai-energy__subtext">Ein klassischer Speicher erfüllt seinen Zweck zuverlässig: Energie aufnehmen und wieder abgeben. Ein intelligentes System ergänzt diesen Ansatz um Messdaten und eine laufende Bewertung.</p>
-      <div class="ai-energy__table-wrap"><table><thead><tr><th scope="col">Funktion</th><th scope="col">Klassischer Speicher</th><th scope="col" class="is-highlight">Intelligentes System</th></tr></thead><tbody><tr><th scope="row">Speichern</th><td>✓</td><td class="is-positive">✓</td></tr><tr><th scope="row">Verbrauch erkennen</th><td>begrenzt</td><td class="is-positive">✓</td></tr><tr><th scope="row">Energiefluss analysieren</th><td>–</td><td class="is-positive">✓</td></tr><tr><th scope="row">Automatische Anpassung</th><td>begrenzt</td><td class="is-positive">✓</td></tr><tr><th scope="row">Smart Meter Integration</th><td>optional</td><td class="is-positive">zentral</td></tr></tbody></table></div>
-      <p class="ai-energy__comparison-note">Die Gegenüberstellung ist keine Bewertung von „gut oder schlecht“. Sie zeigt vor allem, welche zusätzlichen Informationen ein System braucht, um Energie nicht nur zu puffern, sondern situationsbezogen einzusetzen.</p>
-      <a class="ai-energy__text-link" href="{{ comparison_url }}">Mehr zum Thema Eigenverbrauch erhöhen →</a>
+      <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>
+      <p class="ai-energy__subtext">{{ section.settings.subtext }}</p>
+      <div class="ai-energy__table-wrap">
+        <table>
+          <thead><tr><th scope="col">{{ section.settings.feature_heading }}</th><th scope="col">{{ section.settings.classic_heading }}</th><th scope="col" class="is-highlight">{{ section.settings.smart_heading }}</th></tr></thead>
+          <tbody>
+            {% for block in section.blocks %}
+              <tr {{ block.shopify_attributes }}><th scope="row">{{ block.settings.feature }}</th><td>{{ block.settings.classic }}</td><td class="{% if block.settings.highlight %}is-positive{% endif %}">{{ block.settings.smart }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="ai-energy__comparison-note">{{ section.settings.note }}</p>
+      {% if section.settings.cta_label != blank %}<a class="ai-energy__text-link" href="{{ section.settings.cta_url | default: comparison_url }}">{{ section.settings.cta_label }}</a>{% endif %}
     </div>
   </section>
 </div>
 
 {% schema %}
-{"name":"AI Energie – Vergleich","tag":"section","class":"section-ai-energy-comparison","settings":[]}
+{
+  "name":"AI Energie – Vergleich",
+  "tag":"section",
+  "class":"section-ai-energy-comparison",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Einordnung"},
+    {"type":"text","id":"heading_before","label":"Titel Hauptsatz","default":"Klassischer Speicher oder intelligentes Energiemanagement:"},
+    {"type":"text","id":"heading_highlight","label":"Titel Hervorhebung","default":"Was ist der Unterschied?"},
+    {"type":"textarea","id":"subtext","label":"Untertitel","default":"Ein klassischer Speicher erfüllt seinen Zweck zuverlässig: Energie aufnehmen und wieder abgeben. Ein intelligentes System ergänzt diesen Ansatz um Messdaten und eine laufende Bewertung."},
+    {"type":"text","id":"feature_heading","label":"Spalte Funktion","default":"Funktion"},
+    {"type":"text","id":"classic_heading","label":"Spalte klassischer Speicher","default":"Klassischer Speicher"},
+    {"type":"text","id":"smart_heading","label":"Spalte intelligentes System","default":"Intelligentes System"},
+    {"type":"textarea","id":"note","label":"Hinweis unter Tabelle","default":"Die Gegenüberstellung ist keine Bewertung von gut oder schlecht. Sie zeigt vor allem, welche zusätzlichen Informationen ein System braucht, um Energie nicht nur zu puffern, sondern situationsbezogen einzusetzen."},
+    {"type":"text","id":"cta_label","label":"CTA Text","default":"Mehr zum Thema Eigenverbrauch erhöhen →"},
+    {"type":"url","id":"cta_url","label":"CTA Link"}
+  ],
+  "blocks":[{"type":"comparison_row","name":"Vergleichszeile","settings":[
+    {"type":"text","id":"feature","label":"Funktion","default":"Speichern"},
+    {"type":"text","id":"classic","label":"Klassischer Speicher","default":"✓"},
+    {"type":"text","id":"smart","label":"Intelligentes System","default":"✓"},
+    {"type":"checkbox","id":"highlight","label":"Zeile hervorheben","default":true}
+  ]}],
+  "max_blocks":12,
+  "presets":[{"name":"AI Energie – Vergleich","blocks":[{"type":"comparison_row"},{"type":"comparison_row"},{"type":"comparison_row"},{"type":"comparison_row"},{"type":"comparison_row"}]}]
+}
 {% endschema %}

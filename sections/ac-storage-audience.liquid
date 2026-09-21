@@ -1,4 +1,4 @@
-{%- comment -%} AC storage editor section: audience {%- endcomment -%}
+{%- comment -%} AC storage editor section: audiences {%- endcomment -%}
 {% render 'ac-storage-module', module: 'audience', section: section %}
 
 {% schema %}
@@ -9,29 +9,23 @@
   "settings": [
     {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Zielgruppen"},
     {"type":"text","id":"heading","label":"Überschrift","default":"Für wen ist ein AC-gekoppelter Speicher besonders interessant?"},
-    {"type":"text","id":"card_1_title","label":"Karte 1 Titel","default":"Für Haushalte mit bestehender PV-Lösung"},
-    {"type":"textarea","id":"card_1_body","label":"Karte 1 Text","default":"Wenn du bereits Solarstrom erzeugst, aber mehr davon selbst nutzen möchtest, ist ein Speicher eine logische Erweiterung."},
-    {"type":"image_picker","id":"card_1_image","label":"Karte 1 Bild"},
-    {"type":"text","id":"card_1_alt","label":"Karte 1 Alt-Text","default":"Haus mit bestehender Photovoltaikanlage"},
-    {"type":"textarea","id":"card_1_placeholder","label":"Karte 1 Bild Platzhalter","default":"Szenenbild auswählen: Haus mit bestehender PV"},
-    {"type":"text","id":"card_2_title","label":"Karte 2 Titel","default":"Für Balkonkraftwerk-Nutzer mit wachsendem Bedarf"},
-    {"type":"textarea","id":"card_2_body","label":"Karte 2 Text","default":"Wer klein startet und später mehr Unabhängigkeit will, kann schrittweise aufrüsten."},
-    {"type":"image_picker","id":"card_2_image","label":"Karte 2 Bild"},
-    {"type":"text","id":"card_2_alt","label":"Karte 2 Alt-Text","default":"Balkonkraftwerk und Speicher an einem Wohnhaus"},
-    {"type":"textarea","id":"card_2_placeholder","label":"Karte 2 Bild Platzhalter","default":"Szenenbild auswählen: Balkonkraftwerk und Speicher"},
-    {"type":"text","id":"card_3_title","label":"Karte 3 Titel","default":"Für Haushalte mit Verbrauch am Abend oder in der Nacht"},
-    {"type":"textarea","id":"card_3_body","label":"Karte 3 Text","default":"Wenn Strom vor allem dann gebraucht wird, wenn die Sonne nicht mehr scheint, wird ein Speicher besonders relevant."},
-    {"type":"image_picker","id":"card_3_image","label":"Karte 3 Bild"},
-    {"type":"text","id":"card_3_alt","label":"Karte 3 Alt-Text","default":"Abendlicher Stromverbrauch in einem Haushalt"},
-    {"type":"textarea","id":"card_3_placeholder","label":"Karte 3 Bild Platzhalter","default":"Szenenbild auswählen: abendlicher oder nächtlicher Verbrauch"},
-    {"type":"text","id":"card_4_title","label":"Karte 4 Titel","default":"Für Haushalte mit Wallbox oder E-Auto"},
-    {"type":"textarea","id":"card_4_body","label":"Karte 4 Text","default":"Wer zusätzliche Verbraucher im Haushalt hat, profitiert oft stärker von einer intelligenten Nutzung des gespeicherten Stroms."},
-    {"type":"image_picker","id":"card_4_image","label":"Karte 4 Bild"},
-    {"type":"text","id":"card_4_alt","label":"Karte 4 Alt-Text","default":"Wallbox und E-Auto an einem Haus"},
-    {"type":"textarea","id":"card_4_placeholder","label":"Karte 4 Bild Platzhalter","default":"Szenenbild auswählen: Wallbox und E-Auto"},
     {"type":"text","id":"link_label","label":"Weiterführender Link","default":"Zur Lösung für E-Auto & Speicher →"},
     {"type":"url","id":"link_url","label":"Weiterführender Link Ziel"}
   ],
-  "presets":[{"name":"07 Zielgruppen"}]
-}
+  "blocks": [
+    {
+      "type":"audience_card",
+      "name":"Zielgruppenkarte",
+      "settings":[
+        {"type":"text","id":"title","label":"Titel","default":"Zielgruppe"},
+        {"type":"textarea","id":"body","label":"Text","default":"Beschreibung der Zielgruppe."},
+        {"type":"image_picker","id":"image","label":"Bild"},
+        {"type":"text","id":"alt","label":"Alt-Text","default":"AC-gekoppelter Speicher im Haushalt"},
+        {"type":"textarea","id":"placeholder","label":"Bild-Platzhalter","default":"Szenenbild auswählen"}
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets":[{"name":"07 Zielgruppen","blocks":[{"type":"audience_card","settings":{"title":"Für Haushalte mit bestehender PV-Lösung","body":"Wenn du bereits Solarstrom erzeugst, aber mehr davon selbst nutzen möchtest, ist ein Speicher eine logische Erweiterung.","alt":"Haus mit bestehender Photovoltaikanlage","placeholder":"Szenenbild auswählen: Haus mit bestehender PV"}},{"type":"audience_card","settings":{"title":"Für Balkonkraftwerk-Nutzer mit wachsendem Bedarf","body":"Wer klein startet und später mehr Unabhängigkeit will, kann schrittweise aufrüsten.","alt":"Balkonkraftwerk und Speicher an einem Wohnhaus","placeholder":"Szenenbild auswählen: Balkonkraftwerk und Speicher"}},{"type":"audience_card","settings":{"title":"Für Haushalte mit Verbrauch am Abend oder in der Nacht","body":"Wenn Strom vor allem dann gebraucht wird, wenn die Sonne nicht mehr scheint, wird ein Speicher besonders relevant.","alt":"Abendlicher Stromverbrauch in einem Haushalt","placeholder":"Szenenbild auswählen: abendlicher oder nächtlicher Verbrauch"}},{"type":"audience_card","settings":{"title":"Für Haushalte mit Wallbox oder E-Auto","body":"Wer zusätzliche Verbraucher im Haushalt hat, profitiert oft stärker von einer intelligenten Nutzung des gespeicherten Stroms.","alt":"Wallbox und E-Auto an einem Haus","placeholder":"Szenenbild auswählen: Wallbox und E-Auto"}}]}
+]}
 {% endschema %}
