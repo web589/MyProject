@@ -1,0 +1,9 @@
+{%- assign ai_heading_size = section.settings.heading_size | default: 52 -%}
+{%- assign ai_body_size = section.settings.body_size | default: 16 -%}
+{%- assign ai_eyebrow_size = section.settings.eyebrow_size | default: 11 -%}
+{%- assign ai_item_heading_size = section.settings.item_heading_size | default: 18 -%}
+{%- assign ai_item_text_size = section.settings.item_text_size | default: 13 -%}
+{%- assign ai_control_size = section.settings.control_size | default: 13 -%}
+{%- assign ai_note_size = section.settings.note_size | default: 12 -%}
+{%- assign ai_section_spacing = section.settings.section_spacing | default: 80 -%}
+--ai-heading-size: {{ ai_heading_size }}px; --ai-body-size: {{ ai_body_size }}px; --ai-eyebrow-size: {{ ai_eyebrow_size }}px; --ai-item-heading-size: {{ ai_item_heading_size }}px; --ai-item-text-size: {{ ai_item_text_size }}px; --ai-control-size: {{ ai_control_size }}px; --ai-note-size: {{ ai_note_size }}px; --ai-section-spacing: {{ ai_section_spacing }}px;

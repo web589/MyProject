@@ -369,6 +369,8 @@
 
 .ac-storage-page__media--hero {
   height: var(--ac-hero-media-height, 480px);
+  width: min(100%, var(--ac-hero-image-width, 100%));
+  justify-self: end;
 }
 
 .ac-storage-page__media--hero img {
@@ -462,6 +464,8 @@
 
 .ac-storage-page__media--flow {
   height: var(--ac-flow-image-height, 460px);
+  width: min(100%, var(--ac-flow-image-width, 100%));
+  margin-inline: auto;
 }
 
 .ac-storage-page__flow-nodes {
@@ -558,6 +562,8 @@
 
 .ac-storage-page__media--why {
   height: var(--ac-card-image-height, 210px);
+  width: min(100%, var(--ac-card-image-width, 100%));
+  margin-inline: auto;
   border: 0;
   border-bottom: 1px solid var(--ac-line);
   border-radius: 0;
@@ -759,6 +765,8 @@
 
 .ac-storage-page__smart-visuals {
   display: flex;
+  width: min(100%, var(--ac-smart-main-width, 100%));
+  margin-inline: auto;
   flex-direction: column;
   gap: 14px;
 }
@@ -775,6 +783,8 @@
 
 .ac-storage-page__smart-small-grid {
   display: grid;
+  width: min(100%, var(--ac-smart-small-width, 100%));
+  margin-inline: auto;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
@@ -796,6 +806,8 @@
 
 .ac-storage-page__media--audience {
   height: var(--ac-card-image-height, 190px);
+  width: min(100%, var(--ac-card-image-width, 100%));
+  margin-inline: auto;
   border: 0;
   border-bottom: 1px solid var(--ac-line);
   border-radius: 0;
@@ -824,6 +836,8 @@
 .ac-storage-page__media--model {
   display: block;
   height: var(--ac-card-image-height, 210px);
+  width: min(100%, var(--ac-card-image-width, 100%));
+  margin-inline: auto;
   border: 0;
   border-bottom: 1px solid var(--ac-line);
   border-radius: 0;
@@ -939,6 +953,8 @@
 
 .ac-storage-page__media--blog {
   height: var(--ac-card-image-height, 140px);
+  width: min(100%, var(--ac-card-image-width, 100%));
+  margin-inline: auto;
   border: 0;
   border-bottom: 1px solid var(--ac-line);
   border-radius: 0;

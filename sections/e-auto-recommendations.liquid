@@ -59,7 +59,21 @@
     </div>
     <div class="e-auto-page__recommendation-grid" data-eauto-recommendation-grid>
       {% for index in (0..2) %}
-        <article class="e-auto-page__product-card" data-eauto-card="{{ index }}">
+        {% assign card_block = section.blocks[index] %}
+        <article
+          class="e-auto-page__product-card"
+          data-eauto-card="{{ index }}"
+          data-eauto-card-badge-override="{{ card_block.settings.badge | escape }}"
+          data-eauto-card-title-override="{{ card_block.settings.title | escape }}"
+          data-eauto-card-variant-override="{{ card_block.settings.variant | escape }}"
+          data-eauto-card-capacity-override="{{ card_block.settings.capacity | escape }}"
+          data-eauto-card-price-override="{{ card_block.settings.price | escape }}"
+          data-eauto-card-availability-override="{{ card_block.settings.availability | escape }}"
+          data-eauto-card-cta-label-override="{{ card_block.settings.cta_label | escape }}"
+          data-eauto-card-cta-link-override="{{ card_block.settings.cta_link | escape }}"
+          data-eauto-card-default-cta-label="{{ section.settings.card_cta_label | escape }}"
+          {% if card_block != blank %}{{ card_block.shopify_attributes }}{% endif %}
+        >
           <a class="e-auto-page__product-card-media" data-eauto-card-link href="#">
             <img data-eauto-card-image hidden loading="lazy" width="720" height="720" alt="">
             <span data-eauto-card-placeholder>{{ section.settings.card_loading_label }}</span>
@@ -73,7 +87,7 @@
               <strong data-eauto-card-price>–</strong>
               <span data-eauto-card-availability>{{ section.settings.card_loading_label }}</span>
             </div>
-            <a class="e-auto-page__button e-auto-page__button--secondary" data-eauto-card-action href="#">{{ section.settings.card_cta_label }}</a>
+            <a class="e-auto-page__button e-auto-page__button--secondary" data-eauto-card-action href="#">{{ card_block.settings.cta_label | default: section.settings.card_cta_label }}</a>
           </div>
         </article>
       {% endfor %}
@@ -127,6 +141,23 @@
   "name": "E-Auto Empfehlungen",
   "tag": "section",
   "class": "section-e-auto-recommendations",
+  "blocks": [
+    {
+      "type": "card_copy",
+      "name": "Empfehlungskarte",
+      "settings": [
+        {"type":"text","id":"badge","label":"Badge überschreiben","info":"Leer lassen für EMPFOHLENE/ALTERNATIVE KONFIGURATION."},
+        {"type":"text","id":"title","label":"Titel überschreiben","info":"Leer lassen für den Shopify-Produkttitel."},
+        {"type":"text","id":"variant","label":"Konfiguration überschreiben","info":"Leer lassen für den automatisch ermittelten Variantentitel."},
+        {"type":"text","id":"capacity","label":"Kapazität überschreiben","info":"Leer lassen für die automatisch berechnete Kapazität."},
+        {"type":"text","id":"price","label":"Preis überschreiben","info":"Leer lassen für den aktuellen Shopify-Preis."},
+        {"type":"text","id":"availability","label":"Verfügbarkeit überschreiben","info":"Leer lassen für den aktuellen Shopify-Status."},
+        {"type":"text","id":"cta_label","label":"Button überschreiben","info":"Leer lassen für den globalen Karten-CTA."},
+        {"type":"url","id":"cta_link","label":"Button-Link überschreiben","info":"Leer lassen für den automatisch ermittelten Produkt-Link."}
+      ]
+    }
+  ],
+  "max_blocks": 3,
   "settings": [
     {"type":"product","id":"product_mini","label":"VENUS E Mini Produkt"},
     {"type":"product","id":"product_3","label":"VENUS E 3.0 Produkt"},

@@ -388,34 +388,52 @@
     if (node) node.textContent = value;
   }
 
+  function readCardOverrides(card) {
+    var dataset = card ? card.dataset : {};
+    return {
+      badge: dataset.eautoCardBadgeOverride || '',
+      title: dataset.eautoCardTitleOverride || '',
+      variant: dataset.eautoCardVariantOverride || '',
+      capacity: dataset.eautoCardCapacityOverride || '',
+      price: dataset.eautoCardPriceOverride || '',
+      availability: dataset.eautoCardAvailabilityOverride || '',
+      ctaLabel: dataset.eautoCardCtaLabelOverride || '',
+      ctaLink: dataset.eautoCardCtaLinkOverride || ''
+    };
+  }
+
   function renderCard(root, index, item, copy, unit) {
     var card = root.querySelector('[data-eauto-card="' + index + '"]');
     if (!card) return;
 
+    var overrides = readCardOverrides(card);
     var productUrl = productVariantUrl(item);
     var title = (item.quantity > 1 ? item.quantity + '× ' : '') + item.title;
+    var renderedTitle = overrides.title || title;
     var image = card.querySelector('[data-eauto-card-image]');
     var placeholder = card.querySelector('[data-eauto-card-placeholder]');
     var titleLink = card.querySelector('[data-eauto-card-title-link]');
     var mediaLink = card.querySelector('[data-eauto-card-link]');
     var action = card.querySelector('[data-eauto-card-action]');
+    var actionUrl = overrides.ctaLink || productUrl;
 
-    setText(card, '[data-eauto-card-title]', title);
-    setText(card, '[data-eauto-card-variant]', item.variant ? item.variant.title : copy.variantUnavailableLabel);
-    setText(card, '[data-eauto-card-capacity]', formatCapacity(item.capacity, unit));
-    setText(card, '[data-eauto-card-price]', item.variant ? formatMoney(item.variant.price) : '—');
+    setText(card, '[data-eauto-card-title]', renderedTitle);
+    setText(card, '[data-eauto-card-variant]', overrides.variant || (item.variant ? item.variant.title : copy.variantUnavailableLabel));
+    setText(card, '[data-eauto-card-capacity]', overrides.capacity || formatCapacity(item.capacity, unit));
+    setText(card, '[data-eauto-card-price]', overrides.price || (item.variant ? formatMoney(item.variant.price) : '—'));
 
     var availability = item.preorder
       ? copy.preorderLabel
       : item.available
         ? copy.availableLabel
         : copy.unavailableLabel;
-    setText(card, '[data-eauto-card-availability]', availability);
-    setText(card, '[data-eauto-card-badge]', index === 0 ? copy.primaryLabel : copy.alternativeLabel);
+    setText(card, '[data-eauto-card-availability]', overrides.availability || availability);
+    setText(card, '[data-eauto-card-badge]', overrides.badge || (index === 0 ? copy.primaryLabel : copy.alternativeLabel));
+    setText(card, '[data-eauto-card-action]', overrides.ctaLabel || card.dataset.eautoCardDefaultCtaLabel || '');
 
     if (item.image) {
       image.src = item.image;
-      image.alt = title;
+      image.alt = renderedTitle;
       image.hidden = false;
       placeholder.hidden = true;
     } else {
@@ -423,18 +441,26 @@
       placeholder.hidden = false;
     }
 
-    [titleLink, mediaLink, action].forEach(function (link) {
+    [titleLink, mediaLink].forEach(function (link) {
       if (!link) return;
       link.href = productUrl;
       link.removeAttribute('aria-disabled');
     });
+    if (action) {
+      action.href = actionUrl;
+      action.removeAttribute('aria-disabled');
+    }
 
     if (!item.url) {
-      [titleLink, mediaLink, action].forEach(function (link) {
+      [titleLink, mediaLink].forEach(function (link) {
         if (!link) return;
         link.href = '#';
         link.setAttribute('aria-disabled', 'true');
       });
+    }
+    if (!actionUrl && action) {
+      action.href = '#';
+      action.setAttribute('aria-disabled', 'true');
     }
 
     card.classList.toggle('is-unavailable', !item.available && !item.preorder);

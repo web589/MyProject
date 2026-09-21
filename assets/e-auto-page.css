@@ -276,7 +276,7 @@
 
 .e-auto-page__stats strong {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
   color: var(--eauto-ink);
   font-size: var(--eauto-value-size, 18px);
@@ -296,6 +296,7 @@
 
 .e-auto-page__stats .e-auto-page__stat-unit {
   display: inline-flex;
+  align-self: baseline;
   align-items: center;
   min-height: 0;
   padding: 0;
@@ -304,7 +305,7 @@
   color: var(--eauto-blue) !important;
   font-size: var(--eauto-item-text-size, 10px);
   font-weight: 760;
-  line-height: 1;
+  line-height: inherit;
 }
 
 /* 02 — problem */
@@ -739,6 +740,7 @@
 }
 
 .e-auto-page__product-card {
+  position: relative;
   display: flex;
   min-width: 0;
   flex-direction: column;
@@ -746,11 +748,19 @@
   border: 1px solid var(--eauto-line);
   border-radius: 8px;
   background: #fff;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 .e-auto-page__product-card:first-child {
   grid-row: 1 / span 2;
+}
+
+.e-auto-page__product-card:hover,
+.e-auto-page__product-card:focus-within {
+  z-index: 1;
   border-color: var(--eauto-blue);
+  box-shadow: 0 12px 26px rgba(0, 111, 196, 0.12);
+  transform: translateY(-3px);
 }
 
 .e-auto-page__product-card:not(:first-child) {
