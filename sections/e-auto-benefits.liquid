@@ -2,7 +2,7 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-benefits" class="e-auto-page e-auto-page__section e-auto-page__benefits" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px;" aria-labelledby="{{ page_id }}-benefits-heading">
+<section id="eauto-benefits" class="e-auto-page e-auto-page__section e-auto-page__benefits" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 11 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 13 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 12 }}px; --eauto-control-size: {{ section.settings.control_size | default: 12 }}px; --eauto-value-size: {{ section.settings.value_size | default: 34 }}px; --eauto-note-size: {{ section.settings.note_size | default: 10 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px;" aria-labelledby="{{ page_id }}-benefits-heading">
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.benefits_eyebrow }}</p>
@@ -31,6 +31,13 @@
     {"type":"text","id":"benefits_heading_accent","label":"Vorteile Überschrift – blauer Akzent","default":"wirklich bringt"},
     {"type":"textarea","id":"benefits_text","label":"Vorteile Text","default":"Solarstrom wird zeitlich verschoben und steht dann zur Verfügung, wenn Haushalt und E-Auto ihn brauchen."},
     {"type":"textarea","id":"benefits_note","label":"Vorteile Fußnote","default":"* Orientierungswerte, abhängig von Anlagengröße, Verbrauchsprofil und Speicherkapazität."},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Kicker Größe","min":9,"max":18,"step":1,"unit":"px","default":11},
+    {"type":"range","id":"item_heading_size","label":"Vorteil Titel Größe","min":12,"max":26,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"item_text_size","label":"Vorteil Text Größe","min":10,"max":20,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"control_size","label":"Interaktion Größe","min":11,"max":18,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"value_size","label":"Vorteil Wert Größe","min":20,"max":64,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"note_size","label":"Fußnote Größe","min":10,"max":16,"step":1,"unit":"px","default":10},
     {"type":"header","content":"Layout und Größen"},
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},

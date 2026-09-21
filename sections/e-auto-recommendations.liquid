@@ -39,7 +39,7 @@
 <section
   id="eauto-recommendations"
   class="e-auto-page e-auto-page__section e-auto-page__recommendations"
-  style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-recommendation-media-height: {{ section.settings.recommendation_media_height }}px;"
+  style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 10 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 18 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 12 }}px; --eauto-control-size: {{ section.settings.control_size | default: 14 }}px; --eauto-value-size: {{ section.settings.value_size | default: 15 }}px; --eauto-note-size: {{ section.settings.note_size | default: 12 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-recommendation-media-height: {{ section.settings.recommendation_media_height }}px;"
   data-eauto-page
   data-section-id="{{ section.id }}"
   data-eauto-available-label="{{ section.settings.available_label | escape }}"
@@ -146,10 +146,17 @@
     {"type":"text","id":"available_label","label":"Verfügbar Label","default":"Verfügbar"},
     {"type":"text","id":"unavailable_label","label":"Nicht verfügbar Label","default":"Derzeit nicht verfügbar"},
     {"type":"text","id":"preorder_label","label":"Vormerkung Label","default":"Demnächst verfügbar"},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Badge und Label Größe","min":9,"max":18,"step":1,"unit":"px","default":10},
+    {"type":"range","id":"item_heading_size","label":"Produkt Titel Größe","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"Produkt Text Größe","min":10,"max":20,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"control_size","label":"Button Größe","min":11,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"value_size","label":"Preis Größe","min":12,"max":24,"step":1,"unit":"px","default":15},
+    {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
-    {"type":"range","id":"recommendation_media_height","label":"Produkt Bildhöhe","min":180,"max":420,"step":10,"unit":"px","default":240},
+    {"type":"range","id":"recommendation_media_height","label":"Produkt Bildhöhe","min":180,"max":420,"step":10,"unit":"px","default":220},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "presets": [{"name":"E-Auto Empfehlungen"}]

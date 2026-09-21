@@ -20,16 +20,15 @@
   }
 
   .{{ download_center_id }}__hero {
-    width: min(100%, 1640px);
+    width: min(100%, 1520px);
+    aspect-ratio: 1520 / 360;
     margin: 0 auto 72px;
   }
 
   .{{ download_center_id }}__hero-image {
     display: block;
     width: 100%;
-    height: auto;
-    min-height: 180px;
-    max-height: 300px;
+    height: 100%;
     object-fit: cover;
   }
 
@@ -332,11 +331,11 @@
     <div class="{{ download_center_id }}__hero">
       {{
         section.settings.hero_image
-        | image_url: width: 1640
+        | image_url: width: 1520
         | image_tag:
           class: download_center_hero_class,
           loading: 'eager',
-          widths: '640, 960, 1280, 1640',
+          widths: '640, 960, 1280, 1520',
           sizes: '100vw',
           alt: section.settings.hero_alt
       }}

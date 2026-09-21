@@ -2,12 +2,12 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-problem" class="e-auto-page e-auto-page__section e-auto-page__problem" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-problem-media-height: {{ section.settings.problem_media_height }}px;" aria-labelledby="{{ page_id }}-problem-heading">
+<section id="eauto-problem" class="e-auto-page e-auto-page__section e-auto-page__problem" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 11 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 18 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 13 }}px; --eauto-control-size: {{ section.settings.control_size | default: 12 }}px; --eauto-value-size: {{ section.settings.value_size | default: 34 }}px; --eauto-note-size: {{ section.settings.note_size | default: 12 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-problem-media-height: {{ section.settings.problem_media_height }}px;" aria-labelledby="{{ page_id }}-problem-heading">
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.problem_eyebrow }}</p>
       <h2 id="{{ page_id }}-problem-heading">{{ section.settings.problem_heading }}{% if section.settings.problem_heading_accent != blank %} <span>{{ section.settings.problem_heading_accent }}</span>{% endif %}</h2>
-      <p>{{ section.settings.problem_text }}</p>
+      <p>{{ section.settings.problem_text }}{% if section.settings.problem_text_accent != blank %} <strong><span>{{ section.settings.problem_text_accent }}</span></strong>{% endif %}</p>
     </div>
     <div class="e-auto-page__problem-grid">
       <div class="e-auto-page__media e-auto-page__media--wide">
@@ -42,7 +42,8 @@
     {"type":"text","id":"problem_eyebrow","label":"Problem Kicker","default":"Das Problem"},
     {"type":"text","id":"problem_heading","label":"Problem Überschrift – Hauptteil","default":"Deine PV produziert am Tag. Dein Auto lädt"},
     {"type":"text","id":"problem_heading_accent","label":"Problem Überschrift – blauer Akzent","default":"abends."},
-    {"type":"textarea","id":"problem_text","label":"Problem Text","default":"Die Lösung ist nicht mehr Sonne. Es ist der richtige Zeitpunkt – gespeichert."},
+    {"type":"textarea","id":"problem_text","label":"Problem Text","default":"Die Lösung ist nicht mehr Sonne. Es ist"},
+    {"type":"text","id":"problem_text_accent","label":"Problem Text – blauer Akzent","default":"der richtige Zeitpunkt – gespeichert."},
     {"type":"image_picker","id":"problem_image","label":"Problem Bild"},
     {"type":"text","id":"problem_image_alt","label":"Problem Bild Alt-Text","default":"PV-Anlage am Mittag und E-Auto an der Wallbox am Abend"},
     {"type":"text","id":"problem_image_placeholder","label":"Problem Bild Platzhalter","default":"Breites Tag-Nacht-Bild auswählen"},
@@ -52,6 +53,13 @@
     {"type":"text","id":"problem_card_2_kicker","label":"Problem Karte 2 Kicker","default":"ABEND · 19:00"},
     {"type":"text","id":"problem_card_2_heading","label":"Problem Karte 2 Überschrift","default":"E-Auto laden – die Sonne ist schon weg"},
     {"type":"textarea","id":"problem_card_2_text","label":"Problem Karte 2 Text","default":"Du kommst nach Hause und steckst dein Auto an. Ohne Speicher lädt dein Solar-Auto dann mit Netzstrom."},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Kicker und Zeitangabe Größe","min":9,"max":18,"step":1,"unit":"px","default":11},
+    {"type":"range","id":"item_heading_size","label":"Karten Überschrift Größe","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"Karten Text Größe","min":10,"max":20,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"control_size","label":"Interaktion Größe","min":11,"max":18,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"value_size","label":"Wert Größe","min":20,"max":64,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},

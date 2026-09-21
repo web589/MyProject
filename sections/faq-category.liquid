@@ -229,7 +229,7 @@
             {%- render 'collapsible-icons-alt', no_circle: true -%}
           </button>
           <div id="{{ faq_answer_id }}" class="collapsible-content collapsible-content--all" role="region" aria-labelledby="{{ faq_question_id }}">
-            <div class="faq-category-section__answer rte">{{ block.settings.text }}</div>
+            <div class="collapsible-content__inner faq-category-section__answer rte">{{ block.settings.text }}</div>
           </div>
         </div>
       {%- endif -%}

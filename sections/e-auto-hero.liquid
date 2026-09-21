@@ -4,10 +4,10 @@
   assign hero_secondary_link = section.settings.hero_secondary_link | default: '#eauto-flow'
 %}
 
-<section id="eauto-start" class="e-auto-page e-auto-page__hero" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-hero-media-height: {{ section.settings.hero_media_height }}px; --eauto-hero-image-width: {{ section.settings.hero_image_width }}%;" aria-labelledby="{{ page_id }}-hero-heading">
+<section id="eauto-start" class="e-auto-page e-auto-page__hero" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 11 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 18 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 12 }}px; --eauto-control-size: {{ section.settings.control_size | default: 14 }}px; --eauto-value-size: {{ section.settings.value_size | default: 18 }}px; --eauto-note-size: {{ section.settings.note_size | default: 12 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-hero-media-height: {{ section.settings.hero_media_height }}px; --eauto-hero-image-width: {{ section.settings.hero_image_width }}%;" aria-labelledby="{{ page_id }}-hero-heading">
   <div class="e-auto-page__container e-auto-page__hero-grid">
     <div class="e-auto-page__hero-copy">
-      {% if section.settings.hero_eyebrow != blank %}<p class="e-auto-page__eyebrow">{{ section.settings.hero_eyebrow }}</p>{% endif %}
+      {% if section.settings.hero_eyebrow != blank %}<p class="e-auto-page__eyebrow e-auto-page__eyebrow--hero">{{ section.settings.hero_eyebrow }}</p>{% endif %}
       <h1 id="{{ page_id }}-hero-heading">{{ section.settings.hero_heading }}{% if section.settings.hero_heading_accent != blank %} <span>{{ section.settings.hero_heading_accent }}</span>{% endif %}</h1>
       {% if section.settings.hero_text != blank %}<p class="e-auto-page__lead">{{ section.settings.hero_text }}</p>{% endif %}
       <div class="e-auto-page__actions">
@@ -15,9 +15,9 @@
         <a class="e-auto-page__button e-auto-page__button--secondary" href="{{ hero_secondary_link }}">{{ section.settings.hero_secondary_label }}</a>
       </div>
       <div class="e-auto-page__stats" aria-label="{{ section.settings.hero_stats_label }}">
-        <div><strong>{{ section.settings.hero_stat_1_value }}</strong><span>{{ section.settings.hero_stat_1_label }}</span></div>
-        <div><strong>{{ section.settings.hero_stat_2_value }}</strong><span>{{ section.settings.hero_stat_2_label }}</span></div>
-        <div><strong>{{ section.settings.hero_stat_3_value }}</strong><span>{{ section.settings.hero_stat_3_label }}</span></div>
+        <div><strong><span class="e-auto-page__stat-value">{{ section.settings.hero_stat_1_value }}</span><span class="e-auto-page__stat-unit">{{ section.settings.hero_stat_1_unit }}</span></strong><span>{{ section.settings.hero_stat_1_label }}</span></div>
+        <div><strong><span class="e-auto-page__stat-value">{{ section.settings.hero_stat_2_value }}</span><span class="e-auto-page__stat-unit">{{ section.settings.hero_stat_2_unit }}</span></strong><span>{{ section.settings.hero_stat_2_label }}</span></div>
+        <div><strong><span class="e-auto-page__stat-value">{{ section.settings.hero_stat_3_value }}</span><span class="e-auto-page__stat-unit">{{ section.settings.hero_stat_3_unit }}</span></strong><span>{{ section.settings.hero_stat_3_label }}</span></div>
       </div>
     </div>
     <div class="e-auto-page__media e-auto-page__media--hero">
@@ -48,12 +48,22 @@
     {"type":"text","id":"hero_image_alt","label":"Hero Bild Alt-Text","default":"PV-Anlage, VENUS E Speicher und E-Auto an einem modernen Wohnhaus"},
     {"type":"text","id":"hero_image_placeholder","label":"Hero Bild Platzhalter","default":"Hero-Bild auswählen: PV, VENUS E, Wallbox und E-Auto"},
     {"type":"text","id":"hero_stats_label","label":"Hero Kennzahlen Label","default":"E-Auto Speicher Kennzahlen"},
-    {"type":"text","id":"hero_stat_1_value","label":"Kennzahl 1 Wert","default":"2–30 kWh"},
+    {"type":"text","id":"hero_stat_1_value","label":"Kennzahl 1 Wert","default":"2–30"},
+    {"type":"text","id":"hero_stat_1_unit","label":"Kennzahl 1 Einheit","default":"kWh"},
     {"type":"text","id":"hero_stat_1_label","label":"Kennzahl 1 Label","default":"Speicherkapazität"},
-    {"type":"text","id":"hero_stat_2_value","label":"Kennzahl 2 Wert","default":"bis zu 3,6 kW"},
+    {"type":"text","id":"hero_stat_2_value","label":"Kennzahl 2 Wert","default":"bis zu 3,6"},
+    {"type":"text","id":"hero_stat_2_unit","label":"Kennzahl 2 Einheit","default":"kW"},
     {"type":"text","id":"hero_stat_2_label","label":"Kennzahl 2 Label","default":"Ausgangsleistung"},
-    {"type":"text","id":"hero_stat_3_value","label":"Kennzahl 3 Wert","default":"10 Jahre"},
+    {"type":"text","id":"hero_stat_3_value","label":"Kennzahl 3 Wert","default":"10"},
+    {"type":"text","id":"hero_stat_3_unit","label":"Kennzahl 3 Einheit","default":"Jahre"},
     {"type":"text","id":"hero_stat_3_label","label":"Kennzahl 3 Label","default":"Herstellergarantie"},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Kicker und Label Größe","min":9,"max":18,"step":1,"unit":"px","default":11},
+    {"type":"range","id":"item_heading_size","label":"Statistik Titel Größe","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"Statistik Text Größe","min":10,"max":20,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"control_size","label":"Button Größe","min":11,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"value_size","label":"Statistik Wert Größe","min":14,"max":32,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":36,"max":72,"step":1,"unit":"px","default":52},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},

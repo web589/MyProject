@@ -2,7 +2,7 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-faq" class="e-auto-page e-auto-page__section e-auto-page__faq" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px;" aria-labelledby="{{ page_id }}-faq-heading">
+<section id="eauto-faq" class="e-auto-page e-auto-page__section e-auto-page__faq" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 11 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 16 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 16 }}px; --eauto-control-size: {{ section.settings.control_size | default: 13 }}px; --eauto-value-size: {{ section.settings.value_size | default: 34 }}px; --eauto-note-size: {{ section.settings.note_size | default: 12 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px;" aria-labelledby="{{ page_id }}-faq-heading">
   <div class="e-auto-page__container e-auto-page__faq-container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.faq_eyebrow }}</p>
@@ -35,6 +35,13 @@
     {"type":"text","id":"faq_heading","label":"FAQ Überschrift – Hauptteil","default":"Fragen rund ums"},
     {"type":"text","id":"faq_heading_accent","label":"FAQ Überschrift – blauer Akzent","default":"E-Auto laden mit Speicher"},
     {"type":"textarea","id":"faq_text","label":"FAQ Text","default":"Die wichtigsten Antworten zur Verbindung von PV, Hausnetz, Speicher und Wallbox."},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Kicker Größe","min":9,"max":18,"step":1,"unit":"px","default":11},
+    {"type":"range","id":"item_heading_size","label":"Frage Größe","min":13,"max":24,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"item_text_size","label":"Antwort Größe","min":12,"max":20,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"control_size","label":"Frage Button Größe","min":11,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"value_size","label":"Wert Größe","min":20,"max":64,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":38},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},

@@ -1,22 +1,27 @@
 {% liquid
   assign page_id = 'eauto-' | append: section.id
   assign final_primary_link = section.settings.final_primary_link | default: '#eauto-calculator'
+  assign final_secondary_label = section.settings.final_secondary_label | default: 'VENUS E Modelle vergleichen'
+  assign final_secondary_link = section.settings.final_secondary_link | default: '/pages/venus-e-vergleich'
 %}
 
-<section id="eauto-final" class="e-auto-page e-auto-page__final" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-final-media-height: {{ section.settings.final_media_height }}px;" aria-labelledby="{{ page_id }}-final-heading">
+<section id="eauto-final" class="e-auto-page e-auto-page__final" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 11 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 18 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 13 }}px; --eauto-control-size: {{ section.settings.control_size | default: 14 }}px; --eauto-value-size: {{ section.settings.value_size | default: 34 }}px; --eauto-note-size: {{ section.settings.note_size | default: 12 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-final-media-height: {{ section.settings.final_media_height }}px;" aria-labelledby="{{ page_id }}-final-heading">
   <div class="e-auto-page__container e-auto-page__final-inner">
-    <div>
+    <div class="e-auto-page__final-copy">
       <p class="e-auto-page__eyebrow">{{ section.settings.final_eyebrow }}</p>
       <h2 id="{{ page_id }}-final-heading">{{ section.settings.final_heading }}{% if section.settings.final_heading_accent != blank %} <span>{{ section.settings.final_heading_accent }}</span>{% endif %}</h2>
       <p>{{ section.settings.final_text }}</p>
-      <a class="e-auto-page__button e-auto-page__button--primary" href="{{ final_primary_link }}">{{ section.settings.final_primary_label }} <span aria-hidden="true">→</span></a>
     </div>
     <div class="e-auto-page__media e-auto-page__media--final">
       {% if section.settings.final_image != blank %}
-        {{ section.settings.final_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 960px) 50vw, 100vw', alt: section.settings.final_image_alt }}
+        {{ section.settings.final_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 1200px) 1152px, calc(100vw - 40px)', alt: section.settings.final_image_alt }}
       {% elsif request.design_mode %}
         <div class="e-auto-page__placeholder">{{ section.settings.final_image_placeholder }}</div>
       {% endif %}
+    </div>
+    <div class="e-auto-page__final-actions">
+      <a class="e-auto-page__button e-auto-page__button--primary" href="{{ final_primary_link }}">{{ section.settings.final_primary_label }} <span aria-hidden="true">→</span></a>
+      <a class="e-auto-page__button e-auto-page__button--secondary" href="{{ final_secondary_link }}">{{ final_secondary_label }}</a>
     </div>
   </div>
 </section>
@@ -30,17 +35,26 @@
     {"type":"text","id":"final_eyebrow","label":"Abschluss Kicker","default":"Bereit?"},
     {"type":"text","id":"final_heading","label":"Abschluss Überschrift – Hauptteil","default":"Finde den Speicher,"},
     {"type":"text","id":"final_heading_accent","label":"Abschluss Überschrift – blauer Akzent","default":"der zu deinem Auto passt"},
-    {"type":"textarea","id":"final_text","label":"Abschluss Text","default":"Von der kompakten Lösung bis zur großen Konfiguration: Starte mit deinem Fahrprofil und vergleiche die passenden VENUS E Modelle."},
+    {"type":"textarea","id":"final_text","label":"Abschluss Text","default":"Von der kompakten Wohnungslösung bis zum 30-kWh-Speicher für zwei Autos – vier Konfigurationen, ein System."},
     {"type":"text","id":"final_primary_label","label":"Abschluss Button","default":"Passenden Speicher finden"},
     {"type":"url","id":"final_primary_link","label":"Abschluss Link"},
+    {"type":"text","id":"final_secondary_label","label":"Vergleich Button","default":"VENUS E Modelle vergleichen"},
+    {"type":"url","id":"final_secondary_link","label":"Vergleich Link"},
     {"type":"image_picker","id":"final_image","label":"Abschluss Bild"},
     {"type":"text","id":"final_image_alt","label":"Abschluss Bild Alt-Text","default":"VENUS E Produktreihe für unterschiedliche E-Auto Fahrprofile"},
     {"type":"text","id":"final_image_placeholder","label":"Abschluss Bild Platzhalter","default":"Produktreihe-Bild auswählen"},
+    {"type":"header","content":"Typography"},
+    {"type":"range","id":"eyebrow_size","label":"Kicker Größe","min":9,"max":18,"step":1,"unit":"px","default":11},
+    {"type":"range","id":"item_heading_size","label":"Detail Überschrift Größe","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"Detail Text Größe","min":10,"max":20,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"control_size","label":"Button Größe","min":11,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"value_size","label":"Wert Größe","min":20,"max":64,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":38},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"final_media_height","label":"Abschluss Bildhöhe","min":180,"max":420,"step":10,"unit":"px","default":260},
-    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":72}
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":56}
   ],
   "presets": [{"name":"E-Auto Abschluss"}]
 }

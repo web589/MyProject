@@ -8,6 +8,7 @@
 <nav
   id="{{ navigation_anchor }}"
   class="bw-storage bw-storage-section bw-anchor-nav bw-anchor-target"
+  style="--eauto-control-size: {{ section.settings.control_size | default: 13 }}px;"
   data-eauto-anchor-nav
   data-section-id="{{ section.id }}"
   aria-label="{{ section.settings.aria_label | escape }}"
@@ -75,6 +76,20 @@
       "label": "CTA Sprungziel",
       "info": "Anker-ID mit oder ohne # eingeben.",
       "default": "#eauto-calculator"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "control_size",
+      "label": "Navigation Größe",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 13
     }
   ],
   "blocks": [
