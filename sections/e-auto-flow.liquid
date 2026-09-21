@@ -6,7 +6,7 @@
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.flow_eyebrow }}</p>
-      <h2 id="{{ page_id }}-flow-heading">{{ section.settings.flow_heading }}{% if section.settings.flow_heading_accent != blank %} <span>{{ section.settings.flow_heading_accent }}</span>{% endif %}</h2>
+      <h2 id="{{ page_id }}-flow-heading">{{ section.settings.flow_heading }}{% if section.settings.flow_heading_accent != blank %} <span>{{ section.settings.flow_heading_accent }}</span>{% endif %}{% if section.settings.flow_heading_suffix != blank %} {{ section.settings.flow_heading_suffix }}{% endif %}</h2>
       <p>{{ section.settings.flow_text }}</p>
     </div>
     <div class="e-auto-page__toggle" role="tablist" aria-label="{{ section.settings.flow_toggle_label }}">
@@ -47,7 +47,8 @@
   "settings": [
     {"type":"text","id":"flow_eyebrow","label":"Energiefluss Kicker","default":"So funktioniert es"},
     {"type":"text","id":"flow_heading","label":"Energiefluss Überschrift – Hauptteil","default":"Energiefluss:"},
-    {"type":"text","id":"flow_heading_accent","label":"Energiefluss Überschrift – blauer Akzent","default":"AC-gekoppelt über dein Hausnetz"},
+    {"type":"text","id":"flow_heading_accent","label":"Energiefluss Überschrift – blauer Akzent","default":"AC-gekoppelt"},
+    {"type":"text","id":"flow_heading_suffix","label":"Energiefluss Überschrift – schwarzer Ergänzungstext","default":"über dein Hausnetz"},
     {"type":"textarea","id":"flow_text","label":"Energiefluss Text","default":"Der VENUS E wird an dein Hausnetz angeschlossen – nicht an dein Auto. PV-Überschuss landet zuerst im Speicher, abends fließt er über das Hausnetz zu Wallbox und E-Auto."},
     {"type":"text","id":"flow_toggle_label","label":"Energiefluss Tab Label","default":"Tageszeit auswählen"},
     {"type":"text","id":"flow_day_label","label":"Tag Tab","default":"☀ Tag · Speichern"},
