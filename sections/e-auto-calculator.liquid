@@ -1,10 +1,10 @@
 {% liquid
   assign page_id = 'eauto-' | append: section.id
   assign result_button_target = section.settings.result_button_target | default: 'eauto-recommendations' | remove_first: '#' | handle | prepend: '#'
-  assign distance_heading_parts = section.settings.distance_heading | split: ' ø'
-  assign efficiency_heading_parts = section.settings.efficiency_heading | split: ' kWh / 100 km'
-  assign pv_heading_parts = section.settings.pv_heading | split: ' geschätzt pro Tag'
-  assign charge_heading_parts = section.settings.charge_heading | split: ' Ladefenster'
+  assign distance_heading_parts = section.settings.distance_heading | split: '?'
+  assign efficiency_heading_parts = section.settings.efficiency_heading | split: '?'
+  assign pv_heading_parts = section.settings.pv_heading | split: '?'
+  assign charge_heading_parts = section.settings.charge_heading | split: '?'
 %}
 
 <section id="eauto-calculator" class="e-auto-page e-auto-page__section e-auto-page__calculator-section" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 11 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 16 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 11 }}px; --eauto-control-size: {{ section.settings.control_size | default: 12 }}px; --eauto-value-size: {{ section.settings.value_size | default: 58 }}px; --eauto-note-size: {{ section.settings.note_size | default: 11 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px;" aria-labelledby="{{ page_id }}-calculator-heading">
@@ -24,7 +24,7 @@
       <div class="e-auto-page__calculator-steps">
         <div class="e-auto-page__calculator-step">
           <span class="e-auto-page__step-number">01</span>
-          <h3>{% if distance_heading_parts.size > 1 %}{{ distance_heading_parts[0] }} <span class="e-auto-page__calculator-detail">ø{{ distance_heading_parts[1] }}</span>{% else %}{{ section.settings.distance_heading }}{% endif %}</h3>
+          <h3>{% if distance_heading_parts.size > 1 %}{{ distance_heading_parts[0] }}? <span class="e-auto-page__calculator-detail">{{ distance_heading_parts[1] | strip }}</span>{% else %}{{ section.settings.distance_heading }}{% endif %}</h3>
           <div class="e-auto-page__option-grid" data-eauto-option-group="distance">
             <button type="button" class="is-active" data-eauto-option data-eauto-value="under20" aria-pressed="true">{{ section.settings.distance_option_under20_label }}</button>
             <button type="button" data-eauto-option data-eauto-value="20to40" aria-pressed="false">{{ section.settings.distance_option_20to40_label }}</button>
@@ -34,7 +34,7 @@
         </div>
         <div class="e-auto-page__calculator-step">
           <span class="e-auto-page__step-number">02</span>
-          <h3>{% if efficiency_heading_parts.size > 1 %}{{ efficiency_heading_parts[0] }} <span class="e-auto-page__calculator-detail">kWh / 100 km</span>{% else %}{{ section.settings.efficiency_heading }}{% endif %}</h3>
+          <h3>{% if efficiency_heading_parts.size > 1 %}{{ efficiency_heading_parts[0] }}? <span class="e-auto-page__calculator-detail">{{ efficiency_heading_parts[1] | strip }}</span>{% else %}{{ section.settings.efficiency_heading }}{% endif %}</h3>
           <div class="e-auto-page__option-grid" data-eauto-option-group="efficiency">
             <button type="button" class="is-active" data-eauto-option data-eauto-value="efficient" aria-pressed="true">{{ section.settings.efficiency_option_efficient_label }}{% if section.settings.efficiency_option_efficient_note != blank %} <small>({{ section.settings.efficiency_option_efficient_note }})</small>{% endif %}</button>
             <button type="button" data-eauto-option data-eauto-value="average" aria-pressed="false">{{ section.settings.efficiency_option_average_label }}{% if section.settings.efficiency_option_average_note != blank %} <small>({{ section.settings.efficiency_option_average_note }})</small>{% endif %}</button>
@@ -43,7 +43,7 @@
         </div>
         <div class="e-auto-page__calculator-step">
           <span class="e-auto-page__step-number">03</span>
-          <h3>{% if pv_heading_parts.size > 1 %}{{ pv_heading_parts[0] }} <span class="e-auto-page__calculator-detail">geschätzt pro Tag</span>{% else %}{{ section.settings.pv_heading }}{% endif %}</h3>
+          <h3>{% if pv_heading_parts.size > 1 %}{{ pv_heading_parts[0] }}? <span class="e-auto-page__calculator-detail">{{ pv_heading_parts[1] | strip }}</span>{% else %}{{ section.settings.pv_heading }}{% endif %}</h3>
           <div class="e-auto-page__option-grid" data-eauto-option-group="pv">
             <button type="button" data-eauto-option data-eauto-value="low" aria-pressed="false">{{ section.settings.pv_option_low_label }}</button>
             <button type="button" class="is-active" data-eauto-option data-eauto-value="medium" aria-pressed="true">{{ section.settings.pv_option_medium_label }}{% if section.settings.pv_option_medium_note != blank %} <small>({{ section.settings.pv_option_medium_note }})</small>{% endif %}</button>
@@ -52,7 +52,7 @@
         </div>
         <div class="e-auto-page__calculator-step">
           <span class="e-auto-page__step-number">04</span>
-          <h3>{% if charge_heading_parts.size > 1 %}{{ charge_heading_parts[0] }} <span class="e-auto-page__calculator-detail">Ladefenster</span>{% else %}{{ section.settings.charge_heading }}{% endif %}</h3>
+          <h3>{% if charge_heading_parts.size > 1 %}{{ charge_heading_parts[0] }}? <span class="e-auto-page__calculator-detail">{{ charge_heading_parts[1] | strip }}</span>{% else %}{{ section.settings.charge_heading }}{% endif %}</h3>
           <div class="e-auto-page__option-grid" data-eauto-option-group="chargeWindow">
             <button type="button" class="is-active" data-eauto-option data-eauto-value="evening" aria-pressed="true">{{ section.settings.charge_option_evening_label }}</button>
             <button type="button" data-eauto-option data-eauto-value="daytime" aria-pressed="false">{{ section.settings.charge_option_daytime_label }}</button>
