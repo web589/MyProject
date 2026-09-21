@@ -6,10 +6,10 @@
     margin: 0 auto;
     padding: 0 0 56px;
     box-sizing: border-box;
-    scroll-margin-top: 32px;
   }
 
   #shopify-section-{{ section.id }} .faq-category-section__header {
+    position: relative;
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -17,6 +17,34 @@
     margin: 0 0 18px;
     padding: 0 0 16px;
     border-bottom: 1px solid #dce4ec;
+    scroll-margin-top: 120px;
+    transition: color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__header::after {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 3px;
+    border-radius: 999px;
+    background: #0099fe;
+    content: '';
+    opacity: 0;
+    transform: scaleX(0.35);
+    transform-origin: center;
+    transition: opacity 0.25s ease, transform 0.45s ease;
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__header.is-anchor-target {
+    color: #007dcc;
+    background: linear-gradient(90deg, rgba(0, 153, 254, 0.08), rgba(0, 153, 254, 0));
+    box-shadow: 0 14px 28px rgba(0, 153, 254, 0.08);
+  }
+
+  #shopify-section-{{ section.id }} .faq-category-section__header.is-anchor-target::after {
+    opacity: 1;
+    transform: scaleX(1);
   }
 
   #shopify-section-{{ section.id }} .faq-category-section__heading {
@@ -131,13 +159,13 @@
     #shopify-section-{{ section.id }} .faq-category-section {
       max-width: none;
       padding: 0 20px 42px;
-      scroll-margin-top: 20px;
     }
 
     #shopify-section-{{ section.id }} .faq-category-section__header {
       align-items: flex-start;
       gap: 12px;
       margin-bottom: 14px;
+      scroll-margin-top: 92px;
     }
 
     #shopify-section-{{ section.id }} .faq-category-section__heading {
@@ -173,8 +201,8 @@
   assign faq_question_count = section.blocks | where: 'type', 'question' | size
 -%}
 
-<section id="{{ faq_anchor_id }}" class="faq-category-section" aria-labelledby="FAQ-category-title-{{ section.id }}">
-  <header class="faq-category-section__header">
+<section data-faq-category-anchor="{{ faq_anchor_id }}" class="faq-category-section" aria-labelledby="FAQ-category-title-{{ section.id }}">
+  <header id="{{ faq_anchor_id }}" class="faq-category-section__header" data-faq-category-heading tabindex="-1">
     <h2 id="FAQ-category-title-{{ section.id }}" class="faq-category-section__heading">
       {%- if section.settings.category_number != blank -%}
         <span class="faq-category-section__number">{{ section.settings.category_number | escape }}</span>

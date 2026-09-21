@@ -1,0 +1,34 @@
+{%- liquid
+  assign page_id = 'ai-energy-guides-' | append: section.id
+  assign blog_url = '/blogs/blog-center'
+-%}
+
+<div class="ai-energy-page" data-ai-energy-page>
+  <section id="ratgeber" class="ai-energy__section ai-energy__guides" aria-labelledby="{{ page_id }}-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Mehr erfahren</p>
+      <h2 id="{{ page_id }}-heading">Ratgeber & <span>Energie-Wissen</span></h2>
+      <div class="ai-energy__guide-grid">
+        {% for block in section.blocks %}
+          <article class="ai-energy__guide-card" {{ block.shopify_attributes }}>
+            <a class="ai-energy__guide-media" href="{{ block.settings.url | default: blog_url }}">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 33vw, 100vw', alt: block.settings.title }}{% endif %}</a>
+            <div class="ai-energy__guide-copy"><p class="ai-energy__tag">{{ block.settings.tag }}</p><h3>{{ block.settings.title }}</h3><p>{{ block.settings.excerpt }}</p><a class="ai-energy__text-link" href="{{ block.settings.url | default: blog_url }}">Weiterlesen →</a></div>
+          </article>
+        {% endfor %}
+      </div>
+      <a class="ai-energy__button ai-energy__button--secondary ai-energy__center-cta" href="{{ blog_url }}">Alle Ratgeber ansehen →</a>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name":"AI Energie – Ratgeber",
+  "tag":"section",
+  "class":"section-ai-energy-guides",
+  "settings":[],
+  "blocks":[{"type":"guide","name":"Ratgeber Karte","settings":[{"type":"text","id":"tag","label":"Tag","default":"RATGEBER"},{"type":"text","id":"title","label":"Titel"},{"type":"textarea","id":"excerpt","label":"Kurztext"},{"type":"image_picker","id":"image","label":"Bild"},{"type":"url","id":"url","label":"Link"}]}],
+  "max_blocks":12,
+  "presets":[{"name":"AI Energie – Ratgeber","blocks":[{"type":"guide"},{"type":"guide"},{"type":"guide"}]}]
+}
+{% endschema %}

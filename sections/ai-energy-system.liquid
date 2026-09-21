@@ -1,0 +1,31 @@
+{%- assign page_id = 'ai-energy-system-' | append: section.id -%}
+
+<div class="ai-energy-page" data-ai-energy-page>
+  <section id="system" class="ai-energy__section ai-energy__system" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">VENUS E System</p>
+      <h2 id="{{ page_id }}-heading">Ein System, das mit deinem <span>Energiebedarf mitdenkt</span></h2>
+      <p class="ai-energy__subtext">Vier Rollen, ein System: der Speicher als Kern, die App als Fenster zum System, der Smart Meter als Datenquelle – und eine Architektur, die für mehr ausgelegt ist. Sie arbeiten nicht nebeneinander, sondern greifen ineinander.</p>
+      <div class="ai-energy__bento">
+        <article class="ai-energy__bento-card ai-energy__bento-card--main"><div class="ai-energy__badge">01 · KERN</div><div class="ai-energy__bento-media">{% if section.settings.system_storage_image != blank %}{{ section.settings.system_storage_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '700, 1000, 1400', sizes: '(min-width: 960px) 50vw, 100vw', alt: 'VENUS E Speicher im Zuhause' }}{% endif %}</div><div class="ai-energy__bento-copy"><h3>VENUS E Speicher</h3><p>Nimmt Energie auf, hält sie bereit und gibt sie über das Hausnetz wieder ab – abgestimmt auf das, was im Haushalt gerade passiert. Er ist die Hardware, in der alle Entscheidungen des Systems zusammenlaufen.</p></div></article>
+        <article class="ai-energy__bento-card ai-energy__bento-card--app"><div class="ai-energy__badge">02 · FENSTER ZUM SYSTEM</div><div class="ai-energy__bento-media">{% if section.settings.system_app_image != blank %}{{ section.settings.system_app_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '700, 1000, 1400', sizes: '(min-width: 960px) 50vw, 100vw', alt: 'VENUS E App Energie-Dashboard' }}{% endif %}</div><div class="ai-energy__bento-copy"><h3>VENUS E App</h3><p>Zeigt in Echtzeit, was das System erkennt und wie es entscheidet – Erzeugung, Verbrauch und Speicherstatus auf einen Blick.</p></div></article>
+        <article class="ai-energy__bento-card"><div class="ai-energy__badge">03 · DATEN</div><div class="ai-energy__bento-media">{% if section.settings.system_meter_image != blank %}{{ section.settings.system_meter_image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '350, 500, 700', sizes: '(min-width: 960px) 25vw, 50vw', alt: 'Smart Meter als Datenquelle des Systems' }}{% endif %}</div><div class="ai-energy__bento-copy"><h3>Smart Meter</h3><p>Der Daten-Input des Systems: Er liefert die Messwerte, auf denen jede Entscheidung basiert.</p></div></article>
+        <article class="ai-energy__bento-card"><div class="ai-energy__badge">04 · PERSPEKTIVE</div><div class="ai-energy__bento-media ai-energy__vpp-visual" aria-hidden="true"><svg viewBox="0 0 360 180" role="img"><path d="M52 88h256M92 47l-40 41 40 41M268 47l40 41-40 41M180 24v128"/><circle cx="52" cy="88" r="13"/><circle cx="180" cy="88" r="16"/><circle cx="308" cy="88" r="13"/></svg></div><div class="ai-energy__bento-copy"><h3>VPP-ready</h3><p>Auf Erweiterung ausgelegt: perspektivisch für die Einbindung in größere Energieverbände. Verfügbarkeit je nach Region und Anbieter.</p></div></article>
+      </div>
+      <a class="ai-energy__button ai-energy__button--primary ai-energy__center-cta" href="#modelle">Passende VENUS E Lösung finden</a>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name":"AI Energie – System",
+  "tag":"section",
+  "class":"section-ai-energy-system",
+  "settings":[
+    {"type":"image_picker","id":"system_storage_image","label":"System Speicherbild"},
+    {"type":"image_picker","id":"system_app_image","label":"System App Bild"},
+    {"type":"image_picker","id":"system_meter_image","label":"System Smart Meter Bild"}
+  ]
+}
+{% endschema %}

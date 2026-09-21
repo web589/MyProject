@@ -1,0 +1,21 @@
+{%- assign page_id = 'ai-energy-definition-' | append: section.id -%}
+
+<div class="ai-energy-page" data-ai-energy-page>
+  <section id="definition" class="ai-energy__section ai-energy__definition" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Definition</p>
+      <h2 id="{{ page_id }}-heading">Was bedeutet intelligentes <span>Energiemanagement?</span></h2>
+      <div class="ai-energy__answer"><strong>Kurz gesagt:</strong> AI-Energiemanagement beschreibt ein intelligentes System, das Energieflüsse im Haushalt erkennt, analysiert und die Nutzung von Solarstrom optimiert.</div>
+      <p class="ai-energy__muted">Es geht dabei nicht um „automatisch Geld verdienen“, sondern um etwas Nüchternes: die Energie, die dein Haushalt selbst erzeugt, möglichst gut im eigenen Alltag zu nutzen.</p>
+      <div class="ai-energy__feature-grid">
+        <article class="ai-energy__feature-card"><span class="ai-energy__feature-icon" aria-hidden="true">◉</span><p class="ai-energy__tag">01 · ENERGIE ERKENNEN</p><h3>Energieflüsse verstehen</h3><p>Smart Meter und Systemdaten zeigen, wann Energie erzeugt, verbraucht oder gespeichert wird.</p></article>
+        <article class="ai-energy__feature-card"><span class="ai-energy__feature-icon" aria-hidden="true">✓</span><p class="ai-energy__tag">02 · ENERGIE ANALYSIEREN</p><h3>Verbrauchsmuster erkennen</h3><p>Das System berücksichtigt typische Verbrauchssituationen im Haushalt.</p></article>
+        <article class="ai-energy__feature-card"><span class="ai-energy__feature-icon" aria-hidden="true">▶</span><p class="ai-energy__tag">03 · ENERGIE OPTIMIEREN</p><h3>Solarstrom gezielter nutzen</h3><p>Solarstrom wird gezielter genutzt, wenn er im Haushalt benötigt wird.</p></article>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{"name":"AI Energie – Definition","tag":"section","class":"section-ai-energy-definition","settings":[]}
+{% endschema %}

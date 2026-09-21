@@ -187,7 +187,8 @@
   }
 
   #shopify-section-{{ section.id }} .faq-page-header__nav-link:hover,
-  #shopify-section-{{ section.id }} .faq-page-header__nav-link:focus-visible {
+  #shopify-section-{{ section.id }} .faq-page-header__nav-link:focus-visible,
+  #shopify-section-{{ section.id }} .faq-page-header__nav-link.is-active {
     border-color: #0099fe;
     background: #f2f9ff;
     color: #007dcc;
@@ -322,7 +323,13 @@
             {%- assign faq_nav_anchor = block.settings.anchor_id | default: block.id | handle -%}
             {%- if block.settings.label != blank -%}
               <li {{ block.shopify_attributes }}>
-                <a class="faq-page-header__nav-link" href="#{{ faq_nav_anchor }}">
+                <a
+                  class="faq-page-header__nav-link"
+                  href="#{{ faq_nav_anchor }}"
+                  data-faq-anchor-link
+                  data-faq-target="{{ faq_nav_anchor }}"
+                  aria-controls="{{ faq_nav_anchor }}"
+                >
                   {%- if block.settings.number != blank -%}
                     <span class="faq-page-header__nav-number">{{ block.settings.number | escape }}</span>
                   {%- endif -%}
@@ -336,6 +343,88 @@
     {%- endif -%}
   </div>
 </section>
+<script>
+  (() => {
+    const root = document.querySelector('#shopify-section-{{ section.id }}');
+    if (!root || root.dataset.faqAnchorReady === 'true') return;
+
+    root.dataset.faqAnchorReady = 'true';
+    const links = Array.from(root.querySelectorAll('[data-faq-anchor-link]'));
+    const transitionDuration = 1000;
+    let highlightTimer;
+
+    const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const setActiveLink = (anchorId) => {
+      links.forEach((link) => {
+        const isActive = link.dataset.faqTarget === anchorId;
+        link.classList.toggle('is-active', isActive);
+        if (isActive) {
+          link.setAttribute('aria-current', 'location');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    };
+
+    const highlightHeading = (target) => {
+      if (!target) return;
+      window.clearTimeout(highlightTimer);
+      target.classList.remove('is-anchor-target');
+      void target.offsetWidth;
+      target.classList.add('is-anchor-target');
+      highlightTimer = window.setTimeout(() => {
+        target.classList.remove('is-anchor-target');
+      }, prefersReducedMotion() ? 0 : transitionDuration);
+    };
+
+    links.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const targetId = link.dataset.faqTarget;
+        const target = targetId ? document.getElementById(targetId) : null;
+        if (!target) return;
+
+        event.preventDefault();
+        target.scrollIntoView({
+          behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+          block: 'start'
+        });
+        window.history.pushState(null, '', `#${targetId}`);
+        setActiveLink(targetId);
+        highlightHeading(target);
+
+        const focusTarget = () => target.focus({ preventScroll: true });
+        if (prefersReducedMotion()) {
+          focusTarget();
+        } else {
+          window.setTimeout(focusTarget, 450);
+        }
+      });
+    });
+
+    const syncFromHash = () => {
+      const targetId = window.location.hash.slice(1);
+      if (!targetId || !links.some((link) => link.dataset.faqTarget === targetId)) return;
+      const target = document.getElementById(targetId);
+      setActiveLink(targetId);
+      highlightHeading(target);
+    };
+
+    const headings = document.querySelectorAll('[data-faq-category-heading]');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visibleEntry) setActiveLink(visibleEntry.target.id);
+      }, { rootMargin: '-18% 0px -64% 0px', threshold: [0, 0.25, 0.6, 1] });
+      headings.forEach((heading) => observer.observe(heading));
+    }
+
+    window.addEventListener('hashchange', syncFromHash);
+    syncFromHash();
+  })();
+</script>
 {%- endif -%}
 
 {% schema %}

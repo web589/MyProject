@@ -1,0 +1,39 @@
+{%- assign page_id = 'ai-energy-day-' | append: section.id -%}
+{%- assign eauto_url = '/pages/e-auto' -%}
+
+<div class="ai-energy-page" data-ai-energy-page>
+  <section id="alltag" class="ai-energy__section ai-energy__day" data-ai-anchor aria-labelledby="{{ page_id }}-heading" data-ai-tabs>
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Im Alltag</p>
+      <h2 id="{{ page_id }}-heading">Intelligente Energie im <span>Alltag</span></h2>
+      <p class="ai-energy__subtext">Was bedeutet das konkret über den Tag verteilt? Vier typische Situationen – und was das System daraus macht.</p>
+      <div class="ai-energy__timeline" role="tablist" aria-label="Tageszeiten">
+        <button type="button" role="tab" aria-selected="true" data-ai-tab="morning"><strong>06–10 UHR</strong><span>Morgens</span></button>
+        <button type="button" role="tab" aria-selected="false" data-ai-tab="noon"><strong>11–15 UHR</strong><span>Mittags</span></button>
+        <button type="button" role="tab" aria-selected="false" data-ai-tab="evening"><strong>17–22 UHR</strong><span>Abends</span></button>
+        <button type="button" role="tab" aria-selected="false" data-ai-tab="ev"><strong>FLEXIBEL</strong><span>E-Auto laden</span></button>
+      </div>
+      <div class="ai-energy__day-panels">
+        <div class="ai-energy__day-panel" data-ai-panel="morning" role="tabpanel"><div class="ai-energy__day-image">{% if section.settings.morning_image != blank %}{{ section.settings.morning_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: 'Morgendlicher Energiebedarf im Haushalt' }}{% endif %}</div><div class="ai-energy__day-copy"><p><b>ERKANNT</b>Der Bedarf im Haushalt steigt an, während die PV-Anlage noch wenig Energie liefert.</p><p><b>BEWERTET</b>Das System prüft Speicherstand und Netzbezug und erkennt, dass gerade keine hohen Überschüsse entstehen.</p><p><b>ERGEBNIS</b>Gespeicherter Solarstrom wird gezielt dort eingesetzt, wo morgens Bedarf entsteht.</p></div></div>
+        <div class="ai-energy__day-panel" data-ai-panel="noon" role="tabpanel" hidden><div class="ai-energy__day-image">{% if section.settings.noon_image != blank %}{{ section.settings.noon_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: 'Solarstromüberschuss zur Mittagszeit' }}{% endif %}</div><div class="ai-energy__day-copy"><p><b>ERKANNT</b>Die PV-Erzeugung erreicht ihren Höhepunkt, der Verbrauch im Haushalt ist vergleichsweise gering.</p><p><b>BEWERTET</b>Der aktuelle Bedarf ist gedeckt – es bleibt Energie übrig, die nicht sofort gebraucht wird.</p><p><b>ERGEBNIS</b>Überschüssige Energie wird dem Speicher zugeführt, statt direkt ins Netz zu fließen.</p></div></div>
+        <div class="ai-energy__day-panel" data-ai-panel="evening" role="tabpanel" hidden><div class="ai-energy__day-image">{% if section.settings.evening_image != blank %}{{ section.settings.evening_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: 'Abendlicher Energiebedarf im Haushalt' }}{% endif %}</div><div class="ai-energy__day-copy"><p><b>ERKANNT</b>Der Verbrauch steigt deutlich, während die PV-Anlage kaum noch Energie liefert.</p><p><b>BEWERTET</b>Es besteht Bedarf, der nicht mehr aus aktueller Erzeugung gedeckt werden kann.</p><p><b>ERGEBNIS</b>Gespeicherte Energie wird über das Hausnetz bereitgestellt und deckt einen Teil der Abendspitze.</p></div></div>
+        <div class="ai-energy__day-panel" data-ai-panel="ev" role="tabpanel" hidden><div class="ai-energy__day-image">{% if section.settings.ev_image != blank %}{{ section.settings.ev_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: 'E-Auto und Wallbox im Zusammenspiel mit Solarstrom' }}{% endif %}</div><div class="ai-energy__day-copy"><p><b>ERKANNT</b>Zusätzliche Verbraucher wie eine Wallbox melden Bedarf an – oft zeitgleich mit verfügbarem Solarstrom.</p><p><b>BEWERTET</b>Das System berücksichtigt diesen zusätzlichen Bedarf bei der Bewertung der aktuellen Energieflüsse.</p><p><b>ERGEBNIS</b>Du erhältst mehr Transparenz darüber, wann eigener Solarstrom verfügbar ist und wie der Speicher darauf reagiert.</p></div></div>
+      </div>
+      <a class="ai-energy__text-link" href="{{ eauto_url }}">Mehr zum Thema E-Auto laden mit Speicher →</a>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name":"AI Energie – Im Alltag",
+  "tag":"section",
+  "class":"section-ai-energy-day",
+  "settings":[
+    {"type":"image_picker","id":"morning_image","label":"Morgens Bild"},
+    {"type":"image_picker","id":"noon_image","label":"Mittags Bild"},
+    {"type":"image_picker","id":"evening_image","label":"Abends Bild"},
+    {"type":"image_picker","id":"ev_image","label":"E-Auto Bild"}
+  ]
+}
+{% endschema %}

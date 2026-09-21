@@ -1,0 +1,19 @@
+{%- assign page_id = 'ai-energy-comparison-' | append: section.id -%}
+{%- assign comparison_url = '/pages/balkonkraftwerk-mit-speicher#warum-speicher' -%}
+
+<div class="ai-energy-page" data-ai-energy-page>
+  <section id="vergleich" class="ai-energy__section ai-energy__comparison" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Einordnung</p>
+      <h2 id="{{ page_id }}-heading">Klassischer Speicher oder intelligentes Energiemanagement: <span>Was ist der Unterschied?</span></h2>
+      <p class="ai-energy__subtext">Ein klassischer Speicher erfüllt seinen Zweck zuverlässig: Energie aufnehmen und wieder abgeben. Ein intelligentes System ergänzt diesen Ansatz um Messdaten und eine laufende Bewertung.</p>
+      <div class="ai-energy__table-wrap"><table><thead><tr><th scope="col">Funktion</th><th scope="col">Klassischer Speicher</th><th scope="col" class="is-highlight">Intelligentes System</th></tr></thead><tbody><tr><th scope="row">Speichern</th><td>✓</td><td class="is-positive">✓</td></tr><tr><th scope="row">Verbrauch erkennen</th><td>begrenzt</td><td class="is-positive">✓</td></tr><tr><th scope="row">Energiefluss analysieren</th><td>–</td><td class="is-positive">✓</td></tr><tr><th scope="row">Automatische Anpassung</th><td>begrenzt</td><td class="is-positive">✓</td></tr><tr><th scope="row">Smart Meter Integration</th><td>optional</td><td class="is-positive">zentral</td></tr></tbody></table></div>
+      <p class="ai-energy__comparison-note">Die Gegenüberstellung ist keine Bewertung von „gut oder schlecht“. Sie zeigt vor allem, welche zusätzlichen Informationen ein System braucht, um Energie nicht nur zu puffern, sondern situationsbezogen einzusetzen.</p>
+      <a class="ai-energy__text-link" href="{{ comparison_url }}">Mehr zum Thema Eigenverbrauch erhöhen →</a>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{"name":"AI Energie – Vergleich","tag":"section","class":"section-ai-energy-comparison","settings":[]}
+{% endschema %}

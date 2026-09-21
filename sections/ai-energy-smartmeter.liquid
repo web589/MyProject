@@ -1,0 +1,42 @@
+{%- assign page_id = 'ai-energy-smartmeter-' | append: section.id -%}
+{%- assign smart_meter_url = '/products/ct002-smart-meter' -%}
+
+<div class="ai-energy-page" data-ai-energy-page>
+  <section id="smartmeter" class="ai-energy__section ai-energy__smartmeter" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Datenbasis</p>
+      <h2 id="{{ page_id }}-heading">Smart Meter: Die Grundlage für <span>intelligente Steuerung</span></h2>
+      <div class="ai-energy__smart-grid">
+        <div class="ai-energy__smart-media">
+          <div class="ai-energy__media ai-energy__media--meter">{% if section.settings.smart_meter_image != blank %}{{ section.settings.smart_meter_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 42vw, 100vw', alt: 'MARSTEK Smart Meter im Verteilerkasten' }}{% endif %}</div>
+          <div class="ai-energy__smart-thumbs">
+            <div class="ai-energy__media">{% if section.settings.ct002_image != blank %}{{ section.settings.ct002_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: 'MARSTEK CT002 Smart Meter' }}{% endif %}</div>
+            <div class="ai-energy__media">{% if section.settings.ct003_image != blank %}{{ section.settings.ct003_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: 'MARSTEK CT003 P1 Smart Meter' }}{% endif %}</div>
+          </div>
+        </div>
+        <div class="ai-energy__smart-copy">
+          <p>Ohne aktuelle Energiedaten kann ein Speicher nur reagieren. Mit Smart Meter erkennt VENUS E, was im Haushalt passiert, und kann Energieflüsse gezielter steuern.</p>
+          <div class="ai-energy__smart-points">
+            <article><strong>01</strong><div><h3>Verbrauch messen</h3><p>Der Smart Meter erfasst, wie viel Energie dein Haushalt aktuell nutzt – und wann diese Nachfrage entsteht.</p></div></article>
+            <article><strong>02</strong><div><h3>Energiefluss erkennen</h3><p>Erzeugung, Verbrauch und Speicher werden nicht getrennt betrachtet, sondern im Zusammenhang: Wo geht Energie hin, wo fehlt sie gerade?</p></div></article>
+            <article><strong>03</strong><div><h3>Speicher intelligent nutzen</h3><p>Auf Basis dieser Messwerte kann das System Laden und Entladen besser an deinen tatsächlichen Bedarf anpassen.</p></div></article>
+          </div>
+          <a class="ai-energy__button ai-energy__button--primary" href="{{ smart_meter_url }}">Mehr über Smart Meter erfahren →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name":"AI Energie – Smart Meter",
+  "tag":"section",
+  "class":"section-ai-energy-smartmeter",
+  "settings":[
+    {"type":"image_picker","id":"smart_meter_image","label":"Smart Meter Hauptbild"},
+    {"type":"image_picker","id":"ct002_image","label":"CT002 Bild"},
+    {"type":"image_picker","id":"ct003_image","label":"CT003 Bild"}
+  ]
+}
+{% endschema %}

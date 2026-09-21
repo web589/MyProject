@@ -1,0 +1,22 @@
+{%- liquid
+  assign page_id = 'ai-energy-cta-' | append: section.id
+  assign smart_meter_url = '/products/ct002-smart-meter'
+  assign storage_url = '/pages/balkonkraftwerk-mit-speicher'
+-%}
+
+<div class="ai-energy-page" data-ai-energy-page>
+  <section class="ai-energy__section ai-energy__guides" aria-labelledby="{{ page_id }}-heading">
+    <div class="ai-energy__container">
+      <div class="ai-energy__final-cta">
+        <p class="ai-energy__eyebrow">Nächster Schritt</p>
+        <h2 id="{{ page_id }}-heading">Nutze deinen Solarstrom intelligenter</h2>
+        <p>Ob Einstieg oder Ausbau: Wenn du Erzeugung, Verbrauch und Speicher als ein System betrachtest, holst du mehr aus deinem Solarstrom heraus.</p>
+        <div class="ai-energy__actions"><a class="ai-energy__button ai-energy__button--primary" href="#modelle">VENUS E Modelle ansehen</a><a class="ai-energy__button ai-energy__button--secondary" href="{{ smart_meter_url }}">Smart Meter entdecken</a><a class="ai-energy__text-link" href="{{ storage_url }}">Balkonkraftwerk mit Speicher →</a></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{"name":"AI Energie – CTA","tag":"section","class":"section-ai-energy-cta","settings":[]}
+{% endschema %}
