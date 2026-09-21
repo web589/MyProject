@@ -635,20 +635,18 @@
 }
 
 .e-auto-page__calculator-detail {
-  display: inline-flex;
-  min-height: 20px;
-  align-items: center;
-  margin-left: 6px;
-  padding: 3px 8px;
-  border: 1px solid var(--eauto-line);
-  border-radius: 999px;
-  background: #fff;
+  display: inline;
+  margin-left: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   color: var(--eauto-muted);
-  font-size: max(12px, var(--eauto-item-text-size, 11px));
-  font-weight: 500;
+  font-size: var(--eauto-item-text-size, 11px);
+  font-weight: 400;
   letter-spacing: 0;
-  line-height: 1.1;
-  vertical-align: middle;
+  line-height: inherit;
+  vertical-align: baseline;
   white-space: nowrap;
 }
 
