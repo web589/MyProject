@@ -12,10 +12,10 @@
     <div class="e-auto-page__faq-list">
       {% for block in section.blocks %}
         <div class="e-auto-page__faq-item" {{ block.shopify_attributes }}>
-          <button type="button" class="e-auto-page__faq-question" data-eauto-faq-question aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
+          <button type="button" class="e-auto-page__faq-question" data-eauto-faq-question aria-expanded="false">
             <span>{{ block.settings.question }}</span><span aria-hidden="true">+</span>
           </button>
-          <div class="e-auto-page__faq-answer" data-eauto-faq-answer{% unless forloop.first %} hidden{% endunless %}>{{ block.settings.answer }}</div>
+          <div class="e-auto-page__faq-answer" data-eauto-faq-answer hidden>{{ block.settings.answer }}</div>
         </div>
       {% endfor %}
     </div>

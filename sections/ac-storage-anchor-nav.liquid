@@ -29,20 +29,6 @@
       {% endif %}
     {% endfor %}
 
-    {% for block in section.blocks %}
-      {% assign cta_target = block.settings.target | remove_first: '#' | handle %}
-      {% if block.type == 'cta' and block.settings.label != blank and cta_target != blank %}
-        <a
-          class="bw-anchor-nav__cta"
-          href="#{{ cta_target }}"
-          data-ac-anchor-link
-          data-bw-anchor-link
-          {{ block.shopify_attributes }}
-        >
-          {{ block.settings.label | escape }}
-        </a>
-      {% endif %}
-    {% endfor %}
   </div>
 </nav>
 
@@ -105,25 +91,6 @@
           "default": "#definition"
         }
       ]
-    },
-    {
-      "type": "cta",
-      "name": "Hervorgehobener Button",
-      "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Beschriftung",
-          "default": "Modelle ansehen"
-        },
-        {
-          "type": "text",
-          "id": "target",
-          "label": "Sprungziel",
-          "info": "Anker-ID mit oder ohne # eingeben.",
-          "default": "#modelle"
-        }
-      ]
     }
   ],
   "max_blocks": 12,
@@ -139,8 +106,7 @@
         { "type": "link", "settings": { "label": "Zielgruppen", "target": "#zielgruppen" } },
         { "type": "link", "settings": { "label": "Modelle", "target": "#modelle" } },
         { "type": "link", "settings": { "label": "FAQ", "target": "#faq" } },
-        { "type": "link", "settings": { "label": "Ratgeber", "target": "#ratgeber" } },
-        { "type": "cta", "settings": { "label": "Modelle ansehen", "target": "#modelle" } }
+        { "type": "link", "settings": { "label": "Ratgeber", "target": "#ratgeber" } }
       ]
     }
   ]

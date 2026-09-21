@@ -453,7 +453,7 @@
 
 .e-auto-page__profile-layout {
   display: grid;
-  grid-template-columns: minmax(260px, 0.42fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
   gap: 54px;
   align-items: start;
 }
@@ -465,6 +465,7 @@
 
 .e-auto-page__profile-tab {
   display: grid;
+  min-height: 126px;
   gap: 6px;
   padding: 23px 18px;
   border: 0;
@@ -486,15 +487,44 @@
   background: var(--eauto-pale);
 }
 
+.e-auto-page__profile-tab.is-active strong {
+  color: var(--eauto-blue);
+}
+
 .e-auto-page__profile-details {
   min-width: 0;
 }
 
 .e-auto-page__profile-detail {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.6fr);
-  gap: 28px;
-  align-items: end;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.e-auto-page__profile-detail > .e-auto-page__media {
+  grid-column: 1;
+}
+
+.e-auto-page__profile-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 0.72fr);
+  column-gap: 28px;
+  align-items: start;
+}
+
+.e-auto-page__profile-copy h3,
+.e-auto-page__profile-copy > p:not(.e-auto-page__profile-focus) {
+  grid-column: 1;
+}
+
+.e-auto-page__profile-copy h3 {
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.e-auto-page__profile-copy > p:not(.e-auto-page__profile-focus) {
+  margin-bottom: 0;
 }
 
 .e-auto-page__media--profile {
@@ -502,15 +532,23 @@
 }
 
 .e-auto-page__profile-focus {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: start;
+  margin: 0;
   padding: 15px;
   border-radius: 7px;
   background: var(--eauto-pale);
 }
 
+.e-auto-page__profile-focus strong {
+  color: var(--eauto-blue);
+}
+
 /* 06 — calculator */
 .e-auto-page__calculator {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  grid-template-columns: minmax(0, 1fr) minmax(430px, 1fr);
   gap: 34px;
   align-items: stretch;
 }
@@ -663,8 +701,8 @@
   min-height: var(--eauto-recommendation-media-height, 240px);
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: #edf2f6;
+  padding: 0;
+  background: #fff;
   color: var(--eauto-muted);
   text-align: center;
   text-decoration: none;
@@ -910,10 +948,27 @@
   line-height: 1;
 }
 
+.e-auto-page__benefits-grid article > strong span {
+  color: var(--eauto-blue);
+}
+
+.e-auto-page__benefits-grid article h3 {
+  margin-bottom: 6px;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
 .e-auto-page__benefits-grid p,
 .e-auto-page__trust-grid p {
   margin-bottom: 0;
   font-size: 12px;
+}
+
+.e-auto-page__benefits .e-auto-page__note {
+  margin-top: 24px;
+  margin-bottom: 0;
+  color: var(--eauto-copy);
+  font-size: 10px;
 }
 
 .e-auto-page__trust {
@@ -923,8 +978,8 @@
 .e-auto-page__trust-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  gap: 58px;
-  align-items: center;
+  gap: 44px;
+  align-items: start;
 }
 
 .e-auto-page__media--trust {
@@ -933,6 +988,10 @@
 
 .e-auto-page__trust-layout .e-auto-page__section-heading {
   margin-bottom: 26px;
+}
+
+.e-auto-page__trust-layout .e-auto-page__section-heading h2 {
+  font-size: clamp(24px, 2.4vw, var(--eauto-heading-size));
 }
 
 .e-auto-page__trust-layout .e-auto-page__trust-grid {
@@ -954,29 +1013,41 @@
   border-bottom: 0;
 }
 
+.e-auto-page__trust-layout .e-auto-page__trust-grid article > strong {
+  font-size: 24px;
+}
+
+.e-auto-page__trust-layout .e-auto-page__trust-grid article > p {
+  font-size: 11px;
+}
+
 /* 12 — FAQ */
 .e-auto-page__faq-container {
   display: block;
 }
 
 .e-auto-page__faq-list {
-  border-top: 1px solid var(--eauto-line);
+  display: grid;
+  gap: 8px;
 }
 
 .e-auto-page__faq-item {
-  border-bottom: 1px solid var(--eauto-line);
+  overflow: hidden;
+  border: 1px solid var(--eauto-line);
+  border-radius: 6px;
+  background: #fff;
 }
 
 .e-auto-page__faq-question {
   display: flex;
   width: 100%;
-  min-height: 58px;
+  min-height: 48px;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 14px 12px;
+  padding: 14px 18px;
   border: 0;
-  background: transparent;
+  background: #fff;
   color: var(--eauto-ink);
   cursor: pointer;
   font-size: 13px;
@@ -997,7 +1068,7 @@
 
 .e-auto-page__faq-answer {
   max-width: 900px;
-  padding: 0 44px 18px 12px;
+  padding: 0 18px 18px;
 }
 
 .e-auto-page__faq-answer p:last-child {
@@ -1041,6 +1112,7 @@
   .e-auto-page__hero-grid,
   .e-auto-page__profile-layout,
   .e-auto-page__calculator,
+  .e-auto-page__trust-layout,
   .e-auto-page__installation-row,
   .e-auto-page__installation-row:nth-child(even) {
     grid-template-columns: 1fr;
@@ -1055,7 +1127,11 @@
   }
 
   .e-auto-page__profile-detail {
-    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.7fr);
+    grid-template-columns: 1fr;
+  }
+
+  .e-auto-page__profile-copy {
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.72fr);
   }
 
   .e-auto-page__installation-row:nth-child(even) .e-auto-page__installation-media,
@@ -1091,13 +1167,22 @@
   .e-auto-page__hero-grid,
   .e-auto-page__problem-cards,
   .e-auto-page__flow-copy,
-  .e-auto-page__profile-detail,
   .e-auto-page__timeline-grid,
   .e-auto-page__recommendation-grid,
   .e-auto-page__smart-grid,
   .e-auto-page__benefits-grid,
   .e-auto-page__trust-grid {
     grid-template-columns: 1fr;
+  }
+
+  .e-auto-page__profile-copy {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+  }
+
+  .e-auto-page__profile-focus {
+    grid-column: 1;
+    grid-row: auto;
   }
 
   .e-auto-page__problem-cards {
@@ -1116,6 +1201,10 @@
 
   .e-auto-page__profile-tab.is-active {
     transform: none;
+  }
+
+  .e-auto-page__profile-tab {
+    min-height: 0;
   }
 
   .e-auto-page__smart-grid {

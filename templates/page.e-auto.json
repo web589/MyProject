@@ -201,23 +201,26 @@
         "benefit-self-use": {
           "type": "benefit",
           "settings": {
-            "value": "Mehr",
-            "title": "Eigenverbrauch",
-            "text": "Ein größerer Teil deines Solarstroms bleibt im eigenen Haushalt und steht später für das Laden zur Verfügung."
+            "value": "bis 80",
+            "value_accent": "%*",
+            "title": "Mehr Eigenverbrauch",
+            "text": "Mehr Solarstrom bleibt im eigenen Haushalt und steht später für das Laden zur Verfügung."
           }
         },
         "benefit-grid": {
           "type": "benefit",
           "settings": {
-            "value": "Weniger",
-            "title": "Netzbezug",
+            "value": "−30",
+            "value_accent": "%*",
+            "title": "Weniger Netzbezug",
             "text": "Haushalt und E-Auto greifen seltener auf Netzstrom zurück, wenn gespeicherte Energie verfügbar ist."
           }
         },
         "benefit-time": {
           "type": "benefit",
           "settings": {
-            "value": "24 h",
+            "value": "24",
+            "value_accent": "h",
             "title": "Solarstrom später nutzen",
             "text": "Tagsüber produziert, abends gefahren: Der Speicher verschiebt Solarstrom in den passenden Moment."
           }
@@ -228,7 +231,9 @@
         "benefit-grid",
         "benefit-time"
       ],
-      "settings": {}
+      "settings": {
+        "benefits_note": "* Orientierungswerte, abhängig von Anlagengröße, Verbrauchsprofil und Speicherkapazität."
+      }
     },
     "e-auto-trust": {
       "type": "e-auto-trust",
@@ -250,8 +255,8 @@
         "trust-daily": {
           "type": "trust",
           "settings": {
-            "value": "AC",
-            "text": "Für die Nachrüstung an der Hausnetzseite und die Verbindung mit bestehender PV und Wallbox."
+            "value": "6.000+",
+            "text": "Hohe Zyklenfestigkeit – gemacht für tägliches Speichern und Entladen."
           }
         }
       },

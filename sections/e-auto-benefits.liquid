@@ -11,9 +11,12 @@
     </div>
     <div class="e-auto-page__benefits-grid">
       {% for block in section.blocks %}
-        <article {{ block.shopify_attributes }}><strong>{{ block.settings.value }}</strong><h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p></article>
+        <article {{ block.shopify_attributes }}><strong>{{ block.settings.value }}{% if block.settings.value_accent != blank %} <span>{{ block.settings.value_accent }}</span>{% endif %}</strong><h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p></article>
       {% endfor %}
     </div>
+    {% if section.settings.benefits_note != blank %}
+      <p class="e-auto-page__note">{{ section.settings.benefits_note }}</p>
+    {% endif %}
   </div>
 </section>
 
@@ -27,13 +30,14 @@
     {"type":"text","id":"benefits_heading","label":"Vorteile Überschrift – Hauptteil","default":"Was der Speicher beim Laden"},
     {"type":"text","id":"benefits_heading_accent","label":"Vorteile Überschrift – blauer Akzent","default":"wirklich bringt"},
     {"type":"textarea","id":"benefits_text","label":"Vorteile Text","default":"Solarstrom wird zeitlich verschoben und steht dann zur Verfügung, wenn Haushalt und E-Auto ihn brauchen."},
+    {"type":"textarea","id":"benefits_note","label":"Vorteile Fußnote","default":"* Orientierungswerte, abhängig von Anlagengröße, Verbrauchsprofil und Speicherkapazität."},
     {"type":"header","content":"Layout und Größen"},
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
     {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72}
   ],
   "blocks": [
-    {"type":"benefit","name":"Vorteil","settings":[{"type":"text","id":"value","label":"Wert","default":"24 h"},{"type":"text","id":"title","label":"Titel","default":"Solarstrom später nutzen"},{"type":"textarea","id":"text","label":"Text","default":"Tagsüber produziert, abends geladen – der Speicher verschiebt Solarstrom in den passenden Moment."}]}
+    {"type":"benefit","name":"Vorteil","settings":[{"type":"text","id":"value","label":"Wert","default":"24"},{"type":"text","id":"value_accent","label":"Wert Akzent","default":""},{"type":"text","id":"title","label":"Titel","default":"Solarstrom später nutzen"},{"type":"textarea","id":"text","label":"Text","default":"Tagsüber produziert, abends geladen – der Speicher verschiebt Solarstrom in den passenden Moment."}]}
   ],
   "max_blocks": 3,
   "presets": [{"name":"E-Auto Vorteile","blocks":[{"type":"benefit"},{"type":"benefit"},{"type":"benefit"}] }]
