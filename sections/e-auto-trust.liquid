@@ -30,27 +30,27 @@
 
 {% schema %}
 {
-  "name": "E-Auto Vertrauen",
+  "name": "E-Auto 可靠性",
   "tag": "section",
   "class": "section-e-auto-trust",
   "settings": [
-    {"type":"text","id":"trust_eyebrow","label":"Vertrauen Kicker","default":"Vertrauen & Alltagstauglichkeit"},
-    {"type":"text","id":"trust_heading","label":"Vertrauen Überschrift","default":"Gebaut für den täglichen Einsatz"},
-    {"type":"text","id":"trust_heading_accent","label":"Vertrauen Überschrift – blauer Akzent","default":""},
-    {"type":"textarea","id":"trust_text","label":"Vertrauen Text","default":"Tägliches Laden und Entladen ist ein anspruchsvoller Einsatz. Prüfe die aktuellen Produktdaten und Garantiebedingungen deines gewählten Modells."},
-    {"type":"image_picker","id":"trust_image","label":"Vertrauensbild"},
-    {"type":"text","id":"trust_image_alt","label":"Vertrauensbild Alt-Text","default":"VENUS E Speicher im täglichen Einsatz"},
-    {"type":"text","id":"trust_image_placeholder","label":"Vertrauensbild Platzhalter","default":"Alltagsbild mit VENUS E auswählen"},
-    {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":38},
+    {"type":"text","id":"trust_eyebrow","label":"可靠性小标题","default":"Vertrauen & Alltagstauglichkeit"},
+    {"type":"text","id":"trust_heading","label":"可靠性标题","default":"Gebaut für den täglichen Einsatz"},
+    {"type":"text","id":"trust_heading_accent","label":"可靠性标题（蓝色强调）","default":""},
+    {"type":"textarea","id":"trust_text","label":"可靠性说明","default":"Tägliches Laden und Entladen ist ein anspruchsvoller Einsatz. Prüfe die aktuellen Produktdaten und Garantiebedingungen deines gewählten Modells."},
+    {"type":"image_picker","id":"trust_image","label":"可靠性图片"},
+    {"type":"text","id":"trust_image_alt","label":"可靠性图片替代文本","default":"VENUS E Speicher im täglichen Einsatz"},
+    {"type":"text","id":"trust_image_placeholder","label":"可靠性图片占位提示","default":"Alltagsbild mit VENUS E auswählen"},
+    {"type":"header","content":"布局与尺寸"},
+    {"type":"range","id":"heading_size","label":"标题字号","min":28,"max":60,"step":1,"unit":"px","default":38},
     {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"trust_media_height","label":"信任图片高度","min":260,"max":520,"step":10,"unit":"px","default":360},
     {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "blocks": [
-    {"type":"trust","name":"Vertrauenssignal","settings":[{"type":"text","id":"value","label":"Wert","default":"10"},{"type":"text","id":"value_label","label":"Wert Einheit","default":""},{"type":"textarea","id":"text","label":"Text","default":"Herstellergarantie gemäß den Bedingungen des gewählten Modells."}]}
+    {"type":"trust","name":"可靠性指标","settings":[{"type":"text","id":"value","label":"数值","default":"10"},{"type":"text","id":"value_label","label":"数值单位","default":""},{"type":"textarea","id":"text","label":"文案","default":"Herstellergarantie gemäß den Bedingungen des gewählten Modells."}]}
   ],
   "max_blocks": 3,
-  "presets": [{"name":"E-Auto Vertrauen","blocks":[{"type":"trust"},{"type":"trust"},{"type":"trust"}] }]
+  "presets": [{"name":"E-Auto 可靠性","blocks":[{"type":"trust"},{"type":"trust"},{"type":"trust"}] }]
 }
 {% endschema %}

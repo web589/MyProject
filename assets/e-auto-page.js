@@ -158,8 +158,9 @@
   }
 
   function interpolateTemplate(template, values) {
-    var allowedTokens = /\{\{\s*(product_title|product_capacity|range|lower|upper|unit)\s*\}\}/g;
-    return String(template || '').replace(allowedTokens, function (match, token) {
+    var allowedTokens = /\{\{\s*(product_title|product_capacity|range|lower|upper|unit)\s*\}\}|\[\[\s*(product_title|product_capacity|range|lower|upper|unit)\s*\]\]/g;
+    return String(template || '').replace(allowedTokens, function (match, liquidToken, bracketToken) {
+      var token = liquidToken || bracketToken;
       return values[token] === undefined || values[token] === null ? '' : String(values[token]);
     });
   }
@@ -433,7 +434,7 @@
       variantUnavailableLabel: readDataValue(pageMarker.dataset, 'eautoVariantUnavailableLabel', 'Variante nicht gefunden'),
       primaryLabel: readDataValue(pageMarker.dataset, 'eautoPrimaryLabel', 'EMPFOHLENE KONFIGURATION'),
       alternativeLabel: readDataValue(pageMarker.dataset, 'eautoAlternativeLabel', 'ALTERNATIVE KONFIGURATION'),
-      summaryTemplate: readDataValue(pageMarker.dataset, 'eautoSummaryTemplate', 'Kapazitätsbereich: {{range}}. Preise und Verfügbarkeit werden direkt aus Shopify geladen.')
+      summaryTemplate: readDataValue(pageMarker.dataset, 'eautoSummaryTemplate', 'Kapazitätsbereich: [[range]]. Preise und Verfügbarkeit werden direkt aus Shopify geladen.')
     };
     var templateValues = {
       product_title: primary ? primary.title : '',
@@ -449,11 +450,11 @@
 
     if (primary) {
       setText(root, '[data-eauto-result-model]', interpolateTemplate(
-        readDataValue(calculatorSettings, 'eautoResultModelTemplate', 'Passt zu {{product_title}}'),
+        readDataValue(calculatorSettings, 'eautoResultModelTemplate', 'Passt zu [[product_title]]'),
         templateValues
       ));
       setText(root, '[data-eauto-result-copy]', interpolateTemplate(
-        readDataValue(calculatorSettings, 'eautoResultCopyTemplate', 'Mit deiner Auswahl liegt der sinnvolle Orientierungsbereich bei {{range}}.'),
+        readDataValue(calculatorSettings, 'eautoResultCopyTemplate', 'Mit deiner Auswahl liegt der sinnvolle Orientierungsbereich bei [[range]].'),
         templateValues
       ));
     }

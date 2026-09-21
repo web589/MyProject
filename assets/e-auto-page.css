@@ -1009,8 +1009,8 @@
 
 .e-auto-page__trust-layout {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  gap: 44px;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: clamp(32px, 4vw, 44px);
   align-items: start;
 }
 
@@ -1023,7 +1023,7 @@
 }
 
 .e-auto-page__trust-layout .e-auto-page__section-heading h2 {
-  font-size: clamp(24px, 2.4vw, var(--eauto-heading-size));
+  font-size: clamp(24px, 2.6vw, var(--eauto-heading-size));
 }
 
 .e-auto-page__trust-layout .e-auto-page__trust-grid {

@@ -164,7 +164,7 @@
 }
 
 .ac-storage-page h1 {
-  max-width: 700px;
+  max-width: 100%;
   margin-top: 20px;
   font-size: var(--ac-hero-heading-size, 48px);
   font-weight: 600;
@@ -173,6 +173,7 @@
 }
 
 .ac-storage-page h2 {
+  max-width: 100%;
   font-size: var(--ac-heading-size);
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -210,7 +211,7 @@
 
 .ac-storage-page__lead,
 .ac-storage-page__subtext {
-  max-width: 940px;
+  max-width: 100%;
   margin-top: 14px !important;
   color: var(--ac-gray-dark);
   font-size: var(--ac-body-size);
@@ -218,7 +219,7 @@
 }
 
 .ac-storage-page__lead {
-  max-width: 660px;
+  max-width: 100%;
   font-size: var(--ac-hero-lead-size, var(--ac-body-size));
 }
 
@@ -784,6 +785,7 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   margin-top: 40px;
+  background: #fff;
 }
 
 .ac-storage-page__media--model {
@@ -792,6 +794,7 @@
   border: 0;
   border-bottom: 1px solid var(--ac-line);
   border-radius: 0;
+  background: #fff;
   text-decoration: none;
 }
 
@@ -932,7 +935,7 @@
 }
 
 .ac-storage-page__final-card > p {
-  max-width: 900px;
+  max-width: 100%;
   margin-top: 14px;
   color: var(--ac-gray-dark);
   font-size: var(--ac-final-copy-size, var(--ac-body-size));

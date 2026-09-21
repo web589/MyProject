@@ -3,41 +3,41 @@
 
 {% schema %}
 {
-  "name": "10 Ratgeber",
+  "name": "10 文章指南",
   "tag": "section",
   "class": "ac-storage-blog-section",
   "settings": [
-    {"type":"url","id":"blog_url","label":"Ratgeber-Übersicht Ziel"},
-    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Mehr erfahren"},
-    {"type":"text","id":"heading","label":"Überschrift","default":"Ratgeber & Wissen"},
-    {"type":"range","id":"section_padding","label":"Innenabstand Abschnitt","min":40,"max":120,"step":4,"unit":"px","default":72},
-    {"type":"range","id":"content_width","label":"Maximale Inhaltsbreite","min":960,"max":1600,"step":20,"unit":"px","default":1440},
-    {"type":"range","id":"eyebrow_size","label":"Eyebrow-Schriftgröße","min":10,"max":18,"step":1,"unit":"px","default":13},
-    {"type":"range","id":"heading_size","label":"Überschrift Schriftgröße","min":24,"max":56,"step":1,"unit":"px","default":34},
-    {"type":"range","id":"body_size","label":"Grundtext Schriftgröße","min":12,"max":22,"step":1,"unit":"px","default":15},
-    {"type":"text","id":"card_link_label","label":"Fallback-Artikelkarten-Link","default":"Artikel lesen →"},
-    {"type":"text","id":"blog_link_label","label":"Ratgeber-Übersicht Link","default":"Alle Ratgeber ansehen →"}
+    {"type":"url","id":"blog_url","label":"文章指南总览链接"},
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Mehr erfahren"},
+    {"type":"text","id":"heading","label":"标题","default":"Ratgeber & Wissen"},
+    {"type":"range","id":"section_padding","label":"区块内边距","min":40,"max":120,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"content_width","label":"最大内容宽度","min":960,"max":1600,"step":20,"unit":"px","default":1440},
+    {"type":"range","id":"eyebrow_size","label":"眉题字号","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"heading_size","label":"标题字号","min":24,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"正文字号","min":12,"max":22,"step":1,"unit":"px","default":15},
+    {"type":"text","id":"card_link_label","label":"默认文章卡片链接文字","default":"Artikel lesen →"},
+    {"type":"text","id":"blog_link_label","label":"文章指南总览文字","default":"Alle Ratgeber ansehen →"}
   ],
   "blocks": [
     {
       "type":"article",
-      "name":"Ratgeber-Artikel",
+      "name":"文章卡片",
       "settings":[
-        {"type":"url","id":"url","label":"Artikel-Ziel"},
-        {"type":"text","id":"tag","label":"Tag","default":"RATGEBER"},
-        {"type":"text","id":"title","label":"Titel","default":"Artikel-Titel"},
-        {"type":"textarea","id":"copy","label":"Text","default":"Zusammenfassung des Artikels."},
-        {"type":"image_picker","id":"image","label":"Bild"},
-        {"type":"text","id":"alt","label":"Alt-Text","default":"Ratgeber-Artikelbild"},
-        {"type":"textarea","id":"placeholder","label":"Bild-Platzhalter","default":"Artikelbild auswählen"},
-        {"type":"text","id":"link_label","label":"Artikel-Link","default":"Artikel lesen →"},
-        {"type":"range","id":"title_size","label":"Titel Schriftgröße","min":14,"max":24,"step":1,"unit":"px","default":17},
-        {"type":"range","id":"body_size","label":"Text Schriftgröße","min":12,"max":20,"step":1,"unit":"px","default":13},
-        {"type":"range","id":"image_height","label":"Bildhöhe","min":120,"max":280,"step":10,"unit":"px","default":170}
+        {"type":"url","id":"url","label":"文章链接目标"},
+        {"type":"text","id":"tag","label":"标签","default":"RATGEBER"},
+        {"type":"text","id":"title","label":"标题","default":"Artikel-Titel"},
+        {"type":"textarea","id":"copy","label":"正文","default":"Zusammenfassung des Artikels."},
+        {"type":"image_picker","id":"image","label":"图片"},
+        {"type":"text","id":"alt","label":"图片替代文本","default":"Ratgeber-Artikelbild"},
+        {"type":"textarea","id":"placeholder","label":"图片占位提示","default":"Artikelbild auswählen"},
+        {"type":"text","id":"link_label","label":"文章链接文字","default":"Artikel lesen →"},
+        {"type":"range","id":"title_size","label":"标题字号","min":14,"max":24,"step":1,"unit":"px","default":17},
+        {"type":"range","id":"body_size","label":"正文字号","min":12,"max":20,"step":1,"unit":"px","default":13},
+        {"type":"range","id":"image_height","label":"图片高度","min":120,"max":280,"step":10,"unit":"px","default":170}
       ]
     }
   ],
   "max_blocks": 6,
-  "presets":[{"name":"10 Ratgeber","blocks":[{"type":"article","settings":{"url":"/blogs/balkonkraftwerk-mit-speicher","tag":"RATGEBER","title":"Solarspeicher Kosten: Was kostet ein Speicher wirklich?","copy":"Von der Kapazität über die Installation bis zur Lebensdauer: welche Faktoren den Preis bestimmen.","alt":"Solarspeicher Kosten und Dimensionierung","placeholder":"Artikelbild auswählen: Speicherkosten und Dimensionierung","link_label":"Artikel lesen →"}},{"type":"article","settings":{"url":"/pages/venus-e-vergleich","tag":"RATGEBER","title":"AC- oder DC-Speicher: Was ist der Unterschied?","copy":"Beide Konzepte im direkten Vergleich – und wann welches Prinzip sinnvoller ist.","alt":"AC- und DC-Speicher im Vergleich","placeholder":"Artikelbild auswählen: AC- und DC-Speicher","link_label":"Artikel lesen →"}},{"type":"article","settings":{"url":"/blogs/balkonkraftwerk-mit-speicher","tag":"RATGEBER","title":"Solarspeicher nachrüsten: Was ist möglich?","copy":"Was beim nachträglichen Einbau wichtig ist und welche Voraussetzungen du prüfen solltest.","alt":"Solarspeicher nachrüsten","placeholder":"Artikelbild auswählen: Speicher nachrüsten","link_label":"Artikel lesen →"}}]}
+  "presets":[{"name":"10 文章指南","blocks":[{"type":"article","settings":{"url":"/blogs/balkonkraftwerk-mit-speicher","tag":"RATGEBER","title":"Solarspeicher Kosten: Was kostet ein Speicher wirklich?","copy":"Von der Kapazität über die Installation bis zur Lebensdauer: welche Faktoren den Preis bestimmen.","alt":"Solarspeicher Kosten und Dimensionierung","placeholder":"Artikelbild auswählen: Speicherkosten und Dimensionierung","link_label":"Artikel lesen →"}},{"type":"article","settings":{"url":"/pages/venus-e-vergleich","tag":"RATGEBER","title":"AC- oder DC-Speicher: Was ist der Unterschied?","copy":"Beide Konzepte im direkten Vergleich – und wann welches Prinzip sinnvoller ist.","alt":"AC- und DC-Speicher im Vergleich","placeholder":"Artikelbild auswählen: AC- und DC-Speicher","link_label":"Artikel lesen →"}},{"type":"article","settings":{"url":"/blogs/balkonkraftwerk-mit-speicher","tag":"RATGEBER","title":"Solarspeicher nachrüsten: Was ist möglich?","copy":"Was beim nachträglichen Einbau wichtig ist und welche Voraussetzungen du prüfen solltest.","alt":"Solarspeicher nachrüsten","placeholder":"Artikelbild auswählen: Speicher nachrüsten","link_label":"Artikel lesen →"}}]}
 ]}
 {% endschema %}

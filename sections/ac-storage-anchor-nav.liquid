@@ -34,21 +34,21 @@
 
 {% schema %}
 {
-  "name": "AC Ankernavigation",
+  "name": "AC 锚点导航",
   "tag": "section",
   "class": "ac-storage-anchor-nav-section",
   "settings": [
     {
       "type": "text",
       "id": "aria_label",
-      "label": "Barrierefreie Bezeichnung",
+      "label": "无障碍标签",
       "default": "Seitennavigation"
     },
     {
       "type": "text",
       "id": "anchor_id",
-      "label": "Anker-ID der Navigation",
-      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "label": "导航锚点 ID",
+      "info": "无需输入 #；ID 在本页面必须唯一。",
       "default": "ac-storage-navigation"
     },
     {
@@ -75,19 +75,19 @@
   "blocks": [
     {
       "type": "link",
-      "name": "Navigationslink",
+      "name": "导航链接",
       "settings": [
         {
           "type": "text",
           "id": "label",
-          "label": "Beschriftung",
+          "label": "显示文字",
           "default": "Navigation"
         },
         {
           "type": "text",
           "id": "target",
-          "label": "Sprungziel",
-          "info": "Anker-ID mit oder ohne # eingeben.",
+          "label": "跳转目标",
+          "info": "可输入带 # 或不带 # 的锚点 ID。",
           "default": "#definition"
         }
       ]
@@ -96,7 +96,7 @@
   "max_blocks": 12,
   "presets": [
     {
-      "name": "AC-Speicher – Ankernavigation",
+      "name": "AC 储能 – 锚点导航",
       "blocks": [
         { "type": "link", "settings": { "label": "Was ist AC-Speicher?", "target": "#definition" } },
         { "type": "link", "settings": { "label": "Funktionsweise", "target": "#funktion" } },

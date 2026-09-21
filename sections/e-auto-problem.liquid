@@ -35,29 +35,29 @@
 
 {% schema %}
 {
-  "name": "E-Auto Problem",
+  "name": "E-Auto 问题",
   "tag": "section",
   "class": "section-e-auto-problem",
   "settings": [
-    {"type":"text","id":"problem_eyebrow","label":"Problem Kicker","default":"Das Problem"},
-    {"type":"text","id":"problem_heading","label":"Problem Überschrift – Hauptteil","default":"Deine PV produziert am Tag. Dein Auto lädt"},
-    {"type":"text","id":"problem_heading_accent","label":"Problem Überschrift – blauer Akzent","default":"abends."},
-    {"type":"textarea","id":"problem_text","label":"Problem Text","default":"Die Lösung ist nicht mehr Sonne. Es ist der richtige Zeitpunkt – gespeichert."},
-    {"type":"image_picker","id":"problem_image","label":"Problem Bild"},
-    {"type":"text","id":"problem_image_alt","label":"Problem Bild Alt-Text","default":"PV-Anlage am Mittag und E-Auto an der Wallbox am Abend"},
-    {"type":"text","id":"problem_image_placeholder","label":"Problem Bild Platzhalter","default":"Breites Tag-Nacht-Bild auswählen"},
-    {"type":"text","id":"problem_card_1_kicker","label":"Problem Karte 1 Kicker","default":"MITTAG · 12:30"},
-    {"type":"text","id":"problem_card_1_heading","label":"Problem Karte 1 Überschrift","default":"PV-Überschuss – und niemand nutzt ihn"},
-    {"type":"textarea","id":"problem_card_1_text","label":"Problem Karte 1 Text","default":"Sonne, volle Produktion. Aber das Auto steht nicht zu Hause – ein Teil deines Solarstroms geht ins Netz."},
-    {"type":"text","id":"problem_card_2_kicker","label":"Problem Karte 2 Kicker","default":"ABEND · 19:00"},
-    {"type":"text","id":"problem_card_2_heading","label":"Problem Karte 2 Überschrift","default":"E-Auto laden – die Sonne ist schon weg"},
-    {"type":"textarea","id":"problem_card_2_text","label":"Problem Karte 2 Text","default":"Du kommst nach Hause und steckst dein Auto an. Ohne Speicher lädt dein Solar-Auto dann mit Netzstrom."},
-    {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"text","id":"problem_eyebrow","label":"问题区小标题","default":"Das Problem"},
+    {"type":"text","id":"problem_heading","label":"问题区标题（主体）","default":"Deine PV produziert am Tag. Dein Auto lädt"},
+    {"type":"text","id":"problem_heading_accent","label":"问题区标题（蓝色强调）","default":"abends."},
+    {"type":"textarea","id":"problem_text","label":"问题区说明","default":"Die Lösung ist nicht mehr Sonne. Es ist der richtige Zeitpunkt – gespeichert."},
+    {"type":"image_picker","id":"problem_image","label":"问题区图片"},
+    {"type":"text","id":"problem_image_alt","label":"问题区图片替代文本","default":"PV-Anlage am Mittag und E-Auto an der Wallbox am Abend"},
+    {"type":"text","id":"problem_image_placeholder","label":"问题区图片占位提示","default":"Breites Tag-Nacht-Bild auswählen"},
+    {"type":"text","id":"problem_card_1_kicker","label":"问题卡片 1 小标题","default":"MITTAG · 12:30"},
+    {"type":"text","id":"problem_card_1_heading","label":"问题卡片 1 标题","default":"PV-Überschuss – und niemand nutzt ihn"},
+    {"type":"textarea","id":"problem_card_1_text","label":"问题卡片 1 文案","default":"Sonne, volle Produktion. Aber das Auto steht nicht zu Hause – ein Teil deines Solarstroms geht ins Netz."},
+    {"type":"text","id":"problem_card_2_kicker","label":"问题卡片 2 小标题","default":"ABEND · 19:00"},
+    {"type":"text","id":"problem_card_2_heading","label":"问题卡片 2 标题","default":"E-Auto laden – die Sonne ist schon weg"},
+    {"type":"textarea","id":"problem_card_2_text","label":"问题卡片 2 文案","default":"Du kommst nach Hause und steckst dein Auto an. Ohne Speicher lädt dein Solar-Auto dann mit Netzstrom."},
+    {"type":"header","content":"布局与尺寸"},
+    {"type":"range","id":"heading_size","label":"标题字号","min":28,"max":60,"step":1,"unit":"px","default":42},
     {"type":"range","id":"copy_size","label":"文案字号","min":13,"max":22,"step":1,"unit":"px","default":16},
-    {"type":"range","id":"problem_media_height","label":"问题图片高度","min":260,"max":620,"step":10,"unit":"px","default":430},
+    {"type":"range","id":"problem_media_height","label":"问题区图片高度","min":260,"max":620,"step":10,"unit":"px","default":430},
     {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
-  "presets": [{"name":"E-Auto Problem"}]
+  "presets": [{"name":"E-Auto 问题"}]
 }
 {% endschema %}
