@@ -879,8 +879,40 @@
   font-size: 21px;
 }
 
+.e-auto-page__installation-copy > .e-auto-page__eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: var(--eauto-pale);
+  font-size: 10px !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .e-auto-page__installation-copy ul {
-  margin-top: 18px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.e-auto-page__installation-copy li {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  margin-bottom: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--eauto-line);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.e-auto-page__installation-copy li::before {
+  flex: 0 0 auto;
+  color: var(--eauto-blue);
+  content: '√';
+  font-weight: 700;
 }
 
 .e-auto-page__install-steps {
