@@ -95,10 +95,8 @@
   }
 
   function boot() {
-    var root = document.querySelector('[data-ai-energy-page]');
-    if (!root) return;
-    bindTabs(root);
-    bindFaq(root);
+    bindTabs(document);
+    bindFaq(document);
     bindAnchors();
   }
 
