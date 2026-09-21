@@ -1,0 +1,241 @@
+{%- liquid
+  assign page_id = 'ai-energy-' | append: section.id
+  assign hero_function_url = '#funktion'
+  assign hero_models_url = '#modelle'
+  assign smart_meter_url = '/products/ct002-smart-meter'
+  assign comparison_url = '/pages/balkonkraftwerk-mit-speicher#warum-speicher'
+  assign eauto_url = '/pages/e-auto'
+  assign models_compare_url = '/pages/venus-e-vergleich'
+  assign blog_url = '/blogs/blog-center'
+  assign storage_url = '/pages/balkonkraftwerk-mit-speicher'
+  assign default_products = 'venus-e-mini|venus-e-3|venus-e-4|venus-e-max' | split: '|'
+-%}
+
+<div class="ai-energy-page" data-ai-energy-page>
+  <section class="ai-energy__section ai-energy__hero" aria-labelledby="{{ page_id }}-hero-heading">
+    <div class="ai-energy__container ai-energy__hero-grid">
+      <div class="ai-energy__hero-copy">
+        <p class="ai-energy__eyebrow">{{ section.settings.hero_eyebrow }}</p>
+        <h1 id="{{ page_id }}-hero-heading">{{ section.settings.hero_heading }}</h1>
+        <p class="ai-energy__lead">{{ section.settings.hero_text }}</p>
+        <div class="ai-energy__actions">
+          <a class="ai-energy__button ai-energy__button--primary" href="{{ hero_function_url }}">{{ section.settings.hero_function_label }}</a>
+          <a class="ai-energy__button ai-energy__button--secondary" href="{{ hero_models_url }}">{{ section.settings.hero_models_label }}</a>
+        </div>
+      </div>
+      <div class="ai-energy__media ai-energy__media--hero">
+        {% if section.settings.hero_image != blank %}
+          {{ section.settings.hero_image | image_url: width: 1800 | image_tag: loading: 'eager', widths: '640, 960, 1280, 1600, 1800', sizes: '(min-width: 960px) 50vw, 100vw', alt: 'VENUS E Solarspeicher mit Photovoltaikanlage und Smart Energy System' }}
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section id="definition" class="ai-energy__section ai-energy__definition" data-ai-anchor aria-labelledby="{{ page_id }}-definition-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Definition</p>
+      <h2 id="{{ page_id }}-definition-heading">Was bedeutet intelligentes <span>Energiemanagement?</span></h2>
+      <div class="ai-energy__answer"><strong>Kurz gesagt:</strong> AI-Energiemanagement beschreibt ein intelligentes System, das Energieflüsse im Haushalt erkennt, analysiert und die Nutzung von Solarstrom optimiert.</div>
+      <p class="ai-energy__muted">Es geht dabei nicht um „automatisch Geld verdienen“, sondern um etwas Nüchternes: die Energie, die dein Haushalt selbst erzeugt, möglichst gut im eigenen Alltag zu nutzen.</p>
+      <div class="ai-energy__feature-grid">
+        <article class="ai-energy__feature-card"><span class="ai-energy__feature-icon" aria-hidden="true">⌁</span><p class="ai-energy__tag">01 · ENERGIE ERKENNEN</p><h3>Energieflüsse verstehen</h3><p>Smart Meter und Systemdaten zeigen, wann Energie erzeugt, verbraucht oder gespeichert wird.</p></article>
+        <article class="ai-energy__feature-card"><span class="ai-energy__feature-icon" aria-hidden="true">✣</span><p class="ai-energy__tag">02 · ENERGIE ANALYSIEREN</p><h3>Verbrauchsmuster erkennen</h3><p>Das System berücksichtigt typische Verbrauchssituationen im Haushalt.</p></article>
+        <article class="ai-energy__feature-card"><span class="ai-energy__feature-icon" aria-hidden="true">▣</span><p class="ai-energy__tag">03 · ENERGIE OPTIMIEREN</p><h3>Solarstrom gezielter nutzen</h3><p>Solarstrom wird gezielter genutzt, wenn er im Haushalt benötigt wird.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="funktion" class="ai-energy__section ai-energy__function" data-ai-anchor aria-labelledby="{{ page_id }}-function-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Funktionsweise</p>
+      <h2 id="{{ page_id }}-function-heading">So arbeitet intelligentes <span>Energiemanagement</span></h2>
+      <p class="ai-energy__subtext">Drei Schritte, die sich laufend wiederholen: Daten erfassen, Situation bewerten, Energie gezielt steuern. Entscheidend ist nicht ein einzelner Schritt, sondern der Kreislauf dazwischen.</p>
+      <div class="ai-energy__data-grid">
+        <article><p>PV-ERZEUGUNG</p><h3>Solarstrom erkannt</h3><small>Aktuelle Erzeugung wird berücksichtigt</small><span class="ai-energy__sparkline" aria-hidden="true"></span></article>
+        <article><p>VERBRAUCH IM HAUSHALT</p><h3>Verbrauch erkannt</h3><small>Energiebedarf im Haushalt wird erfasst</small><span class="ai-energy__sparkline ai-energy__sparkline--two" aria-hidden="true"></span></article>
+        <article><p>SPEICHERSTAND</p><h3>Speicherstatus berücksichtigt</h3><small>Lade- und Entladefenster</small><span class="ai-energy__sparkline ai-energy__sparkline--three" aria-hidden="true"></span></article>
+        <article><p>NETZBEZUG / EINSPEISUNG</p><h3>Netzfluss erkannt</h3><small>Bezug und Abgabe getrennt</small><span class="ai-energy__sparkline ai-energy__sparkline--four" aria-hidden="true"></span></article>
+      </div>
+      <div class="ai-energy__steps">
+        <article><p class="ai-energy__tag">SCHRITT 01</p><h3>Erfassen</h3><p class="ai-energy__tag">DATENINPUT</p><ul><li>PV-Erzeugung</li><li>Verbrauch im Haushalt</li><li>Speicherstatus</li><li>Netzbezug</li></ul></article>
+        <article><p class="ai-energy__tag">SCHRITT 02</p><h3>Bewerten</h3><p class="ai-energy__tag">SYSTEMPRÜFUNG</p><ul><li>Ist gerade Überschuss vorhanden?</li><li>Soll Energie gespeichert werden?</li><li>Wird jetzt Energie benötigt?</li></ul></article>
+        <article><p class="ai-energy__tag">SCHRITT 03</p><h3>Steuern</h3><p class="ai-energy__tag">ERGEBNIS</p><ul><li>Speicher laden</li><li>Speicher entladen</li><li>Energiefluss anpassen</li></ul></article>
+      </div>
+      <div class="ai-energy__function-visuals">
+        <div class="ai-energy__visual ai-energy__visual--home">
+          {% if section.settings.function_home_image != blank %}{{ section.settings.function_home_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 960px) 55vw, 100vw', alt: 'Photovoltaikanlage, VENUS E Speicher und Smart Meter im Haushalt' }}{% endif %}
+        </div>
+        <div class="ai-energy__visual ai-energy__visual--app">
+          {% if section.settings.function_app_image != blank %}{{ section.settings.function_app_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600, 900, 1200', sizes: '(min-width: 960px) 45vw, 100vw', alt: 'VENUS E App mit Energiefluss und Speicherstatus' }}{% endif %}
+        </div>
+      </div>
+      <div class="ai-energy__function-note"><p>Der Kreislauf läuft dauerhaft: Neue Messwerte führen zu neuen Entscheidungen. So entsteht Schritt für Schritt ein System, das deinen Haushalt und deine Erzeugung besser aufeinander abstimmt.</p><a href="#smartmeter">Welche Datenbasis dafür nötig ist →</a></div>
+    </div>
+  </section>
+
+  <section id="smartmeter" class="ai-energy__section ai-energy__smartmeter" data-ai-anchor aria-labelledby="{{ page_id }}-smartmeter-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Datenbasis</p>
+      <h2 id="{{ page_id }}-smartmeter-heading">Smart Meter: Die Grundlage für <span>intelligente Steuerung</span></h2>
+      <div class="ai-energy__smart-grid">
+        <div class="ai-energy__smart-media">
+          <div class="ai-energy__media ai-energy__media--meter">{% if section.settings.smart_meter_image != blank %}{{ section.settings.smart_meter_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 42vw, 100vw', alt: 'MARSTEK Smart Meter im Verteilerkasten' }}{% endif %}</div>
+          <div class="ai-energy__smart-thumbs">
+            <div class="ai-energy__media">{% if section.settings.ct002_image != blank %}{{ section.settings.ct002_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: 'MARSTEK CT002 Smart Meter' }}{% endif %}</div>
+            <div class="ai-energy__media">{% if section.settings.ct003_image != blank %}{{ section.settings.ct003_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: 'MARSTEK CT003 P1 Smart Meter' }}{% endif %}</div>
+          </div>
+        </div>
+        <div class="ai-energy__smart-copy">
+          <p>Ohne aktuelle Energiedaten kann ein Speicher nur reagieren. Mit Smart Meter erkennt VENUS E, was im Haushalt passiert, und kann Energieflüsse gezielter steuern.</p>
+          <div class="ai-energy__smart-points">
+            <article><strong>01</strong><div><h3>Verbrauch messen</h3><p>Der Smart Meter erfasst, wie viel Energie dein Haushalt aktuell nutzt – und wann diese Nachfrage entsteht.</p></div></article>
+            <article><strong>02</strong><div><h3>Energiefluss erkennen</h3><p>Erzeugung, Verbrauch und Speicher werden nicht getrennt betrachtet, sondern im Zusammenhang: Wo geht Energie hin, wo fehlt sie gerade?</p></div></article>
+            <article><strong>03</strong><div><h3>Speicher intelligent nutzen</h3><p>Auf Basis dieser Messwerte kann das System Laden und Entladen besser an deinen tatsächlichen Bedarf anpassen.</p></div></article>
+          </div>
+          <a class="ai-energy__button ai-energy__button--primary" href="{{ smart_meter_url }}">Mehr über Smart Meter erfahren →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vergleich" class="ai-energy__section ai-energy__comparison" data-ai-anchor aria-labelledby="{{ page_id }}-comparison-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Einordnung</p>
+      <h2 id="{{ page_id }}-comparison-heading">Klassischer Speicher oder intelligentes Energiemanagement: <span>Was ist der Unterschied?</span></h2>
+      <p class="ai-energy__subtext">Ein klassischer Speicher erfüllt seinen Zweck zuverlässig: Energie aufnehmen und wieder abgeben. Ein intelligentes System ergänzt diesen Ansatz um Messdaten und eine laufende Bewertung.</p>
+      <div class="ai-energy__table-wrap"><table><thead><tr><th scope="col">Funktion</th><th scope="col">Klassischer Speicher</th><th scope="col" class="is-highlight">Intelligentes System</th></tr></thead><tbody><tr><th scope="row">Speichern</th><td>✓</td><td class="is-positive">✓</td></tr><tr><th scope="row">Verbrauch erkennen</th><td>begrenzt</td><td class="is-positive">✓</td></tr><tr><th scope="row">Energiefluss analysieren</th><td>—</td><td class="is-positive">✓</td></tr><tr><th scope="row">Automatische Anpassung</th><td>begrenzt</td><td class="is-positive">✓</td></tr><tr><th scope="row">Smart Meter Integration</th><td>optional</td><td class="is-positive">zentral</td></tr></tbody></table></div>
+      <p class="ai-energy__comparison-note">Die Gegenüberstellung ist keine Bewertung von „gut oder schlecht“. Sie zeigt vor allem, welche zusätzlichen Informationen ein System braucht, um Energie nicht nur zu puffern, sondern situationsbezogen einzusetzen.</p>
+      <a class="ai-energy__text-link" href="{{ comparison_url }}">Mehr zum Thema Eigenverbrauch erhöhen →</a>
+    </div>
+  </section>
+
+  <section id="alltag" class="ai-energy__section ai-energy__day" data-ai-anchor aria-labelledby="{{ page_id }}-day-heading" data-ai-tabs>
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Im Alltag</p>
+      <h2 id="{{ page_id }}-day-heading">Intelligente Energie im <span>Alltag</span></h2>
+      <p class="ai-energy__subtext">Was bedeutet das konkret über den Tag verteilt? Vier typische Situationen – und was das System daraus macht.</p>
+      <div class="ai-energy__timeline" role="tablist" aria-label="Tageszeiten">
+        <button type="button" role="tab" aria-selected="true" data-ai-tab="morning"><strong>06–10 UHR</strong><span>Morgens</span></button>
+        <button type="button" role="tab" aria-selected="false" data-ai-tab="noon"><strong>11–15 UHR</strong><span>Mittags</span></button>
+        <button type="button" role="tab" aria-selected="false" data-ai-tab="evening"><strong>17–22 UHR</strong><span>Abends</span></button>
+        <button type="button" role="tab" aria-selected="false" data-ai-tab="ev"><strong>FLEXIBEL</strong><span>E-Auto laden</span></button>
+      </div>
+      <div class="ai-energy__day-panels">
+        <div class="ai-energy__day-panel" data-ai-panel="morning" role="tabpanel"><div class="ai-energy__day-image">{% if section.settings.morning_image != blank %}{{ section.settings.morning_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: 'Morgendlicher Energiebedarf im Haushalt' }}{% endif %}</div><div class="ai-energy__day-copy"><p><b>ERKANNT</b>Der Bedarf im Haushalt steigt an, während die PV-Anlage noch wenig Energie liefert.</p><p><b>BEWERTET</b>Das System prüft Speicherstand und Netzbezug und erkennt, dass gerade keine hohen Überschüsse entstehen.</p><p><b>ERGEBNIS</b>Gespeicherter Solarstrom wird gezielt dort eingesetzt, wo morgens Bedarf entsteht.</p></div></div>
+        <div class="ai-energy__day-panel" data-ai-panel="noon" role="tabpanel" hidden><div class="ai-energy__day-image">{% if section.settings.noon_image != blank %}{{ section.settings.noon_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: 'Solarstromüberschuss zur Mittagszeit' }}{% endif %}</div><div class="ai-energy__day-copy"><p><b>ERKANNT</b>Die PV-Erzeugung erreicht ihren Höhepunkt, der Verbrauch im Haushalt ist vergleichsweise gering.</p><p><b>BEWERTET</b>Der aktuelle Bedarf ist gedeckt – es bleibt Energie übrig, die nicht sofort gebraucht wird.</p><p><b>ERGEBNIS</b>Überschüssige Energie wird dem Speicher zugeführt, statt direkt ins Netz zu fließen.</p></div></div>
+        <div class="ai-energy__day-panel" data-ai-panel="evening" role="tabpanel" hidden><div class="ai-energy__day-image">{% if section.settings.evening_image != blank %}{{ section.settings.evening_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: 'Abendlicher Energiebedarf im Haushalt' }}{% endif %}</div><div class="ai-energy__day-copy"><p><b>ERKANNT</b>Der Verbrauch steigt deutlich, während die PV-Anlage kaum noch Energie liefert.</p><p><b>BEWERTET</b>Es besteht Bedarf, der nicht mehr aus aktueller Erzeugung gedeckt werden kann.</p><p><b>ERGEBNIS</b>Gespeicherte Energie wird über das Hausnetz bereitgestellt und deckt einen Teil der Abendspitze.</p></div></div>
+        <div class="ai-energy__day-panel" data-ai-panel="ev" role="tabpanel" hidden><div class="ai-energy__day-image">{% if section.settings.ev_image != blank %}{{ section.settings.ev_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: 'E-Auto und Wallbox im Zusammenspiel mit Solarstrom' }}{% endif %}</div><div class="ai-energy__day-copy"><p><b>ERKANNT</b>Zusätzliche Verbraucher wie eine Wallbox melden Bedarf an – oft zeitgleich mit verfügbarem Solarstrom.</p><p><b>BEWERTET</b>Das System berücksichtigt diesen zusätzlichen Bedarf bei der Bewertung der aktuellen Energieflüsse.</p><p><b>ERGEBNIS</b>Du erhältst mehr Transparenz darüber, wann eigener Solarstrom verfügbar ist und wie der Speicher darauf reagiert.</p></div></div>
+      </div>
+      <a class="ai-energy__text-link" href="{{ eauto_url }}">Mehr zum Thema E-Auto laden mit Speicher →</a>
+    </div>
+  </section>
+
+  <section id="system" class="ai-energy__section ai-energy__system" data-ai-anchor aria-labelledby="{{ page_id }}-system-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">VENUS E System</p>
+      <h2 id="{{ page_id }}-system-heading">Ein System, das mit deinem <span>Energiebedarf mitdenkt</span></h2>
+      <p class="ai-energy__subtext">Vier Rollen, ein System: der Speicher als Kern, die App als Fenster zum System, der Smart Meter als Datenquelle – und eine Architektur, die für mehr ausgelegt ist. Sie arbeiten nicht nebeneinander, sondern greifen ineinander.</p>
+      <div class="ai-energy__bento">
+        <article class="ai-energy__bento-card ai-energy__bento-card--main"><div class="ai-energy__badge">01 · KERN</div><div class="ai-energy__bento-media">{% if section.settings.system_storage_image != blank %}{{ section.settings.system_storage_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '700, 1000, 1400', sizes: '(min-width: 960px) 50vw, 100vw', alt: 'VENUS E Speicher im Zuhause' }}{% endif %}</div><div class="ai-energy__bento-copy"><h3>VENUS E Speicher</h3><p>Nimmt Energie auf, hält sie bereit und gibt sie über das Hausnetz wieder ab – abgestimmt auf das, was im Haushalt gerade passiert. Er ist die Hardware, in der alle Entscheidungen des Systems zusammenlaufen.</p></div></article>
+        <article class="ai-energy__bento-card ai-energy__bento-card--app"><div class="ai-energy__badge">02 · FENSTER ZUM SYSTEM</div><div class="ai-energy__bento-media">{% if section.settings.system_app_image != blank %}{{ section.settings.system_app_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '700, 1000, 1400', sizes: '(min-width: 960px) 50vw, 100vw', alt: 'VENUS E App Energie-Dashboard' }}{% endif %}</div><div class="ai-energy__bento-copy"><h3>VENUS E App</h3><p>Zeigt in Echtzeit, was das System erkennt und wie es entscheidet – Erzeugung, Verbrauch und Speicherstatus auf einen Blick.</p></div></article>
+        <article class="ai-energy__bento-card"><div class="ai-energy__badge">03 · DATEN</div><div class="ai-energy__bento-media">{% if section.settings.system_meter_image != blank %}{{ section.settings.system_meter_image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '350, 500, 700', sizes: '(min-width: 960px) 25vw, 50vw', alt: 'Smart Meter als Datenquelle des Systems' }}{% endif %}</div><div class="ai-energy__bento-copy"><h3>Smart Meter</h3><p>Der Daten-Input des Systems: Er liefert die Messwerte, auf denen jede Entscheidung basiert.</p></div></article>
+        <article class="ai-energy__bento-card"><div class="ai-energy__badge">04 · PERSPEKTIVE</div><div class="ai-energy__bento-media ai-energy__vpp-visual" aria-hidden="true"><svg viewBox="0 0 360 180" role="img"><path d="M52 88h256M92 47l-40 41 40 41M268 47l40 41-40 41M180 24v128"/><circle cx="52" cy="88" r="13"/><circle cx="180" cy="88" r="16"/><circle cx="308" cy="88" r="13"/></svg></div><div class="ai-energy__bento-copy"><h3>VPP-ready</h3><p>Auf Erweiterung ausgelegt: perspektivisch für die Einbindung in größere Energieverbünde. Verfügbarkeit je nach Region und Anbieter.</p></div></article>
+      </div>
+      <a class="ai-energy__button ai-energy__button--primary ai-energy__center-cta" href="#modelle">Passende VENUS E Lösung finden</a>
+    </div>
+  </section>
+
+  <section id="modelle" class="ai-energy__section ai-energy__models" data-ai-anchor aria-labelledby="{{ page_id }}-models-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Lösungen</p>
+      <h2 id="{{ page_id }}-models-heading">Welche VENUS E Lösung passt zu deinem <span>Energiebedarf?</span></h2>
+      <p class="ai-energy__subtext">Die Entscheidung hängt weniger von technischen Details ab als von deinem Alltag: Wie viel Energie verbrauchst du, wann brauchst du sie, und wie willst du weiter ausbauen?</p>
+      <div class="ai-energy__model-grid">
+        {% for index in (1..4) %}
+          {% assign product_key = 'model_' | append: index | append: '_product' %}
+          {% assign product = section.settings[product_key] %}
+          {% if product == blank %}{% assign product = all_products[default_products[forloop.index0]] %}{% endif %}
+          {% assign title_key = 'model_' | append: index | append: '_title' %}
+          {% assign tag_key = 'model_' | append: index | append: '_tag' %}
+          {% assign text_key = 'model_' | append: index | append: '_text' %}
+          <article class="ai-energy__model-card">
+            <a class="ai-energy__model-media" href="{{ product.url | default: '#' }}">{% if product.featured_image != blank %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 25vw, 100vw', alt: product.title }}{% endif %}</a>
+            <div class="ai-energy__model-copy"><p class="ai-energy__tag">{{ section.settings[tag_key] }}</p><h3>{{ section.settings[title_key] | default: product.title }}</h3><p>{{ section.settings[text_key] }}</p><a class="ai-energy__text-link" href="{{ product.url | default: '#' }}">{{ section.settings[title_key] | default: product.title }} ansehen →</a></div>
+          </article>
+        {% endfor %}
+      </div>
+      <a class="ai-energy__button ai-energy__button--secondary ai-energy__center-cta" href="{{ models_compare_url }}">Alle Modelle im Vergleich →</a>
+    </div>
+  </section>
+
+  <section id="faq" class="ai-energy__section ai-energy__faq" data-ai-anchor aria-labelledby="{{ page_id }}-faq-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Häufige Fragen</p>
+      <h2 id="{{ page_id }}-faq-heading">Fragen zum <span>Energiemanagement</span></h2>
+      <div class="ai-energy__faq-list">
+        {% for block in section.blocks %}{% if block.type == 'faq' %}<article class="ai-energy__faq-item" {{ block.shopify_attributes }}><button type="button" class="ai-energy__faq-question" data-ai-faq-question aria-expanded="false"><span>{{ block.settings.question }}</span><span aria-hidden="true">+</span></button><div class="ai-energy__faq-answer" data-ai-faq-answer hidden>{{ block.settings.answer }}</div></article>{% endif %}{% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section id="ratgeber" class="ai-energy__section ai-energy__guides" aria-labelledby="{{ page_id }}-guides-heading">
+    <div class="ai-energy__container">
+      <p class="ai-energy__eyebrow">Mehr erfahren</p>
+      <h2 id="{{ page_id }}-guides-heading">Ratgeber & <span>Energie-Wissen</span></h2>
+      <div class="ai-energy__guide-grid">{% for block in section.blocks %}{% if block.type == 'guide' %}<article class="ai-energy__guide-card" {{ block.shopify_attributes }}><a class="ai-energy__guide-media" href="{{ block.settings.url | default: blog_url }}">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 33vw, 100vw', alt: block.settings.title }}{% endif %}</a><div class="ai-energy__guide-copy"><p class="ai-energy__tag">{{ block.settings.tag }}</p><h3>{{ block.settings.title }}</h3><p>{{ block.settings.excerpt }}</p><a class="ai-energy__text-link" href="{{ block.settings.url | default: blog_url }}">Weiterlesen →</a></div></article>{% endif %}{% endfor %}</div>
+      <a class="ai-energy__button ai-energy__button--secondary ai-energy__center-cta" href="{{ blog_url }}">Alle Ratgeber ansehen →</a>
+      <div class="ai-energy__final-cta"><p class="ai-energy__eyebrow">Nächster Schritt</p><h2>Nutze deinen Solarstrom intelligenter</h2><p>Ob Einstieg oder Ausbau: Wenn du Erzeugung, Verbrauch und Speicher als ein System betrachtest, holst du mehr aus deinem Solarstrom heraus.</p><div class="ai-energy__actions"><a class="ai-energy__button ai-energy__button--primary" href="#modelle">VENUS E Modelle ansehen</a><a class="ai-energy__button ai-energy__button--secondary" href="{{ smart_meter_url }}">Smart Meter entdecken</a><a class="ai-energy__text-link" href="{{ storage_url }}">Balkonkraftwerk mit Speicher →</a></div></div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "AI-Energiemanagement",
+  "tag": "section",
+  "class": "section-ai-energy-page",
+  "settings": [
+    {"type":"text","id":"hero_eyebrow","label":"Hero Eyebrow","default":"Technologie · Smart Energy"},
+    {"type":"text","id":"hero_heading","label":"Hero Überschrift","default":"AI-Energiemanagement: Solarstrom intelligent nutzen"},
+    {"type":"textarea","id":"hero_text","label":"Hero Text","default":"VENUS E verbindet Energieerzeugung, Verbrauch und Speicher zu einem intelligenten System. So kannst du deinen Eigenverbrauch erhöhen und Solarstrom gezielter nutzen."},
+    {"type":"text","id":"hero_function_label","label":"Hero Hauptbutton","default":"Smart Energy entdecken"},
+    {"type":"text","id":"hero_models_label","label":"Hero Nebenbutton","default":"VENUS E Modelle ansehen"},
+    {"type":"image_picker","id":"hero_image","label":"Hero Bild"},
+    {"type":"image_picker","id":"function_home_image","label":"Funktionsweise Haushalt Bild"},
+    {"type":"image_picker","id":"function_app_image","label":"Funktionsweise App Bild"},
+    {"type":"image_picker","id":"smart_meter_image","label":"Smart Meter 主图"},
+    {"type":"image_picker","id":"ct002_image","label":"CT002 图片"},
+    {"type":"image_picker","id":"ct003_image","label":"CT003 图片"},
+    {"type":"image_picker","id":"morning_image","label":"Morgens 图片"},
+    {"type":"image_picker","id":"noon_image","label":"Mittags 图片"},
+    {"type":"image_picker","id":"evening_image","label":"Abends 图片"},
+    {"type":"image_picker","id":"ev_image","label":"E-Auto 图片"},
+    {"type":"image_picker","id":"system_storage_image","label":"System Speicher图片"},
+    {"type":"image_picker","id":"system_app_image","label":"System App图片"},
+    {"type":"image_picker","id":"system_meter_image","label":"System Smart Meter图片"},
+    {"type":"product","id":"model_1_product","label":"Modell 1"},
+    {"type":"text","id":"model_1_tag","label":"Modell 1 标签","default":"KOMPAKTE LÖSUNG"},
+    {"type":"text","id":"model_1_title","label":"Modell 1 标题","default":"VENUS E Mini"},
+    {"type":"textarea","id":"model_1_text","label":"Modell 1 文案","default":"Für kleinere Haushalte und einfache Energieoptimierung."},
+    {"type":"product","id":"model_2_product","label":"Modell 2"},
+    {"type":"text","id":"model_2_tag","label":"Modell 2 标签","default":"ALLTAG & EIGENVERBRAUCH"},
+    {"type":"text","id":"model_2_title","label":"Modell 2 标题","default":"VENUS E 3.0"},
+    {"type":"textarea","id":"model_2_text","label":"Modell 2 文案","default":"Für Haushalte, die ihren Solarstrom im Alltag flexibler nutzen möchten."},
+    {"type":"product","id":"model_3_product","label":"Modell 3"},
+    {"type":"text","id":"model_3_tag","label":"Modell 3 标签","default":"MEHR SPEICHERBEDARF"},
+    {"type":"text","id":"model_3_title","label":"Modell 3 标题","default":"VENUS E 4.0"},
+    {"type":"textarea","id":"model_3_text","label":"Modell 3 文案","default":"Für mehr Speicherreserve bei höherem Energiebedarf."},
+    {"type":"product","id":"model_4_product","label":"Modell 4"},
+    {"type":"text","id":"model_4_tag","label":"Modell 4 标签","default":"GROSSER ENERGIEBEDARF"},
+    {"type":"text","id":"model_4_title","label":"Modell 4 标题","default":"VENUS E Max"},
+    {"type":"textarea","id":"model_4_text","label":"Modell 4 文案","default":"Für große Haushalte und umfangreiche Energieanforderungen."},
+    {"type":"header","content":"Links werden aus dem Store-Routing verwendet"}
+  ],
+  "blocks": [
+    {"type":"faq","name":"FAQ Frage","settings":[{"type":"text","id":"question","label":"Frage"},{"type":"richtext","id":"answer","label":"Antwort"}]},
+    {"type":"guide","name":"Ratgeber Karte","settings":[{"type":"text","id":"tag","label":"Tag","default":"RATGEBER"},{"type":"text","id":"title","label":"Titel"},{"type":"textarea","id":"excerpt","label":"Kurztext"},{"type":"image_picker","id":"image","label":"Bild"},{"type":"url","id":"url","label":"Link"}]}
+  ],
+  "max_blocks": 12,
+  "presets": [{"name":"AI-Energiemanagement","blocks":[{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"faq"},{"type":"guide"},{"type":"guide"},{"type":"guide"}]}]
+}
+{% endschema %}

@@ -48,6 +48,10 @@
     {{ 'ac-coupled-storage-page.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'ac-coupled-storage-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
+  {%- if template.suffix == 'ai-energiemanagement' -%}
+    {{ 'ai-energy-page.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'ai-energy-page.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
   {%- render 'css-variables' -%}
 
   <script>
@@ -422,7 +426,7 @@
     {%- sections 'popup-group' -%}
 
       <main
-        class="main-content{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}{% if template.suffix == 'e-auto' %} main-content--e-auto{% endif %}"
+        class="main-content{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}{% if template.suffix == 'e-auto' %} main-content--e-auto{% endif %}{% if template.suffix == 'ai-energiemanagement' %} main-content--ai-energy{% endif %}"
         id="MainContent"
         {% if template.suffix == 'balkonkraftwerk-mit-speicher' %}
           style="--bw-storage-content-max-width: {{ settings.bw_storage_content_max_width | default: 1500 }}px;"
