@@ -20,7 +20,7 @@
         </div>
         <div class="e-auto-page__trust-grid">
           {% for block in section.blocks %}
-            <article {{ block.shopify_attributes }}><strong>{{ block.settings.value }}</strong><p>{{ block.settings.text }}</p></article>
+            <article {{ block.shopify_attributes }}><strong>{{ block.settings.value }}{% if block.settings.value_label != blank %}<span>{{ block.settings.value_label }}</span>{% endif %}</strong><p>{{ block.settings.text }}</p></article>
           {% endfor %}
         </div>
       </div>
@@ -48,7 +48,7 @@
     {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "blocks": [
-    {"type":"trust","name":"Vertrauenssignal","settings":[{"type":"text","id":"value","label":"Wert","default":"10 Jahre"},{"type":"textarea","id":"text","label":"Text","default":"Herstellergarantie gemäß den Bedingungen des gewählten Modells."}]}
+    {"type":"trust","name":"Vertrauenssignal","settings":[{"type":"text","id":"value","label":"Wert","default":"10"},{"type":"text","id":"value_label","label":"Wert Einheit","default":""},{"type":"textarea","id":"text","label":"Text","default":"Herstellergarantie gemäß den Bedingungen des gewählten Modells."}]}
   ],
   "max_blocks": 3,
   "presets": [{"name":"E-Auto Vertrauen","blocks":[{"type":"trust"},{"type":"trust"},{"type":"trust"}] }]
