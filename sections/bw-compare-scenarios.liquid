@@ -5,7 +5,7 @@
   endif
 %}
 
-<section id="{{ scenario_anchor }}" class="bw-storage bw-storage-section bw-scenarios bw-anchor-target" aria-labelledby="bw-scenarios-heading-{{ section.id }}">
+<section id="{{ scenario_anchor }}" class="bw-storage bw-storage-section bw-scenarios bw-anchor-target" aria-labelledby="bw-scenarios-heading-{{ section.id }}" style="{% render 'bw-comparison-section-style', section: section %}">
   <div class="bw-container">
     <div class="bw-section__intro bw-scenarios__intro">
       {% if section.settings.eyebrow != blank %}<p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}

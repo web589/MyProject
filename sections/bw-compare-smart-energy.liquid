@@ -5,7 +5,7 @@
   endif
 %}
 
-<section id="{{ smart_anchor }}" class="bw-storage bw-storage-section bw-smart-energy bw-anchor-target" aria-labelledby="bw-smart-energy-heading-{{ section.id }}">
+<section id="{{ smart_anchor }}" class="bw-storage bw-storage-section bw-smart-energy bw-anchor-target" aria-labelledby="bw-smart-energy-heading-{{ section.id }}" style="{% render 'bw-comparison-section-style', section: section %}">
   <div class="bw-container">
     <div class="bw-section__intro bw-smart-energy__intro">
       {% if section.settings.eyebrow != blank %}<p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>{% endif %}

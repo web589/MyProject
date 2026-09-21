@@ -10,7 +10,7 @@
   class="bw-storage bw-storage-section bw-content-grid bw-content-grid--{{ section.settings.card_style }} bw-content-grid--surface-{{ section.settings.surface }} bw-anchor-target"
   data-bw-module="content-grid"
   aria-labelledby="bw-content-grid-heading-{{ section.id }}"
-  style="--bw-content-columns: {{ section.settings.columns }};"
+  style="{% render 'bw-comparison-section-style', section: section %} --bw-content-columns: {{ section.settings.columns }};"
 >
   <div class="bw-container">
     <div class="bw-section__intro bw-content-grid__intro">

@@ -23,6 +23,7 @@
   class="bw-storage bw-storage-section bw-hero bw-anchor-target"
   data-bw-module="hero"
   data-section-id="{{ section.id }}"
+  style="{% render 'bw-comparison-section-style', section: section %}"
 >
   <div
     class="bw-container bw-hero__grid{% unless has_media or request.design_mode %} bw-hero__grid--copy-only{% endunless %}{% if section.settings.media_position == 'left' %} bw-hero__grid--media-left{% endif %}"
