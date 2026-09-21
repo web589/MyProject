@@ -2,7 +2,7 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-trust" class="e-auto-page e-auto-page__section e-auto-page__trust" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 11 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 24 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 11 }}px; --eauto-control-size: {{ section.settings.control_size | default: 12 }}px; --eauto-value-size: {{ section.settings.value_size | default: 24 }}px; --eauto-note-size: {{ section.settings.note_size | default: 12 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-trust-media-height: {{ section.settings.trust_media_height }}px;" aria-labelledby="{{ page_id }}-trust-heading">
+<section id="eauto-trust" class="e-auto-page e-auto-page__section e-auto-page__trust" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 11 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 24 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 11 }}px; --eauto-control-size: {{ section.settings.control_size | default: 12 }}px; --eauto-value-size: {{ section.settings.value_size | default: 24 }}px; --eauto-note-size: {{ section.settings.note_size | default: 12 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-trust-media-height: {{ section.settings.trust_media_height }}px; --eauto-media-width: {{ section.settings.trust_media_width | default: 100 }}%;" aria-labelledby="{{ page_id }}-trust-heading">
   <div class="e-auto-page__container">
     <div class="e-auto-page__trust-layout">
       <div class="e-auto-page__media e-auto-page__media--trust">
@@ -52,6 +52,7 @@
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":38},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"trust_media_height","label":"Vertrauensbild Höhe","min":260,"max":520,"step":10,"unit":"px","default":360},
+    {"type":"range","id":"trust_media_width","label":"Vertrauensbild Breite","min":70,"max":100,"step":1,"unit":"%","default":100},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "blocks": [

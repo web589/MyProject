@@ -2,7 +2,7 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-smart-energy" class="e-auto-page e-auto-page__section e-auto-page__smart" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 11 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 15 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 12 }}px; --eauto-control-size: {{ section.settings.control_size | default: 12 }}px; --eauto-value-size: {{ section.settings.value_size | default: 34 }}px; --eauto-note-size: {{ section.settings.note_size | default: 12 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-smart-media-height: {{ section.settings.smart_media_height }}px;" aria-labelledby="{{ page_id }}-smart-heading">
+<section id="eauto-smart-energy" class="e-auto-page e-auto-page__section e-auto-page__smart" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 11 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 15 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 12 }}px; --eauto-control-size: {{ section.settings.control_size | default: 12 }}px; --eauto-value-size: {{ section.settings.value_size | default: 34 }}px; --eauto-note-size: {{ section.settings.note_size | default: 12 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-smart-media-height: {{ section.settings.smart_media_height }}px; --eauto-media-width: {{ section.settings.smart_media_width | default: 100 }}%;" aria-labelledby="{{ page_id }}-smart-heading">
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.smart_eyebrow }}</p>
@@ -60,6 +60,7 @@
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"smart_media_height","label":"Smart Energy Bildhöhe","min":260,"max":560,"step":10,"unit":"px","default":420},
+    {"type":"range","id":"smart_media_width","label":"Smart Energy Bildbreite","min":70,"max":100,"step":1,"unit":"%","default":100},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "presets": [{"name":"E-Auto Smart Energy"}]

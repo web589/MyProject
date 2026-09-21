@@ -2,7 +2,7 @@
   assign page_id = 'eauto-' | append: section.id
 %}
 
-<section id="eauto-installation" class="e-auto-page e-auto-page__section e-auto-page__installation" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 10 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 21 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 12 }}px; --eauto-control-size: {{ section.settings.control_size | default: 12 }}px; --eauto-value-size: {{ section.settings.value_size | default: 34 }}px; --eauto-note-size: {{ section.settings.note_size | default: 11 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-installation-media-height: {{ section.settings.installation_media_height }}px;" aria-labelledby="{{ page_id }}-installation-heading">
+<section id="eauto-installation" class="e-auto-page e-auto-page__section e-auto-page__installation" style="--eauto-heading-size: {{ section.settings.heading_size }}px; --eauto-copy-size: {{ section.settings.copy_size }}px; --eauto-eyebrow-size: {{ section.settings.eyebrow_size | default: 10 }}px; --eauto-item-heading-size: {{ section.settings.item_heading_size | default: 21 }}px; --eauto-item-text-size: {{ section.settings.item_text_size | default: 12 }}px; --eauto-control-size: {{ section.settings.control_size | default: 12 }}px; --eauto-value-size: {{ section.settings.value_size | default: 34 }}px; --eauto-note-size: {{ section.settings.note_size | default: 11 }}px; --eauto-section-space: {{ section.settings.section_spacing }}px; --eauto-installation-media-height: {{ section.settings.installation_media_height }}px; --eauto-media-width: {{ section.settings.installation_media_width | default: 100 }}%;" aria-labelledby="{{ page_id }}-installation-heading">
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.installation_eyebrow }}</p>
@@ -113,6 +113,7 @@
     {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"installation_media_height","label":"Installationsbild Höhe","min":180,"max":420,"step":10,"unit":"px","default":260},
+    {"type":"range","id":"installation_media_width","label":"Installationsbild Breite","min":70,"max":100,"step":1,"unit":"%","default":100},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],
   "blocks": [

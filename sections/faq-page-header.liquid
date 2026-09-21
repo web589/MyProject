@@ -159,9 +159,9 @@
 
   #shopify-section-{{ section.id }} .faq-page-header__nav-list {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     min-width: min-content;
     margin: 0;
     padding: 0;
@@ -198,6 +198,20 @@
     color: #0099fe;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.04em;
+  }
+
+  @media only screen and (min-width: 769px) and (max-width: 1120px) {
+    #shopify-section-{{ section.id }} .faq-page-header__nav-list {
+      justify-content: flex-start;
+      gap: 6px;
+    }
+
+    #shopify-section-{{ section.id }} .faq-page-header__nav-link {
+      gap: 6px;
+      min-height: 40px;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
   }
 
   @media only screen and (max-width: 768px) {

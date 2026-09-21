@@ -297,10 +297,10 @@
 .e-auto-page__stats .e-auto-page__stat-unit {
   display: inline-flex;
   align-items: center;
-  min-height: 20px;
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: var(--eauto-pale);
+  min-height: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
   color: var(--eauto-blue) !important;
   font-size: var(--eauto-item-text-size, 10px);
   font-weight: 760;
@@ -325,6 +325,8 @@
 
 .e-auto-page__media--wide {
   --eauto-media-height: var(--eauto-problem-media-height, 430px);
+  width: min(100%, var(--eauto-media-width, 100%));
+  margin-inline: auto;
 }
 
 .e-auto-page__problem-cards {
@@ -418,6 +420,8 @@
 
 .e-auto-page__flow-panel .e-auto-page__media {
   --eauto-media-height: var(--eauto-flow-media-height, 520px);
+  width: min(100%, var(--eauto-media-width, 100%));
+  margin-inline: auto;
   order: 1;
 }
 
@@ -463,6 +467,8 @@
 
 .e-auto-page__media--timeline {
   --eauto-media-height: var(--eauto-timeline-media-height, 220px);
+  width: min(100%, var(--eauto-media-width, 100%));
+  margin-inline: auto;
   margin-bottom: 20px;
   border: 0;
   border-radius: 10px;
@@ -575,6 +581,8 @@
 
 .e-auto-page__media--profile {
   --eauto-media-height: var(--eauto-profile-media-height, 410px);
+  width: min(100%, var(--eauto-media-width, 100%));
+  margin-inline: auto;
 }
 
 .e-auto-page__profile-focus {
@@ -762,6 +770,8 @@
 
 .e-auto-page__product-card-media {
   display: flex;
+  width: min(100%, var(--eauto-media-width, 100%));
+  margin-inline: auto;
   min-height: var(--eauto-recommendation-media-height, 240px);
   align-items: center;
   justify-content: center;
@@ -903,6 +913,8 @@
   grid-column: 2;
   grid-row: 1 / span 3;
   --eauto-media-height: var(--eauto-smart-media-height, 420px);
+  width: min(100%, var(--eauto-media-width, 100%));
+  justify-self: center;
   align-self: center;
 }
 
@@ -937,6 +949,8 @@
 
 .e-auto-page__installation-media {
   --eauto-media-height: var(--eauto-installation-media-height, 260px);
+  width: min(100%, var(--eauto-media-width, 100%));
+  justify-self: center;
 }
 
 .e-auto-page__installation-copy h3 {
@@ -1080,6 +1094,8 @@
 
 .e-auto-page__media--trust {
   --eauto-media-height: var(--eauto-trust-media-height, 360px);
+  width: min(100%, var(--eauto-media-width, 100%));
+  margin-inline: auto;
 }
 
 .e-auto-page__trust-layout .e-auto-page__section-heading {
@@ -1215,7 +1231,8 @@
 }
 
 .e-auto-page__media--final {
-  width: 100%;
+  width: min(100%, var(--eauto-media-width, 100%));
+  margin-inline: auto;
   min-height: var(--eauto-final-media-height, 260px);
   aspect-ratio: 1440 / 420;
   --eauto-media-height: var(--eauto-final-media-height, 260px);
