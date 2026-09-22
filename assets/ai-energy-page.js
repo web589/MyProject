@@ -58,6 +58,38 @@
   }
 
   function bindFaq(root) {
+    var faqTransitionMs = 220;
+
+    function setFaqAnswerState(answer, open) {
+      if (!answer) return;
+      if (answer.aiFaqTimer) {
+        window.clearTimeout(answer.aiFaqTimer);
+        answer.aiFaqTimer = null;
+      }
+      if (open) {
+        answer.aiFaqOpening = true;
+        answer.hidden = false;
+        if (reducedMotion()) {
+          answer.classList.add('is-open');
+          return;
+        }
+        window.requestAnimationFrame(function () {
+          if (!answer.hidden && answer.aiFaqOpening) answer.classList.add('is-open');
+        });
+        return;
+      }
+      answer.aiFaqOpening = false;
+      answer.classList.remove('is-open');
+      if (reducedMotion()) {
+        answer.hidden = true;
+        return;
+      }
+      answer.aiFaqTimer = window.setTimeout(function () {
+        answer.hidden = true;
+        answer.aiFaqTimer = null;
+      }, faqTransitionMs);
+    }
+
     root.querySelectorAll('[data-ai-faq-question]').forEach(function (button) {
       if (button.dataset.aiFaqBound === 'true') return;
       button.dataset.aiFaqBound = 'true';
@@ -69,11 +101,11 @@
           question.setAttribute('aria-expanded', 'false');
           var questionItem = question.closest('.ai-energy__faq-item');
           var questionAnswer = questionItem && questionItem.querySelector('[data-ai-faq-answer]');
-          if (questionAnswer) questionAnswer.hidden = true;
+          setFaqAnswerState(questionAnswer, false);
         });
         if (shouldOpen && answer) {
           button.setAttribute('aria-expanded', 'true');
-          answer.hidden = false;
+          setFaqAnswerState(answer, true);
         }
       });
     });
