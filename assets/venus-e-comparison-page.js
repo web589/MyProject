@@ -3,6 +3,7 @@
 
   var initializedNavs = new WeakSet();
   var initializedTables = new WeakSet();
+  var initializedFaqs = new WeakSet();
   var globalAnchorHandlerReady = false;
 
   function prefersReducedMotion() {
@@ -256,6 +257,65 @@
     updateStickyState();
   }
 
+  function setupFaq(section) {
+    if (!section || initializedFaqs.has(section)) return;
+
+    var items = Array.prototype.slice.call(section.querySelectorAll('.bw-faq__item'));
+    if (!items.length) return;
+
+    initializedFaqs.add(section);
+
+    items.forEach(function (item) {
+      var summary = item.querySelector('summary');
+      var answer = item.querySelector('.bw-faq__answer');
+      if (!summary || !answer) return;
+
+      function clearAnimation(open) {
+        item.open = open;
+        answer.style.height = '';
+        answer.style.opacity = '';
+        item.classList.remove('is-opening', 'is-closing');
+        item.removeAttribute('data-bw-faq-animating');
+      }
+
+      summary.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        if (item.hasAttribute('data-bw-faq-animating')) return;
+
+        var shouldOpen = !item.open;
+        if (prefersReducedMotion()) {
+          item.open = shouldOpen;
+          return;
+        }
+
+        item.setAttribute('data-bw-faq-animating', '');
+        item.classList.toggle('is-opening', shouldOpen);
+        item.classList.toggle('is-closing', !shouldOpen);
+
+        if (shouldOpen) {
+          item.open = true;
+          answer.style.height = '0px';
+          answer.style.opacity = '0';
+          void answer.offsetHeight;
+        } else {
+          answer.style.height = answer.scrollHeight + 'px';
+          answer.style.opacity = '1';
+          void answer.offsetHeight;
+        }
+
+        window.requestAnimationFrame(function () {
+          answer.style.height = shouldOpen ? answer.scrollHeight + 'px' : '0px';
+          answer.style.opacity = shouldOpen ? '1' : '0';
+        });
+
+        window.setTimeout(function () {
+          clearAnimation(shouldOpen);
+        }, 380);
+      });
+    });
+  }
+
   function boot(root) {
     var context = root || document;
     setupGlobalAnchorHandler();
@@ -265,6 +325,9 @@
 
     if (context.matches && context.matches('[data-bw-compare-table]')) setupComparisonTable(context);
     context.querySelectorAll('[data-bw-compare-table]').forEach(setupComparisonTable);
+
+    if (context.matches && context.matches('[data-bw-module="faq"]')) setupFaq(context);
+    context.querySelectorAll('[data-bw-module="faq"]').forEach(setupFaq);
   }
 
   if (document.readyState === 'loading') {
