@@ -23,7 +23,12 @@
           endif
           assign scenario_image_alt = block.settings.image_alt | default: scenario_image.alt | default: product.title | default: block.settings.title
         %}
-        <article class="bw-scenario-card{% if block.settings.highlight %} bw-scenario-card--highlight{% endif %}" role="listitem" {{ block.shopify_attributes }}>
+        <article
+          class="bw-scenario-card{% if block.settings.highlight %} bw-scenario-card--highlight{% endif %}"
+          role="listitem"
+          data-bw-scenario-card
+          {{ block.shopify_attributes }}
+        >
           <div class="bw-scenario-card__media">
             {% if scenario_image != blank %}
               {{ scenario_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400', sizes: '(min-width: 900px) 46vw, 92vw', alt: scenario_image_alt }}
@@ -37,7 +42,7 @@
               {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
             </div>
             {% if product != blank %}
-              <a class="bw-scenario-card__link" href="{{ product.url }}">{{ block.settings.link_label | default: product.title | escape }} <span aria-hidden="true">→</span></a>
+              <a class="bw-scenario-card__link" href="{{ product.url }}" data-bw-scenario-select>{{ block.settings.link_label | default: product.title | escape }} <span aria-hidden="true">→</span></a>
             {% elsif request.design_mode %}
               <span class="bw-scenario-card__link" aria-disabled="true">{{ block.settings.link_label | default: 'Produkt auswählen' | escape }} <span aria-hidden="true">→</span></span>
             {% endif %}

@@ -35,11 +35,19 @@
       {% endif %}
 
       <h1>
-        <span class="bw-hero__heading-line">{{ section.settings.heading_line_1 | escape }}</span>
-        <span class="bw-hero__heading-line">
-          {{ section.settings.heading_line_2 | escape }}
-          <span class="bw-hero__heading-accent">{{ section.settings.heading_accent | escape }}</span>
-        </span>
+        {% if section.settings.heading_accent_position == 'line_1' %}
+          <span class="bw-hero__heading-line">
+            {{ section.settings.heading_line_1 | escape }}
+            <span class="bw-hero__heading-accent">{{ section.settings.heading_line_2 | escape }}</span>
+          </span>
+          <span class="bw-hero__heading-line bw-hero__heading-line--accent">{{ section.settings.heading_accent | escape }}</span>
+        {% else %}
+          <span class="bw-hero__heading-line">{{ section.settings.heading_line_1 | escape }}</span>
+          <span class="bw-hero__heading-line">
+            {{ section.settings.heading_line_2 | escape }}
+            <span class="bw-hero__heading-accent">{{ section.settings.heading_accent | escape }}</span>
+          </span>
+        {% endif %}
       </h1>
 
       {% if section.settings.text != blank %}
@@ -118,6 +126,16 @@
       "id": "heading_accent",
       "label": "Blauer Überschriftenteil",
       "default": "Netzstrom."
+    },
+    {
+      "type": "select",
+      "id": "heading_accent_position",
+      "label": "Position des blauen Überschriftenteils",
+      "options": [
+        { "value": "line_2", "label": "Zeile 2" },
+        { "value": "line_1", "label": "Zeile 1" }
+      ],
+      "default": "line_2"
     },
     {
       "type": "richtext",

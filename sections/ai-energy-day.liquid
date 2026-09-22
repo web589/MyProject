@@ -17,7 +17,7 @@
       <div class="ai-energy__day-panels">
         {% for block in section.blocks %}
           <div id="ai-energy-panel-{{ block.id }}" class="ai-energy__day-panel" data-ai-panel="{{ block.id }}" role="tabpanel" aria-labelledby="ai-energy-tab-{{ block.id }}"{% unless forloop.first %} hidden{% endunless %} {{ block.shopify_attributes }}>
-            <div class="ai-energy__day-image">
+            <div class="ai-energy__day-image{% if block.settings.image == blank %} ai-energy__day-image--placeholder{% endif %}">
               {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}{% endif %}
             </div>
             <div class="ai-energy__day-copy">

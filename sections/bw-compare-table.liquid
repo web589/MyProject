@@ -8,10 +8,14 @@
   assign product_2 = section.settings.product_2
   assign product_3 = section.settings.product_3
   assign product_4 = section.settings.product_4
-  assign product_1_label = product_1.title | default: 'Produkt 1'
-  assign product_2_label = product_2.title | default: 'Produkt 2'
-  assign product_3_label = product_3.title | default: 'Produkt 3'
-  assign product_4_label = product_4.title | default: 'Produkt 4'
+  assign product_1_label = section.settings.product_1_label | default: product_1.title | default: 'Produkt 1'
+  assign product_2_label = section.settings.product_2_label | default: product_2.title | default: 'Produkt 2'
+  assign product_3_label = section.settings.product_3_label | default: product_3.title | default: 'Produkt 3'
+  assign product_4_label = section.settings.product_4_label | default: product_4.title | default: 'Produkt 4'
+  assign product_1_link_label = section.settings.product_1_link_label | default: 'Mini entdecken'
+  assign product_2_link_label = section.settings.product_2_link_label | default: '3.0 entdecken'
+  assign product_3_link_label = section.settings.product_3_link_label | default: '4.0 entdecken'
+  assign product_4_link_label = section.settings.product_4_link_label | default: 'Max entdecken'
   assign highlight_1 = false
   assign highlight_2 = false
   assign highlight_3 = false
@@ -64,7 +68,7 @@
             aria-pressed="{% if default_selected_column == '1' %}true{% else %}false{% endif %}"
             aria-label="{{ product_1_label | append: ' auswählen' | escape }}"
           >
-            {% render 'bw-compare-product-header', compare_product: product_1, highlighted: highlight_1, visual_only: true, price_prefix: section.settings.price_prefix %}
+            {% render 'bw-compare-product-header', compare_product: product_1, highlighted: highlight_1, visual_only: true, display_label: product_1_label, price_prefix: section.settings.price_prefix %}
           </div>
           <div
             class="bw-specs__sticky-product{% if highlight_2 %} is-highlighted{% endif %}{% if default_selected_column == '2' %} is-selected{% endif %}"
@@ -76,7 +80,7 @@
             aria-pressed="{% if default_selected_column == '2' %}true{% else %}false{% endif %}"
             aria-label="{{ product_2_label | append: ' auswählen' | escape }}"
           >
-            {% render 'bw-compare-product-header', compare_product: product_2, highlighted: highlight_2, visual_only: true, price_prefix: section.settings.price_prefix %}
+            {% render 'bw-compare-product-header', compare_product: product_2, highlighted: highlight_2, visual_only: true, display_label: product_2_label, price_prefix: section.settings.price_prefix %}
           </div>
           <div
             class="bw-specs__sticky-product{% if highlight_3 %} is-highlighted{% endif %}{% if default_selected_column == '3' %} is-selected{% endif %}"
@@ -88,7 +92,7 @@
             aria-pressed="{% if default_selected_column == '3' %}true{% else %}false{% endif %}"
             aria-label="{{ product_3_label | append: ' auswählen' | escape }}"
           >
-            {% render 'bw-compare-product-header', compare_product: product_3, highlighted: highlight_3, visual_only: true, price_prefix: section.settings.price_prefix %}
+            {% render 'bw-compare-product-header', compare_product: product_3, highlighted: highlight_3, visual_only: true, display_label: product_3_label, price_prefix: section.settings.price_prefix %}
           </div>
           <div
             class="bw-specs__sticky-product{% if highlight_4 %} is-highlighted{% endif %}{% if default_selected_column == '4' %} is-selected{% endif %}"
@@ -100,7 +104,7 @@
             aria-pressed="{% if default_selected_column == '4' %}true{% else %}false{% endif %}"
             aria-label="{{ product_4_label | append: ' auswählen' | escape }}"
           >
-            {% render 'bw-compare-product-header', compare_product: product_4, highlighted: highlight_4, visual_only: true, price_prefix: section.settings.price_prefix %}
+            {% render 'bw-compare-product-header', compare_product: product_4, highlighted: highlight_4, visual_only: true, display_label: product_4_label, price_prefix: section.settings.price_prefix %}
           </div>
         </div>
       </div>
@@ -135,7 +139,7 @@
               aria-pressed="{% if default_selected_column == '1' %}true{% else %}false{% endif %}"
               aria-label="{{ product_1_label | append: ' auswählen' | escape }}"
             >
-              {% render 'bw-compare-product-header', compare_product: product_1, highlighted: highlight_1, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
+              {% render 'bw-compare-product-header', compare_product: product_1, highlighted: highlight_1, display_label: product_1_label, price_prefix: section.settings.price_prefix %}
             </th>
             <th
               class="bw-specs__product-cell{% if highlight_2 %} is-highlighted{% endif %}{% if default_selected_column == '2' %} is-selected{% endif %}"
@@ -147,7 +151,7 @@
               aria-pressed="{% if default_selected_column == '2' %}true{% else %}false{% endif %}"
               aria-label="{{ product_2_label | append: ' auswählen' | escape }}"
             >
-              {% render 'bw-compare-product-header', compare_product: product_2, highlighted: highlight_2, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
+              {% render 'bw-compare-product-header', compare_product: product_2, highlighted: highlight_2, display_label: product_2_label, price_prefix: section.settings.price_prefix %}
             </th>
             <th
               class="bw-specs__product-cell{% if highlight_3 %} is-highlighted{% endif %}{% if default_selected_column == '3' %} is-selected{% endif %}"
@@ -159,7 +163,7 @@
               aria-pressed="{% if default_selected_column == '3' %}true{% else %}false{% endif %}"
               aria-label="{{ product_3_label | append: ' auswählen' | escape }}"
             >
-              {% render 'bw-compare-product-header', compare_product: product_3, highlighted: highlight_3, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
+              {% render 'bw-compare-product-header', compare_product: product_3, highlighted: highlight_3, display_label: product_3_label, price_prefix: section.settings.price_prefix %}
             </th>
             <th
               class="bw-specs__product-cell{% if highlight_4 %} is-highlighted{% endif %}{% if default_selected_column == '4' %} is-selected{% endif %}"
@@ -171,7 +175,7 @@
               aria-pressed="{% if default_selected_column == '4' %}true{% else %}false{% endif %}"
               aria-label="{{ product_4_label | append: ' auswählen' | escape }}"
             >
-              {% render 'bw-compare-product-header', compare_product: product_4, highlighted: highlight_4, show_status: true, price_prefix: section.settings.price_prefix, available_label: section.settings.available_label, unavailable_label: section.settings.unavailable_label %}
+              {% render 'bw-compare-product-header', compare_product: product_4, highlighted: highlight_4, display_label: product_4_label, price_prefix: section.settings.price_prefix %}
             </th>
           </tr>
         </thead>
@@ -186,7 +190,7 @@
               case block.settings.common_field
                 when 'capacity'
                   assign spec_keys = 'capacity,storage_capacity,speicherkapazitaet,speicherkapazitat,speicherkapazität'
-                  assign spec_source = 'variant'
+                  assign spec_source = 'capacity_range'
                 when 'battery_type'
                   assign spec_keys = 'battery_type,batterietyp,cell_type,zelltyp,battery_chemistry'
                 when 'nominal_voltage'
@@ -282,6 +286,39 @@
             </tr>
           {% endfor %}
         </tbody>
+        <tfoot>
+          <tr class="bw-specs__actions-row">
+            <th class="bw-specs__label-cell" scope="row"></th>
+            <td>
+              {% if product_1 != blank %}
+                <a class="bw-specs__product-link" href="{{ product_1.url }}">
+                  {{ product_1_link_label | escape }} <span aria-hidden="true">&rarr;</span>
+                </a>
+              {% endif %}
+            </td>
+            <td>
+              {% if product_2 != blank %}
+                <a class="bw-specs__product-link" href="{{ product_2.url }}">
+                  {{ product_2_link_label | escape }} <span aria-hidden="true">&rarr;</span>
+                </a>
+              {% endif %}
+            </td>
+            <td>
+              {% if product_3 != blank %}
+                <a class="bw-specs__product-link" href="{{ product_3.url }}">
+                  {{ product_3_link_label | escape }} <span aria-hidden="true">&rarr;</span>
+                </a>
+              {% endif %}
+            </td>
+            <td>
+              {% if product_4 != blank %}
+                <a class="bw-specs__product-link" href="{{ product_4.url }}">
+                  {{ product_4_link_label | escape }} <span aria-hidden="true">&rarr;</span>
+                </a>
+              {% endif %}
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
     <p class="bw-specs__mobile-hint">{{ section.settings.mobile_hint | escape }}</p>
@@ -326,6 +363,34 @@
     { "type": "product", "id": "product_2", "label": "Produkt 2" },
     { "type": "product", "id": "product_3", "label": "Produkt 3" },
     { "type": "product", "id": "product_4", "label": "Produkt 4" },
+    {
+      "type": "text",
+      "id": "product_1_label",
+      "label": "Anzeigename Produkt 1",
+      "default": "VENUS E Mini"
+    },
+    {
+      "type": "text",
+      "id": "product_2_label",
+      "label": "Anzeigename Produkt 2",
+      "default": "VENUS E 3.0"
+    },
+    {
+      "type": "text",
+      "id": "product_3_label",
+      "label": "Anzeigename Produkt 3",
+      "default": "VENUS E 4.0"
+    },
+    {
+      "type": "text",
+      "id": "product_4_label",
+      "label": "Anzeigename Produkt 4",
+      "default": "VENUS E Max"
+    },
+    { "type": "text", "id": "product_1_link_label", "label": "Linktext Produkt 1", "default": "Mini entdecken" },
+    { "type": "text", "id": "product_2_link_label", "label": "Linktext Produkt 2", "default": "3.0 entdecken" },
+    { "type": "text", "id": "product_3_link_label", "label": "Linktext Produkt 3", "default": "4.0 entdecken" },
+    { "type": "text", "id": "product_4_link_label", "label": "Linktext Produkt 4", "default": "Max entdecken" },
     {
       "type": "select",
       "id": "highlight_column",
@@ -502,7 +567,7 @@
           "id": "common_field",
           "label": "Datenfeld",
           "options": [
-            { "value": "capacity", "label": "Speicherkapazität (1× Variante)" },
+            { "value": "capacity", "label": "Speicherkapazität (Produktbereich mit Variantenfallback)" },
             { "value": "battery_type", "label": "Batterietyp" },
             { "value": "nominal_voltage", "label": "Nennspannung" },
             { "value": "cell_capacity", "label": "Zellkapazität" },

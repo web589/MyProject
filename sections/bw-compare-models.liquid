@@ -30,6 +30,7 @@
           assign model = block.settings.product
           assign model_image = block.settings.image
           assign display_title = block.settings.display_title
+          assign model_button_label = block.settings.button_label | default: section.settings.cta_label
           if model_image == blank and model != blank
             assign model_image = model.featured_image
           endif
@@ -91,11 +92,11 @@
                   {% endif %}
                 </p>
                 <a class="bw-button bw-button--primary bw-model-card__button" href="{{ model.url }}">
-                  {{ section.settings.cta_label | escape }}
+                  {{ model_button_label | escape }}
                 </a>
               {% elsif request.design_mode %}
                 <span class="bw-button bw-button--primary bw-model-card__button" aria-disabled="true">
-                  {{ section.settings.cta_label | escape }}
+                  {{ model_button_label | escape }}
                 </span>
               {% endif %}
             </div>
@@ -400,6 +401,12 @@
           "type": "richtext",
           "id": "description",
           "label": "Kurzbeschreibung"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Produktbutton (optional)",
+          "info": "Ohne Eingabe wird der allgemeine Produktbutton verwendet."
         },
         {
           "type": "checkbox",

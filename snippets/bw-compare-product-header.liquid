@@ -1,6 +1,6 @@
 {%- liquid
   assign header_image = compare_product.featured_image
-  assign is_visual_only = visual_only | default: false
+  assign product_label = display_label | default: compare_product.title
 -%}
 
 <div class="bw-table-product{% if highlighted %} bw-table-product--highlight{% endif %}">
@@ -22,13 +22,7 @@
 
   <div class="bw-table-product__copy">
     {%- if compare_product != blank -%}
-      {%- if is_visual_only -%}
-        <span class="bw-table-product__name">{{ compare_product.title | escape }}</span>
-      {%- else -%}
-        <a class="bw-table-product__name" href="{{ compare_product.url }}">
-          {{ compare_product.title | escape }}
-        </a>
-      {%- endif -%}
+      <span class="bw-table-product__name">{{ product_label | escape }}</span>
       <span class="bw-table-product__price">
         {{ price_prefix | escape }} {{ compare_product.price_min | money }}
       </span>

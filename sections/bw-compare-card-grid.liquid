@@ -44,6 +44,21 @@
           if card_link_label == blank and card_product != blank
             assign card_link_label = card_product.title
           endif
+          assign product_link = block.settings.product_link_url
+          if product_link == blank and card_product != blank
+            assign product_link = card_product.url
+          endif
+          assign product_link_label = block.settings.product_link_label
+          assign secondary_link = block.settings.secondary_link_url
+          assign secondary_link_label = block.settings.secondary_link_label
+          assign has_card_actions = false
+          if product_link_label != blank and product_link != blank
+            assign has_card_actions = true
+          elsif secondary_link_label != blank and secondary_link != blank
+            assign has_card_actions = true
+          elsif card_link_label != blank and card_link != blank
+            assign has_card_actions = true
+          endif
         %}
         <article class="bw-content-card" role="listitem" {{ block.shopify_attributes }}>
           {% if block.settings.video != blank or card_image != blank %}
@@ -98,11 +113,26 @@
               </ul>
             {% endif %}
 
-            {% if card_link_label != blank and card_link != blank %}
-              <a class="bw-content-card__link" href="{{ card_link }}">
-                {{ card_link_label | escape }}
-                <span aria-hidden="true">→</span>
-              </a>
+            {% if has_card_actions %}
+              <div class="bw-content-card__actions">
+                {% if product_link_label != blank and product_link != blank %}
+                  <a class="bw-content-card__link bw-content-card__link--product" href="{{ product_link }}">
+                    <span aria-hidden="true">&rarr;</span>
+                    {{ product_link_label | escape }}
+                  </a>
+                {% endif %}
+                {% if secondary_link_label != blank and secondary_link != blank %}
+                  <a class="bw-content-card__link bw-content-card__link--secondary" href="{{ secondary_link }}">
+                    {{ secondary_link_label | escape }}
+                  </a>
+                {% endif %}
+                {% if card_link_label != blank and card_link != blank %}
+                  <a class="bw-content-card__link" href="{{ card_link }}">
+                    {{ card_link_label | escape }}
+                    <span aria-hidden="true">&rarr;</span>
+                  </a>
+                {% endif %}
+              </div>
             {% endif %}
           </div>
         </article>
@@ -343,6 +373,28 @@
           "type": "url",
           "id": "link_url",
           "label": "Linkziel"
+        },
+        {
+          "type": "text",
+          "id": "product_link_label",
+          "label": "Produktlinktext (optional)",
+          "info": "Zusätzlicher Produktlink vor dem normalen Link, z. B. „VENUS E Mini“."
+        },
+        {
+          "type": "url",
+          "id": "product_link_url",
+          "label": "Produktlinkziel (optional)",
+          "info": "Ohne Eingabe wird die ausgewählte Produktseite verwendet."
+        },
+        {
+          "type": "text",
+          "id": "secondary_link_label",
+          "label": "Zweiter Linktext (optional)"
+        },
+        {
+          "type": "url",
+          "id": "secondary_link_url",
+          "label": "Zweites Linkziel (optional)"
         }
       ]
     }

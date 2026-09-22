@@ -57,63 +57,6 @@
     });
   }
 
-  function bindFaq(root) {
-    var faqTransitionMs = 180;
-
-    function setFaqAnswerState(answer, open) {
-      if (!answer) return;
-      if (answer.aiFaqTimer) {
-        window.clearTimeout(answer.aiFaqTimer);
-        answer.aiFaqTimer = null;
-      }
-      if (open) {
-        answer.aiFaqOpening = true;
-        answer.hidden = false;
-        answer.style.setProperty('--ai-faq-answer-height', answer.scrollHeight + 'px');
-        if (reducedMotion()) {
-          answer.classList.add('is-open');
-          return;
-        }
-        window.requestAnimationFrame(function () {
-          if (!answer.hidden && answer.aiFaqOpening) answer.classList.add('is-open');
-        });
-        return;
-      }
-      answer.aiFaqOpening = false;
-      answer.classList.remove('is-open');
-      if (reducedMotion()) {
-        answer.hidden = true;
-        answer.style.removeProperty('--ai-faq-answer-height');
-        return;
-      }
-      answer.aiFaqTimer = window.setTimeout(function () {
-        answer.hidden = true;
-        answer.style.removeProperty('--ai-faq-answer-height');
-        answer.aiFaqTimer = null;
-      }, faqTransitionMs);
-    }
-
-    root.querySelectorAll('[data-ai-faq-question]').forEach(function (button) {
-      if (button.dataset.aiFaqBound === 'true') return;
-      button.dataset.aiFaqBound = 'true';
-      button.addEventListener('click', function () {
-        var item = button.closest('.ai-energy__faq-item');
-        var answer = item && item.querySelector('[data-ai-faq-answer]');
-        var shouldOpen = button.getAttribute('aria-expanded') !== 'true';
-        root.querySelectorAll('[data-ai-faq-question]').forEach(function (question) {
-          question.setAttribute('aria-expanded', 'false');
-          var questionItem = question.closest('.ai-energy__faq-item');
-          var questionAnswer = questionItem && questionItem.querySelector('[data-ai-faq-answer]');
-          setFaqAnswerState(questionAnswer, false);
-        });
-        if (shouldOpen && answer) {
-          button.setAttribute('aria-expanded', 'true');
-          setFaqAnswerState(answer, true);
-        }
-      });
-    });
-  }
-
   function bindAnchors() {
     var nav = document.querySelector('[data-bw-anchor-nav]');
     if (!nav || nav.dataset.aiAnchorBound === 'true') return;
@@ -147,7 +90,6 @@
 
   function boot() {
     bindTabs(document);
-    bindFaq(document);
     bindAnchors();
   }
 
