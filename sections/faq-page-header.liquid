@@ -6,6 +6,7 @@
   }
 
   #shopify-section-{{ section.id }} .faq-page-header__banner-wrap {
+    display: none;
     width: 100%;
     max-width: 1640px;
     margin: 0 auto;
@@ -109,14 +110,28 @@
   #shopify-section-{{ section.id }} .faq-page-header__body {
     width: 100%;
     max-width: 1080px;
-    padding-top: 72px;
+    padding-top: 34px;
+    padding-right: 0;
+    padding-left: 0;
     box-sizing: border-box;
   }
 
   #shopify-section-{{ section.id }} .faq-page-header__title-wrap {
-    max-width: 760px;
-    margin: 0 auto 36px;
-    text-align: center;
+    max-width: none;
+    margin: 0 0 28px;
+    padding: 0 0 28px;
+    border-bottom: 1px solid #dce4ec;
+    text-align: left;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-header__title-wrap .faq-page-header__eyebrow {
+    margin: 0 0 12px;
+    color: #0099fe;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.4;
+    text-transform: none;
   }
 
   #shopify-section-{{ section.id }} .faq-page-header__title {
@@ -330,6 +345,9 @@
 
   <div class="page-width page-width--narrow faq-page-header__body">
     <header class="faq-page-header__title-wrap">
+      {%- if section.settings.banner_eyebrow != blank -%}
+        <p class="faq-page-header__eyebrow">{{ section.settings.banner_eyebrow | escape }}</p>
+      {%- endif -%}
       <h1 id="FAQ-page-title-{{ section.id }}" class="faq-page-header__title">{{ faq_page_title | escape }}</h1>
       {%- if section.settings.subtitle != blank -%}
         <div class="faq-page-header__subtitle rte">{{ section.settings.subtitle }}</div>
