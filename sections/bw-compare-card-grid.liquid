@@ -36,19 +36,19 @@
             assign card_image = card_product.featured_image
           endif
           assign card_image_alt = block.settings.image_alt | default: card_image.alt | default: card_product.title | default: block.settings.title
+          assign product_link_label = block.settings.product_link_label
           assign card_link = block.settings.link_url
-          if card_link == blank and card_product != blank
+          if card_link == blank and card_product != blank and product_link_label == blank
             assign card_link = card_product.url
           endif
           assign card_link_label = block.settings.link_label
-          if card_link_label == blank and card_product != blank
+          if card_link_label == blank and card_product != blank and product_link_label == blank
             assign card_link_label = card_product.title
           endif
           assign product_link = block.settings.product_link_url
           if product_link == blank and card_product != blank
             assign product_link = card_product.url
           endif
-          assign product_link_label = block.settings.product_link_label
           assign secondary_link = block.settings.secondary_link_url
           assign secondary_link_label = block.settings.secondary_link_label
           assign has_card_actions = false

@@ -47,7 +47,7 @@
             <p class="bw-model-card__badge">{{ block.settings.badge | escape }}</p>
           {% endif %}
 
-          <div class="bw-model-card__media">
+          <div class="bw-model-card__media{% if model_image != blank %} bw-model-card__media--has-image{% endif %}">
             {% if model_image != blank %}
               {{
                 model_image

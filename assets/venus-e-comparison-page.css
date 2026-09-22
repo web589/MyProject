@@ -403,11 +403,6 @@
   box-shadow: 0 12px 28px rgba(0, 153, 254, 0.12);
 }
 
-.bw-scenario-card.is-selected {
-  border-color: var(--bw-blue);
-  box-shadow: 0 12px 28px rgba(0, 153, 254, 0.12);
-}
-
 .bw-scenario-card__media {
   aspect-ratio: 16 / 7.5;
   background: #eaf0f4;
@@ -461,7 +456,8 @@
 }
 
 .bw-scenario-card--highlight .bw-scenario-card__link,
-.bw-scenario-card.is-selected .bw-scenario-card__link {
+.bw-scenario-card:hover .bw-scenario-card__link,
+.bw-scenario-card:focus-within .bw-scenario-card__link {
   background: var(--bw-blue);
   color: #fff;
 }
@@ -474,8 +470,10 @@
 
 .bw-scenario-card--highlight .bw-scenario-card__link:hover,
 .bw-scenario-card--highlight .bw-scenario-card__link:focus-visible,
-.bw-scenario-card.is-selected .bw-scenario-card__link:hover,
-.bw-scenario-card.is-selected .bw-scenario-card__link:focus-visible {
+.bw-scenario-card:hover .bw-scenario-card__link:hover,
+.bw-scenario-card:hover .bw-scenario-card__link:focus-visible,
+.bw-scenario-card:focus-within .bw-scenario-card__link:hover,
+.bw-scenario-card:focus-within .bw-scenario-card__link:focus-visible {
   background: var(--bw-blue-deep);
   color: #fff;
 }
@@ -720,6 +718,10 @@
 .bw-specs__actions-row > * {
   padding: 20px 14px 22px;
   background: #fff;
+}
+
+.bw-specs__actions-row > [data-bw-compare-column].is-selected {
+  background: #f2faff;
 }
 
 .bw-specs__actions-row .bw-specs__label-cell {
@@ -1764,9 +1766,10 @@
 
 .section-bw-compare-trust .bw-compare-trust__media {
   width: var(--bw-compare-image-width, 100%);
-  height: var(--bw-compare-image-height, 356px);
-  min-height: 0;
+  height: auto;
+  min-height: 100%;
   margin-inline: auto;
+  align-self: stretch;
 }
 
 .section-bw-compare-trust .bw-compare-trust__stat strong {
@@ -1914,12 +1917,17 @@
 .section-bw-compare-models .bw-model-card__media {
   width: auto;
   height: 194px;
-  margin: 16px 16px 0;
+  margin: 46px 16px 0;
   padding: 0;
   border: 1px dashed #c4d0db;
   border-radius: 3px;
   aspect-ratio: auto;
   background: #edf2f6;
+}
+
+.section-bw-compare-models .bw-model-card__media--has-image {
+  border: 0;
+  background: transparent;
 }
 
 .section-bw-compare-models .bw-model-card__media img {
@@ -2074,6 +2082,11 @@
   margin: 48px 19px 0;
 }
 
+.section-bw-compare-models .bw-models--final .bw-model-card__media--has-image {
+  border: 0;
+  background: transparent;
+}
+
 .section-bw-compare-models .bw-models--final .bw-model-card__body {
   padding: 13px 19px 16px;
 }
@@ -2215,7 +2228,8 @@
 }
 
 .section-bw-compare-scenarios .bw-scenario-card--highlight,
-.section-bw-compare-scenarios .bw-scenario-card.is-selected {
+.section-bw-compare-scenarios .bw-scenario-card:hover,
+.section-bw-compare-scenarios .bw-scenario-card:focus-within {
   border-color: var(--bw-blue);
   box-shadow: none;
 }

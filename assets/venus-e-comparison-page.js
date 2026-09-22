@@ -3,7 +3,6 @@
 
   var initializedNavs = new WeakSet();
   var initializedTables = new WeakSet();
-  var initializedScenarioSections = new WeakSet();
   var globalAnchorHandlerReady = false;
 
   function prefersReducedMotion() {
@@ -257,36 +256,6 @@
     updateStickyState();
   }
 
-  function setupScenarioChoices(section) {
-    if (!section || initializedScenarioSections.has(section)) return;
-
-    var cards = Array.prototype.slice.call(section.querySelectorAll('[data-bw-scenario-card]'));
-    if (!cards.length) return;
-
-    initializedScenarioSections.add(section);
-
-    function selectCard(selectedCard) {
-      cards.forEach(function (card) {
-        card.classList.toggle('is-selected', card === selectedCard);
-      });
-    }
-
-    var initialCard = cards.find(function (card) {
-      return card.classList.contains('bw-scenario-card--highlight');
-    }) || cards[0];
-
-    cards.forEach(function (card) {
-      var link = card.querySelector('[data-bw-scenario-select]');
-      if (!link) return;
-
-      link.addEventListener('click', function () {
-        selectCard(card);
-      });
-    });
-
-    selectCard(initialCard);
-  }
-
   function boot(root) {
     var context = root || document;
     setupGlobalAnchorHandler();
@@ -296,9 +265,6 @@
 
     if (context.matches && context.matches('[data-bw-compare-table]')) setupComparisonTable(context);
     context.querySelectorAll('[data-bw-compare-table]').forEach(setupComparisonTable);
-
-    if (context.matches && context.matches('.section-bw-compare-scenarios')) setupScenarioChoices(context);
-    context.querySelectorAll('.section-bw-compare-scenarios').forEach(setupScenarioChoices);
   }
 
   if (document.readyState === 'loading') {

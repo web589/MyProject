@@ -289,28 +289,28 @@
         <tfoot>
           <tr class="bw-specs__actions-row">
             <th class="bw-specs__label-cell" scope="row"></th>
-            <td>
+            <td class="{% if default_selected_column == '1' %}is-selected{% endif %}" data-bw-compare-column="1">
               {% if product_1 != blank %}
                 <a class="bw-specs__product-link" href="{{ product_1.url }}">
                   {{ product_1_link_label | escape }} <span aria-hidden="true">&rarr;</span>
                 </a>
               {% endif %}
             </td>
-            <td>
+            <td class="{% if default_selected_column == '2' %}is-selected{% endif %}" data-bw-compare-column="2">
               {% if product_2 != blank %}
                 <a class="bw-specs__product-link" href="{{ product_2.url }}">
                   {{ product_2_link_label | escape }} <span aria-hidden="true">&rarr;</span>
                 </a>
               {% endif %}
             </td>
-            <td>
+            <td class="{% if default_selected_column == '3' %}is-selected{% endif %}" data-bw-compare-column="3">
               {% if product_3 != blank %}
                 <a class="bw-specs__product-link" href="{{ product_3.url }}">
                   {{ product_3_link_label | escape }} <span aria-hidden="true">&rarr;</span>
                 </a>
               {% endif %}
             </td>
-            <td>
+            <td class="{% if default_selected_column == '4' %}is-selected{% endif %}" data-bw-compare-column="4">
               {% if product_4 != blank %}
                 <a class="bw-specs__product-link" href="{{ product_4.url }}">
                   {{ product_4_link_label | escape }} <span aria-hidden="true">&rarr;</span>

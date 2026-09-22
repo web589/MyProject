@@ -26,7 +26,6 @@
         <article
           class="bw-scenario-card{% if block.settings.highlight %} bw-scenario-card--highlight{% endif %}"
           role="listitem"
-          data-bw-scenario-card
           {{ block.shopify_attributes }}
         >
           <div class="bw-scenario-card__media">
@@ -42,7 +41,7 @@
               {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
             </div>
             {% if product != blank %}
-              <a class="bw-scenario-card__link" href="{{ product.url }}" data-bw-scenario-select>{{ block.settings.link_label | default: product.title | escape }} <span aria-hidden="true">→</span></a>
+              <a class="bw-scenario-card__link" href="{{ product.url }}">{{ block.settings.link_label | default: product.title | escape }} <span aria-hidden="true">→</span></a>
             {% elsif request.design_mode %}
               <span class="bw-scenario-card__link" aria-disabled="true">{{ block.settings.link_label | default: 'Produkt auswählen' | escape }} <span aria-hidden="true">→</span></span>
             {% endif %}
