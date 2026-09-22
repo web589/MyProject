@@ -110,7 +110,7 @@
   #shopify-section-{{ section.id }} .faq-page-header__body {
     width: 100%;
     max-width: 1080px;
-    padding-top: 30px;
+    padding-top: 34px;
     padding-right: 0;
     padding-left: 0;
     box-sizing: border-box;
@@ -118,14 +118,14 @@
 
   #shopify-section-{{ section.id }} .faq-page-header__title-wrap {
     max-width: none;
-    margin: 0 0 20px;
-    padding: 0 0 18px;
+    margin: 0 0 28px;
+    padding: 0 0 28px;
     border-bottom: 1px solid #dce4ec;
     text-align: left;
   }
 
   #shopify-section-{{ section.id }} .faq-page-header__title-wrap .faq-page-header__eyebrow {
-    margin: 0 0 8px;
+    margin: 0 0 12px;
     color: #0099fe;
     font-size: 14px;
     font-weight: 700;
@@ -161,7 +161,7 @@
 
   #shopify-section-{{ section.id }} .faq-page-header__nav {
     width: min(1640px, calc(100vw - 40px));
-    margin: 0 0 32px;
+    margin: 0 0 48px;
     margin-left: 50%;
     transform: translateX(-50%);
     overflow-x: auto;
@@ -177,8 +177,8 @@
   #shopify-section-{{ section.id }} .faq-page-header__nav-list {
     display: flex;
     flex-wrap: nowrap;
-    justify-content: space-between;
-    gap: 6px;
+    justify-content: center;
+    gap: 12px;
     max-width: 1280px;
     min-width: min-content;
     margin: 0 auto;
@@ -190,9 +190,9 @@
     display: inline-flex;
     flex: 0 0 auto;
     align-items: center;
-    gap: 6px;
-    min-height: 38px;
-    padding: 7px 12px;
+    gap: 8px;
+    min-height: 42px;
+    padding: 9px 14px;
     border: 1px solid #dce4ec;
     border-radius: 999px;
     background: #ffffff;
@@ -221,8 +221,8 @@
 
   @media only screen and (min-width: 769px) and (max-width: 1120px) {
     #shopify-section-{{ section.id }} .faq-page-header__nav-list {
-      justify-content: space-between;
-      gap: 6px;
+      justify-content: center;
+      gap: 10px;
     }
 
     #shopify-section-{{ section.id }} .faq-page-header__nav-link {
@@ -258,14 +258,14 @@
 
     #shopify-section-{{ section.id }} .faq-page-header__body {
       max-width: none;
-      padding-top: 32px;
+      padding-top: 48px;
       padding-right: 20px;
       padding-bottom: 0;
       padding-left: 20px;
     }
 
     #shopify-section-{{ section.id }} .faq-page-header__title-wrap {
-      margin-bottom: 20px;
+      margin-bottom: 28px;
       text-align: left;
     }
 
@@ -277,7 +277,7 @@
       width: calc(100% + 40px);
       margin-left: -20px;
       margin-right: -20px;
-      margin-bottom: 28px;
+      margin-bottom: 40px;
       padding: 0 20px 6px;
       box-sizing: border-box;
       transform: none;
@@ -286,6 +286,7 @@
     #shopify-section-{{ section.id }} .faq-page-header__nav-list {
       flex-wrap: nowrap;
       justify-content: flex-start;
+      gap: 8px;
     }
   }
 </style>
