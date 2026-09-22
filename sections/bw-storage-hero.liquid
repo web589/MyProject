@@ -84,7 +84,7 @@
     </div>
 
     {% if has_media or request.design_mode %}
-      <div class="bw-media bw-media--hero bw-hero__media">
+      <div class="bw-media bw-media--hero bw-hero__media{% if has_media %} bw-hero__media--has-content{% endif %}">
         {% if section.settings.video != blank %}
           {{ section.settings.video | video_tag: image_size: '1400x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'bw-media__video' }}
         {% elsif section.settings.image != blank %}

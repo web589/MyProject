@@ -278,6 +278,26 @@
         item.removeAttribute('data-bw-faq-animating');
       }
 
+      function waitForAnimation(open) {
+        var finished = false;
+        var fallbackTimer;
+
+        function finish() {
+          if (finished) return;
+          finished = true;
+          window.clearTimeout(fallbackTimer);
+          answer.removeEventListener('transitionend', handleTransitionEnd);
+          clearAnimation(open);
+        }
+
+        function handleTransitionEnd(event) {
+          if (event.target === answer && event.propertyName === 'height') finish();
+        }
+
+        answer.addEventListener('transitionend', handleTransitionEnd);
+        fallbackTimer = window.setTimeout(finish, 460);
+      }
+
       summary.addEventListener('click', function (event) {
         event.preventDefault();
 
@@ -309,9 +329,7 @@
           answer.style.opacity = shouldOpen ? '1' : '0';
         });
 
-        window.setTimeout(function () {
-          clearAnimation(shouldOpen);
-        }, 380);
+        waitForAnimation(shouldOpen);
       });
     });
   }

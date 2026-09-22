@@ -1883,7 +1883,7 @@
 }
 
 .section-bw-compare-models .bw-container {
-  width: min(1080px, calc(100% - 40px));
+  width: min(var(--bw-storage-content-max-width, 1500px), calc(100% - 48px));
 }
 
 .section-bw-compare-models .bw-models__intro {
@@ -2232,7 +2232,7 @@
 }
 
 .section-bw-compare-scenarios .bw-container {
-  width: min(960px, calc(100% - 40px));
+  width: min(var(--bw-storage-content-max-width, 1500px), calc(100% - 48px));
 }
 
 .section-bw-compare-scenarios .bw-scenarios__intro {
@@ -2449,6 +2449,11 @@
     box-shadow: none;
   }
 
+  .section-bw-storage-hero .bw-hero__grid:not(.bw-hero__grid--media-left) .bw-hero__media.bw-hero__media--has-content {
+    border: 0;
+    background: transparent;
+  }
+
   .section-bw-storage-hero .bw-hero__grid:not(.bw-hero__grid--media-left) .bw-hero__media img,
   .section-bw-storage-hero .bw-hero__grid:not(.bw-hero__grid--media-left) .bw-hero__media video {
     height: 100%;
@@ -2474,6 +2479,11 @@
     border: 1px dashed #c4d0db;
     border-radius: 10px;
     box-shadow: none;
+  }
+
+  .section-bw-storage-hero .bw-hero__media--has-content {
+    border: 0;
+    background: transparent;
   }
 }
 
@@ -2504,7 +2514,7 @@
 }
 
 .section-bw-compare-card-grid .bw-container {
-  width: min(1080px, calc(100% - 40px));
+  width: min(var(--bw-storage-content-max-width, 1500px), calc(100% - 48px));
 }
 
 .section-bw-compare-card-grid .bw-content-grid__intro {
