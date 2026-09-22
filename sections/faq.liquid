@@ -452,6 +452,30 @@
     line-height: 1.75;
   }
 
+  /* Keep the FAQ panel on a natural-height CSS track instead of animating an inline pixel height. */
+  #shopify-section-{{ section.id }} .faq-page-layout .faq-item .collapsible-content {
+    display: grid;
+    grid-template-rows: minmax(0, 0fr);
+    height: auto !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: grid-template-rows 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.2s ease, visibility 0s linear 0.35s;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-layout .faq-item .collapsible-content.is-open {
+    grid-template-rows: minmax(0, 1fr);
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  #shopify-section-{{ section.id }} .faq-page-layout .faq-item .collapsible-content__inner {
+    min-height: 0;
+    overflow: hidden;
+    transform: none;
+    transition: none;
+  }
+
   #shopify-section-{{ section.id }} .rte.collapsible-content__inner--faq > :first-child {
     margin-top: 0;
   }
