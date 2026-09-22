@@ -1,7 +1,9 @@
 {%- if template.name == 'page' and template.suffix == 'faq' -%}
 {%- liquid
   assign faq_banner_overlay_color = section.settings.banner_overlay_color | default: '#041830'
-  assign faq_banner_overlay_rgb = faq_banner_overlay_color | color_to_rgb
+  assign faq_banner_overlay_red = faq_banner_overlay_color | color_extract: 'red'
+  assign faq_banner_overlay_green = faq_banner_overlay_color | color_extract: 'green'
+  assign faq_banner_overlay_blue = faq_banner_overlay_color | color_extract: 'blue'
   assign faq_banner_overlay_left_opacity = section.settings.banner_overlay_left_opacity | default: 84 | divided_by: 100.0
   assign faq_banner_overlay_middle_opacity = section.settings.banner_overlay_middle_opacity | default: 48 | divided_by: 100.0
   assign faq_banner_overlay_right_opacity = section.settings.banner_overlay_right_opacity | default: 8 | divided_by: 100.0
@@ -62,7 +64,7 @@
 
   #shopify-section-{{ section.id }} .faq-page-header__scrim {
     z-index: 1;
-    background: linear-gradient(90deg, rgba({{ faq_banner_overlay_rgb }}, {{ faq_banner_overlay_left_opacity }}) 0%, rgba({{ faq_banner_overlay_rgb }}, {{ faq_banner_overlay_middle_opacity }}) 48%, rgba({{ faq_banner_overlay_rgb }}, {{ faq_banner_overlay_right_opacity }}) 100%);
+    background: linear-gradient(90deg, rgba({{ faq_banner_overlay_red }}, {{ faq_banner_overlay_green }}, {{ faq_banner_overlay_blue }}, {{ faq_banner_overlay_left_opacity }}) 0%, rgba({{ faq_banner_overlay_red }}, {{ faq_banner_overlay_green }}, {{ faq_banner_overlay_blue }}, {{ faq_banner_overlay_middle_opacity }}) 48%, rgba({{ faq_banner_overlay_red }}, {{ faq_banner_overlay_green }}, {{ faq_banner_overlay_blue }}, {{ faq_banner_overlay_right_opacity }}) 100%);
   }
 
   #shopify-section-{{ section.id }} .faq-page-header__banner-content {
