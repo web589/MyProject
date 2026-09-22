@@ -10,7 +10,11 @@
       <div class="ai-energy__feature-grid">
         {% for block in section.blocks %}
           <article class="ai-energy__feature-card" {{ block.shopify_attributes }}>
-            <span class="ai-energy__feature-icon" aria-hidden="true">{{ block.settings.icon }}</span>
+            {% if block.settings.icon != blank %}
+              <span class="ai-energy__feature-icon" aria-hidden="true">
+                {{ block.settings.icon | image_url: width: 64 | image_tag: loading: 'lazy', widths: '32, 48, 64', sizes: '24px', alt: '' }}
+              </span>
+            {% endif %}
             <p class="ai-energy__tag">{{ block.settings.label }}</p>
             <h3>{{ block.settings.title }}</h3>
             <p>{{ block.settings.text }}</p>
@@ -46,7 +50,7 @@
   ],
   "blocks": [
     {"type":"feature","name":"Feature","settings":[
-      {"type":"text","id":"icon","label":"Icon","default":"01"},
+      {"type":"image_picker","id":"icon","label":"Icon"},
       {"type":"text","id":"label","label":"Nummer und Label","default":"01 · ENERGIE ERKENNEN"},
       {"type":"text","id":"title","label":"Titel","default":"Energieflüsse verstehen"},
       {"type":"textarea","id":"text","label":"Beschreibung","default":"Smart Meter und Systemdaten zeigen, wann Energie erzeugt, verbraucht oder gespeichert wird."}
