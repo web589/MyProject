@@ -270,66 +270,30 @@
       var answer = item.querySelector('.bw-faq__answer');
       if (!summary || !answer) return;
 
-      function clearAnimation(open) {
-        item.open = open;
-        answer.style.height = '';
-        answer.style.opacity = '';
-        item.classList.remove('is-opening', 'is-closing');
-        item.removeAttribute('data-bw-faq-animating');
-      }
+      answer.addEventListener('transitionend', function (event) {
+        if (event.target !== answer || event.propertyName !== 'grid-template-rows') return;
+        if (!item.classList.contains('is-closing')) return;
 
-      function waitForAnimation(open) {
-        var finished = false;
-        var fallbackTimer;
-
-        function finish() {
-          if (finished) return;
-          finished = true;
-          window.clearTimeout(fallbackTimer);
-          answer.removeEventListener('transitionend', handleTransitionEnd);
-          clearAnimation(open);
-        }
-
-        function handleTransitionEnd(event) {
-          if (event.target === answer && event.propertyName === 'height') finish();
-        }
-
-        answer.addEventListener('transitionend', handleTransitionEnd);
-        fallbackTimer = window.setTimeout(finish, 460);
-      }
+        item.open = false;
+        item.classList.remove('is-closing');
+      });
 
       summary.addEventListener('click', function (event) {
         event.preventDefault();
 
-        if (item.hasAttribute('data-bw-faq-animating')) return;
-
-        var shouldOpen = !item.open;
+        var shouldOpen = item.classList.contains('is-closing') || !item.open;
         if (prefersReducedMotion()) {
           item.open = shouldOpen;
+          item.classList.remove('is-closing');
           return;
         }
 
-        item.setAttribute('data-bw-faq-animating', '');
-        item.classList.toggle('is-opening', shouldOpen);
-        item.classList.toggle('is-closing', !shouldOpen);
-
         if (shouldOpen) {
+          item.classList.remove('is-closing');
           item.open = true;
-          answer.style.height = '0px';
-          answer.style.opacity = '0';
-          void answer.offsetHeight;
         } else {
-          answer.style.height = answer.scrollHeight + 'px';
-          answer.style.opacity = '1';
-          void answer.offsetHeight;
+          item.classList.add('is-closing');
         }
-
-        window.requestAnimationFrame(function () {
-          answer.style.height = shouldOpen ? answer.scrollHeight + 'px' : '0px';
-          answer.style.opacity = shouldOpen ? '1' : '0';
-        });
-
-        waitForAnimation(shouldOpen);
       });
     });
   }

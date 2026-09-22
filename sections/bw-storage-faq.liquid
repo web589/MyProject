@@ -33,7 +33,9 @@
         <details class="bw-faq__item"{% if item_open %} open{% endif %} {{ block.shopify_attributes }}>
           <summary>{{ block.settings.question }}</summary>
           {% if block.settings.answer != blank %}
-            <div class="bw-faq__answer">{{ block.settings.answer }}</div>
+            <div class="bw-faq__answer">
+              <div class="bw-faq__answer-inner">{{ block.settings.answer }}</div>
+            </div>
           {% endif %}
         </details>
       {% endfor %}

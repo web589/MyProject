@@ -1865,13 +1865,19 @@
 }
 
 .bw-faq__answer {
-  padding: 0 54px 22px 23px;
+  padding: 0;
   color: var(--bw-copy);
   font-size: 0.9rem;
   line-height: 1.55;
 }
 
-.bw-faq__answer > :last-child {
+.bw-faq__answer-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 54px 22px 23px;
+}
+
+.bw-faq__answer-inner > :last-child {
   margin-bottom: 0;
 }
 
@@ -2278,7 +2284,7 @@
     padding: 20px 48px 12px 18px;
   }
 
-  .bw-faq__answer {
+  .bw-faq__answer-inner {
     padding: 0 18px 20px;
   }
 

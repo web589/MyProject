@@ -1810,16 +1810,35 @@
 }
 
 .section-bw-storage-faq .bw-faq__answer {
+  display: grid;
+  grid-template-rows: minmax(0, 0fr);
   overflow: hidden;
-  transition: height 380ms cubic-bezier(.25, .46, .45, .94), opacity 240ms ease;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows 320ms cubic-bezier(.25, .46, .45, .94), opacity 180ms ease, visibility 0s linear 320ms;
 }
 
-.section-bw-storage-faq .bw-faq__item[data-bw-faq-animating] .bw-faq__answer {
-  will-change: height, opacity;
+.section-bw-storage-faq .bw-faq__answer-inner {
+  min-height: 0;
+  overflow: hidden;
 }
 
-.section-bw-storage-faq .bw-faq__item.is-opening summary::after {
-  transform: translateY(4px) rotate(225deg);
+.section-bw-storage-faq .bw-faq__item[open] .bw-faq__answer {
+  grid-template-rows: minmax(0, 1fr);
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.section-bw-storage-faq .bw-faq__item.is-closing .bw-faq__answer {
+  grid-template-rows: minmax(0, 0fr);
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: 0s, 0s, 320ms;
+}
+
+.section-bw-storage-faq .bw-faq__item[open] .bw-faq__answer {
+  will-change: grid-template-rows, opacity;
 }
 
 .section-bw-storage-faq .bw-faq__item.is-closing summary::after {
