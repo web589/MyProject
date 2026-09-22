@@ -1,4 +1,11 @@
 {%- if template.name == 'page' and template.suffix == 'faq' -%}
+{%- liquid
+  assign faq_banner_overlay_color = section.settings.banner_overlay_color | default: '#041830'
+  assign faq_banner_overlay_rgb = faq_banner_overlay_color | color_to_rgb
+  assign faq_banner_overlay_left_opacity = section.settings.banner_overlay_left_opacity | default: 84 | divided_by: 100.0
+  assign faq_banner_overlay_middle_opacity = section.settings.banner_overlay_middle_opacity | default: 48 | divided_by: 100.0
+  assign faq_banner_overlay_right_opacity = section.settings.banner_overlay_right_opacity | default: 8 | divided_by: 100.0
+-%}
 <style>
   #shopify-section-{{ section.id }} .faq-page-header {
     width: 100%;
@@ -55,7 +62,7 @@
 
   #shopify-section-{{ section.id }} .faq-page-header__scrim {
     z-index: 1;
-    background: linear-gradient(90deg, rgba(4, 24, 48, 0.84) 0%, rgba(4, 24, 48, 0.48) 48%, rgba(4, 24, 48, 0.08) 100%);
+    background: linear-gradient(90deg, rgba({{ faq_banner_overlay_rgb }}, {{ faq_banner_overlay_left_opacity }}) 0%, rgba({{ faq_banner_overlay_rgb }}, {{ faq_banner_overlay_middle_opacity }}) 48%, rgba({{ faq_banner_overlay_rgb }}, {{ faq_banner_overlay_right_opacity }}) 100%);
   }
 
   #shopify-section-{{ section.id }} .faq-page-header__banner-content {
@@ -482,6 +489,49 @@
       "id": "banner_image_mobile",
       "label": "FAQ Banner mobile image",
       "info": "Optional. Recommended size: 768 × 520 px. Falls back to the desktop image when empty."
+    },
+    {
+      "type": "header",
+      "content": "FAQ Banner overlay"
+    },
+    {
+      "type": "color",
+      "id": "banner_overlay_color",
+      "label": "FAQ Banner overlay color",
+      "default": "#041830"
+    },
+    {
+      "type": "range",
+      "id": "banner_overlay_left_opacity",
+      "label": "FAQ Banner overlay left opacity",
+      "info": "0% is transparent and 100% is fully opaque.",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 84
+    },
+    {
+      "type": "range",
+      "id": "banner_overlay_middle_opacity",
+      "label": "FAQ Banner overlay middle opacity",
+      "info": "Controls the overlay around the center of the banner.",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "banner_overlay_right_opacity",
+      "label": "FAQ Banner overlay right opacity",
+      "info": "Controls the overlay at the right edge of the banner.",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 8
     },
     {
       "type": "text",
