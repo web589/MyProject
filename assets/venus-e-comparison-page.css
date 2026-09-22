@@ -2561,11 +2561,18 @@
 
 .section-bw-compare-card-grid .bw-content-card__media {
   width: calc(100% - 44px);
-  height: 112px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  max-height: var(--bw-compare-image-height, 300px);
   margin: 20px 22px 0;
   border: 1px dashed #c4d0db;
   border-radius: 5px;
   background: #edf2f6;
+}
+
+.section-bw-compare-card-grid .bw-content-card__media--has-content {
+  border: 0;
+  background: transparent;
 }
 
 .section-bw-compare-card-grid .bw-content-card__media img,
@@ -2643,7 +2650,7 @@
   }
 
   .section-bw-compare-card-grid .bw-content-card__media {
-    height: 140px;
+    height: auto;
   }
 }
 
@@ -2657,6 +2664,6 @@
   }
 
   .section-bw-compare-card-grid .bw-content-card__media {
-    height: min(160px, 38vw);
+    height: auto;
   }
 }

@@ -62,7 +62,7 @@
         %}
         <article class="bw-content-card" role="listitem" {{ block.shopify_attributes }}>
           {% if block.settings.video != blank or card_image != blank %}
-            <div class="bw-content-card__media">
+            <div class="bw-content-card__media bw-content-card__media--has-content">
               {% if block.settings.video != blank %}
                 {{
                   block.settings.video
