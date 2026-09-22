@@ -35,7 +35,7 @@
       <div class="ac-storage-page__wrap ac-storage-page__hero-grid">
         <div class="ac-storage-page__hero-copy">
           <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
-          <h1>{{ section.settings.heading }}</h1>
+          <h1>{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="ac-storage-page__heading-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h1>
           <p class="ac-storage-page__lead">{{ section.settings.lead }}</p>
           <div class="ac-storage-page__actions">
             {% for block in section.blocks %}

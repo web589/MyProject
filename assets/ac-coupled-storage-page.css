@@ -173,6 +173,10 @@
   line-height: 1.16;
 }
 
+.ac-storage-page h1 .ac-storage-page__heading-accent {
+  color: var(--ac-blue);
+}
+
 .ac-storage-page h2 {
   max-width: 100%;
   font-size: var(--ac-heading-size);
@@ -427,6 +431,10 @@
 .ac-storage-page__comparison,
 .ac-storage-page__models,
 .ac-storage-page__final {
+  width: 100vw;
+  max-width: none;
+  margin-right: calc(50% - 50vw);
+  margin-left: calc(50% - 50vw);
   background: var(--ac-bg);
 }
 
@@ -881,11 +889,6 @@
   background: #fff;
 }
 
-.ac-storage-page__blog {
-  padding-right: 80px;
-  padding-left: 80px;
-}
-
 .ac-storage-page__faq-list {
   width: 100%;
   margin-top: 36px;
@@ -1053,7 +1056,10 @@
 }
 
 .ac-storage-page__final-card .ac-storage-page__link {
+  align-self: center;
+  margin-top: 0;
   margin-left: 6px;
+  transform: translateY(-2px);
 }
 
 @media only screen and (max-width: 1200px) {
