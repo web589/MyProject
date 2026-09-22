@@ -286,7 +286,7 @@
           "settings": {
             "title": "Pendler",
             "summary": "Jeden Tag ins Büro, ca. 30–60 km hin und zurück.",
-            "focus": "Mittelgroße Kapazität, damit abends Reichweite für den nächsten Tag aus Solarstrom kommt.",
+            "focus": "Mittelgroße Kapazität(10–15 kWh), damit abends Reichweite für den nächsten Tag aus Solarstrom kommt.",
             "image_alt": "E-Auto Fahrprofil",
             "image_placeholder": "Profilbild auswählen"
           }
@@ -295,8 +295,8 @@
           "type": "profile",
           "settings": {
             "title": "Homeoffice",
-            "summary": "Das Auto steht tagsüber zu Hause, Laden tagsüber ist möglich.",
-            "focus": "Ein kleinerer Speicher reicht oft, weil überschüssige PV direkt zum Laden genutzt werden kann.",
+            "summary": "Auto steht tagsüber zu Hause, Laden tagsüber möglich.",
+            "focus": "Kleinerer Speicher reicht oft (5–10 kWh) – du kannst direkt mit PV-Überschuss laden und speicherst nur für den Abend.",
             "image_alt": "E-Auto Fahrprofil",
             "image_placeholder": "Profilbild auswählen"
           }
@@ -305,8 +305,8 @@
           "type": "profile",
           "settings": {
             "title": "Hohe Fahrleistung",
-            "summary": "Viel unterwegs, über 80 km am Tag und tägliches Laden.",
-            "focus": "Große Kapazität oder Modulerweiterung – die genaue Auswahl hängt vom PV-Überschuss ab.",
+            "summary": "Viel unterwegs, 80+  km am Tag, tägliches Laden.",
+            "focus": "Große Kapazität (15–30 kWh) oder Modulerweiterung – jedes kWh Eigenverbrauch zählt doppelt.",
             "image_alt": "E-Auto Fahrprofil",
             "image_placeholder": "Profilbild auswählen"
           }
@@ -316,7 +316,7 @@
           "settings": {
             "title": "Wochenendfahrer",
             "summary": "Unter der Woche steht das Auto, am Wochenende wird gefahren.",
-            "focus": "Flexibel planen: Ladezeit und tatsächlicher Überschuss sind wichtiger als die maximale Tagesstrecke.",
+            "focus": "Flexible Konfiguration – unter der Woche sammelt der Speicher Überschuss, am Wochenende lädt das Auto.",
             "image_alt": "E-Auto Fahrprofil",
             "image_placeholder": "Profilbild auswählen"
           }
@@ -332,10 +332,10 @@
         "profile_eyebrow": "Dein Fahrprofil",
         "profile_heading": "Welches Ladeprofil",
         "profile_heading_accent": "passt zu dir?",
-        "profile_text": "Vier typische Alltage. Wähle ein Profil und sieh, worauf es bei deinem Speicher ankommt.",
+        "profile_text": "Vier typische Alltage. Klicke auf dein Profil – dann siehst du, worauf es bei deinem Speicher ankommt: welche Kapazität sinnvoll ist, wie viel PV-Überschuss du am Tag nutzen solltest und wann dein Auto am besten lädt.",
         "profile_tab_label": "Fahrprofile auswählen",
         "profile_focus_label": "Speicher-Fokus:",
-        "profile_note": "Kein Profil passt exakt? Die Kapazitätswahl berücksichtigt deine tatsächlichen Angaben.",
+        "profile_note": "Kein Profil passt exakt? Die Kapazitätswahl unten berücksichtigt deine realen Bedarf – nicht das Profil.",
         "eyebrow_size": 11,
         "item_heading_size": 18,
         "item_text_size": 12,
@@ -355,7 +355,7 @@
         "calculator_eyebrow": "Schnell-Ermittlung",
         "calculator_heading": "Wie viel Speicher braucht dein",
         "calculator_heading_accent": "E-Auto?",
-        "calculator_text": "Vier feste Angaben – wir zeigen dir, in welchem Kapazitätsbereich dein VENUS E liegen sollte.",
+        "calculator_text": "Drei Angaben – wir zeigen dir, in welchem Kapazitätsbereich dein VENUS E liegen sollte.",
         "distance_heading": "Wie weit fährst du am Tag? ø km / Tag",
         "efficiency_heading": "Wie viel Verbrauch hat dein Auto? kWh / 100 km",
         "pv_heading": "Wie viel PV-Überschuss hast du? geschätzt pro Tag",
@@ -382,10 +382,10 @@
         "result_initial_range": "2–5 kWh",
         "capacity_unit_label": "kWh",
         "result_model_template": "Passt zu [[product_title]]",
-        "result_copy_template": "Mit deiner Auswahl liegt der sinnvolle Orientierungsbereich bei [[range]].",
+        "result_copy_template": "mit deiner Tagesreichweite von ca.  [[range]] lädst du überwiegend mit eigenem Solarstrom.",
         "result_button_label": "Passende Modelle ansehen",
         "result_button_target": "#eauto-recommendations",
-        "result_note": "Orientierungswert auf Basis deiner Angaben. Die genaue Auslegung hängt auch von Haushaltsverbrauch, Jahreszeit und Wallbox-Leistung ab.",
+        "result_note": "Orientierungswert auf Basis deiner Angaben. Die genaue Auslegung hängt auch von Haushaltsverbrauch, Jahreszeit und Wallbox-Leistung ab – unsere Beratung prüft das gerne im Detail.",
         "item_heading_size": 16,
         "item_text_size": 11,
         "control_size": 12,
@@ -583,7 +583,7 @@
             "value": "bis 80",
             "value_accent": "%",
             "title": "Mehr Eigenverbrauch",
-            "text": "Mehr Solarstrom bleibt im eigenen Haushalt und steht später für das Laden zur Verfügung."
+            "text": "Mit Speicher nutzt du einen deutlich größeren Teil deines Solarstroms selbst – statt ihn für Cent-Beträge einzuspeisen."
           }
         },
         "benefit-grid": {
@@ -592,7 +592,7 @@
             "value": "−",
             "value_accent": "30",
             "title": "Weniger Netzbezug",
-            "text": "Haushalt und E-Auto greifen seltener auf Netzstrom zurück, wenn gespeicherte Energie verfügbar ist."
+            "text": "Haushalt und E-Auto greifen seltener auf Netzstrom zurück – gerade in den Abend- und Winterstunden."
           }
         },
         "benefit-time": {
@@ -601,7 +601,7 @@
             "value": "24",
             "value_accent": "h",
             "title": "Solarstrom später nutzen",
-            "text": "Tagsüber produziert, abends gefahren: Der Speicher verschiebt Solarstrom in den passenden Moment."
+            "text": "Tagsüber produziert, nachts gefahren: Der Speicher verschiebt deinen Solarstrom genau in den Moment, in dem du ihn brauchst."
           }
         }
       },
@@ -687,42 +687,42 @@
           "type": "faq",
           "settings": {
             "question": "Kann der VENUS E mein Auto direkt laden?",
-            "answer": "<p>Nein – und das ist Absicht. Der VENUS E ist AC-gekoppelt an dein Hausnetz angeschlossen. Geladen wird dein Auto weiterhin über die Wallbox.</p>"
+            "answer": "<p>Nein – und das ist Absicht. Der VENUS E ist AC-gekoppelt an dein Hausnetz angeschlossen und liefert Energie dorthin. Geladen wird dein Auto weiterhin über die Wallbox, die die Ladeleistung regelt. Der Speicher sorgt dafür, dass dabei dein eigener Solarstrom statt Netzstrom fließt.</p>"
           }
         },
         "faq-wallbox": {
           "type": "faq",
           "settings": {
             "question": "Brauche ich eine bestimmte Wallbox?",
-            "answer": "<p>Der VENUS E arbeitet über das Hausnetz. Ob deine bestehende Wallbox passt, hängt von ihrer Installation und der konkreten Systemkonfiguration ab.</p>"
+            "answer": "<p>Nein, der VENUS E arbeitet über das Hausnetz und ist mit gängigen Wallboxen kompatibel. Deine bestehende Wallbox kann in der Regel bleiben, wie sie ist.</p>"
           }
         },
         "faq-smart-meter": {
           "type": "faq",
           "settings": {
             "question": "Brauche ich ein Smart Meter?",
-            "answer": "<p>Für eine zuverlässige Erfassung von PV-Überschuss und Verbrauch wird ein kompatibles Smart Meter empfohlen. Prüfe die Anforderungen des gewählten Modells und deines Stromzählers.</p>"
+            "answer": "<p>Ein Smart Meter wird empfohlen: Es erfasst in Echtzeit, was Produktion und Verbrauch gerade leisten. Nur so kann der Speicher Überschuss zuverlässig erkennen und gezielt speichern oder freigeben. Ohne Messung arbeitet das System mit geschätzten Werten.</p>"
           }
         },
         "faq-size": {
           "type": "faq",
           "settings": {
             "question": "Wie groß sollte der Speicher für mein E-Auto sein?",
-            "answer": "<p>Das hängt vor allem von Tagesstrecke, Fahrzeugverbrauch, PV-Überschuss und Ladezeit ab. Nutze den Rechner auf dieser Seite als erste Orientierung.</p>"
+            "answer": "<p>Als Faustformel zählt deine tägliche Fahrstrecke: Etwa 15–20 kWh Verbrauch pro 100 km bedeutet für 30 km/Tag rund 5–6 kWh Ladebedarf am Abend. Nutze die Schnell-Ermittlung weiter oben auf dieser Seite für eine erste Orientierung.</p>"
           }
         },
         "faq-pv": {
           "type": "faq",
           "settings": {
             "question": "Funktioniert das mit meiner bestehenden PV-Anlage?",
-            "answer": "<p>Der VENUS E wird AC-gekoppelt nachgerüstet. Ob deine Anlage und der vorhandene Hausanschluss kompatibel sind, sollte vor der Installation geprüft werden.</p>"
+            "answer": "<p>Ja. Der VENUS E wird AC-gekoppelt nachgerüstet – auf der Haushaltsseite deines Hausanschlusses. Deine PV-Anlage mit Wechselrichter bleibt unverändert, es ist keine Neuverkabelung nötig.</p>"
           }
         },
         "faq-night": {
           "type": "faq",
           "settings": {
             "question": "Lädt mein Auto nachts komplett aus dem Speicher?",
-            "answer": "<p>Das hängt von Speicherkapazität, Fahrprofil, Ladeleistung und dem verfügbaren Solarüberschuss ab. Bei höherem Bedarf ergänzt das Netz den fehlenden Anteil.</p>"
+            "answer": "<p>Das hängt von der Speicherkapazität und deinem Ladebedarf ab. Bei kurzen bis mittleren Strecken deckt ein passend dimensionierter VENUS E den Abendbedarf in der Regel vollständig. Bei sehr hohen Reichweiten oder mehreren Autos ergänzt das Netz – dann aber nur den Rest.</p>"
           }
         }
       },
