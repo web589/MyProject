@@ -60,6 +60,10 @@
     <div class="e-auto-page__recommendation-grid" data-eauto-recommendation-grid>
       {% for index in (0..2) %}
         {% assign card_block = section.blocks[index] %}
+        {% assign card_fallback_product = product_mini %}
+        {% if index == 1 %}{% assign card_fallback_product = product_3 %}{% endif %}
+        {% if index == 2 %}{% assign card_fallback_product = product_4 %}{% endif %}
+        {% assign card_fallback_url = card_fallback_product.url | default: '/collections/alle-venus-e-serie' %}
         <article
           class="e-auto-page__product-card"
           data-eauto-card="{{ index }}"
@@ -74,13 +78,13 @@
           data-eauto-card-default-cta-label="{{ section.settings.card_cta_label | escape }}"
           {% if card_block != blank %}{{ card_block.shopify_attributes }}{% endif %}
         >
-          <a class="e-auto-page__product-card-media" data-eauto-card-link href="#">
+          <a class="e-auto-page__product-card-media" data-eauto-card-link href="{{ card_fallback_url }}">
             <img data-eauto-card-image hidden loading="lazy" width="720" height="720" alt="">
             <span data-eauto-card-placeholder>{{ section.settings.card_loading_label }}</span>
           </a>
           <div class="e-auto-page__product-card-body">
             <span class="e-auto-page__product-card-badge" data-eauto-card-badge>{{ section.settings.card_recommendation_label }}</span>
-            <h3><a data-eauto-card-title-link href="#"><span data-eauto-card-title>{{ section.settings.card_loading_label }}</span></a></h3>
+            <h3><a data-eauto-card-title-link href="{{ card_fallback_url }}"><span data-eauto-card-title>{{ section.settings.card_loading_label }}</span></a></h3>
             <p class="e-auto-page__product-card-variant" data-eauto-card-variant></p>
             <p class="e-auto-page__product-card-capacity" data-eauto-card-capacity></p>
             <p class="e-auto-page__product-card-description" data-eauto-card-description hidden></p>
@@ -88,7 +92,7 @@
               <strong data-eauto-card-price>–</strong>
               <span data-eauto-card-availability>{{ section.settings.card_loading_label }}</span>
             </div>
-            <a class="e-auto-page__button e-auto-page__button--secondary" data-eauto-card-action href="#">{{ card_block.settings.cta_label | default: section.settings.card_cta_label }}</a>
+            <a class="e-auto-page__button e-auto-page__button--secondary" data-eauto-card-action href="{{ card_block.settings.cta_link | default: card_fallback_url }}">{{ card_block.settings.cta_label | default: section.settings.card_cta_label }}</a>
           </div>
         </article>
       {% endfor %}

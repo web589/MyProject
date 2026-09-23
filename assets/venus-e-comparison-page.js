@@ -282,6 +282,15 @@
         event.preventDefault();
 
         var shouldOpen = item.classList.contains('is-closing') || !item.open;
+        items.forEach(function (otherItem) {
+          if (otherItem === item || !otherItem.open) return;
+          if (prefersReducedMotion()) {
+            otherItem.open = false;
+            otherItem.classList.remove('is-closing');
+          } else {
+            otherItem.classList.add('is-closing');
+          }
+        });
         if (prefersReducedMotion()) {
           item.open = shouldOpen;
           item.classList.remove('is-closing');

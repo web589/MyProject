@@ -404,7 +404,7 @@
 
   function productVariantUrl(item) {
     if (item.variant && item.variant.url) return item.variant.url;
-    return item.url || '#';
+    return item.url || '/collections/alle-venus-e-serie';
   }
 
   function setText(root, selector, value) {
@@ -483,12 +483,12 @@
     if (!item.url) {
       [titleLink, mediaLink].forEach(function (link) {
         if (!link) return;
-        link.href = '#';
+        link.href = '/collections/alle-venus-e-serie';
         link.setAttribute('aria-disabled', 'true');
       });
     }
     if (!actionUrl && action) {
-      action.href = '#';
+      action.href = '/collections/alle-venus-e-serie';
       action.setAttribute('aria-disabled', 'true');
     }
 

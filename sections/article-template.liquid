@@ -91,10 +91,10 @@
     --blog-article-blue: #008ff0;
     --blog-article-blue-hover: #0077d2;
     --blog-article-body-font-family: 'Inter', var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
-    --blog-article-body-font-size: var(--typeBodySize, 17px);
-    --blog-article-body-font-size-mobile: var(--typeBodySizeMobile, 16px);
+    --blog-article-body-font-size: 15.5px;
+    --blog-article-body-font-size-mobile: 15.5px;
     --blog-article-body-font-weight: 400;
-    --blog-article-body-line-height: 1.6;
+    --blog-article-body-line-height: 1.8;
     --blog-article-body-color: var(--colorTextBody, #2a3743);
     --blog-article-ink: #112b46;
     --blog-article-muted: #6b7f99;
@@ -233,8 +233,8 @@
   .blog-article__title {
     color: var(--blog-article-ink);
     font-family: 'Inter', var(--typeBasePrimary), var(--typeBaseFallback), sans-serif;
-    font-size: 56px;
-    font-weight: 500;
+    font-size: 38px;
+    font-weight: 600;
     line-height: 1.1;
     letter-spacing: -0.02em;
     margin: 0 0 30px;
@@ -357,8 +357,8 @@
   .blog-article__layout {
     align-items: stretch;
     display: grid;
-    gap: 64px;
-    grid-template-columns: minmax(0, 1fr) minmax(380px, 460px);
+    gap: 56px;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 360px);
   }
 
   .blog-article__main {
@@ -460,14 +460,14 @@
 
   .blog-article__body h2 {
     font-family: var(--blog-article-body-font-family) !important;
-    font-size: clamp(28px, 3vw, 40px) !important;
+    font-size: 26px !important;
     line-height: 1.18 !important;
     margin: 52px 0 18px !important;
   }
 
   .blog-article__body h3 {
     font-family: var(--blog-article-body-font-family) !important;
-    font-size: clamp(22px, 2.4vw, 30px) !important;
+    font-size: 17.5px !important;
     line-height: 1.2 !important;
     margin: 38px 0 14px !important;
   }
@@ -677,6 +677,23 @@
     );
     z-index: 20;
   }
+
+  /* The reading tools travel together; the signup stays a normal scrolling card. */
+  .blog-article__sidebar { display: flex; flex-direction: column; }
+  .blog-article__recommended-sticky { order: 1; }
+  .blog-article__newsletter { order: 2; }
+  .blog-article__recommended-sticky .blog-article__toc {
+    background: #fff;
+    border: 1px solid var(--blog-article-border);
+    border-left: 2px solid var(--blog-article-blue);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 18px;
+  }
+  .blog-article__recommended-sticky .blog-article__toc-title,
+  .blog-article__recommended-sticky .blog-article__toc-title strong { font-size: 17px; font-weight: 700; }
+  .blog-article__recommended-sticky .blog-article__toc-link { color: var(--blog-article-muted); font-size: 14px; padding: 7px 10px; }
+  .blog-article__recommended-sticky .blog-article__toc-link.is-active { background: #f3faff; border-left: 2px solid var(--blog-article-blue); color: var(--blog-article-blue); font-weight: 600; }
 
   .blog-article__recommended-title {
     align-items: center;
@@ -1012,6 +1029,15 @@
       position: static;
     }
 
+    .blog-article__main > .blog-article__toc {
+      background: #fff;
+      border: 1px solid var(--blog-article-border);
+      border-left: 2px solid var(--blog-article-blue);
+      border-radius: 10px;
+      margin: 0 0 28px;
+      padding: 16px;
+    }
+
     .blog-article__recommended {
       padding: 16px;
     }
@@ -1160,17 +1186,6 @@
       <div class="blog-article__main">
         {%- if article.content != blank -%}
           <div class="article__body rte blog-article__body" data-blog-article-body>
-            <nav
-              class="blog-article__toc"
-              data-blog-article-toc
-              hidden
-              aria-label="{{ 'blogs.article.table_of_contents' | t }}"
-            >
-              <div class="blog-article__toc-title">
-                <strong>{{ 'blogs.article.table_of_contents' | t }}</strong>
-              </div>
-              <ol class="blog-article__toc-list" data-blog-article-toc-list></ol>
-            </nav>
             {{ article.content }}
           </div>
         {%- endif -%}
@@ -1401,7 +1416,16 @@
           {%- endform -%}
         </section>
 
-        <div class="blog-article__recommended-sticky">
+        <div class="blog-article__recommended-sticky" data-blog-article-sidebar-sticky>
+          <nav
+            class="blog-article__toc"
+            data-blog-article-toc
+            hidden
+            aria-label="{{ 'blogs.article.table_of_contents' | t }}"
+          >
+            <div class="blog-article__toc-title"><strong>{{ 'blogs.article.table_of_contents' | t }}</strong></div>
+            <ol class="blog-article__toc-list" data-blog-article-toc-list></ol>
+          </nav>
           {%- if recommended_product_count > 0 -%}
             <section class="blog-article__recommended" aria-labelledby="BlogArticleRecommended-{{ section.id }}">
               <h2 class="blog-article__recommended-title" id="BlogArticleRecommended-{{ section.id }}">

@@ -1,6 +1,8 @@
 {%- assign header_font = settings.type_header_font_family -%}
 {%- assign base_font = settings.type_base_font_family -%}
 {%- assign base_font_bold = base_font | font_modify: 'weight', '600' -%}
+{%- assign base_font_medium = base_font | font_modify: 'weight', '500' -%}
+{%- assign base_font_strong = base_font | font_modify: 'weight', '700' -%}
 {%- assign base_font_italic = base_font | font_modify: 'style', 'italic' -%}
 {%- assign base_font_bold_italic = base_font_bold | font_modify: 'style', 'italic' -%}
 
@@ -9,6 +11,8 @@
   {{ base_font | font_face: font_display: 'swap' }}
 
   {{ base_font_bold | font_face: font_display: 'swap' }}
+  {{ base_font_medium | font_face: font_display: 'swap' }}
+  {{ base_font_strong | font_face: font_display: 'swap' }}
   {{ base_font_italic | font_face: font_display: 'swap' }}
   {{ base_font_bold_italic | font_face: font_display: 'swap' }}
 {%- endstyle -%}

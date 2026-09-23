@@ -2317,3 +2317,8 @@
     animation-iteration-count: 1 !important;
   }
 }
+/* Shared VENUS E design contract for the linked landing-page templates. */
+.main-content--venus-e, .main-content--ac-storage, .main-content--ai-energy, .main-content--e-auto { --ve-blue:#0099fe; --ve-blue-soft:#e8f4ff; --ve-ink:#0e1b2c; --ve-muted:#5b6b7c; --ve-border:#e3e8ee; --ve-line:#edf0f4; --ve-surface:#f5f7f9; --ve-navy:#142a42; --ve-dark:#0c1826; color:var(--ve-ink); font-family:Inter,var(--font-body-family,sans-serif); }
+.main-content--venus-e :is(.bw-storage-section,.bw-compare-section), .main-content--ac-storage .ac-storage-page, .main-content--ai-energy .ai-energy__section, .main-content--e-auto .e-auto-page__section { scroll-margin-top:76px; }
+.main-content--venus-e :is(.bw-storage-card,.bw-compare-card), .main-content--ac-storage :is(.ac-storage-page__card,.ac-storage-page__feature-card), .main-content--ai-energy :is(.ai-energy__feature-card,.ai-energy__bento-card), .main-content--e-auto :is(.e-auto-page__card,.e-auto-page__product-card) { border-radius:10px; }
+.main-content--venus-e :is(.bw-button,.bw-anchor-nav__cta), .main-content--ac-storage :is(.ac-storage-page__button,.ac-storage-anchor-nav__cta), .main-content--ai-energy :is(.ai-energy__button,.bw-anchor-nav__cta), .main-content--e-auto :is(.e-auto-page__button,.e-auto-page__navigation-cta) { border-radius:8px; }
