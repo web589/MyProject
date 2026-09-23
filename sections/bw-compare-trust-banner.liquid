@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div class="bw-compare-trust__media">
+      <div class="bw-compare-trust__media{% if section.settings.image != blank %} bw-compare-trust__media--has-image{% endif %}">
         {% if section.settings.image != blank %}
           {{
             section.settings.image

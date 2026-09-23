@@ -14,6 +14,9 @@
 >
   <div class="bw-container bw-faq">
     <div class="bw-section__intro bw-faq__intro">
+      {% if section.settings.eyebrow != blank %}
+        <p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
       <h2 id="bw-faq-heading-{{ section.id }}">{{ section.settings.heading }}</h2>
       {% if section.settings.text != blank %}
         <p>{{ section.settings.text }}</p>
@@ -40,6 +43,17 @@
         </details>
       {% endfor %}
     </div>
+
+    {% if section.settings.view_all_text != blank and section.settings.view_all_link != blank %}
+      <div class="bw-faq__view-all">
+        <a class="bw-faq__view-all-link" href="{{ section.settings.view_all_link }}">
+          {{ section.settings.view_all_text | escape }}
+          <svg class="bw-faq__view-all-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {% endif %}
   </div>
 </section>
 
@@ -68,9 +82,26 @@
       "default": "FAQ"
     },
     {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": ""
+    },
+    {
       "type": "textarea",
       "id": "text",
       "label": "Einleitung"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Linktext für alle Fragen",
+      "default": ""
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "Link zu allen Fragen"
     },
     {
       "type": "select",
