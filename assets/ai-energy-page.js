@@ -88,8 +88,36 @@
     targets.forEach(function (item) { observer.observe(item.target); });
   }
 
+  function bindFaq(root) {
+    root.querySelectorAll('.ai-energy__faq-list').forEach(function (list) {
+      if (list.dataset.aiFaqBound === 'true') return;
+      list.dataset.aiFaqBound = 'true';
+      var questions = Array.prototype.slice.call(list.querySelectorAll('.ai-energy__faq-question'));
+      questions.forEach(function (question) {
+        question.addEventListener('click', function () {
+          var open = question.getAttribute('aria-expanded') !== 'true';
+          questions.forEach(function (otherQuestion) {
+            var answer = document.getElementById(otherQuestion.getAttribute('aria-controls'));
+            var active = otherQuestion === question && open;
+            otherQuestion.setAttribute('aria-expanded', active ? 'true' : 'false');
+            var icon = otherQuestion.querySelector('span:last-child');
+            if (icon) icon.textContent = active ? '–' : '+';
+            if (!answer) return;
+            answer.hidden = !active;
+            answer.setAttribute('aria-hidden', active ? 'false' : 'true');
+          });
+        });
+      });
+      questions.forEach(function (question) {
+        var answer = document.getElementById(question.getAttribute('aria-controls'));
+        if (answer) { answer.hidden = true; answer.setAttribute('aria-hidden', 'true'); }
+      });
+    });
+  }
+
   function boot() {
     bindTabs(document);
+    bindFaq(document);
     bindAnchors();
   }
 

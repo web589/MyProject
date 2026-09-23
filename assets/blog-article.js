@@ -49,27 +49,15 @@
     return Boolean(hasImage && !element.textContent.trim());
   }
 
-  function placeTableOfContents(body, toc) {
-    var paragraphs = Array.prototype.slice.call(body.querySelectorAll('p'));
-    var intro = paragraphs.find(function(paragraph) {
-      return paragraph !== toc && paragraph.textContent.trim();
-    });
-
-    if (!intro) {
-      var firstHeading = body.querySelector('h2');
-      if (firstHeading) firstHeading.insertAdjacentElement('beforebegin', toc);
-      return;
+  function placeTableOfContents(root, body, toc) {
+    var sticky = root.querySelector('[data-blog-article-sidebar-sticky]');
+    var main = root.querySelector('.blog-article__main');
+    if (!sticky || !main) return;
+    if (window.matchMedia('(max-width: 1024px)').matches) {
+      main.insertBefore(toc, body);
+    } else {
+      sticky.insertBefore(toc, sticky.firstChild);
     }
-
-    var insertionPoint = intro;
-    var nextElement = insertionPoint.nextElementSibling;
-    if (nextElement === toc) nextElement = nextElement.nextElementSibling;
-
-    if (isImageOnlyBlock(nextElement)) {
-      insertionPoint = nextElement;
-    }
-
-    insertionPoint.insertAdjacentElement('afterend', toc);
   }
 
   function removeNewsletterActionHash(form) {
@@ -299,12 +287,13 @@
       list.appendChild(item);
     });
 
-    placeTableOfContents(body, toc);
+    placeTableOfContents(root, body, toc);
     toc.hidden = false;
     setActiveItem(list, headings[0].id);
 
     observeHeadings();
     observeBlogCenter();
+    window.addEventListener('resize', function() { placeTableOfContents(root, body, toc); }, { passive: true });
   }
 
   function init(scope) {
