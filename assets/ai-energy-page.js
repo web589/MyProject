@@ -115,8 +115,75 @@
     });
   }
 
+  function bindDesignSystemFaq(root) {
+    root.querySelectorAll('.ai-energy__faq-list').forEach(function (list) {
+      if (list.dataset.aiFaqBound === 'true') return;
+      list.dataset.aiFaqBound = 'true';
+
+      var questions = Array.prototype.slice.call(list.querySelectorAll('[data-ai-faq-question]'));
+
+      function getAnswer(question) {
+        var answerId = question.getAttribute('aria-controls');
+        return answerId ? document.getElementById(answerId) : null;
+      }
+
+      function closeAnswer(question) {
+        var answer = getAnswer(question);
+        question.setAttribute('aria-expanded', 'false');
+        var icon = question.querySelector('span:last-child');
+        if (icon) icon.textContent = '+';
+        if (!answer) return;
+
+        answer.classList.remove('is-open');
+        answer.setAttribute('aria-hidden', 'true');
+        answer.style.maxHeight = '0px';
+        if (answer._aiFaqHideTimer) window.clearTimeout(answer._aiFaqHideTimer);
+        answer._aiFaqHideTimer = window.setTimeout(function () {
+          if (!answer.classList.contains('is-open')) answer.hidden = true;
+        }, reducedMotion() ? 0 : 340);
+      }
+
+      function openAnswer(question) {
+        var answer = getAnswer(question);
+        if (!answer) return;
+        if (answer._aiFaqHideTimer) window.clearTimeout(answer._aiFaqHideTimer);
+
+        question.setAttribute('aria-expanded', 'true');
+        var icon = question.querySelector('span:last-child');
+        if (icon) icon.textContent = '−';
+        answer.hidden = false;
+        answer.classList.add('is-open');
+        answer.setAttribute('aria-hidden', 'false');
+        answer.style.maxHeight = '0px';
+
+        var schedule = window.requestAnimationFrame || function (callback) { window.setTimeout(callback, 0); };
+        schedule(function () {
+          if (question.getAttribute('aria-expanded') === 'true') answer.style.maxHeight = answer.scrollHeight + 'px';
+        });
+      }
+
+      questions.forEach(function (question) {
+        var answer = getAnswer(question);
+        question.setAttribute('aria-expanded', 'false');
+        if (answer) {
+          answer.hidden = true;
+          answer.classList.remove('is-open');
+          answer.setAttribute('aria-hidden', 'true');
+          answer.style.maxHeight = '0px';
+        }
+
+        question.addEventListener('click', function () {
+          var shouldOpen = question.getAttribute('aria-expanded') !== 'true';
+          questions.forEach(closeAnswer);
+          if (shouldOpen) openAnswer(question);
+        });
+      });
+    });
+  }
+
   function boot() {
     bindTabs(document);
+    bindDesignSystemFaq(document);
     bindFaq(document);
     bindAnchors();
   }

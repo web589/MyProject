@@ -1,0 +1,270 @@
+/* Shared, page-scoped VENUS E design system. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('{{ 'inter-400.woff2' | asset_url }}') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('{{ 'inter-500.woff2' | asset_url }}') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('{{ 'inter-600.woff2' | asset_url }}') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('{{ 'inter-700.woff2' | asset_url }}') format('woff2');
+}
+
+.main-content--venus-e,
+.main-content--ac-storage,
+.main-content--ai-energy,
+.main-content--e-auto {
+  --blue: #0099fe;
+  --blue-soft: #e8f4ff;
+  --ink: #0e1b2c;
+  --gray: #8a97a6;
+  --gray-dark: #5b6b7c;
+  --border: #e3e8ee;
+  --line: #edf0f4;
+  --bg: #f5f7f9;
+  --navy: #142a42;
+  --dark: #0c1826;
+  --r: 10px;
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.main-content--venus-e {
+  --blue-card: #f3faff;
+  --bw-blue: var(--blue);
+  --bw-cyan: #00c6ff;
+  --bw-ink: var(--ink);
+  --bw-muted: var(--gray-dark);
+  --bw-border: var(--border);
+  --bw-line: var(--line);
+  --bw-surface: var(--bg);
+  --bw-navy: var(--navy);
+  --bw-button-gradient: linear-gradient(90deg, var(--blue), #00c6ff);
+}
+
+.main-content--ac-storage .ac-storage-page,
+.main-content--ac-storage .ac-storage-anchor-nav {
+  --ac-blue: var(--blue);
+  --ac-blue-soft: var(--blue-soft);
+  --ac-ink: var(--ink);
+  --ac-gray: var(--gray);
+  --ac-gray-dark: var(--gray-dark);
+  --ac-border: var(--border);
+  --ac-line: var(--line);
+  --ac-bg: var(--bg);
+  --ac-navy: var(--navy);
+  --ac-dark: var(--dark);
+  --ac-radius: var(--r);
+}
+
+.main-content--ai-energy,
+.main-content--ai-energy .ai-energy-page {
+  --ai-blue: var(--blue);
+  --ai-navy: var(--navy);
+  --ai-ink: var(--ink);
+  --ai-muted: var(--gray-dark);
+  --ai-line: var(--line);
+  --ai-soft: var(--bg);
+}
+
+.main-content--e-auto .e-auto-page {
+  --eauto-blue: var(--blue);
+  --eauto-blue-deep: var(--blue);
+  --eauto-cyan: #00c6ff;
+  --eauto-ink: var(--ink);
+  --eauto-copy: var(--gray-dark);
+  --eauto-muted: var(--gray);
+  --eauto-line: var(--border);
+  --eauto-surface: var(--bg);
+  --eauto-pale: var(--blue-soft);
+  --eauto-radius: var(--r);
+}
+
+.main-content--venus-e :is(h1, h2, h3, h4),
+.main-content--ac-storage .ac-storage-page :is(h1, h2, h3, h4),
+.main-content--ai-energy .ai-energy-page :is(h1, h2, h3, h4),
+.main-content--e-auto .e-auto-page :is(h1, h2, h3, h4) {
+  font-weight: 600;
+}
+
+.main-content--ac-storage .ac-storage-page h1,
+.main-content--ai-energy .ai-energy-page h1 {
+  max-width: none;
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+}
+
+.main-content--ac-storage .ac-storage-page h2,
+.main-content--ai-energy .ai-energy-page h2 {
+  max-width: none;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.main-content--e-auto .e-auto-page h1,
+.main-content--venus-e .bw-storage h1 {
+  max-width: none;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.main-content--e-auto .e-auto-page h2 {
+  max-width: none;
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+
+.main-content--venus-e .bw-storage h2 {
+  max-width: none;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.main-content--venus-e :is(.bw-eyebrow, .bw-models__eyebrow),
+.main-content--ac-storage .ac-storage-page__eyebrow,
+.main-content--ai-energy :is(.ai-energy__eyebrow, .ai-energy__tag),
+.main-content--e-auto .e-auto-page__eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.main-content--venus-e :is(.bw-rte, .bw-lead),
+.main-content--ac-storage .ac-storage-page :is(.ac-storage-page__lead, .ac-storage-page__card-body p),
+.main-content--ai-energy .ai-energy-page :is(.ai-energy__lead, .ai-energy__subtext),
+.main-content--e-auto .e-auto-page :is(.e-auto-page__lead, .e-auto-page__card-body p) {
+  color: var(--gray-dark);
+  font-weight: 400;
+}
+
+.main-content--venus-e :is(.bw-button, .bw-anchor-nav__cta),
+.main-content--ac-storage :is(.ac-storage-page__button, .ac-storage-anchor-nav__cta),
+.main-content--ai-energy :is(.ai-energy__button, .bw-anchor-nav__cta),
+.main-content--e-auto :is(.e-auto-page__button, .e-auto-page__navigation-cta) {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.main-content--venus-e .bw-button {
+  padding: 12px 26px;
+  font-size: 14px;
+}
+
+.main-content--ac-storage .ac-storage-page__button {
+  padding: 14px 30px;
+  font-size: 14.5px;
+}
+
+.main-content--ai-energy .ai-energy__button {
+  padding: 14px 30px;
+  font-size: 14.5px;
+}
+
+.main-content--e-auto .e-auto-page__button {
+  padding: 13px 26px;
+  font-size: 14px;
+}
+
+.main-content--venus-e .bw-button--primary,
+.main-content--ac-storage .ac-storage-page__button--primary,
+.main-content--ai-energy .ai-energy__button--primary,
+.main-content--e-auto .e-auto-page__button--primary {
+  background: linear-gradient(90deg, var(--blue), #00c6ff);
+  box-shadow: 0 6px 18px rgba(0, 153, 254, 0.35);
+}
+
+.main-content--venus-e .bw-button--primary:hover,
+.main-content--ac-storage .ac-storage-page__button--primary:hover,
+.main-content--ai-energy .ai-energy__button--primary:hover,
+.main-content--e-auto .e-auto-page__button--primary:hover {
+  filter: brightness(1.06);
+}
+
+.main-content--venus-e .bw-button--secondary,
+.main-content--ac-storage .ac-storage-page__button--secondary,
+.main-content--ai-energy .ai-energy__button--secondary,
+.main-content--e-auto .e-auto-page__button--secondary {
+  border-color: #9bd8ff;
+  background: #fff;
+  color: var(--blue);
+}
+
+.main-content--venus-e .bw-button--secondary:hover,
+.main-content--ac-storage .ac-storage-page__button--secondary:hover,
+.main-content--ai-energy .ai-energy__button--secondary:hover,
+.main-content--e-auto .e-auto-page__button--secondary:hover {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+}
+
+.main-content--ac-storage :is(.ac-storage-page__card, .ac-storage-page__feature-card, .ac-storage-page__audience-card, .ac-storage-page__model-card, .ac-storage-page__blog-card),
+.main-content--ai-energy :is(.ai-energy__feature-card, .ai-energy__bento-card, .ai-energy__data-grid article),
+.main-content--e-auto :is(.e-auto-page__card, .e-auto-page__recommendation-card, .e-auto-page__product-card),
+.main-content--venus-e :is(.bw-model-card, .bw-content-card, .bw-compare-trust) {
+  border-color: var(--border);
+  border-radius: var(--r);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.main-content--ac-storage :is(.ac-storage-page__card, .ac-storage-page__feature-card, .ac-storage-page__audience-card, .ac-storage-page__model-card, .ac-storage-page__blog-card):hover,
+.main-content--ai-energy :is(.ai-energy__feature-card, .ai-energy__bento-card):hover,
+.main-content--e-auto :is(.e-auto-page__card, .e-auto-page__recommendation-card, .e-auto-page__product-card):hover,
+.main-content--venus-e :is(.bw-model-card, .bw-content-card):hover {
+  border-color: #9bd8ff;
+  box-shadow: 0 4px 18px rgba(0, 153, 254, 0.06);
+}
+
+.main-content--venus-e :is(.bw-hero__stat strong, .bw-capacity-map__value),
+.main-content--ac-storage :is(.ac-storage-page__stat, .ac-storage-page__value),
+.main-content--ai-energy :is(.ai-energy__stat, .ai-energy__value),
+.main-content--e-auto :is(.e-auto-page__stat-value, .e-auto-page__result-range, .e-auto-page__timeline-value) {
+  font-variant-numeric: tabular-nums;
+}
+
+.main-content--venus-e [id] {
+  scroll-margin-top: 140px;
+}
+
+.main-content--ac-storage [id],
+.main-content--ai-energy [id],
+.main-content--e-auto [id] {
+  scroll-margin-top: 110px;
+}
+
+.main-content--venus-e .section-bw-storage-navigation .bw-anchor-nav__inner {
+  min-height: 72px;
+}
+
+.main-content--ac-storage .ac-storage-anchor-nav .bw-anchor-nav__inner,
+.main-content--ai-energy .section-bw-storage-navigation .bw-anchor-nav__inner,
+.main-content--e-auto .section-e-auto-navigation .bw-anchor-nav__inner {
+  min-height: 64px;
+}

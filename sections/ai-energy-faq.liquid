@@ -11,9 +11,9 @@
           {%- assign faq_question_id = 'ai-energy-faq-question-' | append: section.id | append: '-' | append: block.id -%}
           {%- assign faq_answer_id = 'ai-energy-faq-answer-' | append: section.id | append: '-' | append: block.id -%}
           <article class="ai-energy__faq-item" {{ block.shopify_attributes }}>
-            <button id="{{ faq_question_id }}" type="button" class="ai-energy__faq-question collapsible-trigger collapsible--auto-height" aria-controls="{{ faq_answer_id }}" aria-expanded="false"><span>{{ block.settings.question }}</span><span aria-hidden="true">+</span></button>
-            <div id="{{ faq_answer_id }}" class="ai-energy__faq-answer collapsible-content collapsible-content--all" role="region" aria-labelledby="{{ faq_question_id }}">
-              <div class="collapsible-content__inner">{{ block.settings.answer }}</div>
+            <button id="{{ faq_question_id }}" type="button" class="ai-energy__faq-question" data-ai-faq-question aria-controls="{{ faq_answer_id }}" aria-expanded="false"><span>{{ block.settings.question }}</span><span aria-hidden="true">+</span></button>
+            <div id="{{ faq_answer_id }}" class="ai-energy__faq-answer" data-ai-faq-answer role="region" aria-labelledby="{{ faq_question_id }}" aria-hidden="true" hidden>
+              <div class="ai-energy__faq-answer-inner">{{ block.settings.answer }}</div>
             </div>
           </article>
         {% endfor %}

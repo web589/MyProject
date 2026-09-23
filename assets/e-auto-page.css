@@ -1290,13 +1290,13 @@
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
-  transition: max-height 300ms ease, opacity 220ms ease, visibility 0s linear 300ms;
+  transition: max-height 0.34s cubic-bezier(.4,0,.2,1), opacity 0.22s ease 0.06s, visibility 0s linear 0.34s;
 }
 
 .e-auto-page__faq-answer.is-open {
   opacity: 1;
   visibility: visible;
-  transition: max-height 320ms ease, opacity 240ms ease;
+  transition: max-height 0.34s cubic-bezier(.4,0,.2,1), opacity 0.22s ease 0.06s;
 }
 
 /* Keep an older FAQ template functional while the section markup is refreshed. */

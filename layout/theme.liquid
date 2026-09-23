@@ -58,6 +58,9 @@
     {{ 'ai-energy-page.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'ai-energy-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
+  {%- if template.suffix == 'venus-e-vergleich' or template.suffix == 'ac-gekoppelter-speicher' or template.suffix == 'ai-energiemanagement' or template.suffix == 'e-auto' -%}
+    {{ 'venus-e-design-system.css' | asset_url | stylesheet_tag }}
+  {%- endif -%}
   {%- render 'css-variables' -%}
 
   <script>
