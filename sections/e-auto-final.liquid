@@ -15,7 +15,7 @@
     <div class="e-auto-page__media e-auto-page__media--final">
       {% if section.settings.final_image != blank %}
         {{ section.settings.final_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 1200px) 1152px, calc(100vw - 40px)', alt: section.settings.final_image_alt }}
-      {% elsif request.design_mode %}
+      {% else %}
         <div class="e-auto-page__placeholder">{{ section.settings.final_image_placeholder }}</div>
       {% endif %}
     </div>
@@ -51,11 +51,11 @@
     {"type":"range","id":"value_size","label":"Wert Größe","min":20,"max":64,"step":1,"unit":"px","default":34},
     {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":38},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"final_media_height","label":"Abschluss Bildhöhe","min":180,"max":420,"step":10,"unit":"px","default":260},
     {"type":"range","id":"final_media_width","label":"Abschluss Bildbreite","min":70,"max":100,"step":1,"unit":"%","default":100},
-    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":56}
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":68}
   ],
   "presets": [{"name":"E-Auto Abschluss"}]
 }

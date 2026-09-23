@@ -15,6 +15,8 @@
                 <svg viewBox="0 0 360 180" role="img" aria-label="Virtuelles Kraftwerk Diagramm"><path d="M52 88h256M92 47l-40 41 40 41M268 47l40 41-40 41M180 24v128"/><circle cx="52" cy="88" r="13"/><circle cx="180" cy="88" r="16"/><circle cx="308" cy="88" r="13"/></svg>
               {% elsif block.settings.image != blank %}
                 {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '700, 1000, 1400', sizes: '(min-width: 960px) 50vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}
+              {% else %}
+                <div class="ph ai-energy__placeholder{% if block.settings.show_diagram %} ph--dark{% endif %}">Systembild auswählen</div>
               {% endif %}
             </div>
             <div class="ai-energy__bento-copy"><h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p></div>
@@ -46,7 +48,7 @@
     {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":13},
     {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":52},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":34},
     {"type":"range","id":"body_size","label":"Textgröße","min":12,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80},
     {"type":"range","id":"system_image_height","label":"Systembilder Höhe","min":160,"max":500,"step":10,"unit":"px","default":230},

@@ -13,7 +13,7 @@
       <div class="e-auto-page__media e-auto-page__media--wide">
         {% if section.settings.problem_image != blank %}
           {{ section.settings.problem_image | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600, 1800', sizes: '100vw', alt: section.settings.problem_image_alt }}
-        {% elsif request.design_mode %}
+        {% else %}
           <div class="e-auto-page__placeholder">{{ section.settings.problem_image_placeholder }}</div>
         {% endif %}
       </div>
@@ -61,11 +61,11 @@
     {"type":"range","id":"value_size","label":"Wert Größe","min":20,"max":64,"step":1,"unit":"px","default":34},
     {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":40},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"problem_media_height","label":"Problem Bildhöhe","min":260,"max":620,"step":10,"unit":"px","default":430},
     {"type":"range","id":"problem_media_width","label":"Problem Bildbreite","min":70,"max":100,"step":1,"unit":"%","default":100},
-    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":68}
   ],
   "presets": [{"name":"E-Auto Problem"}]
 }

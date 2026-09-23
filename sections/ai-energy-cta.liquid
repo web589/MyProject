@@ -10,9 +10,9 @@
         <div class="ai-energy__actions">
           {% for block in section.blocks %}
             {% if block.settings.style == 'link' %}
-              <a class="ai-energy__text-link" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+              <a class="ai-energy__text-link" href="{{ block.settings.url | default: '#modelle' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
             {% else %}
-              <a class="ai-energy__button ai-energy__button--{{ block.settings.style }}" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+              <a class="ai-energy__button ai-energy__button--{{ block.settings.style }}" href="{{ block.settings.url | default: '#modelle' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
             {% endif %}
           {% endfor %}
         </div>
@@ -38,7 +38,7 @@
     {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":13},
     {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":48},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":34},
     {"type":"range","id":"body_size","label":"Textgröße","min":12,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
   ],

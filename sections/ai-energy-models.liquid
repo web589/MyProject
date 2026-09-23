@@ -11,14 +11,14 @@
         {% for block in section.blocks %}
           {% assign product = block.settings.product %}
           <article class="ai-energy__model-card" {{ block.shopify_attributes }}>
-            <a class="ai-energy__model-media" href="{{ block.settings.product_url | default: product.url | default: '#' }}">
-              {% if product.featured_image != blank %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 25vw, 100vw', alt: product.title }}{% elsif block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 25vw, 100vw', alt: block.settings.title }}{% endif %}
+            <a class="ai-energy__model-media" href="{{ block.settings.product_url | default: product.url | default: models_compare_url }}">
+              {% if product.featured_image != blank %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 25vw, 100vw', alt: product.title }}{% elsif block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 25vw, 100vw', alt: block.settings.title }}{% else %}<div class="ph ai-energy__placeholder">Produktbild auswählen</div>{% endif %}
             </a>
             <div class="ai-energy__model-copy">
               <p class="ai-energy__tag">{{ block.settings.tag }}</p>
               <h3>{{ block.settings.title | default: product.title }}</h3>
               <p>{{ block.settings.text }}</p>
-              <a class="ai-energy__text-link" href="{{ block.settings.product_url | default: product.url | default: '#' }}">{{ block.settings.title | default: product.title }} ansehen →</a>
+              <a class="ai-energy__text-link" href="{{ block.settings.product_url | default: product.url | default: models_compare_url }}">{{ block.settings.title | default: product.title }} ansehen →</a>
             </div>
           </article>
         {% endfor %}
@@ -48,7 +48,7 @@
     {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":13},
     {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":52},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":34},
     {"type":"range","id":"body_size","label":"Textgröße","min":12,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80},
     {"type":"range","id":"model_image_height","label":"Modellbild Höhe","min":160,"max":360,"step":10,"unit":"px","default":210},

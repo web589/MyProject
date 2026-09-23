@@ -12,7 +12,7 @@
     <div class="e-auto-page__profile-layout">
       <div class="e-auto-page__profile-tabs" role="tablist" aria-label="{{ section.settings.profile_tab_label }}">
         {% for block in section.blocks %}
-          <button type="button" class="e-auto-page__profile-tab{% if forloop.first %} is-active{% endif %}" data-eauto-profile-tab="{{ block.id }}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" {{ block.shopify_attributes }}>
+          <button id="{{ page_id }}-profile-tab-{{ block.id }}" type="button" class="e-auto-page__profile-tab{% if forloop.first %} is-active{% endif %}" data-eauto-profile-tab="{{ block.id }}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"{% unless forloop.first %} tabindex="-1"{% endunless %} aria-controls="{{ page_id }}-profile-panel-{{ block.id }}" {{ block.shopify_attributes }}>
             <strong>{{ block.settings.title }}</strong>
             <span>{{ block.settings.summary }}</span>
           </button>
@@ -20,11 +20,11 @@
       </div>
       <div class="e-auto-page__profile-details">
         {% for block in section.blocks %}
-          <div class="e-auto-page__profile-detail{% if forloop.first %} is-active{% endif %}" data-eauto-profile-panel="{{ block.id }}" role="tabpanel"{% unless forloop.first %} hidden{% endunless %}>
+          <div id="{{ page_id }}-profile-panel-{{ block.id }}" class="e-auto-page__profile-detail{% if forloop.first %} is-active{% endif %}" data-eauto-profile-panel="{{ block.id }}" role="tabpanel" aria-labelledby="{{ page_id }}-profile-tab-{{ block.id }}"{% unless forloop.first %} hidden{% endunless %}>
             <div class="e-auto-page__media e-auto-page__media--profile">
               {% if block.settings.image != blank %}
                 {{ block.settings.image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1100', sizes: '(min-width: 960px) 55vw, 100vw', alt: block.settings.image_alt }}
-              {% elsif request.design_mode %}
+              {% else %}
                 <div class="e-auto-page__placeholder">{{ block.settings.image_placeholder }}</div>
               {% endif %}
             </div>
@@ -62,11 +62,11 @@
     {"type":"range","id":"value_size","label":"Wert Größe","min":20,"max":64,"step":1,"unit":"px","default":34},
     {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":40},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"profile_media_height","label":"Fahrprofil Bildhöhe","min":260,"max":560,"step":10,"unit":"px","default":410},
     {"type":"range","id":"profile_media_width","label":"Fahrprofil Bildbreite","min":70,"max":100,"step":1,"unit":"%","default":100},
-    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":68}
   ],
   "blocks": [
     {"type":"profile","name":"Fahrprofil","settings":[{"type":"text","id":"title","label":"Titel","default":"Pendler"},{"type":"textarea","id":"summary","label":"Kurzbeschreibung","default":"Jeden Tag ins Büro, ca. 30–60 km hin und zurück."},{"type":"textarea","id":"focus","label":"Speicher-Fokus","default":"Mittelgroße Kapazität für das Laden am Abend."},{"type":"image_picker","id":"image","label":"Bild"},{"type":"text","id":"image_alt","label":"Bild Alt-Text","default":"E-Auto Fahrprofil"},{"type":"text","id":"image_placeholder","label":"Bild Platzhalter","default":"Profilbild auswählen"}]}

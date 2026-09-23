@@ -41,16 +41,21 @@
     if (marker) marker.textContent = open ? '–' : '+';
     if (open) {
       answer.hidden = false;
-      window.requestAnimationFrame(function () {
-        if (question.getAttribute('aria-expanded') === 'true') answer.classList.add('is-open');
+      answer.style.maxHeight = '0px';
+      var schedule = window.requestAnimationFrame || function (callback) { window.setTimeout(callback, 0); };
+      schedule(function () {
+        if (question.getAttribute('aria-expanded') !== 'true') return;
+        answer.classList.add('is-open');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
       });
       return;
     }
 
     answer.classList.remove('is-open');
+    answer.style.maxHeight = '0px';
     answer.hidden = false;
     var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var hideDelay = reducedMotion ? 0 : 320;
+    var hideDelay = reducedMotion ? 0 : 340;
     answer._acFaqHideTimer = window.setTimeout(function () {
       if (!answer.classList.contains('is-open')) answer.hidden = true;
       answer._acFaqHideTimer = null;

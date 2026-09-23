@@ -30,6 +30,27 @@
     }
   };
 
+  var CAPACITY_RULES = {
+    distanceKm: {
+      under20: 15,
+      '20to40': 30,
+      '40to80': 60,
+      over80: 100
+    },
+    consumptionKwhPer100Km: {
+      efficient: 16,
+      average: 19,
+      high: 24
+    },
+    noPvValues: ['low'],
+    daytimeValue: 'daytime',
+    step: 2.5,
+    lowerCoverage: 0.8,
+    upperCoverage: 1.6,
+    upperBuffer: 2,
+    maxCapacity: 30
+  };
+
   var PRODUCT_CONFIG = {
     mini: {
       family: 'Mini',
@@ -119,27 +140,41 @@
     return new Intl.NumberFormat('de-DE', { style: 'currency', currency: currency }).format(parseNumber(cents, 0) / 100);
   }
 
-  function roundCapacityUpper(value) {
-    return Math.min(30, Math.max(5, Math.ceil(parseNumber(value, 0) / 5) * 5));
+  function roundUpToStep(value, step) {
+    return Math.ceil(parseNumber(value, 0) / step) * step;
   }
 
   function calculateCapacity(selection) {
     var distance = CONFIG.distance[selection.distance] || CONFIG.distance.under20;
-    var efficiencyDelta = CONFIG.efficiencyCorrection[selection.efficiency] || 0;
-    var chargeDelta = CONFIG.chargeCorrection[selection.chargeWindow] || 0;
-    var pvLimit = CONFIG.pvLimit[selection.pv] || CONFIG.pvLimit.medium;
-    var rawLower = Math.max(2, distance.min + chargeDelta);
-    var rawUpper = distance.max + efficiencyDelta + chargeDelta;
-    var lower = Math.min(rawLower, pvLimit);
-    var upper = Math.min(roundCapacityUpper(rawUpper), pvLimit);
+    var km = CAPACITY_RULES.distanceKm[selection.distance] || CAPACITY_RULES.distanceKm.under20;
+    var verbrauch = CAPACITY_RULES.consumptionKwhPer100Km[selection.efficiency] || CAPACITY_RULES.consumptionKwhPer100Km.average;
+    var dailyKwh = km * verbrauch / 100;
+    var rawLower = dailyKwh * CAPACITY_RULES.lowerCoverage;
+    var rawUpper = dailyKwh * CAPACITY_RULES.upperCoverage + CAPACITY_RULES.upperBuffer;
+    var lower = Math.max(5, roundUpToStep(rawLower, CAPACITY_RULES.step));
+    var upper = Math.min(CAPACITY_RULES.maxCapacity, Math.max(5, roundUpToStep(rawUpper, CAPACITY_RULES.step)));
 
-    if (upper < lower) upper = lower;
+    if (selection.chargeWindow === CAPACITY_RULES.daytimeValue) {
+      lower = Math.max(5, lower * 0.6);
+    }
+
+    if (CAPACITY_RULES.noPvValues.indexOf(selection.pv) !== -1) {
+      lower = Math.max(10, lower);
+      upper = Math.max(15, upper);
+    }
+
+    upper = Math.min(CAPACITY_RULES.maxCapacity, upper);
+    if (upper <= lower && lower < CAPACITY_RULES.maxCapacity) {
+      upper = Math.min(CAPACITY_RULES.maxCapacity, lower + 5);
+    }
 
     return {
       lower: lower,
       upper: upper,
       distanceLabel: distance.label,
-      pvLimit: pvLimit,
+      dailyKwh: dailyKwh,
+      verbrauch: verbrauch,
+      pv: selection.pv,
       rawLower: rawLower,
       rawUpper: rawUpper
     };
@@ -315,6 +350,14 @@
     return ['venus3', 'venus4', 'max', 'mini'];
   }
 
+  function recommendedFamily(result) {
+    var midpoint = (result.lower + result.upper) / 2;
+    if (midpoint <= 6) return 'mini';
+    if (midpoint <= 8.5) return 'venus3';
+    if (midpoint <= 15) return 'venus4';
+    return 'max';
+  }
+
   function buildCandidate(productKey, capacityConfig, products) {
     var product = products[productKey] || {};
     var variant = findVariant(product, capacityConfig.kwh);
@@ -351,55 +394,35 @@
   }
 
   function selectRecommendations(result, products) {
-    var order = familyOrderFor(result);
-    var priority = {};
-    order.forEach(function (productKey, index) { priority[productKey] = index; });
     var candidates = allCandidates(products);
-    var eligible = candidates.filter(function (candidate) {
-      return result.upper <= 6 || candidate.productKey !== 'mini';
-    });
-    var inRange = eligible.filter(function (candidate) {
-      return candidate.capacity >= result.lower - 0.25 && candidate.capacity <= result.upper + 0.25;
-    });
-    var selected = [];
+    var modelOrder = ['mini', 'venus3', 'venus4', 'max'];
+    var primaryFamily = recommendedFamily(result);
+    var midpoint = (result.lower + result.upper) / 2;
 
-    function addFirstForFamily(productKey) {
-      var familyCandidate = inRange
+    function nearestForFamily(productKey) {
+      return candidates
         .filter(function (candidate) { return candidate.productKey === productKey; })
-        .sort(function (a, b) { return a.capacity - b.capacity; })[0];
-      if (familyCandidate && !selected.some(function (item) { return item.productKey === familyCandidate.productKey; })) {
-        selected.push(familyCandidate);
-      }
+        .sort(function (a, b) {
+          var midpointDifference = Math.abs(a.capacity - midpoint) - Math.abs(b.capacity - midpoint);
+          if (midpointDifference !== 0) return midpointDifference;
+          return a.capacity - b.capacity;
+        })[0];
     }
 
-    if (result.lower >= 20) {
-      inRange
-        .filter(function (candidate) { return candidate.productKey === 'max'; })
-        .sort(function (a, b) { return a.capacity - b.capacity; })
-        .forEach(function (candidate) {
-          if (selected.length < 2) selected.push(candidate);
-        });
-      order.slice(1).forEach(addFirstForFamily);
-    } else {
-      order.forEach(addFirstForFamily);
-    }
+    var primary = nearestForFamily(primaryFamily);
+    if (!primary) return candidates.slice(0, 3);
 
-    var fallbackCandidates = eligible.slice().sort(function (a, b) {
-      var distanceDifference = candidateDistance(a, result) - candidateDistance(b, result);
-      if (distanceDifference !== 0) return distanceDifference;
-      var priorityDifference = priority[a.productKey] - priority[b.productKey];
-      if (priorityDifference !== 0) return priorityDifference;
-      return a.capacity - b.capacity;
-    });
+    var alternatives = modelOrder
+      .filter(function (productKey) { return productKey !== primaryFamily; })
+      .sort(function (a, b) {
+        return Math.abs(modelOrder.indexOf(a) - modelOrder.indexOf(primaryFamily))
+          - Math.abs(modelOrder.indexOf(b) - modelOrder.indexOf(primaryFamily));
+      })
+      .map(nearestForFamily)
+      .filter(Boolean)
+      .slice(0, 2);
 
-    fallbackCandidates.forEach(function (candidate) {
-      if (selected.length >= 3) return;
-      if (!selected.some(function (item) { return item.productKey === candidate.productKey && item.capacity === candidate.capacity; })) {
-        selected.push(candidate);
-      }
-    });
-
-    return selected.slice(0, 3);
+    return [primary].concat(alternatives);
   }
 
   function productVariantUrl(item) {
@@ -562,43 +585,83 @@
   }
 
   function bindFlow(root) {
-    root.querySelectorAll('[data-eauto-flow-toggle]').forEach(function (button) {
+    var buttons = Array.prototype.slice.call(root.querySelectorAll('[data-eauto-flow-toggle]'));
+
+    function renderFlow(mode) {
+      buttons.forEach(function (toggle) {
+        var active = toggle.dataset.eautoFlowToggle === mode;
+        toggle.classList.toggle('is-active', active);
+        toggle.setAttribute('aria-selected', active ? 'true' : 'false');
+        toggle.tabIndex = active ? 0 : -1;
+      });
+      root.querySelectorAll('[data-eauto-flow-panel]').forEach(function (panel) {
+        var active = panel.dataset.eautoFlowPanel === mode;
+        panel.hidden = !active;
+        panel.classList.toggle('is-active', active);
+        panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+    }
+
+    buttons.forEach(function (button, index) {
       if (button.dataset.eautoBound === 'true') return;
       button.dataset.eautoBound = 'true';
       button.addEventListener('click', function () {
-        var mode = button.dataset.eautoFlowToggle;
-        root.querySelectorAll('[data-eauto-flow-toggle]').forEach(function (toggle) {
-          var active = toggle === button;
-          toggle.classList.toggle('is-active', active);
-          toggle.setAttribute('aria-selected', active ? 'true' : 'false');
-        });
-        root.querySelectorAll('[data-eauto-flow-panel]').forEach(function (panel) {
-          var active = panel.dataset.eautoFlowPanel === mode;
-          panel.hidden = !active;
-          panel.classList.toggle('is-active', active);
-        });
+        renderFlow(button.dataset.eautoFlowToggle);
+      });
+      button.addEventListener('keydown', function (event) {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+        event.preventDefault();
+        var direction = event.key === 'ArrowRight' ? 1 : -1;
+        var next = buttons[(index + direction + buttons.length) % buttons.length];
+        renderFlow(next.dataset.eautoFlowToggle);
+        next.focus();
       });
     });
+
+    if (buttons.length) {
+      var activeButton = buttons.find(function (button) { return button.getAttribute('aria-selected') === 'true'; }) || buttons[0];
+      renderFlow(activeButton.dataset.eautoFlowToggle);
+    }
   }
 
   function bindProfiles(root) {
-    root.querySelectorAll('[data-eauto-profile-tab]').forEach(function (button) {
+    var buttons = Array.prototype.slice.call(root.querySelectorAll('[data-eauto-profile-tab]'));
+
+    function renderProfile(profileId) {
+      buttons.forEach(function (tab) {
+        var active = tab.dataset.eautoProfileTab === profileId;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        tab.tabIndex = active ? 0 : -1;
+      });
+      root.querySelectorAll('[data-eauto-profile-panel]').forEach(function (panel) {
+        var active = panel.dataset.eautoProfilePanel === profileId;
+        panel.hidden = !active;
+        panel.classList.toggle('is-active', active);
+        panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+    }
+
+    buttons.forEach(function (button, index) {
       if (button.dataset.eautoBound === 'true') return;
       button.dataset.eautoBound = 'true';
       button.addEventListener('click', function () {
-        var profileId = button.dataset.eautoProfileTab;
-        root.querySelectorAll('[data-eauto-profile-tab]').forEach(function (tab) {
-          var active = tab === button;
-          tab.classList.toggle('is-active', active);
-          tab.setAttribute('aria-selected', active ? 'true' : 'false');
-        });
-        root.querySelectorAll('[data-eauto-profile-panel]').forEach(function (panel) {
-          var active = panel.dataset.eautoProfilePanel === profileId;
-          panel.hidden = !active;
-          panel.classList.toggle('is-active', active);
-        });
+        renderProfile(button.dataset.eautoProfileTab);
+      });
+      button.addEventListener('keydown', function (event) {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+        event.preventDefault();
+        var direction = event.key === 'ArrowRight' ? 1 : -1;
+        var next = buttons[(index + direction + buttons.length) % buttons.length];
+        renderProfile(next.dataset.eautoProfileTab);
+        next.focus();
       });
     });
+
+    if (buttons.length) {
+      var activeButton = buttons.find(function (button) { return button.getAttribute('aria-selected') === 'true'; }) || buttons[0];
+      renderProfile(activeButton.dataset.eautoProfileTab);
+    }
   }
 
   function bindFaq(root) {

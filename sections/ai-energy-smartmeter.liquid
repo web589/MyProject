@@ -9,11 +9,11 @@
       <div class="ai-energy__smart-grid">
         <div class="ai-energy__smart-media">
           <div class="ai-energy__media ai-energy__media--meter">
-            {% if section.settings.smart_meter_image != blank %}{{ section.settings.smart_meter_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 42vw, 100vw', alt: section.settings.smart_meter_alt }}{% endif %}
+            {% if section.settings.smart_meter_image != blank %}{{ section.settings.smart_meter_image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 42vw, 100vw', alt: section.settings.smart_meter_alt }}{% else %}<div class="ph ai-energy__placeholder">Smart-Meter-Bild auswählen</div>{% endif %}
           </div>
           <div class="ai-energy__smart-thumbs">
-            <div class="ai-energy__media">{% if section.settings.ct002_image != blank %}{{ section.settings.ct002_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: section.settings.ct002_alt }}{% endif %}</div>
-            <div class="ai-energy__media">{% if section.settings.ct003_image != blank %}{{ section.settings.ct003_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: section.settings.ct003_alt }}{% endif %}</div>
+            <div class="ai-energy__media">{% if section.settings.ct002_image != blank %}{{ section.settings.ct002_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: section.settings.ct002_alt }}{% else %}<div class="ph ai-energy__placeholder">CT002-Bild auswählen</div>{% endif %}</div>
+            <div class="ai-energy__media">{% if section.settings.ct003_image != blank %}{{ section.settings.ct003_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '(min-width: 960px) 20vw, 50vw', alt: section.settings.ct003_alt }}{% else %}<div class="ph ai-energy__placeholder">CT003-Bild auswählen</div>{% endif %}</div>
           </div>
         </div>
         <div class="ai-energy__smart-copy">
@@ -56,7 +56,7 @@
     {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":13},
     {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":52},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":34},
     {"type":"range","id":"body_size","label":"Textgröße","min":12,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80},
     {"type":"range","id":"smart_meter_image_height","label":"Smart-Meter-Bildhöhe","min":220,"max":420,"step":10,"unit":"px","default":260},

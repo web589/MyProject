@@ -16,7 +16,7 @@
           <div class="e-auto-page__media e-auto-page__media--timeline">
             {% if block.settings.image != blank %}
               {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(min-width: 960px) 25vw, 90vw', alt: block.settings.image_alt }}
-            {% elsif request.design_mode %}
+            {% else %}
               <div class="e-auto-page__placeholder">{{ block.settings.image_placeholder }}</div>
             {% endif %}
           </div>
@@ -47,11 +47,11 @@
     {"type":"range","id":"value_size","label":"Wert Größe","min":20,"max":64,"step":1,"unit":"px","default":34},
     {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":40},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"timeline_media_height","label":"Timeline Bildhöhe","min":150,"max":360,"step":10,"unit":"px","default":220},
     {"type":"range","id":"timeline_media_width","label":"Timeline Bildbreite","min":70,"max":100,"step":1,"unit":"%","default":100},
-    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":68}
   ],
   "blocks": [
     {"type":"timeline","name":"Typischer Tag","settings":[{"type":"text","id":"time","label":"Uhrzeit","default":"08:00"},{"type":"image_picker","id":"image","label":"Bild"},{"type":"text","id":"image_alt","label":"Bild Alt-Text","default":"E-Auto im Tagesverlauf"},{"type":"text","id":"image_placeholder","label":"Bild Platzhalter","default":"Timeline-Bild auswählen"},{"type":"text","id":"heading","label":"Überschrift","default":"Auto unterwegs"},{"type":"textarea","id":"text","label":"Text","default":"Das Auto fährt los, die PV-Anlage startet in den Tag."},{"type":"text","id":"badge","label":"Badge","default":"PV-Überschuss"}]}

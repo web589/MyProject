@@ -9,12 +9,16 @@
         <p class="ai-energy__lead">{{ section.settings.subtext }}</p>
         <div class="ai-energy__actions">
           {% for block in section.blocks %}
-            {% if block.type == 'button' %}<a class="ai-energy__button ai-energy__button--{{ block.settings.style }}" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>{% endif %}
+            {% if block.type == 'button' %}
+              {% assign button_fallback = '#funktion' %}
+              {% if forloop.last %}{% assign button_fallback = '#modelle' %}{% endif %}
+              <a class="ai-energy__button ai-energy__button--{{ block.settings.style }}" href="{{ block.settings.url | default: button_fallback }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+            {% endif %}
           {% endfor %}
         </div>
       </div>
       <div class="ai-energy__media ai-energy__media--hero">
-        {% if section.settings.hero_image != blank %}{{ section.settings.hero_image | image_url: width: 1800 | image_tag: loading: 'eager', widths: '640, 960, 1280, 1600, 1800', sizes: '(min-width: 960px) 50vw, 100vw', alt: section.settings.hero_alt }}{% endif %}
+        {% if section.settings.hero_image != blank %}{{ section.settings.hero_image | image_url: width: 1800 | image_tag: loading: 'eager', widths: '640, 960, 1280, 1600, 1800', sizes: '(min-width: 960px) 50vw, 100vw', alt: section.settings.hero_alt }}{% else %}<div class="ph ai-energy__placeholder">Hero-Bild auswählen</div>{% endif %}
       </div>
     </div>
   </section>
@@ -39,7 +43,7 @@
     {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":14},
     {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":36,"max":72,"step":1,"unit":"px","default":70},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":36,"max":72,"step":1,"unit":"px","default":48},
     {"type":"range","id":"body_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":17},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80},
     {"type":"range","id":"hero_image_height","label":"Hero Bildhöhe","min":320,"max":620,"step":10,"unit":"px","default":480},

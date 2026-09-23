@@ -9,13 +9,14 @@
   --eauto-surface: #f4f7fa;
   --eauto-pale: #eaf5ff;
   --eauto-radius: 10px;
-  --eauto-section-space: 82px;
-  --eauto-heading-size: 44px;
+  --eauto-section-space: 68px;
+  --eauto-heading-size: 52px;
   --eauto-copy-size: 16px;
   --eauto-media-height: 420px;
   box-sizing: border-box;
   overflow: clip;
   color: var(--eauto-ink);
+  font-family: Inter, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background: #fff;
 }
 
@@ -33,7 +34,7 @@
 
 .main-content--e-auto .e-auto-page,
 .main-content--e-auto [data-eauto-anchor-nav] {
-  scroll-margin-top: 72px;
+  scroll-margin-top: 110px;
 }
 
 .section-e-auto-navigation .bw-anchor-nav__inner {
@@ -68,22 +69,22 @@
 .e-auto-page h2,
 .e-auto-page h3 {
   color: var(--eauto-ink);
-  letter-spacing: -0.035em;
-  line-height: 1.1;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  font-weight: 600;
 }
 
 .e-auto-page h1 {
-  max-width: 720px;
+  max-width: none;
   margin-bottom: 22px;
-  font-size: clamp(36px, 4vw, var(--eauto-heading-size));
-  font-weight: 720;
+  font-size: clamp(36px, 4vw, var(--eauto-heading-size, 52px));
 }
 
 .e-auto-page h2 {
-  max-width: 1050px;
+  max-width: none;
   margin-bottom: 16px;
-  font-size: clamp(26px, 3vw, var(--eauto-heading-size));
-  font-weight: 700;
+  font-size: clamp(28px, 3vw, var(--eauto-heading-size, 40px));
+  line-height: 1.18;
 }
 
 .e-auto-page h1 span,
@@ -125,7 +126,7 @@
   margin-bottom: 12px;
   color: var(--eauto-blue) !important;
   font-size: var(--eauto-eyebrow-size, 11px) !important;
-  font-weight: 760;
+  font-weight: 600;
   letter-spacing: 0.06em;
   line-height: 1.2 !important;
   text-transform: none;
@@ -160,11 +161,11 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 13px 26px;
   border: 1px solid transparent;
-  border-radius: 7px;
+  border-radius: 8px;
   font-size: var(--eauto-control-size, 14px);
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.2;
   text-decoration: none;
   transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
@@ -175,7 +176,7 @@
 }
 
 .e-auto-page__button--primary {
-  background: linear-gradient(100deg, var(--eauto-blue), var(--eauto-cyan));
+  background: linear-gradient(90deg, var(--eauto-blue), var(--eauto-cyan));
   color: #fff;
   box-shadow: 0 8px 18px rgba(0, 153, 254, 0.16);
 }
@@ -238,10 +239,6 @@
   min-width: 0;
 }
 
-.e-auto-page__hero-copy h1 {
-  max-width: 560px;
-}
-
 .e-auto-page__actions {
   display: flex;
   flex-wrap: wrap;
@@ -280,7 +277,7 @@
   gap: 6px;
   color: var(--eauto-ink);
   font-size: var(--eauto-value-size, 18px);
-  font-weight: 760;
+  font-weight: 600;
 }
 
 .e-auto-page__stats > div > span {
@@ -304,7 +301,7 @@
   background: transparent;
   color: var(--eauto-blue) !important;
   font-size: var(--eauto-item-text-size, 10px);
-  font-weight: 760;
+  font-weight: 600;
   line-height: inherit;
 }
 
@@ -342,7 +339,7 @@
 
 .e-auto-page__problem .e-auto-page__section-heading > p strong span {
   color: var(--eauto-blue);
-  font-weight: 760;
+  font-weight: 600;
 }
 
 .e-auto-page__problem-cards h3 {
@@ -365,7 +362,7 @@
   margin-bottom: 10px;
   color: var(--eauto-blue);
   font-size: var(--eauto-eyebrow-size, 11px);
-  font-weight: 760;
+  font-weight: 600;
   letter-spacing: 0.07em;
 }
 
@@ -381,7 +378,7 @@
   margin: 0 auto 20px;
   padding: 0;
   border: 1px solid var(--eauto-line);
-  border-radius: 6px;
+  border-radius: 8px;
   background: #fff;
 }
 
@@ -463,7 +460,7 @@
   background: #fff;
   color: var(--eauto-blue);
   font-size: var(--eauto-eyebrow-size, 11px);
-  font-weight: 760;
+  font-weight: 600;
 }
 
 .e-auto-page__media--timeline {
@@ -592,7 +589,7 @@
   align-self: start;
   margin: 0;
   padding: 15px;
-  border-radius: 7px;
+  border-radius: var(--eauto-radius);
   background: var(--eauto-pale);
 }
 
@@ -623,7 +620,7 @@
   margin-right: 12px;
   color: var(--eauto-blue);
   font-size: var(--eauto-eyebrow-size, 11px);
-  font-weight: 760;
+  font-weight: 600;
   letter-spacing: 0.07em;
 }
 
@@ -661,7 +658,7 @@
   min-height: 38px;
   padding: 8px 13px;
   border: 1px solid var(--eauto-line);
-  border-radius: 5px;
+  border-radius: 8px;
   background: #fff;
   color: var(--eauto-copy);
   cursor: pointer;
@@ -688,7 +685,7 @@
   align-items: flex-start;
   justify-content: center;
   padding: 45px 34px;
-  border-radius: 9px;
+  border-radius: var(--eauto-radius);
   background: #102b47;
 }
 
@@ -744,7 +741,7 @@
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--eauto-line);
-  border-radius: 8px;
+  border-radius: var(--eauto-radius);
   background: #fff;
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
@@ -813,7 +810,7 @@
   margin-bottom: 10px;
   color: var(--eauto-blue);
   font-size: var(--eauto-eyebrow-size, 10px);
-  font-weight: 760;
+  font-weight: 600;
   letter-spacing: 0.06em;
 }
 
@@ -906,7 +903,7 @@
 .e-auto-page__smart-grid article > span {
   color: var(--eauto-blue);
   font-size: var(--eauto-eyebrow-size, 11px);
-  font-weight: 760;
+  font-weight: 600;
 }
 
 .e-auto-page__smart-grid article h3,
@@ -1030,7 +1027,7 @@
   background: var(--eauto-pale);
   color: var(--eauto-blue);
   font-size: var(--eauto-eyebrow-size, 11px);
-  font-weight: 760;
+  font-weight: 600;
 }
 
 .e-auto-page__install-steps small {
@@ -1189,7 +1186,7 @@
 .e-auto-page__faq-item {
   overflow: hidden;
   border: 1px solid var(--eauto-line);
-  border-radius: 9px;
+  border-radius: var(--eauto-radius);
   background: #fff;
   transition: border-color 180ms ease, box-shadow 180ms ease;
 }
@@ -1212,8 +1209,8 @@
   background: #fff;
   color: var(--eauto-ink);
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
   line-height: 1.4;
   text-align: left;
   transition: background-color 180ms ease, color 180ms ease;
@@ -1321,8 +1318,8 @@
 .e-auto-page__faq-answer > p {
   margin-bottom: 10px;
   color: var(--eauto-copy);
-  font-size: 13px;
-  line-height: 1.55;
+  font-size: 14px;
+  line-height: 1.7;
 }
 
 /* 13 — final CTA */

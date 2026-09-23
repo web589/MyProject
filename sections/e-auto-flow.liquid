@@ -10,27 +10,27 @@
       <p>{{ section.settings.flow_text }}</p>
     </div>
     <div class="e-auto-page__toggle" role="tablist" aria-label="{{ section.settings.flow_toggle_label }}">
-      <button type="button" class="is-active" data-eauto-flow-toggle="day" role="tab" aria-selected="true">{{ section.settings.flow_day_label }}</button>
-      <button type="button" data-eauto-flow-toggle="evening" role="tab" aria-selected="false">{{ section.settings.flow_evening_label }}</button>
+      <button id="{{ page_id }}-flow-tab-day" type="button" class="is-active" data-eauto-flow-toggle="day" role="tab" aria-selected="true" aria-controls="{{ page_id }}-flow-panel-day">{{ section.settings.flow_day_label }}</button>
+      <button id="{{ page_id }}-flow-tab-evening" type="button" data-eauto-flow-toggle="evening" role="tab" aria-selected="false" aria-controls="{{ page_id }}-flow-panel-evening" tabindex="-1">{{ section.settings.flow_evening_label }}</button>
     </div>
-    <div class="e-auto-page__flow-panel is-active" data-eauto-flow-panel="day" role="tabpanel">
+    <div id="{{ page_id }}-flow-panel-day" class="e-auto-page__flow-panel is-active" data-eauto-flow-panel="day" role="tabpanel" aria-labelledby="{{ page_id }}-flow-tab-day">
       <div class="e-auto-page__media e-auto-page__media--flow">
         {% if section.settings.flow_day_video != blank %}
           {{ section.settings.flow_day_video | video_tag: controls: false, autoplay: false, loop: true, muted: true, playsinline: true, preload: 'metadata' }}
         {% elsif section.settings.flow_day_image != blank %}
           {{ section.settings.flow_day_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 960px) 58vw, 100vw', alt: section.settings.flow_day_image_alt }}
-        {% elsif request.design_mode %}
+        {% else %}
           <div class="e-auto-page__placeholder">{{ section.settings.flow_image_placeholder }}</div>
         {% endif %}
       </div>
     </div>
-    <div class="e-auto-page__flow-panel" data-eauto-flow-panel="evening" role="tabpanel" hidden>
+    <div id="{{ page_id }}-flow-panel-evening" class="e-auto-page__flow-panel" data-eauto-flow-panel="evening" role="tabpanel" aria-labelledby="{{ page_id }}-flow-tab-evening" hidden>
       <div class="e-auto-page__media e-auto-page__media--flow">
         {% if section.settings.flow_evening_video != blank %}
           {{ section.settings.flow_evening_video | video_tag: controls: false, autoplay: false, loop: true, muted: true, playsinline: true, preload: 'metadata' }}
         {% elsif section.settings.flow_evening_image != blank %}
           {{ section.settings.flow_evening_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 960px) 58vw, 100vw', alt: section.settings.flow_evening_image_alt }}
-        {% elsif request.design_mode %}
+        {% else %}
           <div class="e-auto-page__placeholder">{{ section.settings.flow_image_placeholder }}</div>
         {% endif %}
       </div>
@@ -79,11 +79,11 @@
     {"type":"range","id":"value_size","label":"Wert Größe","min":20,"max":64,"step":1,"unit":"px","default":34},
     {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":40},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"flow_media_height","label":"Energiefluss Bildhöhe","min":320,"max":720,"step":10,"unit":"px","default":520},
     {"type":"range","id":"flow_media_width","label":"Energiefluss Bildbreite","min":70,"max":100,"step":1,"unit":"%","default":100},
-    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":68}
   ],
   "presets": [{"name":"E-Auto Energiefluss"}]
 }

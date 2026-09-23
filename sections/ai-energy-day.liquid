@@ -18,7 +18,7 @@
         {% for block in section.blocks %}
           <div id="ai-energy-panel-{{ block.id }}" class="ai-energy__day-panel" data-ai-panel="{{ block.id }}" role="tabpanel" aria-labelledby="ai-energy-tab-{{ block.id }}"{% unless forloop.first %} hidden{% endunless %} {{ block.shopify_attributes }}>
             <div class="ai-energy__day-image{% if block.settings.image == blank %} ai-energy__day-image--placeholder{% endif %}">
-              {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}{% endif %}
+              {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '550, 800, 1100', sizes: '(min-width: 960px) 45vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}{% else %}<div class="ph ai-energy__placeholder">Szenenbild auswählen</div>{% endif %}
             </div>
             <div class="ai-energy__day-copy">
               <p><b>ERKANNT</b>{{ block.settings.recognized }}</p>
@@ -53,7 +53,7 @@
     {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":13},
     {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":52},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":34},
     {"type":"range","id":"body_size","label":"Textgröße","min":12,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80},
     {"type":"range","id":"day_image_height","label":"Szenenbild Höhe","min":240,"max":520,"step":10,"unit":"px","default":330},

@@ -12,7 +12,7 @@
       <div class="ai-energy__guide-grid">
         {% for block in section.blocks %}
           <article class="ai-energy__guide-card" {{ block.shopify_attributes }}>
-            <a class="ai-energy__guide-media" href="{{ block.settings.url | default: blog_url }}">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 33vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}{% endif %}</a>
+            <a class="ai-energy__guide-media" href="{{ block.settings.url | default: blog_url }}">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 33vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}{% else %}<div class="ph ai-energy__placeholder">Ratgeberbild auswählen</div>{% endif %}</a>
             <div class="ai-energy__guide-copy"><p class="ai-energy__tag">{{ block.settings.tag }}</p><h3>{{ block.settings.title }}</h3><p>{{ block.settings.excerpt }}</p><a class="ai-energy__text-link" href="{{ block.settings.url | default: blog_url }}">{{ block.settings.link_label }}</a></div>
           </article>
         {% endfor %}
@@ -42,7 +42,7 @@
     {"type":"range","id":"control_size","label":"Button und Link Größe","min":11,"max":18,"step":1,"unit":"px","default":13},
     {"type":"range","id":"note_size","label":"Hinweisgröße","min":10,"max":18,"step":1,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":52},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":72,"step":1,"unit":"px","default":34},
     {"type":"range","id":"body_size","label":"Textgröße","min":12,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80},
     {"type":"range","id":"guide_image_height","label":"Ratgeberbild Höhe","min":180,"max":420,"step":10,"unit":"px","default":280},

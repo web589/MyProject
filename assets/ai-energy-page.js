@@ -10,6 +10,22 @@
     target.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
   }
 
+  function renderTimeline(tabRoot, value) {
+    var tabs = Array.prototype.slice.call(tabRoot.querySelectorAll('[data-ai-tab]'));
+    var panels = Array.prototype.slice.call(tabRoot.querySelectorAll('[data-ai-panel]'));
+    tabs.forEach(function (tab) {
+      var active = tab.dataset.aiTab === value;
+      tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      tab.tabIndex = active ? 0 : -1;
+    });
+    panels.forEach(function (panel) {
+      var active = panel.dataset.aiPanel === value;
+      panel.hidden = !active;
+      panel.classList.toggle('is-active', active);
+    });
+    tabRoot.dataset.aiTimelineValue = value;
+  }
+
   function bindTabs(root) {
     root.querySelectorAll('[data-ai-tabs]').forEach(function (tabRoot) {
       var tabs = Array.prototype.slice.call(tabRoot.querySelectorAll('[data-ai-tab]'));
@@ -18,17 +34,7 @@
         if (button.dataset.aiTabBound === 'true') return;
         button.dataset.aiTabBound = 'true';
         button.addEventListener('click', function () {
-          var value = button.dataset.aiTab;
-          tabRoot.querySelectorAll('[data-ai-tab]').forEach(function (tab) {
-            var active = tab === button;
-            tab.setAttribute('aria-selected', active ? 'true' : 'false');
-            tab.tabIndex = active ? 0 : -1;
-          });
-          tabRoot.querySelectorAll('[data-ai-panel]').forEach(function (panel) {
-            var active = panel.dataset.aiPanel === value;
-            panel.hidden = !active;
-            panel.classList.toggle('is-active', active);
-          });
+          renderTimeline(tabRoot, button.dataset.aiTab);
         });
         button.addEventListener('keydown', function (event) {
           if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
@@ -43,17 +49,7 @@
       tabRoot.dataset.aiTabsBound = 'true';
 
       var activeTab = tabs.find(function (tab) { return tab.getAttribute('aria-selected') === 'true'; }) || tabs[0];
-      var activeValue = activeTab.dataset.aiTab;
-      tabs.forEach(function (tab) {
-        var active = tab === activeTab;
-        tab.setAttribute('aria-selected', active ? 'true' : 'false');
-        tab.tabIndex = active ? 0 : -1;
-      });
-      tabRoot.querySelectorAll('[data-ai-panel]').forEach(function (panel) {
-        var active = panel.dataset.aiPanel === activeValue;
-        panel.hidden = !active;
-        panel.classList.toggle('is-active', active);
-      });
+      renderTimeline(tabRoot, activeTab.dataset.aiTab);
     });
   }
 
@@ -86,33 +82,6 @@
       });
     }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
     targets.forEach(function (item) { observer.observe(item.target); });
-  }
-
-  function bindFaq(root) {
-    root.querySelectorAll('.ai-energy__faq-list').forEach(function (list) {
-      if (list.dataset.aiFaqBound === 'true') return;
-      list.dataset.aiFaqBound = 'true';
-      var questions = Array.prototype.slice.call(list.querySelectorAll('.ai-energy__faq-question'));
-      questions.forEach(function (question) {
-        question.addEventListener('click', function () {
-          var open = question.getAttribute('aria-expanded') !== 'true';
-          questions.forEach(function (otherQuestion) {
-            var answer = document.getElementById(otherQuestion.getAttribute('aria-controls'));
-            var active = otherQuestion === question && open;
-            otherQuestion.setAttribute('aria-expanded', active ? 'true' : 'false');
-            var icon = otherQuestion.querySelector('span:last-child');
-            if (icon) icon.textContent = active ? '–' : '+';
-            if (!answer) return;
-            answer.hidden = !active;
-            answer.setAttribute('aria-hidden', active ? 'false' : 'true');
-          });
-        });
-      });
-      questions.forEach(function (question) {
-        var answer = document.getElementById(question.getAttribute('aria-controls'));
-        if (answer) { answer.hidden = true; answer.setAttribute('aria-hidden', 'true'); }
-      });
-    });
   }
 
   function bindDesignSystemFaq(root) {
@@ -184,7 +153,6 @@
   function boot() {
     bindTabs(document);
     bindDesignSystemFaq(document);
-    bindFaq(document);
     bindAnchors();
   }
 

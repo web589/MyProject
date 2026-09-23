@@ -27,7 +27,7 @@
 }
 
 .ac-storage-page[id] {
-  scroll-margin-top: 76px;
+  scroll-margin-top: 110px;
 }
 
 .site-header-group:has(#SiteHeader[data-native-sticky="true"]) {
@@ -57,7 +57,7 @@
   box-shadow: 0 3px 10px rgba(17, 24, 39, 0.03);
   backdrop-filter: blur(12px);
   color: #444;
-  font-family: Inter, var(--typeBasePrimary), var(--typeBaseFallback), sans-serif;
+  font-family: Inter, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .ac-storage-anchor-nav .bw-container {
@@ -67,7 +67,7 @@
 
 .ac-storage-anchor-nav .bw-anchor-nav__inner {
   display: flex;
-  min-height: var(--ac-nav-height, 60px);
+  min-height: var(--ac-nav-height, 64px);
   align-items: center;
   gap: clamp(18px, 3vw, 38px);
   overflow-x: auto;
@@ -936,22 +936,20 @@
 }
 
 .ac-storage-page__faq-answer {
-  display: grid;
-  grid-template-rows: 0fr;
   max-width: 1000px;
+  max-height: 0;
   padding: 0 40px 0 0;
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
-  transition: grid-template-rows 0.34s cubic-bezier(.4,0,.2,1), padding-bottom 0.34s cubic-bezier(.4,0,.2,1), opacity 0.22s ease 0.06s, visibility 0s linear 0.34s;
+  transition: max-height 0.34s cubic-bezier(.4,0,.2,1), padding-bottom 0.34s cubic-bezier(.4,0,.2,1), opacity 0.22s ease 0.06s, visibility 0s linear 0.34s;
 }
 
 .ac-storage-page__faq-answer.is-open {
-  grid-template-rows: 1fr;
   padding-bottom: 24px;
   opacity: 1;
   visibility: visible;
-  transition: grid-template-rows 0.34s cubic-bezier(.4,0,.2,1), padding-bottom 0.34s cubic-bezier(.4,0,.2,1), opacity 0.22s ease 0.06s, visibility 0s linear 0s;
+  transition: max-height 0.34s cubic-bezier(.4,0,.2,1), padding-bottom 0.34s cubic-bezier(.4,0,.2,1), opacity 0.22s ease 0.06s, visibility 0s linear 0s;
 }
 
 .ac-storage-page__faq-answer p {
@@ -973,11 +971,11 @@
   display: flex;
   min-height: 306px;
   flex-direction: column;
-  border-radius: 8px;
+  border-radius: var(--ac-radius);
 }
 
 .ac-storage-page__media--blog {
-  height: var(--ac-card-image-height, 140px);
+  height: 170px;
   width: min(100%, var(--ac-card-image-width, 100%));
   margin-inline: auto;
   border: 0;

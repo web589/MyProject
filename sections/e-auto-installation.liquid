@@ -14,7 +14,7 @@
         <div class="e-auto-page__media e-auto-page__installation-media">
           {% if section.settings.installation_image != blank %}
             {{ section.settings.installation_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '540, 800, 1100, 1400', sizes: '(min-width: 960px) 55vw, 100vw', alt: section.settings.installation_image_alt }}
-          {% elsif request.design_mode %}
+          {% else %}
             <div class="e-auto-page__placeholder">{{ section.settings.installation_image_placeholder }}</div>
           {% endif %}
         </div>
@@ -32,7 +32,7 @@
         <div class="e-auto-page__media e-auto-page__installation-media">
           {% if section.settings.installation_house_image != blank %}
             {{ section.settings.installation_house_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '540, 800, 1100, 1400', sizes: '(min-width: 960px) 55vw, 100vw', alt: section.settings.installation_house_image_alt }}
-          {% elsif request.design_mode %}
+          {% else %}
             <div class="e-auto-page__placeholder">{{ section.settings.installation_house_image_placeholder }}</div>
           {% endif %}
         </div>
@@ -50,7 +50,7 @@
         <div class="e-auto-page__media e-auto-page__installation-media">
           {% if section.settings.installation_step_image != blank %}
             {{ section.settings.installation_step_image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '540, 800, 1100, 1400', sizes: '(min-width: 960px) 55vw, 100vw', alt: section.settings.installation_step_image_alt }}
-          {% elsif request.design_mode %}
+          {% else %}
             <div class="e-auto-page__placeholder">{{ section.settings.installation_step_image_placeholder }}</div>
           {% endif %}
         </div>
@@ -110,11 +110,11 @@
     {"type":"range","id":"value_size","label":"Wert Größe","min":20,"max":64,"step":1,"unit":"px","default":34},
     {"type":"range","id":"note_size","label":"Hinweis Größe","min":10,"max":16,"step":1,"unit":"px","default":11},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":42},
+    {"type":"range","id":"heading_size","label":"Überschrift Größe","min":28,"max":60,"step":1,"unit":"px","default":40},
     {"type":"range","id":"copy_size","label":"Textgröße","min":13,"max":22,"step":1,"unit":"px","default":16},
     {"type":"range","id":"installation_media_height","label":"Installationsbild Höhe","min":180,"max":420,"step":10,"unit":"px","default":260},
     {"type":"range","id":"installation_media_width","label":"Installationsbild Breite","min":70,"max":100,"step":1,"unit":"%","default":100},
-    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":80}
+    {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":68}
   ],
   "blocks": [
     {"type":"install_step","name":"Installationsschritt","settings":[{"type":"text","id":"title","label":"Titel","default":"Bestehende PV bleibt"},{"type":"text","id":"text","label":"Text","default":"Module und Wechselrichter bleiben unangetastet."}]}
