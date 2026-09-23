@@ -2304,6 +2304,86 @@
   font-size: 11px;
 }
 
+@media (min-width: 900px) {
+  .section-bw-compare-models .bw-models--final .bw-container {
+    width: min(1440px, calc(100% - 48px));
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-models__intro {
+    margin-bottom: 84px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-models__intro h2 {
+    font-size: 30px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-models__grid {
+    gap: 20px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-model-card {
+    min-height: 422px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-model-card__badge {
+    top: 24px;
+    left: 27px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-model-card__media {
+    height: var(--bw-compare-image-height, 180px);
+    margin: 64px 27px 0;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-model-card__body {
+    padding: 16px 27px 27px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-model-card__body h3 {
+    font-size: 18px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-model-card__capacity {
+    font-size: 13px !important;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-model-card__price strong {
+    font-size: 22px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-model-card__button {
+    min-height: 40px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-models__support {
+    margin-top: 56px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-models__support h3 {
+    max-width: 320px;
+    font-size: 26px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-models__support p {
+    max-width: 400px;
+    font-size: 14px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-models__support-points li {
+    min-height: 44px;
+    padding: 9px 0;
+    font-size: 14px;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-models__support-actions .bw-button {
+    min-height: 44px;
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
 @media (max-width: 899px) {
   .section-bw-compare-models .bw-models--final .bw-model-card__media {
     height: 134px;
@@ -2883,6 +2963,36 @@
   .section-bw-compare-trust .bw-compare-trust,
   .bw-compare-trust {
     padding-block: 96px;
+  }
+
+  /* Match the full-size desktop reference for the guarantee banner only. */
+  .section-bw-compare-trust .bw-container,
+  .bw-compare-trust .bw-container {
+    width: min(1640px, calc(100% - 48px));
+  }
+
+  .section-bw-compare-trust .bw-compare-trust__panel {
+    min-height: 710px;
+  }
+
+  .section-bw-compare-trust .bw-compare-trust__copy {
+    padding: 96px;
+  }
+
+  .section-bw-compare-trust .bw-compare-trust__copy h2 {
+    max-width: 600px;
+  }
+
+  .section-bw-compare-trust .bw-compare-trust__intro {
+    max-width: 610px;
+  }
+
+  .section-bw-compare-trust .bw-compare-trust__stats {
+    column-gap: 48px;
+  }
+
+  .section-bw-compare-trust .bw-compare-trust__stat {
+    padding-block: 30px 24px;
   }
 
   .section-bw-storage-faq .bw-faq-section {
