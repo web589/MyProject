@@ -592,8 +592,12 @@
   padding: 26px 26px 28px;
 }
 
+.ac-storage-page__why-stat-icon {
+  margin-bottom: 14px;
+}
+
 .ac-storage-page__why-stat h3 {
-  margin-top: 14px;
+  margin-top: 0;
   font-size: var(--ac-card-title-size, 18px);
 }
 
@@ -620,6 +624,13 @@
 
 .ac-storage-page__center-cta .ac-storage-page__link {
   margin-top: 36px;
+}
+
+.ac-storage-page__center-cta .ac-storage-page__button--primary {
+  display: inline-flex;
+  margin-top: 36px;
+  color: #fff;
+  font-weight: 600;
 }
 
 .ac-storage-page__table-wrap {
@@ -694,6 +705,10 @@
   color: #fff;
 }
 
+.ac-storage-page__smart h2 span {
+  color: var(--ac-blue);
+}
+
 .ac-storage-page__smart .ac-storage-page__eyebrow {
   color: #4db2ff;
 }
@@ -713,6 +728,7 @@
 
 .ac-storage-page__smart-steps {
   display: flex;
+  height: calc(var(--ac-smart-main-height, 296px) + var(--ac-smart-small-height, 150px) + 14px);
   flex-direction: column;
 }
 
@@ -763,7 +779,8 @@
   font-weight: 600;
   line-height: 1.35;
   text-decoration: none;
-  transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  animation: none !important;
+  transition: none;
 }
 
 .ac-storage-page__smart .ac-storage-page__link--button:hover,
@@ -784,6 +801,12 @@
 }
 
 .ac-storage-page__smart .ac-storage-page__media {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  color: #8fa1b3;
+}
+
+.ac-storage-page__smart .ac-storage-page__placeholder {
   border-color: rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.06);
   color: #8fa1b3;
@@ -837,6 +860,12 @@
   font-size: var(--ac-card-body-size, var(--ac-body-size));
 }
 
+.ac-storage-page__audience .ac-storage-page__link,
+.ac-storage-page__audience .ac-storage-page__link:hover,
+.ac-storage-page__audience .ac-storage-page__link:focus-visible {
+  color: var(--ac-blue) !important;
+}
+
 .ac-storage-page__models-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -886,6 +915,10 @@
   flex-wrap: wrap;
   gap: 14px;
   margin-top: 36px;
+}
+
+.ac-storage-page__models-actions .ac-storage-page__button {
+  font-size: 14px;
 }
 
 .ac-storage-page__faq,
@@ -1089,6 +1122,10 @@
   .ac-storage-page__hero-grid,
   .ac-storage-page__smart-grid {
     grid-template-columns: 1fr;
+  }
+
+  .ac-storage-page__smart-steps {
+    height: auto;
   }
 
   .ac-storage-page__hero-copy {

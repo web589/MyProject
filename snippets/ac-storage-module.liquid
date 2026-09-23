@@ -68,7 +68,13 @@
     <section id="definition" class="ac-storage-page ac-storage-page__section ac-storage-page__answer" data-ac-storage-page {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
-        <h2>{{ section.settings.heading }}</h2>
+        {% assign definition_heading_accent = section.settings.heading_accent | default: 'AC-gekoppelter Speicher?' %}
+        {% if definition_heading_accent != blank and section.settings.heading contains definition_heading_accent %}
+          {% assign definition_heading_parts = section.settings.heading | split: definition_heading_accent %}
+          <h2>{{ definition_heading_parts[0] }}<span class="ac-storage-page__heading-accent">{{ definition_heading_accent }}</span>{{ definition_heading_parts[1] }}</h2>
+        {% else %}
+          <h2>{{ section.settings.heading }}</h2>
+        {% endif %}
         <div class="ac-storage-page__answer-box">
           <p><strong>{{ section.settings.answer_label }}</strong> {{ section.settings.answer }}</p>
         </div>
@@ -101,7 +107,13 @@
     <section id="funktion" class="ac-storage-page ac-storage-page__section ac-storage-page__function" data-ac-storage-page style="{{ ac_storage_style }} --ac-flow-image-height: {{ section.settings.flow_image_height | default: 460 }}px; --ac-flow-image-width: {{ section.settings.flow_image_width | default: 100 }}%; --ac-flow-node-size: {{ section.settings.flow_node_size | default: 13 }}px;" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
-        <h2>{{ section.settings.heading }}</h2>
+        {% assign function_heading_accent = section.settings.heading_accent | default: 'im Haushalt' %}
+        {% if function_heading_accent != blank and section.settings.heading contains function_heading_accent %}
+          {% assign function_heading_parts = section.settings.heading | split: function_heading_accent %}
+          <h2>{{ function_heading_parts[0] }}<span class="ac-storage-page__heading-accent">{{ function_heading_accent }}</span>{{ function_heading_parts[1] }}</h2>
+        {% else %}
+          <h2>{{ section.settings.heading }}</h2>
+        {% endif %}
         <p class="ac-storage-page__subtext">{{ section.settings.subtext }}</p>
         <div class="ac-storage-page__flow-toggle" role="tablist" aria-label="{{ section.settings.toggle_aria_label }}">
           <button type="button" role="tab" class="is-active" data-ac-flow-toggle="day" aria-selected="true" aria-controls="{{ page_id }}-day">{{ section.settings.toggle_day_label }}</button>
@@ -159,7 +171,13 @@
     <section id="vorteile" class="ac-storage-page ac-storage-page__section ac-storage-page__why" data-ac-storage-page style="{{ ac_storage_style }}" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
-        <h2>{{ section.settings.heading }}</h2>
+        {% assign why_heading_accent = section.settings.heading_accent | default: 'besonders praktisch ist' %}
+        {% if why_heading_accent != blank and section.settings.heading contains why_heading_accent %}
+          {% assign why_heading_parts = section.settings.heading | split: why_heading_accent %}
+          <h2>{{ why_heading_parts[0] }}<span class="ac-storage-page__heading-accent">{{ why_heading_accent }}</span>{{ why_heading_parts[1] }}</h2>
+        {% else %}
+          <h2>{{ section.settings.heading }}</h2>
+        {% endif %}
         <p class="ac-storage-page__subtext">{{ section.settings.subtext }}</p>
         <div class="ac-storage-page__why-grid">
           {% assign why_stat_index = 0 %}
@@ -181,7 +199,14 @@
             {% elsif block.type == 'stat' %}
               {% assign why_stat_index = why_stat_index | plus: 1 %}
               <article class="ac-storage-page__why-stat" style="--ac-card-title-size: {{ block.settings.title_size | default: 18 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-min-height: {{ block.settings.card_height | default: 188 }}px;" {{ block.shopify_attributes }}>
-                <span class="ac-storage-page__step-number">{{ why_stat_index | prepend: '0' }}</span>
+                <span class="ac-storage-page__icon ac-storage-page__why-stat-icon" aria-hidden="true">
+                  {% case why_stat_index %}
+                    {% when 1 %}
+                      <svg viewBox="0 0 24 24"><path d="M3 19h18M4 15l4-4 3 3 6-7 3 2"/></svg>
+                    {% when 2 %}
+                      <svg viewBox="0 0 24 24"><rect x="3.5" y="7" width="16" height="10" rx="1.5"/><path d="M19.5 10h2v4h-2M8 9.5v5M12 9.5v5M16 9.5v5"/></svg>
+                  {% endcase %}
+                </span>
                 <h3>{{ block.settings.title }}</h3>
                 <p>{{ block.settings.body }}</p>
                 <span class="ac-storage-page__tag">{{ block.settings.tag }}</span>
@@ -190,7 +215,7 @@
           {% endfor %}
         </div>
         <div class="ac-storage-page__center-cta">
-          <a class="ac-storage-page__link" href="{{ why_cta_url }}">{{ section.settings.cta_label }}</a>
+          <a class="ac-storage-page__button ac-storage-page__button--primary" href="{{ why_cta_url }}">{{ section.settings.cta_label }}</a>
         </div>
       </div>
     </section>
@@ -234,7 +259,13 @@
     <section id="steuerung" class="ac-storage-page ac-storage-page__section ac-storage-page__smart" data-ac-storage-page style="{{ ac_storage_style }} --ac-smart-main-height: {{ section.settings.main_image_height | default: 296 }}px; --ac-smart-small-height: {{ section.settings.small_image_height | default: 150 }}px; --ac-smart-main-width: {{ section.settings.main_image_width | default: 100 }}%; --ac-smart-small-width: {{ section.settings.small_image_width | default: 100 }}%;" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
-        <h2>{{ section.settings.heading }}</h2>
+        {% assign smart_heading_accent = section.settings.heading_accent | default: 'sondern intelligent steuern' %}
+        {% if smart_heading_accent != blank and section.settings.heading contains smart_heading_accent %}
+          {% assign smart_heading_parts = section.settings.heading | split: smart_heading_accent %}
+          <h2>{{ smart_heading_parts[0] }}<span>{{ smart_heading_accent }}</span>{{ smart_heading_parts[1] }}</h2>
+        {% else %}
+          <h2>{{ section.settings.heading }}</h2>
+        {% endif %}
         <p class="ac-storage-page__subtext">{{ section.settings.subtext }}</p>
         <div class="ac-storage-page__smart-grid">
           <div>
@@ -291,7 +322,13 @@
     <section id="zielgruppen" class="ac-storage-page ac-storage-page__section ac-storage-page__audience" data-ac-storage-page style="{{ ac_storage_style }}" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
-        <h2>{{ section.settings.heading }}</h2>
+        {% assign audience_heading_accent = section.settings.heading_accent | default: 'besonders interessant?' %}
+        {% if audience_heading_accent != blank and section.settings.heading contains audience_heading_accent %}
+          {% assign audience_heading_parts = section.settings.heading | split: audience_heading_accent %}
+          <h2>{{ audience_heading_parts[0] }}<span class="ac-storage-page__heading-accent">{{ audience_heading_accent }}</span>{{ audience_heading_parts[1] }}</h2>
+        {% else %}
+          <h2>{{ section.settings.heading }}</h2>
+        {% endif %}
         <div class="ac-storage-page__audience-grid">
           {% for block in section.blocks %}
             {% if block.type == 'audience_card' %}
@@ -319,7 +356,13 @@
     <section id="modelle" class="ac-storage-page ac-storage-page__section ac-storage-page__models" data-ac-storage-page style="{{ ac_storage_style }}" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
-        <h2>{{ section.settings.heading }}</h2>
+        {% assign models_heading_accent = section.settings.heading_accent | default: 'Lösungen' %}
+        {% if models_heading_accent != blank and section.settings.heading contains models_heading_accent %}
+          {% assign models_heading_parts = section.settings.heading | split: models_heading_accent %}
+          <h2>{{ models_heading_parts[0] }}<span class="ac-storage-page__heading-accent">{{ models_heading_accent }}</span>{{ models_heading_parts[1] }}</h2>
+        {% else %}
+          <h2>{{ section.settings.heading }}</h2>
+        {% endif %}
         <p class="ac-storage-page__subtext">{{ section.settings.subtext }}</p>
         <div class="ac-storage-page__models-grid">
           {% for block in section.blocks %}

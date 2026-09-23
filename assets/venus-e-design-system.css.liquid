@@ -34,7 +34,8 @@
 .main-content--venus-e,
 .main-content--ac-storage,
 .main-content--ai-energy,
-.main-content--e-auto {
+.main-content--e-auto,
+.main-content--faq {
   --blue: #0099fe;
   --blue-soft: #e8f4ff;
   --ink: #0e1b2c;
@@ -50,6 +51,18 @@
   font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+.main-content--faq :is(h1, h2, h3, h4, p, a, button, span) {
+  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.main-content--faq [id] {
+  scroll-margin-top: 110px;
+}
+
+.main-content--faq[data-faq-reduced-motion='true'] :is(.faq-category-section__answer, .faq-category-section__trigger .icon-chevron-down) {
+  transition: none !important;
 }
 
 .main-content--venus-e {
@@ -106,7 +119,8 @@
 .main-content--venus-e :is(h1, h2, h3, h4),
 .main-content--ac-storage .ac-storage-page :is(h1, h2, h3, h4),
 .main-content--ai-energy .ai-energy-page :is(h1, h2, h3, h4),
-.main-content--e-auto .e-auto-page :is(h1, h2, h3, h4) {
+.main-content--e-auto .e-auto-page :is(h1, h2, h3, h4),
+.main-content--faq :is(h1, h2, h3, h4) {
   font-weight: 600;
 }
 

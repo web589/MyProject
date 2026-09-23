@@ -58,8 +58,11 @@
     {{ 'ai-energy-page.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'ai-energy-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
-  {%- if template.suffix == 'venus-e-vergleich' or template.suffix == 'ac-gekoppelter-speicher' or template.suffix == 'ai-energiemanagement' or template.suffix == 'e-auto' -%}
+  {%- if template.suffix == 'venus-e-vergleich' or template.suffix == 'ac-gekoppelter-speicher' or template.suffix == 'ai-energiemanagement' or template.suffix == 'e-auto' or template.suffix == 'faq' -%}
     {{ 'venus-e-design-system.css' | asset_url | stylesheet_tag }}
+  {%- endif -%}
+  {%- if template.suffix == 'faq' -%}
+    <script src="{{ 'faq-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
   {%- render 'css-variables' -%}
 
@@ -435,7 +438,7 @@
     {%- sections 'popup-group' -%}
 
       <main
-        class="main-content{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}{% if template.suffix == 'venus-e-vergleich' %} main-content--venus-e{% endif %}{% if template.suffix == 'ac-gekoppelter-speicher' %} main-content--ac-storage{% endif %}{% if template.suffix == 'e-auto' %} main-content--e-auto{% endif %}{% if template.suffix == 'ai-energiemanagement' %} main-content--ai-energy{% endif %}"
+        class="main-content{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}{% if template.suffix == 'venus-e-vergleich' %} main-content--venus-e{% endif %}{% if template.suffix == 'ac-gekoppelter-speicher' %} main-content--ac-storage{% endif %}{% if template.suffix == 'e-auto' %} main-content--e-auto{% endif %}{% if template.suffix == 'ai-energiemanagement' %} main-content--ai-energy{% endif %}{% if template.suffix == 'faq' %} main-content--faq{% endif %}"
         id="MainContent"
         {% if template.suffix == 'balkonkraftwerk-mit-speicher' %}
           style="--bw-storage-content-max-width: {{ settings.bw_storage_content_max_width | default: 1500 }}px;"
