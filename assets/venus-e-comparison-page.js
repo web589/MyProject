@@ -214,6 +214,13 @@
     function updateStickyState() {
       scheduled = false;
 
+      var desktopSticky = !window.matchMedia || window.matchMedia('(min-width: 900px)').matches;
+      if (!desktopSticky) {
+        sticky.classList.remove('is-stuck');
+        setStickyAccessibility(false);
+        return;
+      }
+
       var stickyTop = getNavBottom();
       var tableRect = table.getBoundingClientRect();
       var theadRect = table.tHead.getBoundingClientRect();

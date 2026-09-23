@@ -2791,3 +2791,172 @@
     height: auto;
   }
 }
+
+/* Final comparison-page design-system convergence. Keep mobile breakpoints above intact. */
+.section-bw-compare-models .bw-model-card,
+.section-bw-compare-scenarios .bw-scenario-card,
+.section-bw-compare-card-grid .bw-content-card,
+.section-bw-compare-table .bw-specs__scroller,
+.section-bw-compare-capacity .bw-capacity-map__panel,
+.section-bw-compare-trust .bw-compare-trust,
+.bw-compare-trust {
+  border-radius: 10px;
+}
+
+.section-bw-compare-models .bw-models__intro .bw-eyebrow,
+.section-bw-compare-scenarios .bw-scenarios__intro .bw-eyebrow,
+.section-bw-compare-card-grid .bw-content-grid__intro .bw-eyebrow,
+.section-bw-compare-table .bw-specs__intro .bw-eyebrow,
+.section-bw-compare-capacity .bw-capacity-map__intro .bw-eyebrow,
+.section-bw-compare-smart-energy .bw-smart-energy__intro .bw-eyebrow,
+.section-bw-compare-trust .bw-compare-trust__eyebrow,
+.bw-compare-trust .bw-compare-trust__eyebrow {
+  margin-bottom: 16px;
+  font-size: 13px !important;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+@media (min-width: 1200px) {
+  .section-bw-storage-navigation {
+    top: 72px;
+  }
+
+  .section-bw-storage-navigation .bw-anchor-nav__inner {
+    width: min(1440px, calc(100% - 48px));
+    min-height: 48px;
+    gap: 34px;
+  }
+
+  .section-bw-storage-navigation .bw-anchor-nav__link,
+  .section-bw-storage-navigation .bw-anchor-nav__cta {
+    font-size: 13.5px;
+    font-weight: 500;
+  }
+
+  .section-bw-storage-hero .bw-container,
+  .section-bw-compare-models .bw-container,
+  .section-bw-compare-scenarios .bw-container,
+  .section-bw-compare-card-grid .bw-container,
+  .section-bw-compare-table .bw-container,
+  .section-bw-compare-capacity .bw-container,
+  .section-bw-compare-smart-energy .bw-container,
+  .section-bw-compare-trust .bw-container,
+  .bw-compare-trust .bw-container,
+  .section-bw-storage-faq .bw-container {
+    width: min(1440px, calc(100% - 48px));
+  }
+
+  .section-bw-storage-hero .bw-hero {
+    padding-block: 80px 64px;
+  }
+
+  .section-bw-storage-hero .bw-hero__grid {
+    min-height: 460px;
+    grid-template-columns: minmax(0, 600px) minmax(0, 1fr);
+    gap: 72px;
+  }
+
+  .section-bw-storage-hero .bw-hero__media {
+    height: 460px;
+  }
+
+  .section-bw-storage-hero .bw-hero h1 {
+    font-size: 52px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .section-bw-compare-models .bw-models,
+  .section-bw-compare-scenarios .bw-scenarios,
+  .section-bw-compare-card-grid .bw-content-grid,
+  .section-bw-compare-capacity .bw-capacity-map,
+  .section-bw-compare-smart-energy .bw-smart-energy {
+    padding-block: 76px;
+  }
+
+  .section-bw-compare-table .bw-specs {
+    padding-block: 68px;
+  }
+
+  .section-bw-compare-trust .bw-compare-trust,
+  .bw-compare-trust {
+    padding-block: 96px;
+  }
+
+  .section-bw-storage-faq .bw-faq-section {
+    padding-block: 88px;
+  }
+
+  .section-bw-compare-models .bw-models--final {
+    padding-block: 76px;
+  }
+
+  .section-bw-compare-models .bw-models__intro h2,
+  .section-bw-compare-scenarios .bw-scenarios__intro h2,
+  .section-bw-compare-card-grid .bw-content-grid__intro h2,
+  .section-bw-compare-table .bw-specs__intro h2,
+  .section-bw-compare-capacity .bw-capacity-map__intro h2,
+  .section-bw-compare-smart-energy .bw-smart-energy__intro h2,
+  .section-bw-compare-trust .bw-compare-trust__copy h2,
+  .bw-compare-trust .bw-compare-trust__copy h2,
+  .section-bw-storage-faq .bw-faq__intro h2 {
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  .section-bw-compare-models .bw-models--final .bw-models__intro h2 {
+    font-size: 30px;
+  }
+
+  .section-bw-compare-models .bw-model-card__body h3,
+  .section-bw-compare-card-grid .bw-content-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .section-bw-compare-scenarios .bw-scenario-card__body h3 {
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .section-bw-compare-models .bw-model-card__description,
+  .section-bw-compare-models .bw-model-card__description p,
+  .section-bw-compare-scenarios .bw-scenario-card__body p,
+  .section-bw-compare-card-grid .bw-content-card__text,
+  .section-bw-compare-card-grid .bw-content-card__text p {
+    font-size: 13.5px;
+    font-weight: 400;
+    line-height: 1.65;
+  }
+
+  .section-bw-compare-table .bw-specs__label-column {
+    width: 300px;
+  }
+
+  .section-bw-compare-table .bw-specs__label-cell {
+    padding: 18px 22px;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+
+  .section-bw-compare-table .bw-specs__value {
+    padding: 18px 22px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .section-bw-compare-table .bw-specs__product-link {
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  .section-bw-compare-table .bw-table-product__name {
+    font-size: 15.5px;
+    font-weight: 600;
+  }
+}
