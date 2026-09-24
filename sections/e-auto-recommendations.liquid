@@ -48,15 +48,16 @@
   data-eauto-primary-label="{{ section.settings.card_recommendation_label | escape }}"
   data-eauto-alternative-label="{{ section.settings.alternative_label | escape }}"
   data-eauto-variant-unavailable-label="{{ section.settings.variant_unavailable_label | escape }}"
-  data-eauto-summary-template="{{ section.settings.recommendations_summary_template | escape }}"
   data-eauto-recommendation-hint-template="{{ section.settings.recommendation_hint_template | escape }}"
+  data-eauto-card-cta-template="{{ section.settings.card_cta_label | escape }}"
+  data-eauto-comparison-cta-label="{{ section.settings.comparison_cta_label | escape }}"
+  data-eauto-comparison-cta-mini-label="{{ section.settings.comparison_cta_mini_label | escape }}"
   aria-labelledby="{{ page_id }}-recommendations-heading"
 >
   <div class="e-auto-page__container">
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.recommendations_eyebrow }}</p>
       <h2 id="{{ page_id }}-recommendations-heading">{{ section.settings.recommendations_heading }}{% if section.settings.recommendations_heading_accent != blank %} <span>{{ section.settings.recommendations_heading_accent }}</span>{% endif %}</h2>
-      <p data-eauto-recommendations-summary>{{ section.settings.recommendations_text }}</p>
     </div>
     <div class="e-auto-page__recommendation-grid" data-eauto-recommendation-grid>
       {% for index in (0..2) %}
@@ -65,10 +66,10 @@
         {% if index == 1 %}{% assign card_fallback_product = product_3 %}{% endif %}
         {% if index == 2 %}{% assign card_fallback_product = product_4 %}{% endif %}
         {% assign card_fallback_url = card_fallback_product.url | default: '/collections/alle-venus-e-serie' %}
+        {% assign card_fallback_cta_label = section.settings.card_cta_label | replace: '[[product_title]]', card_fallback_product.title | replace: '{{ product_title }}', card_fallback_product.title %}
         <article
           class="e-auto-page__product-card"
           data-eauto-card="{{ index }}"
-          data-eauto-card-default-cta-label="{{ section.settings.card_cta_label | escape }}"
           {% if card_block != blank %}{{ card_block.shopify_attributes }}{% endif %}
         >
           <a class="e-auto-page__product-card-media" data-eauto-card-link href="{{ card_fallback_url }}">
@@ -86,7 +87,7 @@
               <strong data-eauto-card-price>–</strong>
               <span data-eauto-card-availability>{{ section.settings.card_loading_label }}</span>
             </div>
-            <a class="e-auto-page__button e-auto-page__button--secondary" data-eauto-card-action href="{{ card_fallback_url }}">{{ section.settings.card_cta_label }}</a>
+            <a class="e-auto-page__button e-auto-page__button--secondary" data-eauto-card-action href="{{ card_fallback_url }}">{{ card_fallback_cta_label }}</a>
           </div>
         </article>
       {% endfor %}
@@ -140,6 +141,26 @@
       }
     }
   </script>
+  <script type="application/json" data-eauto-card-copy>
+    {
+      "mini": {
+        "badge": {{ section.settings.mini_card_badge | json }},
+        "description": {{ section.settings.mini_card_description | json }}
+      },
+      "venus3": {
+        "badge": {{ section.settings.venus_3_card_badge | json }},
+        "description": {{ section.settings.venus_3_card_description | json }}
+      },
+      "venus4": {
+        "badge": {{ section.settings.venus_4_card_badge | json }},
+        "description": {{ section.settings.venus_4_card_description | json }}
+      },
+      "max": {
+        "badge": {{ section.settings.max_card_badge | json }},
+        "description": {{ section.settings.max_card_description | json }}
+      }
+    }
+  </script>
 </section>
 
 {% schema %}
@@ -163,20 +184,28 @@
     {"type":"text","id":"recommendations_eyebrow","label":"推荐眉题","default":"Deine Optionen"},
     {"type":"text","id":"recommendations_heading","label":"推荐标题","default":"Welche VENUS E Lösung"},
     {"type":"text","id":"recommendations_heading_accent","label":"推荐标题强调部分","default":"passt dazu?"},
-    {"type":"textarea","id":"recommendations_text","label":"推荐文本","default":""},
-    {"type":"textarea","id":"recommendations_summary_template","label":"推荐摘要模板","info":"Verfügbare Variablen: range, lower, upper, unit.","default":""},
     {"type":"textarea","id":"recommendations_note","label":"推荐备注","default":""},
     {"type":"text","id":"recommendation_hint_template","label":"主推荐卡提示","info":"Verfügbare Variablen: range, lower, upper, unit.","default":"Empfohlen für deine Berechnung: [[range]]"},
     {"type":"text","id":"comparison_cta_label","label":"Vergleichs-CTA-Text","default":"Kurze Strecken? Auch der VENUS E Mini (2 – 6 kWh) passt – alle Modelle im direkten Vergleich ansehen →"},
+    {"type":"text","id":"comparison_cta_mini_label","label":"Mini 推荐时的 Vergleichs-CTA-Text","default":"Mehr Reserven gewünscht? VENUS E 3.0 oder 4.0 – alle Modelle im direkten Vergleich ansehen →"},
     {"type":"url","id":"comparison_cta_link","label":"Vergleichs-CTA-Link"},
-    {"type":"text","id":"card_recommendation_label","label":"卡片推荐标签","default":"EMPFOHLENE KONFIGURATION"},
-    {"type":"text","id":"alternative_label","label":"备选标签","default":"ALTERNATIVE KONFIGURATION"},
+    {"type":"text","id":"card_recommendation_label","label":"卡片推荐标签（兼容旧设置）","default":"EMPFOHLENE KONFIGURATION"},
+    {"type":"text","id":"alternative_label","label":"备选标签（兼容旧设置）","default":"ALTERNATIVE KONFIGURATION"},
     {"type":"text","id":"variant_unavailable_label","label":"变体不可用标签","default":"Variante nicht gefunden"},
     {"type":"text","id":"card_loading_label","label":"卡片加载中标签","default":"Konfiguration wird geladen"},
-    {"type":"text","id":"card_cta_label","label":"卡片行动按钮标签","default":"Produkt ansehen"},
+    {"type":"text","id":"card_cta_label","label":"卡片行动按钮模板","info":"Verfügbare Variablen: product_title, product_capacity, range, lower, upper, unit.","default":"[[product_title]] ansehen →"},
     {"type":"text","id":"available_label","label":"可用标签","default":"Verfügbar"},
     {"type":"text","id":"unavailable_label","label":"不可用标签","default":"Derzeit nicht verfügbar"},
     {"type":"text","id":"preorder_label","label":"预售标签","default":"Demnächst verfügbar"},
+    {"type":"header","content":"Produktkarten-Texte"},
+    {"type":"text","id":"mini_card_badge","label":"VENUS E Mini 眉题","default":"KOMPAKT & EINSTEIGER"},
+    {"type":"textarea","id":"mini_card_description","label":"VENUS E Mini 卡片文案","default":"Für kurze Strecken und wenig Fahrleistung – speichert den Tagesüberschuss für die ersten Abendstunden."},
+    {"type":"text","id":"venus_3_card_badge","label":"VENUS E 3.0 眉题","default":"FLEXIBEL & ERWEITERBAR"},
+    {"type":"textarea","id":"venus_3_card_description","label":"VENUS E 3.0 卡片文案","default":"Modular erweiterbar – wächst mit deinem Fahrprofil und deinem Haushalt mit."},
+    {"type":"text","id":"venus_4_card_badge","label":"VENUS E 4.0 眉题","default":"EMPFOHLEN FÜR E-AUTO"},
+    {"type":"textarea","id":"venus_4_card_description","label":"VENUS E 4.0 卡片文案","default":"Der Ausgleich zwischen Tagesüberschuss und Abend-Laden – die häufigste Konfiguration für Pendler."},
+    {"type":"text","id":"max_card_badge","label":"VENUS E Max 眉题","default":"MAXIMALE REICHWEITE"},
+    {"type":"textarea","id":"max_card_description","label":"VENUS E Max 卡片文案","default":"Für hohe Fahrleistung & zwei Autos: auch in dunklen Winterwochen noch eigener Solarstrom im Akku."},
     {"type":"header","content":"Typography"},
     {"type":"range","id":"eyebrow_size","label":"眉题大小","min":9,"max":18,"step":1,"unit":"px","default":13},
     {"type":"range","id":"item_heading_size","label":"项目标题大小","min":14,"max":30,"step":1,"unit":"px","default":18},

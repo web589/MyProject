@@ -311,6 +311,16 @@
     return ['venus3', 'venus4', 'max', 'mini'];
   }
 
+  function readCardCopy(root) {
+    var node = root.querySelector('[data-eauto-card-copy]');
+    if (!node) return {};
+    try {
+      return JSON.parse(node.textContent) || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
   function recommendedFamily(result) {
     var midpoint = (result.lower + result.upper) / 2;
     if (midpoint <= 6) return 'mini';
@@ -407,7 +417,7 @@
     if (node) node.textContent = value;
   }
 
-  function renderCard(root, index, item, copy, unit) {
+  function renderCard(root, index, item, copy, unit, cardCopy) {
     var card = root.querySelector('[data-eauto-card="' + index + '"]');
     if (!card) return;
 
@@ -418,13 +428,22 @@
     var titleLink = card.querySelector('[data-eauto-card-title-link]');
     var mediaLink = card.querySelector('[data-eauto-card-link]');
     var action = card.querySelector('[data-eauto-card-action]');
+    var familyCopy = cardCopy[item.productKey] || {};
+    var cardTemplateValues = {
+      product_title: renderedTitle,
+      product_capacity: formatCapacity(item.capacity, unit),
+      range: copy.range,
+      lower: copy.lower,
+      upper: copy.upper,
+      unit: unit
+    };
     setText(card, '[data-eauto-card-title]', renderedTitle);
     setText(card, '[data-eauto-card-variant]', item.variant ? item.variant.title : copy.variantUnavailableLabel);
-    setText(card, '[data-eauto-card-capacity]', formatCapacity(item.capacity, unit));
+    setText(card, '[data-eauto-card-capacity]', cardTemplateValues.product_capacity);
     var description = card.querySelector('[data-eauto-card-description]');
     if (description) {
-      description.textContent = item.product.description || '';
-      description.hidden = !item.product.description;
+      description.textContent = familyCopy.description || '';
+      description.hidden = !familyCopy.description;
     }
     setText(card, '[data-eauto-card-price]', item.variant ? formatMoney(item.variant.price) : '—');
 
@@ -434,8 +453,8 @@
         ? copy.availableLabel
         : copy.unavailableLabel;
     setText(card, '[data-eauto-card-availability]', availability);
-    setText(card, '[data-eauto-card-badge]', index === 0 ? copy.primaryLabel : copy.alternativeLabel);
-    setText(card, '[data-eauto-card-action]', card.dataset.eautoCardDefaultCtaLabel || '');
+    setText(card, '[data-eauto-card-badge]', familyCopy.badge || (index === 0 ? copy.primaryLabel : copy.alternativeLabel));
+    setText(card, '[data-eauto-card-action]', interpolateTemplate(copy.cardCtaTemplate, cardTemplateValues));
 
     if (item.image) {
       image.src = item.image;
@@ -479,6 +498,7 @@
     var primary = recommendations[0];
     var pageMarker = readPageMarker();
     var calculatorSettings = readCalculatorSettings(root);
+    var cardCopy = readCardCopy(root);
     var unit = calculatorSettings.eautoCapacityUnit || 'kWh';
     var range = formatRange(result.lower, result.upper, unit);
     var copy = {
@@ -488,7 +508,7 @@
       variantUnavailableLabel: readDataValue(pageMarker.dataset, 'eautoVariantUnavailableLabel', 'Variante nicht gefunden'),
       primaryLabel: readDataValue(pageMarker.dataset, 'eautoPrimaryLabel', 'EMPFOHLENE KONFIGURATION'),
       alternativeLabel: readDataValue(pageMarker.dataset, 'eautoAlternativeLabel', 'ALTERNATIVE KONFIGURATION'),
-      summaryTemplate: readDataValue(pageMarker.dataset, 'eautoSummaryTemplate', 'Kapazitätsbereich: [[range]]. Preise und Verfügbarkeit werden direkt aus Shopify geladen.')
+      cardCtaTemplate: readDataValue(pageMarker.dataset, 'eautoCardCtaTemplate', '[[product_title]] ansehen →')
     };
     var templateValues = {
       product_title: primary ? primary.title : '',
@@ -500,7 +520,6 @@
     };
 
     setText(root, '[data-eauto-result-range]', range);
-    setText(root, '[data-eauto-recommendations-summary]', interpolateTemplate(copy.summaryTemplate, templateValues));
     setText(root, '[data-eauto-card-hint]', interpolateTemplate(
       readDataValue(pageMarker.dataset, 'eautoRecommendationHintTemplate', 'Empfohlen für deine Berechnung: [[range]]'),
       templateValues
@@ -518,7 +537,22 @@
 
     for (var index = 0; index < 3; index += 1) {
       var item = recommendations[index] || buildCandidate('mini', PRODUCT_CONFIG.mini.capacities[0], products);
-      renderCard(root, index, item, copy, unit);
+      renderCard(root, index, item, copy, unit, cardCopy);
+    }
+
+    var comparisonCta = root.querySelector('.e-auto-page__comparison-cta');
+    if (comparisonCta) {
+      comparisonCta.textContent = primary && primary.productKey === 'mini'
+        ? readDataValue(
+          pageMarker.dataset,
+          'eautoComparisonCtaMiniLabel',
+          'Mehr Reserven gewünscht? VENUS E 3.0 oder 4.0 – alle Modelle im direkten Vergleich ansehen →'
+        )
+        : readDataValue(
+          pageMarker.dataset,
+          'eautoComparisonCtaLabel',
+          'Kurze Strecken? Auch der VENUS E Mini (2 – 6 kWh) passt – alle Modelle im direkten Vergleich ansehen →'
+        );
     }
   }
 
