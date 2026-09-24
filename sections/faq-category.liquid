@@ -4,7 +4,7 @@
     width: 100%;
     max-width: 1080px;
     margin: 0 auto;
-    padding: 0 0 52px;
+    padding: 0 0 72px;
     box-sizing: border-box;
   }
 
@@ -14,9 +14,9 @@
     align-items: baseline;
     justify-content: space-between;
     gap: 20px;
-    margin: 0 0 16px;
-    padding: 0 0 14px;
-    border-bottom: 1px solid var(--line);
+    margin: 0 0 18px;
+    padding: 0 0 16px;
+    border-bottom: 1px solid var(--border);
     scroll-margin-top: 110px;
     transition: color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
   }
@@ -50,42 +50,42 @@
   #shopify-section-{{ section.id }} .faq-category-section__heading {
     display: flex;
     align-items: baseline;
-    gap: 10px;
+    gap: 12px;
     min-width: 0;
     margin: 0;
     color: var(--ink);
-    font-size: 22px;
+    font-size: clamp(22px, 2.5vw, 30px);
     font-weight: 600;
     line-height: 1.2;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
 
   #shopify-section-{{ section.id }} .faq-category-section__number {
     flex: 0 0 auto;
     color: var(--blue);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     font-variant-numeric: tabular-nums;
   }
 
   #shopify-section-{{ section.id }} .faq-category-section__count {
     flex: 0 0 auto;
     color: var(--gray);
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.4;
   }
 
   #shopify-section-{{ section.id }} .faq-category-section__questions {
     display: grid;
-    gap: 9px;
+    gap: 12px;
   }
 
   #shopify-section-{{ section.id }} .faq-category-section__item {
     margin: 0;
     overflow: hidden;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--r);
     background: #ffffff;
     transition: border-color 0.18s ease, box-shadow 0.18s ease;
   }
@@ -94,7 +94,7 @@
   #shopify-section-{{ section.id }} .faq-category-section__item:has(.faq-category-section__trigger.is-open),
   #shopify-section-{{ section.id }} .faq-category-section__item:has(.faq-category-section__trigger:focus-visible) {
     border-color: var(--blue);
-    box-shadow: none;
+    box-shadow: 0 8px 24px rgba(0, 153, 254, 0.08);
   }
 
   #shopify-section-{{ section.id }} .faq-category-section__trigger {
@@ -103,10 +103,10 @@
     justify-content: space-between;
     gap: 20px;
     width: 100%;
-    min-height: 46px;
-    padding: 13px 18px;
+    min-height: 72px;
+    padding: 20px 22px;
     color: var(--ink);
-    font-size: 13px;
+    font-size: 15.5px;
     font-weight: 600;
     line-height: 1.45;
     text-align: left;
@@ -126,10 +126,10 @@
   #shopify-section-{{ section.id }} .faq-category-section__answer {
     max-height: 0;
     overflow: hidden;
-    border-left: 0;
-    border-radius: 0;
-    background: #ffffff;
-    color: var(--gray-dark);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 var(--r) var(--r) 0;
+    background: var(--blue-soft);
+    color: var(--ink);
     opacity: 0;
     visibility: hidden;
     transition: max-height .34s cubic-bezier(.4, 0, .2, 1), opacity .22s ease .06s, visibility 0s linear .34s;
@@ -142,9 +142,9 @@
   }
 
   #shopify-section-{{ section.id }} .faq-category-section__answer-inner {
-    padding: 0 18px 15px;
-    color: var(--gray-dark);
-    font-size: 12px;
+    padding: 0 30px 24px;
+    color: var(--ink);
+    font-size: 14.5px;
     line-height: 1.75;
   }
 
@@ -172,7 +172,7 @@
   @media only screen and (max-width: 768px) {
     #shopify-section-{{ section.id }} .faq-category-section {
       max-width: none;
-      padding: 0 20px 38px;
+      padding: 0 20px 42px;
     }
 
     #shopify-section-{{ section.id }} .faq-category-section__header {
@@ -183,8 +183,8 @@
     }
 
     #shopify-section-{{ section.id }} .faq-category-section__heading {
-      gap: 8px;
-      font-size: 21px;
+      gap: 9px;
+      font-size: 23px;
     }
 
     #shopify-section-{{ section.id }} .faq-category-section__count {
@@ -197,14 +197,14 @@
     }
 
     #shopify-section-{{ section.id }} .faq-category-section__trigger {
-      min-height: 48px;
-      padding: 14px 16px;
-      font-size: 13px;
+      min-height: 64px;
+      padding: 17px 18px;
+      font-size: 16px;
     }
 
     #shopify-section-{{ section.id }} .faq-category-section__answer-inner {
-      padding: 0 16px 14px;
-      font-size: 12px;
+      padding: 0 18px 20px;
+      font-size: 14px;
     }
   }
 </style>

@@ -55,12 +55,6 @@
       });
     }
 
-    function closeOtherItems(currentItem) {
-      items.forEach(function (item) {
-        if (item !== currentItem && item.classList.contains('is-open')) setItemState(item, false);
-      });
-    }
-
     items.forEach(function (item) {
       var question = getQuestion(item);
       var answer = getAnswer(item);
@@ -79,7 +73,6 @@
       if (!item) return;
 
       var willOpen = !item.classList.contains('is-open');
-      if (willOpen) closeOtherItems(item);
       setItemState(item, willOpen);
     });
 
