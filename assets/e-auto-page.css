@@ -44,6 +44,13 @@
 .section-e-auto-navigation .bw-anchor-nav__link,
 .section-e-auto-navigation .bw-anchor-nav__cta {
   font-size: var(--eauto-control-size, 13px);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.section-e-auto-navigation .bw-anchor-nav__link.is-active,
+.section-e-auto-navigation .bw-anchor-nav__cta {
+  font-weight: 500;
 }
 
 .e-auto-page [hidden] {
@@ -94,14 +101,19 @@
 
 .e-auto-page h3 {
   margin-bottom: 10px;
-  font-size: clamp(18px, 1.5vw, 24px);
+  font-size: 18px;
 }
 
 .e-auto-page p,
 .e-auto-page li {
   color: var(--eauto-copy);
   font-size: clamp(13px, 1.05vw, var(--eauto-copy-size));
-  line-height: 1.62;
+  letter-spacing: 0;
+  line-height: 1.65;
+}
+
+.e-auto-page strong {
+  font-weight: 600;
 }
 
 .e-auto-page__container {
@@ -123,11 +135,11 @@
 }
 
 .e-auto-page__eyebrow {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   color: var(--eauto-blue) !important;
   font-size: var(--eauto-eyebrow-size, 11px) !important;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
   line-height: 1.2 !important;
   text-transform: none;
 }
@@ -139,20 +151,21 @@
   padding: 5px 11px;
   border-radius: 999px;
   background: var(--eauto-pale);
-  font-size: var(--eauto-eyebrow-size, 10px) !important;
-  letter-spacing: 0.04em;
+  font-size: max(10px, calc(var(--eauto-eyebrow-size, 13px) - 1px)) !important;
+  letter-spacing: 0.06em;
 }
 
 .e-auto-page__lead {
   max-width: 650px;
-  font-size: clamp(15px, 1.15vw, var(--eauto-copy-size)) !important;
-  line-height: 1.7 !important;
+  font-size: calc(var(--eauto-copy-size, 16px) + 0.5px) !important;
+  line-height: 1.65 !important;
 }
 
 .e-auto-page__note {
   margin: 24px 0 0;
   color: var(--eauto-muted) !important;
   font-size: max(11px, var(--eauto-note-size, 12px)) !important;
+  line-height: 1.7;
 }
 
 .e-auto-page__button {
@@ -217,8 +230,8 @@
   justify-content: center;
   padding: 28px;
   color: var(--eauto-muted);
-  font-size: var(--eauto-item-text-size, 13px);
-  line-height: 1.55;
+  font-size: 13px;
+  line-height: 1.7;
   text-align: center;
 }
 
@@ -278,11 +291,14 @@
   color: var(--eauto-ink);
   font-size: var(--eauto-value-size, 18px);
   font-weight: 600;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
 }
 
 .e-auto-page__stats > div > span {
   color: var(--eauto-copy);
-  font-size: max(12px, var(--eauto-item-text-size, 12px));
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .e-auto-page__stats .e-auto-page__stat-value {
@@ -300,8 +316,8 @@
   border-radius: 0;
   background: transparent;
   color: var(--eauto-blue) !important;
-  font-size: var(--eauto-item-text-size, 10px);
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   line-height: inherit;
 }
 
@@ -350,6 +366,7 @@
 
 .e-auto-page__problem-cards p {
   font-size: var(--eauto-item-text-size, 13px);
+  line-height: 1.65;
 }
 
 .e-auto-page__problem-cards p:last-child,
@@ -361,9 +378,9 @@
   display: block;
   margin-bottom: 10px;
   color: var(--eauto-blue);
-  font-size: var(--eauto-eyebrow-size, 11px);
+  font-size: max(10px, calc(var(--eauto-eyebrow-size, 13px) - 1px));
   font-weight: 600;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.06em;
 }
 
 /* 03 — energy flow */
@@ -396,8 +413,8 @@
   background: transparent;
   color: var(--eauto-copy);
   cursor: pointer;
-  font-size: var(--eauto-control-size, 12px);
-  font-weight: 700;
+  font-size: var(--eauto-control-size, 13.5px);
+  font-weight: 500;
 }
 
 .e-auto-page__toggle button + button {
@@ -459,8 +476,9 @@
   border-radius: 999px;
   background: #fff;
   color: var(--eauto-blue);
-  font-size: var(--eauto-eyebrow-size, 11px);
+  font-size: max(10px, calc(var(--eauto-eyebrow-size, 13px) - 1px));
   font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
 .e-auto-page__media--timeline {
@@ -482,13 +500,15 @@
 
 .e-auto-page__timeline-item p {
   font-size: var(--eauto-item-text-size, 13px);
+  line-height: 1.65;
 }
 
 .e-auto-page__timeline-badge {
   display: inline-block;
   color: var(--eauto-blue-deep);
-  font-size: var(--eauto-item-text-size, 12px);
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
 /* 05 — profiles */
@@ -524,12 +544,13 @@
 
 .e-auto-page__profile-tab span {
   color: var(--eauto-copy);
-  font-size: max(12px, var(--eauto-item-text-size, 12px));
-  line-height: 1.45;
+  font-size: var(--eauto-item-text-size, 14px);
+  line-height: 1.65;
 }
 
 .e-auto-page__profile-tab strong {
   font-size: var(--eauto-control-size, 16px);
+  font-weight: 600;
 }
 
 .e-auto-page__profile-tab.is-active {
@@ -575,6 +596,8 @@
 
 .e-auto-page__profile-copy > p:not(.e-auto-page__profile-focus) {
   margin-bottom: 0;
+  font-size: var(--eauto-item-text-size, 14px);
+  line-height: 1.65;
 }
 
 .e-auto-page__media--profile {
@@ -591,6 +614,8 @@
   padding: 15px;
   border-radius: var(--eauto-radius);
   background: var(--eauto-pale);
+  font-size: var(--eauto-item-text-size, 14px);
+  line-height: 1.65;
 }
 
 .e-auto-page__profile-focus strong {
@@ -619,16 +644,16 @@
   display: inline-block;
   margin-right: 12px;
   color: var(--eauto-blue);
-  font-size: var(--eauto-eyebrow-size, 11px);
+  font-size: max(10px, calc(var(--eauto-eyebrow-size, 13px) - 1px));
   font-weight: 600;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
 }
 
 .e-auto-page__calculator-step h3 {
   display: inline;
   margin-bottom: 14px;
-  font-size: var(--eauto-item-heading-size, 16px);
-  letter-spacing: -0.015em;
+  font-size: var(--eauto-item-heading-size, 18px);
 }
 
 .e-auto-page__calculator-detail {
@@ -639,7 +664,7 @@
   border-radius: 0;
   background: transparent;
   color: var(--eauto-muted);
-  font-size: var(--eauto-item-text-size, 11px);
+  font-size: calc(var(--eauto-item-text-size, 13.5px) - 0.5px);
   font-weight: 400;
   letter-spacing: 0;
   line-height: inherit;
@@ -662,14 +687,15 @@
   background: #fff;
   color: var(--eauto-copy);
   cursor: pointer;
-  font-size: var(--eauto-control-size, 12px);
+  font-size: var(--eauto-control-size, 14px);
+  font-weight: 500;
   line-height: 1.3;
   transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
 }
 
 .e-auto-page__option-grid button small {
   color: inherit;
-  font-size: max(12px, var(--eauto-item-text-size, 11px));
+  font-size: max(11px, calc(var(--eauto-item-text-size, 13.5px) - 1px));
 }
 
 .e-auto-page__option-grid button.is-active {
@@ -700,14 +726,21 @@
   display: block;
   margin: 18px 0 20px;
   color: #fff;
-  font-size: clamp(32px, 4.8vw, var(--eauto-value-size, 58px));
-  letter-spacing: -0.06em;
+  font-size: clamp(32px, 4.8vw, var(--eauto-value-size, 56px));
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 0.98;
+  font-variant-numeric: tabular-nums;
 }
 
 .e-auto-page__calculator-result h3 {
   margin-bottom: 10px;
-  font-size: var(--eauto-item-heading-size, 16px);
+  font-size: var(--eauto-item-heading-size, 18px);
+}
+
+.e-auto-page__calculator-result p {
+  font-size: calc(var(--eauto-item-text-size, 13.5px) + 1px);
+  line-height: 1.7;
 }
 
 .e-auto-page__calculator-result .e-auto-page__button {
@@ -718,8 +751,8 @@
 .e-auto-page__calculator-result small {
   margin-top: 22px;
   color: #a9bfd2 !important;
-  font-size: var(--eauto-note-size, 11px);
-  line-height: 1.55;
+  font-size: var(--eauto-note-size, 13px);
+  line-height: 1.7;
 }
 
 /* 07 — recommendations */
@@ -809,7 +842,7 @@
   display: inline-block;
   margin-bottom: 10px;
   color: var(--eauto-blue);
-  font-size: var(--eauto-eyebrow-size, 10px);
+  font-size: max(10px, calc(var(--eauto-eyebrow-size, 13px) - 1px));
   font-weight: 600;
   letter-spacing: 0.06em;
 }
@@ -817,6 +850,10 @@
 .e-auto-page__product-card h3 {
   margin-bottom: 8px;
   font-size: var(--eauto-item-heading-size, 18px);
+}
+
+.e-auto-page__product-card:first-child h3 {
+  font-size: calc(var(--eauto-item-heading-size, 18px) + 4px);
 }
 
 .e-auto-page__product-card h3 a {
@@ -827,19 +864,20 @@
 .e-auto-page__product-card-variant,
 .e-auto-page__product-card-capacity {
   margin-bottom: 4px;
-  font-size: max(12px, var(--eauto-item-text-size, 12px)) !important;
+  font-size: var(--eauto-item-text-size, 13.5px) !important;
 }
 
 .e-auto-page__product-card-capacity {
   color: var(--eauto-blue-deep) !important;
-  font-weight: 700;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .e-auto-page__product-card-description {
   margin: 10px 0 0;
   color: var(--eauto-copy);
-  font-size: max(13px, var(--eauto-item-text-size, 12px)) !important;
-  line-height: 1.55;
+  font-size: var(--eauto-item-text-size, 13.5px) !important;
+  line-height: 1.65;
 }
 
 .e-auto-page__product-card-meta {
@@ -852,11 +890,13 @@
 
 .e-auto-page__product-card-meta strong {
   font-size: var(--eauto-value-size, 15px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .e-auto-page__product-card-meta span {
   color: var(--eauto-copy);
-  font-size: max(12px, var(--eauto-item-text-size, 11px));
+  font-size: max(11px, calc(var(--eauto-item-text-size, 13.5px) - 1px));
   text-align: right;
 }
 
@@ -902,8 +942,9 @@
 
 .e-auto-page__smart-grid article > span {
   color: var(--eauto-blue);
-  font-size: var(--eauto-eyebrow-size, 11px);
+  font-size: max(10px, calc(var(--eauto-eyebrow-size, 13px) - 1px));
   font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
 .e-auto-page__smart-grid article h3,
@@ -913,12 +954,13 @@
 
 .e-auto-page__smart-grid article h3 {
   margin-bottom: 5px;
-  font-size: var(--eauto-item-heading-size, 15px);
+  font-size: var(--eauto-item-heading-size, 19px);
 }
 
 .e-auto-page__smart-grid article p {
   margin-bottom: 0;
-  font-size: max(12px, var(--eauto-item-text-size, 12px));
+  font-size: var(--eauto-item-text-size, 14px);
+  line-height: 1.65;
 }
 
 .e-auto-page__media--smart {
@@ -969,6 +1011,11 @@
   font-size: var(--eauto-item-heading-size, 21px);
 }
 
+.e-auto-page__installation-copy > p:not(.e-auto-page__eyebrow) {
+  font-size: var(--eauto-item-text-size, 14px);
+  line-height: 1.65;
+}
+
 .e-auto-page__installation-copy > .e-auto-page__eyebrow {
   display: inline-flex;
   width: fit-content;
@@ -976,8 +1023,8 @@
   padding: 5px 10px;
   border-radius: 4px;
   background: var(--eauto-pale);
-  font-size: var(--eauto-eyebrow-size, 10px) !important;
-  letter-spacing: 0.04em;
+  font-size: max(10px, calc(var(--eauto-eyebrow-size, 13px) - 1px)) !important;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -994,8 +1041,8 @@
   margin-bottom: 0;
   padding: 8px 0;
   border-bottom: 1px solid var(--eauto-line);
-  font-size: max(13px, var(--eauto-item-text-size, 12px));
-  line-height: 1.5;
+  font-size: var(--eauto-item-text-size, 14px);
+  line-height: 1.65;
 }
 
 .e-auto-page__installation-copy li::before {
@@ -1026,15 +1073,23 @@
   border-radius: 50%;
   background: var(--eauto-pale);
   color: var(--eauto-blue);
-  font-size: var(--eauto-eyebrow-size, 11px);
+  font-size: max(10px, calc(var(--eauto-eyebrow-size, 13px) - 1px));
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.e-auto-page__install-steps strong {
+  color: var(--eauto-ink);
+  font-size: var(--eauto-item-text-size, 14px);
   font-weight: 600;
+  line-height: 1.65;
 }
 
 .e-auto-page__install-steps small {
   grid-column: 2;
   color: var(--eauto-copy);
-  font-size: max(12px, var(--eauto-item-text-size, 11px));
-  line-height: 1.5;
+  font-size: calc(var(--eauto-item-text-size, 14px) - 1px);
+  line-height: 1.65;
 }
 
 /* 10–11 — benefits and trust */
@@ -1067,7 +1122,10 @@
   margin-bottom: 8px;
   color: var(--eauto-ink);
   font-size: var(--eauto-value-size, 34px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .e-auto-page__benefits-grid article > strong span {
@@ -1076,21 +1134,21 @@
 
 .e-auto-page__benefits-grid article h3 {
   margin-bottom: 6px;
-  font-size: var(--eauto-item-heading-size, 13px);
-  letter-spacing: 0;
+  font-size: var(--eauto-item-heading-size, 18px);
 }
 
 .e-auto-page__benefits-grid p,
 .e-auto-page__trust-grid p {
   margin-bottom: 0;
-  font-size: max(13px, var(--eauto-item-text-size, 12px));
+  font-size: var(--eauto-item-text-size, 13.5px);
+  line-height: 1.65;
 }
 
 .e-auto-page__benefits .e-auto-page__note {
   margin-top: 24px;
   margin-bottom: 0;
   color: var(--eauto-copy);
-  font-size: max(11px, var(--eauto-note-size, 10px));
+  font-size: var(--eauto-note-size, 12.5px);
 }
 
 .e-auto-page__trust {
@@ -1138,18 +1196,19 @@
 }
 
 .e-auto-page__trust-layout .e-auto-page__trust-grid article > strong {
-  font-size: var(--eauto-value-size, 24px);
+  font-size: var(--eauto-value-size, 38px);
 }
 
 .e-auto-page__trust-layout .e-auto-page__trust-grid article > strong span {
   margin-left: 7px;
   color: var(--eauto-blue);
-  font-size: var(--eauto-item-text-size, 11px);
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .e-auto-page__trust-layout .e-auto-page__trust-grid article > p {
-  font-size: max(12px, var(--eauto-item-text-size, 11px));
+  font-size: var(--eauto-item-text-size, 14px);
+  line-height: 1.65;
 }
 
 /* 12 — FAQ */
@@ -1174,7 +1233,7 @@
 .e-auto-page__faq .e-auto-page__section-heading h2 {
   max-width: none;
   margin-bottom: 0;
-  font-size: clamp(32px, 3vw, 38px);
+  font-size: clamp(32px, 3vw, var(--eauto-heading-size, 40px));
   line-height: 1.18;
 }
 
@@ -1209,7 +1268,7 @@
   background: #fff;
   color: var(--eauto-ink);
   cursor: pointer;
-  font-size: 15px;
+  font-size: var(--eauto-item-heading-size, 15.5px);
   font-weight: 600;
   line-height: 1.4;
   text-align: left;
@@ -1318,7 +1377,7 @@
 .e-auto-page__faq-answer > p {
   margin-bottom: 10px;
   color: var(--eauto-copy);
-  font-size: 14px;
+  font-size: var(--eauto-item-text-size, 14px);
   line-height: 1.7;
 }
 
@@ -1454,7 +1513,7 @@
   }
 
   .e-auto-page__faq .e-auto-page__section-heading h2 {
-    font-size: clamp(28px, 8vw, 38px);
+    font-size: clamp(28px, 8vw, var(--eauto-heading-size, 40px));
   }
 
   .e-auto-page__faq-question {
@@ -1557,11 +1616,11 @@
   }
 
   .e-auto-page__stats strong {
-    font-size: var(--eauto-value-size, 15px);
+    font-size: min(15px, var(--eauto-value-size, 19px));
   }
 
   .e-auto-page__stats span {
-    font-size: max(12px, var(--eauto-item-text-size, 11px));
+    font-size: min(11px, var(--eauto-item-text-size, 12px));
   }
 
   .e-auto-page__final-actions,
