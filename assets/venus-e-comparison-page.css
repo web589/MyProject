@@ -2715,7 +2715,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1.9fr) minmax(280px, 1fr);
   align-items: start;
-  gap: 40px;
+  column-gap: 40px;
+  row-gap: 0;
   margin-bottom: 30px;
 }
 
@@ -3561,6 +3562,31 @@
   color: #fff !important;
 }
 
+/* Match the capacity reference: keep the eyebrow in title case and align the
+ * supporting copy with the heading without changing the panel's vertical gap. */
+.section-bw-compare-capacity .bw-capacity-map__intro .bw-eyebrow {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+@media (min-width: 900px) {
+  .section-bw-compare-capacity .bw-capacity-map__heading-row {
+    align-items: center;
+  }
+}
+
+/* Kaufkriterien reference: keep the supporting line under the main heading
+ * while retaining the two-column card grid and its image spacing. */
+#kaufkriterien.section-bw-compare-card-grid .bw-content-grid__intro {
+  display: block;
+  max-width: 520px;
+}
+
+#kaufkriterien.section-bw-compare-card-grid .bw-content-grid__intro .bw-rte {
+  margin-top: 14px;
+  padding-top: 0;
+}
+
 @media (max-width: 899px) {
   .section-bw-storage-hero .bw-hero h1 {
     font-size: min(var(--bw-compare-heading-size, 52px), 46px);
@@ -3597,4 +3623,21 @@
   .section-bw-compare-models .bw-models--final .bw-models__support h3 {
     font-size: 24px;
   }
+}
+
+/* Keep the two final support CTAs' colors unchanged while hovering. */
+.section-bw-compare-models .bw-models--final .bw-models__support-actions .bw-button--primary:hover {
+  background-position: left center;
+  color: #fff;
+}
+
+.section-bw-compare-models .bw-models--final .bw-models__support-actions .bw-button--secondary:hover {
+  border-color: var(--bw-blue);
+  background: #fff;
+  color: var(--bw-blue);
+}
+
+/* Keep the Smart Energy CTA's original blue unchanged on hover. */
+.section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-button--primary:hover {
+  filter: none;
 }
