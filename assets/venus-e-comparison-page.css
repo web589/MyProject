@@ -3443,6 +3443,124 @@
   font-weight: 500;
 }
 
+/* Final VENUS E comparison-page color contract.
+ * Keep this after the legacy UI-reference rules: those rules use hard-coded
+ * colors and several target rich-text paragraphs directly. */
+.main-content--venus-e .section-bw-storage-hero .bw-hero__pill,
+.main-content--venus-e .section-bw-storage-hero .bw-hero__heading-line--accent,
+.main-content--venus-e .section-bw-storage-hero .bw-actions .bw-button--secondary,
+.main-content--venus-e .section-bw-storage-hero .bw-hero__check,
+.main-content--venus-e .section-bw-compare-models .bw-models__intro .bw-eyebrow,
+.main-content--venus-e .section-bw-compare-models .bw-model-card__capacity,
+.main-content--venus-e .section-bw-compare-models .bw-model-card__button,
+.main-content--venus-e .section-bw-compare-scenarios .bw-scenarios__intro .bw-eyebrow,
+.main-content--venus-e .section-bw-compare-scenarios .bw-scenario-card__link,
+.main-content--venus-e .section-bw-compare-card-grid .bw-content-grid__intro .bw-eyebrow,
+.main-content--venus-e .section-bw-compare-card-grid .bw-content-card__number,
+.main-content--venus-e .section-bw-compare-card-grid .bw-content-card__tags li,
+.main-content--venus-e .section-bw-compare-table .bw-table-product__price,
+.main-content--venus-e .section-bw-compare-table .bw-specs__product-link,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__number,
+.main-content--venus-e .section-bw-storage-faq .bw-faq__intro .bw-eyebrow,
+.main-content--venus-e .section-bw-storage-faq .bw-faq__view-all-link {
+  color: var(--blue);
+}
+
+.main-content--venus-e .section-bw-storage-hero .bw-hero h1,
+.main-content--venus-e .section-bw-storage-hero .bw-hero__heading-line,
+.main-content--venus-e .section-bw-compare-models .bw-models__intro h2,
+.main-content--venus-e .section-bw-compare-models .bw-model-card__body h3,
+.main-content--venus-e .section-bw-compare-models .bw-model-card__price strong,
+.main-content--venus-e .section-bw-compare-models .bw-models__support h3,
+.main-content--venus-e .section-bw-compare-scenarios .bw-scenarios__intro h2,
+.main-content--venus-e .section-bw-compare-scenarios .bw-scenario-card__body h3,
+.main-content--venus-e .section-bw-compare-card-grid .bw-content-grid__intro h2,
+.main-content--venus-e .section-bw-compare-card-grid .bw-content-card h3,
+.main-content--venus-e .section-bw-compare-table .bw-specs__intro h2,
+.main-content--venus-e .section-bw-compare-table .bw-specs__table thead .bw-specs__label-cell,
+.main-content--venus-e .section-bw-compare-table .bw-specs__value,
+.main-content--venus-e .section-bw-compare-table .bw-table-product__name,
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-map__intro h2,
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-row__label h3,
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-row__point strong,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__intro h2,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__feature h3,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__app-copy h3,
+.main-content--venus-e .section-bw-storage-faq .bw-faq__intro h2,
+.main-content--venus-e .section-bw-storage-faq .bw-faq__item summary {
+  color: var(--ink);
+}
+
+/* The legacy selector includes p, so this needs the same direct target. */
+.main-content--venus-e .section-bw-storage-hero .bw-lead,
+.main-content--venus-e .section-bw-storage-hero .bw-lead p,
+.main-content--venus-e .section-bw-compare-models .bw-models__intro .bw-rte,
+.main-content--venus-e .section-bw-compare-models .bw-models__intro .bw-rte p,
+.main-content--venus-e .section-bw-compare-scenarios .bw-scenarios__intro .bw-rte,
+.main-content--venus-e .section-bw-compare-scenarios .bw-scenarios__intro .bw-rte p,
+.main-content--venus-e .section-bw-compare-card-grid .bw-content-grid__intro .bw-rte,
+.main-content--venus-e .section-bw-compare-card-grid .bw-content-grid__intro .bw-rte p,
+.main-content--venus-e .section-bw-compare-table .bw-specs__intro .bw-rte,
+.main-content--venus-e .section-bw-compare-table .bw-specs__intro .bw-rte p,
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-map__text,
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-map__text p,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__intro .bw-rte,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__intro .bw-rte p,
+.main-content--venus-e .section-bw-storage-faq .bw-faq__intro p {
+  color: var(--gray) !important;
+}
+
+.main-content--venus-e .section-bw-storage-hero .bw-hero__stats--checklist .bw-hero__stat strong,
+.main-content--venus-e .section-bw-compare-models .bw-model-card__badge,
+.main-content--venus-e .section-bw-compare-models .bw-model-card__description,
+.main-content--venus-e .section-bw-compare-models .bw-model-card__description p,
+.main-content--venus-e .section-bw-compare-models .bw-model-card__price,
+.main-content--venus-e .section-bw-compare-models .bw-models__support :is(p, li),
+.main-content--venus-e .section-bw-compare-scenarios .bw-scenario-card__body p,
+.main-content--venus-e .section-bw-compare-card-grid .bw-content-card__text,
+.main-content--venus-e .section-bw-compare-card-grid .bw-content-card__text p,
+.main-content--venus-e .section-bw-compare-table .bw-specs__label-cell,
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-row__label p,
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-map__footnote,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__feature p,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-rte,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-rte p,
+.main-content--venus-e .section-bw-storage-faq .bw-faq__answer,
+.main-content--venus-e .section-bw-storage-faq .bw-faq__answer p {
+  color: var(--gray-dark);
+}
+
+.main-content--venus-e .section-bw-compare-trust .bw-compare-trust__eyebrow {
+  color: #4db2ff !important;
+}
+
+.main-content--venus-e .section-bw-compare-trust .bw-compare-trust__copy h2,
+.main-content--venus-e .section-bw-compare-trust .bw-compare-trust__stat strong {
+  color: #fff;
+}
+
+.main-content--venus-e .section-bw-compare-trust :is(.bw-compare-trust__intro, .bw-compare-trust__stat p) {
+  color: #8fa1b3 !important;
+}
+
+/* These two legacy declarations already use !important. */
+.main-content--venus-e .section-bw-compare-models .bw-model-card__badge,
+.main-content--venus-e .section-bw-compare-models .bw-model-card__price {
+  color: var(--gray-dark) !important;
+}
+
+/* Preserve intentional inverse text on blue UI elements. */
+.main-content--venus-e .section-bw-storage-hero .bw-hero__heading-line--accent {
+  color: var(--blue);
+}
+
+.main-content--venus-e .section-bw-compare-models .bw-model-card--highlight .bw-model-card__badge,
+.main-content--venus-e .section-bw-compare-models .bw-model-card:hover .bw-model-card__badge,
+.main-content--venus-e .section-bw-compare-models .bw-model-card:focus-within .bw-model-card__badge,
+.main-content--venus-e .section-bw-compare-models .bw-models--final .bw-model-card__button {
+  color: #fff !important;
+}
+
 @media (max-width: 899px) {
   .section-bw-storage-hero .bw-hero h1 {
     font-size: min(var(--bw-compare-heading-size, 52px), 46px);
