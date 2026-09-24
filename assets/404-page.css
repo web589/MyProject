@@ -125,26 +125,34 @@
     transition: all 0.18s ease;
   }
 
-  .venus-404__button--primary {
-    background: linear-gradient(90deg, #0099FE, #00C6FF);
-    color: #fff;
+  .venus-404 .venus-404__button--primary {
+    border: 0 !important;
+    background: linear-gradient(90deg, #0099FE, #00C6FF) !important;
+    color: #fff !important;
+    box-shadow: none;
   }
 
-  .venus-404__button--primary:hover,
-  .venus-404__button--primary:focus-visible {
+  .venus-404 .venus-404__button--primary:hover,
+  .venus-404 .venus-404__button--primary:focus-visible {
+    background: linear-gradient(90deg, #0099FE, #00C6FF) !important;
+    color: #fff !important;
     filter: brightness(1.06);
   }
 
-  .venus-404__button--ghost {
-    border-color: #9BD8FF;
-    background: #fff;
-    color: var(--venus-404-blue);
+  .venus-404 .venus-404__button--ghost,
+  .venus-404 .venus-404__support-actions .venus-404__button--ghost {
+    border: 1px solid #9BD8FF !important;
+    background: #fff !important;
+    color: var(--venus-404-blue) !important;
   }
 
-  .venus-404__button--ghost:hover,
-  .venus-404__button--ghost:focus-visible {
-    border-color: var(--venus-404-blue);
-    background: var(--venus-404-blue-soft);
+  .venus-404 .venus-404__button--ghost:hover,
+  .venus-404 .venus-404__button--ghost:focus-visible,
+  .venus-404 .venus-404__support-actions .venus-404__button--ghost:hover,
+  .venus-404 .venus-404__support-actions .venus-404__button--ghost:focus-visible {
+    border-color: var(--venus-404-blue) !important;
+    background: var(--venus-404-blue-soft) !important;
+    color: var(--venus-404-blue) !important;
   }
 
   .venus-404__button:focus-visible,
