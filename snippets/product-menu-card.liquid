@@ -85,7 +85,13 @@
       assign badge_tone = 'blue'
     endif
 
-    assign quantity_label = quantity | default: 1 | append: '×'
+    assign show_quantity_label = true
+    if category_handle == 'zubehor'
+      assign show_quantity_label = false
+    endif
+    if show_quantity_label
+      assign quantity_label = quantity | default: 1 | append: '×'
+    endif
   endif
 -%}
 
@@ -93,7 +99,7 @@
   <a
     class="mega-menu-products__card"
     href="{{ product_link | escape }}"
-    aria-label="{{ quantity_label }} {{ card_title | escape }}"
+    aria-label="{% if show_quantity_label %}{{ quantity_label }} {% endif %}{{ card_title | escape }}"
   >
     <div class="mega-menu-products__card-media">
       {%- if card_badge != blank -%}
@@ -119,7 +125,7 @@
     </div>
 
     <div class="mega-menu-products__card-content">
-      <h3 class="mega-menu-products__card-title">{{ quantity_label }} {{ card_title | escape }}</h3>
+      <h3 class="mega-menu-products__card-title">{% if show_quantity_label %}{{ quantity_label }} {% endif %}{{ card_title | escape }}</h3>
       {%- if card_specs != blank -%}
         <p class="mega-menu-products__card-specs">{{ card_specs | escape }}</p>
       {%- endif -%}

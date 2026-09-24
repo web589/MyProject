@@ -274,7 +274,7 @@
                         <div class="mega-menu-products__cards" role="list">
                           {%- for mega_variant in menu_block.settings.product.variants limit: 3 -%}
                             <div role="listitem">
-                              {%- render 'product-menu-card', block: menu_block, variant: mega_variant, quantity: forloop.index -%}
+                              {%- render 'product-menu-card', block: menu_block, variant: mega_variant, quantity: forloop.index, category_handle: product_category_handle -%}
                             </div>
                           {%- endfor -%}
                         </div>
