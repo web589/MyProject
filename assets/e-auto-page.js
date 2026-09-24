@@ -547,6 +547,10 @@
 
     setText(root, '[data-eauto-result-range]', range);
     setText(root, '[data-eauto-recommendations-summary]', interpolateTemplate(copy.summaryTemplate, templateValues));
+    setText(root, '[data-eauto-card-hint]', interpolateTemplate(
+      readDataValue(pageMarker.dataset, 'eautoRecommendationHintTemplate', 'Empfohlen für deine Berechnung: [[range]]'),
+      templateValues
+    ));
 
     if (primary) {
       setText(root, '[data-eauto-result-model]', interpolateTemplate(

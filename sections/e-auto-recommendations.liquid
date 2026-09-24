@@ -49,6 +49,7 @@
   data-eauto-alternative-label="{{ section.settings.alternative_label | escape }}"
   data-eauto-variant-unavailable-label="{{ section.settings.variant_unavailable_label | escape }}"
   data-eauto-summary-template="{{ section.settings.recommendations_summary_template | escape }}"
+  data-eauto-recommendation-hint-template="{{ section.settings.recommendation_hint_template | escape }}"
   aria-labelledby="{{ page_id }}-recommendations-heading"
 >
   <div class="e-auto-page__container">
@@ -88,6 +89,7 @@
             <p class="e-auto-page__product-card-variant" data-eauto-card-variant></p>
             <p class="e-auto-page__product-card-capacity" data-eauto-card-capacity></p>
             <p class="e-auto-page__product-card-description" data-eauto-card-description hidden></p>
+            {% if forloop.first %}<p class="e-auto-page__product-card-hint" data-eauto-card-hint>{{ section.settings.recommendation_hint_template }}</p>{% endif %}
             <div class="e-auto-page__product-card-meta">
               <strong data-eauto-card-price>–</strong>
               <span data-eauto-card-availability>{{ section.settings.card_loading_label }}</span>
@@ -97,6 +99,9 @@
         </article>
       {% endfor %}
     </div>
+    {% if section.settings.comparison_cta_label != blank %}
+      <a class="e-auto-page__comparison-cta" href="{{ section.settings.comparison_cta_link | default: '/pages/venus-e-vergleich' }}">{{ section.settings.comparison_cta_label }}</a>
+    {% endif %}
     {% if section.settings.recommendations_note != blank %}<p class="e-auto-page__note">{{ section.settings.recommendations_note }}</p>{% endif %}
   </div>
   <script type="application/json" data-eauto-product-data>
@@ -174,6 +179,9 @@
     {"type":"textarea","id":"recommendations_text","label":"推荐文本","default":"Die drei Konfigurationen werden direkt aus deiner Auswahl und den aktuellen Shopify-Produktdaten zusammengestellt."},
     {"type":"textarea","id":"recommendations_summary_template","label":"推荐摘要模板","info":"Verfügbare Variablen: range, lower, upper, unit.","default":"Kapazitätsbereich: [[range]]. Preise und Verfügbarkeit werden direkt aus Shopify geladen."},
     {"type":"textarea","id":"recommendations_note","label":"推荐备注","default":"Preise, Varianten, Bilder und Verfügbarkeit werden direkt aus Shopify gelesen."},
+    {"type":"text","id":"recommendation_hint_template","label":"主推荐卡提示","info":"Verfügbare Variablen: range, lower, upper, unit.","default":"Empfohlen für deine Berechnung: [[range]]"},
+    {"type":"text","id":"comparison_cta_label","label":"Vergleichs-CTA-Text","default":"Kurze Strecken? Auch der VENUS E Mini (2 – 6 kWh) passt – alle Modelle im direkten Vergleich ansehen →"},
+    {"type":"url","id":"comparison_cta_link","label":"Vergleichs-CTA-Link"},
     {"type":"text","id":"card_recommendation_label","label":"卡片推荐标签","default":"EMPFOHLENE KONFIGURATION"},
     {"type":"text","id":"alternative_label","label":"备选标签","default":"ALTERNATIVE KONFIGURATION"},
     {"type":"text","id":"variant_unavailable_label","label":"变体不可用标签","default":"Variante nicht gefunden"},

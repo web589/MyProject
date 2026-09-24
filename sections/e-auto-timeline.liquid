@@ -7,24 +7,28 @@
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.timeline_eyebrow }}</p>
       <h2 id="{{ page_id }}-timeline-heading">{{ section.settings.timeline_heading }}{% if section.settings.timeline_heading_accent != blank %} <span>{{ section.settings.timeline_heading_accent }}</span>{% endif %}</h2>
-      <p>{{ section.settings.timeline_text }}</p>
+      {% if section.settings.timeline_text != blank %}<p>{{ section.settings.timeline_text }}</p>{% endif %}
     </div>
-    <div class="e-auto-page__timeline-grid" role="list">
-      {% for block in section.blocks %}
-        <article class="e-auto-page__timeline-item" role="listitem" {{ block.shopify_attributes }}>
-          <div class="e-auto-page__timeline-time">{{ block.settings.time }}</div>
-          <div class="e-auto-page__media e-auto-page__media--timeline">
-            {% if block.settings.image != blank %}
-              {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(min-width: 960px) 25vw, 90vw', alt: block.settings.image_alt }}
-            {% else %}
-              <div class="e-auto-page__placeholder">{{ block.settings.image_placeholder }}</div>
-            {% endif %}
-          </div>
-          <h3>{{ block.settings.heading }}</h3>
-          <p>{{ block.settings.text }}</p>
-          {% if block.settings.badge != blank %}<span class="e-auto-page__timeline-badge">{{ block.settings.badge }}</span>{% endif %}
-        </article>
-      {% endfor %}
+    <div class="e-auto-page__timeline-frame">
+      <div class="e-auto-page__timeline-grid" role="list">
+        {% for block in section.blocks %}
+          <article class="e-auto-page__timeline-item" role="listitem" {{ block.shopify_attributes }}>
+            <div class="e-auto-page__timeline-time">{{ block.settings.time }}</div>
+            <div class="e-auto-page__media e-auto-page__media--timeline">
+              {% if block.settings.image != blank %}
+                {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(min-width: 960px) 25vw, 90vw', alt: block.settings.image_alt }}
+              {% else %}
+                <div class="e-auto-page__placeholder">{{ block.settings.image_placeholder }}</div>
+              {% endif %}
+              {% if block.settings.badge != blank %}<span class="e-auto-page__timeline-badge">{{ block.settings.badge }}</span>{% endif %}
+            </div>
+            <div class="e-auto-page__timeline-copy">
+              <h3>{{ block.settings.heading }}</h3>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </section>
