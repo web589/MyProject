@@ -31,7 +31,7 @@
       <div class="bw-smart-energy__app-copy">
         <h3>{{ section.settings.app_heading | escape }}</h3>
         {% if section.settings.app_text != blank %}<div class="bw-rte">{{ section.settings.app_text }}</div>{% endif %}
-        {% if section.settings.app_label != blank and section.settings.app_link != blank %}<a class="bw-button bw-button--primary" href="{{ section.settings.app_link }}">{{ section.settings.app_label | escape }}</a>{% endif %}
+        {% if section.settings.app_label != blank and section.settings.app_link != blank %}<a class="bw-button bw-button--primary" href="{{ section.settings.app_link }}">{{ section.settings.app_label | replace: ' →', '' | escape }}<span class="bw-button__arrow" aria-hidden="true">&rarr;</span></a>{% endif %}
       </div>
       <div class="bw-smart-energy__app-media">
         {% if section.settings.app_video != blank %}

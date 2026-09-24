@@ -132,7 +132,7 @@
         <div class="bw-models__support-actions">
           {% if section.settings.support_label != blank and section.settings.support_link != blank %}
             <a class="bw-button bw-button--primary" href="{{ section.settings.support_link }}">
-              {{ section.settings.support_label | escape }} <span aria-hidden="true">&rarr;</span>
+              {{ section.settings.support_label | escape }}<span class="bw-button__arrow" aria-hidden="true">&rarr;</span>
             </a>
           {% endif %}
           {% if section.settings.support_compare_label != blank and section.settings.support_compare_link != blank %}

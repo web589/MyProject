@@ -3718,11 +3718,14 @@
   overflow-wrap: anywhere;
 }
 
-.main-content--venus-e .section-bw-storage-hero .bw-actions .bw-button--primary,
-.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-button--primary {
-  gap: 0.4em;
-}
-
 .main-content--venus-e .section-bw-storage-hero .bw-actions .bw-button--primary::after {
   content: none;
+}
+
+.main-content--venus-e .section-bw-storage-hero .bw-button__arrow,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-button__arrow,
+.main-content--venus-e .section-bw-compare-models .bw-models--final .bw-button__arrow {
+  display: inline-block;
+  flex: 0 0 auto;
+  margin-left: 0.4em;
 }
