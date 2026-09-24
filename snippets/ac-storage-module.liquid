@@ -198,14 +198,18 @@
               </article>
             {% elsif block.type == 'stat' %}
               {% assign why_stat_index = why_stat_index | plus: 1 %}
-              <article class="ac-storage-page__why-stat" style="--ac-card-title-size: {{ block.settings.title_size | default: 18 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-min-height: {{ block.settings.card_height | default: 188 }}px;" {{ block.shopify_attributes }}>
+              <article class="ac-storage-page__why-stat" style="--ac-card-title-size: {{ block.settings.title_size | default: 18 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-min-height: {{ block.settings.card_height | default: 188 }}px; --ac-icon-size: {{ block.settings.icon_size | default: 24 }}px;" {{ block.shopify_attributes }}>
                 <span class="ac-storage-page__icon ac-storage-page__why-stat-icon" aria-hidden="true">
-                  {% case why_stat_index %}
-                    {% when 1 %}
-                      <svg viewBox="0 0 24 24"><path d="M3 19h18M4 15l4-4 3 3 6-7 3 2"/></svg>
-                    {% when 2 %}
-                      <svg viewBox="0 0 24 24"><rect x="3.5" y="7" width="16" height="10" rx="1.5"/><path d="M19.5 10h2v4h-2M8 9.5v5M12 9.5v5M16 9.5v5"/></svg>
-                  {% endcase %}
+                  {% if block.settings.icon != blank %}
+                    {{ block.settings.icon | image_url: width: 160 | image_tag: class: 'ac-storage-page__icon-image', loading: 'lazy', widths: '32, 48, 64, 96, 160', sizes: '64px', alt: '' }}
+                  {% else %}
+                    {% case why_stat_index %}
+                      {% when 1 %}
+                        <svg viewBox="0 0 24 24"><path d="M3 19h18M4 15l4-4 3 3 6-7 3 2"/></svg>
+                      {% when 2 %}
+                        <svg viewBox="0 0 24 24"><rect x="3.5" y="7" width="16" height="10" rx="1.5"/><path d="M19.5 10h2v4h-2M8 9.5v5M12 9.5v5M16 9.5v5"/></svg>
+                    {% endcase %}
+                  {% endif %}
                 </span>
                 <h3>{{ block.settings.title }}</h3>
                 <p>{{ block.settings.body }}</p>
@@ -225,7 +229,13 @@
     <section id="vergleich" class="ac-storage-page ac-storage-page__section ac-storage-page__comparison" data-ac-storage-page style="{{ ac_storage_style }} --ac-table-size: {{ section.settings.table_text_size | default: 15 }}px;" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
-        <h2>{{ section.settings.heading }}</h2>
+        {% assign comparison_heading_accent = section.settings.heading_accent | default: 'was ist der Unterschied?' %}
+        {% if comparison_heading_accent != blank and section.settings.heading contains comparison_heading_accent %}
+          {% assign comparison_heading_parts = section.settings.heading | split: comparison_heading_accent %}
+          <h2>{{ comparison_heading_parts[0] }}<span class="ac-storage-page__heading-accent">{{ comparison_heading_accent }}</span>{{ comparison_heading_parts[1] }}</h2>
+        {% else %}
+          <h2>{{ section.settings.heading }}</h2>
+        {% endif %}
         <p class="ac-storage-page__subtext">{{ section.settings.subtext }}</p>
         <div class="ac-storage-page__table-wrap">
           <table>
@@ -398,7 +408,13 @@
     <section id="faq" class="ac-storage-page ac-storage-page__section ac-storage-page__faq" data-ac-storage-page style="{{ ac_storage_style }} --ac-faq-question-size: {{ section.settings.question_size | default: 16 }}px; --ac-faq-answer-size: {{ section.settings.answer_size | default: 14 }}px;" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>
-        <h2>{{ section.settings.heading }}</h2>
+        {% assign faq_heading_accent = section.settings.heading_accent | default: 'AC-gekoppelten Speicher' %}
+        {% if faq_heading_accent != blank and section.settings.heading contains faq_heading_accent %}
+          {% assign faq_heading_parts = section.settings.heading | split: faq_heading_accent %}
+          <h2>{{ faq_heading_parts[0] }}<span class="ac-storage-page__heading-accent">{{ faq_heading_accent }}</span>{{ faq_heading_parts[1] }}</h2>
+        {% else %}
+          <h2>{{ section.settings.heading }}</h2>
+        {% endif %}
         <div class="ac-storage-page__faq-list">
           {% for block in section.blocks %}
             {% if block.type == 'faq' and block.settings.question != blank %}
