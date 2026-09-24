@@ -11,8 +11,10 @@
     --venus-404-body-size: 16px;
     --venus-404-eyebrow-size: 13px;
     --venus-404-item-heading-size: 18px;
-    --venus-404-item-text-size: 13px;
-    --venus-404-control-size: 14px;
+    --venus-404-item-text-size: 13.5px;
+    --venus-404-control-size: 14.5px;
+    --venus-404-chip-label-size: 12.5px;
+    --venus-404-chip-size: 13px;
     --venus-404-section-spacing: 72px;
     --venus-404-number-size: 140px;
     --venus-404-icon-size: 24px;
@@ -107,34 +109,30 @@
 
   .venus-404__button {
     display: inline-flex;
-    min-height: 47px;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    border: 1px solid transparent;
+    border: 0;
     border-radius: 8px;
     padding: 14px 30px;
     cursor: pointer;
-    font: inherit;
+    font-family: inherit;
     font-size: var(--venus-404-control-size, 14.5px);
     font-weight: 500;
-    line-height: 1.2;
+    line-height: normal;
     text-align: center;
     text-decoration: none;
-    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+    transition: all 0.18s ease;
   }
 
   .venus-404__button--primary {
-    border-color: var(--venus-404-blue);
-    background: var(--venus-404-blue);
+    background: linear-gradient(90deg, #0099FE, #00C6FF);
     color: #fff;
   }
 
   .venus-404__button--primary:hover,
   .venus-404__button--primary:focus-visible {
-    border-color: #0089e4;
-    background: #0089e4;
-    box-shadow: 0 4px 14px rgba(0, 153, 254, 0.18);
+    filter: brightness(1.06);
   }
 
   .venus-404__button--ghost {
@@ -312,7 +310,7 @@
     align-self: center;
     margin-right: 6px;
     color: var(--venus-404-gray-dark);
-    font-size: var(--venus-404-control-size, 12.5px);
+    font-size: var(--venus-404-chip-label-size, 12.5px);
     font-weight: 600;
   }
 
@@ -323,10 +321,10 @@
     cursor: pointer;
     background: #fff;
     color: var(--venus-404-gray-dark);
-    font: inherit;
-    font-size: var(--venus-404-control-size, 13px);
+    font-family: inherit;
+    font-size: var(--venus-404-chip-size, 13px);
     font-weight: 500;
-    line-height: 1.35;
+    line-height: normal;
     transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
   }
 
@@ -379,7 +377,7 @@
     margin-top: 22px;
     font-size: var(--venus-404-item-heading-size, 18px);
     font-weight: 600;
-    line-height: 1.35;
+    line-height: normal;
   }
 
   .venus-404__card p {
@@ -397,7 +395,7 @@
     color: var(--venus-404-blue);
     font-size: var(--venus-404-control-size, 13.5px);
     font-weight: 500;
-    line-height: 1.4;
+    line-height: normal;
     text-decoration: none;
   }
 
