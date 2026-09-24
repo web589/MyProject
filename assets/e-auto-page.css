@@ -576,7 +576,9 @@
 
 .e-auto-page__profile-tabs {
   display: grid;
+  grid-auto-rows: 126px;
   gap: 0;
+  align-content: start;
 }
 
 .e-auto-page__profile-tab {
@@ -1642,6 +1644,10 @@
 
   .e-auto-page__profile-tab.is-active {
     transform: none;
+  }
+
+  .e-auto-page__profile-tabs {
+    grid-auto-rows: auto;
   }
 
   .e-auto-page__profile-tab {
