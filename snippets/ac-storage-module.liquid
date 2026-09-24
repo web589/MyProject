@@ -471,9 +471,10 @@
     </section>
 
   {% when 'final' %}
-    <section id="abschluss" class="ac-storage-page ac-storage-page__section ac-storage-page__final" data-ac-storage-page style="{{ ac_storage_style }} --ac-final-heading-size: {{ section.settings.final_heading_size | default: 30 }}px; --ac-final-copy-size: {{ section.settings.final_copy_size | default: 15 }}px;" {{ section.shopify_attributes }}>
+    <section id="abschluss" class="ac-storage-page ac-storage-page__section ac-storage-page__final" data-ac-storage-page style="{{ ac_storage_style }} --ac-final-heading-size: {{ section.settings.final_heading_size | default: 30 }}px; --ac-final-copy-size: {{ section.settings.final_copy_size | default: 15.5 }}px;" {{ section.shopify_attributes }}>
       <div class="ac-storage-page__wrap">
         <div class="ac-storage-page__final-card">
+          {% if section.settings.eyebrow != blank %}<p class="ac-storage-page__eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
           <h2>{{ section.settings.heading }}</h2>
           <p>{{ section.settings.copy }}</p>
           <div class="ac-storage-page__actions">

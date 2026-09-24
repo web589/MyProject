@@ -469,9 +469,9 @@
         "recommendations_eyebrow": "Deine Optionen",
         "recommendations_heading": "Welche VENUS E Lösung",
         "recommendations_heading_accent": "passt dazu?",
-        "recommendations_text": "Die drei Konfigurationen werden direkt aus deiner Auswahl und den aktuellen Shopify-Produktdaten zusammengestellt.",
-        "recommendations_summary_template": "Kapazitätsbereich: [[range]]. Preise und Verfügbarkeit werden direkt aus Shopify geladen.",
-        "recommendations_note": "Preise, Varianten, Bilder und Verfügbarkeit werden direkt aus Shopify gelesen.",
+        "recommendations_text": "",
+        "recommendations_summary_template": "",
+        "recommendations_note": "",
         "recommendation_hint_template": "Empfohlen für deine Berechnung: [[range]]",
         "comparison_cta_label": "Kurze Strecken? Auch der VENUS E Mini (2 – 6 kWh) passt – alle Modelle im direkten Vergleich ansehen →",
         "comparison_cta_link": "/pages/venus-e-vergleich",
@@ -542,7 +542,7 @@
           "type": "install_step",
           "settings": {
             "title": "VENUS E auf AC-Seite ergänzen",
-            "text": "Der Speicher wird auf der Hausnetzseite ergänzt."
+            "text": "Keine Eingriffe in die Gleichstromseite"
           }
         },
         "install-smart-meter": {
@@ -562,7 +562,7 @@
         "installation_eyebrow": "Installation & Nachrüstung",
         "installation_heading": "Wallbox, Hausnetz & bestehende PV –",
         "installation_heading_accent": "alles bleibt wie es ist",
-        "installation_text": "Der VENUS E wird AC-gekoppelt auf der Haushaltsseite ergänzt. Die Wallbox regelt weiterhin die Ladeleistung am Fahrzeug.",
+        "installation_text": "",
         "installation_image_alt": "Bestehende PV-Anlage, Hausnetz und Wallbox mit VENUS E",
         "installation_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png",
         "installation_image_placeholder": "Bestehende PV-Anlage auswählen",
@@ -573,28 +573,28 @@
         "installation_step_image": "shopify://shop_images/MARSTEK_VENUS_E_Solarspeicher_Serie_Produkt_bersicht.webp",
         "installation_step_image_placeholder": "Nachrüstungsbild auswählen",
         "existing_pv_eyebrow": "Bestehende PV-Anlage",
-        "installation_card_heading": "Alles läuft über dein Hausnetz",
-        "installation_card_text": "Bestehende PV, Hausnetz und Wallbox bleiben als getrennte Komponenten erhalten.",
-        "installation_point_1": "Keine direkte Verbindung vom Speicher zum Auto",
-        "installation_point_2": "Die Ladeleistung wird weiterhin von der Wallbox geregelt",
+        "installation_card_heading": "Du hast schon PV? Perfekt.",
+        "installation_card_text": "Der VENUS E kommt zu deiner bestehenden Anlage dazu – Module, Wechselrichter und Ausrichtung bleiben unangetastet.",
+        "installation_point_1": "Kein Austausch des Wechselrichters nötig",
+        "installation_point_2": "Funktioniert mit gängigen PV-Setups",
         "installation_point_3": "Für die Messung und Regelung kann ein kompatibles Smart Meter erforderlich sein",
         "house_eyebrow": "Wallbox & Hausnetz",
         "house_heading": "Alles läuft über dein Hausnetz",
-        "house_text": "Der VENUS E wird AC-gekoppelt auf der Hausnetzseite ergänzt. Deine Wallbox bleibt die Schnittstelle zum Auto.",
+        "house_text": "",
         "house_point_1": "Kompatibel mit bestehenden Wallboxen",
-        "house_point_2": "Die Ladeleistung wird weiterhin von der Wallbox geregelt",
+        "house_point_2": "Ladeleistung weiterhin von der Wallbox geregelt",
         "steps_eyebrow": "AC-gekoppelt nachrüstbar",
         "steps_heading": "Nachrüsten in drei Schritten",
-        "steps_text": "Bestehende Komponenten bleiben erhalten. Der Speicher ergänzt dein Hausnetz auf der AC-Seite.",
+        "steps_text": "",
         "eyebrow_size": 13,
-        "item_heading_size": 21,
-        "item_text_size": 14,
+        "item_heading_size": 24,
+        "item_text_size": 14.5,
         "control_size": 12,
         "value_size": 34,
         "note_size": 13,
         "heading_size": 40,
         "copy_size": 16,
-        "installation_media_height": 260,
+        "installation_media_height": 360,
         "installation_media_width": 100,
         "section_spacing": 68
       }
@@ -605,8 +605,10 @@
         "benefit-self-use": {
           "type": "benefit",
           "settings": {
+            "value_prefix": "",
             "value": "bis 80",
             "value_accent": "%",
+            "value_suffix": "*",
             "title": "Mehr Eigenverbrauch",
             "text": "Mit Speicher nutzt du einen deutlich größeren Teil deines Solarstroms selbst – statt ihn für Cent-Beträge einzuspeisen."
           }
@@ -614,8 +616,10 @@
         "benefit-grid": {
           "type": "benefit",
           "settings": {
-            "value": "−",
-            "value_accent": "30",
+            "value_prefix": "−",
+            "value": "30 %",
+            "value_accent": "",
+            "value_suffix": "*",
             "title": "Weniger Netzbezug",
             "text": "Haushalt und E-Auto greifen seltener auf Netzstrom zurück – gerade in den Abend- und Winterstunden."
           }
@@ -623,8 +627,10 @@
         "benefit-time": {
           "type": "benefit",
           "settings": {
+            "value_prefix": "",
             "value": "24",
             "value_accent": "h",
+            "value_suffix": "",
             "title": "Solarstrom später nutzen",
             "text": "Tagsüber produziert, nachts gefahren: Der Speicher verschiebt deinen Solarstrom genau in den Moment, in dem du ihn brauchst."
           }
@@ -639,7 +645,7 @@
         "benefits_eyebrow": "Dein Nutzen",
         "benefits_heading": "Was der Speicher beim Laden",
         "benefits_heading_accent": "wirklich bringt",
-        "benefits_text": "Solarstrom wird zeitlich verschoben und steht dann zur Verfügung, wenn Haushalt und E-Auto ihn brauchen.",
+        "benefits_text": "",
         "benefits_note": "* Orientierungswerte, abhängig von Anlagengröße, Verbrauchsprofil und Speicherkapazität.",
         "eyebrow_size": 13,
         "item_heading_size": 18,
@@ -659,8 +665,8 @@
           "type": "trust",
           "settings": {
             "value": "10",
-            "value_label": "",
-            "text": "Herstellergarantie gemäß den Bedingungen des gewählten VENUS E Modells."
+            "value_label": "Jahre",
+            "text": "Herstellergarantie – für Jahre des täglichen Ladezyklus-Alltags."
           }
         },
         "trust-chemistry": {
@@ -668,14 +674,14 @@
           "settings": {
             "value": "LiFePO₄",
             "value_label": "",
-            "text": "Phosphat-Zellchemie für eine langlebige und robuste Speicherlösung."
+            "text": "Phosphate-Zellenchemie: langlebig, thermisch stabil, sicher im Wohnraum."
           }
         },
         "trust-daily": {
           "type": "trust",
           "settings": {
             "value": "6.000+",
-            "value_label": "",
+            "value_label": "Zyklen",
             "text": "Hohe Zyklenfestigkeit – gemacht für tägliches Speichern und Entladen."
           }
         }
@@ -689,7 +695,7 @@
         "trust_eyebrow": "Vertrauen & Alltagstauglichkeit",
         "trust_heading": "Gebaut für den täglichen Einsatz",
         "trust_heading_accent": "",
-        "trust_text": "Tägliches Laden und Entladen ist ein anspruchsvoller Einsatz. Prüfe die aktuellen Produktdaten und Garantiebedingungen deines gewählten Modells.",
+        "trust_text": "Tägliches Laden und Entladen ist der anspruchsvollste Einsatz für einen Speicher. Der VENUS E ist dafür ausgelegt.",
         "trust_image_alt": "VENUS E Speicher im täglichen Einsatz",
         "trust_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png",
         "trust_image_placeholder": "Alltagsbild mit VENUS E auswählen",
@@ -701,7 +707,7 @@
         "note_size": 13,
         "heading_size": 36,
         "copy_size": 16,
-        "trust_media_height": 360,
+        "trust_media_height": 540,
         "trust_media_width": 100,
         "section_spacing": 68
       }

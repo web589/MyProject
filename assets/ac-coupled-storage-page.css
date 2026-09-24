@@ -293,6 +293,7 @@
 }
 
 .ac-storage-page__link:hover {
+  color: var(--ac-blue);
   text-decoration: underline;
 }
 
@@ -1078,6 +1079,10 @@
   font-size: var(--ac-final-heading-size, 30px);
 }
 
+.ac-storage-page__final-card .ac-storage-page__eyebrow {
+  margin-top: 0 !important;
+}
+
 .ac-storage-page__final-card > p {
   max-width: 100%;
   margin-top: 14px;
@@ -1090,11 +1095,15 @@
   margin-top: 28px;
 }
 
+.ac-storage-page__final-card .ac-storage-page__button {
+  min-height: 0;
+  line-height: normal;
+}
+
 .ac-storage-page__final-card .ac-storage-page__link {
   align-self: center;
   margin-top: 0;
   margin-left: 6px;
-  transform: translateY(-2px);
 }
 
 @media only screen and (max-width: 1200px) {

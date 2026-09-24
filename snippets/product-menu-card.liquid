@@ -4,7 +4,7 @@
   if product != blank
     assign card_variant = variant | default: product.selected_or_first_available_variant
     assign card_title = block.settings.product_title | default: product.title
-    assign card_specs = card_variant.title
+    assign card_specs = block.settings.card_specs | default: card_variant.title
 
     if block.settings.product_title == blank
       if product.title contains ' – '
@@ -128,6 +128,8 @@
       <h3 class="mega-menu-products__card-title">{% if show_quantity_label %}{{ quantity_label }} {% endif %}{{ card_title | escape }}</h3>
       {%- if card_specs != blank -%}
         <p class="mega-menu-products__card-specs">{{ card_specs | escape }}</p>
+      {%- elsif category_handle == 'zubehor' -%}
+        <p class="mega-menu-products__card-specs mega-menu-products__card-specs--placeholder" aria-hidden="true">&nbsp;</p>
       {%- endif -%}
       {%- if product_description != blank -%}
         <p class="mega-menu-products__card-description">{{ product_description | escape | newline_to_br }}</p>
