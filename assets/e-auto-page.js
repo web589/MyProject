@@ -9,46 +9,40 @@
 
   var CONFIG = {
     distance: {
-      under20: { label: 'Unter 20 km', min: 2, max: 5 },
-      '20to40': { label: '20–40 km', min: 5, max: 8 },
-      '40to80': { label: '40–80 km', min: 10, max: 15 },
-      over80: { label: 'Über 80 km', min: 20, max: 28 }
+      under20: { label: 'Unter 20 km' },
+      '20to40': { label: '20–40 km' },
+      '40to80': { label: '40–80 km' },
+      over80: { label: 'Über 80 km' }
+    }
+  };
+
+  /*
+   * This is deliberately a fixed-choice recommendation table, not a free-input
+   * calculator.  The upper capacity is capped by the selected PV surplus:
+   * min(driving demand + consumption correction, PV surplus limit).
+   */
+  var CAPACITY_RULES = {
+    drivingDemand: {
+      under20: { lower: 2, upper: 5 },
+      '20to40': { lower: 5, upper: 8 },
+      '40to80': { lower: 10, upper: 15 },
+      over80: { lower: 20, upper: 30 }
     },
-    efficiencyCorrection: {
-      efficient: 0,
-      average: 1,
-      high: 2
+    consumptionCorrection: {
+      efficient: { lower: 0, upper: 0 },
+      average: { lower: 0, upper: 1 },
+      high: { lower: 0, upper: 2 }
     },
-    pvLimit: {
+    pvSurplusLimit: {
       low: 5,
       medium: 10,
       high: 30
     },
-    chargeCorrection: {
-      evening: 0,
-      daytime: -2
-    }
-  };
-
-  var CAPACITY_RULES = {
-    distanceKm: {
-      under20: 15,
-      '20to40': 30,
-      '40to80': 60,
-      over80: 100
+    chargeWindowCorrection: {
+      evening: { lower: 0, upper: 0 },
+      daytime: { lower: 0, upper: -2 }
     },
-    consumptionKwhPer100Km: {
-      efficient: 16,
-      average: 19,
-      high: 24
-    },
-    noPvValues: ['low'],
-    daytimeValue: 'daytime',
-    step: 2.5,
-    lowerCoverage: 0.8,
-    upperCoverage: 1.6,
-    upperBuffer: 2,
-    maxCapacity: 30
+    minimumCapacity: 2
   };
 
   var PRODUCT_CONFIG = {
@@ -86,30 +80,6 @@
     }
   };
 
-  var PRODUCT_COPY = {
-    mini: {
-      title: 'VENUS E Mini',
-      badge: 'KOMPAKT & EINSTEIGER',
-      capacityRange: '2 – 6 kWh',
-      description: 'Für kurze Strecken und wenig Fahrleistung – speichert den Tagesüberschuss für die ersten Abendstunden.',
-      ctaLabel: 'VENUS E Mini ansehen →'
-    },
-    venus3: {
-      title: 'VENUS E 3.0',
-      badge: 'FLEXIBEL & ERWEITERBAR',
-      capacityRange: '5,12 – 15,36 kWh',
-      description: 'Modular erweiterbar – wächst mit deinem Fahrprofil und deinem Haushalt mit.',
-      ctaLabel: 'VENUS E 3.0 ansehen →'
-    },
-    venus4: {
-      title: 'VENUS E 4.0',
-      badge: 'EMPFOHLEN FÜR E-AUTO',
-      capacityRange: '5 – 15 kWh',
-      description: 'Der Ausgleich zwischen Tagesüberschuss und Abend-Laden – die häufigste Konfiguration für Pendler.',
-      ctaLabel: 'VENUS E 4.0 ansehen →'
-    }
-  };
-
   var DEFAULT_STATE = {
     distance: 'under20',
     efficiency: 'efficient',
@@ -140,43 +110,25 @@
     return new Intl.NumberFormat('de-DE', { style: 'currency', currency: currency }).format(parseNumber(cents, 0) / 100);
   }
 
-  function roundUpToStep(value, step) {
-    return Math.ceil(parseNumber(value, 0) / step) * step;
-  }
-
   function calculateCapacity(selection) {
     var distance = CONFIG.distance[selection.distance] || CONFIG.distance.under20;
-    var km = CAPACITY_RULES.distanceKm[selection.distance] || CAPACITY_RULES.distanceKm.under20;
-    var verbrauch = CAPACITY_RULES.consumptionKwhPer100Km[selection.efficiency] || CAPACITY_RULES.consumptionKwhPer100Km.average;
-    var dailyKwh = km * verbrauch / 100;
-    var rawLower = dailyKwh * CAPACITY_RULES.lowerCoverage;
-    var rawUpper = dailyKwh * CAPACITY_RULES.upperCoverage + CAPACITY_RULES.upperBuffer;
-    var lower = Math.max(5, roundUpToStep(rawLower, CAPACITY_RULES.step));
-    var upper = Math.min(CAPACITY_RULES.maxCapacity, Math.max(5, roundUpToStep(rawUpper, CAPACITY_RULES.step)));
-
-    if (selection.chargeWindow === CAPACITY_RULES.daytimeValue) {
-      lower = Math.max(5, lower * 0.6);
-    }
-
-    if (CAPACITY_RULES.noPvValues.indexOf(selection.pv) !== -1) {
-      lower = Math.max(10, lower);
-      upper = Math.max(15, upper);
-    }
-
-    upper = Math.min(CAPACITY_RULES.maxCapacity, upper);
-    if (upper <= lower && lower < CAPACITY_RULES.maxCapacity) {
-      upper = Math.min(CAPACITY_RULES.maxCapacity, lower + 5);
-    }
+    var drivingDemand = CAPACITY_RULES.drivingDemand[selection.distance] || CAPACITY_RULES.drivingDemand.under20;
+    var consumption = CAPACITY_RULES.consumptionCorrection[selection.efficiency] || CAPACITY_RULES.consumptionCorrection.average;
+    var chargeWindow = CAPACITY_RULES.chargeWindowCorrection[selection.chargeWindow] || CAPACITY_RULES.chargeWindowCorrection.evening;
+    var pvLimit = CAPACITY_RULES.pvSurplusLimit[selection.pv] || CAPACITY_RULES.pvSurplusLimit.medium;
+    var demandLower = Math.max(CAPACITY_RULES.minimumCapacity, drivingDemand.lower + consumption.lower + chargeWindow.lower);
+    var demandUpper = Math.max(demandLower, drivingDemand.upper + consumption.upper + chargeWindow.upper);
+    var upper = Math.min(demandUpper, pvLimit);
+    var lower = Math.min(demandLower, upper);
 
     return {
       lower: lower,
       upper: upper,
       distanceLabel: distance.label,
-      dailyKwh: dailyKwh,
-      verbrauch: verbrauch,
       pv: selection.pv,
-      rawLower: rawLower,
-      rawUpper: rawUpper
+      demandLower: demandLower,
+      demandUpper: demandUpper,
+      pvLimit: pvLimit
     };
   }
 
@@ -185,12 +137,21 @@
     return match ? parseFloat(match[1].replace(',', '.')) : null;
   }
 
-  function findVariant(product, capacity) {
+  function findVariant(product, capacity, quantity) {
     if (!product || !Array.isArray(product.variants)) return null;
-    return product.variants.find(function (variant) {
+    var exactCapacityVariant = product.variants.find(function (variant) {
       var variantText = [variant.title, Array.isArray(variant.options) ? variant.options.join(' ') : variant.options].join(' ');
       var parsed = parseCapacityFromText(variantText);
       return parsed !== null && Math.abs(parsed - capacity) < 0.08;
+    });
+    if (exactCapacityVariant) return exactCapacityVariant;
+
+    /* Some product feeds use a quantity option (for example "2 PCS") instead
+     * of a kWh option. The fixed capacity table supplies that equivalent. */
+    var quantityPattern = new RegExp('(^|\\D)' + quantity + '\\s*(?:x|×|pcs?\\.?|stk\\.?|stuck|stück|module?)(?:$|\\D)', 'i');
+    return product.variants.find(function (variant) {
+      var variantText = [variant.title, Array.isArray(variant.options) ? variant.options.join(' ') : variant.options].join(' ');
+      return quantityPattern.test(variantText);
     }) || null;
   }
 
@@ -360,7 +321,7 @@
 
   function buildCandidate(productKey, capacityConfig, products) {
     var product = products[productKey] || {};
-    var variant = findVariant(product, capacityConfig.kwh);
+    var variant = findVariant(product, capacityConfig.kwh, capacityConfig.quantity);
     var productConfig = PRODUCT_CONFIG[productKey];
     return {
       productKey: productKey,
@@ -395,30 +356,41 @@
 
   function selectRecommendations(result, products) {
     var candidates = allCandidates(products);
-    var modelOrder = ['mini', 'venus3', 'venus4', 'max'];
+    var modelOrder = familyOrderFor(result);
     var primaryFamily = recommendedFamily(result);
-    var midpoint = (result.lower + result.upper) / 2;
 
-    function nearestForFamily(productKey) {
+    function lowestSuitableForFamily(productKey) {
       return candidates
         .filter(function (candidate) { return candidate.productKey === productKey; })
         .sort(function (a, b) {
-          var midpointDifference = Math.abs(a.capacity - midpoint) - Math.abs(b.capacity - midpoint);
-          if (midpointDifference !== 0) return midpointDifference;
           return a.capacity - b.capacity;
-        })[0];
+        })
+        .find(function (candidate) { return candidate.capacity >= result.lower; })
+        || candidates
+          .filter(function (candidate) { return candidate.productKey === productKey; })
+          .sort(function (a, b) { return b.capacity - a.capacity; })[0];
     }
 
-    var primary = nearestForFamily(primaryFamily);
+    var primary = lowestSuitableForFamily(primaryFamily);
     if (!primary) return candidates.slice(0, 3);
+
+    /*
+     * Max is modular. For high mileage, keep the large configurations together
+     * so the visitor sees the 2x/3x expansion path instead of two undersized
+     * products from a different family.
+     */
+    if (primaryFamily === 'max') {
+      var maxCandidates = candidates
+        .filter(function (candidate) { return candidate.productKey === 'max' && candidate.capacity !== primary.capacity; })
+        .sort(function (a, b) { return a.capacity - b.capacity; });
+      var expansion = maxCandidates.filter(function (candidate) { return candidate.capacity > primary.capacity; });
+      var fallback = maxCandidates.filter(function (candidate) { return candidate.capacity < primary.capacity; }).reverse();
+      return [primary].concat(expansion, fallback).slice(0, 3);
+    }
 
     var alternatives = modelOrder
       .filter(function (productKey) { return productKey !== primaryFamily; })
-      .sort(function (a, b) {
-        return Math.abs(modelOrder.indexOf(a) - modelOrder.indexOf(primaryFamily))
-          - Math.abs(modelOrder.indexOf(b) - modelOrder.indexOf(primaryFamily));
-      })
-      .map(nearestForFamily)
+      .map(lowestSuitableForFamily)
       .filter(Boolean)
       .slice(0, 2);
 
@@ -435,53 +407,35 @@
     if (node) node.textContent = value;
   }
 
-  function readCardOverrides(card) {
-    var dataset = card ? card.dataset : {};
-    return {
-      badge: dataset.eautoCardBadgeOverride || '',
-      title: dataset.eautoCardTitleOverride || '',
-      variant: dataset.eautoCardVariantOverride || '',
-      capacity: dataset.eautoCardCapacityOverride || '',
-      price: dataset.eautoCardPriceOverride || '',
-      availability: dataset.eautoCardAvailabilityOverride || '',
-      ctaLabel: dataset.eautoCardCtaLabelOverride || '',
-      ctaLink: dataset.eautoCardCtaLinkOverride || ''
-    };
-  }
-
   function renderCard(root, index, item, copy, unit) {
     var card = root.querySelector('[data-eauto-card="' + index + '"]');
     if (!card) return;
 
-    var overrides = readCardOverrides(card);
     var productUrl = productVariantUrl(item);
-    var title = (item.quantity > 1 ? item.quantity + '× ' : '') + item.title;
-    var productCopy = PRODUCT_COPY[item.productKey] || {};
-    var renderedTitle = overrides.title || productCopy.title || title;
+    var renderedTitle = item.title || 'VENUS E';
     var image = card.querySelector('[data-eauto-card-image]');
     var placeholder = card.querySelector('[data-eauto-card-placeholder]');
     var titleLink = card.querySelector('[data-eauto-card-title-link]');
     var mediaLink = card.querySelector('[data-eauto-card-link]');
     var action = card.querySelector('[data-eauto-card-action]');
-    var actionUrl = overrides.ctaLink || productUrl;
     setText(card, '[data-eauto-card-title]', renderedTitle);
-    setText(card, '[data-eauto-card-variant]', overrides.variant || (item.variant ? item.variant.title : copy.variantUnavailableLabel));
-    setText(card, '[data-eauto-card-capacity]', overrides.capacity || productCopy.capacityRange || formatCapacity(item.capacity, unit));
+    setText(card, '[data-eauto-card-variant]', item.variant ? item.variant.title : copy.variantUnavailableLabel);
+    setText(card, '[data-eauto-card-capacity]', formatCapacity(item.capacity, unit));
     var description = card.querySelector('[data-eauto-card-description]');
     if (description) {
-      description.textContent = productCopy.description || '';
-      description.hidden = !productCopy.description;
+      description.textContent = item.product.description || '';
+      description.hidden = !item.product.description;
     }
-    setText(card, '[data-eauto-card-price]', overrides.price || (item.variant ? formatMoney(item.variant.price) : '—'));
+    setText(card, '[data-eauto-card-price]', item.variant ? formatMoney(item.variant.price) : '—');
 
     var availability = item.preorder
       ? copy.preorderLabel
       : item.available
         ? copy.availableLabel
         : copy.unavailableLabel;
-    setText(card, '[data-eauto-card-availability]', overrides.availability || availability);
-    setText(card, '[data-eauto-card-badge]', overrides.badge || productCopy.badge || (index === 0 ? copy.primaryLabel : copy.alternativeLabel));
-    setText(card, '[data-eauto-card-action]', overrides.ctaLabel || productCopy.ctaLabel || card.dataset.eautoCardDefaultCtaLabel || '');
+    setText(card, '[data-eauto-card-availability]', availability);
+    setText(card, '[data-eauto-card-badge]', index === 0 ? copy.primaryLabel : copy.alternativeLabel);
+    setText(card, '[data-eauto-card-action]', card.dataset.eautoCardDefaultCtaLabel || '');
 
     if (item.image) {
       image.src = item.image;
@@ -499,7 +453,7 @@
       link.removeAttribute('aria-disabled');
     });
     if (action) {
-      action.href = actionUrl;
+      action.href = productUrl;
       action.removeAttribute('aria-disabled');
     }
 
@@ -510,7 +464,7 @@
         link.setAttribute('aria-disabled', 'true');
       });
     }
-    if (!actionUrl && action) {
+    if (!productUrl && action) {
       action.href = '/collections/alle-venus-e-serie';
       action.setAttribute('aria-disabled', 'true');
     }

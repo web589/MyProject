@@ -68,14 +68,6 @@
         <article
           class="e-auto-page__product-card"
           data-eauto-card="{{ index }}"
-          data-eauto-card-badge-override="{{ card_block.settings.badge | escape }}"
-          data-eauto-card-title-override="{{ card_block.settings.title | escape }}"
-          data-eauto-card-variant-override="{{ card_block.settings.variant | escape }}"
-          data-eauto-card-capacity-override="{{ card_block.settings.capacity | escape }}"
-          data-eauto-card-price-override="{{ card_block.settings.price | escape }}"
-          data-eauto-card-availability-override="{{ card_block.settings.availability | escape }}"
-          data-eauto-card-cta-label-override="{{ card_block.settings.cta_label | escape }}"
-          data-eauto-card-cta-link-override="{{ card_block.settings.cta_link | escape }}"
           data-eauto-card-default-cta-label="{{ section.settings.card_cta_label | escape }}"
           {% if card_block != blank %}{{ card_block.shopify_attributes }}{% endif %}
         >
@@ -94,7 +86,7 @@
               <strong data-eauto-card-price>–</strong>
               <span data-eauto-card-availability>{{ section.settings.card_loading_label }}</span>
             </div>
-            <a class="e-auto-page__button e-auto-page__button--secondary" data-eauto-card-action href="{{ card_block.settings.cta_link | default: card_fallback_url }}">{{ card_block.settings.cta_label | default: section.settings.card_cta_label }}</a>
+            <a class="e-auto-page__button e-auto-page__button--secondary" data-eauto-card-action href="{{ card_fallback_url }}">{{ section.settings.card_cta_label }}</a>
           </div>
         </article>
       {% endfor %}
@@ -111,6 +103,7 @@
         "handle": {{ product_mini.handle | json }},
         "title": {{ product_mini.title | json }},
         "url": {{ product_mini.url | json }},
+        "description": {{ product_mini.description | strip_html | strip | truncate: 200 | json }},
         "featured_image": {% if product_mini.featured_image != blank %}{{ product_mini.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
         "preorder_enabled": {{ mini_preorder | default: false | json }},
         "variants": [{% if product_mini != blank %}{% for variant in product_mini.variants %}{"id":{{ variant.id | append: '' | json }},"title":{{ variant.title | json }},"options":{{ variant.options | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant.featured_image != blank %}{{ variant.featured_image | image_url: width: 1000 | json }}{% elsif product_mini.featured_image != blank %}{{ product_mini.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},"url":{{ product_mini.url | append: '?variant=' | append: variant.id | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
@@ -120,6 +113,7 @@
         "handle": {{ product_3.handle | json }},
         "title": {{ product_3.title | json }},
         "url": {{ product_3.url | json }},
+        "description": {{ product_3.description | strip_html | strip | truncate: 200 | json }},
         "featured_image": {% if product_3.featured_image != blank %}{{ product_3.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
         "preorder_enabled": {{ product_3_preorder | default: false | json }},
         "variants": [{% if product_3 != blank %}{% for variant in product_3.variants %}{"id":{{ variant.id | append: '' | json }},"title":{{ variant.title | json }},"options":{{ variant.options | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant.featured_image != blank %}{{ variant.featured_image | image_url: width: 1000 | json }}{% elsif product_3.featured_image != blank %}{{ product_3.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},"url":{{ product_3.url | append: '?variant=' | append: variant.id | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
@@ -129,6 +123,7 @@
         "handle": {{ product_4.handle | json }},
         "title": {{ product_4.title | json }},
         "url": {{ product_4.url | json }},
+        "description": {{ product_4.description | strip_html | strip | truncate: 200 | json }},
         "featured_image": {% if product_4.featured_image != blank %}{{ product_4.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
         "preorder_enabled": {{ product_4_preorder | default: false | json }},
         "variants": [{% if product_4 != blank %}{% for variant in product_4.variants %}{"id":{{ variant.id | append: '' | json }},"title":{{ variant.title | json }},"options":{{ variant.options | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant.featured_image != blank %}{{ variant.featured_image | image_url: width: 1000 | json }}{% elsif product_4.featured_image != blank %}{{ product_4.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},"url":{{ product_4.url | append: '?variant=' | append: variant.id | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
@@ -138,6 +133,7 @@
         "handle": {{ product_max.handle | json }},
         "title": {{ product_max.title | json }},
         "url": {{ product_max.url | json }},
+        "description": {{ product_max.description | strip_html | strip | truncate: 200 | json }},
         "featured_image": {% if product_max.featured_image != blank %}{{ product_max.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},
         "preorder_enabled": {{ max_preorder | default: false | json }},
         "variants": [{% if product_max != blank %}{% for variant in product_max.variants %}{"id":{{ variant.id | append: '' | json }},"title":{{ variant.title | json }},"options":{{ variant.options | json }},"available":{{ variant.available | json }},"price":{{ variant.price | json }},"compare_at_price":{{ variant.compare_at_price | json }},"image":{% if variant.featured_image != blank %}{{ variant.featured_image | image_url: width: 1000 | json }}{% elsif product_max.featured_image != blank %}{{ product_max.featured_image | image_url: width: 1000 | json }}{% else %}null{% endif %},"url":{{ product_max.url | append: '?variant=' | append: variant.id | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}]
@@ -155,16 +151,7 @@
     {
       "type": "card_copy",
       "name": "Empfehlungskarte",
-      "settings": [
-        {"type":"text","id":"badge","label":"徽标","info":"Leer lassen für EMPFOHLENE/ALTERNATIVE KONFIGURATION."},
-        {"type":"text","id":"title","label":"标题","info":"Leer lassen für den Shopify-Produkttitel."},
-        {"type":"text","id":"variant","label":"变体","info":"Leer lassen für den automatisch ermittelten Variantentitel."},
-        {"type":"text","id":"capacity","label":"容量","info":"Leer lassen für die automatisch berechnete Kapazität."},
-        {"type":"text","id":"price","label":"价格","info":"Leer lassen für den aktuellen Shopify-Preis."},
-        {"type":"text","id":"availability","label":"库存状态","info":"Leer lassen für den aktuellen Shopify-Status."},
-        {"type":"text","id":"cta_label","label":"行动按钮标签","info":"Leer lassen für den globalen Karten-CTA."},
-        {"type":"url","id":"cta_link","label":"行动按钮链接","info":"Leer lassen für den automatisch ermittelten Produkt-Link."}
-      ]
+      "settings": []
     }
   ],
   "max_blocks": 3,
