@@ -3268,9 +3268,16 @@
   line-height: 1.4;
 }
 
-.section-bw-compare-card-grid .bw-content-card__number,
-.section-bw-compare-smart-energy .bw-smart-energy__number {
+.section-bw-compare-card-grid .bw-content-card__number {
   font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.section-bw-compare-smart-energy .bw-smart-energy__number {
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.05em;
   line-height: 1.2;
@@ -3595,6 +3602,43 @@
 #kaufkriterien.section-bw-compare-card-grid .bw-content-grid__intro .bw-rte {
   margin-top: 14px;
   padding-top: 0;
+}
+
+/* FAQ state color must win over the page-wide ink-color contract above. */
+.main-content--venus-e .section-bw-storage-faq .bw-faq__item summary:hover,
+.main-content--venus-e .section-bw-storage-faq .bw-faq__item summary:focus-visible,
+.main-content--venus-e .section-bw-storage-faq .bw-faq__item[open] summary {
+  color: var(--blue);
+}
+
+/* Keep the App CTA copy compact without changing the Smart Energy feature cards. */
+.section-bw-compare-smart-energy .bw-smart-energy__app-copy h3 {
+  font-size: 16px;
+}
+
+.section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-rte,
+.section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-rte p {
+  font-size: 13px;
+}
+
+/* Match the installation-card number size to the approved reference. */
+#installation .bw-content-card__number {
+  font-size: 22px;
+}
+
+/* Remove the outer vertical spacing around the guarantee banner. */
+#vertrauen.bw-compare-trust {
+  padding-block: 0;
+}
+
+/* Set the overview price prefix ("ab") to the approved size. */
+#modelle .bw-model-card__price > span {
+  font-size: 13px;
+}
+
+/* Keep the FAQ eyebrow blue in the Theme Editor and storefront preview. */
+#faq .bw-faq__intro .bw-eyebrow {
+  color: var(--blue) !important;
 }
 
 @media (max-width: 899px) {
