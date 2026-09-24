@@ -57,7 +57,7 @@
       <div class="bw-actions">
         {% if section.settings.primary_label != blank %}
           <a class="bw-button bw-button--primary" href="{{ primary_link }}" data-bw-anchor-link>
-            {{ section.settings.primary_label | escape }}
+            {{ section.settings.primary_label | escape }} <span aria-hidden="true">&rarr;</span>
           </a>
         {% endif %}
         {% if section.settings.secondary_label != blank %}

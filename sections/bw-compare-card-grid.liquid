@@ -13,7 +13,7 @@
   style="{% render 'bw-comparison-section-style', section: section %} --bw-content-columns: {{ section.settings.columns }};"
 >
   <div class="bw-container">
-    <div class="bw-section__intro bw-content-grid__intro">
+    <div class="bw-section__intro bw-content-grid__intro{% if grid_anchor == 'kaufkriterien' %} bw-content-grid__intro--stacked{% endif %}">
       {% if section.settings.eyebrow != blank %}
         <p class="bw-eyebrow">{{ section.settings.eyebrow | escape }}</p>
       {% endif %}

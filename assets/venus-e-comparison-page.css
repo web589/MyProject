@@ -3594,12 +3594,12 @@
 
 /* Kaufkriterien reference: keep the supporting line under the main heading
  * while retaining the two-column card grid and its image spacing. */
-#kaufkriterien.section-bw-compare-card-grid .bw-content-grid__intro {
+.section-bw-compare-card-grid .bw-content-grid__intro--stacked {
   display: block;
   max-width: 520px;
 }
 
-#kaufkriterien.section-bw-compare-card-grid .bw-content-grid__intro .bw-rte {
+.section-bw-compare-card-grid .bw-content-grid__intro--stacked .bw-rte {
   margin-top: 14px;
   padding-top: 0;
 }
@@ -3705,4 +3705,24 @@
   background-position: left center;
   color: #fff !important;
   filter: none;
+}
+
+/* Keep the three comparison-page CTA labels and arrows inside their buttons. */
+.main-content--venus-e .section-bw-storage-hero .bw-actions .bw-button--primary,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-button--primary,
+.main-content--venus-e .section-bw-compare-models .bw-models--final .bw-models__support-actions .bw-button--primary {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.main-content--venus-e .section-bw-storage-hero .bw-actions .bw-button--primary,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-button--primary {
+  gap: 0.4em;
+}
+
+.main-content--venus-e .section-bw-storage-hero .bw-actions .bw-button--primary::after {
+  content: none;
 }
