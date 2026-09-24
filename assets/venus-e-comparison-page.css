@@ -1516,6 +1516,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .bw-model-card,
+  .bw-model-card__badge,
   .bw-model-card__media img,
   .bw-scenario-card,
   .bw-scenario-card__media img,
@@ -2020,7 +2021,7 @@
   border-color: #d8e0e8;
   border-radius: 7px;
   box-shadow: none;
-  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  transition: border-color 320ms ease-in-out, box-shadow 320ms ease-in-out, transform 320ms ease-in-out;
 }
 
 .section-bw-compare-models .bw-model-card:hover,
@@ -2050,6 +2051,7 @@
   font-weight: 500;
   letter-spacing: 0.02em;
   line-height: 1 !important;
+  transition: background-color 280ms ease-in-out, color 280ms ease-in-out;
 }
 
 .section-bw-compare-models .bw-model-card--highlight .bw-model-card__badge {
@@ -2081,6 +2083,7 @@
 
 .section-bw-compare-models .bw-model-card__media img {
   mix-blend-mode: normal;
+  transition: transform 420ms ease-in-out;
 }
 
 .section-bw-compare-models .bw-model-card__body {
