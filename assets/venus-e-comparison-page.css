@@ -1118,7 +1118,7 @@
 
 .bw-capacity-map__footnote {
   max-width: 830px;
-  margin: 24px 0 0;
+  margin: 40px 0 0;
   color: #6f7f91 !important;
   font-size: 0.73rem !important;
   line-height: 1.55 !important;
@@ -2731,6 +2731,7 @@
 
 .section-bw-compare-card-grid .bw-content-grid__intro h2 {
   grid-column: 1;
+  grid-row: 2;
   margin-bottom: 0;
   font-size: 28px;
   line-height: 1.15;
@@ -2738,9 +2739,9 @@
 
 .section-bw-compare-card-grid .bw-content-grid__intro .bw-rte {
   grid-column: 2;
-  grid-row: 1 / span 2;
+  grid-row: 2;
   align-self: start;
-  padding-top: 21px;
+  padding-top: 0;
 }
 
 .section-bw-compare-card-grid .bw-content-grid__intro .bw-rte,
@@ -3628,13 +3629,15 @@
 /* Keep the two final support CTAs' colors unchanged while hovering. */
 .section-bw-compare-models .bw-models--final .bw-models__support-actions .bw-button--primary:hover {
   background-position: left center;
-  color: #fff;
+  color: #fff !important;
+  filter: none;
 }
 
 .section-bw-compare-models .bw-models--final .bw-models__support-actions .bw-button--secondary:hover {
-  border-color: var(--bw-blue);
+  border-color: #9bd8ff;
   background: #fff;
   color: var(--bw-blue);
+  filter: none;
 }
 
 /* Keep the Smart Energy CTA's original blue unchanged on hover. */
