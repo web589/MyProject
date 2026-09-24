@@ -7,28 +7,24 @@
     <div class="e-auto-page__section-heading">
       <p class="e-auto-page__eyebrow">{{ section.settings.timeline_eyebrow }}</p>
       <h2 id="{{ page_id }}-timeline-heading">{{ section.settings.timeline_heading }}{% if section.settings.timeline_heading_accent != blank %} <span>{{ section.settings.timeline_heading_accent }}</span>{% endif %}</h2>
-      {% if section.settings.timeline_text != blank %}<p>{{ section.settings.timeline_text }}</p>{% endif %}
+      <p>{{ section.settings.timeline_text }}</p>
     </div>
-    <div class="e-auto-page__timeline-frame">
-      <div class="e-auto-page__timeline-grid" role="list">
-        {% for block in section.blocks %}
-          <article class="e-auto-page__timeline-item" role="listitem" {{ block.shopify_attributes }}>
-            <div class="e-auto-page__timeline-time">{{ block.settings.time }}</div>
-            <div class="e-auto-page__media e-auto-page__media--timeline">
-              {% if block.settings.image != blank %}
-                {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(min-width: 960px) 25vw, 90vw', alt: block.settings.image_alt }}
-              {% else %}
-                <div class="e-auto-page__placeholder">{{ block.settings.image_placeholder }}</div>
-              {% endif %}
-              {% if block.settings.badge != blank %}<span class="e-auto-page__timeline-badge">{{ block.settings.badge }}</span>{% endif %}
-            </div>
-            <div class="e-auto-page__timeline-copy">
-              <h3>{{ block.settings.heading }}</h3>
-              <p>{{ block.settings.text }}</p>
-            </div>
-          </article>
-        {% endfor %}
-      </div>
+    <div class="e-auto-page__timeline-grid" role="list">
+      {% for block in section.blocks %}
+        <article class="e-auto-page__timeline-item" role="listitem" {{ block.shopify_attributes }}>
+          <div class="e-auto-page__timeline-time">{{ block.settings.time }}</div>
+          <div class="e-auto-page__media e-auto-page__media--timeline">
+            {% if block.settings.image != blank %}
+              {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(min-width: 960px) 25vw, 90vw', alt: block.settings.image_alt }}
+            {% else %}
+              <div class="e-auto-page__placeholder">{{ block.settings.image_placeholder }}</div>
+            {% endif %}
+          </div>
+          <h3>{{ block.settings.heading }}</h3>
+          <p>{{ block.settings.text }}</p>
+          {% if block.settings.badge != blank %}<span class="e-auto-page__timeline-badge">{{ block.settings.badge }}</span>{% endif %}
+        </article>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -42,7 +38,7 @@
     {"type":"text","id":"timeline_eyebrow","label":"Timeline Kicker","default":"Ein typischer Tag"},
     {"type":"text","id":"timeline_heading","label":"Timeline Überschrift – Hauptteil","default":"So sieht ein Tag"},
     {"type":"text","id":"timeline_heading_accent","label":"Timeline Überschrift – blauer Akzent","default":"mit PV, Speicher und E-Auto aus"},
-    {"type":"textarea","id":"timeline_text","label":"Timeline Text","default":""},
+    {"type":"textarea","id":"timeline_text","label":"Timeline Text","default":"Vier Momente zeigen, wie dein Solarstrom vom Mittag bis zum Laden am Abend verschoben wird."},
     {"type":"header","content":"Typography"},
     {"type":"range","id":"eyebrow_size","label":"Kicker und Zeitangabe Größe","min":9,"max":18,"step":1,"unit":"px","default":13},
     {"type":"range","id":"item_heading_size","label":"Moment Überschrift Größe","min":14,"max":30,"step":0.5,"unit":"px","default":17},
@@ -58,7 +54,7 @@
     {"type":"range","id":"section_spacing","label":"Abstand oben und unten","min":40,"max":140,"step":4,"unit":"px","default":68}
   ],
   "blocks": [
-    {"type":"timeline","name":"Typischer Tag","settings":[{"type":"text","id":"time","label":"Uhrzeit","default":"08:00"},{"type":"image_picker","id":"image","label":"Bild"},{"type":"text","id":"image_alt","label":"Bild Alt-Text","default":"E-Auto im Tagesverlauf"},{"type":"text","id":"image_placeholder","label":"Bild Platzhalter","default":"Timeline-Bild auswählen"},{"type":"text","id":"heading","label":"Überschrift","default":"Auto unterwegs"},{"type":"textarea","id":"text","label":"Text","default":"Das Auto fährt los, PV-Anlage startet in den Tag. Zu Hause verbraucht kaum jemand Strom."},{"type":"text","id":"badge","label":"Badge","default":""}]}
+    {"type":"timeline","name":"Typischer Tag","settings":[{"type":"text","id":"time","label":"Uhrzeit","default":"08:00"},{"type":"image_picker","id":"image","label":"Bild"},{"type":"text","id":"image_alt","label":"Bild Alt-Text","default":"E-Auto im Tagesverlauf"},{"type":"text","id":"image_placeholder","label":"Bild Platzhalter","default":"Timeline-Bild auswählen"},{"type":"text","id":"heading","label":"Überschrift","default":"Auto unterwegs"},{"type":"textarea","id":"text","label":"Text","default":"Das Auto fährt los, die PV-Anlage startet in den Tag."},{"type":"text","id":"badge","label":"Badge","default":"PV-Überschuss"}]}
   ],
   "max_blocks": 4,
   "presets": [{"name":"E-Auto Typischer Tag","blocks":[{"type":"timeline"},{"type":"timeline"},{"type":"timeline"},{"type":"timeline"}] }]
