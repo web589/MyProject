@@ -40,7 +40,7 @@
         <article class="bw-capacity-row" role="listitem" style="--bw-capacity-start-position: {{ capacity_start_position }}%; --bw-capacity-end-position: {{ capacity_end_position }}%;" {{ block.shopify_attributes }}>
           <div class="bw-capacity-row__label">
             <h3>{{ block.settings.product_name | escape }}</h3>
-            {% if block.settings.note != blank %}<p>{{ block.settings.note | escape }}</p>{% endif %}
+            {% if block.settings.note != blank %}<small class="bw-capacity-row__note">{{ block.settings.note | escape }}</small>{% endif %}
           </div>
           <div class="bw-capacity-row__visual" aria-hidden="true">
             <span class="bw-capacity-row__line"></span>
@@ -98,19 +98,19 @@
       "type": "text",
       "id": "eyebrow",
       "label": "眉题",
-      "default": "Kapazität einordnen"
+      "default": "Speicherkapazität richtig wählen"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "标题",
-      "default": "Vom Einstieg bis zum größeren Energiebedarf"
+      "default": "2 bis 30 kWh – welche Größe brauchst du?"
     },
     {
       "type": "richtext",
       "id": "text",
       "label": "文本",
-      "default": "<p>Die passende Kapazität hängt unter anderem von PV-Ertrag, Verbrauchsprofil und gewünschter Reserve ab. Die Skala hilft bei der ersten Einordnung.</p>"
+      "default": "<p>Jedes Modell lässt sich modular erweitern. Wähle die Größe, die zu deinem Haushalt passt – und skaliere bei Bedarf.</p>"
     },
     {
       "type": "range",
@@ -126,15 +126,15 @@
       "type": "textarea",
       "id": "footnote",
       "label": "脚注",
-      "default": "Die dargestellten Werte dienen der Modellübersicht. Verfügbare Varianten und aktuelle Produktdaten findest du auf der jeweiligen Produktseite."
+      "default": "Alle Werte in kWh. Modul-Anzahl variiert pro Modell. SmartBox-Architektur erlaubt parallele Erweiterung ohne Neuverkabelung."
     },
     { "type": "header", "content": "Layout und Größen" },
-    { "type": "range", "id": "eyebrow_size", "label": "眉题大小", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 12 },
-    { "type": "range", "id": "heading_size", "label": "标题大小", "min": 24, "max": 56, "step": 1, "unit": "px", "default": 38 },
-    { "type": "range", "id": "body_size", "label": "正文大小", "min": 12, "max": 22, "step": 1, "unit": "px", "default": 16 },
-    { "type": "range", "id": "card_title_size", "label": "卡片标题大小", "min": 14, "max": 24, "step": 1, "unit": "px", "default": 18 },
-    { "type": "range", "id": "card_text_size", "label": "卡片文本大小", "min": 11, "max": 20, "step": 1, "unit": "px", "default": 14 },
-    { "type": "range", "id": "section_spacing", "label": "区块间距", "min": 40, "max": 120, "step": 4, "unit": "px", "default": 72 }
+    { "type": "range", "id": "eyebrow_size", "label": "眉题大小", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "heading_size", "label": "标题大小", "min": 24, "max": 56, "step": 1, "unit": "px", "default": 36 },
+    { "type": "range", "id": "body_size", "label": "正文大小", "min": 12, "max": 22, "step": 1, "unit": "px", "default": 15 },
+    { "type": "range", "id": "card_title_size", "label": "卡片标题大小", "min": 14, "max": 24, "step": 1, "unit": "px", "default": 15 },
+    { "type": "range", "id": "card_text_size", "label": "卡片文本大小", "min": 11, "max": 20, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "section_spacing", "label": "区块间距", "min": 40, "max": 120, "step": 4, "unit": "px", "default": 76 }
   ],
   "blocks": [
     {
@@ -168,10 +168,10 @@
     {
       "name": "VENUS E · Kapazität",
       "blocks": [
-        { "type": "capacity", "settings": { "product_name": "VENUS E Mini", "points": "2" } },
-        { "type": "capacity", "settings": { "product_name": "VENUS E 3.0", "points": "5.12" } },
-        { "type": "capacity", "settings": { "product_name": "VENUS E 4.0", "points": "5" } },
-        { "type": "capacity", "settings": { "product_name": "VENUS E Max", "points": "10" } }
+        { "type": "capacity", "settings": { "product_name": "VENUS E Mini", "note": "2 kWh / Modul", "points": "2,4,6" } },
+        { "type": "capacity", "settings": { "product_name": "VENUS E 3.0", "note": "5,12 kWh / Modul", "points": "10.24,15.36" } },
+        { "type": "capacity", "settings": { "product_name": "VENUS E 4.0", "note": "5 kWh / Modul", "points": "10,15" } },
+        { "type": "capacity", "settings": { "product_name": "VENUS E Max", "note": "10 kWh / Modul", "points": "10,15,20,25,30" } }
       ]
     }
   ]

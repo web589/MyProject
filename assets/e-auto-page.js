@@ -551,7 +551,6 @@
       readDataValue(pageMarker.dataset, 'eautoRecommendationHintTemplate', 'Empfohlen für deine Berechnung: [[range]]'),
       templateValues
     ));
-
     if (primary) {
       setText(root, '[data-eauto-result-model]', interpolateTemplate(
         readDataValue(calculatorSettings, 'eautoResultModelTemplate', 'Passt zu [[product_title]]'),

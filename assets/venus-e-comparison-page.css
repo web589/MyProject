@@ -3586,6 +3586,49 @@
   text-transform: none;
 }
 
+/* Match the capacity UI data: 15px model names, 12px notes and scale labels. */
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-row__label h3,
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-row__point strong {
+  color: var(--gray-dark) !important;
+}
+
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-row__note,
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-map__footnote {
+  color: var(--gray) !important;
+}
+
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-row__note {
+  display: block;
+  margin: 3px 0 0;
+  font-size: var(--bw-compare-card-text-size, 12px) !important;
+  line-height: 1.25 !important;
+}
+
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-row__label h3 {
+  font-size: var(--bw-compare-card-title-size, 15px);
+  line-height: 1.2;
+}
+
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-row__point strong {
+  font-size: var(--bw-compare-card-text-size, 12px);
+  font-weight: 400;
+}
+
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-map__footnote {
+  max-width: none;
+  margin: 22px 0 0;
+  font-size: 13.5px !important;
+  line-height: 1.2 !important;
+}
+
+/* The capacity reference starts close below the sticky anchor navigation.
+ * Keep the configurable bottom spacing while reducing only the top gap. */
+@media (min-width: 900px) {
+  .main-content--venus-e .section-bw-compare-capacity .bw-capacity-map {
+    padding-top: 16px;
+  }
+}
+
 @media (min-width: 900px) {
   .section-bw-compare-capacity .bw-capacity-map__heading-row {
     align-items: center;
@@ -3613,12 +3656,12 @@
 
 /* Keep the App CTA copy compact without changing the Smart Energy feature cards. */
 .section-bw-compare-smart-energy .bw-smart-energy__app-copy h3 {
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-rte,
 .section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-rte p {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 /* Match the installation-card number size to the approved reference. */
@@ -3634,6 +3677,25 @@
 /* Set the overview price prefix ("ab") to the approved size. */
 #modelle .bw-model-card__price > span {
   font-size: 13px;
+}
+
+/* The final model picker has its own compact price rule. */
+#abschluss .bw-model-card__price > span {
+  font-size: 13px !important;
+}
+
+/* Keep all overview CTAs directly below their price and left-aligned with the card copy. */
+#modelle.bw-models--overview .bw-model-card__footer {
+  margin-top: 14px;
+}
+
+#modelle.bw-models--overview .bw-model-card__button {
+  align-self: flex-start;
+  width: auto;
+  margin-top: 0;
+  padding: 0;
+  justify-content: flex-start;
+  text-align: left;
 }
 
 /* Keep the FAQ eyebrow blue in the Theme Editor and storefront preview. */
@@ -3737,5 +3799,41 @@
   border: 0;
   border-radius: 8px;
   box-shadow: none;
-  transform: none;
+}
+
+.main-content--venus-e .section-bw-storage-hero .bw-actions .bw-button--primary:hover,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__app-copy .bw-button--primary:hover,
+.main-content--venus-e .section-bw-compare-models .bw-models--final .bw-models__support-actions .bw-button--primary:hover {
+  box-shadow: 0 9px 20px rgba(0, 153, 252, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Match the centered desktop anchor navigation used on the other landing pages. */
+@media (min-width: 1200px) {
+  .main-content--venus-e .section-bw-storage-navigation .bw-anchor-nav__inner {
+    position: relative;
+    width: min(1500px, calc(100% - 48px));
+    margin: 0 auto;
+    justify-content: center;
+    gap: clamp(24px, 2.7vw, 48px);
+  }
+
+  .main-content--venus-e .section-bw-storage-navigation .bw-anchor-nav__cta {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    margin-left: 0;
+    transform: translateY(-50%);
+  }
+
+  .main-content--venus-e .section-bw-storage-navigation .bw-anchor-nav__cta:hover {
+    background-position: right center;
+    box-shadow: 0 9px 20px rgba(0, 153, 252, 0.2);
+    transform: translateY(calc(-50% - 1px));
+  }
+
+  .main-content--venus-e .section-bw-storage-navigation .bw-anchor-nav__cta:active {
+    box-shadow: 0 4px 11px rgba(0, 153, 252, 0.16);
+    transform: translateY(-50%) scale(0.98);
+  }
 }

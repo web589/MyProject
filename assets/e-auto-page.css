@@ -515,6 +515,7 @@
   font-size: max(10px, calc(var(--eauto-eyebrow-size, 13px) - 1px));
   font-weight: 600;
   letter-spacing: 0.06em;
+  text-decoration: none;
   transform: translateX(-50%);
 }
 
@@ -522,10 +523,11 @@
   --eauto-media-height: var(--eauto-timeline-media-height, 220px);
   position: relative;
   width: min(100%, var(--eauto-media-width, 100%));
+  height: var(--eauto-media-height);
   margin-inline: auto;
   margin-bottom: 26px;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--eauto-radius);
 }
 
 .e-auto-page__media--timeline img {
@@ -576,14 +578,15 @@
 
 .e-auto-page__profile-tabs {
   display: grid;
-  grid-auto-rows: 126px;
+  grid-auto-rows: 180px;
   gap: 0;
   align-content: start;
 }
 
 .e-auto-page__profile-tab {
   display: grid;
-  min-height: 126px;
+  min-height: 180px;
+  align-content: center;
   gap: 6px;
   padding: 23px 18px;
   border: 0;
@@ -965,33 +968,28 @@
 .e-auto-page__product-card:not(:first-child) .e-auto-page__button {
   width: fit-content;
   min-height: 0;
-  padding: 10px 14px;
-  border: 3px solid #e44b2e;
-  border-radius: 999px;
-  background: #fff;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--eauto-blue);
+  box-shadow: none;
 }
 
 .e-auto-page__comparison-cta {
-  display: flex;
-  width: min(100%, 960px);
-  min-height: 94px;
+  display: block;
+  width: fit-content;
   margin: 26px auto 0;
-  align-items: center;
-  justify-content: center;
-  padding: 18px 32px;
-  border: 4px solid #e44b2e;
-  border-radius: 22px;
+  padding: 0;
   color: var(--eauto-blue);
   font-size: var(--eauto-control-size, 14px);
   font-weight: 600;
-  line-height: 1.45;
+  line-height: 1.5;
   text-align: center;
   text-decoration: none;
 }
 
 .e-auto-page__comparison-cta:hover {
-  border-color: var(--eauto-blue);
+  color: var(--eauto-blue-deep);
 }
 
 .e-auto-page__product-card a[aria-disabled="true"] {
@@ -1686,6 +1684,7 @@
 
   .e-auto-page__profile-tab {
     min-height: 0;
+    align-content: start;
   }
 
   .e-auto-page__smart-grid {
@@ -1737,17 +1736,13 @@
     height: 220px;
   }
 
-  .e-auto-page__product-card:first-child .e-auto-page__button,
-  .e-auto-page__product-card:not(:first-child) .e-auto-page__button {
+  .e-auto-page__product-card:first-child .e-auto-page__button {
     width: 100%;
   }
 
   .e-auto-page__comparison-cta {
-    min-height: 0;
     margin-top: 20px;
-    padding: 16px 20px;
-    border-width: 3px;
-    border-radius: 16px;
+    padding: 0 20px;
   }
 
   .e-auto-page__stats {
