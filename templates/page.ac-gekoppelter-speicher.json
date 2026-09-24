@@ -130,6 +130,7 @@
         "hero_lead_size": 16,
         "hero_copy_width": 640,
         "hero_media_height": 480,
+        "hero_image_width": 100,
         "hero_image_fit": "cover",
         "hero_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png",
         "hero_image_alt": "Solarspeicher an einem Haus mit Photovoltaikanlage",
@@ -242,6 +243,7 @@
         "heading_size": 34,
         "body_size": 15,
         "flow_image_height": 460,
+        "flow_image_width": 100,
         "flow_node_size": 13,
         "toggle_aria_label": "Tageszeit für Energiefluss auswählen",
         "toggle_day_label": "☀ Tag · Speichern",
@@ -268,7 +270,8 @@
             "placeholder": "Familien-Szenenbild auswählen: bestehende PV und nachgerüsteter Speicher",
             "title_size": 18,
             "body_size": 13,
-            "image_height": 210
+            "image_height": 210,
+            "image_width": 100
           }
         },
         "why_card_2": {
@@ -280,7 +283,8 @@
             "placeholder": "Familien-Szenenbild auswählen: abendlicher Stromverbrauch",
             "title_size": 18,
             "body_size": 13,
-            "image_height": 210
+            "image_height": 210,
+            "image_width": 100
           }
         },
         "why_stat_1": {
@@ -444,6 +448,8 @@
         "body_size": 15,
         "main_image_height": 300,
         "small_image_height": 150,
+        "main_image_width": 100,
+        "small_image_width": 100,
         "link_label": "Smart Meter & Energiefluss ansehen",
         "link_url": "",
         "main_image_alt": "VENUS E Speicher in einem modernen Zuhause",
@@ -466,7 +472,8 @@
             "placeholder": "Szenenbild auswählen: Haus mit bestehender PV",
             "title_size": 17,
             "body_size": 13,
-            "image_height": 190
+            "image_height": 190,
+            "image_width": 100
           }
         },
         "audience_card_2": {
@@ -478,7 +485,8 @@
             "placeholder": "Szenenbild auswählen: Balkonkraftwerk und Speicher",
             "title_size": 17,
             "body_size": 13,
-            "image_height": 190
+            "image_height": 190,
+            "image_width": 100
           }
         },
         "audience_card_3": {
@@ -490,7 +498,8 @@
             "placeholder": "Szenenbild auswählen: abendlicher oder nächtlicher Verbrauch",
             "title_size": 17,
             "body_size": 13,
-            "image_height": 190
+            "image_height": 190,
+            "image_width": 100
           }
         },
         "audience_card_4": {
@@ -502,7 +511,8 @@
             "placeholder": "Szenenbild auswählen: Wallbox und E-Auto",
             "title_size": 17,
             "body_size": 13,
-            "image_height": 190
+            "image_height": 190,
+            "image_width": 100
           }
         }
       },
@@ -538,7 +548,8 @@
             "link_label": "VENUS E Mini ansehen →",
             "title_size": 18,
             "body_size": 13,
-            "image_height": 210
+            "image_height": 210,
+            "image_width": 100
           }
         },
         "model_3": {
@@ -551,7 +562,8 @@
             "link_label": "VENUS E 3.0 ansehen →",
             "title_size": 18,
             "body_size": 13,
-            "image_height": 210
+            "image_height": 210,
+            "image_width": 100
           }
         },
         "model_4": {
@@ -564,7 +576,8 @@
             "link_label": "VENUS E 4.0 ansehen →",
             "title_size": 18,
             "body_size": 13,
-            "image_height": 210
+            "image_height": 210,
+            "image_width": 100
           }
         },
         "model_max": {
@@ -577,7 +590,8 @@
             "link_label": "VENUS E Max ansehen →",
             "title_size": 18,
             "body_size": 13,
-            "image_height": 210
+            "image_height": 210,
+            "image_width": 100
           }
         }
       },
@@ -694,7 +708,8 @@
             "link_label": "Artikel lesen →",
             "title_size": 17,
             "body_size": 13,
-            "image_height": 140
+            "image_height": 140,
+            "image_width": 100
           }
         },
         "article_2": {
@@ -709,7 +724,8 @@
             "link_label": "Artikel lesen →",
             "title_size": 17,
             "body_size": 13,
-            "image_height": 140
+            "image_height": 140,
+            "image_width": 100
           }
         },
         "article_3": {
@@ -724,7 +740,8 @@
             "link_label": "Artikel lesen →",
             "title_size": 17,
             "body_size": 13,
-            "image_height": 140
+            "image_height": 140,
+            "image_width": 100
           }
         }
       },
@@ -780,18 +797,22 @@
         "final_link"
       ],
       "settings": {
-        "eyebrow": "Nächster Schritt",
         "heading": "Du möchtest herausfinden, welche Lösung zu deinem Haushalt passt?",
         "copy": "Sieh dir die VENUS E Modelle an, vergleiche typische Einsatzbereiche oder entdecke passende Lösungen für mehr Eigenverbrauch im Alltag.",
         "section_padding": 72,
         "content_width": 1440,
         "final_heading_size": 30,
-        "final_copy_size": 15.5
+        "final_copy_size": 15
       }
     },
     "ac_newsletter": {
       "type": "bw-storage-newsletter-sync",
-      "settings": {"anchor_id":"newsletter","aria_label":"VENUS E Newsletter","source_section_id":"1786674497042b635a","error_text":"Das Newsletterformular konnte gerade nicht geladen werden."}
+      "settings": {
+        "anchor_id": "newsletter",
+        "aria_label": "VENUS E Newsletter",
+        "source_section_id": "1786674497042b635a",
+        "error_text": "Das Newsletterformular konnte gerade nicht geladen werden."
+      }
     }
   },
   "order": [
