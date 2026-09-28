@@ -224,15 +224,6 @@
         "media_alt": "Balkonkraftwerk mit VENUS E Speicher"
       }
     },
-    "venus_models": {
-      "type": "bw-storage-models-sync",
-      "settings": {
-        "anchor_id": "modelle",
-        "aria_label": "VENUS E Modelle",
-        "source_section_id": "17864389448c0111e2",
-        "error_text": "Die Modelle konnten gerade nicht geladen werden."
-      }
-    },
     "venus_comparison": {
       "type": "bw-storage-comparison",
       "blocks": {
@@ -375,6 +366,15 @@
         "footer_text": "Solarüberschuss tagsüber speichern, abends selbst nutzen – für mehr Eigenverbrauch und weniger Netzbezug."
       }
     },
+    "venus_models": {
+      "type": "bw-storage-models-sync",
+      "settings": {
+        "anchor_id": "modelle",
+        "aria_label": "VENUS E Modelle",
+        "source_section_id": "17864389448c0111e2",
+        "error_text": "Die Modelle konnten gerade nicht geladen werden."
+      }
+    },
     "venus_retrofit": {
       "type": "bw-storage-retrofit",
       "blocks": {
@@ -418,7 +418,7 @@
         "retrofit_app"
       ],
       "settings": {
-        "anchor_id": "nachruesten",
+        "anchor_id": "Nachrüsten",
         "image": "shopify://shop_images/Balkonkraftuerk_mit_VENUS_E_Speicher_einfach_nachruisten-1.webp",
         "media_width": 50,
         "media_position": "left",
@@ -515,7 +515,7 @@
         "capacity_30"
       ],
       "settings": {
-        "anchor_id": "kapazitaet",
+        "anchor_id": "Kapazität",
         "heading": "Welche Speichergröße passt zu deinem Balkonkraftwerk?",
         "text": "Die passende Speicherkapazität hängt vor allem von deinem Solarüberschuss, der PV-Leistung und deinem Verbrauch außerhalb der Sonnenstunden ab – nicht allein von der Haushaltsgröße.",
         "presets_label": "Kapazitätsstufen",
@@ -536,72 +536,6 @@
         "result_button_label": "Passende VENUS E Konfigurationen ansehen",
         "result_note": "Die Empfehlung dient als erste Orientierung. Der tatsächliche Speicherbedarf kann je nach Solarüberschuss, PV-Ertrag, Lastprofil und Nutzungsverhalten abweichen.",
         "low_pv_warning": "Deine PV-Leistung ist im Verhältnis zu deinem Jahresverbrauch relativ niedrig. Du kannst die Empfehlung trotzdem ansehen."
-      }
-    },
-    "venus_recommendations": {
-      "type": "bw-storage-recommendations",
-      "blocks": {
-        "recommend_primary": {
-          "type": "recommendation_card",
-          "settings": {
-            "role": "slot1",
-            "badge": "Empfohlen",
-            "title": "VENUS E",
-            "capacity": "ca. 10 kWh"
-          }
-        },
-        "recommend_4": {
-          "type": "recommendation_card",
-          "settings": {
-            "role": "slot2",
-            "badge": "",
-            "title": "Alternative",
-            "capacity": "ca. 10 kWh"
-          }
-        },
-        "recommend_max": {
-          "type": "recommendation_card",
-          "settings": {
-            "role": "slot3",
-            "badge": "",
-            "title": "Alternative",
-            "capacity": "ca. 10 kWh"
-          }
-        }
-      },
-      "block_order": [
-        "recommend_primary",
-        "recommend_4",
-        "recommend_max"
-      ],
-      "settings": {
-        "anchor_id": "empfehlungen",
-        "context_label": "Basierend auf deiner Eingabe",
-        "heading": "Passende VENUS E Konfigurationen für",
-        "product_mini": "venus-e-mini",
-        "product_3": "venus-e-3",
-        "product_4": "venus-e-4",
-        "product_max": "venus-e-max",
-        "description_mini": "Kompakter Solarspeicher für Balkonkraftwerk, Wohnung und kleinere Haushalte.",
-        "description_3": "Flexibler Solarspeicher für bestehende PV-Anlagen und mittleren bis höheren Energiebedarf.",
-        "description_4": "Leistungsstarker Solarspeicher für Einfamilienhäuser und höheren Strombedarf.",
-        "description_max": "Für große PV-Anlagen und Haushalte mit hohem Energiebedarf.",
-        "available_label_mini": "Verfügbar",
-        "available_button_mini": "In den Warenkorb",
-        "available_label_3": "Verfügbar",
-        "available_button_3": "In den Warenkorb",
-        "available_label_4": "Verfügbar",
-        "available_button_4": "In den Warenkorb",
-        "available_label_max": "Verfügbar",
-        "available_button_max": "In den Warenkorb",
-        "preorder_label_mini": "Demnächst verfügbar",
-        "preorder_button_mini": "Jetzt vormerken",
-        "preorder_label_3": "Demnächst verfügbar",
-        "preorder_button_3": "Jetzt vormerken",
-        "preorder_label_4": "Demnächst verfügbar",
-        "preorder_button_4": "Jetzt vormerken",
-        "preorder_label_max": "Demnächst verfügbar",
-        "preorder_button_max": "Jetzt vormerken"
       }
     },
     "venus_zero_feed": {
@@ -795,6 +729,72 @@
         "anchor_id": "features",
         "heading": "Mehr als nur speichern: Funktionen für dein Balkonkraftwerk mit Speicher",
         "text": "Notstrom, intelligentes Energiemanagement, flexible Speicherkapazität und VPP-Fähigkeit machen VENUS E zu mehr als nur einem Solarspeicher."
+      }
+    },
+    "venus_recommendations": {
+      "type": "bw-storage-recommendations",
+      "blocks": {
+        "recommend_primary": {
+          "type": "recommendation_card",
+          "settings": {
+            "role": "slot1",
+            "badge": "Empfohlen",
+            "title": "VENUS E",
+            "capacity": "ca. 10 kWh"
+          }
+        },
+        "recommend_4": {
+          "type": "recommendation_card",
+          "settings": {
+            "role": "slot2",
+            "badge": "",
+            "title": "Alternative",
+            "capacity": "ca. 10 kWh"
+          }
+        },
+        "recommend_max": {
+          "type": "recommendation_card",
+          "settings": {
+            "role": "slot3",
+            "badge": "",
+            "title": "Alternative",
+            "capacity": "ca. 10 kWh"
+          }
+        }
+      },
+      "block_order": [
+        "recommend_primary",
+        "recommend_4",
+        "recommend_max"
+      ],
+      "settings": {
+        "anchor_id": "empfehlungen",
+        "context_label": "Basierend auf deiner Eingabe",
+        "heading": "Passende VENUS E Konfigurationen für",
+        "product_mini": "venus-e-mini",
+        "product_3": "venus-e-3",
+        "product_4": "venus-e-4",
+        "product_max": "venus-e-max",
+        "description_mini": "Kompakter Solarspeicher für Balkonkraftwerk, Wohnung und kleinere Haushalte.",
+        "description_3": "Flexibler Solarspeicher für bestehende PV-Anlagen und mittleren bis höheren Energiebedarf.",
+        "description_4": "Leistungsstarker Solarspeicher für Einfamilienhäuser und höheren Strombedarf.",
+        "description_max": "Für große PV-Anlagen und Haushalte mit hohem Energiebedarf.",
+        "available_label_mini": "Verfügbar",
+        "available_button_mini": "In den Warenkorb",
+        "available_label_3": "Verfügbar",
+        "available_button_3": "In den Warenkorb",
+        "available_label_4": "Verfügbar",
+        "available_button_4": "In den Warenkorb",
+        "available_label_max": "Verfügbar",
+        "available_button_max": "In den Warenkorb",
+        "preorder_label_mini": "Demnächst verfügbar",
+        "preorder_button_mini": "Jetzt vormerken",
+        "preorder_label_3": "Demnächst verfügbar",
+        "preorder_button_3": "Jetzt vormerken",
+        "preorder_label_4": "Demnächst verfügbar",
+        "preorder_button_4": "Jetzt vormerken",
+        "preorder_label_max": "Demnächst verfügbar",
+        "preorder_button_max": "Jetzt vormerken"
       }
     },
     "venus_steps": {
