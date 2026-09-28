@@ -14,7 +14,7 @@
     </div>
     <div class="e-auto-page__media e-auto-page__media--final">
       {% if section.settings.final_image != blank %}
-        {{ section.settings.final_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 1200px) 1152px, calc(100vw - 40px)', alt: section.settings.final_image_alt }}
+        {{ section.settings.final_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 1440px) 1440px, calc(100vw - 100px)', alt: section.settings.final_image_alt }}
       {% else %}
         <div class="e-auto-page__placeholder">{{ section.settings.final_image_placeholder }}</div>
       {% endif %}
