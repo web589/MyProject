@@ -1,0 +1,68 @@
+{%- assign page_id = 'vpp-ready-participation-' | append: section.id -%}
+<div class="vpp-ready-page" data-vpp-ready-page style="{% render 'vpp-ready-style', section: section %}">
+  <section id="teilnahme" class="vpp-ready__section vpp-ready__participation" aria-labelledby="{{ page_id }}-heading">
+    <div class="vpp-ready__container">
+      <p class="vpp-ready__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span>{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+      <p class="vpp-ready__subtext">{{ section.settings.subtext }}</p>
+      <div class="vpp-ready__participation-grid">
+        <div class="vpp-ready__requirements">
+          {% for block in section.blocks %}
+            {% if block.type == 'requirement' %}<article class="vpp-ready__requirement" {{ block.shopify_attributes }}><h3>{{ block.settings.title }}</h3><p>{{ block.settings.text }}</p>{% if block.settings.link_label != blank %}<a class="vpp-ready__text-link" href="{{ block.settings.link_url | default: '/pages/smart-meter-energiefluss' }}">{{ block.settings.link_label }}</a>{% endif %}</article>{% endif %}
+          {% endfor %}
+        </div>
+        <aside class="vpp-ready__check-card" aria-labelledby="{{ page_id }}-check-heading">
+          <div class="vpp-ready__media vpp-ready__media--check">{% if section.settings.image != blank %}{{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200', sizes: '(min-width: 981px) 40vw, 100vw', alt: section.settings.image_alt }}{% else %}<div class="vpp-ready__placeholder">{{ section.settings.image_placeholder }}</div>{% endif %}</div>
+          <p class="vpp-ready__check-kicker">{{ section.settings.card_kicker }}</p>
+          <h3 id="{{ page_id }}-check-heading">{{ section.settings.card_heading }}</h3>
+          <p>{{ section.settings.card_text }}</p>
+          <ul>
+            {% for block in section.blocks %}
+              {% if block.type == 'check_item' %}<li {{ block.shopify_attributes }}><span aria-hidden="true">✓</span>{{ block.settings.text }}</li>{% endif %}
+            {% endfor %}
+          </ul>
+          {% if section.settings.cta_label != blank %}<a class="vpp-ready__button vpp-ready__button--primary" href="{{ section.settings.cta_url | default: '/pages/vpp-anfrage' }}">{{ section.settings.cta_label }}</a>{% endif %}
+          {% if section.settings.cta_note != blank %}<p class="vpp-ready__check-note">{{ section.settings.cta_note }}</p>{% endif %}
+        </aside>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name":"06 VPP 参与条件",
+  "tag":"section",
+  "class":"vpp-ready-participation-section",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Teilnahme prüfen"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"Was brauchst du für die"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"VPP-Teilnahme?"},
+    {"type":"textarea","id":"subtext","label":"副标题","default":"Entscheidend ist das konkrete Programm. Prüfe, ob dein Speichermodell, dein Standort und deine Installation die Anforderungen des Anbieters erfüllen."},
+    {"type":"image_picker","id":"image","label":"咨询卡图片"},
+    {"type":"text","id":"image_alt","label":"咨询卡图片替代文字","default":"VENUS E Speicher und Verteilerkasten"},
+    {"type":"text","id":"image_placeholder","label":"图片占位文字","default":"请选择 VENUS E 与配电箱横幅图片"},
+    {"type":"text","id":"card_kicker","label":"咨询卡眉题","default":"VPP-Check"},
+    {"type":"text","id":"card_heading","label":"咨询卡标题","default":"Prüfe deine VPP-Möglichkeiten"},
+    {"type":"textarea","id":"card_text","label":"咨询卡说明","default":"Teile uns dein VENUS E Modell, deinen Standort und deine vorhandene Installation mit. Wir helfen dir einzuordnen, welche Voraussetzungen für eine mögliche VPP-Anbindung noch zu prüfen sind."},
+    {"type":"text","id":"cta_label","label":"咨询按钮文字","default":"VPP-Möglichkeiten anfragen"},
+    {"type":"url","id":"cta_url","label":"咨询按钮链接"},
+    {"type":"textarea","id":"cta_note","label":"咨询提示文字","default":"Eine Anfrage ist noch keine Anmeldung zu einem VPP-Programm."},
+    {"type":"header","content":"版式与字体"},
+    {"type":"range","id":"section_padding","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"content_width","label":"内容宽度","min":1120,"max":1440,"step":20,"unit":"px","default":1440},
+    {"type":"range","id":"eyebrow_size","label":"眉题字号","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"heading_size","label":"标题字号","min":28,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"副标题字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"item_heading_size","label":"条件标题字号","min":14,"max":28,"step":1,"unit":"px","default":17},
+    {"type":"range","id":"item_text_size","label":"条件正文字号","min":12,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"按钮字号","min":11,"max":18,"step":1,"unit":"px","default":14}
+  ],
+  "blocks":[
+    {"type":"requirement","name":"参与条件","settings":[{"type":"text","id":"title","label":"标题","default":"Modell & Software"},{"type":"textarea","id":"text","label":"说明文字","default":"Ist dein konkretes VENUS E Modell mit dem erforderlichen Softwarestand für das Programm freigegeben?"},{"type":"text","id":"link_label","label":"专题链接文字"},{"type":"url","id":"link_url","label":"专题链接地址"}]},
+    {"type":"check_item","name":"自查项目","settings":[{"type":"text","id":"text","label":"自查文字","default":"VENUS E Modell"}]}
+  ],
+  "max_blocks":8,
+  "presets":[{"name":"06 VPP 参与条件","blocks":[{"type":"requirement","settings":{"title":"Modell & Software","text":"Ist dein konkretes VENUS E Modell mit dem erforderlichen Softwarestand für das Programm freigegeben?"}},{"type":"requirement","settings":{"title":"Anbieter & Region","text":"Gibt es für deinen Standort ein passendes Angebot, und welche Tarifbedingungen gelten?"}},{"type":"requirement","settings":{"title":"Messung & Verbindung","text":"Sind die geforderten Messdaten, Kommunikationswege und technischen Voraussetzungen vorhanden?","link_label":"Smart Meter & Energiefluss verstehen →","link_url":"/pages/smart-meter-energiefluss"}},{"type":"requirement","settings":{"title":"Vertrag & Einrichtung","text":"Sind Vergütung, Steuerungsumfang und die Einrichtung der Teilnahme nachvollziehbar geregelt?"}},{"type":"check_item","settings":{"text":"VENUS E Modell"}},{"type":"check_item","settings":{"text":"Land & Postleitzahl"}},{"type":"check_item","settings":{"text":"Vorhandene Installation"}}]}]
+}
+{% endschema %}

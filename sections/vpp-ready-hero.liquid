@@ -1,0 +1,58 @@
+{%- assign page_id = 'vpp-ready-hero-' | append: section.id -%}
+<div class="vpp-ready-page" data-vpp-ready-page style="{% render 'vpp-ready-style', section: section %}">
+  <section class="vpp-ready__section vpp-ready__hero" aria-labelledby="{{ page_id }}-heading">
+    <div class="vpp-ready__container vpp-ready__hero-grid">
+      <div class="vpp-ready__hero-copy">
+        <p class="vpp-ready__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h1 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span>{{ section.settings.heading_highlight }}</span>{% endif %}</h1>
+        <p class="vpp-ready__subtext vpp-ready__subtext--hero">{{ section.settings.subtext }}</p>
+        <div class="vpp-ready__actions">
+          {% for block in section.blocks %}
+            <a class="vpp-ready__button vpp-ready__button--{{ block.settings.style }}" href="{{ block.settings.url | default: '#teilnahme' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+          {% endfor %}
+        </div>
+        {% if section.settings.note != blank %}<p class="vpp-ready__note">{{ section.settings.note }}</p>{% endif %}
+      </div>
+      <div class="vpp-ready__media vpp-ready__media--hero">
+        {% if section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 1800 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '640, 960, 1280, 1600, 1800', sizes: '(min-width: 981px) 48vw, 100vw', alt: section.settings.image_alt }}
+        {% else %}
+          <div class="vpp-ready__placeholder">请选择 VPP 主视觉图片</div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name":"01 VPP 首屏",
+  "tag":"section",
+  "class":"vpp-ready-hero-section",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Vernetzte Energie"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"VPP-ready: vorbereitet auf"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"virtuelle Kraftwerke"},
+    {"type":"textarea","id":"subtext","label":"副标题","default":"Ein VPP-ready-Speicher kann nicht nur Solarstrom speichern, sondern perspektivisch auch Teil eines vernetzten Energiesystems werden. Erfahre, wie virtuelle Kraftwerke funktionieren, welche Vorteile sie bieten und was für eine Teilnahme wichtig ist."},
+    {"type":"textarea","id":"note","label":"提示文字","default":"Teilnahme und mögliche Vergütung hängen vom Modell, vom Anbieter und vom verfügbaren Programm ab."},
+    {"type":"image_picker","id":"image","label":"主视觉图片"},
+    {"type":"text","id":"image_alt","label":"主视觉替代文字","default":"VENUS E Speicher als Vorbereitung für virtuelle Kraftwerke"},
+    {"type":"header","content":"版式与字体"},
+    {"type":"range","id":"section_padding","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"content_width","label":"内容宽度","min":1120,"max":1440,"step":20,"unit":"px","default":1440},
+    {"type":"range","id":"eyebrow_size","label":"眉题字号","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"heading_size","label":"主标题字号","min":36,"max":64,"step":1,"unit":"px","default":48},
+    {"type":"range","id":"body_size","label":"副标题字号","min":14,"max":22,"step":1,"unit":"px","default":17},
+    {"type":"range","id":"item_heading_size","label":"项目标题字号","min":14,"max":28,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"项目正文字号","min":12,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"按钮字号","min":12,"max":18,"step":1,"unit":"px","default":15}
+  ],
+  "blocks":[{"type":"button","name":"行动按钮","settings":[
+    {"type":"text","id":"label","label":"按钮文字","default":"Voraussetzungen prüfen"},
+    {"type":"url","id":"url","label":"按钮链接"},
+    {"type":"select","id":"style","label":"按钮样式","options":[{"value":"primary","label":"主要按钮"},{"value":"secondary","label":"次要按钮"}],"default":"primary"}
+  ]}],
+  "max_blocks":2,
+  "presets":[{"name":"01 VPP 首屏","blocks":[{"type":"button","settings":{"label":"Voraussetzungen prüfen","url":"#teilnahme","style":"primary"}},{"type":"button","settings":{"label":"Speichermodelle ansehen","url":"#modelle","style":"secondary"}}]}]
+}
+{% endschema %}

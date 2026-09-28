@@ -1,0 +1,11 @@
+{%- liquid
+  assign vpp_padding = section.settings.section_padding | default: 72
+  assign vpp_content_width = section.settings.content_width | default: 1440
+  assign vpp_heading_size = section.settings.heading_size | default: 34
+  assign vpp_body_size = section.settings.body_size | default: 16
+  assign vpp_eyebrow_size = section.settings.eyebrow_size | default: 13
+  assign vpp_item_heading_size = section.settings.item_heading_size | default: 18
+  assign vpp_item_text_size = section.settings.item_text_size | default: 14
+  assign vpp_control_size = section.settings.control_size | default: 14
+-%}
+--vpp-section-padding: {{ vpp_padding }}px; --vpp-content-width: {{ vpp_content_width }}px; --vpp-heading-size: {{ vpp_heading_size }}px; --vpp-body-size: {{ vpp_body_size }}px; --vpp-eyebrow-size: {{ vpp_eyebrow_size }}px; --vpp-item-heading-size: {{ vpp_item_heading_size }}px; --vpp-item-text-size: {{ vpp_item_text_size }}px; --vpp-control-size: {{ vpp_control_size }}px;

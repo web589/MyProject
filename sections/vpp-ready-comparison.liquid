@@ -1,0 +1,62 @@
+{%- assign page_id = 'vpp-ready-comparison-' | append: section.id -%}
+<div class="vpp-ready-page" data-vpp-ready-page style="{% render 'vpp-ready-style', section: section %}">
+  <section class="vpp-ready__section vpp-ready__comparison" aria-labelledby="{{ page_id }}-heading">
+    <div class="vpp-ready__container">
+      <p class="vpp-ready__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span>{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+      <p class="vpp-ready__subtext">{{ section.settings.subtext }}</p>
+      <div class="vpp-ready__concepts">
+        {% for block in section.blocks %}
+          {% if block.type == 'concept' %}<span class="vpp-ready__concept{% if block.settings.active %} is-active{% endif %}" {{ block.shopify_attributes }}>{% render 'vpp-ready-icon', icon: block.settings.icon %}{{ block.settings.label }}</span>{% endif %}
+        {% endfor %}
+      </div>
+      <div class="vpp-ready__table-wrap">
+        <table>
+          <thead><tr><th>{{ section.settings.name_heading }}</th><th>{{ section.settings.goal_heading }}</th><th>{{ section.settings.difference_heading }}</th></tr></thead>
+          <tbody>
+            {% for block in section.blocks %}
+              {% if block.type == 'row' %}<tr{% if block.settings.highlight %} class="is-highlighted"{% endif %} {{ block.shopify_attributes }}><td class="vpp-ready__table-name" data-label="{{ section.settings.name_heading }}">{{ block.settings.name }}</td><td data-label="{{ section.settings.goal_heading }}">{{ block.settings.goal }}</td><td data-label="{{ section.settings.difference_heading }}">{{ block.settings.difference }}</td></tr>{% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% if section.settings.note != blank %}<p class="vpp-ready__table-note">{{ section.settings.note }}</p>{% endif %}
+      {% if section.settings.link_label != blank %}<a class="vpp-ready__text-link vpp-ready__table-link" href="{{ section.settings.link_url | default: '/blogs/blog-center' }}">{{ section.settings.link_label }}</a>{% endif %}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name":"05 VPP 应用对照",
+  "tag":"section",
+  "class":"vpp-ready-comparison-section",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Richtig einordnen"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"Eigenverbrauch, dynamischer Tarif oder"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"VPP?"},
+    {"type":"textarea","id":"subtext","label":"副标题","default":"Diese Anwendungen verfolgen unterschiedliche Ziele. Sie können zusammenwirken, sind aber nicht dasselbe."},
+    {"type":"text","id":"name_heading","label":"第一列表头","default":"Anwendung"},
+    {"type":"text","id":"goal_heading","label":"第二列表头","default":"Worum es geht"},
+    {"type":"text","id":"difference_heading","label":"第三列表头","default":"Wichtiger Unterschied"},
+    {"type":"textarea","id":"note","label":"表格说明","default":"Die drei Anwendungen können sich ergänzen, verfolgen aber unterschiedliche Ziele."},
+    {"type":"text","id":"link_label","label":"延伸链接文字","default":"Dynamische Stromtarife und Speicher verstehen →"},
+    {"type":"url","id":"link_url","label":"延伸链接地址"},
+    {"type":"header","content":"版式与字体"},
+    {"type":"range","id":"section_padding","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"content_width","label":"内容宽度","min":1120,"max":1440,"step":20,"unit":"px","default":1440},
+    {"type":"range","id":"eyebrow_size","label":"眉题字号","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"heading_size","label":"标题字号","min":28,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"副标题字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"item_heading_size","label":"项目标题字号","min":14,"max":28,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"表格正文字号","min":12,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"控件字号","min":11,"max":18,"step":1,"unit":"px","default":14}
+  ],
+  "blocks":[
+    {"type":"concept","name":"概念标签","settings":[{"type":"text","id":"label","label":"标签文字","default":"Eigenverbrauch"},{"type":"select","id":"icon","label":"线性图标","options":[{"value":"home","label":"住宅"},{"value":"meter","label":"电表"},{"value":"grid","label":"电网"}],"default":"home"},{"type":"checkbox","id":"active","label":"标记为当前主题","default":false}]},
+    {"type":"row","name":"对照表行","settings":[{"type":"text","id":"name","label":"名称","default":"Eigenverbrauch"},{"type":"textarea","id":"goal","label":"内容说明","default":"Eigenen Solarstrom speichern und später im Haushalt nutzen."},{"type":"textarea","id":"difference","label":"差异说明","default":"Dafür ist keine VPP-Teilnahme erforderlich."},{"type":"checkbox","id":"highlight","label":"浅蓝背景强调","default":false}]}
+  ],
+  "max_blocks":8,
+  "presets":[{"name":"05 VPP 应用对照","blocks":[{"type":"concept","settings":{"label":"Eigenverbrauch","icon":"home","active":false}},{"type":"concept","settings":{"label":"Dynamischer Stromtarif","icon":"meter","active":false}},{"type":"concept","settings":{"label":"VPP-Teilnahme","icon":"grid","active":true}},{"type":"row","settings":{"name":"Eigenverbrauch","goal":"Eigenen Solarstrom speichern und später im Haushalt nutzen.","difference":"Dafür ist keine VPP-Teilnahme erforderlich.","highlight":false}},{"type":"row","settings":{"name":"Dynamischer Stromtarif","goal":"Strombezug an zeitlich wechselnden Strompreisen ausrichten.","difference":"Ein dynamischer Tarif allein macht deinen Speicher noch nicht zum Teil eines VPP.","highlight":false}},{"type":"row","settings":{"name":"VPP-Teilnahme","goal":"Mehrere Anlagen über eine Plattform koordinieren und ihre Flexibilität gebündelt bereitstellen.","difference":"Dafür braucht es ein passendes Programm und eine entsprechende Einbindung.","highlight":true}}]}]
+}
+{% endschema %}

@@ -9,10 +9,10 @@
 
   var CONFIG = {
     distance: {
-      under20: { label: 'Unter 20 km' },
-      '20to40': { label: '20–40 km' },
-      '40to80': { label: '40–80 km' },
-      over80: { label: 'Über 80 km' }
+      under20: { label: 'Unter 20 km', distance: 10 },
+      '20to40': { label: '20 – 40 km', distance: 30 },
+      '40to80': { label: '40 – 80 km', distance: 60 },
+      over80: { label: 'Über 80 km', distance: 90 }
     }
   };
 
@@ -100,7 +100,7 @@
   }
 
   function formatRange(lower, upper, unit) {
-    return String(lower).replace('.', ',') + '–' + String(upper).replace('.', ',') + ' ' + (unit || 'kWh');
+    return String(lower).replace('.', ',') + ' – ' + String(upper).replace('.', ',') + ' ' + (unit || 'kWh');
   }
 
   function formatMoney(cents) {
@@ -125,6 +125,7 @@
       lower: lower,
       upper: upper,
       distanceLabel: distance.label,
+      distance: distance.distance,
       pv: selection.pv,
       demandLower: demandLower,
       demandUpper: demandUpper,
@@ -179,7 +180,7 @@
   }
 
   function interpolateTemplate(template, values) {
-    var allowedTokens = /\{\{\s*(product_title|product_capacity|range|lower|upper|unit)\s*\}\}|\[\[\s*(product_title|product_capacity|range|lower|upper|unit)\s*\]\]/g;
+    var allowedTokens = /\{\{\s*(product_title|product_capacity|range|lower|upper|unit|distance)\s*\}\}|\[\[\s*(product_title|product_capacity|range|lower|upper|unit|distance)\s*\]\]/g;
     return String(template || '').replace(allowedTokens, function (match, liquidToken, bracketToken) {
       var token = liquidToken || bracketToken;
       return values[token] === undefined || values[token] === null ? '' : String(values[token]);
@@ -417,6 +418,27 @@
     if (node) node.textContent = value;
   }
 
+  function setCalculatorModel(root, template, values) {
+    var node = root.querySelector('[data-eauto-result-model]');
+    if (!node) return;
+
+    var text = interpolateTemplate(template, values);
+    var title = String(values.product_title || '');
+    var titleIndex = title ? text.indexOf(title) : -1;
+
+    if (titleIndex < 0) {
+      node.textContent = text;
+      return;
+    }
+
+    node.replaceChildren();
+    node.append(document.createTextNode(text.slice(0, titleIndex)));
+    var titleNode = document.createElement('strong');
+    titleNode.textContent = title;
+    node.append(titleNode);
+    node.append(document.createTextNode(text.slice(titleIndex + title.length)));
+  }
+
   function renderCard(root, index, item, copy, unit, cardCopy) {
     var card = root.querySelector('[data-eauto-card="' + index + '"]');
     if (!card) return;
@@ -516,7 +538,8 @@
       range: range,
       lower: String(result.lower).replace('.', ','),
       upper: String(result.upper).replace('.', ','),
-      unit: unit
+      unit: unit,
+      distance: String(result.distance || '')
     };
 
     setText(root, '[data-eauto-result-range]', range);
@@ -525,10 +548,11 @@
       templateValues
     ));
     if (primary) {
-      setText(root, '[data-eauto-result-model]', interpolateTemplate(
+      setCalculatorModel(
+        root,
         readDataValue(calculatorSettings, 'eautoResultModelTemplate', 'Passt zu [[product_title]]'),
         templateValues
-      ));
+      );
       setText(root, '[data-eauto-result-copy]', interpolateTemplate(
         readDataValue(calculatorSettings, 'eautoResultCopyTemplate', 'Mit deiner Auswahl liegt der sinnvolle Orientierungsbereich bei [[range]].'),
         templateValues

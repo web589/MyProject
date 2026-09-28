@@ -1,0 +1,62 @@
+{%- assign page_id = 'vpp-ready-guides-' | append: section.id -%}
+<div class="vpp-ready-page" data-vpp-ready-page style="{% render 'vpp-ready-style', section: section %}">
+  <section id="ratgeber" class="vpp-ready__section vpp-ready__guides" aria-labelledby="{{ page_id }}-heading">
+    <div class="vpp-ready__container">
+      <p class="vpp-ready__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span>{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+      {% if section.settings.subtext != blank %}<p class="vpp-ready__subtext">{{ section.settings.subtext }}</p>{% endif %}
+      <div class="vpp-ready__guide-grid">
+        {% for block in section.blocks %}
+          <article class="vpp-ready__guide-card" {{ block.shopify_attributes }}>
+            <a class="vpp-ready__guide-media" href="{{ block.settings.url | default: '/blogs/blog-center' }}">
+              {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 981px) 33vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}{% else %}<div class="vpp-ready__placeholder">请选择 Ratgeber 图片</div>{% endif %}
+            </a>
+            <div class="vpp-ready__guide-copy">
+              {% if block.settings.tag != blank %}<p class="vpp-ready__tag">{{ block.settings.tag }}</p>{% endif %}
+              <h3>{{ block.settings.title }}</h3>
+              <p>{{ block.settings.excerpt }}</p>
+              {% if block.settings.link_label != blank %}<a class="vpp-ready__text-link" href="{{ block.settings.url | default: '/blogs/blog-center' }}">{{ block.settings.link_label }}</a>{% endif %}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+      {% if section.settings.cta_label != blank %}<p class="vpp-ready__center-cta"><a class="vpp-ready__button vpp-ready__button--secondary" href="{{ section.settings.cta_url | default: '/blogs/blog-center' }}">{{ section.settings.cta_label }}</a></p>{% endif %}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name":"10 VPP 延伸阅读",
+  "tag":"section",
+  "class":"vpp-ready-guides-section",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Weiterführende Themen"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"Ratgeber &"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"Energie-Wissen"},
+    {"type":"textarea","id":"subtext","label":"副标题","default":""},
+    {"type":"text","id":"cta_label","label":"全部文章按钮文字","default":"Alle Ratgeber ansehen →"},
+    {"type":"url","id":"cta_url","label":"全部文章按钮链接"},
+    {"type":"header","content":"版式与字体"},
+    {"type":"range","id":"section_padding","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"content_width","label":"内容宽度","min":1120,"max":1440,"step":20,"unit":"px","default":1440},
+    {"type":"range","id":"eyebrow_size","label":"眉题字号","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"heading_size","label":"标题字号","min":28,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"副标题字号","min":13,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"item_heading_size","label":"文章标题字号","min":14,"max":28,"step":1,"unit":"px","default":17},
+    {"type":"range","id":"item_text_size","label":"文章正文字号","min":12,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"按钮字号","min":11,"max":18,"step":1,"unit":"px","default":14}
+  ],
+  "blocks":[{"type":"guide","name":"文章卡片","settings":[
+    {"type":"text","id":"tag","label":"文章标签","default":"RATGEBER"},
+    {"type":"text","id":"title","label":"文章标题","default":"Dynamischer Stromtarif und Speicher: Wie funktioniert das?"},
+    {"type":"textarea","id":"excerpt","label":"文章摘要","default":"Wie zeitlich wechselnde Strompreise die Nutzung eines Speichers beeinflussen können."},
+    {"type":"image_picker","id":"image","label":"文章图片"},
+    {"type":"text","id":"image_alt","label":"文章图片替代文字","default":"Energie-Wissen Ratgeber"},
+    {"type":"url","id":"url","label":"文章链接"},
+    {"type":"text","id":"link_label","label":"阅读链接文字","default":"Weiterlesen →"}
+  ]}],
+  "max_blocks":6,
+  "presets":[{"name":"10 VPP 延伸阅读","blocks":[{"type":"guide"},{"type":"guide"},{"type":"guide"}]}]
+}
+{% endschema %}

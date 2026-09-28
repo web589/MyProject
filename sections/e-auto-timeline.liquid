@@ -12,7 +12,7 @@
     <div class="e-auto-page__timeline-frame">
       <div class="e-auto-page__timeline-grid" role="list">
         {% for block in section.blocks %}
-          <article class="e-auto-page__timeline-item" role="listitem" {{ block.shopify_attributes }}>
+          <article class="e-auto-page__timeline-item{% if forloop.index == 2 or forloop.index == 4 %} is-highlighted{% endif %}" role="listitem" {{ block.shopify_attributes }}>
             {% if block.settings.time_link != blank %}
               <a class="e-auto-page__timeline-time" href="{{ block.settings.time_link | escape }}" aria-label="{{ block.settings.time | escape }}">{{ block.settings.time }}</a>
             {% else %}
