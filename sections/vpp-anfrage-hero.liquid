@@ -1,6 +1,6 @@
 {%- assign heading_id = 'vpp-anfrage-hero-' | append: section.id -%}
 <div class="vpp-anfrage-page" data-vpp-anfrage-page style="{% render 'vpp-anfrage-style', section: section %}">
-  <section class="vpp-anfrage__section vpp-anfrage__hero" aria-labelledby="{{ heading_id }}">
+  <section id="start" class="vpp-anfrage__section vpp-anfrage__hero vpp-anchor-target" aria-labelledby="{{ heading_id }}">
     <div class="vpp-anfrage__container vpp-anfrage__hero-grid">
       <div class="vpp-anfrage__hero-copy">
         {% if section.settings.eyebrow != blank %}<p class="vpp-anfrage__eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}

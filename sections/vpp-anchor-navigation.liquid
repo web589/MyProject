@@ -1,0 +1,107 @@
+{%- liquid
+  assign navigation_anchor = section.settings.anchor_id | default: 'navigation' | handle
+-%}
+
+<nav
+  id="{{ navigation_anchor }}"
+  class="vpp-anchor-nav"
+  data-vpp-anchor-nav
+  data-section-id="{{ section.id }}"
+  aria-label="{{ section.settings.aria_label | escape }}"
+  style="--vpp-anchor-text-size: {{ section.settings.nav_text_size | default: 13.5 }}px;"
+>
+  <div class="vpp-anchor-nav__inner">
+    {% for block in section.blocks %}
+      {% assign link_target = block.settings.target | remove_first: '#' | handle %}
+      {% if block.settings.label != blank and link_target != blank %}
+        <a
+          class="vpp-anchor-nav__link"
+          href="#{{ link_target }}"
+          data-vpp-anchor-link
+          {{ block.shopify_attributes }}
+        >
+          {{ block.settings.label | escape }}
+        </a>
+      {% endif %}
+    {% endfor %}
+
+    {% assign cta_target = section.settings.cta_target | remove_first: '#' | handle %}
+    {% if section.settings.cta_label != blank and cta_target != blank %}
+      <a class="vpp-anchor-nav__cta" href="#{{ cta_target }}" data-vpp-anchor-link>
+        {{ section.settings.cta_label | escape }}
+      </a>
+    {% endif %}
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "VPP · Ankernavigation",
+  "tag": "section",
+  "class": "section-vpp-anchor-navigation",
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "无障碍标签",
+      "default": "Seitennavigation"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "导航锚点 ID",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "default": "navigation"
+    },
+    {
+      "type": "range",
+      "id": "nav_text_size",
+      "label": "导航文本大小",
+      "min": 11,
+      "max": 18,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13.5
+    },
+    {
+      "type": "header",
+      "content": "突出显示的行动按钮"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "行动按钮标签",
+      "default": "Jetzt anfragen"
+    },
+    {
+      "type": "text",
+      "id": "cta_target",
+      "label": "行动按钮目标",
+      "info": "Anker-ID mit oder ohne # eingeben.",
+      "default": "#teilnahme"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "导航链接",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "标签",
+          "default": "Navigation"
+        },
+        {
+          "type": "text",
+          "id": "target",
+          "label": "目标锚点",
+          "info": "Anker-ID mit oder ohne # eingeben.",
+          "default": "#start"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 20
+}
+{% endschema %}

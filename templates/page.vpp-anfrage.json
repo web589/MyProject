@@ -9,6 +9,24 @@
  */
 {
   "sections": {
+    "vpp_navigation": {
+      "type": "vpp-anchor-navigation",
+      "blocks": {
+        "nav_start": { "type": "link", "settings": { "label": "Start", "target": "#start" } },
+        "nav_why": { "type": "link", "settings": { "label": "Warum diese Angaben?", "target": "#warum" } },
+        "nav_form": { "type": "link", "settings": { "label": "Anfrage", "target": "#anfrage" } },
+        "nav_faq": { "type": "link", "settings": { "label": "FAQ", "target": "#faq" } },
+        "nav_support": { "type": "link", "settings": { "label": "Support", "target": "#abschluss" } }
+      },
+      "block_order": ["nav_start", "nav_why", "nav_form", "nav_faq", "nav_support"],
+      "settings": {
+        "aria_label": "Navigation zur VPP-Anfrage",
+        "anchor_id": "navigation",
+        "nav_text_size": 13.5,
+        "cta_label": "Formular ausfüllen",
+        "cta_target": "#anfrage"
+      }
+    },
     "vpp_anfrage_hero": {
       "type": "vpp-anfrage-hero",
       "blocks": {
@@ -165,5 +183,5 @@
       }
     }
   },
-  "order": ["vpp_anfrage_hero", "vpp_anfrage_why", "vpp_anfrage_form", "vpp_anfrage_faq", "vpp_anfrage_final"]
+  "order": ["vpp_navigation", "vpp_anfrage_hero", "vpp_anfrage_why", "vpp_anfrage_form", "vpp_anfrage_faq", "vpp_anfrage_final"]
 }

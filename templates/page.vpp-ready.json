@@ -9,6 +9,29 @@
  */
 {
   "sections": {
+    "vpp_navigation": {
+      "type": "vpp-anchor-navigation",
+      "blocks": {
+        "nav_start": { "type": "link", "settings": { "label": "Start", "target": "#start" } },
+        "nav_definition": { "type": "link", "settings": { "label": "VPP-ready erklärt", "target": "#definition" } },
+        "nav_benefits": { "type": "link", "settings": { "label": "Vorteile", "target": "#vorteile" } },
+        "nav_function": { "type": "link", "settings": { "label": "Funktionsweise", "target": "#funktionsweise" } },
+        "nav_comparison": { "type": "link", "settings": { "label": "Einordnung", "target": "#vergleich" } },
+        "nav_participation": { "type": "link", "settings": { "label": "Teilnahme", "target": "#teilnahme" } },
+        "nav_boundaries": { "type": "link", "settings": { "label": "Bedingungen", "target": "#bedingungen" } },
+        "nav_models": { "type": "link", "settings": { "label": "Modelle", "target": "#modelle" } },
+        "nav_faq": { "type": "link", "settings": { "label": "FAQ", "target": "#faq" } },
+        "nav_guides": { "type": "link", "settings": { "label": "Ratgeber", "target": "#ratgeber" } }
+      },
+      "block_order": ["nav_start", "nav_definition", "nav_benefits", "nav_function", "nav_comparison", "nav_participation", "nav_boundaries", "nav_models", "nav_faq", "nav_guides"],
+      "settings": {
+        "aria_label": "Navigation zu VPP-ready",
+        "anchor_id": "navigation",
+        "nav_text_size": 13.5,
+        "cta_label": "VPP-Möglichkeiten anfragen",
+        "cta_target": "#teilnahme"
+      }
+    },
     "vpp_hero": {
       "type": "vpp-ready-hero",
       "blocks": {
@@ -456,6 +479,7 @@
     }
   },
   "order": [
+    "vpp_navigation",
     "vpp_hero",
     "vpp_definition",
     "vpp_benefits",

@@ -1,6 +1,6 @@
 {%- assign page_id = 'vpp-ready-guides-' | append: section.id -%}
 <div class="vpp-ready-page" data-vpp-ready-page style="{% render 'vpp-ready-style', section: section %}">
-  <section id="ratgeber" class="vpp-ready__section vpp-ready__guides" aria-labelledby="{{ page_id }}-heading">
+  <section id="ratgeber" class="vpp-ready__section vpp-ready__guides vpp-anchor-target" aria-labelledby="{{ page_id }}-heading">
     <div class="vpp-ready__container">
       <p class="vpp-ready__eyebrow">{{ section.settings.eyebrow }}</p>
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span>{{ section.settings.heading_highlight }}</span>{% endif %}</h2>

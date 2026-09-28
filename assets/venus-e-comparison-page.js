@@ -23,10 +23,21 @@
     }
   }
 
-  function scrollToTarget(target) {
+  function getLocationTarget() {
+    var rawHash = window.location.hash || '';
+    if (rawHash.charAt(0) !== '#' || rawHash.length < 2) return null;
+
+    try {
+      return document.getElementById(decodeURIComponent(rawHash.slice(1)));
+    } catch (error) {
+      return document.getElementById(rawHash.slice(1));
+    }
+  }
+
+  function scrollToTarget(target, behavior) {
     if (!target) return;
     target.scrollIntoView({
-      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      behavior: behavior || (prefersReducedMotion() ? 'auto' : 'smooth'),
       block: 'start'
     });
   }
@@ -86,6 +97,17 @@
       }
     }
 
+    function setActiveLink(activeItem) {
+      activeLinks.forEach(function (item) {
+        var active = item === activeItem;
+        item.link.classList.toggle('is-active', active);
+        if (active) item.link.setAttribute('aria-current', 'location');
+        else item.link.removeAttribute('aria-current');
+      });
+
+      if (activeItem) revealActiveLink(activeItem.link);
+    }
+
     function updateActiveLink() {
       scheduled = false;
       if (!activeLinks.length) return;
@@ -101,14 +123,23 @@
         }
       });
 
-      activeLinks.forEach(function (item) {
-        var active = item === activeItem;
-        item.link.classList.toggle('is-active', active);
-        if (active) item.link.setAttribute('aria-current', 'location');
-        else item.link.removeAttribute('aria-current');
-      });
+      setActiveLink(activeItem);
+    }
 
-      revealActiveLink(activeItem.link);
+    function syncLocation() {
+      var target = getLocationTarget();
+      var activeItem = null;
+
+      if (target) {
+        activeItem = activeLinks.find(function (item) {
+          return getHashTarget(item.link) === target;
+        }) || null;
+
+        if (activeItem) setActiveLink(activeItem);
+        scrollToTarget(target, 'auto');
+      }
+
+      scheduleUpdate();
     }
 
     function scheduleUpdate() {
@@ -119,7 +150,13 @@
 
     window.addEventListener('scroll', scheduleUpdate, { passive: true });
     window.addEventListener('resize', scheduleUpdate);
+    window.addEventListener('hashchange', syncLocation);
+    window.addEventListener('popstate', syncLocation);
     updateActiveLink();
+
+    if (window.location.hash) {
+      window.requestAnimationFrame(syncLocation);
+    }
   }
 
   function setupComparisonTable(section) {
