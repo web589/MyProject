@@ -165,7 +165,7 @@
         "note_size": 13,
         "heading_size": 40,
         "copy_size": 16,
-        "problem_media_height": 480,
+        "problem_media_height": 320,
         "problem_media_width": 100,
         "section_spacing": 68
       }
@@ -223,7 +223,9 @@
             "image_placeholder": "Timeline-Bild auswählen",
             "heading": "Auto unterwegs",
             "text": "Das Auto fährt los, PV-Anlage startet in den Tag. Zu Hause verbraucht kaum jemand Strom.",
-            "badge": ""
+            "badge": "",
+            "badge_link": "",
+            "badge_flow_mode": "none"
           }
         },
         "timeline_noon": {
@@ -251,7 +253,9 @@
             "image_placeholder": "Timeline-Bild auswählen",
             "heading": "Auto zurück",
             "text": "Du kommst nach Hause und steckst das Auto an die Wallbox – genau jetzt geht die Sonne unter.",
-            "badge": ""
+            "badge": "",
+            "badge_link": "",
+            "badge_flow_mode": "none"
           }
         },
         "timeline_night": {
@@ -449,6 +453,7 @@
         "recommendations_note": "",
         "recommendation_hint_template": "Empfohlen für deine Berechnung: [[range]]",
         "comparison_cta_label": "Kurze Strecken? Auch der VENUS E Mini (2 – 6 kWh) passt – alle Modelle im direkten Vergleich ansehen →",
+        "comparison_cta_mini_label": "Mehr Reserven gewünscht? VENUS E 3.0 oder 4.0 – alle Modelle im direkten Vergleich ansehen →",
         "comparison_cta_link": "/pages/venus-e-vergleich",
         "card_recommendation_label": "EMPFOHLENE KONFIGURATION",
         "alternative_label": "ALTERNATIVE KONFIGURATION",
@@ -458,6 +463,14 @@
         "available_label": "Verfügbar",
         "unavailable_label": "Derzeit nicht verfügbar",
         "preorder_label": "Demnächst verfügbar",
+        "mini_card_badge": "KOMPAKT & EINSTEIGER",
+        "mini_card_description": "Für kurze Strecken und wenig Fahrleistung – speichert den Tagesüberschuss für die ersten Abendstunden.",
+        "venus_3_card_badge": "FLEXIBEL & ERWEITERBAR",
+        "venus_3_card_description": "Modular erweiterbar – wächst mit deinem Fahrprofil und deinem Haushalt mit.",
+        "venus_4_card_badge": "EMPFOHLEN FÜR E-AUTO",
+        "venus_4_card_description": "Der Ausgleich zwischen Tagesüberschuss und Abend-Laden – die häufigste Konfiguration für Pendler.",
+        "max_card_badge": "MAXIMALE REICHWEITE",
+        "max_card_description": "Für hohe Fahrleistung & zwei Autos: auch in dunklen Winterwochen noch eigener Solarstrom im Akku.",
         "eyebrow_size": 13,
         "item_heading_size": 18,
         "item_text_size": 13.5,
@@ -541,7 +554,7 @@
         "installation_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png",
         "installation_image_alt": "Bestehende PV-Anlage, Hausnetz und Wallbox mit VENUS E",
         "installation_image_placeholder": "Bestehende PV-Anlage auswählen",
-        "installation_house_image": "shopify://shop_images/MARSTEK_CT002_Smart_Meter_im_Verteilerkasten.webp",
+        "installation_house_image": "shopify://shop_images/4_3_25c4496a-e513-4204-b762-5713bdcc8400.webp",
         "installation_house_image_alt": "Hausnetz, Wallbox und VENUS E",
         "installation_house_image_placeholder": "Hausnetz-Bild auswählen",
         "installation_step_image": "shopify://shop_images/MARSTEK_VENUS_E_Solarspeicher_Serie_Produkt_bersicht.webp",
@@ -569,7 +582,7 @@
         "note_size": 13,
         "heading_size": 40,
         "copy_size": 16,
-        "installation_media_height": 360,
+        "installation_media_height": 280,
         "installation_media_width": 100,
         "section_spacing": 68
       }
@@ -580,8 +593,10 @@
         "benefit-self-use": {
           "type": "benefit",
           "settings": {
+            "value_prefix": "",
             "value": "bis 80",
             "value_accent": "%",
+            "value_suffix": "",
             "title": "Mehr Eigenverbrauch",
             "text": "Mit Speicher nutzt du einen deutlich größeren Teil deines Solarstroms selbst – statt ihn für Cent-Beträge einzuspeisen."
           }
@@ -589,8 +604,10 @@
         "benefit-grid": {
           "type": "benefit",
           "settings": {
+            "value_prefix": "",
             "value": "30",
             "value_accent": "%",
+            "value_suffix": "",
             "title": "Weniger Netzbezug",
             "text": "Haushalt und E-Auto greifen seltener auf Netzstrom zurück – gerade in den Abend- und Winterstunden."
           }
@@ -598,8 +615,10 @@
         "benefit-time": {
           "type": "benefit",
           "settings": {
+            "value_prefix": "",
             "value": "24",
             "value_accent": "h",
+            "value_suffix": "",
             "title": "Solarstrom später nutzen",
             "text": "Tagsüber produziert, nachts gefahren: Der Speicher verschiebt deinen Solarstrom genau in den Moment, in dem du ihn brauchst."
           }
