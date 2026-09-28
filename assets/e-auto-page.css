@@ -1123,6 +1123,9 @@
 
 .e-auto-page__product-card:not(:first-child) .e-auto-page__button:hover,
 .e-auto-page__product-card:not(:first-child) .e-auto-page__button:focus-visible {
+  border-color: transparent;
+  background: transparent;
+  color: var(--eauto-blue);
   transform: none;
   text-decoration: underline;
 }
@@ -1151,7 +1154,7 @@
   box-shadow: none;
 }
 
-/* Preserve each button's existing hover feedback. */
+/* Keep recommendation-card CTAs independent from the shared secondary-button hover. */
 .main-content--e-auto .e-auto-page__hero .e-auto-page__button--primary:hover {
   box-shadow: 0 6px 18px rgba(0, 153, 254, 0.35);
   transform: translateY(-2px);
@@ -1164,6 +1167,9 @@
 
 .main-content--e-auto .e-auto-page__product-card:first-child .e-auto-page__button:hover,
 .main-content--e-auto .e-auto-page__product-card:first-child .e-auto-page__button:focus-visible {
+  border-color: transparent;
+  background: linear-gradient(90deg, var(--eauto-blue), #00c6ff);
+  color: #fff;
   box-shadow: none;
   filter: brightness(1.06);
   transform: none;
