@@ -356,7 +356,9 @@
   color: var(--vpp-anfrage-ink);
   font-size: var(--vpp-anfrage-item-text-size);
   font-weight: 400;
+  letter-spacing: normal;
   line-height: 1.35;
+  text-transform: none;
   cursor: pointer;
   transition: border-color 150ms ease, background-color 150ms ease;
 }
@@ -488,7 +490,9 @@
   color: var(--vpp-anfrage-gray-dark);
   font-size: 12.5px;
   font-weight: 400;
+  letter-spacing: normal;
   line-height: 1.7;
+  text-transform: none;
   cursor: pointer;
 }
 
@@ -510,6 +514,23 @@
   font-size: 12.5px;
   font-weight: 400;
   line-height: 1.7;
+}
+
+.vpp-anfrage__spam-disclaimer {
+  margin-top: 14px;
+  color: var(--vpp-anfrage-gray-dark);
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.vpp-anfrage__spam-disclaimer p {
+  margin: 0 !important;
+}
+
+.vpp-anfrage__spam-disclaimer a {
+  color: var(--vpp-anfrage-blue);
+  text-decoration: underline;
 }
 
 .vpp-anfrage__form-card .shopify-challenge__container,

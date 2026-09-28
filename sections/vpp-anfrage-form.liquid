@@ -112,7 +112,11 @@
 
             <button class="vpp-anfrage__button vpp-anfrage__button--primary" type="submit">{{ section.settings.submit_label }}</button>
             <p class="vpp-anfrage__form-note">{{ section.settings.form_note }}</p>
-            {{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}
+            {% if section.settings.spam_disclaimer != blank %}
+              <div class="vpp-anfrage__spam-disclaimer">{{ section.settings.spam_disclaimer }}</div>
+            {% else %}
+              {{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}
+            {% endif %}
           {%- endif -%}
         {%- endform -%}
 
@@ -170,6 +174,7 @@
     {"type": "richtext", "id": "privacy_text", "label": "隐私同意文案", "default": "<p>Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet werden. Weitere Informationen in der <a href=\"/pages/datenschutz\">Datenschutzerklärung</a>.</p>"},
     {"type": "text", "id": "submit_label", "label": "提交按钮文字", "default": "VPP-Möglichkeiten anfragen"},
     {"type": "text", "id": "form_note", "label": "提交按钮说明", "default": "Eine Anfrage ist noch keine Anmeldung zu einem VPP-Programm."},
+    {"type": "richtext", "id": "spam_disclaimer", "label": "hCaptcha 说明文字", "default": "<p>Diese Website ist durch <a href=\"https://www.hcaptcha.com/\">hCaptcha</a> geschützt und es gelten die <a href=\"https://www.hcaptcha.com/terms\">allgemeinen Geschäftsbedingungen</a> und <a href=\"https://www.hcaptcha.com/privacy\">Datenschutzbestimmungen</a> von hCaptcha.</p>"},
     {"type": "text", "id": "success_heading", "label": "成功标题", "default": "Vielen Dank für deine Anfrage."},
     {"type": "textarea", "id": "success_text", "label": "成功说明", "default": "Wir haben deine Angaben erhalten und melden uns mit den nächsten Schritten bei dir."},
     {"type": "header", "content": "流程卡"},

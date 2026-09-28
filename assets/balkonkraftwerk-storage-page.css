@@ -290,6 +290,18 @@
   transform: scaleX(1);
 }
 
+.bw-anchor-nav__link.is-missing-target {
+  color: #b42318;
+  text-decoration: underline wavy #b42318;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.bw-anchor-nav__link.is-missing-target::before {
+  content: "⚠ ";
+  font-size: 0.75em;
+}
+
 .bw-anchor-nav__cta {
   min-width: 121px;
   margin-left: auto;

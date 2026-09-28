@@ -12,11 +12,11 @@
     "vpp_navigation": {
       "type": "vpp-anchor-navigation",
       "blocks": {
-        "nav_start": { "type": "link", "settings": { "label": "Start", "target": "#start" } },
-        "nav_why": { "type": "link", "settings": { "label": "Warum diese Angaben?", "target": "#warum" } },
-        "nav_form": { "type": "link", "settings": { "label": "Anfrage", "target": "#anfrage" } },
-        "nav_faq": { "type": "link", "settings": { "label": "FAQ", "target": "#faq" } },
-        "nav_support": { "type": "link", "settings": { "label": "Support", "target": "#abschluss" } }
+        "nav_start": { "type": "link", "settings": { "label": "Start", "module": "vpp_request_start" } },
+        "nav_why": { "type": "link", "settings": { "label": "Warum diese Angaben?", "module": "vpp_request_why" } },
+        "nav_form": { "type": "link", "settings": { "label": "Anfrage", "module": "vpp_request_form" } },
+        "nav_faq": { "type": "link", "settings": { "label": "FAQ", "module": "vpp_request_faq" } },
+        "nav_support": { "type": "link", "settings": { "label": "Support", "module": "vpp_request_support" } }
       },
       "block_order": ["nav_start", "nav_why", "nav_form", "nav_faq", "nav_support"],
       "settings": {
@@ -24,7 +24,8 @@
         "anchor_id": "navigation",
         "nav_text_size": 13.5,
         "cta_label": "Formular ausfüllen",
-        "cta_target": "#anfrage"
+        "cta_module": "vpp_request_form",
+        "cta_target": ""
       }
     },
     "vpp_anfrage_hero": {
@@ -122,6 +123,7 @@
         "privacy_text": "<p>Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet werden. Weitere Informationen in der <a href=\"/pages/datenschutz\">Datenschutzerklärung</a>.</p>",
         "submit_label": "VPP-Möglichkeiten anfragen",
         "form_note": "Eine Anfrage ist noch keine Anmeldung zu einem VPP-Programm.",
+        "spam_disclaimer": "<p>Diese Website ist durch <a href=\"https://www.hcaptcha.com/\">hCaptcha</a> geschützt und es gelten die <a href=\"https://www.hcaptcha.com/terms\">allgemeinen Geschäftsbedingungen</a> und <a href=\"https://www.hcaptcha.com/privacy\">Datenschutzbestimmungen</a> von hCaptcha.</p>",
         "success_heading": "Vielen Dank für deine Anfrage.",
         "success_text": "Wir haben deine Angaben erhalten und melden uns mit den nächsten Schritten bei dir.",
         "flow_heading": "Was passiert nach deiner Anfrage?",

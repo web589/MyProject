@@ -15,13 +15,16 @@
 >
   <div class="bw-container bw-anchor-nav__inner">
     {% for block in section.blocks %}
-      {% assign link_target = block.settings.target | remove_first: '#' | handle %}
+      {% assign link_module = block.settings.module %}
+      {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
+      {% assign link_target = link_target | strip | remove_first: '#' | handle %}
       {% if block.type == 'link' and block.settings.label != blank and link_target != blank %}
         <a
           class="bw-anchor-nav__link"
           href="#{{ link_target }}"
           data-ac-anchor-link
           data-bw-anchor-link
+          data-bw-anchor-module="{{ link_module | escape }}"
           {{ block.shopify_attributes }}
         >
           {{ block.settings.label | escape }}
@@ -78,17 +81,37 @@
       "name": "Navigationslink",
       "settings": [
         {
+          "type": "select",
+          "id": "module",
+          "label": "链接到模块",
+          "options": [
+            { "value": "ac_definition", "label": "AC-Speicher · Was ist AC-Speicher?" },
+            { "value": "ac_function", "label": "AC-Speicher · Funktionsweise" },
+            { "value": "ac_why", "label": "AC-Speicher · Vorteile" },
+            { "value": "ac_comparison", "label": "AC-Speicher · AC oder DC?" },
+            { "value": "ac_smart", "label": "AC-Speicher · Intelligente Steuerung" },
+            { "value": "ac_audience", "label": "AC-Speicher · Zielgruppen" },
+            { "value": "ac_models", "label": "AC-Speicher · Modelle" },
+            { "value": "ac_faq", "label": "AC-Speicher · FAQ" },
+            { "value": "ac_blog", "label": "AC-Speicher · Ratgeber" },
+            { "value": "custom", "label": "自定义锚点（高级）" }
+          ],
+          "default": "ac_definition"
+        },
+        {
           "type": "text",
           "id": "label",
           "label": "标签",
-          "default": "Navigation"
+          "default": "Navigation",
+          "info": "模块决定链接目标；此处仅用于自定义导航显示文字。"
         },
         {
           "type": "text",
           "id": "target",
-          "label": "目标地址",
-          "info": "Anker-ID mit oder ohne # eingeben.",
-          "default": "#definition"
+          "label": "自定义锚点 ID（高级）",
+          "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
+          "default": "",
+          "visible_if": "{{ block.settings.module }} == 'custom'"
         }
       ]
     }
@@ -98,15 +121,15 @@
     {
       "name": "AC-Speicher – Ankernavigation",
       "blocks": [
-        { "type": "link", "settings": { "label": "Was ist AC-Speicher?", "target": "#definition" } },
-        { "type": "link", "settings": { "label": "Funktionsweise", "target": "#funktion" } },
-        { "type": "link", "settings": { "label": "Vorteile", "target": "#vorteile" } },
-        { "type": "link", "settings": { "label": "AC oder DC?", "target": "#vergleich" } },
-        { "type": "link", "settings": { "label": "Intelligente Steuerung", "target": "#steuerung" } },
-        { "type": "link", "settings": { "label": "Zielgruppen", "target": "#zielgruppen" } },
-        { "type": "link", "settings": { "label": "Modelle", "target": "#modelle" } },
-        { "type": "link", "settings": { "label": "FAQ", "target": "#faq" } },
-        { "type": "link", "settings": { "label": "Ratgeber", "target": "#ratgeber" } }
+        { "type": "link", "settings": { "label": "Was ist AC-Speicher?", "module": "ac_definition" } },
+        { "type": "link", "settings": { "label": "Funktionsweise", "module": "ac_function" } },
+        { "type": "link", "settings": { "label": "Vorteile", "module": "ac_why" } },
+        { "type": "link", "settings": { "label": "AC oder DC?", "module": "ac_comparison" } },
+        { "type": "link", "settings": { "label": "Intelligente Steuerung", "module": "ac_smart" } },
+        { "type": "link", "settings": { "label": "Zielgruppen", "module": "ac_audience" } },
+        { "type": "link", "settings": { "label": "Modelle", "module": "ac_models" } },
+        { "type": "link", "settings": { "label": "FAQ", "module": "ac_faq" } },
+        { "type": "link", "settings": { "label": "Ratgeber", "module": "ac_blog" } }
       ]
     }
   ]

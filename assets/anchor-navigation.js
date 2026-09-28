@@ -12,6 +12,10 @@
     return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
 
+  function isDesignMode() {
+    return Boolean(window.Shopify && window.Shopify.designMode);
+  }
+
   function targetFor(link) {
     if (!link) return null;
 
@@ -85,20 +89,40 @@
     var links = [];
     var activeLinks = [];
     var scheduled = false;
+    var layoutObserver = null;
 
     function collectTargets() {
       links = Array.prototype.slice.call(nav.querySelectorAll(linkSelector));
       activeLinks = [];
 
+      if (layoutObserver) layoutObserver.disconnect();
+
       links.forEach(function (link) {
         var target = targetFor(link);
         link.hidden = false;
+        link.classList.remove('is-missing-target');
+        link.removeAttribute('data-anchor-validation');
+
+        if (!target && isDesignMode()) {
+          link.classList.add('is-missing-target');
+          link.setAttribute('data-anchor-validation', 'missing');
+          if (link.dataset.anchorWarningShown !== 'true') {
+            link.dataset.anchorWarningShown = 'true';
+            console.warn('[anchor-navigation] No matching section for navigation item:', link.dataset.bwAnchorModule || link.textContent.trim());
+          }
+        }
+
         if (!target || target.hidden) return;
 
         if (link.matches(navLinkSelector) && !link.hasAttribute('data-anchor-nav-cta')) {
           activeLinks.push({ link: link, target: target });
         }
       });
+
+      if (window.ResizeObserver) {
+        layoutObserver = new ResizeObserver(function () { scheduleUpdate(); });
+        activeLinks.forEach(function (item) { layoutObserver.observe(item.target); });
+      }
     }
 
     function revealActiveLink(link) {
@@ -107,10 +131,11 @@
       var scrollerRect = scroller.getBoundingClientRect();
       var linkRect = link.getBoundingClientRect();
       if (linkRect.left < scrollerRect.left || linkRect.right > scrollerRect.right) {
-        link.scrollIntoView({
-          behavior: reducedMotion() ? 'auto' : 'smooth',
-          block: 'nearest',
-          inline: 'center'
+        var targetLeft = link.offsetLeft - (scroller.clientWidth - link.offsetWidth) / 2;
+        var maxScrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+        scroller.scrollTo({
+          left: Math.max(0, Math.min(targetLeft, maxScrollLeft)),
+          behavior: reducedMotion() ? 'auto' : 'smooth'
         });
       }
     }
@@ -159,8 +184,10 @@
     window.addEventListener('scroll', scheduleUpdate, { passive: true });
     window.addEventListener('resize', scheduleUpdate);
     window.addEventListener('anchor-navigation:update', scheduleUpdate);
+    window.addEventListener('anchor-navigation:layout-change', syncLocation);
     window.addEventListener('hashchange', syncLocation);
     window.addEventListener('popstate', syncLocation);
+    window.addEventListener('load', syncLocation, { once: true });
 
     collectTargets();
     navControllers.set(nav, {

@@ -15,7 +15,9 @@
   <div class="vpp-anchor-nav__inner">
     <div class="vpp-anchor-nav__links">
       {% for block in section.blocks %}
-        {% assign link_target = block.settings.target | remove_first: '#' | handle %}
+        {% assign link_module = block.settings.module %}
+        {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
+        {% assign link_target = link_target | strip | remove_first: '#' | handle %}
         {% if block.settings.label != blank and link_target != blank %}
           <a
             class="vpp-anchor-nav__link"
@@ -23,6 +25,7 @@
             data-vpp-anchor-link
             data-anchor-link
             data-anchor-nav-link
+            data-bw-anchor-module="{{ link_module | escape }}"
             {{ block.shopify_attributes }}
           >
             {{ block.settings.label | escape }}
@@ -31,9 +34,11 @@
       {% endfor %}
     </div>
 
-    {% assign cta_target = section.settings.cta_target | remove_first: '#' | handle %}
+    {% assign cta_module = section.settings.cta_module %}
+    {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
+    {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
     {% if section.settings.cta_label != blank and cta_target != blank %}
-      <a class="vpp-anchor-nav__cta" href="#{{ cta_target }}" data-vpp-anchor-link data-anchor-link data-anchor-nav-cta>
+      <a class="vpp-anchor-nav__cta" href="#{{ cta_target }}" data-vpp-anchor-link data-anchor-link data-anchor-nav-cta data-bw-anchor-module="{{ cta_module | escape }}">
         {{ section.settings.cta_label | escape }}
       </a>
     {% endif %}
@@ -80,11 +85,47 @@
       "default": "Jetzt anfragen"
     },
     {
+      "type": "select",
+      "id": "cta_module",
+      "label": "行动按钮链接到模块",
+      "options": [
+        { "value": "vpp_ready_participation", "label": "VPP-ready · Teilnahme" },
+        { "value": "vpp_ready_start", "label": "VPP-ready · Start" },
+        { "value": "vpp_ready_definition", "label": "VPP-ready · Erklärung" },
+        { "value": "vpp_ready_benefits", "label": "VPP-ready · Vorteile" },
+        { "value": "vpp_ready_function", "label": "VPP-ready · Funktionsweise" },
+        { "value": "vpp_ready_comparison", "label": "VPP-ready · Einordnung" },
+        { "value": "vpp_ready_boundaries", "label": "VPP-ready · Bedingungen" },
+        { "value": "vpp_ready_models", "label": "VPP-ready · Modelle" },
+        { "value": "vpp_ready_faq", "label": "VPP-ready · FAQ" },
+        { "value": "vpp_ready_guides", "label": "VPP-ready · Ratgeber" },
+        { "value": "vpp_request_start", "label": "VPP-Anfrage · Start" },
+        { "value": "vpp_request_why", "label": "VPP-Anfrage · Warum" },
+        { "value": "vpp_request_form", "label": "VPP-Anfrage · Anfrage" },
+        { "value": "vpp_request_faq", "label": "VPP-Anfrage · FAQ" },
+        { "value": "vpp_request_support", "label": "VPP-Anfrage · Support" },
+        { "value": "ai_start", "label": "AI-Energie · Start" },
+        { "value": "ai_definition", "label": "AI-Energie · Erklärung" },
+        { "value": "ai_function", "label": "AI-Energie · Funktionsweise" },
+        { "value": "ai_meter", "label": "AI-Energie · Smart Meter" },
+        { "value": "ai_compare", "label": "AI-Energie · Vergleich" },
+        { "value": "ai_day", "label": "AI-Energie · Im Alltag" },
+        { "value": "ai_system", "label": "AI-Energie · System" },
+        { "value": "ai_models", "label": "AI-Energie · Modelle" },
+        { "value": "ai_faq", "label": "AI-Energie · FAQ" },
+        { "value": "ai_guides", "label": "AI-Energie · Ratgeber" },
+        { "value": "ai_final", "label": "AI-Energie · Nächster Schritt" },
+        { "value": "custom", "label": "自定义锚点（高级）" }
+      ],
+      "default": "vpp_ready_participation"
+    },
+    {
       "type": "text",
       "id": "cta_target",
-      "label": "行动按钮目标",
-      "info": "Anker-ID mit oder ohne # eingeben.",
-      "default": "#teilnahme"
+      "label": "自定义锚点 ID（高级）",
+      "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
+      "default": "",
+      "visible_if": "{{ section.settings.cta_module }} == 'custom'"
     }
   ],
   "blocks": [
@@ -93,17 +134,54 @@
       "name": "导航链接",
       "settings": [
         {
+          "type": "select",
+          "id": "module",
+          "label": "链接到模块",
+          "options": [
+            { "value": "vpp_ready_start", "label": "VPP-ready · Start" },
+            { "value": "vpp_ready_definition", "label": "VPP-ready · Erklärung" },
+            { "value": "vpp_ready_benefits", "label": "VPP-ready · Vorteile" },
+            { "value": "vpp_ready_function", "label": "VPP-ready · Funktionsweise" },
+            { "value": "vpp_ready_comparison", "label": "VPP-ready · Einordnung" },
+            { "value": "vpp_ready_participation", "label": "VPP-ready · Teilnahme" },
+            { "value": "vpp_ready_boundaries", "label": "VPP-ready · Bedingungen" },
+            { "value": "vpp_ready_models", "label": "VPP-ready · Modelle" },
+            { "value": "vpp_ready_faq", "label": "VPP-ready · FAQ" },
+            { "value": "vpp_ready_guides", "label": "VPP-ready · Ratgeber" },
+            { "value": "vpp_request_start", "label": "VPP-Anfrage · Start" },
+            { "value": "vpp_request_why", "label": "VPP-Anfrage · Warum" },
+            { "value": "vpp_request_form", "label": "VPP-Anfrage · Anfrage" },
+            { "value": "vpp_request_faq", "label": "VPP-Anfrage · FAQ" },
+            { "value": "vpp_request_support", "label": "VPP-Anfrage · Support" },
+            { "value": "ai_start", "label": "AI-Energie · Start" },
+            { "value": "ai_definition", "label": "AI-Energie · Erklärung" },
+            { "value": "ai_function", "label": "AI-Energie · Funktionsweise" },
+            { "value": "ai_meter", "label": "AI-Energie · Smart Meter" },
+            { "value": "ai_compare", "label": "AI-Energie · Vergleich" },
+            { "value": "ai_day", "label": "AI-Energie · Im Alltag" },
+            { "value": "ai_system", "label": "AI-Energie · System" },
+            { "value": "ai_models", "label": "AI-Energie · Modelle" },
+            { "value": "ai_faq", "label": "AI-Energie · FAQ" },
+            { "value": "ai_guides", "label": "AI-Energie · Ratgeber" },
+            { "value": "ai_final", "label": "AI-Energie · Nächster Schritt" },
+            { "value": "custom", "label": "自定义锚点（高级）" }
+          ],
+          "default": "vpp_ready_start"
+        },
+        {
           "type": "text",
           "id": "label",
           "label": "标签",
-          "default": "Navigation"
+          "default": "Navigation",
+          "info": "模块决定链接目标；此处仅用于自定义导航显示文字。"
         },
         {
           "type": "text",
           "id": "target",
-          "label": "目标锚点",
-          "info": "Anker-ID mit oder ohne # eingeben.",
-          "default": "#start"
+          "label": "自定义锚点 ID（高级）",
+          "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
+          "default": "",
+          "visible_if": "{{ block.settings.module }} == 'custom'"
         }
       ]
     }

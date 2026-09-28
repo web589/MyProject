@@ -93,6 +93,18 @@
   transform: scaleX(1);
 }
 
+.vpp-anchor-nav__link.is-missing-target {
+  color: #b42318;
+  text-decoration: underline wavy #b42318;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.vpp-anchor-nav__link.is-missing-target::before {
+  content: "⚠ ";
+  font-size: 0.75em;
+}
+
 .vpp-anchor-nav__cta {
   min-width: 132px;
   flex: 0 0 auto;

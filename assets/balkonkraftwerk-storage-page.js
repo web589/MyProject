@@ -881,6 +881,7 @@
         mount.removeAttribute('aria-busy');
         executeScripts(mount);
         mount.dispatchEvent(new CustomEvent('venus:homepage-sync-ready', { bubbles: true }));
+        window.dispatchEvent(new CustomEvent('anchor-navigation:layout-change'));
       }).catch(function () {
         mount.removeAttribute('aria-busy');
         if (isDesignMode()) {

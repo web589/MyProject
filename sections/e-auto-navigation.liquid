@@ -15,12 +15,15 @@
 >
   <div class="bw-container bw-anchor-nav__inner">
     {% for block in section.blocks %}
-      {% assign link_target = block.settings.target | remove_first: '#' | handle %}
+      {% assign link_module = block.settings.module %}
+      {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
+      {% assign link_target = link_target | strip | remove_first: '#' | handle %}
       {% if block.settings.label != blank and link_target != blank %}
         <a
           class="bw-anchor-nav__link"
           href="#{{ link_target }}"
           data-eauto-anchor-link
+          data-bw-anchor-module="{{ link_module | escape }}"
           {{ block.shopify_attributes }}
         >
           {{ block.settings.label | escape }}
@@ -28,12 +31,15 @@
       {% endif %}
     {% endfor %}
 
-    {% assign cta_target = section.settings.cta_target | remove_first: '#' | handle %}
+    {% assign cta_module = section.settings.cta_module %}
+    {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
+    {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
     {% if section.settings.cta_label != blank and cta_target != blank %}
       <a
         class="bw-anchor-nav__cta"
         href="#{{ cta_target }}"
         data-eauto-anchor-link
+        data-bw-anchor-module="{{ cta_module | escape }}"
       >
         {{ section.settings.cta_label | escape }}
       </a>
@@ -71,11 +77,31 @@
       "default": "Passenden Speicher finden"
     },
     {
+      "type": "select",
+      "id": "cta_module",
+      "label": "行动按钮链接到模块",
+      "options": [
+        { "value": "eauto_calculator", "label": "E-Auto · Rechner" },
+        { "value": "eauto_start", "label": "E-Auto · Start" },
+        { "value": "eauto_problem", "label": "E-Auto · Problem" },
+        { "value": "eauto_flow", "label": "E-Auto · Energiefluss" },
+        { "value": "eauto_day", "label": "E-Auto · Typischer Tag" },
+        { "value": "eauto_profile", "label": "E-Auto · Fahrprofile" },
+        { "value": "eauto_recommendations", "label": "E-Auto · Empfehlungen" },
+        { "value": "eauto_smart_energy", "label": "E-Auto · Smart Energy" },
+        { "value": "eauto_installation", "label": "E-Auto · Installation" },
+        { "value": "eauto_faq", "label": "E-Auto · FAQ" },
+        { "value": "custom", "label": "自定义锚点（高级）" }
+      ],
+      "default": "eauto_calculator"
+    },
+    {
       "type": "text",
       "id": "cta_target",
-      "label": "行动按钮目标地址",
-      "info": "Anker-ID mit oder ohne # eingeben.",
-      "default": "#eauto-calculator"
+      "label": "自定义锚点 ID（高级）",
+      "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
+      "default": "",
+      "visible_if": "{{ section.settings.cta_module }} == 'custom'"
     },
     {
       "type": "header",
@@ -98,17 +124,38 @@
       "name": "Navigationslink",
       "settings": [
         {
+          "type": "select",
+          "id": "module",
+          "label": "链接到模块",
+          "options": [
+            { "value": "eauto_start", "label": "E-Auto · Start" },
+            { "value": "eauto_problem", "label": "E-Auto · Problem" },
+            { "value": "eauto_flow", "label": "E-Auto · Energiefluss" },
+            { "value": "eauto_day", "label": "E-Auto · Typischer Tag" },
+            { "value": "eauto_profile", "label": "E-Auto · Fahrprofile" },
+            { "value": "eauto_calculator", "label": "E-Auto · Rechner" },
+            { "value": "eauto_recommendations", "label": "E-Auto · Empfehlungen" },
+            { "value": "eauto_smart_energy", "label": "E-Auto · Smart Energy" },
+            { "value": "eauto_installation", "label": "E-Auto · Installation" },
+            { "value": "eauto_faq", "label": "E-Auto · FAQ" },
+            { "value": "custom", "label": "自定义锚点（高级）" }
+          ],
+          "default": "eauto_start"
+        },
+        {
           "type": "text",
           "id": "label",
           "label": "标签",
-          "default": "Navigation"
+          "default": "Navigation",
+          "info": "模块决定链接目标；此处仅用于自定义导航显示文字。"
         },
         {
           "type": "text",
           "id": "target",
-          "label": "目标地址",
-          "info": "Anker-ID mit oder ohne # eingeben.",
-          "default": "#eauto-start"
+          "label": "自定义锚点 ID（高级）",
+          "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
+          "default": "",
+          "visible_if": "{{ block.settings.module }} == 'custom'"
         }
       ]
     }
@@ -121,19 +168,20 @@
         "anchor_id": "eauto-navigation",
         "aria_label": "E-Auto Seitennavigation",
         "cta_label": "Passenden Speicher finden",
-        "cta_target": "#eauto-calculator"
+        "cta_module": "eauto_calculator",
+        "cta_target": ""
       },
       "blocks": [
-        { "type": "link", "settings": { "label": "Start", "target": "#eauto-start" } },
-        { "type": "link", "settings": { "label": "Problem", "target": "#eauto-problem" } },
-        { "type": "link", "settings": { "label": "Energiefluss", "target": "#eauto-flow" } },
-        { "type": "link", "settings": { "label": "Typischer Tag", "target": "#eauto-day" } },
-        { "type": "link", "settings": { "label": "Fahrprofile", "target": "#eauto-profile" } },
-        { "type": "link", "settings": { "label": "Rechner", "target": "#eauto-calculator" } },
-        { "type": "link", "settings": { "label": "Empfehlungen", "target": "#eauto-recommendations" } },
-        { "type": "link", "settings": { "label": "Smart Energy", "target": "#eauto-smart-energy" } },
-        { "type": "link", "settings": { "label": "Installation", "target": "#eauto-installation" } },
-        { "type": "link", "settings": { "label": "FAQ", "target": "#eauto-faq" } }
+        { "type": "link", "settings": { "label": "Start", "module": "eauto_start" } },
+        { "type": "link", "settings": { "label": "Problem", "module": "eauto_problem" } },
+        { "type": "link", "settings": { "label": "Energiefluss", "module": "eauto_flow" } },
+        { "type": "link", "settings": { "label": "Typischer Tag", "module": "eauto_day" } },
+        { "type": "link", "settings": { "label": "Fahrprofile", "module": "eauto_profile" } },
+        { "type": "link", "settings": { "label": "Rechner", "module": "eauto_calculator" } },
+        { "type": "link", "settings": { "label": "Empfehlungen", "module": "eauto_recommendations" } },
+        { "type": "link", "settings": { "label": "Smart Energy", "module": "eauto_smart_energy" } },
+        { "type": "link", "settings": { "label": "Installation", "module": "eauto_installation" } },
+        { "type": "link", "settings": { "label": "FAQ", "module": "eauto_faq" } }
       ]
     }
   ]
