@@ -1,162 +1,11 @@
 (function () {
   'use strict';
 
-  var initializedNavs = new WeakSet();
   var initializedTables = new WeakSet();
   var initializedFaqs = new WeakSet();
-  var globalAnchorHandlerReady = false;
 
   function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
-
-  function getHashTarget(link) {
-    if (!link) return null;
-
-    var rawHref = link.getAttribute('href') || '';
-    if (rawHref.charAt(0) !== '#' || rawHref.length < 2) return null;
-
-    try {
-      return document.getElementById(decodeURIComponent(rawHref.slice(1)));
-    } catch (error) {
-      return document.getElementById(rawHref.slice(1));
-    }
-  }
-
-  function getLocationTarget() {
-    var rawHash = window.location.hash || '';
-    if (rawHash.charAt(0) !== '#' || rawHash.length < 2) return null;
-
-    try {
-      return document.getElementById(decodeURIComponent(rawHash.slice(1)));
-    } catch (error) {
-      return document.getElementById(rawHash.slice(1));
-    }
-  }
-
-  function scrollToTarget(target, behavior) {
-    if (!target) return;
-    target.scrollIntoView({
-      behavior: behavior || (prefersReducedMotion() ? 'auto' : 'smooth'),
-      block: 'start'
-    });
-  }
-
-  function setupGlobalAnchorHandler() {
-    if (globalAnchorHandlerReady) return;
-    globalAnchorHandlerReady = true;
-
-    document.addEventListener('click', function (event) {
-      var link = event.target.closest('[data-bw-anchor-link]');
-      if (!link) return;
-
-      var target = getHashTarget(link);
-      if (!target) return;
-
-      event.preventDefault();
-      scrollToTarget(target);
-
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, '', '#' + target.id);
-      }
-    });
-  }
-
-  function setupAnchorNav(nav) {
-    if (!nav || initializedNavs.has(nav)) return;
-    initializedNavs.add(nav);
-
-    var navScroller = nav.querySelector('.bw-anchor-nav__inner');
-    var links = Array.prototype.slice.call(nav.querySelectorAll('[data-bw-anchor-link]'));
-    var activeLinks = [];
-    var scheduled = false;
-
-    links.forEach(function (link) {
-      var target = getHashTarget(link);
-      if (!target) {
-        link.hidden = true;
-        return;
-      }
-
-      if (link.classList.contains('bw-anchor-nav__link')) {
-        activeLinks.push({ link: link });
-      }
-    });
-
-    function revealActiveLink(link) {
-      if (!navScroller || !link) return;
-
-      var scrollerRect = navScroller.getBoundingClientRect();
-      var linkRect = link.getBoundingClientRect();
-      if (linkRect.left < scrollerRect.left || linkRect.right > scrollerRect.right) {
-        link.scrollIntoView({
-          behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-          block: 'nearest',
-          inline: 'center'
-        });
-      }
-    }
-
-    function setActiveLink(activeItem) {
-      activeLinks.forEach(function (item) {
-        var active = item === activeItem;
-        item.link.classList.toggle('is-active', active);
-        if (active) item.link.setAttribute('aria-current', 'location');
-        else item.link.removeAttribute('aria-current');
-      });
-
-      if (activeItem) revealActiveLink(activeItem.link);
-    }
-
-    function updateActiveLink() {
-      scheduled = false;
-      if (!activeLinks.length) return;
-
-      var navBottom = nav.getBoundingClientRect().bottom;
-      var activationLine = Math.max(0, navBottom) + 36;
-      var activeItem = activeLinks[0];
-
-      activeLinks.forEach(function (item) {
-        var target = getHashTarget(item.link);
-        if (target && target.getBoundingClientRect().top <= activationLine) {
-          activeItem = item;
-        }
-      });
-
-      setActiveLink(activeItem);
-    }
-
-    function syncLocation() {
-      var target = getLocationTarget();
-      var activeItem = null;
-
-      if (target) {
-        activeItem = activeLinks.find(function (item) {
-          return getHashTarget(item.link) === target;
-        }) || null;
-
-        if (activeItem) setActiveLink(activeItem);
-        scrollToTarget(target, 'auto');
-      }
-
-      scheduleUpdate();
-    }
-
-    function scheduleUpdate() {
-      if (scheduled) return;
-      scheduled = true;
-      window.requestAnimationFrame(updateActiveLink);
-    }
-
-    window.addEventListener('scroll', scheduleUpdate, { passive: true });
-    window.addEventListener('resize', scheduleUpdate);
-    window.addEventListener('hashchange', syncLocation);
-    window.addEventListener('popstate', syncLocation);
-    updateActiveLink();
-
-    if (window.location.hash) {
-      window.requestAnimationFrame(syncLocation);
-    }
   }
 
   function setupComparisonTable(section) {
@@ -177,7 +26,7 @@
     var resizeObserver = null;
 
     function getNavBottom() {
-      var nav = document.querySelector('[data-bw-anchor-nav]');
+      var nav = document.querySelector('[data-anchor-nav], [data-bw-anchor-nav], [data-vpp-anchor-nav]');
       if (!nav || nav.hidden) return 0;
       return Math.max(0, Math.round(nav.getBoundingClientRect().bottom));
     }
@@ -353,10 +202,6 @@
 
   function boot(root) {
     var context = root || document;
-    setupGlobalAnchorHandler();
-
-    if (context.matches && context.matches('[data-bw-anchor-nav]')) setupAnchorNav(context);
-    context.querySelectorAll('[data-bw-anchor-nav]').forEach(setupAnchorNav);
 
     if (context.matches && context.matches('[data-bw-compare-table]')) setupComparisonTable(context);
     context.querySelectorAll('[data-bw-compare-table]').forEach(setupComparisonTable);

@@ -10,6 +10,8 @@
   class="bw-storage bw-storage-section bw-anchor-nav bw-anchor-target"
   data-bw-module="navigation"
   data-bw-anchor-nav
+  data-anchor-nav
+  data-bw-anchor-controller="modern"
   data-section-id="{{ section.id }}"
   style="--bw-nav-text-size: {{ section.settings.nav_text_size | default: 13 }}px;"
   aria-label="{{ section.settings.aria_label | escape }}"
@@ -22,6 +24,8 @@
           class="bw-anchor-nav__link"
           href="#{{ link_target }}"
           data-bw-anchor-link
+          data-anchor-link
+          data-anchor-nav-link
           {{ block.shopify_attributes }}
         >
           {{ block.settings.label | escape }}
@@ -35,6 +39,8 @@
         class="bw-anchor-nav__cta"
         href="#{{ cta_target }}"
         data-bw-anchor-link
+        data-anchor-link
+        data-anchor-nav-cta
       >
         {{ section.settings.cta_label | escape }}
       </a>

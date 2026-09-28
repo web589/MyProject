@@ -4,7 +4,7 @@
 -%}
 
 <div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-guide-image-height: {{ section.settings.guide_image_height | default: 303 }}px; --ai-guide-image-width: {{ section.settings.guide_image_width | default: 100 }}%;">
-  <section id="ratgeber" class="ai-energy__section ai-energy__guides" aria-labelledby="{{ page_id }}-heading">
+  <section id="ratgeber" class="ai-energy__section ai-energy__guides vpp-anchor-target" aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>

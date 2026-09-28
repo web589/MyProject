@@ -52,8 +52,6 @@
     <script src="{{ 'ac-coupled-storage-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
   {%- if template.suffix == 'ai-energiemanagement' -%}
-    {{ 'balkonkraftwerk-storage-page.css' | asset_url | stylesheet_tag }}
-    <script src="{{ 'balkonkraftwerk-storage-page.js' | asset_url }}" defer="defer"></script>
     {{ 'ai-energy-page.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'ai-energy-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
@@ -69,9 +67,11 @@
     {{ 'vpp-anfrage-page.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'vpp-anfrage-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
-  {%- if template.suffix == 'vpp-ready' or template.suffix == 'vpp-anfrage' -%}
+  {%- if template.suffix == 'vpp-ready' or template.suffix == 'vpp-anfrage' or template.suffix == 'ai-energiemanagement' -%}
     {{ 'vpp-anchor-navigation.css' | asset_url | stylesheet_tag }}
-    <script src="{{ 'vpp-anchor-navigation.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+  {%- if template.suffix == 'balkonkraftwerk-mit-speicher' or template.suffix == 'venus-e-vergleich' or template.suffix == 'vpp-ready' or template.suffix == 'vpp-anfrage' or template.suffix == 'ai-energiemanagement' -%}
+    <script src="{{ 'anchor-navigation.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
   {%- if template.suffix == 'venus-e-vergleich' or template.suffix == 'ac-gekoppelter-speicher' or template.suffix == 'ai-energiemanagement' or template.suffix == 'e-auto' or template.suffix == 'smart-meter-energiefluss' or template.suffix == 'faq' -%}
     {{ 'venus-e-design-system.css' | asset_url | stylesheet_tag }}

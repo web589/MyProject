@@ -1,7 +1,7 @@
 {%- assign page_id = 'ai-energy-hero-' | append: section.id -%}
 
 <div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-hero-image-height: {{ section.settings.hero_image_height | default: 480 }}px; --ai-hero-image-width: {{ section.settings.hero_image_width | default: 100 }}%;">
-  <section class="ai-energy__section ai-energy__hero" aria-labelledby="{{ page_id }}-heading">
+  <section id="start" class="ai-energy__section ai-energy__hero vpp-anchor-target" aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container ai-energy__hero-grid">
       <div class="ai-energy__hero-copy">
         <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
@@ -12,7 +12,7 @@
             {% if block.type == 'button' %}
               {% assign button_fallback = '#funktion' %}
               {% if forloop.last %}{% assign button_fallback = '#modelle' %}{% endif %}
-              <a class="ai-energy__button ai-energy__button--{{ block.settings.style }}" href="{{ block.settings.url | default: button_fallback }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+              <a class="ai-energy__button ai-energy__button--{{ block.settings.style }}" href="{{ block.settings.url | default: button_fallback }}" data-vpp-anchor-link {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
             {% endif %}
           {% endfor %}
         </div>

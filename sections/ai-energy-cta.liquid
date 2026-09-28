@@ -1,7 +1,7 @@
 {%- assign page_id = 'ai-energy-cta-' | append: section.id -%}
 
 <div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %}">
-  <section class="ai-energy__section ai-energy__guides" aria-labelledby="{{ page_id }}-heading">
+  <section id="abschluss" class="ai-energy__section ai-energy__guides vpp-anchor-target" aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <div class="ai-energy__final-cta">
         <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
@@ -10,9 +10,9 @@
         <div class="ai-energy__actions">
           {% for block in section.blocks %}
             {% if block.settings.style == 'link' %}
-              <a class="ai-energy__text-link" href="{{ block.settings.url | default: '#modelle' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+              <a class="ai-energy__text-link" href="{{ block.settings.url | default: '#modelle' }}" data-vpp-anchor-link {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
             {% else %}
-              <a class="ai-energy__button ai-energy__button--{{ block.settings.style }}" href="{{ block.settings.url | default: '#modelle' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+              <a class="ai-energy__button ai-energy__button--{{ block.settings.style }}" href="{{ block.settings.url | default: '#modelle' }}" data-vpp-anchor-link {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
             {% endif %}
           {% endfor %}
         </div>

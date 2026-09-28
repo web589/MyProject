@@ -33,7 +33,7 @@
   if request.page_type == 'blog' or request.page_type == 'article'
     assign disable_header_sticky = true
   elsif request.page_type == 'page'
-    if template.suffix == 'balkonkraftwerk-mit-speicher' or template.suffix == 'vpp-ready' or template.suffix == 'vpp-anfrage'
+    if template.suffix == 'balkonkraftwerk-mit-speicher' or template.suffix == 'vpp-ready' or template.suffix == 'vpp-anfrage' or template.suffix == 'ai-energiemanagement'
       comment
         These landing pages have their own in-page anchor navigation. Keep the
         global announcement and header in normal flow so the anchor bar can sit

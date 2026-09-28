@@ -2,7 +2,7 @@
 {%- assign eauto_url = '/pages/e-auto' -%}
 
 <div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-day-image-height: {{ section.settings.day_image_height | default: 330 }}px; --ai-day-image-width: {{ section.settings.day_image_width | default: 100 }}%;">
-  <section id="alltag" class="ai-energy__section ai-energy__day" data-ai-anchor aria-labelledby="{{ page_id }}-heading" data-ai-tabs>
+  <section id="alltag" class="ai-energy__section ai-energy__day vpp-anchor-target" data-ai-anchor aria-labelledby="{{ page_id }}-heading" data-ai-tabs>
     <div class="ai-energy__container">
       <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>

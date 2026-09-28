@@ -84,6 +84,10 @@
     element.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
   }
 
+  function hasModernAnchorNavigation() {
+    return Boolean(document.querySelector('[data-bw-anchor-controller="modern"]'));
+  }
+
   function formatNumber(value) {
     return new Intl.NumberFormat('de-DE').format(Number(value));
   }
@@ -888,6 +892,7 @@
 
   function refreshNavigation() {
     if (navigationObserver) navigationObserver.disconnect();
+    if (hasModernAnchorNavigation()) return;
     var nav = document.querySelector('[data-bw-anchor-nav]');
     if (!nav) return;
     var navScroller = nav.querySelector('.bw-anchor-nav__inner');
@@ -909,6 +914,7 @@
       if (link.dataset.bwInitialized !== 'true') {
         link.dataset.bwInitialized = 'true';
         link.addEventListener('click', function (event) {
+          if (hasModernAnchorNavigation()) return;
           var href = link.getAttribute('href');
           if (!href || href.charAt(0) !== '#') return;
           var target = document.querySelector(href);
@@ -929,6 +935,7 @@
 
     if (!('IntersectionObserver' in window)) return;
     navigationObserver = new IntersectionObserver(function (entries) {
+      if (hasModernAnchorNavigation()) return;
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         var id = '#' + entry.target.id;
@@ -948,10 +955,12 @@
   }
 
   function bindAnchorLinks() {
+    if (hasModernAnchorNavigation()) return;
     document.querySelectorAll('[data-bw-anchor-link]').forEach(function (link) {
       if (link.dataset.bwAnchorInitialized === 'true') return;
       link.dataset.bwAnchorInitialized = 'true';
       link.addEventListener('click', function (event) {
+        if (hasModernAnchorNavigation()) return;
         var href = link.getAttribute('href');
         if (!href || href.charAt(0) !== '#') return;
         var target = document.querySelector(href);
@@ -1015,11 +1024,13 @@
   }
 
   function bindFinalCta() {
+    if (hasModernAnchorNavigation()) return;
     document.querySelectorAll('[data-bw-final-state], [data-bw-module="final-cta"]').forEach(function (root) {
       if (root.dataset.bwInitialized === 'true') return;
       root.dataset.bwInitialized = 'true';
       root.querySelectorAll('[data-bw-final-calculate]').forEach(function (link) {
         link.addEventListener('click', function (event) {
+          if (hasModernAnchorNavigation()) return;
           var href = link.getAttribute('href');
           var target = href && href.charAt(0) === '#' ? document.querySelector(href) : null;
           if (!target) return;

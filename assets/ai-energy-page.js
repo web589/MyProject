@@ -5,11 +5,6 @@
     return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
 
-  function scrollToTarget(target) {
-    if (!target) return;
-    target.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
-  }
-
   function renderTimeline(tabRoot, value) {
     var tabs = Array.prototype.slice.call(tabRoot.querySelectorAll('[data-ai-tab]'));
     var panels = Array.prototype.slice.call(tabRoot.querySelectorAll('[data-ai-panel]'));
@@ -51,37 +46,6 @@
       var activeTab = tabs.find(function (tab) { return tab.getAttribute('aria-selected') === 'true'; }) || tabs[0];
       renderTimeline(tabRoot, activeTab.dataset.aiTab);
     });
-  }
-
-  function bindAnchors() {
-    var nav = document.querySelector('[data-bw-anchor-nav]');
-    if (!nav || nav.dataset.aiAnchorBound === 'true') return;
-    nav.dataset.aiAnchorBound = 'true';
-    var links = Array.prototype.slice.call(nav.querySelectorAll('[data-bw-anchor-link]'));
-    var targets = [];
-
-    links.forEach(function (link) {
-      var href = link.getAttribute('href');
-      var target = href && href.charAt(0) === '#' ? document.querySelector(href) : null;
-      if (!target || target.id === 'navigation') {
-        link.hidden = !target || target.id === 'navigation';
-        return;
-      }
-      targets.push({ target: target, link: link });
-      link.addEventListener('click', function (event) {
-        event.preventDefault();
-        scrollToTarget(target);
-      });
-    });
-
-    if (!('IntersectionObserver' in window)) return;
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        targets.forEach(function (item) { item.link.classList.toggle('is-active', item.target === entry.target); });
-      });
-    }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
-    targets.forEach(function (item) { observer.observe(item.target); });
   }
 
   function bindDesignSystemFaq(root) {
@@ -153,7 +117,6 @@
   function boot() {
     bindTabs(document);
     bindDesignSystemFaq(document);
-    bindAnchors();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

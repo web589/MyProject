@@ -27,7 +27,7 @@
 }
 
 .ac-storage-page[id] {
-  scroll-margin-top: 110px;
+  scroll-margin-top: var(--anchor-scroll-offset);
 }
 
 .site-header-group:has(#SiteHeader[data-native-sticky="true"]) {
@@ -67,7 +67,7 @@
 
 .ac-storage-anchor-nav .bw-anchor-nav__inner {
   display: flex;
-  min-height: var(--ac-nav-height, 64px);
+  min-height: var(--ac-nav-height, var(--anchor-nav-height));
   align-items: center;
   gap: clamp(18px, 3vw, 38px);
   overflow-x: auto;
@@ -1170,7 +1170,7 @@
 
 @media only screen and (max-width: 899px) {
   .ac-storage-anchor-nav .bw-anchor-nav__inner {
-    min-height: 54px;
+    min-height: var(--anchor-nav-height);
     padding-right: 0;
   }
 

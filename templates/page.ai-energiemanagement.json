@@ -10,8 +10,22 @@
 {
   "sections": {
     "ai_navigation": {
-      "type": "bw-storage-navigation",
+      "type": "vpp-anchor-navigation",
       "blocks": {
+        "nav_start": {
+          "type": "link",
+          "settings": {
+            "label": "Start",
+            "target": "#start"
+          }
+        },
+        "nav_definition": {
+          "type": "link",
+          "settings": {
+            "label": "AI-Energie erklärt",
+            "target": "#definition"
+          }
+        },
         "nav_function": {
           "type": "link",
           "settings": {
@@ -60,16 +74,34 @@
             "label": "FAQ",
             "target": "#faq"
           }
+        },
+        "nav_guides": {
+          "type": "link",
+          "settings": {
+            "label": "Ratgeber",
+            "target": "#ratgeber"
+          }
+        },
+        "nav_final": {
+          "type": "link",
+          "settings": {
+            "label": "Nächster Schritt",
+            "target": "#abschluss"
+          }
         }
       },
       "block_order": [
+        "nav_start",
+        "nav_definition",
         "nav_function",
         "nav_meter",
         "nav_compare",
         "nav_day",
         "nav_system",
         "nav_models",
-        "nav_faq"
+        "nav_faq",
+        "nav_guides",
+        "nav_final"
       ],
       "settings": {
         "aria_label": "Navigation zum AI-Energiemanagement",

@@ -1,7 +1,7 @@
 {%- assign page_id = 'ai-energy-function-' | append: section.id -%}
 
 <div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-function-image-height: {{ section.settings.function_image_height | default: 340 }}px; --ai-function-image-width: {{ section.settings.function_image_width | default: 100 }}%;">
-  <section id="funktion" class="ai-energy__section ai-energy__function" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
+  <section id="funktion" class="ai-energy__section ai-energy__function vpp-anchor-target" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>
@@ -60,7 +60,7 @@
       </div>
       <div class="ai-energy__function-note">
         <p>{{ section.settings.note }}</p>
-        {% if section.settings.note_link_label != blank %}<a href="{{ section.settings.note_link_url | default: '#smartmeter' }}">{{ section.settings.note_link_label }}</a>{% endif %}
+        {% if section.settings.note_link_label != blank %}<a href="{{ section.settings.note_link_url | default: '#smartmeter' }}" data-vpp-anchor-link>{{ section.settings.note_link_label }}</a>{% endif %}
       </div>
     </div>
   </section>

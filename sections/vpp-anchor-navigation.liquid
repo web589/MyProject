@@ -6,28 +6,34 @@
   id="{{ navigation_anchor }}"
   class="vpp-anchor-nav"
   data-vpp-anchor-nav
+  data-anchor-nav
+  data-bw-anchor-controller="modern"
   data-section-id="{{ section.id }}"
   aria-label="{{ section.settings.aria_label | escape }}"
   style="--vpp-anchor-text-size: {{ section.settings.nav_text_size | default: 13.5 }}px;"
 >
   <div class="vpp-anchor-nav__inner">
-    {% for block in section.blocks %}
-      {% assign link_target = block.settings.target | remove_first: '#' | handle %}
-      {% if block.settings.label != blank and link_target != blank %}
-        <a
-          class="vpp-anchor-nav__link"
-          href="#{{ link_target }}"
-          data-vpp-anchor-link
-          {{ block.shopify_attributes }}
-        >
-          {{ block.settings.label | escape }}
-        </a>
-      {% endif %}
-    {% endfor %}
+    <div class="vpp-anchor-nav__links">
+      {% for block in section.blocks %}
+        {% assign link_target = block.settings.target | remove_first: '#' | handle %}
+        {% if block.settings.label != blank and link_target != blank %}
+          <a
+            class="vpp-anchor-nav__link"
+            href="#{{ link_target }}"
+            data-vpp-anchor-link
+            data-anchor-link
+            data-anchor-nav-link
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.label | escape }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
 
     {% assign cta_target = section.settings.cta_target | remove_first: '#' | handle %}
     {% if section.settings.cta_label != blank and cta_target != blank %}
-      <a class="vpp-anchor-nav__cta" href="#{{ cta_target }}" data-vpp-anchor-link>
+      <a class="vpp-anchor-nav__cta" href="#{{ cta_target }}" data-vpp-anchor-link data-anchor-link data-anchor-nav-cta>
         {{ section.settings.cta_label | escape }}
       </a>
     {% endif %}

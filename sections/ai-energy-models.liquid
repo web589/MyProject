@@ -2,7 +2,7 @@
 {%- assign models_compare_url = '/pages/venus-e-vergleich' -%}
 
 <div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-model-image-height: {{ section.settings.model_image_height | default: 210 }}px; --ai-model-image-width: {{ section.settings.model_image_width | default: 100 }}%;">
-  <section id="modelle" class="ai-energy__section ai-energy__models" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
+  <section id="modelle" class="ai-energy__section ai-energy__models vpp-anchor-target" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>

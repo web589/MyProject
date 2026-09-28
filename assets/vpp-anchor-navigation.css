@@ -1,11 +1,5 @@
 /* Shared VPP anchor navigation: page header scrolls away, this bar owns the viewport top. */
-.main-content--vpp-ready,
-.main-content--vpp-anfrage {
-  --vpp-anchor-nav-height: 72px;
-}
-
 .section-vpp-anchor-navigation {
-  --vpp-anchor-nav-height: 72px;
   position: sticky;
   top: 0;
   z-index: 20;
@@ -31,15 +25,25 @@
 .vpp-anchor-nav__inner {
   display: flex;
   width: min(1440px, calc(100% - 48px));
-  min-height: var(--vpp-anchor-nav-height);
+  min-height: var(--anchor-nav-height);
+  align-items: center;
+  gap: clamp(12px, 2vw, 24px);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.vpp-anchor-nav__links {
+  display: flex;
+  min-width: 0;
+  min-height: var(--anchor-nav-height);
+  flex: 1 1 auto;
   align-items: center;
   gap: clamp(18px, 3vw, 38px);
-  margin: 0 auto;
   overflow-x: auto;
   scrollbar-width: none;
 }
 
-.vpp-anchor-nav__inner::-webkit-scrollbar {
+.vpp-anchor-nav__links::-webkit-scrollbar {
   display: none;
 }
 
@@ -91,7 +95,7 @@
 
 .vpp-anchor-nav__cta {
   min-width: 132px;
-  margin-left: auto;
+  flex: 0 0 auto;
   padding: 13px 22px;
   border: 1px solid transparent;
   border-radius: 8px;
@@ -121,50 +125,24 @@
 }
 
 .vpp-anchor-target {
-  scroll-margin-top: calc(var(--vpp-anchor-nav-height, 72px) + 12px);
+  scroll-margin-top: var(--anchor-scroll-offset);
 }
 
 @media (min-width: 1200px) {
-  .vpp-anchor-nav__inner {
-    position: relative;
+  .vpp-anchor-nav__links {
     justify-content: center;
     gap: clamp(24px, 2.7vw, 48px);
-  }
-
-  .vpp-anchor-nav__cta {
-    position: absolute;
-    top: 50%;
-    right: 16px;
-    margin-left: 0;
-    transform: translateY(-50%);
-  }
-
-  .vpp-anchor-nav__cta:hover {
-    transform: translateY(calc(-50% - 1px));
-  }
-
-  .vpp-anchor-nav__cta:active {
-    transform: translateY(-50%) scale(0.98);
   }
 }
 
 @media (max-width: 899px) {
-  .main-content--vpp-ready,
-  .main-content--vpp-anfrage {
-    --vpp-anchor-nav-height: 54px;
-  }
-
-  .section-vpp-anchor-navigation {
-    --vpp-anchor-nav-height: 54px;
-  }
-
   .vpp-anchor-nav__inner {
-    gap: 23px;
+    gap: 0;
   }
 
   .vpp-anchor-nav__cta {
-    position: sticky;
-    right: 0;
+    position: relative;
+    z-index: 1;
     box-shadow: -15px 0 16px #fff;
   }
 }
@@ -172,6 +150,9 @@
 @media (max-width: 599px) {
   .vpp-anchor-nav__inner {
     width: calc(100% - 20px);
+  }
+
+  .vpp-anchor-nav__links {
     gap: 18px;
   }
 

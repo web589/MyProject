@@ -1,7 +1,7 @@
 {%- assign page_id = 'ai-energy-system-' | append: section.id -%}
 
 <div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-system-image-height: {{ section.settings.system_image_height | default: 230 }}px; --ai-system-image-width: {{ section.settings.system_image_width | default: 100 }}%;">
-  <section id="system" class="ai-energy__section ai-energy__system" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
+  <section id="system" class="ai-energy__section ai-energy__system vpp-anchor-target" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>
@@ -34,7 +34,7 @@
           </article>
         {% endfor %}
       </div>
-      {% if section.settings.cta_label != blank %}<a class="ai-energy__button ai-energy__button--{{ section.settings.cta_style }} ai-energy__center-cta" href="{{ section.settings.cta_url | default: '#modelle' }}">{{ section.settings.cta_label }}</a>{% endif %}
+      {% if section.settings.cta_label != blank %}<a class="ai-energy__button ai-energy__button--{{ section.settings.cta_style }} ai-energy__center-cta" href="{{ section.settings.cta_url | default: '#modelle' }}" data-vpp-anchor-link>{{ section.settings.cta_label }}</a>{% endif %}
     </div>
   </section>
 </div>

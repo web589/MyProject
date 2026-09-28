@@ -1,7 +1,7 @@
 {%- assign page_id = 'ai-energy-faq-' | append: section.id -%}
 
 <div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %}">
-  <section id="faq" class="ai-energy__section ai-energy__faq" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
+  <section id="faq" class="ai-energy__section ai-energy__faq vpp-anchor-target" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>
@@ -18,7 +18,7 @@
           </article>
         {% endfor %}
       </div>
-      {% if section.settings.cta_label != blank %}<a class="ai-energy__text-link" href="{{ section.settings.cta_url | default: '#modelle' }}">{{ section.settings.cta_label }}</a>{% endif %}
+      {% if section.settings.cta_label != blank %}<a class="ai-energy__text-link" href="{{ section.settings.cta_url | default: '#modelle' }}" data-vpp-anchor-link>{{ section.settings.cta_label }}</a>{% endif %}
     </div>
   </section>
 </div>

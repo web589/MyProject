@@ -2,7 +2,7 @@
 {%- assign smart_meter_url = '/products/ct002-smart-meter' -%}
 
 <div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-meter-image-height: {{ section.settings.smart_meter_image_height | default: 260 }}px; --ai-thumb-image-height: {{ section.settings.smart_thumb_image_height | default: 170 }}px; --ai-smart-image-width: {{ section.settings.smart_image_width | default: 100 }}%;">
-  <section id="smartmeter" class="ai-energy__section ai-energy__smartmeter" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
+  <section id="smartmeter" class="ai-energy__section ai-energy__smartmeter vpp-anchor-target" data-ai-anchor aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>

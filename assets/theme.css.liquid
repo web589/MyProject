@@ -12,6 +12,17 @@
   }
 }
 
+:root {
+  --anchor-nav-height: 72px;
+  --anchor-scroll-offset: calc(var(--anchor-nav-height) + 12px);
+}
+
+@media (max-width: 899px) {
+  :root {
+    --anchor-nav-height: 54px;
+  }
+}
+
 @keyframes spin{
   0%{
     transform:rotate(0deg);
