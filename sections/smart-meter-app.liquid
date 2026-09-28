@@ -27,14 +27,14 @@
 
 {% schema %}
 {
-  "name": "智能电表 · App 数据",
+  "name": "智能电表 · 应用数据",
   "class": "section-smart-meter-app",
   "settings": [
     {"type":"text","id":"eyebrow","label":"眉题","default":"Sichtbarkeit"},
     {"type":"text","id":"heading_before","label":"标题前半部分","default":"Dein Energiefluss"},
     {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"auf einen Blick"},
     {"type":"textarea","id":"subtext","label":"副标题","default":"Die MARSTEK App zeigt dir verfügbare Mess- und Speicherdaten. Welche Ansichten und Werte du siehst, hängt von den verbundenen Geräten und deiner Konfiguration ab."},
-    {"type":"image_picker","id":"image","label":"App 图片"},
+    {"type":"image_picker","id":"image","label":"应用界面图片"},
     {"type":"text","id":"image_alt","label":"图片替代文字","default":"MARSTEK App mit Energiedaten eines Smart Meters"},
     {"type":"text","id":"image_placeholder","label":"图片占位文字","default":"MARSTEK-App-Ansicht auswählen"},
     {"type":"header","content":"排版与布局"},
@@ -46,16 +46,16 @@
     {"type":"range","id":"control_size","label":"控件文字大小","min":11,"max":18,"step":1,"unit":"px","default":14},
     {"type":"range","id":"note_size","label":"备注文字大小","min":10,"max":18,"step":1,"unit":"px","default":13},
     {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72},
-    {"type":"range","id":"image_height","label":"App 图片高度","min":300,"max":620,"step":10,"unit":"px","default":480},
-    {"type":"range","id":"image_width","label":"App 图片宽度","min":50,"max":100,"step":1,"unit":"%","default":100}
+    {"type":"range","id":"image_height","label":"应用界面图片高度","min":300,"max":620,"step":10,"unit":"px","default":480},
+    {"type":"range","id":"image_width","label":"应用界面图片宽度","min":50,"max":100,"step":1,"unit":"%","default":100}
   ],
   "blocks": [
-    {"type":"point","name":"App 信息点","settings":[
+    {"type":"point","name":"应用信息点","settings":[
       {"type":"text","id":"title","label":"标题","default":"Netzbezug & Einspeisung"},
       {"type":"textarea","id":"text","label":"正文","default":"Erkenne anhand der verfügbaren Messwerte, ob Strom aus dem Netz bezogen oder eingespeist wird."}
     ]}
   ],
   "max_blocks": 6,
-  "presets": [{"name":"智能电表 · App 数据","blocks":[{"type":"point"},{"type":"point","settings":{"title":"Laden & Entladen","text":"Sieh, ob dein Speicher gerade Energie aufnimmt oder bereitstellt."}},{"type":"point","settings":{"title":"Ladezustand","text":"Prüfe den Ladezustand deines VENUS E Speichers."}}]}]
+  "presets": [{"name":"智能电表 · 应用数据","blocks":[{"type":"point"},{"type":"point","settings":{"title":"Laden & Entladen","text":"Sieh, ob dein Speicher gerade Energie aufnimmt oder bereitstellt."}},{"type":"point","settings":{"title":"Ladezustand","text":"Prüfe den Ladezustand deines VENUS E Speichers."}}]}]
 }
 {% endschema %}

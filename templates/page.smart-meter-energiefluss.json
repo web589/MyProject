@@ -1,0 +1,200 @@
+{
+  "sections": {
+    "smart_meter_hero": {
+      "type": "smart-meter-hero",
+      "blocks": {
+        "compare": {"type": "button", "settings": {"label": "Smart Meter vergleichen", "url": "#ct", "style": "primary"}},
+        "function": {"type": "button", "settings": {"label": "So funktioniert es", "url": "#fluss", "style": "secondary"}}
+      },
+      "block_order": ["compare", "function"],
+      "settings": {
+        "eyebrow": "Smart Meter für deinen Speicher",
+        "heading_before": "Smart Meter & Energiefluss: Daten für",
+        "heading_highlight": "deinen VENUS E Speicher",
+        "subtext": "CT002 misst elektrische Werte, CT003 (P1) liest Daten deines kompatiblen Stromzählers aus. Mit diesen Informationen kann VENUS E seine Lade- und Entladeleistung gezielter an Netzbezug und Einspeisung anpassen.",
+        "hero_image": "shopify://shop_images/MARSTEK_CT003_mit_P1_Plug_Play.webp",
+        "hero_alt": "Kompatibler digitaler Stromzähler mit Smart Meter CT003 und VENUS E Speicher"
+      }
+    },
+    "smart_meter_definition": {
+      "type": "smart-meter-definition",
+      "blocks": {
+        "grid": {"type": "feature", "settings": {"icon": "grid", "number": "01 · NETZBEZUG", "title": "Netzbezug erkennen", "text": "Zeigt, ob dein Zuhause gerade Strom aus dem öffentlichen Netz bezieht."}},
+        "feed": {"type": "feature", "settings": {"icon": "feed", "number": "02 · EINSPEISUNG", "title": "Einspeisung erkennen", "text": "Zeigt, ob Strom aus deinem Zuhause in das öffentliche Netz fließt."}},
+        "battery": {"type": "feature", "settings": {"icon": "battery", "number": "03 · SPEICHERREGELUNG", "title": "Speicherregelung unterstützen", "text": "Liefert Messdaten, die VENUS E bei der Anpassung seiner Lade- und Entladeleistung nutzen kann."}}
+      },
+      "block_order": ["grid", "feed", "battery"],
+      "settings": {
+        "eyebrow": "Definition",
+        "heading_before": "Was macht ein Smart Meter für",
+        "heading_highlight": "deinen Speicher?",
+        "answer": "<p><strong>Kurz gesagt:</strong> Ein Smart Meter liefert Messdaten für die Speichersteuerung. Bei einer passenden Messkonfiguration zeigen diese Werte, ob dein Zuhause Strom aus dem Netz bezieht oder ins Netz einspeist. VENUS E kann die Informationen nutzen, um seine Lade- und Entladeleistung entsprechend anzupassen.</p>",
+        "note": "Auf dieser Seite geht es um Smart Meter für die Steuerung deines VENUS E Speichers."
+      }
+    },
+    "smart_meter_flow": {
+      "type": "smart-meter-flow",
+      "blocks": {
+        "ct002": {"type": "meter", "settings": {"tab_label": "CT002 · Messung im Verteiler", "desktop_image": "shopify://shop_images/MARSTEK_CT002_und_VENUS_E_zur_intelligenten_Steuerung_der_Nulleinspeisung-1.webp", "image_alt": "Smart Meter CT002 im Verteiler mit VENUS E Speicher", "step_number": "SCHRITT 01", "step_title": "Elektrische Werte messen", "step_text": "CT002 erfasst elektrische Messwerte über die installierten Stromwandler und Messanschlüsse."}},
+        "ct003": {"type": "meter", "settings": {"tab_label": "CT003 · Daten über P1", "desktop_image": "shopify://shop_images/MARSTEK_CT003_f_r_Nulleinspeisung_mit_VENUS_E.webp", "image_alt": "Smart Meter CT003 mit P1-Anschluss und VENUS E Speicher", "step_number": "SCHRITT 01", "step_title": "Zählerdaten auslesen", "step_text": "CT003 (P1) liest Daten des kompatiblen Stromzählers aus."}},
+        "transfer": {"type": "step", "settings": {"number": "SCHRITT 02", "title": "Messdaten übermitteln", "text": "Die Messdaten werden an das VENUS E System übermittelt."}},
+        "adjust": {"type": "step", "settings": {"number": "SCHRITT 03", "title": "Speicherleistung anpassen", "text": "VENUS E berücksichtigt die Messdaten zusammen mit Ladezustand und Einstellungen bei der Regelung."}}
+      },
+      "block_order": ["ct002", "ct003", "transfer", "adjust"],
+      "settings": {
+        "eyebrow": "Funktionsweise",
+        "heading_before": "So nutzt VENUS E die",
+        "heading_highlight": "Smart-Meter-Daten",
+        "subtext": "CT002 erfasst elektrische Messwerte, CT003 (P1) liest vorhandene Zählerdaten aus. Die Informationen werden an das VENUS E System übermittelt und unterstützen dort die Regelung des Speichers.",
+        "tabs_aria_label": "Smart-Meter-Messlösung auswählen",
+        "note": "Der Ladezustand stammt aus dem Speicher selbst. Der Smart Meter ergänzt die Informationen zum Netzfluss.",
+        "link_label": "Was das für deinen Speicher ändert →",
+        "link_url": "#daten"
+      }
+    },
+    "smart_meter_everyday": {
+      "type": "smart-meter-everyday",
+      "blocks": {
+        "without_data": {"type": "case", "settings": {"label": "Ohne aktuelle Netzflussdaten", "title": "Keine aktuelle Rückmeldung zum Netzbezug", "text": "Der gestiegene Netzbezug steht der Speicherregelung nicht als aktueller Messwert zur Verfügung.", "highlight": false}},
+        "with_data": {"type": "case", "settings": {"label": "Mit aktuellen Netzflussdaten", "title": "VENUS E kann seine Leistung anpassen", "text": "Der erhöhte Netzbezug wird erfasst. Bei ausreichendem Ladezustand kann VENUS E seine Entladeleistung anpassen und einen Teil des zusätzlichen Bedarfs decken.", "highlight": true}}
+      },
+      "block_order": ["without_data", "with_data"],
+      "settings": {
+        "eyebrow": "Im Alltag",
+        "heading_before": "So helfen Messdaten bei",
+        "heading_highlight": "wechselndem Strombedarf",
+        "subtext": "Beispiel: Ein zusätzlicher Verbraucher wird eingeschaltet und dein Zuhause bezieht mehr Strom aus dem Netz.",
+        "image": "shopify://shop_images/VENUS_E_Solarspeicher_im_Familienalltag.webp",
+        "image_alt": "Haushalt mit erhöhtem Strombedarf am Abend",
+        "caption": "Der Strombedarf im Haushalt steigt.",
+        "summary": "Der Smart Meter liefert die Messdaten. VENUS E regelt die Speicherleistung.",
+        "note": "Beispielhafte Darstellung. Die mögliche Anpassung hängt von Ladezustand, Leistungsgrenzen und Einstellungen ab."
+      }
+    },
+    "smart_meter_app": {
+      "type": "smart-meter-app",
+      "blocks": {
+        "grid": {"type": "point", "settings": {"title": "Netzbezug & Einspeisung", "text": "Erkenne anhand der verfügbaren Messwerte, ob Strom aus dem Netz bezogen oder eingespeist wird."}},
+        "charge": {"type": "point", "settings": {"title": "Laden & Entladen", "text": "Sieh, ob dein Speicher gerade Energie aufnimmt oder bereitstellt."}},
+        "state": {"type": "point", "settings": {"title": "Ladezustand", "text": "Prüfe den Ladezustand deines VENUS E Speichers."}}
+      },
+      "block_order": ["grid", "charge", "state"],
+      "settings": {
+        "eyebrow": "Sichtbarkeit",
+        "heading_before": "Dein Energiefluss",
+        "heading_highlight": "auf einen Blick",
+        "subtext": "Die MARSTEK App zeigt dir verfügbare Mess- und Speicherdaten. Welche Ansichten und Werte du siehst, hängt von den verbundenen Geräten und deiner Konfiguration ab.",
+        "image": "shopify://shop_images/Energiedaten_in_der_App_mit_MARSTEK_CT002.webp",
+        "image_alt": "MARSTEK App mit Energiedaten eines Smart Meters"
+      }
+    },
+    "smart_meter_solutions": {
+      "type": "smart-meter-solutions",
+      "blocks": {
+        "ct002_card": {"type": "meter_card", "settings": {"product": "ct002-smart-meter", "category": "SMART METER", "title": "Smart Meter CT002", "subtitle": "Dreiphasige Messung im Verteiler", "description": "CT002 erfasst elektrische Messwerte über Stromwandler und Messanschlüsse. Die Daten werden für die Steuerung deines VENUS E Speichers bereitgestellt.", "key_1": "Datenquelle", "value_1": "Messung über Stromwandler", "key_2": "Anschluss", "value_2": "Messanschlüsse im Verteiler", "key_3": "Installation", "value_3": "Durch eine Elektrofachkraft", "link_label": "CT002 ansehen →"}},
+        "ct003_card": {"type": "meter_card", "settings": {"product": "ct003-smart-meter", "category": "SMART METER", "title": "Smart Meter CT003 (P1)", "subtitle": "Zählerdaten über die P1-Schnittstelle", "description": "CT003 (P1) liest Daten eines kompatiblen digitalen Stromzählers aus. Über die App wird die Messlösung mit deinem VENUS E System verknüpft.", "key_1": "Datenquelle", "value_1": "Daten des kompatiblen Stromzählers", "key_2": "Anschluss", "value_2": "Unterstützte P1-Schnittstelle", "key_3": "Installation", "value_3": "Anschluss gemäß Anleitung", "link_label": "CT003 (P1) ansehen →"}}
+      },
+      "block_order": ["ct002_card", "ct003_card"],
+      "settings": {
+        "eyebrow": "Lösungen",
+        "heading_before": "Welcher Smart Meter passt zu",
+        "heading_highlight": "deinem System?",
+        "subtext": "CT002 und CT003 (P1) unterstützen die Speichersteuerung auf unterschiedlichen Wegen. Entscheidend sind deine Messkonfiguration, die Schnittstellen deines Stromzählers und die Kompatibilität mit deinem VENUS E Modell.",
+        "bottom_link_label": "Anschluss und Kompatibilität prüfen →",
+        "bottom_link_url": "#integration"
+      }
+    },
+    "smart_meter_integration": {
+      "type": "smart-meter-integration",
+      "blocks": {
+        "meter": {"type": "step", "settings": {"number": "SCHRITT 01", "title": "Stromzähler prüfen", "text": "Notiere Hersteller und Modell deines Stromzählers. Prüfe, ob eine für CT003 unterstützte P1-Schnittstelle vorhanden ist."}},
+        "match": {"type": "step", "settings": {"number": "SCHRITT 02", "title": "Messlösung abgleichen", "text": "Gleiche die Angaben mit der Kompatibilitätsinformation der Messlösung und deines VENUS E Modells ab.", "link_label": "Kompatibilität anfragen →", "link_url": "/pages/kontakt"}},
+        "install": {"type": "step", "settings": {"number": "SCHRITT 03", "title": "Installation klären", "text": "Plane die Installation von CT002 mit einer Elektrofachkraft. Verbinde CT003 (P1) nur mit einer geeigneten, zugänglichen Schnittstelle gemäß Anleitung."}},
+        "contact": {"type": "action", "settings": {"label": "Kompatibilität anfragen", "url": "/pages/kontakt"}}
+      },
+      "block_order": ["meter", "match", "install", "contact"],
+      "settings": {
+        "eyebrow": "Integration",
+        "heading_before": "Vor dem Kauf: Anschluss und",
+        "heading_highlight": "Kompatibilität prüfen",
+        "subtext": "Prüfe zuerst deinen Stromzähler, die vorhandenen Schnittstellen und dein VENUS E Modell. Danach lässt sich die passende Messlösung gezielt auswählen.",
+        "help_text": "Du bist unsicher? Nenne uns dein VENUS E Modell und die Modellbezeichnung deines Stromzählers."
+      }
+    },
+    "smart_meter_bridge": {
+      "type": "smart-meter-bridge",
+      "blocks": {
+        "ai_energy": {"type": "link", "settings": {"label": "Intelligentes Energiemanagement verstehen →", "url": "/pages/ai-energiemanagement", "style": "text"}}
+      },
+      "block_order": ["ai_energy"],
+      "settings": {
+        "eyebrow": "Verbindung",
+        "heading_before": "Aus Messdaten wird",
+        "heading_highlight": "gezielte Speichersteuerung",
+        "text": "Die Messlösung liefert Informationen zum Netzfluss. Das Energiemanagement berücksichtigt diese zusammen mit Ladezustand und Einstellungen, um den Speicher passend zur aktuellen Situation zu steuern."
+      }
+    },
+    "smart_meter_faq": {
+      "type": "smart-meter-faq",
+      "blocks": {
+        "question_1": {"type": "faq", "settings": {"question": "Was macht ein Smart Meter für meinen Speicher?", "answer": "<p>Ein Smart Meter stellt Messdaten für die Speichersteuerung bereit. Bei einer passenden Messkonfiguration erkennt das System daran Netzbezug und Einspeisung und kann die Lade- und Entladeleistung entsprechend anpassen.</p>"}},
+        "question_2": {"type": "faq", "settings": {"question": "Braucht jeder Speicher einen Smart Meter?", "answer": "<p>Nicht für jede Betriebsart ist ein zusätzlicher Smart Meter erforderlich. Für eine Regelung nach dem aktuellen Netzbezug oder der Einspeisung werden jedoch passende Messdaten benötigt. Welche Betriebsarten verfügbar sind, hängt vom Speichersystem ab.</p>"}},
+        "question_3": {"type": "faq", "settings": {"question": "Was ist der Unterschied zwischen CT002 und CT003 (P1)?", "answer": "<p>CT002 misst elektrische Werte über eine Installation im Verteiler. CT003 (P1) liest Daten eines kompatiblen Stromzählers aus. Beide unterstützen die Speichersteuerung, unterscheiden sich aber bei Datenquelle, Anschluss und Installation.</p>"}},
+        "question_4": {"type": "faq", "settings": {"question": "Funktioniert CT003 (P1) mit jedem digitalen Stromzähler?", "answer": "<p>Nein. Der Stromzähler und seine P1-Schnittstelle müssen von CT003 unterstützt werden. Prüfe deshalb vor dem Kauf die genaue Modellbezeichnung und die verfügbaren Kompatibilitätsinformationen.</p>"}},
+        "question_5": {"type": "faq", "settings": {"question": "Kann ich den Smart Meter selbst installieren?", "answer": "<p>CT002 muss von einer Elektrofachkraft installiert werden. CT003 (P1) wird gemäß Anleitung mit einer geeigneten, zugänglichen P1-Schnittstelle verbunden. Arbeiten an der elektrischen Verteilung gehören in fachkundige Hände.</p>"}},
+        "question_6": {"type": "faq", "settings": {"question": "Erkennt oder schaltet der Smart Meter einzelne Haushaltsgeräte?", "answer": "<p>CT002 und CT003 dienen hier als Datenquelle für die Speichersteuerung. Daraus folgt keine automatische Erkennung oder Schaltung einzelner Haushaltsgeräte. Für solche Funktionen sind gesonderte Mess- oder Steuerungsmöglichkeiten erforderlich.</p>"}},
+        "question_7": {"type": "faq", "settings": {"question": "Erhöht ein Smart Meter automatisch meinen Eigenverbrauch?", "answer": "<p>Nicht allein. Die Messdaten können den Speicher dabei unterstützen, Solarüberschüsse aufzunehmen und gespeicherte Energie bedarfsgerecht bereitzustellen. Der Nutzen hängt unter anderem von Solarüberschuss, Verbrauchszeiten und Speichergröße ab.</p>"}},
+        "question_8": {"type": "faq", "settings": {"question": "Ersetzen CT002 oder CT003 meinen Stromzähler oder ein Smart-Meter-Gateway?", "answer": "<p>Nein. Sie werden hier als Zubehör für die Speichersteuerung eingesetzt. Ein intelligentes Messsystem im deutschen Messwesen besteht aus einer modernen Messeinrichtung und einem Smart-Meter-Gateway. Diese Rolle übernehmen CT002 und CT003 nicht.</p>"}}
+      },
+      "block_order": ["question_1", "question_2", "question_3", "question_4", "question_5", "question_6", "question_7", "question_8"],
+      "settings": {
+        "eyebrow": "Häufige Fragen",
+        "heading_before": "Fragen zu",
+        "heading_highlight": "Smart Meter & Energiefluss"
+      }
+    },
+    "smart_meter_guides": {
+      "type": "smart-meter-guides",
+      "blocks": {
+        "meter_guide": {"type": "guide", "settings": {"image": "shopify://shop_images/MARSTEK_CT002_Smart_Meter_im_Verteilerkasten.webp", "image_alt": "Smart Meter CT002 im Verteilerkasten", "tag": "RATGEBER", "title": "Smart Meter erklärt: Warum sind Messdaten wichtig?", "text": "Erfahre, welche Rolle Messdaten bei der Steuerung eines Speichers spielen.", "link_label": "Weiterlesen →", "url": "/pages/ratgeber/smart-meter-messdaten"}},
+        "self_use_guide": {"type": "guide", "settings": {"image": "shopify://shop_images/MARSTEK_CT003_f_r_h_heren_Eigenverbrauch_mit_VENUS_E.webp", "image_alt": "VENUS E und Smart Meter für höheren Eigenverbrauch", "tag": "RATGEBER", "title": "Eigenverbrauch erhöhen: So nutzt du Solarstrom besser", "text": "Welche Rolle Verbrauchszeiten, Solarüberschüsse und Speichergröße im Alltag spielen.", "link_label": "Weiterlesen →", "url": "/pages/ratgeber/eigenverbrauch-erhoehen"}},
+        "control_guide": {"type": "guide", "settings": {"image": "shopify://shop_images/MARSTEK_CT002_und_VENUS_E_zur_intelligenten_Steuerung_der_Nulleinspeisung-1.webp", "image_alt": "VENUS E und Smart Meter zur intelligenten Speichersteuerung", "tag": "RATGEBER", "title": "Solarspeicher intelligent steuern: Was bedeutet das?", "text": "Wie Messdaten, Einstellungen und Speicherbetrieb zusammenwirken.", "link_label": "Weiterlesen →", "url": "/pages/ratgeber/solarspeicher-steuern"}}
+      },
+      "block_order": ["meter_guide", "self_use_guide", "control_guide"],
+      "settings": {
+        "eyebrow": "Mehr erfahren",
+        "heading_before": "Ratgeber &",
+        "heading_highlight": "Energie-Wissen",
+        "cta_label": "Alle Ratgeber ansehen →",
+        "cta_url": "/pages/ratgeber"
+      }
+    },
+    "smart_meter_final": {
+      "type": "smart-meter-final",
+      "blocks": {
+        "compare": {"type": "action", "settings": {"label": "Smart Meter vergleichen", "url": "#ct", "style": "primary"}},
+        "integration": {"type": "action", "settings": {"label": "Kompatibilität prüfen", "url": "#integration", "style": "secondary"}},
+        "models": {"type": "action", "settings": {"label": "Speichermodelle ansehen →", "url": "/pages/speicher-vergleich", "style": "text"}}
+      },
+      "block_order": ["compare", "integration", "models"],
+      "settings": {
+        "eyebrow": "Nächster Schritt",
+        "heading": "Finde den passenden Smart Meter für deinen Speicher",
+        "text": "Vergleiche CT002 und CT003 (P1) und prüfe, welche Messlösung zu deinem Stromzähler und deinem VENUS E Modell passt."
+      }
+    }
+  },
+  "order": [
+    "smart_meter_hero",
+    "smart_meter_definition",
+    "smart_meter_flow",
+    "smart_meter_everyday",
+    "smart_meter_app",
+    "smart_meter_solutions",
+    "smart_meter_integration",
+    "smart_meter_bridge",
+    "smart_meter_faq",
+    "smart_meter_guides",
+    "smart_meter_final"
+  ]
+}

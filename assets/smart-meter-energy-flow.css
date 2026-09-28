@@ -1,0 +1,947 @@
+.main-content--smart-meter {
+  --sm-blue: #0099fe;
+  --sm-blue-soft: #e8f4ff;
+  --sm-ink: #0e1b2c;
+  --sm-gray: #8a97a6;
+  --sm-gray-dark: #5b6b7c;
+  --sm-border: #e3e8ee;
+  --sm-line: #edf0f4;
+  --sm-bg: #f5f7f9;
+  --sm-navy: #142a42;
+  --sm-radius: 10px;
+  background: #fff;
+  color: var(--sm-ink);
+}
+
+.main-content--smart-meter .smart-meter-page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1640px;
+  margin: 0 auto;
+  overflow: clip;
+  color: var(--sm-ink);
+  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.main-content--smart-meter .smart-meter-page *,
+.main-content--smart-meter .smart-meter-page *::before,
+.main-content--smart-meter .smart-meter-page *::after {
+  box-sizing: border-box;
+}
+
+.main-content--smart-meter .sm-section {
+  padding: var(--sm-section-spacing, 72px) 100px;
+}
+
+.main-content--smart-meter .sm-container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.main-content--smart-meter .sm-section [id] {
+  scroll-margin-top: 110px;
+}
+
+.main-content--smart-meter .sm-section :is(h1, h2, h3, p, figure, dl) {
+  margin: 0;
+}
+
+.main-content--smart-meter .sm-section h1,
+.main-content--smart-meter .sm-section h2,
+.main-content--smart-meter .sm-section h3 {
+  color: var(--sm-ink);
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.main-content--smart-meter .sm-section h1 {
+  width: 100%;
+  max-width: none;
+  margin-top: 20px;
+  font-size: var(--sm-heading-size, 46px);
+  letter-spacing: -0.015em;
+  line-height: 1.18;
+}
+
+.main-content--smart-meter .sm-section h2 {
+  width: 100%;
+  max-width: none;
+  font-size: var(--sm-heading-size, 34px);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.main-content--smart-meter .sm-section h3 {
+  font-size: var(--sm-item-heading-size, 18px);
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+.main-content--smart-meter .sm-accent {
+  color: var(--sm-blue);
+}
+
+.main-content--smart-meter .sm-eyebrow,
+.main-content--smart-meter .sm-number {
+  color: var(--sm-blue);
+  font-size: var(--sm-eyebrow-size, 13px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.main-content--smart-meter .sm-number {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.main-content--smart-meter .sm-lead,
+.main-content--smart-meter .sm-subtext {
+  width: 100%;
+  max-width: none;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-body-size, 16px);
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+.main-content--smart-meter .sm-lead {
+  margin-top: 14px;
+  font-size: var(--sm-body-size, 17px);
+}
+
+.main-content--smart-meter .sm-subtext {
+  margin-top: 14px;
+}
+
+.main-content--smart-meter .sm-note {
+  margin-top: 18px !important;
+  color: var(--sm-gray);
+  font-size: var(--sm-note-size, 13.5px);
+  line-height: 1.7;
+}
+
+.main-content--smart-meter .sm-note--center {
+  text-align: center;
+}
+
+.main-content--smart-meter .sm-media,
+.main-content--smart-meter .sm-flow-media,
+.main-content--smart-meter .sm-solution-card__media,
+.main-content--smart-meter .sm-guide-card__media {
+  overflow: hidden;
+  border-radius: var(--sm-radius);
+}
+
+.main-content--smart-meter .sm-media img,
+.main-content--smart-meter .sm-flow-media img,
+.main-content--smart-meter .sm-solution-card__media img,
+.main-content--smart-meter .sm-guide-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.main-content--smart-meter .sm-placeholder {
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border: 1.5px dashed #c4cdd7;
+  border-radius: inherit;
+  background: #edf1f5;
+  color: #7c8b9c;
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.main-content--smart-meter .sm-button {
+  display: inline-flex;
+  min-height: 47px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 30px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #fff;
+  font: inherit;
+  font-size: var(--sm-control-size, 14.5px);
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: center;
+  text-decoration: none;
+  transition: filter 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.main-content--smart-meter .sm-button--primary {
+  background: linear-gradient(90deg, #0099fe, #00c6ff);
+}
+
+.main-content--smart-meter .sm-button--primary:hover {
+  filter: brightness(1.06);
+}
+
+.main-content--smart-meter .sm-button--secondary {
+  border-color: #9bd8ff;
+  background: #fff;
+  color: var(--sm-blue);
+}
+
+.main-content--smart-meter .sm-button--secondary:hover {
+  border-color: var(--sm-blue);
+  background: var(--sm-blue-soft);
+}
+
+.main-content--smart-meter .sm-text-link {
+  display: inline-block;
+  color: var(--sm-blue);
+  font-size: var(--sm-control-size, 14px);
+  font-weight: 500;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.main-content--smart-meter .sm-text-link:hover {
+  text-decoration: underline;
+}
+
+.main-content--smart-meter .sm-button:focus-visible,
+.main-content--smart-meter .sm-text-link:focus-visible,
+.main-content--smart-meter .sm-meter-tabs button:focus-visible,
+.main-content--smart-meter .sm-faq-question:focus-visible {
+  outline: 3px solid rgba(0, 153, 254, 0.35);
+  outline-offset: 3px;
+}
+
+.main-content--smart-meter .sm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.main-content--smart-meter .sm-hero {
+  padding-top: 72px;
+  padding-bottom: 80px;
+  background: #fff;
+}
+
+.main-content--smart-meter .sm-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 72px;
+}
+
+.main-content--smart-meter .sm-hero__copy {
+  width: 100%;
+  min-width: 0;
+}
+
+.main-content--smart-meter .sm-hero__copy .sm-actions {
+  margin-top: 34px;
+}
+
+.main-content--smart-meter .sm-hero__media {
+  width: var(--sm-hero-image-width, 100%);
+  height: var(--sm-hero-image-height, 480px);
+  margin-left: auto;
+}
+
+.main-content--smart-meter .sm-definition {
+  background: #fff;
+}
+
+.main-content--smart-meter .sm-answer-box {
+  width: 100%;
+  max-width: none;
+  margin-top: 26px;
+  padding: 24px 30px;
+  border-left: 3px solid var(--sm-blue);
+  border-radius: 0 var(--sm-radius) var(--sm-radius) 0;
+  background: var(--sm-blue-soft);
+  color: var(--sm-ink);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.main-content--smart-meter .sm-answer-box p {
+  font: inherit;
+}
+
+.main-content--smart-meter .sm-answer-box strong {
+  font-weight: 600;
+}
+
+.main-content--smart-meter .sm-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 36px;
+}
+
+.main-content--smart-meter .sm-feature-card {
+  padding: 28px 26px;
+  border-radius: var(--sm-radius);
+  background: var(--sm-bg);
+}
+
+.main-content--smart-meter .sm-feature-card__icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  color: var(--sm-blue);
+}
+
+.main-content--smart-meter .sm-feature-card__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+}
+
+.main-content--smart-meter .sm-feature-card .sm-number {
+  margin-top: 14px !important;
+}
+
+.main-content--smart-meter .sm-feature-card h3 {
+  margin-top: 14px;
+}
+
+.main-content--smart-meter .sm-feature-card h3 + p {
+  margin-top: 10px;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-item-text-size, 13.5px);
+  line-height: 1.65;
+}
+
+.main-content--smart-meter .sm-flow {
+  background: var(--sm-bg);
+}
+
+.main-content--smart-meter .sm-meter-tabs {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  margin: 30px auto 0;
+  overflow: hidden;
+  border: 1px solid var(--sm-border);
+  border-radius: 8px;
+}
+
+.main-content--smart-meter .sm-meter-tabs button {
+  min-height: 44px;
+  padding: 10px 26px;
+  border: 0;
+  background: #fff;
+  color: var(--sm-gray-dark);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--sm-control-size, 14px);
+  font-weight: 500;
+  line-height: 1.35;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.main-content--smart-meter .sm-meter-tabs button + button {
+  border-left: 1px solid var(--sm-border);
+}
+
+.main-content--smart-meter .sm-meter-tabs button[aria-selected='true'] {
+  background: var(--sm-blue);
+  color: #fff;
+}
+
+.main-content--smart-meter .sm-meter-panels {
+  margin-top: 26px;
+}
+
+.main-content--smart-meter .sm-meter-panel[hidden] {
+  display: none;
+}
+
+.main-content--smart-meter .sm-flow-media {
+  width: 100%;
+  aspect-ratio: 5 / 2;
+}
+
+.main-content--smart-meter .sm-flow-media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.main-content--smart-meter .sm-flow-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.main-content--smart-meter .sm-step-card {
+  min-width: 0;
+  padding: 24px 26px;
+  border: 1px solid var(--sm-border);
+  border-radius: var(--sm-radius);
+  background: #fff;
+}
+
+.main-content--smart-meter .sm-step-card h3 {
+  margin-top: 12px;
+}
+
+.main-content--smart-meter .sm-step-card h3 + p {
+  margin-top: 10px;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-item-text-size, 14px);
+  line-height: 1.65;
+}
+
+.main-content--smart-meter .sm-flow-foot {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+.main-content--smart-meter .sm-flow-foot p {
+  max-width: 900px;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-note-size, 13.5px);
+  line-height: 1.7;
+}
+
+.main-content--smart-meter .sm-everyday {
+  background: #fff;
+}
+
+.main-content--smart-meter .sm-everyday__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 40%) minmax(0, 60%);
+  align-items: start;
+  gap: 40px;
+  margin-top: 36px;
+}
+
+.main-content--smart-meter .sm-everyday__media {
+  height: var(--sm-everyday-image-height, 420px);
+}
+
+.main-content--smart-meter .sm-everyday__figure figcaption {
+  margin-top: 12px;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-note-size, 13.5px);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.main-content--smart-meter .sm-case-list {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main-content--smart-meter .sm-case-card {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: 22px 28px;
+  border: 1px solid var(--sm-border);
+  border-radius: var(--sm-radius);
+  background: #fff;
+}
+
+.main-content--smart-meter .sm-case-card--highlight {
+  border-color: #bfe4ff;
+  background: var(--sm-blue-soft);
+}
+
+.main-content--smart-meter .sm-case-card__label {
+  color: var(--sm-blue);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+}
+
+.main-content--smart-meter .sm-case-card h3 {
+  margin-top: 10px;
+  font-size: var(--sm-item-heading-size, 17.5px);
+}
+
+.main-content--smart-meter .sm-case-card h3 + p {
+  margin-top: 9px;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-item-text-size, 14px);
+  line-height: 1.7;
+}
+
+.main-content--smart-meter .sm-compare-summary {
+  width: 100%;
+  margin-top: 24px !important;
+  padding: 20px 24px;
+  border-radius: var(--sm-radius);
+  background: var(--sm-bg);
+  color: var(--sm-ink);
+  font-size: var(--sm-body-size, 16px);
+  font-weight: 500;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.main-content--smart-meter .sm-app {
+  background: #fff;
+}
+
+.main-content--smart-meter .sm-app__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 600px);
+  align-items: center;
+  gap: 64px;
+  margin-top: 40px;
+}
+
+.main-content--smart-meter .sm-app__media {
+  width: var(--sm-app-image-width, 100%);
+  height: var(--sm-app-image-height, 480px);
+}
+
+.main-content--smart-meter .sm-app__points {
+  min-width: 0;
+}
+
+.main-content--smart-meter .sm-app-point {
+  padding: 18px 0;
+  border-top: 1px solid var(--sm-line);
+}
+
+.main-content--smart-meter .sm-app-point:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.main-content--smart-meter .sm-app-point h3 {
+  font-size: var(--sm-item-heading-size, 17px);
+}
+
+.main-content--smart-meter .sm-app-point h3 + p {
+  margin-top: 8px;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-item-text-size, 14px);
+  line-height: 1.65;
+}
+
+.main-content--smart-meter .sm-solutions {
+  background: var(--sm-bg);
+}
+
+.main-content--smart-meter .sm-solution-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.main-content--smart-meter .sm-solution-card,
+.main-content--smart-meter .sm-guide-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--sm-border);
+  border-radius: var(--sm-radius);
+  background: #fff;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.main-content--smart-meter .sm-solution-card:hover,
+.main-content--smart-meter .sm-guide-card:hover {
+  border-color: #9bd8ff;
+  box-shadow: 0 4px 18px rgba(0, 153, 254, 0.06);
+}
+
+.main-content--smart-meter .sm-solution-card__media {
+  height: var(--sm-product-image-height, 240px);
+  border-radius: 0;
+  border-bottom: 1px solid var(--sm-line);
+}
+
+.main-content--smart-meter .sm-solution-card__body,
+.main-content--smart-meter .sm-guide-card__body {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 22px 24px 24px;
+}
+
+.main-content--smart-meter .sm-solution-card__body h3 {
+  margin-top: 8px;
+  font-size: var(--sm-item-heading-size, 20px);
+}
+
+.main-content--smart-meter .sm-solution-card__subtitle {
+  margin-top: 6px !important;
+  color: var(--sm-gray);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.main-content--smart-meter .sm-solution-card__description {
+  margin-top: 14px !important;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-item-text-size, 13.5px);
+  line-height: 1.65;
+}
+
+.main-content--smart-meter .sm-spec-list {
+  margin-top: 16px;
+  border-top: 1px solid var(--sm-line);
+}
+
+.main-content--smart-meter .sm-spec-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--sm-line);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.main-content--smart-meter .sm-spec-list dt {
+  flex: 0 0 auto;
+  color: var(--sm-gray);
+  font-weight: 500;
+}
+
+.main-content--smart-meter .sm-spec-list dd {
+  margin: 0;
+  color: var(--sm-ink);
+  font-weight: 500;
+  text-align: right;
+}
+
+.main-content--smart-meter .sm-solution-card__link,
+.main-content--smart-meter .sm-guide-card__link {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.main-content--smart-meter .sm-solutions__bottom-link {
+  margin-top: 24px !important;
+  text-align: center;
+}
+
+.main-content--smart-meter .sm-integration {
+  background: #fff;
+}
+
+.main-content--smart-meter .sm-integration__steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 36px;
+}
+
+.main-content--smart-meter .sm-integration-step {
+  padding: 26px;
+  border-radius: var(--sm-radius);
+  background: var(--sm-bg);
+}
+
+.main-content--smart-meter .sm-integration-step h3 {
+  margin-top: 12px;
+  font-size: var(--sm-item-heading-size, 17px);
+}
+
+.main-content--smart-meter .sm-integration-step h3 + p {
+  margin-top: 10px;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-item-text-size, 13.5px);
+  line-height: 1.65;
+}
+
+.main-content--smart-meter .sm-integration-step .sm-text-link {
+  margin-top: 14px;
+}
+
+.main-content--smart-meter .sm-integration__actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.main-content--smart-meter .sm-integration__actions > p {
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-item-text-size, 14px);
+  line-height: 1.7;
+}
+
+.main-content--smart-meter .sm-bridge {
+  background: var(--sm-blue-soft);
+}
+
+.main-content--smart-meter .sm-bridge__lead {
+  width: 100%;
+  max-width: none;
+  margin-top: 14px !important;
+  color: var(--sm-ink);
+  font-size: var(--sm-body-size, 16.5px);
+  line-height: 1.75;
+}
+
+.main-content--smart-meter .sm-bridge__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.main-content--smart-meter .sm-faq {
+  background: #fff;
+}
+
+.main-content--smart-meter .sm-faq-list {
+  width: 100%;
+  margin-top: 36px;
+  border-top: 1px solid var(--sm-line);
+}
+
+.main-content--smart-meter .sm-faq-item {
+  border-bottom: 1px solid var(--sm-line);
+}
+
+.main-content--smart-meter .sm-faq-question {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 8px 22px 0;
+  border: 0;
+  background: transparent;
+  color: var(--sm-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--sm-item-heading-size, 16px);
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: left;
+  transition: color 0.15s ease;
+}
+
+.main-content--smart-meter .sm-faq-question:hover {
+  color: var(--sm-blue);
+}
+
+.main-content--smart-meter .sm-faq-question__symbol {
+  display: block;
+  flex: 0 0 auto;
+  color: var(--sm-blue);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.main-content--smart-meter .sm-faq-answer {
+  overflow: hidden;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-item-text-size, 14.5px);
+  line-height: 1.75;
+  opacity: 0;
+  transition: max-height 0.34s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease 0.06s;
+}
+
+.main-content--smart-meter .sm-faq-answer:not([hidden]) {
+  opacity: 1;
+}
+
+.main-content--smart-meter .sm-faq-answer__inner {
+  max-width: 1000px;
+  padding: 0 40px 24px 0;
+}
+
+.main-content--smart-meter .sm-faq-answer__inner p + p {
+  margin-top: 12px;
+}
+
+.main-content--smart-meter .sm-guides {
+  background: var(--sm-bg);
+}
+
+.main-content--smart-meter .sm-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.main-content--smart-meter .sm-guide-card__media {
+  display: block;
+  height: var(--sm-guide-image-height, 280px);
+  border-radius: 0;
+  border-bottom: 1px solid var(--sm-line);
+}
+
+.main-content--smart-meter .sm-guide-card__body h3 {
+  margin-top: 10px;
+  font-size: var(--sm-item-heading-size, 17px);
+  line-height: 1.42;
+}
+
+.main-content--smart-meter .sm-guide-card__body h3 + p {
+  margin-top: 10px;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-item-text-size, 13.5px);
+  line-height: 1.65;
+}
+
+.main-content--smart-meter .sm-guides__cta {
+  margin-top: 36px !important;
+  text-align: center;
+}
+
+.main-content--smart-meter .sm-final {
+  background: var(--sm-bg);
+}
+
+.main-content--smart-meter .sm-final-card {
+  padding: 44px 48px;
+  border: 1px solid var(--sm-border);
+  border-radius: var(--sm-radius);
+  background: #fff;
+}
+
+.main-content--smart-meter .sm-final-card h2 {
+  margin-top: 0;
+  font-size: var(--sm-heading-size, 30px);
+}
+
+.main-content--smart-meter .sm-final-card > p:not(.sm-eyebrow) {
+  width: 100%;
+  max-width: none;
+  margin-top: 14px;
+  color: var(--sm-gray-dark);
+  font-size: var(--sm-body-size, 15.5px);
+  line-height: 1.7;
+}
+
+.main-content--smart-meter .sm-final-card__actions {
+  align-items: center;
+  margin-top: 28px;
+}
+
+.main-content--smart-meter .sm-final-card__actions .sm-text-link {
+  margin-left: 6px;
+}
+
+@media (max-width: 1180px) {
+  .main-content--smart-meter .sm-section {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+
+  .main-content--smart-meter .sm-guide-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .main-content--smart-meter .sm-hero__grid,
+  .main-content--smart-meter .sm-app__grid,
+  .main-content--smart-meter .sm-everyday__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .main-content--smart-meter .sm-hero__grid,
+  .main-content--smart-meter .sm-app__grid {
+    gap: 36px;
+  }
+
+  .main-content--smart-meter .sm-hero__media,
+  .main-content--smart-meter .sm-app__media {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .main-content--smart-meter .sm-feature-grid,
+  .main-content--smart-meter .sm-flow-steps,
+  .main-content--smart-meter .sm-integration__steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .main-content--smart-meter .sm-section {
+    padding-right: 22px;
+    padding-left: 22px;
+  }
+
+  .main-content--smart-meter .sm-section h1 {
+    font-size: 30px;
+  }
+
+  .main-content--smart-meter .sm-section h2 {
+    font-size: 27px;
+  }
+
+  .main-content--smart-meter .sm-meter-tabs {
+    width: 100%;
+  }
+
+  .main-content--smart-meter .sm-meter-tabs button {
+    flex: 1 1 50%;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .main-content--smart-meter .sm-flow-media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .main-content--smart-meter .sm-solution-grid,
+  .main-content--smart-meter .sm-guide-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .main-content--smart-meter .sm-final-card {
+    padding: 32px 26px;
+  }
+
+  .main-content--smart-meter .sm-final-card__actions .sm-text-link {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-content--smart-meter .smart-meter-page *,
+  .main-content--smart-meter .smart-meter-page *::before,
+  .main-content--smart-meter .smart-meter-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
