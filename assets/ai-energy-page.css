@@ -103,6 +103,13 @@
 .ai-energy__function-note { display: flex; justify-content: space-between; gap: 28px; margin-top: 18px; }
 .ai-energy__function-note p { max-width: 940px; margin-bottom: 0; font-size: var(--ai-note-size,.82rem); line-height: 1.6; }
 .ai-energy__function-note a { flex: 0 0 auto; color: #4db2ff; font-size: var(--ai-control-size,14px); font-weight: 500; text-decoration: none; }
+.main-content--ai-energy .ai-energy-page .ai-energy__function-note a:hover,
+.main-content--ai-energy .ai-energy-page .ai-energy__function-note a:focus-visible {
+  color: #4db2ff;
+  text-decoration: underline;
+  text-decoration-color: #4db2ff;
+  text-underline-offset: 3px;
+}
 
 .ai-energy__smart-grid { display: grid; grid-template-columns: minmax(0,600px) minmax(0,1fr); gap: 64px; align-items: start; margin-top: 24px; }
 .ai-energy__media--meter { width: min(100%,var(--ai-smart-image-width,100%)); min-height: var(--ai-meter-image-height,260px); margin-inline: auto; border-radius: 8px; }
