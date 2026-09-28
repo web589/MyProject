@@ -3,7 +3,7 @@
   assign blog_url = '/blogs/blog-center'
 -%}
 
-<div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-guide-image-height: {{ section.settings.guide_image_height | default: 280 }}px; --ai-guide-image-width: {{ section.settings.guide_image_width | default: 100 }}%;">
+<div class="ai-energy-page" data-ai-energy-page style="{% render 'ai-energy-style', section: section %} --ai-guide-image-height: {{ section.settings.guide_image_height | default: 303 }}px; --ai-guide-image-width: {{ section.settings.guide_image_width | default: 100 }}%;">
   <section id="ratgeber" class="ai-energy__section ai-energy__guides" aria-labelledby="{{ page_id }}-heading">
     <div class="ai-energy__container">
       <p class="ai-energy__eyebrow">{{ section.settings.eyebrow }}</p>
@@ -36,16 +36,16 @@
     {"type":"url","id":"cta_url","label":"行动按钮链接地址"},
     {"type":"select","id":"cta_style","label":"行动按钮样式","options":[{"value":"primary","label":"Primär"},{"value":"secondary","label":"Sekundär"}],"default":"secondary"},
     {"type":"header","content":"Typography"},
-    {"type":"range","id":"eyebrow_size","label":"眉题大小","min":9,"max":18,"step":1,"unit":"px","default":11},
-    {"type":"range","id":"item_heading_size","label":"项目标题大小","min":14,"max":30,"step":1,"unit":"px","default":18},
-    {"type":"range","id":"item_text_size","label":"项目文本大小","min":10,"max":20,"step":1,"unit":"px","default":13},
-    {"type":"range","id":"control_size","label":"控件大小","min":11,"max":18,"step":1,"unit":"px","default":13},
-    {"type":"range","id":"note_size","label":"备注大小","min":10,"max":18,"step":1,"unit":"px","default":12},
+    {"type":"range","id":"eyebrow_size","label":"眉题大小","min":9,"max":18,"step":0.5,"unit":"px","default":13},
+    {"type":"range","id":"item_heading_size","label":"项目标题大小","min":14,"max":30,"step":0.5,"unit":"px","default":17},
+    {"type":"range","id":"item_text_size","label":"项目文本大小","min":10,"max":20,"step":0.5,"unit":"px","default":13.5},
+    {"type":"range","id":"control_size","label":"控件大小","min":11,"max":18,"step":0.5,"unit":"px","default":14.5},
+    {"type":"range","id":"note_size","label":"备注大小","min":10,"max":18,"step":0.5,"unit":"px","default":12},
     {"type":"header","content":"Layout und Größen"},
-    {"type":"range","id":"heading_size","label":"标题大小","min":28,"max":72,"step":1,"unit":"px","default":34},
-    {"type":"range","id":"body_size","label":"正文大小","min":12,"max":22,"step":1,"unit":"px","default":16},
-    {"type":"range","id":"section_spacing","label":"区块间距","min":40,"max":140,"step":4,"unit":"px","default":80},
-    {"type":"range","id":"guide_image_height","label":"指南图片高度","min":180,"max":420,"step":10,"unit":"px","default":280},
+    {"type":"range","id":"heading_size","label":"标题大小","min":28,"max":72,"step":0.5,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"正文大小","min":12,"max":22,"step":0.5,"unit":"px","default":16},
+    {"type":"range","id":"section_spacing","label":"区块间距","min":40,"max":140,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"guide_image_height","label":"指南图片高度","min":180,"max":420,"step":1,"unit":"px","default":303},
     {"type":"range","id":"guide_image_width","label":"指南图片宽度","min":40,"max":100,"step":1,"unit":"%","default":100}
   ],
   "blocks":[{"type":"guide","name":"Ratgeber Karte","settings":[

@@ -1,0 +1,11 @@
+{%- liquid
+  assign sm_heading_size = section.settings.heading_size | default: 34
+  assign sm_body_size = section.settings.body_size | default: 16
+  assign sm_eyebrow_size = section.settings.eyebrow_size | default: 13
+  assign sm_item_heading_size = section.settings.item_heading_size | default: 18
+  assign sm_item_text_size = section.settings.item_text_size | default: 14
+  assign sm_control_size = section.settings.control_size | default: 14
+  assign sm_note_size = section.settings.note_size | default: 13
+  assign sm_section_spacing = section.settings.section_spacing | default: 72
+-%}
+--sm-heading-size: {{ sm_heading_size }}px; --sm-body-size: {{ sm_body_size }}px; --sm-eyebrow-size: {{ sm_eyebrow_size }}px; --sm-item-heading-size: {{ sm_item_heading_size }}px; --sm-item-text-size: {{ sm_item_text_size }}px; --sm-control-size: {{ sm_control_size }}px; --sm-note-size: {{ sm_note_size }}px; --sm-section-spacing: {{ sm_section_spacing }}px;

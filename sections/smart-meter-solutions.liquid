@@ -1,0 +1,95 @@
+{%- assign page_id = 'smart-meter-solutions-' | append: section.id -%}
+
+<section id="ct" class="smart-meter-page sm-section sm-solutions" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %} --sm-product-image-height: {{ section.settings.image_height | default: 240 }}px;">
+  <div class="sm-container">
+    {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+    <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span class="sm-accent">{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+    {% if section.settings.subtext != blank %}<p class="sm-subtext">{{ section.settings.subtext }}</p>{% endif %}
+    <div class="sm-solution-grid">
+      {% for block in section.blocks %}
+        {% liquid
+          assign product = block.settings.product
+          assign card_url = block.settings.url
+          if product != blank
+            assign card_url = product.url
+          endif
+          assign card_title = block.settings.title
+          if card_title == blank and product != blank
+            assign card_title = product.title
+          endif
+        %}
+        <article class="sm-solution-card" {{ block.shopify_attributes }}>
+          <div class="sm-solution-card__media">
+            {% if block.settings.image != blank %}
+              {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '480, 720, 1000', sizes: '(min-width: 721px) 50vw, 100vw', alt: block.settings.image_alt | default: card_title }}
+            {% elsif product != blank and product.featured_image != blank %}
+              {{ product.featured_image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '480, 720, 1000', sizes: '(min-width: 721px) 50vw, 100vw', alt: product.title }}
+            {% else %}
+              <div class="sm-placeholder">{{ block.settings.image_placeholder }}</div>
+            {% endif %}
+          </div>
+          <div class="sm-solution-card__body">
+            {% if block.settings.category != blank %}<p class="sm-number">{{ block.settings.category }}</p>{% endif %}
+            <h3>{{ card_title }}</h3>
+            {% if block.settings.subtitle != blank %}<p class="sm-solution-card__subtitle">{{ block.settings.subtitle }}</p>{% endif %}
+            {% if block.settings.description != blank %}<p class="sm-solution-card__description">{{ block.settings.description }}</p>{% endif %}
+            <dl class="sm-spec-list">
+              {% if block.settings.key_1 != blank and block.settings.value_1 != blank %}<div><dt>{{ block.settings.key_1 }}</dt><dd>{{ block.settings.value_1 }}</dd></div>{% endif %}
+              {% if block.settings.key_2 != blank and block.settings.value_2 != blank %}<div><dt>{{ block.settings.key_2 }}</dt><dd>{{ block.settings.value_2 }}</dd></div>{% endif %}
+              {% if block.settings.key_3 != blank and block.settings.value_3 != blank %}<div><dt>{{ block.settings.key_3 }}</dt><dd>{{ block.settings.value_3 }}</dd></div>{% endif %}
+            </dl>
+            {% if block.settings.link_label != blank %}<a class="sm-text-link sm-solution-card__link" href="{{ card_url | default: '#integration' }}">{{ block.settings.link_label }}</a>{% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    {% if section.settings.bottom_link_label != blank %}<p class="sm-solutions__bottom-link"><a class="sm-text-link" href="{{ section.settings.bottom_link_url | default: '#integration' }}">{{ section.settings.bottom_link_label }}</a></p>{% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "智能电表 · 方案选择",
+  "class": "section-smart-meter-solutions",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Lösungen"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"Welcher Smart Meter passt zu"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"deinem System?"},
+    {"type":"textarea","id":"subtext","label":"副标题","default":"CT002 und CT003 (P1) unterstützen die Speichersteuerung auf unterschiedlichen Wegen. Entscheidend sind deine Messkonfiguration, die Schnittstellen deines Stromzählers und die Kompatibilität mit deinem VENUS E Modell."},
+    {"type":"text","id":"bottom_link_label","label":"底部链接文字","default":"Anschluss und Kompatibilität prüfen →"},
+    {"type":"url","id":"bottom_link_url","label":"底部链接地址"},
+    {"type":"header","content":"排版与布局"},
+    {"type":"range","id":"heading_size","label":"标题大小","min":24,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"正文大小","min":12,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"eyebrow_size","label":"眉题大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"item_heading_size","label":"产品标题大小","min":14,"max":30,"step":1,"unit":"px","default":20},
+    {"type":"range","id":"item_text_size","label":"产品正文大小","min":10,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"链接文字大小","min":11,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"note_size","label":"备注文字大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"image_height","label":"产品图片高度","min":160,"max":360,"step":10,"unit":"px","default":240}
+  ],
+  "blocks": [
+    {"type":"meter_card","name":"仪表产品卡","settings":[
+      {"type":"product","id":"product","label":"关联产品"},
+      {"type":"url","id":"url","label":"备用链接地址"},
+      {"type":"image_picker","id":"image","label":"产品图片覆盖"},
+      {"type":"text","id":"image_alt","label":"图片替代文字"},
+      {"type":"text","id":"image_placeholder","label":"图片占位文字","default":"Produktbild auswählen"},
+      {"type":"text","id":"category","label":"分类标签","default":"SMART METER"},
+      {"type":"text","id":"title","label":"标题","default":"Smart Meter CT002"},
+      {"type":"text","id":"subtitle","label":"副标题","default":"Dreiphasige Messung im Verteiler"},
+      {"type":"textarea","id":"description","label":"产品说明","default":"CT002 erfasst elektrische Messwerte über Stromwandler und Messanschlüsse. Die Daten werden für die Steuerung deines VENUS E Speichers bereitgestellt."},
+      {"type":"text","id":"key_1","label":"规格标签 1","default":"Datenquelle"},
+      {"type":"text","id":"value_1","label":"规格内容 1","default":"Messung über Stromwandler"},
+      {"type":"text","id":"key_2","label":"规格标签 2","default":"Anschluss"},
+      {"type":"text","id":"value_2","label":"规格内容 2","default":"Messanschlüsse im Verteiler"},
+      {"type":"text","id":"key_3","label":"规格标签 3","default":"Installation"},
+      {"type":"text","id":"value_3","label":"规格内容 3","default":"Durch eine Elektrofachkraft"},
+      {"type":"text","id":"link_label","label":"链接文字","default":"CT002 ansehen →"}
+    ]}
+  ],
+  "max_blocks": 4,
+  "presets": [{"name":"智能电表 · 方案选择","blocks":[{"type":"meter_card"},{"type":"meter_card","settings":{"title":"Smart Meter CT003 (P1)","subtitle":"Zählerdaten über die P1-Schnittstelle","description":"CT003 (P1) liest Daten eines kompatiblen digitalen Stromzählers aus. Über die App wird die Messlösung mit deinem VENUS E System verknüpft.","key_1":"Datenquelle","value_1":"Daten des kompatiblen Stromzählers","key_2":"Anschluss","value_2":"Unterstützte P1-Schnittstelle","key_3":"Installation","value_3":"Anschluss gemäß Anleitung","link_label":"CT003 (P1) ansehen →"}}]}]
+}
+{% endschema %}

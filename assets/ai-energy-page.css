@@ -455,7 +455,23 @@ body:has(.main-content--ai-energy) .site-header-group:has(#SiteHeader[data-nativ
   }
 
   .main-content--ai-energy .ai-energy-page .ai-energy__steps {
+    align-items: stretch;
     margin-top: 36px;
+  }
+
+  .main-content--ai-energy .ai-energy-page .ai-energy__step-connector {
+    align-self: stretch;
+    height: auto;
+  }
+
+  .main-content--ai-energy .ai-energy-page .ai-energy__step-track {
+    top: 78px;
+    transform: none;
+  }
+
+  .main-content--ai-energy .ai-energy-page .ai-energy__step-dot {
+    top: -4px;
+    transform: none;
   }
 
   .main-content--ai-energy .ai-energy-page .ai-energy__steps article {
@@ -621,6 +637,10 @@ body:has(.main-content--ai-energy) .site-header-group:has(#SiteHeader[data-nativ
     color: #5b6b7c;
     font-size: 14.5px;
     font-weight: 600;
+  }
+
+  .main-content--ai-energy .ai-energy-page .ai-energy__table-wrap tbody tr:last-child :is(th, td) {
+    border-bottom: 0;
   }
 
   .main-content--ai-energy .ai-energy-page .ai-energy__table-wrap .is-positive {

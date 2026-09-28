@@ -1,0 +1,53 @@
+{%- assign page_id = 'smart-meter-faq-' | append: section.id -%}
+
+<section id="faq" class="smart-meter-page sm-section sm-faq" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %}">
+  <div class="sm-container">
+    {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+    <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span class="sm-accent">{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+    {% if section.settings.subtext != blank %}<p class="sm-subtext">{{ section.settings.subtext }}</p>{% endif %}
+    <div class="sm-faq-list" data-sm-faq>
+      {% for block in section.blocks %}
+        {%- assign question_id = page_id | append: '-question-' | append: block.id -%}
+        {%- assign answer_id = page_id | append: '-answer-' | append: block.id -%}
+        <article class="sm-faq-item" {{ block.shopify_attributes }}>
+          <button id="{{ question_id }}" class="sm-faq-question" type="button" data-sm-faq-button aria-controls="{{ answer_id }}" aria-expanded="false"><span>{{ block.settings.question }}</span><span class="sm-faq-question__symbol" aria-hidden="true">+</span></button>
+          <div id="{{ answer_id }}" class="sm-faq-answer" data-sm-faq-answer role="region" aria-labelledby="{{ question_id }}" aria-hidden="true" hidden>
+            <div class="sm-faq-answer__inner">{{ block.settings.answer }}</div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{%- render 'structured-data', structured_data_context: 'faq', faq_items: section.blocks, faq_source: 'bw_storage' -%}
+
+{% schema %}
+{
+  "name": "智能电表 · 常见问题",
+  "class": "section-smart-meter-faq",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Häufige Fragen"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"Fragen zu"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"Smart Meter & Energiefluss"},
+    {"type":"textarea","id":"subtext","label":"副标题"},
+    {"type":"header","content":"排版与布局"},
+    {"type":"range","id":"heading_size","label":"标题大小","min":24,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"正文大小","min":12,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"eyebrow_size","label":"眉题大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"item_heading_size","label":"问题文字大小","min":13,"max":24,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"item_text_size","label":"答案文字大小","min":12,"max":20,"step":1,"unit":"px","default":15},
+    {"type":"range","id":"control_size","label":"控件文字大小","min":11,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"note_size","label":"备注文字大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72}
+  ],
+  "blocks": [
+    {"type":"faq","name":"问答","settings":[
+      {"type":"text","id":"question","label":"问题","default":"Was macht ein Smart Meter für meinen Speicher?"},
+      {"type":"richtext","id":"answer","label":"答案","default":"<p>Ein Smart Meter stellt Messdaten für die Speichersteuerung bereit. Bei einer passenden Messkonfiguration erkennt das System daran Netzbezug und Einspeisung und kann die Lade- und Entladeleistung entsprechend anpassen.</p>"}
+    ]}
+  ],
+  "max_blocks": 12,
+  "presets": [{"name":"智能电表 · 常见问题","blocks":[{"type":"faq"},{"type":"faq","settings":{"question":"Braucht jeder Speicher einen Smart Meter?","answer":"<p>Nicht für jede Betriebsart ist ein zusätzlicher Smart Meter erforderlich. Für eine Regelung nach dem aktuellen Netzbezug oder der Einspeisung werden jedoch passende Messdaten benötigt. Welche Betriebsarten verfügbar sind, hängt vom Speichersystem ab.</p>"}},{"type":"faq","settings":{"question":"Was ist der Unterschied zwischen CT002 und CT003 (P1)?","answer":"<p>CT002 misst elektrische Werte über eine Installation im Verteiler. CT003 (P1) liest Daten eines kompatiblen Stromzählers aus. Beide unterstützen die Speichersteuerung, unterscheiden sich aber bei Datenquelle, Anschluss und Installation.</p>"}},{"type":"faq","settings":{"question":"Funktioniert CT003 (P1) mit jedem digitalen Stromzähler?","answer":"<p>Nein. Der Stromzähler und seine P1-Schnittstelle müssen von CT003 unterstützt werden. Prüfe deshalb vor dem Kauf die genaue Modellbezeichnung und die verfügbaren Kompatibilitätsinformationen.</p>"}},{"type":"faq","settings":{"question":"Kann ich den Smart Meter selbst installieren?","answer":"<p>CT002 muss von einer Elektrofachkraft installiert werden. CT003 (P1) wird gemäß Anleitung mit einer geeigneten, zugänglichen P1-Schnittstelle verbunden. Arbeiten an der elektrischen Verteilung gehören in fachkundige Hände.</p>"}},{"type":"faq","settings":{"question":"Erkennt oder schaltet der Smart Meter einzelne Haushaltsgeräte?","answer":"<p>CT002 und CT003 dienen hier als Datenquelle für die Speichersteuerung. Daraus folgt keine automatische Erkennung oder Schaltung einzelner Haushaltsgeräte. Für solche Funktionen sind gesonderte Mess- oder Steuerungsmöglichkeiten erforderlich.</p>"}},{"type":"faq","settings":{"question":"Erhöht ein Smart Meter automatisch meinen Eigenverbrauch?","answer":"<p>Nicht allein. Die Messdaten können den Speicher dabei unterstützen, Solarüberschüsse aufzunehmen und gespeicherte Energie bedarfsgerecht bereitzustellen. Der Nutzen hängt unter anderem von Solarüberschuss, Verbrauchszeiten und Speichergröße ab.</p>"}},{"type":"faq","settings":{"question":"Ersetzen CT002 oder CT003 meinen Stromzähler oder ein Smart-Meter-Gateway?","answer":"<p>Nein. Sie werden hier als Zubehör für die Speichersteuerung eingesetzt. Ein intelligentes Messsystem im deutschen Messwesen besteht aus einer modernen Messeinrichtung und einem Smart-Meter-Gateway. Diese Rolle übernehmen CT002 und CT003 nicht.</p>"}}]}]
+}
+{% endschema %}

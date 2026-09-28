@@ -1,0 +1,63 @@
+{%- assign page_id = 'smart-meter-hero-' | append: section.id -%}
+
+<section class="smart-meter-page sm-section sm-hero" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %} --sm-hero-image-height: {{ section.settings.hero_image_height | default: 480 }}px; --sm-hero-image-width: {{ section.settings.hero_image_width | default: 100 }}%;">
+  <div class="sm-container sm-hero__grid">
+    <div class="sm-hero__copy">
+      {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+      <h1 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span class="sm-accent">{{ section.settings.heading_highlight }}</span>{% endif %}</h1>
+      {% if section.settings.subtext != blank %}<p class="sm-lead">{{ section.settings.subtext }}</p>{% endif %}
+      {% if section.blocks.size > 0 %}
+        <div class="sm-actions">
+          {% for block in section.blocks %}
+            {% assign fallback_url = '#ct' %}
+            {% if forloop.last %}{% assign fallback_url = '#fluss' %}{% endif %}
+            <a class="sm-button sm-button--{{ block.settings.style }}" href="{{ block.settings.url | default: fallback_url }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+    <div class="sm-media sm-hero__media">
+      {% if section.settings.hero_image != blank %}
+        {{ section.settings.hero_image | image_url: width: 1800 | image_tag: loading: 'eager', widths: '640, 960, 1280, 1600, 1800', sizes: '(min-width: 981px) 48vw, 100vw', alt: section.settings.hero_alt }}
+      {% else %}
+        <div class="sm-placeholder">{{ section.settings.image_placeholder }}</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "智能电表 · 首屏",
+  "class": "section-smart-meter-hero",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Smart Meter für deinen Speicher"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"Smart Meter & Energiefluss: Daten für"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"deinen VENUS E Speicher"},
+    {"type":"textarea","id":"subtext","label":"副标题","default":"CT002 misst elektrische Werte, CT003 (P1) liest Daten deines kompatiblen Stromzählers aus. Mit diesen Informationen kann VENUS E seine Lade- und Entladeleistung gezielter an Netzbezug und Einspeisung anpassen."},
+    {"type":"image_picker","id":"hero_image","label":"主视觉图片"},
+    {"type":"text","id":"hero_alt","label":"主视觉替代文字","default":"Kompatibler digitaler Stromzähler mit Smart Meter CT003 und VENUS E Speicher"},
+    {"type":"text","id":"image_placeholder","label":"图片占位文字","default":"Hero-Bild auswählen"},
+    {"type":"header","content":"排版与布局"},
+    {"type":"range","id":"heading_size","label":"标题大小","min":36,"max":64,"step":1,"unit":"px","default":46},
+    {"type":"range","id":"body_size","label":"副标题大小","min":13,"max":22,"step":1,"unit":"px","default":17},
+    {"type":"range","id":"eyebrow_size","label":"眉题大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"item_heading_size","label":"项目标题大小","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"项目正文大小","min":10,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"按钮文字大小","min":11,"max":18,"step":1,"unit":"px","default":15},
+    {"type":"range","id":"note_size","label":"备注文字大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"hero_image_height","label":"主视觉高度","min":320,"max":620,"step":10,"unit":"px","default":480},
+    {"type":"range","id":"hero_image_width","label":"主视觉宽度","min":50,"max":100,"step":1,"unit":"%","default":100}
+  ],
+  "blocks": [
+    {"type":"button","name":"按钮","settings":[
+      {"type":"text","id":"label","label":"按钮文字","default":"Smart Meter vergleichen"},
+      {"type":"url","id":"url","label":"链接地址"},
+      {"type":"select","id":"style","label":"按钮样式","options":[{"value":"primary","label":"主按钮"},{"value":"secondary","label":"次按钮"}],"default":"primary"}
+    ]}
+  ],
+  "max_blocks": 4,
+  "presets": [{"name":"智能电表 · 首屏","blocks":[{"type":"button"},{"type":"button","settings":{"label":"So funktioniert es","style":"secondary"}}]}]
+}
+{% endschema %}

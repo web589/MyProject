@@ -1,0 +1,65 @@
+{%- assign page_id = 'smart-meter-integration-' | append: section.id -%}
+
+<section id="integration" class="smart-meter-page sm-section sm-integration" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %}">
+  <div class="sm-container">
+    {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+    <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span class="sm-accent">{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+    {% if section.settings.subtext != blank %}<p class="sm-subtext">{{ section.settings.subtext }}</p>{% endif %}
+    <div class="sm-integration__steps">
+      {% for block in section.blocks %}
+        {% if block.type == 'step' %}
+          <article class="sm-integration-step" {{ block.shopify_attributes }}>
+            <p class="sm-number">{{ block.settings.number }}</p>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.text }}</p>
+            {% if block.settings.link_label != blank %}<a class="sm-text-link" href="{{ block.settings.link_url | default: '/pages/kontakt' }}">{{ block.settings.link_label }}</a>{% endif %}
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="sm-integration__actions">
+      {% if section.settings.help_text != blank %}<p>{{ section.settings.help_text }}</p>{% endif %}
+      {% for block in section.blocks %}
+        {% if block.type == 'action' %}<a class="sm-button sm-button--primary" href="{{ block.settings.url | default: '/pages/kontakt' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "智能电表 · 兼容性检查",
+  "class": "section-smart-meter-integration",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Integration"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"Vor dem Kauf: Anschluss und"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"Kompatibilität prüfen"},
+    {"type":"textarea","id":"subtext","label":"副标题","default":"Prüfe zuerst deinen Stromzähler, die vorhandenen Schnittstellen und dein VENUS E Modell. Danach lässt sich die passende Messlösung gezielt auswählen."},
+    {"type":"text","id":"help_text","label":"咨询提示","default":"Du bist unsicher? Nenne uns dein VENUS E Modell und die Modellbezeichnung deines Stromzählers."},
+    {"type":"header","content":"排版与布局"},
+    {"type":"range","id":"heading_size","label":"标题大小","min":24,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"正文大小","min":12,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"eyebrow_size","label":"眉题大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"item_heading_size","label":"步骤标题大小","min":14,"max":30,"step":1,"unit":"px","default":17},
+    {"type":"range","id":"item_text_size","label":"步骤正文大小","min":10,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"按钮文字大小","min":11,"max":18,"step":1,"unit":"px","default":15},
+    {"type":"range","id":"note_size","label":"备注文字大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72}
+  ],
+  "blocks": [
+    {"type":"step","name":"检查步骤","settings":[
+      {"type":"text","id":"number","label":"步骤编号","default":"SCHRITT 01"},
+      {"type":"text","id":"title","label":"标题","default":"Stromzähler prüfen"},
+      {"type":"textarea","id":"text","label":"正文","default":"Notiere Hersteller und Modell deines Stromzählers. Prüfe, ob eine für CT003 unterstützte P1-Schnittstelle vorhanden ist."},
+      {"type":"text","id":"link_label","label":"附加链接文字"},
+      {"type":"url","id":"link_url","label":"附加链接地址"}
+    ]},
+    {"type":"action","name":"咨询按钮","settings":[
+      {"type":"text","id":"label","label":"按钮文字","default":"Kompatibilität anfragen"},
+      {"type":"url","id":"url","label":"链接地址"}
+    ]}
+  ],
+  "max_blocks": 6,
+  "presets": [{"name":"智能电表 · 兼容性检查","blocks":[{"type":"step"},{"type":"step","settings":{"number":"SCHRITT 02","title":"Messlösung abgleichen","text":"Gleiche die Angaben mit der Kompatibilitätsinformation der Messlösung und deines VENUS E Modells ab.","link_label":"Kompatibilität anfragen →"}},{"type":"step","settings":{"number":"SCHRITT 03","title":"Installation klären","text":"Plane die Installation von CT002 mit einer Elektrofachkraft. Verbinde CT003 (P1) nur mit einer geeigneten, zugänglichen Schnittstelle gemäß Anleitung."}},{"type":"action"}]}]
+}
+{% endschema %}

@@ -1,0 +1,59 @@
+{%- assign page_id = 'smart-meter-definition-' | append: section.id -%}
+
+<section class="smart-meter-page sm-section sm-definition" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %}">
+  <div class="sm-container">
+    {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+    <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span class="sm-accent">{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+    {% if section.settings.answer != blank %}<div class="sm-answer-box">{{ section.settings.answer }}</div>{% endif %}
+    {% if section.settings.note != blank %}<p class="sm-note">{{ section.settings.note }}</p>{% endif %}
+    <div class="sm-feature-grid">
+      {% for block in section.blocks %}
+        <article class="sm-feature-card" {{ block.shopify_attributes }}>
+          <span class="sm-feature-card__icon" aria-hidden="true">
+            {% case block.settings.icon %}
+              {% when 'feed' %}<svg viewBox="0 0 24 24" focusable="false"><path d="M3 12h6l2 4 4-8 2 4h4"/></svg>
+              {% when 'battery' %}<svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="6" width="16" height="13" rx="2"/><path d="M9 10l-2 3h4l-2 3M14 10v6"/></svg>
+              {% else %}<svg viewBox="0 0 24 24" focusable="false"><path d="M3 17h4l2-3 3 5 3-7 2 3h4"/></svg>
+            {% endcase %}
+          </span>
+          {% if block.settings.number != blank %}<p class="sm-number">{{ block.settings.number }}</p>{% endif %}
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "智能电表 · 定义",
+  "class": "section-smart-meter-definition",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Definition"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"Was macht ein Smart Meter für"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"deinen Speicher?"},
+    {"type":"richtext","id":"answer","label":"核心说明","default":"<p><strong>Kurz gesagt:</strong> Ein Smart Meter liefert Messdaten für die Speichersteuerung. Bei einer passenden Messkonfiguration zeigen diese Werte, ob dein Zuhause Strom aus dem Netz bezieht oder ins Netz einspeist. VENUS E kann die Informationen nutzen, um seine Lade- und Entladeleistung entsprechend anzupassen.</p>"},
+    {"type":"text","id":"note","label":"备注","default":"Auf dieser Seite geht es um Smart Meter für die Steuerung deines VENUS E Speichers."},
+    {"type":"header","content":"排版与布局"},
+    {"type":"range","id":"heading_size","label":"标题大小","min":24,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"正文大小","min":12,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"eyebrow_size","label":"眉题大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"item_heading_size","label":"卡片标题大小","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"卡片正文大小","min":10,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"控件文字大小","min":11,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"note_size","label":"备注文字大小","min":10,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72}
+  ],
+  "blocks": [
+    {"type":"feature","name":"功能卡片","settings":[
+      {"type":"select","id":"icon","label":"图标","options":[{"value":"grid","label":"电网波形"},{"value":"feed","label":"电流波形"},{"value":"battery","label":"电池"}],"default":"grid"},
+      {"type":"text","id":"number","label":"编号标签","default":"01 · NETZBEZUG"},
+      {"type":"text","id":"title","label":"标题","default":"Netzbezug erkennen"},
+      {"type":"textarea","id":"text","label":"正文","default":"Zeigt, ob dein Zuhause gerade Strom aus dem öffentlichen Netz bezieht."}
+    ]}
+  ],
+  "max_blocks": 6,
+  "presets": [{"name":"智能电表 · 定义","blocks":[{"type":"feature"},{"type":"feature","settings":{"icon":"feed","number":"02 · EINSPEISUNG","title":"Einspeisung erkennen","text":"Zeigt, ob Strom aus deinem Zuhause in das öffentliche Netz fließt."}},{"type":"feature","settings":{"icon":"battery","number":"03 · SPEICHERREGELUNG","title":"Speicherregelung unterstützen","text":"Liefert Messdaten, die VENUS E bei der Anpassung seiner Lade- und Entladeleistung nutzen kann."}}]}]
+}
+{% endschema %}

@@ -1,0 +1,66 @@
+{%- assign page_id = 'smart-meter-guides-' | append: section.id -%}
+
+<section class="smart-meter-page sm-section sm-guides" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %} --sm-guide-image-height: {{ section.settings.image_height | default: 280 }}px;">
+  <div class="sm-container">
+    {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+    <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span class="sm-accent">{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+    <div class="sm-guide-grid">
+      {% for block in section.blocks %}
+        <article class="sm-guide-card" {{ block.shopify_attributes }}>
+          <a class="sm-guide-card__media" href="{{ block.settings.url | default: '/pages/ratgeber' }}">
+            {% if block.settings.image != blank %}
+              {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '360, 600, 900, 1000', sizes: '(min-width: 981px) 33vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}
+            {% else %}
+              <div class="sm-placeholder">{{ block.settings.image_placeholder }}</div>
+            {% endif %}
+          </a>
+          <div class="sm-guide-card__body">
+            {% if block.settings.tag != blank %}<p class="sm-number">{{ block.settings.tag }}</p>{% endif %}
+            <h3>{{ block.settings.title }}</h3>
+            {% if block.settings.text != blank %}<p>{{ block.settings.text }}</p>{% endif %}
+            {% if block.settings.link_label != blank %}<a class="sm-text-link sm-guide-card__link" href="{{ block.settings.url | default: '/pages/ratgeber' }}">{{ block.settings.link_label }}</a>{% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    {% if section.settings.cta_label != blank %}<p class="sm-guides__cta"><a class="sm-button sm-button--secondary" href="{{ section.settings.cta_url | default: '/pages/ratgeber' }}">{{ section.settings.cta_label }}</a></p>{% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "智能电表 · 指南",
+  "class": "section-smart-meter-guides",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Mehr erfahren"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"Ratgeber &"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"Energie-Wissen"},
+    {"type":"text","id":"cta_label","label":"底部按钮文字","default":"Alle Ratgeber ansehen →"},
+    {"type":"url","id":"cta_url","label":"底部按钮链接地址"},
+    {"type":"header","content":"排版与布局"},
+    {"type":"range","id":"heading_size","label":"标题大小","min":24,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"正文大小","min":12,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"eyebrow_size","label":"眉题大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"item_heading_size","label":"卡片标题大小","min":14,"max":30,"step":1,"unit":"px","default":17},
+    {"type":"range","id":"item_text_size","label":"卡片正文大小","min":10,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"按钮文字大小","min":11,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"note_size","label":"备注文字大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72},
+    {"type":"range","id":"image_height","label":"指南图片高度","min":180,"max":420,"step":10,"unit":"px","default":280}
+  ],
+  "blocks": [
+    {"type":"guide","name":"指南卡片","settings":[
+      {"type":"image_picker","id":"image","label":"图片"},
+      {"type":"text","id":"image_alt","label":"图片替代文字"},
+      {"type":"text","id":"image_placeholder","label":"图片占位文字","default":"Ratgeberbild auswählen"},
+      {"type":"text","id":"tag","label":"分类标签","default":"RATGEBER"},
+      {"type":"text","id":"title","label":"标题","default":"Smart Meter erklärt: Warum sind Messdaten wichtig?"},
+      {"type":"textarea","id":"text","label":"摘要","default":"Erfahre, welche Rolle Messdaten bei der Steuerung eines Speichers spielen."},
+      {"type":"text","id":"link_label","label":"链接文字","default":"Weiterlesen →"},
+      {"type":"url","id":"url","label":"链接地址"}
+    ]}
+  ],
+  "max_blocks": 6,
+  "presets": [{"name":"智能电表 · 指南","blocks":[{"type":"guide"},{"type":"guide","settings":{"title":"Eigenverbrauch erhöhen: So nutzt du Solarstrom besser","text":"Welche Rolle Verbrauchszeiten, Solarüberschüsse und Speichergröße im Alltag spielen."}},{"type":"guide","settings":{"title":"Solarspeicher intelligent steuern: Was bedeutet das?","text":"Wie Messdaten, Einstellungen und Speicherbetrieb zusammenwirken."}}]}]
+}
+{% endschema %}

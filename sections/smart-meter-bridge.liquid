@@ -1,0 +1,47 @@
+{%- assign page_id = 'smart-meter-bridge-' | append: section.id -%}
+
+<section id="ki" class="smart-meter-page sm-section sm-bridge" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %}">
+  <div class="sm-container">
+    {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+    <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span class="sm-accent">{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+    {% if section.settings.text != blank %}<p class="sm-bridge__lead">{{ section.settings.text }}</p>{% endif %}
+    {% if section.blocks.size > 0 %}
+      <div class="sm-bridge__links">
+        {% for block in section.blocks %}
+          <a class="{% if block.settings.style == 'button' %}sm-button sm-button--primary{% else %}sm-text-link{% endif %}" href="{{ block.settings.url | default: '/pages/ai-energiemanagement' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "智能电表 · 能源管理衔接",
+  "class": "section-smart-meter-bridge",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Verbindung"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"Aus Messdaten wird"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"gezielte Speichersteuerung"},
+    {"type":"textarea","id":"text","label":"正文","default":"Die Messlösung liefert Informationen zum Netzfluss. Das Energiemanagement berücksichtigt diese zusammen mit Ladezustand und Einstellungen, um den Speicher passend zur aktuellen Situation zu steuern."},
+    {"type":"header","content":"排版与布局"},
+    {"type":"range","id":"heading_size","label":"标题大小","min":24,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"正文大小","min":12,"max":22,"step":1,"unit":"px","default":17},
+    {"type":"range","id":"eyebrow_size","label":"眉题大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"item_heading_size","label":"项目标题大小","min":14,"max":30,"step":1,"unit":"px","default":18},
+    {"type":"range","id":"item_text_size","label":"项目正文大小","min":10,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"链接文字大小","min":11,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"note_size","label":"备注文字大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72}
+  ],
+  "blocks": [
+    {"type":"link","name":"衔接链接","settings":[
+      {"type":"text","id":"label","label":"链接文字","default":"Intelligentes Energiemanagement verstehen →"},
+      {"type":"url","id":"url","label":"链接地址"},
+      {"type":"select","id":"style","label":"链接样式","options":[{"value":"text","label":"文字链接"},{"value":"button","label":"主按钮"}],"default":"text"}
+    ]}
+  ],
+  "max_blocks": 3,
+  "presets": [{"name":"智能电表 · 能源管理衔接","blocks":[{"type":"link"}]}]
+}
+{% endschema %}

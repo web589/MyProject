@@ -1,0 +1,115 @@
+{%- assign page_id = 'smart-meter-flow-' | append: section.id -%}
+
+<section id="fluss" class="smart-meter-page sm-section sm-flow" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %}">
+  <div class="sm-container">
+    {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+    <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span class="sm-accent">{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
+    {% if section.settings.subtext != blank %}<p class="sm-subtext">{{ section.settings.subtext }}</p>{% endif %}
+
+    <div class="sm-meter-tabs" data-sm-meter-tabs role="tablist" aria-label="{{ section.settings.tabs_aria_label }}">
+      {% assign meter_index = 0 %}
+      {% for block in section.blocks %}
+        {% if block.type == 'meter' %}
+          <button id="{{ page_id }}-tab-{{ block.id }}" type="button" role="tab" data-sm-meter-tab="{{ block.id }}" aria-controls="{{ page_id }}-panel-{{ block.id }}" aria-selected="{% if meter_index == 0 %}true{% else %}false{% endif %}"{% unless meter_index == 0 %} tabindex="-1"{% endunless %} {{ block.shopify_attributes }}>{{ block.settings.tab_label }}</button>
+          {% assign meter_index = meter_index | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="sm-meter-panels">
+      {% assign meter_index = 0 %}
+      {% for block in section.blocks %}
+        {% if block.type == 'meter' %}
+          <div id="{{ page_id }}-panel-{{ block.id }}" class="sm-meter-panel{% if meter_index == 0 %} is-active{% endif %}" data-sm-meter-panel="{{ block.id }}" role="tabpanel" aria-labelledby="{{ page_id }}-tab-{{ block.id }}"{% unless meter_index == 0 %} hidden{% endunless %}>
+            <div class="sm-flow-media">
+              {% if block.settings.desktop_image != blank %}
+                <picture>
+                  {% if block.settings.mobile_image != blank %}<source media="(max-width: 720px)" srcset="{{ block.settings.mobile_image | image_url: width: 1000 }}">{% endif %}
+                  {{ block.settings.desktop_image | image_url: width: 2200 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600, 2200', sizes: '100vw', alt: block.settings.image_alt }}
+                </picture>
+              {% else %}
+                <div class="sm-placeholder">{{ block.settings.image_placeholder }}</div>
+              {% endif %}
+            </div>
+          </div>
+          {% assign meter_index = meter_index | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="sm-flow-steps">
+      <article class="sm-step-card sm-step-card--meter" data-sm-meter-step>
+        {% assign meter_index = 0 %}
+        {% for block in section.blocks %}
+          {% if block.type == 'meter' %}
+            <div data-sm-meter-step-content="{{ block.id }}"{% unless meter_index == 0 %} hidden{% endunless %}>
+              <p class="sm-number">{{ block.settings.step_number }}</p>
+              <h3>{{ block.settings.step_title }}</h3>
+              <p>{{ block.settings.step_text }}</p>
+            </div>
+            {% assign meter_index = meter_index | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      </article>
+      {% for block in section.blocks %}
+        {% if block.type == 'step' %}
+          <article class="sm-step-card" {{ block.shopify_attributes }}>
+            <p class="sm-number">{{ block.settings.number }}</p>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.text }}</p>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="sm-flow-foot">
+      {% if section.settings.note != blank %}<p>{{ section.settings.note }}</p>{% endif %}
+      {% if section.settings.link_label != blank %}<a class="sm-text-link" href="{{ section.settings.link_url | default: '#daten' }}">{{ section.settings.link_label }}</a>{% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "智能电表 · 数据流",
+  "class": "section-smart-meter-flow",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Funktionsweise"},
+    {"type":"text","id":"heading_before","label":"标题前半部分","default":"So nutzt VENUS E die"},
+    {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"Smart-Meter-Daten"},
+    {"type":"textarea","id":"subtext","label":"副标题","default":"CT002 erfasst elektrische Messwerte, CT003 (P1) liest vorhandene Zählerdaten aus. Die Informationen werden an das VENUS E System übermittelt und unterstützen dort die Regelung des Speichers."},
+    {"type":"text","id":"tabs_aria_label","label":"切换无障碍标签","default":"Smart-Meter-Messlösung auswählen"},
+    {"type":"textarea","id":"note","label":"底部说明","default":"Der Ladezustand stammt aus dem Speicher selbst. Der Smart Meter ergänzt die Informationen zum Netzfluss."},
+    {"type":"text","id":"link_label","label":"底部链接文字","default":"Was das für deinen Speicher ändert →"},
+    {"type":"url","id":"link_url","label":"底部链接地址"},
+    {"type":"header","content":"排版与布局"},
+    {"type":"range","id":"heading_size","label":"标题大小","min":24,"max":56,"step":1,"unit":"px","default":34},
+    {"type":"range","id":"body_size","label":"正文大小","min":12,"max":22,"step":1,"unit":"px","default":16},
+    {"type":"range","id":"eyebrow_size","label":"眉题大小","min":10,"max":18,"step":1,"unit":"px","default":13},
+    {"type":"range","id":"item_heading_size","label":"步骤标题大小","min":14,"max":30,"step":1,"unit":"px","default":20},
+    {"type":"range","id":"item_text_size","label":"步骤正文大小","min":10,"max":20,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"control_size","label":"切换控件文字大小","min":11,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"note_size","label":"备注文字大小","min":10,"max":18,"step":1,"unit":"px","default":14},
+    {"type":"range","id":"section_spacing","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72}
+  ],
+  "blocks": [
+    {"type":"meter","name":"仪表模式","settings":[
+      {"type":"text","id":"tab_label","label":"切换标签","default":"CT002 · Messung im Verteiler"},
+      {"type":"image_picker","id":"desktop_image","label":"桌面场景图片"},
+      {"type":"image_picker","id":"mobile_image","label":"移动端场景图片"},
+      {"type":"text","id":"image_alt","label":"图片替代文字","default":"Smart Meter CT002 im Verteiler mit VENUS E Speicher"},
+      {"type":"text","id":"image_placeholder","label":"图片占位文字","default":"Installationsbild auswählen"},
+      {"type":"text","id":"step_number","label":"第一步编号","default":"SCHRITT 01"},
+      {"type":"text","id":"step_title","label":"第一步标题","default":"Elektrische Werte messen"},
+      {"type":"textarea","id":"step_text","label":"第一步正文","default":"CT002 erfasst elektrische Messwerte über die installierten Stromwandler und Messanschlüsse."}
+    ]},
+    {"type":"step","name":"公共步骤","settings":[
+      {"type":"text","id":"number","label":"步骤编号","default":"SCHRITT 02"},
+      {"type":"text","id":"title","label":"标题","default":"Messdaten übermitteln"},
+      {"type":"textarea","id":"text","label":"正文","default":"Die Messdaten werden an das VENUS E System übermittelt."}
+    ]}
+  ],
+  "max_blocks": 8,
+  "presets": [{"name":"智能电表 · 数据流","blocks":[{"type":"meter"},{"type":"meter","settings":{"tab_label":"CT003 · Daten über P1","image_alt":"Smart Meter CT003 mit P1-Anschluss und VENUS E Speicher","step_number":"SCHRITT 01","step_title":"Zählerdaten auslesen","step_text":"CT003 (P1) liest Daten des kompatiblen Stromzählers aus."}},{"type":"step"},{"type":"step","settings":{"number":"SCHRITT 03","title":"Speicherleistung anpassen","text":"VENUS E berücksichtigt die Messdaten zusammen mit Ladezustand und Einstellungen bei der Regelung."}}]}]
+}
+{% endschema %}
