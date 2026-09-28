@@ -25,17 +25,18 @@
       {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
       {% assign link_target = link_target | strip | remove_first: '#' | handle %}
       {% if link_label != blank and link_target != blank %}
-        <a
-          class="bw-anchor-nav__link"
-          href="#{{ link_target }}"
-          data-bw-anchor-link
-          data-anchor-link
-          data-anchor-nav-link
-          data-bw-anchor-module="{{ link_module | escape }}"
-          {{ block.shopify_attributes }}
-        >
-          {{ link_label | escape }}
-        </a>
+        <span class="bw-anchor-nav__item" {{ block.shopify_attributes }}>
+          <a
+            class="bw-anchor-nav__link"
+            href="#{{ link_target }}"
+            data-bw-anchor-link
+            data-anchor-link
+            data-anchor-nav-link
+            data-bw-anchor-module="{{ link_module | escape }}"
+          >
+            {{ link_label | escape }}
+          </a>
+        </span>
       {% endif %}
     {% endfor %}
 
