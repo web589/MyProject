@@ -1,0 +1,83 @@
+{%- assign heading_id = 'vpp-anfrage-hero-' | append: section.id -%}
+<div class="vpp-anfrage-page" data-vpp-anfrage-page style="{% render 'vpp-anfrage-style', section: section %}">
+  <section class="vpp-anfrage__section vpp-anfrage__hero" aria-labelledby="{{ heading_id }}">
+    <div class="vpp-anfrage__container vpp-anfrage__hero-grid">
+      <div class="vpp-anfrage__hero-copy">
+        {% if section.settings.eyebrow != blank %}<p class="vpp-anfrage__eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+        <h1 id="{{ heading_id }}">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span>{{ section.settings.heading_highlight }}</span>{% endif %}</h1>
+        {% if section.settings.subtext != blank %}<p class="vpp-anfrage__subtext vpp-anfrage__subtext--hero">{{ section.settings.subtext }}</p>{% endif %}
+        {% if section.blocks.size > 0 %}
+          <div class="vpp-anfrage__trust-list">
+            {% for block in section.blocks %}
+              <span class="vpp-anfrage__trust-item" {{ block.shopify_attributes }}>
+                {% case block.settings.icon %}
+                  {% when 'clock' %}
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>
+                  {% when 'lock' %}
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10.2" width="15" height="9.8" rx="2.2"/><path d="M8.2 10.2V7.6a3.8 3.8 0 0 1 7.6 0v2.6"/></svg>
+                  {% else %}
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>
+                {% endcase %}
+                {{ block.settings.text }}
+              </span>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="vpp-anfrage__media vpp-anfrage__media--hero">
+        {% if section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 1800 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '640, 960, 1280, 1600, 1800', sizes: '(min-width: 981px) 48vw, 100vw', alt: section.settings.image_alt }}
+        {% else %}
+          <div class="vpp-anfrage__placeholder">{{ section.settings.image_placeholder }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "01 VPP 咨询首屏",
+  "tag": "section",
+  "class": "vpp-anfrage-hero-section",
+  "settings": [
+    {"type": "text", "id": "eyebrow", "label": "眉题", "default": "VPP-CHECK"},
+    {"type": "text", "id": "heading_before", "label": "标题前半部分", "default": "VPP-Anfrage für deinen"},
+    {"type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "VENUS E Speicher"},
+    {"type": "textarea", "id": "subtext", "label": "副标题", "default": "Teile uns dein VENUS E Modell, deinen Standort und deine aktuelle Installation mit. Wir prüfen, welche Voraussetzungen für eine mögliche VPP-Anbindung relevant sind und welche nächsten Schritte sinnvoll sind."},
+    {"type": "image_picker", "id": "image", "label": "首屏图片"},
+    {"type": "text", "id": "image_alt", "label": "图片替代文字", "default": "Wohnhaus mit VENUS E Speicher und Smart Meter für eine mögliche VPP-Anbindung"},
+    {"type": "text", "id": "image_placeholder", "label": "无图占位文字", "default": "VPP 主视觉图片 auswählen"},
+    {"type": "header", "content": "版式与字体"},
+    {"type": "range", "id": "section_padding", "label": "区块上下间距", "min": 40, "max": 140, "step": 4, "unit": "px", "default": 72},
+    {"type": "range", "id": "content_width", "label": "内容宽度", "min": 1120, "max": 1440, "step": 20, "unit": "px", "default": 1440},
+    {"type": "range", "id": "eyebrow_size", "label": "眉题字号", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 13},
+    {"type": "range", "id": "heading_size", "label": "主标题字号", "min": 36, "max": 64, "step": 1, "unit": "px", "default": 48},
+    {"type": "range", "id": "body_size", "label": "副标题字号", "min": 14, "max": 22, "step": 1, "unit": "px", "default": 17},
+    {"type": "range", "id": "item_heading_size", "label": "项目标题字号", "min": 14, "max": 28, "step": 1, "unit": "px", "default": 18},
+    {"type": "range", "id": "item_text_size", "label": "项目正文字号", "min": 12, "max": 20, "step": 1, "unit": "px", "default": 14},
+    {"type": "range", "id": "control_size", "label": "控件字号", "min": 12, "max": 18, "step": 1, "unit": "px", "default": 14}
+  ],
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "信任点",
+      "settings": [
+        {"type": "select", "id": "icon", "label": "图标", "options": [{"value": "check", "label": "勾选"}, {"value": "clock", "label": "时钟"}, {"value": "lock", "label": "锁"}], "default": "check"},
+        {"type": "text", "id": "text", "label": "文字", "default": "Kostenlose Einschätzung"}
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "01 VPP 咨询首屏",
+      "blocks": [
+        {"type": "trust_item", "settings": {"icon": "check", "text": "Kostenlose Einschätzung"}},
+        {"type": "trust_item", "settings": {"icon": "clock", "text": "Persönliche Rückmeldung"}},
+        {"type": "trust_item", "settings": {"icon": "lock", "text": "Keine automatische Anmeldung"}}
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,11 @@
+{%- liquid
+  assign vpp_anfrage_padding = section.settings.section_padding | default: 72
+  assign vpp_anfrage_content_width = section.settings.content_width | default: 1440
+  assign vpp_anfrage_heading_size = section.settings.heading_size | default: 34
+  assign vpp_anfrage_body_size = section.settings.body_size | default: 16
+  assign vpp_anfrage_eyebrow_size = section.settings.eyebrow_size | default: 13
+  assign vpp_anfrage_item_heading_size = section.settings.item_heading_size | default: 18
+  assign vpp_anfrage_item_text_size = section.settings.item_text_size | default: 14
+  assign vpp_anfrage_control_size = section.settings.control_size | default: 14
+-%}
+--vpp-anfrage-section-padding: {{ vpp_anfrage_padding }}px; --vpp-anfrage-content-width: {{ vpp_anfrage_content_width }}px; --vpp-anfrage-heading-size: {{ vpp_anfrage_heading_size }}px; --vpp-anfrage-body-size: {{ vpp_anfrage_body_size }}px; --vpp-anfrage-eyebrow-size: {{ vpp_anfrage_eyebrow_size }}px; --vpp-anfrage-item-heading-size: {{ vpp_anfrage_item_heading_size }}px; --vpp-anfrage-item-text-size: {{ vpp_anfrage_item_text_size }}px; --vpp-anfrage-control-size: {{ vpp_anfrage_control_size }}px;

@@ -1,0 +1,169 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "vpp_anfrage_hero": {
+      "type": "vpp-anfrage-hero",
+      "blocks": {
+        "trust_assessment": {"type": "trust_item", "settings": {"icon": "check", "text": "Kostenlose Einschätzung"}},
+        "trust_reply": {"type": "trust_item", "settings": {"icon": "clock", "text": "Persönliche Rückmeldung"}},
+        "trust_no_signup": {"type": "trust_item", "settings": {"icon": "lock", "text": "Keine automatische Anmeldung"}}
+      },
+      "block_order": ["trust_assessment", "trust_reply", "trust_no_signup"],
+      "settings": {
+        "eyebrow": "VPP-CHECK",
+        "heading_before": "VPP-Anfrage für deinen",
+        "heading_highlight": "VENUS E Speicher",
+        "subtext": "Teile uns dein VENUS E Modell, deinen Standort und deine aktuelle Installation mit. Wir prüfen, welche Voraussetzungen für eine mögliche VPP-Anbindung relevant sind und welche nächsten Schritte sinnvoll sind.",
+        "image": "shopify://shop_images/VENUS_E_VPP-f_higer_Solarspeicher.webp",
+        "image_alt": "Wohnhaus mit VENUS E Speicher und Smart Meter für eine mögliche VPP-Anbindung",
+        "image_placeholder": "VPP 主视觉图片 auswählen",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 48,
+        "body_size": 17,
+        "item_heading_size": 18,
+        "item_text_size": 14,
+        "control_size": 14
+      }
+    },
+    "vpp_anfrage_why": {
+      "type": "vpp-anfrage-why",
+      "blocks": {
+        "reason_model": {"type": "reason", "settings": {"icon": "battery", "title": "Dein VENUS E Modell", "text": "Jedes Modell kann unterschiedliche Voraussetzungen für Programme erfüllen."}},
+        "reason_location": {"type": "reason", "settings": {"icon": "pin", "title": "Dein Standort", "text": "VPP-Angebote hängen vom Land und verfügbaren Programmen ab."}},
+        "reason_installation": {"type": "reason", "settings": {"icon": "home", "title": "Deine Installation & Smart Meter", "text": "PV-Anlage, Smart Meter und weitere technische Komponenten helfen bei der Einschätzung."}}
+      },
+      "block_order": ["reason_model", "reason_location", "reason_installation"],
+      "settings": {
+        "eyebrow": "Warum diese Angaben?",
+        "heading_before": "Warum benötigen wir diese",
+        "heading_highlight": "Informationen?",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 16,
+        "item_heading_size": 17,
+        "item_text_size": 14,
+        "control_size": 14
+      }
+    },
+    "vpp_anfrage_form": {
+      "type": "vpp-anfrage-form",
+      "blocks": {
+        "model_unsure": {"type": "model_option", "settings": {"label": "Ich bin noch nicht sicher"}},
+        "model_mini": {"type": "model_option", "settings": {"label": "VENUS E Mini"}},
+        "model_3": {"type": "model_option", "settings": {"label": "VENUS E 3.0"}},
+        "model_4": {"type": "model_option", "settings": {"label": "VENUS E 4.0"}},
+        "model_max": {"type": "model_option", "settings": {"label": "VENUS E Max"}},
+        "country_de": {"type": "country_option", "settings": {"label": "Deutschland"}},
+        "country_nl": {"type": "country_option", "settings": {"label": "Niederlande"}},
+        "country_be": {"type": "country_option", "settings": {"label": "Belgien"}},
+        "component_pv": {"type": "component_option", "settings": {"label": "PV-Anlage"}},
+        "component_balcony": {"type": "component_option", "settings": {"label": "Balkonkraftwerk"}},
+        "component_meter": {"type": "component_option", "settings": {"label": "Smart Meter"}},
+        "component_wallbox": {"type": "component_option", "settings": {"label": "Wallbox"}},
+        "component_heatpump": {"type": "component_option", "settings": {"label": "Wärmepumpe"}},
+        "component_none": {"type": "component_option", "settings": {"label": "Noch keine Installation"}},
+        "flow_review": {"type": "flow_step", "settings": {"number": "01", "title": "Wir prüfen deine Angaben", "text": "Modell, Standort und Installation."}},
+        "flow_requirements": {"type": "flow_step", "settings": {"number": "02", "title": "Wir klären die Voraussetzungen", "text": "Technische Anforderungen und mögliche Programme."}},
+        "flow_reply": {"type": "flow_step", "settings": {"number": "03", "title": "Wir melden uns bei dir", "text": "Mit den nächsten Schritten und den Informationen, die noch fehlen."}}
+      },
+      "block_order": ["model_unsure", "model_mini", "model_3", "model_4", "model_max", "country_de", "country_nl", "country_be", "component_pv", "component_balcony", "component_meter", "component_wallbox", "component_heatpump", "component_none", "flow_review", "flow_requirements", "flow_reply"],
+      "settings": {
+        "eyebrow": "Formular",
+        "heading_before": "Deine Angaben zur",
+        "heading_highlight": "VPP-Anfrage",
+        "subtext": "Die Angaben helfen uns, Modell, Standort und Installation richtig einzuordnen. Du erhältst eine Einordnung – keine automatische Anmeldung.",
+        "product_group_heading": "Produkt",
+        "model_question": "Welches VENUS E Modell nutzt du?",
+        "location_group_heading": "Standort",
+        "country_question": "Wo befindet sich deine Installation?",
+        "country_placeholder": "Land wählen",
+        "postcode_label": "Postleitzahl",
+        "postcode_placeholder": "z. B. 40213",
+        "installation_group_heading": "Deine aktuelle Installation",
+        "component_question": "Welche Komponenten sind bereits vorhanden?",
+        "component_error": "Bitte wähle mindestens eine vorhandene Komponente aus.",
+        "smart_meter_hint": "<p>Du bist nicht sicher, was ein Smart Meter ist? <a href=\"/pages/smart-meter-energiefluss\">Smart Meter &amp; Energiefluss verstehen →</a></p>",
+        "situation_group_heading": "Deine Situation (optional)",
+        "situation_placeholder": "Beschreibe kurz deine aktuelle Situation oder deine Frage.",
+        "contact_group_heading": "Kontakt",
+        "name_placeholder": "Name",
+        "email_placeholder": "E-Mail-Adresse",
+        "phone_placeholder": "Telefonnummer (optional)",
+        "privacy_text": "<p>Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet werden. Weitere Informationen in der <a href=\"/pages/datenschutz\">Datenschutzerklärung</a>.</p>",
+        "submit_label": "VPP-Möglichkeiten anfragen",
+        "form_note": "Eine Anfrage ist noch keine Anmeldung zu einem VPP-Programm.",
+        "success_heading": "Vielen Dank für deine Anfrage.",
+        "success_text": "Wir haben deine Angaben erhalten und melden uns mit den nächsten Schritten bei dir.",
+        "flow_heading": "Was passiert nach deiner Anfrage?",
+        "flow_text": "Wir ordnen deine Angaben ein und melden uns mit den nächsten Schritten.",
+        "flow_note": "Eine Anfrage bedeutet keine automatische Teilnahme an einem VPP-Programm.",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 16,
+        "item_heading_size": 15,
+        "item_text_size": 14,
+        "control_size": 15
+      }
+    },
+    "vpp_anfrage_faq": {
+      "type": "vpp-anfrage-faq",
+      "blocks": {
+        "faq_ready": {"type": "faq", "settings": {"question": "Ist mein VENUS E automatisch VPP-fähig?", "answer": "<p>Nicht automatisch. Die tatsächliche Teilnahme hängt vom Modell, Softwarestand, Anbieter und verfügbaren Programmen ab.<br><a href=\"/pages/vpp-ready\">VPP-ready Speicher verstehen →</a></p>"}},
+        "faq_provider": {"type": "faq", "settings": {"question": "Muss ich bereits einen VPP-Anbieter haben?", "answer": "<p>Nein. Wir helfen dir dabei, die relevanten Voraussetzungen einzuordnen.</p>"}},
+        "faq_cost": {"type": "faq", "settings": {"question": "Kostet die Anfrage etwas?", "answer": "<p>Nein. Die erste Anfrage zur Einschätzung deiner Möglichkeiten ist kostenlos.</p>"}},
+        "faq_normal_use": {"type": "faq", "settings": {"question": "Kann ich meinen Speicher weiterhin normal nutzen?", "answer": "<p>Ja. VPP-ready beschreibt eine zusätzliche Möglichkeit und ersetzt nicht die normale Nutzung deines Speichers.<br><a href=\"/pages/ai-energiemanagement\">Mehr über intelligentes Energiemanagement erfahren →</a></p>"}}
+      },
+      "block_order": ["faq_ready", "faq_provider", "faq_cost", "faq_normal_use"],
+      "settings": {
+        "eyebrow": "Häufige Fragen",
+        "heading_before": "Fragen zu deiner",
+        "heading_highlight": "VPP-Anfrage",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 34,
+        "body_size": 16,
+        "item_heading_size": 16,
+        "item_text_size": 15,
+        "control_size": 14
+      }
+    },
+    "vpp_anfrage_final": {
+      "type": "vpp-anfrage-final",
+      "blocks": {
+        "final_contact": {"type": "button", "settings": {"label": "Kontakt aufnehmen", "url": "/pages/kontakt"}},
+        "final_smart_meter": {"type": "text_link", "settings": {"prefix": "Oder informiere dich zuerst über", "label": "Smart Meter & Energiefluss →", "url": "/pages/smart-meter-energiefluss"}}
+      },
+      "block_order": ["final_contact", "final_smart_meter"],
+      "settings": {
+        "eyebrow": "Support",
+        "heading_before": "Noch Fragen zu deinem",
+        "heading_highlight": "VENUS E System?",
+        "subtext": "Unser Team hilft dir bei technischen Fragen rund um Speicher, Smart Meter und VPP-Möglichkeiten.",
+        "section_padding": 72,
+        "content_width": 1440,
+        "eyebrow_size": 13,
+        "heading_size": 28,
+        "body_size": 16,
+        "item_heading_size": 18,
+        "item_text_size": 14,
+        "control_size": 15
+      }
+    }
+  },
+  "order": ["vpp_anfrage_hero", "vpp_anfrage_why", "vpp_anfrage_form", "vpp_anfrage_faq", "vpp_anfrage_final"]
+}
