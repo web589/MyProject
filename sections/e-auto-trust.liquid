@@ -20,7 +20,7 @@
         </div>
         <div class="e-auto-page__trust-grid">
           {% for block in section.blocks %}
-            <article {{ block.shopify_attributes }}><strong>{{ block.settings.value }}{% if block.settings.value_label != blank %}<span>{{ block.settings.value_label }}</span>{% endif %}</strong><p>{{ block.settings.text }}</p></article>
+            <article {{ block.shopify_attributes }}><strong>{{ block.settings.value }}{% if block.settings.value_label != blank %}<span{% if block.settings.value_label == 'Zyklen' %} class="e-auto-page__trust-value-label--stacked"{% endif %}>{{ block.settings.value_label }}</span>{% endif %}</strong><p>{{ block.settings.text }}</p></article>
           {% endfor %}
         </div>
       </div>
