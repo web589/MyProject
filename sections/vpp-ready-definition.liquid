@@ -28,14 +28,14 @@
   "tag":"section",
   "class":"vpp-ready-definition-section",
   "settings":[
-    {"type":"text","id":"eyebrow","label":"眉题","default":"Grundlagen"},
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Einfach erklärt"},
     {"type":"text","id":"heading_before","label":"标题前半部分","default":"Was bedeutet"},
     {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"VPP-ready?"},
     {"type":"text","id":"answer_label","label":"答案标签","default":"Kurz gesagt:"},
     {"type":"textarea","id":"answer","label":"定义内容","default":"VPP steht für „Virtual Power Plant“, auf Deutsch „virtuelles Kraftwerk“. Dabei werden verteilte Speicher, Erzeugungsanlagen oder flexible Verbraucher digital koordiniert. VPP-ready beschreibt hier die technische Vorbereitung auf eine solche Einbindung – noch keine bereits aktive Teilnahme."},
     {"type":"textarea","id":"note","label":"补充说明","default":"Ein virtuelles Kraftwerk koordiniert verteilte Anlagen über eine gemeinsame Steuerung. Die Häuser werden dafür nicht durch eine eigene Leitung miteinander verbunden."},
     {"type":"image_picker","id":"image","label":"信息图图片"},
-    {"type":"text","id":"image_alt","label":"信息图替代文字","default":"Vom vorbereiteten Speicher zur aktiven VPP-Teilnahme"},
+    {"type":"text","id":"image_alt","label":"信息图替代文字","default":"Infografik: VENUS E Speicher, technische Vorbereitung, VPP-Programm und aktive Teilnahme"},
     {"type":"text","id":"image_placeholder","label":"图片占位文字","default":"请选择 VPP 状态信息图：最多四个蓝色节点"},
     {"type":"header","content":"版式与字体"},
     {"type":"range","id":"section_padding","label":"区块上下间距","min":40,"max":140,"step":4,"unit":"px","default":72},
@@ -48,11 +48,11 @@
     {"type":"range","id":"control_size","label":"控件字号","min":11,"max":18,"step":1,"unit":"px","default":14}
   ],
   "blocks":[{"type":"state","name":"状态说明","settings":[
-    {"type":"text","id":"number","label":"编号","default":"01"},
+    {"type":"text","id":"number","label":"编号","default":"01 · TECHNISCHE BASIS"},
     {"type":"text","id":"title","label":"标题","default":"Technisch vorbereitet"},
     {"type":"textarea","id":"text","label":"说明文字","default":"Das System verfügt über die technischen Voraussetzungen für eine mögliche VPP-Anbindung."}
   ]}],
   "max_blocks":4,
-  "presets":[{"name":"02 VPP 定义","blocks":[{"type":"state","settings":{"number":"01","title":"Technisch vorbereitet","text":"Das System verfügt über die technischen Voraussetzungen für eine mögliche VPP-Anbindung."}},{"type":"state","settings":{"number":"02","title":"Passendes Programm erforderlich","text":"Für eine tatsächliche Teilnahme muss für dein Modell und deinen Standort ein geeignetes VPP-Programm verfügbar sein."}},{"type":"state","settings":{"number":"03","title":"Teilnahme aktiviert","text":"Die Einbindung wurde eingerichtet und das entsprechende VPP-Programm ist aktiv."}}]}]
+  "presets":[{"name":"02 VPP 定义","blocks":[{"type":"state","settings":{"number":"01 · TECHNISCHE BASIS","title":"Technisch vorbereitet","text":"Das System verfügt über die technischen Voraussetzungen für eine mögliche VPP-Anbindung."}},{"type":"state","settings":{"number":"02 · PROGRAMM","title":"Passendes Programm erforderlich","text":"Für eine tatsächliche Teilnahme muss für dein Modell und deinen Standort ein geeignetes VPP-Programm verfügbar sein."}},{"type":"state","settings":{"number":"03 · AKTIVE NUTZUNG","title":"Teilnahme aktiviert","text":"Die Einbindung wurde eingerichtet und das entsprechende VPP-Programm ist aktiv."}}]}]
 }
 {% endschema %}
