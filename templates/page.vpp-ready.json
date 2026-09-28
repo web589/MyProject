@@ -12,18 +12,117 @@
     "vpp_navigation": {
       "type": "vpp-anchor-navigation",
       "blocks": {
-        "nav_start": { "type": "link", "settings": { "label": "Start", "module": "vpp_ready_start" } },
-        "nav_definition": { "type": "link", "settings": { "label": "VPP-ready erklärt", "module": "vpp_ready_definition" } },
-        "nav_benefits": { "type": "link", "settings": { "label": "Vorteile", "module": "vpp_ready_benefits" } },
-        "nav_function": { "type": "link", "settings": { "label": "Funktionsweise", "module": "vpp_ready_function" } },
-        "nav_comparison": { "type": "link", "settings": { "label": "Einordnung", "module": "vpp_ready_comparison" } },
-        "nav_participation": { "type": "link", "settings": { "label": "Teilnahme", "module": "vpp_ready_participation" } },
-        "nav_boundaries": { "type": "link", "settings": { "label": "Bedingungen", "module": "vpp_ready_boundaries" } },
-        "nav_models": { "type": "link", "settings": { "label": "Modelle", "module": "vpp_ready_models" } },
-        "nav_faq": { "type": "link", "settings": { "label": "FAQ", "module": "vpp_ready_faq" } },
-        "nav_guides": { "type": "link", "settings": { "label": "Ratgeber", "module": "vpp_ready_guides" } }
+        "nav_start": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "Start",
+            "target": ""
+          }
+        },
+        "link_9fiAaz": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_definition",
+            "label": "Navigation",
+            "target": ""
+          }
+        },
+        "link_iMNX7x": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "Navigation",
+            "target": ""
+          }
+        },
+        "nav_definition": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "VPP-ready erklärt",
+            "target": ""
+          }
+        },
+        "nav_benefits": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "Vorteile",
+            "target": ""
+          }
+        },
+        "nav_function": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "Funktionsweise",
+            "target": ""
+          }
+        },
+        "nav_comparison": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "Einordnung",
+            "target": ""
+          }
+        },
+        "nav_participation": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "Teilnahme",
+            "target": ""
+          }
+        },
+        "nav_boundaries": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "Bedingungen",
+            "target": ""
+          }
+        },
+        "nav_models": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "Modelle",
+            "target": ""
+          }
+        },
+        "nav_faq": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "FAQ",
+            "target": ""
+          }
+        },
+        "nav_guides": {
+          "type": "link",
+          "settings": {
+            "module": "vpp_ready_start",
+            "label": "Ratgeber",
+            "target": ""
+          }
+        }
       },
-      "block_order": ["nav_start", "nav_definition", "nav_benefits", "nav_function", "nav_comparison", "nav_participation", "nav_boundaries", "nav_models", "nav_faq", "nav_guides"],
+      "block_order": [
+        "nav_start",
+        "link_9fiAaz",
+        "link_iMNX7x",
+        "nav_definition",
+        "nav_benefits",
+        "nav_function",
+        "nav_comparison",
+        "nav_participation",
+        "nav_boundaries",
+        "nav_models",
+        "nav_faq",
+        "nav_guides"
+      ],
       "settings": {
         "aria_label": "Navigation zu VPP-ready",
         "anchor_id": "navigation",
@@ -53,7 +152,10 @@
           }
         }
       },
-      "block_order": ["hero_check", "hero_models"],
+      "block_order": [
+        "hero_check",
+        "hero_models"
+      ],
       "settings": {
         "eyebrow": "Vernetzte Energie",
         "heading_before": "VPP-ready: vorbereitet auf",
@@ -100,7 +202,11 @@
           }
         }
       },
-      "block_order": ["state_prepared", "state_program", "state_active"],
+      "block_order": [
+        "state_prepared",
+        "state_program",
+        "state_active"
+      ],
       "settings": {
         "eyebrow": "Einfach erklärt",
         "heading_before": "Was bedeutet",
@@ -148,7 +254,11 @@
           }
         }
       },
-      "block_order": ["benefit_flexibility", "benefit_grid", "benefit_program"],
+      "block_order": [
+        "benefit_flexibility",
+        "benefit_grid",
+        "benefit_program"
+      ],
       "settings": {
         "eyebrow": "Zusätzliche Möglichkeiten",
         "heading_before": "Welchen Nutzen kann ein virtuelles",
@@ -202,7 +312,12 @@
           }
         }
       },
-      "block_order": ["step_connect", "step_bundle", "step_coordinate", "function_ai_link"],
+      "block_order": [
+        "step_connect",
+        "step_bundle",
+        "step_coordinate",
+        "function_ai_link"
+      ],
       "settings": {
         "eyebrow": "Funktionsweise",
         "heading_before": "Wie funktioniert ein virtuelles Kraftwerk mit",
@@ -226,9 +341,30 @@
     "vpp_comparison": {
       "type": "vpp-ready-comparison",
       "blocks": {
-        "concept_self_use": {"type": "concept", "settings": {"label": "Eigenverbrauch", "icon": "sun", "active": false}},
-        "concept_tariff": {"type": "concept", "settings": {"label": "Dynamischer Stromtarif", "icon": "bolt", "active": false}},
-        "concept_vpp": {"type": "concept", "settings": {"label": "VPP-Teilnahme", "icon": "network", "active": true}},
+        "concept_self_use": {
+          "type": "concept",
+          "settings": {
+            "label": "Eigenverbrauch",
+            "icon": "sun",
+            "active": false
+          }
+        },
+        "concept_tariff": {
+          "type": "concept",
+          "settings": {
+            "label": "Dynamischer Stromtarif",
+            "icon": "bolt",
+            "active": false
+          }
+        },
+        "concept_vpp": {
+          "type": "concept",
+          "settings": {
+            "label": "VPP-Teilnahme",
+            "icon": "network",
+            "active": true
+          }
+        },
         "comparison_self_use": {
           "type": "row",
           "settings": {
@@ -257,7 +393,14 @@
           }
         }
       },
-      "block_order": ["concept_self_use", "concept_tariff", "concept_vpp", "comparison_self_use", "comparison_tariff", "comparison_vpp"],
+      "block_order": [
+        "concept_self_use",
+        "concept_tariff",
+        "concept_vpp",
+        "comparison_self_use",
+        "comparison_tariff",
+        "comparison_vpp"
+      ],
       "settings": {
         "eyebrow": "Richtig einordnen",
         "heading_before": "Eigenverbrauch, dynamischer Tarif oder",
@@ -282,15 +425,70 @@
     "vpp_participation": {
       "type": "vpp-ready-participation",
       "blocks": {
-        "requirement_model": {"type": "requirement", "settings": {"title": "Modell & Software", "text": "Ist dein konkretes VENUS E Modell mit dem erforderlichen Softwarestand für das Programm freigegeben?", "link_label": "", "link_url": ""}},
-        "requirement_region": {"type": "requirement", "settings": {"title": "Anbieter & Region", "text": "Gibt es für deinen Standort ein passendes Angebot, und welche Tarifbedingungen gelten?", "link_label": "", "link_url": ""}},
-        "requirement_measurement": {"type": "requirement", "settings": {"title": "Messung & Verbindung", "text": "Sind die geforderten Messdaten, Kommunikationswege und technischen Voraussetzungen vorhanden?", "link_label": "Smart Meter & Energiefluss verstehen →", "link_url": "/pages/smart-meter-energiefluss"}},
-        "requirement_contract": {"type": "requirement", "settings": {"title": "Vertrag & Einrichtung", "text": "Sind Vergütung, Steuerungsumfang und die Einrichtung der Teilnahme nachvollziehbar geregelt?", "link_label": "", "link_url": ""}},
-        "check_model": {"type": "check_item", "settings": {"text": "VENUS E Modell"}},
-        "check_location": {"type": "check_item", "settings": {"text": "Land & Postleitzahl"}},
-        "check_installation": {"type": "check_item", "settings": {"text": "Vorhandene Installation"}}
+        "requirement_model": {
+          "type": "requirement",
+          "settings": {
+            "title": "Modell & Software",
+            "text": "Ist dein konkretes VENUS E Modell mit dem erforderlichen Softwarestand für das Programm freigegeben?",
+            "link_label": "",
+            "link_url": ""
+          }
+        },
+        "requirement_region": {
+          "type": "requirement",
+          "settings": {
+            "title": "Anbieter & Region",
+            "text": "Gibt es für deinen Standort ein passendes Angebot, und welche Tarifbedingungen gelten?",
+            "link_label": "",
+            "link_url": ""
+          }
+        },
+        "requirement_measurement": {
+          "type": "requirement",
+          "settings": {
+            "title": "Messung & Verbindung",
+            "text": "Sind die geforderten Messdaten, Kommunikationswege und technischen Voraussetzungen vorhanden?",
+            "link_label": "Smart Meter & Energiefluss verstehen →",
+            "link_url": "/pages/smart-meter-energiefluss"
+          }
+        },
+        "requirement_contract": {
+          "type": "requirement",
+          "settings": {
+            "title": "Vertrag & Einrichtung",
+            "text": "Sind Vergütung, Steuerungsumfang und die Einrichtung der Teilnahme nachvollziehbar geregelt?",
+            "link_label": "",
+            "link_url": ""
+          }
+        },
+        "check_model": {
+          "type": "check_item",
+          "settings": {
+            "text": "VENUS E Modell"
+          }
+        },
+        "check_location": {
+          "type": "check_item",
+          "settings": {
+            "text": "Land & Postleitzahl"
+          }
+        },
+        "check_installation": {
+          "type": "check_item",
+          "settings": {
+            "text": "Vorhandene Installation"
+          }
+        }
       },
-      "block_order": ["requirement_model", "requirement_region", "requirement_measurement", "requirement_contract", "check_model", "check_location", "check_installation"],
+      "block_order": [
+        "requirement_model",
+        "requirement_region",
+        "requirement_measurement",
+        "requirement_contract",
+        "check_model",
+        "check_location",
+        "check_installation"
+      ],
       "settings": {
         "eyebrow": "Teilnahme prüfen",
         "heading_before": "Was brauchst du für die",
@@ -318,13 +516,54 @@
     "vpp_boundaries": {
       "type": "vpp-ready-boundaries",
       "blocks": {
-        "boundary_reserve": {"type": "check", "settings": {"icon": "home", "title": "Eigenverbrauch & Speicherreserve", "text": "Wie werden dein eigener Strombedarf und eine mögliche Speicherreserve berücksichtigt?"}},
-        "boundary_costs": {"type": "check", "settings": {"icon": "euro", "title": "Vergütung & Kosten", "text": "Welche Vergütung ist vorgesehen, welche Gebühren fallen an und wie erfolgt die Abrechnung?"}},
-        "boundary_warranty": {"type": "check", "settings": {"icon": "battery", "title": "Ladezyklen & Garantie", "text": "Welche zusätzliche Nutzung ist vorgesehen und welche Garantiebedingungen gelten dafür?"}},
-        "boundary_data": {"type": "check", "settings": {"icon": "lock", "title": "Zugriff & Daten", "text": "Wer darf den Speicher steuern und welche Daten werden dafür verarbeitet?"}},
-        "boundary_contract": {"type": "check", "settings": {"icon": "contract", "title": "Pause & Vertragsende", "text": "Welche Möglichkeiten bestehen, die Teilnahme zu pausieren oder zu beenden?"}}
+        "boundary_reserve": {
+          "type": "check",
+          "settings": {
+            "icon": "home",
+            "title": "Eigenverbrauch & Speicherreserve",
+            "text": "Wie werden dein eigener Strombedarf und eine mögliche Speicherreserve berücksichtigt?"
+          }
+        },
+        "boundary_costs": {
+          "type": "check",
+          "settings": {
+            "icon": "euro",
+            "title": "Vergütung & Kosten",
+            "text": "Welche Vergütung ist vorgesehen, welche Gebühren fallen an und wie erfolgt die Abrechnung?"
+          }
+        },
+        "boundary_warranty": {
+          "type": "check",
+          "settings": {
+            "icon": "battery",
+            "title": "Ladezyklen & Garantie",
+            "text": "Welche zusätzliche Nutzung ist vorgesehen und welche Garantiebedingungen gelten dafür?"
+          }
+        },
+        "boundary_data": {
+          "type": "check",
+          "settings": {
+            "icon": "lock",
+            "title": "Zugriff & Daten",
+            "text": "Wer darf den Speicher steuern und welche Daten werden dafür verarbeitet?"
+          }
+        },
+        "boundary_contract": {
+          "type": "check",
+          "settings": {
+            "icon": "contract",
+            "title": "Pause & Vertragsende",
+            "text": "Welche Möglichkeiten bestehen, die Teilnahme zu pausieren oder zu beenden?"
+          }
+        }
       },
-      "block_order": ["boundary_reserve", "boundary_costs", "boundary_warranty", "boundary_data", "boundary_contract"],
+      "block_order": [
+        "boundary_reserve",
+        "boundary_costs",
+        "boundary_warranty",
+        "boundary_data",
+        "boundary_contract"
+      ],
       "settings": {
         "eyebrow": "Nutzung & Bedingungen",
         "heading_before": "Was solltest du vor der Teilnahme",
@@ -345,12 +584,53 @@
     "vpp_models": {
       "type": "vpp-ready-models",
       "blocks": {
-        "model_mini": {"type": "product", "settings": {"product": "venus-e-mini", "tag": "", "fallback_title": "VENUS E Mini", "text": "Kompakter Speicher für kleinere Energiemengen und wenig Platz.", "link_label": "Details ansehen →"}},
-        "model_3": {"type": "product", "settings": {"product": "venus-e-3", "tag": "", "fallback_title": "VENUS E 3.0", "text": "Für Haushalte, die Solarstrom flexibel speichern und zeitversetzt nutzen möchten.", "link_label": "Details ansehen →"}},
-        "model_4": {"type": "product", "settings": {"product": "venus-e-4", "tag": "", "fallback_title": "VENUS E 4.0", "text": "Für Haushalte mit höheren Anforderungen an Leistung und Energiemanagement.", "link_label": "Details ansehen →"}},
-        "model_max": {"type": "product", "settings": {"product": "venus-e-max", "tag": "", "fallback_title": "VENUS E Max", "text": "Für größere Haushalte mit höherem Speicher- und Leistungsbedarf.", "link_label": "Details ansehen →"}}
+        "model_mini": {
+          "type": "product",
+          "settings": {
+            "product": "venus-e-mini",
+            "tag": "",
+            "fallback_title": "VENUS E Mini",
+            "text": "Kompakter Speicher für kleinere Energiemengen und wenig Platz.",
+            "link_label": "Details ansehen →"
+          }
+        },
+        "model_3": {
+          "type": "product",
+          "settings": {
+            "product": "venus-e-3",
+            "tag": "",
+            "fallback_title": "VENUS E 3.0",
+            "text": "Für Haushalte, die Solarstrom flexibel speichern und zeitversetzt nutzen möchten.",
+            "link_label": "Details ansehen →"
+          }
+        },
+        "model_4": {
+          "type": "product",
+          "settings": {
+            "product": "venus-e-4",
+            "tag": "",
+            "fallback_title": "VENUS E 4.0",
+            "text": "Für Haushalte mit höheren Anforderungen an Leistung und Energiemanagement.",
+            "link_label": "Details ansehen →"
+          }
+        },
+        "model_max": {
+          "type": "product",
+          "settings": {
+            "product": "venus-e-max",
+            "tag": "",
+            "fallback_title": "VENUS E Max",
+            "text": "Für größere Haushalte mit höherem Speicher- und Leistungsbedarf.",
+            "link_label": "Details ansehen →"
+          }
+        }
       },
-      "block_order": ["model_mini", "model_3", "model_4", "model_max"],
+      "block_order": [
+        "model_mini",
+        "model_3",
+        "model_4",
+        "model_max"
+      ],
       "settings": {
         "eyebrow": "Speichermodelle",
         "heading_before": "Welcher VENUS E passt zu deinem",
@@ -372,17 +652,81 @@
     "vpp_faq": {
       "type": "vpp-ready-faq",
       "blocks": {
-        "faq_ready": {"type": "faq", "settings": {"question": "Was bedeutet VPP-ready bei einem Speicher?", "answer": "<p>VPP-ready beschreibt hier die technische Vorbereitung auf die Einbindung in ein virtuelles Kraftwerk. Für die tatsächliche Teilnahme müssen zusätzlich die Anforderungen eines konkreten Anbieters und Programms erfüllt sein.</p>"}},
-        "faq_germany": {"type": "faq", "settings": {"question": "Kann ich meinen VENUS E in Deutschland direkt für ein VPP nutzen?", "answer": "<p>Das muss für dein konkretes Modell und ein verfügbares Programm geprüft werden. Die Bezeichnung VPP-ready allein bestätigt noch keine aktive Teilnahme an deinem Standort. <a href=\"/pages/vpp-anfrage\">VPP-Möglichkeiten anfragen →</a></p>"}},
-        "faq_money": {"type": "faq", "settings": {"question": "Bekomme ich mit VPP-ready automatisch Geld?", "answer": "<p>Nein. Eine mögliche Vergütung entsteht erst im Rahmen eines entsprechenden Programms. Ob sich die Teilnahme lohnt, hängt unter anderem von Vergütung, Gebühren und der tatsächlichen Nutzung des Speichers ab.</p>"}},
-        "faq_control": {"type": "faq", "settings": {"question": "Kann ein VPP-Anbieter meinen Speicher jederzeit steuern?", "answer": "<p>Wie und in welchem Umfang ein VPP-Anbieter auf den Speicher zugreifen kann, richtet sich nach dem jeweiligen Programm. Prüfe insbesondere, wie Eigenverbrauch, Speicherreserve und technische Grenzen berücksichtigt werden.</p>"}},
-        "faq_tariff": {"type": "faq", "settings": {"question": "Ist ein dynamischer Stromtarif bereits ein VPP?", "answer": "<p>Nein. Ein dynamischer Tarif verändert den Strompreis im Tagesverlauf. Ein VPP koordiniert mehrere Anlagen gemeinsam. Beides kann kombiniert werden, setzt aber unterschiedliche Vereinbarungen und Funktionen voraus.</p>"}},
-        "faq_meter": {"type": "faq", "settings": {"question": "Reichen CT002 oder CT003 für eine VPP-Teilnahme aus?", "answer": "<p>Nicht automatisch. CT002 und CT003 unterstützen die Speichersteuerung mit Messdaten. Ein VPP-Anbieter kann zusätzliche Anforderungen an Messung, Kommunikation und Abrechnung stellen. Die Eignung muss deshalb für das jeweilige Programm geprüft werden.</p>"}},
-        "faq_reserve": {"type": "faq", "settings": {"question": "Bleibt genug Energie für meinen eigenen Haushalt?", "answer": "<p>Wie dein Eigenverbrauch und mögliche Reserven berücksichtigt werden, hängt von den Einstellungen und Teilnahmebedingungen ab. Kläre vor dem Beitritt, welche Prioritäten das Programm setzt.</p>"}},
-        "faq_without": {"type": "faq", "settings": {"question": "Kann ich VPP-ready auch ohne VPP nutzen?", "answer": "<p>Ja. VPP-ready beschreibt eine zusätzliche Möglichkeit. Dein VENUS E kann auch ohne aktive VPP-Teilnahme als Speichersystem genutzt werden.</p>"}},
-        "faq_backup": {"type": "faq", "settings": {"question": "Bedeutet VPP-ready auch Notstromversorgung?", "answer": "<p>Nein. VPP-Anbindung und Notstromversorgung sind unterschiedliche Funktionen. Welche Notstrom- oder EPS-Funktionen verfügbar sind, hängt vom jeweiligen VENUS E Modell und der Installation ab.</p>"}}
+        "faq_ready": {
+          "type": "faq",
+          "settings": {
+            "question": "Was bedeutet VPP-ready bei einem Speicher?",
+            "answer": "<p>VPP-ready beschreibt hier die technische Vorbereitung auf die Einbindung in ein virtuelles Kraftwerk. Für die tatsächliche Teilnahme müssen zusätzlich die Anforderungen eines konkreten Anbieters und Programms erfüllt sein.</p>"
+          }
+        },
+        "faq_germany": {
+          "type": "faq",
+          "settings": {
+            "question": "Kann ich meinen VENUS E in Deutschland direkt für ein VPP nutzen?",
+            "answer": "<p>Das muss für dein konkretes Modell und ein verfügbares Programm geprüft werden. Die Bezeichnung VPP-ready allein bestätigt noch keine aktive Teilnahme an deinem Standort. <a href=\"/pages/vpp-anfrage\">VPP-Möglichkeiten anfragen →</a></p>"
+          }
+        },
+        "faq_money": {
+          "type": "faq",
+          "settings": {
+            "question": "Bekomme ich mit VPP-ready automatisch Geld?",
+            "answer": "<p>Nein. Eine mögliche Vergütung entsteht erst im Rahmen eines entsprechenden Programms. Ob sich die Teilnahme lohnt, hängt unter anderem von Vergütung, Gebühren und der tatsächlichen Nutzung des Speichers ab.</p>"
+          }
+        },
+        "faq_control": {
+          "type": "faq",
+          "settings": {
+            "question": "Kann ein VPP-Anbieter meinen Speicher jederzeit steuern?",
+            "answer": "<p>Wie und in welchem Umfang ein VPP-Anbieter auf den Speicher zugreifen kann, richtet sich nach dem jeweiligen Programm. Prüfe insbesondere, wie Eigenverbrauch, Speicherreserve und technische Grenzen berücksichtigt werden.</p>"
+          }
+        },
+        "faq_tariff": {
+          "type": "faq",
+          "settings": {
+            "question": "Ist ein dynamischer Stromtarif bereits ein VPP?",
+            "answer": "<p>Nein. Ein dynamischer Tarif verändert den Strompreis im Tagesverlauf. Ein VPP koordiniert mehrere Anlagen gemeinsam. Beides kann kombiniert werden, setzt aber unterschiedliche Vereinbarungen und Funktionen voraus.</p>"
+          }
+        },
+        "faq_meter": {
+          "type": "faq",
+          "settings": {
+            "question": "Reichen CT002 oder CT003 für eine VPP-Teilnahme aus?",
+            "answer": "<p>Nicht automatisch. CT002 und CT003 unterstützen die Speichersteuerung mit Messdaten. Ein VPP-Anbieter kann zusätzliche Anforderungen an Messung, Kommunikation und Abrechnung stellen. Die Eignung muss deshalb für das jeweilige Programm geprüft werden.</p>"
+          }
+        },
+        "faq_reserve": {
+          "type": "faq",
+          "settings": {
+            "question": "Bleibt genug Energie für meinen eigenen Haushalt?",
+            "answer": "<p>Wie dein Eigenverbrauch und mögliche Reserven berücksichtigt werden, hängt von den Einstellungen und Teilnahmebedingungen ab. Kläre vor dem Beitritt, welche Prioritäten das Programm setzt.</p>"
+          }
+        },
+        "faq_without": {
+          "type": "faq",
+          "settings": {
+            "question": "Kann ich VPP-ready auch ohne VPP nutzen?",
+            "answer": "<p>Ja. VPP-ready beschreibt eine zusätzliche Möglichkeit. Dein VENUS E kann auch ohne aktive VPP-Teilnahme als Speichersystem genutzt werden.</p>"
+          }
+        },
+        "faq_backup": {
+          "type": "faq",
+          "settings": {
+            "question": "Bedeutet VPP-ready auch Notstromversorgung?",
+            "answer": "<p>Nein. VPP-Anbindung und Notstromversorgung sind unterschiedliche Funktionen. Welche Notstrom- oder EPS-Funktionen verfügbar sind, hängt vom jeweiligen VENUS E Modell und der Installation ab.</p>"
+          }
+        }
       },
-      "block_order": ["faq_ready", "faq_germany", "faq_money", "faq_control", "faq_tariff", "faq_meter", "faq_reserve", "faq_without", "faq_backup"],
+      "block_order": [
+        "faq_ready",
+        "faq_germany",
+        "faq_money",
+        "faq_control",
+        "faq_tariff",
+        "faq_meter",
+        "faq_reserve",
+        "faq_without",
+        "faq_backup"
+      ],
       "settings": {
         "eyebrow": "Häufige Fragen",
         "heading_before": "Fragen zu",
@@ -438,7 +782,11 @@
           }
         }
       },
-      "block_order": ["guide_tariff", "guide_meter", "guide_retrofit"],
+      "block_order": [
+        "guide_tariff",
+        "guide_meter",
+        "guide_retrofit"
+      ],
       "settings": {
         "eyebrow": "Weiterführende Themen",
         "heading_before": "Ratgeber &",
@@ -459,10 +807,27 @@
     "vpp_final": {
       "type": "vpp-ready-final",
       "blocks": {
-        "final_models": {"type": "button", "settings": {"label": "Speichermodelle vergleichen", "url": "/pages/venus-e-vergleich", "style": "primary"}},
-        "final_contact": {"type": "button", "settings": {"label": "VPP-Möglichkeiten anfragen", "url": "/pages/vpp-anfrage", "style": "secondary"}}
+        "final_models": {
+          "type": "button",
+          "settings": {
+            "label": "Speichermodelle vergleichen",
+            "url": "/pages/venus-e-vergleich",
+            "style": "primary"
+          }
+        },
+        "final_contact": {
+          "type": "button",
+          "settings": {
+            "label": "VPP-Möglichkeiten anfragen",
+            "url": "/pages/vpp-anfrage",
+            "style": "secondary"
+          }
+        }
       },
-      "block_order": ["final_models", "final_contact"],
+      "block_order": [
+        "final_models",
+        "final_contact"
+      ],
       "settings": {
         "eyebrow": "Dein nächster Schritt",
         "heading_before": "Speicher passend wählen. VPP-Möglichkeiten klären.",

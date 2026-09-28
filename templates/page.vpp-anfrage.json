@@ -12,30 +12,82 @@
     "vpp_navigation": {
       "type": "vpp-anchor-navigation",
       "blocks": {
-        "nav_start": { "type": "link", "settings": { "label": "Start", "module": "vpp_request_start" } },
-        "nav_why": { "type": "link", "settings": { "label": "Warum diese Angaben?", "module": "vpp_request_why" } },
-        "nav_form": { "type": "link", "settings": { "label": "Anfrage", "module": "vpp_request_form" } },
-        "nav_faq": { "type": "link", "settings": { "label": "FAQ", "module": "vpp_request_faq" } },
-        "nav_support": { "type": "link", "settings": { "label": "Support", "module": "vpp_request_support" } }
+        "nav_start": {
+          "type": "link",
+          "settings": {
+            "label": "Start"
+          }
+        },
+        "nav_why": {
+          "type": "link",
+          "settings": {
+            "label": "Warum diese Angaben?"
+          }
+        },
+        "nav_form": {
+          "type": "link",
+          "settings": {
+            "label": "Anfrage"
+          }
+        },
+        "nav_faq": {
+          "type": "link",
+          "settings": {
+            "label": "FAQ"
+          }
+        },
+        "nav_support": {
+          "type": "link",
+          "settings": {
+            "label": "Support"
+          }
+        }
       },
-      "block_order": ["nav_start", "nav_why", "nav_form", "nav_faq", "nav_support"],
+      "block_order": [
+        "nav_start",
+        "nav_why",
+        "nav_form",
+        "nav_faq",
+        "nav_support"
+      ],
       "settings": {
         "aria_label": "Navigation zur VPP-Anfrage",
         "anchor_id": "navigation",
         "nav_text_size": 13.5,
         "cta_label": "Formular ausfüllen",
-        "cta_module": "vpp_request_form",
         "cta_target": ""
       }
     },
     "vpp_anfrage_hero": {
       "type": "vpp-anfrage-hero",
       "blocks": {
-        "trust_assessment": {"type": "trust_item", "settings": {"icon": "check", "text": "Kostenlose Einschätzung"}},
-        "trust_reply": {"type": "trust_item", "settings": {"icon": "clock", "text": "Persönliche Rückmeldung"}},
-        "trust_no_signup": {"type": "trust_item", "settings": {"icon": "lock", "text": "Keine automatische Anmeldung"}}
+        "trust_assessment": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "check",
+            "text": "Kostenlose Einschätzung"
+          }
+        },
+        "trust_reply": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "clock",
+            "text": "Persönliche Rückmeldung"
+          }
+        },
+        "trust_no_signup": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "lock",
+            "text": "Keine automatische Anmeldung"
+          }
+        }
       },
-      "block_order": ["trust_assessment", "trust_reply", "trust_no_signup"],
+      "block_order": [
+        "trust_assessment",
+        "trust_reply",
+        "trust_no_signup"
+      ],
       "settings": {
         "eyebrow": "VPP-CHECK",
         "heading_before": "VPP-Anfrage für deinen",
@@ -57,11 +109,36 @@
     "vpp_anfrage_why": {
       "type": "vpp-anfrage-why",
       "blocks": {
-        "reason_model": {"type": "reason", "settings": {"icon": "battery", "title": "Dein VENUS E Modell", "text": "Jedes Modell kann unterschiedliche Voraussetzungen für Programme erfüllen."}},
-        "reason_location": {"type": "reason", "settings": {"icon": "pin", "title": "Dein Standort", "text": "VPP-Angebote hängen vom Land und verfügbaren Programmen ab."}},
-        "reason_installation": {"type": "reason", "settings": {"icon": "home", "title": "Deine Installation & Smart Meter", "text": "PV-Anlage, Smart Meter und weitere technische Komponenten helfen bei der Einschätzung."}}
+        "reason_model": {
+          "type": "reason",
+          "settings": {
+            "icon": "battery",
+            "title": "Dein VENUS E Modell",
+            "text": "Jedes Modell kann unterschiedliche Voraussetzungen für Programme erfüllen."
+          }
+        },
+        "reason_location": {
+          "type": "reason",
+          "settings": {
+            "icon": "pin",
+            "title": "Dein Standort",
+            "text": "VPP-Angebote hängen vom Land und verfügbaren Programmen ab."
+          }
+        },
+        "reason_installation": {
+          "type": "reason",
+          "settings": {
+            "icon": "home",
+            "title": "Deine Installation & Smart Meter",
+            "text": "PV-Anlage, Smart Meter und weitere technische Komponenten helfen bei der Einschätzung."
+          }
+        }
       },
-      "block_order": ["reason_model", "reason_location", "reason_installation"],
+      "block_order": [
+        "reason_model",
+        "reason_location",
+        "reason_installation"
+      ],
       "settings": {
         "eyebrow": "Warum diese Angaben?",
         "heading_before": "Warum benötigen wir diese",
@@ -79,25 +156,134 @@
     "vpp_anfrage_form": {
       "type": "vpp-anfrage-form",
       "blocks": {
-        "model_unsure": {"type": "model_option", "settings": {"label": "Ich bin noch nicht sicher"}},
-        "model_mini": {"type": "model_option", "settings": {"label": "VENUS E Mini"}},
-        "model_3": {"type": "model_option", "settings": {"label": "VENUS E 3.0"}},
-        "model_4": {"type": "model_option", "settings": {"label": "VENUS E 4.0"}},
-        "model_max": {"type": "model_option", "settings": {"label": "VENUS E Max"}},
-        "country_de": {"type": "country_option", "settings": {"label": "Deutschland"}},
-        "country_nl": {"type": "country_option", "settings": {"label": "Niederlande"}},
-        "country_be": {"type": "country_option", "settings": {"label": "Belgien"}},
-        "component_pv": {"type": "component_option", "settings": {"label": "PV-Anlage"}},
-        "component_balcony": {"type": "component_option", "settings": {"label": "Balkonkraftwerk"}},
-        "component_meter": {"type": "component_option", "settings": {"label": "Smart Meter"}},
-        "component_wallbox": {"type": "component_option", "settings": {"label": "Wallbox"}},
-        "component_heatpump": {"type": "component_option", "settings": {"label": "Wärmepumpe"}},
-        "component_none": {"type": "component_option", "settings": {"label": "Noch keine Installation"}},
-        "flow_review": {"type": "flow_step", "settings": {"number": "01", "title": "Wir prüfen deine Angaben", "text": "Modell, Standort und Installation."}},
-        "flow_requirements": {"type": "flow_step", "settings": {"number": "02", "title": "Wir klären die Voraussetzungen", "text": "Technische Anforderungen und mögliche Programme."}},
-        "flow_reply": {"type": "flow_step", "settings": {"number": "03", "title": "Wir melden uns bei dir", "text": "Mit den nächsten Schritten und den Informationen, die noch fehlen."}}
+        "model_unsure": {
+          "type": "model_option",
+          "settings": {
+            "label": "Ich bin noch nicht sicher"
+          }
+        },
+        "model_mini": {
+          "type": "model_option",
+          "settings": {
+            "label": "VENUS E Mini"
+          }
+        },
+        "model_3": {
+          "type": "model_option",
+          "settings": {
+            "label": "VENUS E 3.0"
+          }
+        },
+        "model_4": {
+          "type": "model_option",
+          "settings": {
+            "label": "VENUS E 4.0"
+          }
+        },
+        "model_max": {
+          "type": "model_option",
+          "settings": {
+            "label": "VENUS E Max"
+          }
+        },
+        "country_de": {
+          "type": "country_option",
+          "settings": {
+            "label": "Deutschland"
+          }
+        },
+        "country_nl": {
+          "type": "country_option",
+          "settings": {
+            "label": "Niederlande"
+          }
+        },
+        "country_be": {
+          "type": "country_option",
+          "settings": {
+            "label": "Belgien"
+          }
+        },
+        "component_pv": {
+          "type": "component_option",
+          "settings": {
+            "label": "PV-Anlage"
+          }
+        },
+        "component_balcony": {
+          "type": "component_option",
+          "settings": {
+            "label": "Balkonkraftwerk"
+          }
+        },
+        "component_meter": {
+          "type": "component_option",
+          "settings": {
+            "label": "Smart Meter"
+          }
+        },
+        "component_wallbox": {
+          "type": "component_option",
+          "settings": {
+            "label": "Wallbox"
+          }
+        },
+        "component_heatpump": {
+          "type": "component_option",
+          "settings": {
+            "label": "Wärmepumpe"
+          }
+        },
+        "component_none": {
+          "type": "component_option",
+          "settings": {
+            "label": "Noch keine Installation"
+          }
+        },
+        "flow_review": {
+          "type": "flow_step",
+          "settings": {
+            "number": "01",
+            "title": "Wir prüfen deine Angaben",
+            "text": "Modell, Standort und Installation."
+          }
+        },
+        "flow_requirements": {
+          "type": "flow_step",
+          "settings": {
+            "number": "02",
+            "title": "Wir klären die Voraussetzungen",
+            "text": "Technische Anforderungen und mögliche Programme."
+          }
+        },
+        "flow_reply": {
+          "type": "flow_step",
+          "settings": {
+            "number": "03",
+            "title": "Wir melden uns bei dir",
+            "text": "Mit den nächsten Schritten und den Informationen, die noch fehlen."
+          }
+        }
       },
-      "block_order": ["model_unsure", "model_mini", "model_3", "model_4", "model_max", "country_de", "country_nl", "country_be", "component_pv", "component_balcony", "component_meter", "component_wallbox", "component_heatpump", "component_none", "flow_review", "flow_requirements", "flow_reply"],
+      "block_order": [
+        "model_unsure",
+        "model_mini",
+        "model_3",
+        "model_4",
+        "model_max",
+        "country_de",
+        "country_nl",
+        "country_be",
+        "component_pv",
+        "component_balcony",
+        "component_meter",
+        "component_wallbox",
+        "component_heatpump",
+        "component_none",
+        "flow_review",
+        "flow_requirements",
+        "flow_reply"
+      ],
       "settings": {
         "eyebrow": "Formular",
         "heading_before": "Deine Angaben zur",
@@ -142,12 +328,41 @@
     "vpp_anfrage_faq": {
       "type": "vpp-anfrage-faq",
       "blocks": {
-        "faq_ready": {"type": "faq", "settings": {"question": "Ist mein VENUS E automatisch VPP-fähig?", "answer": "<p>Nicht automatisch. Die tatsächliche Teilnahme hängt vom Modell, Softwarestand, Anbieter und verfügbaren Programmen ab.<br><a href=\"/pages/vpp-ready\">VPP-ready Speicher verstehen →</a></p>"}},
-        "faq_provider": {"type": "faq", "settings": {"question": "Muss ich bereits einen VPP-Anbieter haben?", "answer": "<p>Nein. Wir helfen dir dabei, die relevanten Voraussetzungen einzuordnen.</p>"}},
-        "faq_cost": {"type": "faq", "settings": {"question": "Kostet die Anfrage etwas?", "answer": "<p>Nein. Die erste Anfrage zur Einschätzung deiner Möglichkeiten ist kostenlos.</p>"}},
-        "faq_normal_use": {"type": "faq", "settings": {"question": "Kann ich meinen Speicher weiterhin normal nutzen?", "answer": "<p>Ja. VPP-ready beschreibt eine zusätzliche Möglichkeit und ersetzt nicht die normale Nutzung deines Speichers.<br><a href=\"/pages/ai-energiemanagement\">Mehr über intelligentes Energiemanagement erfahren →</a></p>"}}
+        "faq_ready": {
+          "type": "faq",
+          "settings": {
+            "question": "Ist mein VENUS E automatisch VPP-fähig?",
+            "answer": "<p>Nicht automatisch. Die tatsächliche Teilnahme hängt vom Modell, Softwarestand, Anbieter und verfügbaren Programmen ab.<br><a href=\"/pages/vpp-ready\">VPP-ready Speicher verstehen →</a></p>"
+          }
+        },
+        "faq_provider": {
+          "type": "faq",
+          "settings": {
+            "question": "Muss ich bereits einen VPP-Anbieter haben?",
+            "answer": "<p>Nein. Wir helfen dir dabei, die relevanten Voraussetzungen einzuordnen.</p>"
+          }
+        },
+        "faq_cost": {
+          "type": "faq",
+          "settings": {
+            "question": "Kostet die Anfrage etwas?",
+            "answer": "<p>Nein. Die erste Anfrage zur Einschätzung deiner Möglichkeiten ist kostenlos.</p>"
+          }
+        },
+        "faq_normal_use": {
+          "type": "faq",
+          "settings": {
+            "question": "Kann ich meinen Speicher weiterhin normal nutzen?",
+            "answer": "<p>Ja. VPP-ready beschreibt eine zusätzliche Möglichkeit und ersetzt nicht die normale Nutzung deines Speichers.<br><a href=\"/pages/ai-energiemanagement\">Mehr über intelligentes Energiemanagement erfahren →</a></p>"
+          }
+        }
       },
-      "block_order": ["faq_ready", "faq_provider", "faq_cost", "faq_normal_use"],
+      "block_order": [
+        "faq_ready",
+        "faq_provider",
+        "faq_cost",
+        "faq_normal_use"
+      ],
       "settings": {
         "eyebrow": "Häufige Fragen",
         "heading_before": "Fragen zu deiner",
@@ -165,10 +380,26 @@
     "vpp_anfrage_final": {
       "type": "vpp-anfrage-final",
       "blocks": {
-        "final_contact": {"type": "button", "settings": {"label": "Kontakt aufnehmen", "url": "/pages/kontakt"}},
-        "final_smart_meter": {"type": "text_link", "settings": {"prefix": "Oder informiere dich zuerst über", "label": "Smart Meter & Energiefluss →", "url": "/pages/smart-meter-energiefluss"}}
+        "final_contact": {
+          "type": "button",
+          "settings": {
+            "label": "Kontakt aufnehmen",
+            "url": "/pages/kontakt"
+          }
+        },
+        "final_smart_meter": {
+          "type": "text_link",
+          "settings": {
+            "prefix": "Oder informiere dich zuerst über",
+            "label": "Smart Meter & Energiefluss →",
+            "url": "/pages/smart-meter-energiefluss"
+          }
+        }
       },
-      "block_order": ["final_contact", "final_smart_meter"],
+      "block_order": [
+        "final_contact",
+        "final_smart_meter"
+      ],
       "settings": {
         "eyebrow": "Support",
         "heading_before": "Noch Fragen zu deinem",
@@ -185,5 +416,12 @@
       }
     }
   },
-  "order": ["vpp_navigation", "vpp_anfrage_hero", "vpp_anfrage_why", "vpp_anfrage_form", "vpp_anfrage_faq", "vpp_anfrage_final"]
+  "order": [
+    "vpp_navigation",
+    "vpp_anfrage_hero",
+    "vpp_anfrage_why",
+    "vpp_anfrage_form",
+    "vpp_anfrage_faq",
+    "vpp_anfrage_final"
+  ]
 }
