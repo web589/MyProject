@@ -127,8 +127,7 @@
       "id": "cta_target",
       "label": "自定义锚点 ID（高级）",
       "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
-      "default": "",
-      "visible_if": "{{ section.settings.cta_module }} == 'custom'"
+      "visible_if": "{{ section.settings.cta_module == 'custom' }}"
     }
   ],
   "blocks": [
@@ -175,8 +174,7 @@
           "id": "target",
           "label": "自定义锚点 ID（高级）",
           "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
-          "default": "",
-          "visible_if": "{{ block.settings.module }} == 'custom'"
+          "visible_if": "{{ block.settings.module == 'custom' }}"
         }
       ]
     }
