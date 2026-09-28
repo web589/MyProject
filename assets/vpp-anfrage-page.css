@@ -128,14 +128,20 @@
 }
 
 .vpp-anfrage__button--primary {
+  border: 0;
+  border-radius: 8px;
   background: linear-gradient(90deg, #0099fe, #00c6ff);
+  box-shadow: none;
   color: #fff;
+  transform: none;
 }
 
 .vpp-anfrage__button--primary:hover,
 .vpp-anfrage__button--primary:focus-visible {
+  box-shadow: none;
   color: #fff;
   filter: brightness(1.06);
+  transform: none;
 }
 
 .vpp-anfrage__button--secondary {
@@ -197,11 +203,21 @@
   stroke-width: 1.7;
 }
 
+.vpp-anfrage__trust-item img {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
 .vpp-anfrage__media--hero {
   aspect-ratio: 4 / 3;
 }
 
 .vpp-anfrage__why {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   background: var(--vpp-anfrage-bg);
 }
 
@@ -239,6 +255,12 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.6;
+}
+
+.vpp-anfrage__why-icon img {
+  width: 21px;
+  height: 21px;
+  object-fit: contain;
 }
 
 .vpp-anfrage__why-item h3 {
@@ -613,6 +635,9 @@
 }
 
 .vpp-anfrage__faq {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   background: var(--vpp-anfrage-bg);
 }
 

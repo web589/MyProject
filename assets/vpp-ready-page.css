@@ -131,14 +131,20 @@
 }
 
 .vpp-ready__button--primary {
+  border: 0;
+  border-radius: 8px;
   background: linear-gradient(90deg, #0099fe, #00c6ff);
+  box-shadow: none;
   color: #fff;
+  transform: none;
 }
 
 .vpp-ready__button--primary:hover,
 .vpp-ready__button--primary:focus-visible {
+  box-shadow: none;
   color: #fff;
   filter: brightness(1.06);
+  transform: none;
 }
 
 .vpp-ready__button--secondary {

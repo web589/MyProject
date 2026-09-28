@@ -14,6 +14,17 @@
               <span class="ai-energy__feature-icon" aria-hidden="true">
                 {{ block.settings.icon | image_url: width: 64 | image_tag: loading: 'lazy', widths: '32, 48, 64', sizes: '24px', alt: '' }}
               </span>
+            {% else %}
+              <span class="ai-energy__feature-icon" aria-hidden="true">
+                {% case forloop.index0 %}
+                  {% when 0 %}
+                    <svg viewBox="0 0 24 24" focusable="false" role="presentation"><path d="M3 17l4-5 4 3 4-7 3 4 3-2"/><path d="M3 21h18"/></svg>
+                  {% when 1 %}
+                    <svg viewBox="0 0 24 24" focusable="false" role="presentation"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>
+                  {% else %}
+                    <svg viewBox="0 0 24 24" focusable="false" role="presentation"><path d="M4 6h10v12H4z"/><path d="M18 9v6"/><path d="M14 10l6 2-6 2z"/></svg>
+                {% endcase %}
+              </span>
             {% endif %}
             <p class="ai-energy__tag">{{ block.settings.label }}</p>
             <h3>{{ block.settings.title }}</h3>

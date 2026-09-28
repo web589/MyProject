@@ -10,14 +10,18 @@
           <div class="vpp-anfrage__trust-list">
             {% for block in section.blocks %}
               <span class="vpp-anfrage__trust-item" {{ block.shopify_attributes }}>
-                {% case block.settings.icon %}
-                  {% when 'clock' %}
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>
-                  {% when 'lock' %}
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10.2" width="15" height="9.8" rx="2.2"/><path d="M8.2 10.2V7.6a3.8 3.8 0 0 1 7.6 0v2.6"/></svg>
-                  {% else %}
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>
-                {% endcase %}
+                {% if block.settings.icon_image != blank %}
+                  {{ block.settings.icon_image | image_url: width: 96 | image_tag: class: 'vpp-anfrage__trust-icon-image', widths: '48, 72, 96', sizes: '16px', alt: '', loading: 'lazy' }}
+                {% else %}
+                  {% case block.settings.icon %}
+                    {% when 'clock' %}
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>
+                    {% when 'lock' %}
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10.2" width="15" height="9.8" rx="2.2"/><path d="M8.2 10.2V7.6a3.8 3.8 0 0 1 7.6 0v2.6"/></svg>
+                    {% else %}
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>
+                  {% endcase %}
+                {% endif %}
                 {{ block.settings.text }}
               </span>
             {% endfor %}
@@ -64,6 +68,7 @@
       "name": "信任点",
       "settings": [
         {"type": "select", "id": "icon", "label": "图标", "options": [{"value": "check", "label": "勾选"}, {"value": "clock", "label": "时钟"}, {"value": "lock", "label": "锁"}], "default": "check"},
+        {"type": "image_picker", "id": "icon_image", "label": "自定义图标（可选）", "info": "上传后会替换上面的默认图标。"},
         {"type": "text", "id": "text", "label": "文字", "default": "Kostenlose Einschätzung"}
       ]
     }

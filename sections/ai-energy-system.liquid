@@ -9,7 +9,18 @@
       <div class="ai-energy__bento">
         {% for block in section.blocks %}
           <article class="ai-energy__bento-card{% if block.settings.layout != 'standard' %} ai-energy__bento-card--{{ block.settings.layout }}{% endif %}" {{ block.shopify_attributes }}>
-            <div class="ai-energy__badge">{{ block.settings.badge }}</div>
+            {% assign badge_parts = block.settings.badge | split: '·' %}
+            {% assign badge_number = badge_parts | first | strip %}
+            {% assign badge_role = badge_parts | last | strip %}
+            <div class="ai-energy__badge">
+              {% if badge_parts.size > 1 %}
+                <b class="ai-energy__badge-number">{{ badge_number }}</b>
+                <i class="ai-energy__badge-separator" aria-hidden="true"></i>
+                <span class="ai-energy__badge-role">{{ badge_role }}</span>
+              {% else %}
+                <span class="ai-energy__badge-role">{{ badge_number }}</span>
+              {% endif %}
+            </div>
             <div class="ai-energy__bento-media{% if block.settings.show_diagram %} ai-energy__vpp-visual{% endif %}">
               {% if block.settings.show_diagram %}
                 <svg viewBox="0 0 360 180" role="img" aria-label="Virtuelles Kraftwerk Diagramm"><path d="M52 88h256M92 47l-40 41 40 41M268 47l40 41-40 41M180 24v128"/><circle cx="52" cy="88" r="13"/><circle cx="180" cy="88" r="16"/><circle cx="308" cy="88" r="13"/></svg>

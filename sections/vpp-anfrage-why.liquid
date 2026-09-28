@@ -8,14 +8,18 @@
         {% for block in section.blocks %}
           <article class="vpp-anfrage__why-item" {{ block.shopify_attributes }}>
             <span class="vpp-anfrage__why-icon" aria-hidden="true">
-              {% case block.settings.icon %}
-                {% when 'pin' %}
-                  <svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
-                {% when 'home' %}
-                  <svg viewBox="0 0 24 24"><path d="m3.5 10.5 8.5-6.5 8.5 6.5"/><path d="M5.5 9.8V20h13V9.8"/><path d="M10 20v-5h4v5"/><path d="M12 4V2.2"/></svg>
-                {% else %}
-                  <svg viewBox="0 0 24 24"><rect x="2.5" y="7.5" width="16" height="9.5" rx="2.2"/><path d="M21 11v2.5"/><path d="M6 10.2h6.5v3.8H6z"/><path d="M15 10.2h1.6v3.8H15z"/></svg>
-              {% endcase %}
+              {% if block.settings.icon_image != blank %}
+                {{ block.settings.icon_image | image_url: width: 96 | image_tag: class: 'vpp-anfrage__why-icon-image', widths: '48, 72, 96', sizes: '21px', alt: '', loading: 'lazy' }}
+              {% else %}
+                {% case block.settings.icon %}
+                  {% when 'pin' %}
+                    <svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                  {% when 'home' %}
+                    <svg viewBox="0 0 24 24"><path d="m3.5 10.5 8.5-6.5 8.5 6.5"/><path d="M5.5 9.8V20h13V9.8"/><path d="M10 20v-5h4v5"/><path d="M12 4V2.2"/></svg>
+                  {% else %}
+                    <svg viewBox="0 0 24 24"><rect x="2.5" y="7.5" width="16" height="9.5" rx="2.2"/><path d="M21 11v2.5"/><path d="M6 10.2h6.5v3.8H6z"/><path d="M15 10.2h1.6v3.8H15z"/></svg>
+                {% endcase %}
+              {% endif %}
             </span>
             <div>
               <h3>{{ block.settings.title }}</h3>
@@ -53,6 +57,7 @@
       "name": "说明项目",
       "settings": [
         {"type": "select", "id": "icon", "label": "图标", "options": [{"value": "battery", "label": "电池"}, {"value": "pin", "label": "地点"}, {"value": "home", "label": "住宅"}], "default": "battery"},
+        {"type": "image_picker", "id": "icon_image", "label": "自定义图标（可选）", "info": "上传后会替换上面的默认图标。"},
         {"type": "text", "id": "title", "label": "标题", "default": "Dein VENUS E Modell"},
         {"type": "textarea", "id": "text", "label": "说明文字", "default": "Jedes Modell kann unterschiedliche Voraussetzungen für Programme erfüllen."}
       ]
