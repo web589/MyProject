@@ -32,6 +32,11 @@
   z-index: 30;
 }
 
+/* Let the page anchor bar stick after the global menu scrolls out of view. */
+.site-header-group:has(#SiteHeader[data-native-sticky="true"]) {
+  position: static;
+}
+
 .main-content--e-auto .e-auto-page,
 .main-content--e-auto [data-eauto-anchor-nav] {
   scroll-margin-top: 110px;
@@ -51,6 +56,11 @@
 .section-e-auto-navigation .bw-anchor-nav__link.is-active,
 .section-e-auto-navigation .bw-anchor-nav__cta {
   font-weight: 500;
+}
+
+.section-e-auto-navigation .bw-anchor-nav__cta:hover,
+.section-e-auto-navigation .bw-anchor-nav__cta:focus-visible {
+  color: #fff;
 }
 
 .e-auto-page [hidden] {
