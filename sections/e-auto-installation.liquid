@@ -58,9 +58,9 @@
           <p class="e-auto-page__eyebrow">{{ section.settings.steps_eyebrow }}</p>
           <h3>{{ section.settings.steps_heading }}</h3>
           <p>{{ section.settings.steps_text }}</p>
-          <div class="e-auto-page__install-steps">
+          <div class="e-auto-page__install-steps" role="list" aria-label="{{ section.settings.steps_heading }}">
             {% for block in section.blocks %}
-              <div class="e-auto-page__install-step" {{ block.shopify_attributes }}>
+              <div class="e-auto-page__install-step" role="listitem" {{ block.shopify_attributes }}>
                 <span class="e-auto-page__install-step-number">{{ forloop.index }}</span>
                 <div>
                   <strong>{{ block.settings.title }}</strong>
