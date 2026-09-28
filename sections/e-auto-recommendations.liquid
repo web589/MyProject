@@ -63,10 +63,11 @@
       {% for index in (0..2) %}
         {% assign card_block = section.blocks[index] %}
         {% assign card_fallback_product = product_mini %}
-        {% if index == 1 %}{% assign card_fallback_product = product_3 %}{% endif %}
-        {% if index == 2 %}{% assign card_fallback_product = product_4 %}{% endif %}
+        {% assign card_fallback_family = 'Mini' %}
+        {% if index == 1 %}{% assign card_fallback_product = product_3 %}{% assign card_fallback_family = '3.0' %}{% endif %}
+        {% if index == 2 %}{% assign card_fallback_product = product_4 %}{% assign card_fallback_family = '4.0' %}{% endif %}
         {% assign card_fallback_url = card_fallback_product.url | default: '/collections/alle-venus-e-serie' %}
-        {% assign card_fallback_cta_label = section.settings.card_cta_label | replace: '[[product_title]]', card_fallback_product.title | replace: '{{ product_title }}', card_fallback_product.title %}
+        {% assign card_fallback_cta_label = section.settings.card_cta_label | replace: '[[product_family]]', card_fallback_family | replace: '{{ product_family }}', card_fallback_family | replace: '[[product_title]]', card_fallback_product.title | replace: '{{ product_title }}', card_fallback_product.title %}
         <article
           class="e-auto-page__product-card"
           data-eauto-card="{{ index }}"
@@ -193,7 +194,7 @@
     {"type":"text","id":"alternative_label","label":"备选标签（兼容旧设置）","default":"ALTERNATIVE KONFIGURATION"},
     {"type":"text","id":"variant_unavailable_label","label":"变体不可用标签","default":"Variante nicht gefunden"},
     {"type":"text","id":"card_loading_label","label":"卡片加载中标签","default":"Konfiguration wird geladen"},
-    {"type":"text","id":"card_cta_label","label":"卡片行动按钮模板","info":"Verfügbare Variablen: product_title, product_capacity, range, lower, upper, unit.","default":"[[product_title]] ansehen →"},
+    {"type":"text","id":"card_cta_label","label":"卡片行动按钮模板","info":"Verfügbare Variablen: product_title, product_family, product_capacity, range, lower, upper, unit.","default":"VENUS E [[product_family]] ansehen →"},
     {"type":"text","id":"available_label","label":"可用标签","default":"Verfügbar"},
     {"type":"text","id":"unavailable_label","label":"不可用标签","default":"Derzeit nicht verfügbar"},
     {"type":"text","id":"preorder_label","label":"预售标签","default":"Demnächst verfügbar"},

@@ -58,6 +58,10 @@
     {{ 'ai-energy-page.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'ai-energy-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
+  {%- if template.suffix == 'vpp-ready' -%}
+    {{ 'vpp-ready-page.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'vpp-ready-page.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
   {%- if template.suffix == 'venus-e-vergleich' or template.suffix == 'ac-gekoppelter-speicher' or template.suffix == 'ai-energiemanagement' or template.suffix == 'e-auto' or template.suffix == 'faq' -%}
     {{ 'venus-e-design-system.css' | asset_url | stylesheet_tag }}
   {%- endif -%}

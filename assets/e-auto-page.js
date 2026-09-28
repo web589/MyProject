@@ -180,7 +180,7 @@
   }
 
   function interpolateTemplate(template, values) {
-    var allowedTokens = /\{\{\s*(product_title|product_capacity|range|lower|upper|unit|distance)\s*\}\}|\[\[\s*(product_title|product_capacity|range|lower|upper|unit|distance)\s*\]\]/g;
+    var allowedTokens = /\{\{\s*(product_title|product_family|product_capacity|range|lower|upper|unit|distance)\s*\}\}|\[\[\s*(product_title|product_family|product_capacity|range|lower|upper|unit|distance)\s*\]\]/g;
     return String(template || '').replace(allowedTokens, function (match, liquidToken, bracketToken) {
       var token = liquidToken || bracketToken;
       return values[token] === undefined || values[token] === null ? '' : String(values[token]);
@@ -453,6 +453,7 @@
     var familyCopy = cardCopy[item.productKey] || {};
     var cardTemplateValues = {
       product_title: renderedTitle,
+      product_family: item.family,
       product_capacity: formatCapacity(item.capacity, unit),
       range: copy.range,
       lower: copy.lower,
@@ -530,7 +531,7 @@
       variantUnavailableLabel: readDataValue(pageMarker.dataset, 'eautoVariantUnavailableLabel', 'Variante nicht gefunden'),
       primaryLabel: readDataValue(pageMarker.dataset, 'eautoPrimaryLabel', 'EMPFOHLENE KONFIGURATION'),
       alternativeLabel: readDataValue(pageMarker.dataset, 'eautoAlternativeLabel', 'ALTERNATIVE KONFIGURATION'),
-      cardCtaTemplate: readDataValue(pageMarker.dataset, 'eautoCardCtaTemplate', '[[product_title]] ansehen →')
+      cardCtaTemplate: readDataValue(pageMarker.dataset, 'eautoCardCtaTemplate', 'VENUS E [[product_family]] ansehen →')
     };
     var templateValues = {
       product_title: primary ? primary.title : '',
