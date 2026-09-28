@@ -12,7 +12,13 @@
           <thead><tr><th scope="col">{{ section.settings.feature_heading }}</th><th scope="col">{{ section.settings.classic_heading }}</th><th scope="col" class="is-highlight">{{ section.settings.smart_heading }}</th></tr></thead>
           <tbody>
             {% for block in section.blocks %}
-              <tr {{ block.shopify_attributes }}><th scope="row">{{ block.settings.feature }}</th><td>{{ block.settings.classic }}</td><td class="{% if block.settings.highlight %}is-positive{% endif %}">{{ block.settings.smart }}</td></tr>
+              {% assign classic_class = '' %}
+              {% case block.settings.classic %}
+                {% when '✓' %}{% assign classic_class = 'is-positive' %}
+                {% when '—' %}{% assign classic_class = 'is-neutral' %}
+                {% when 'begrenzt', 'optional' %}{% assign classic_class = 'is-limited' %}
+              {% endcase %}
+              <tr {{ block.shopify_attributes }}><th scope="row">{{ block.settings.feature }}</th><td class="{{ classic_class }}">{{ block.settings.classic }}</td><td class="{% if block.settings.highlight %}is-positive{% endif %}">{{ block.settings.smart }}</td></tr>
             {% endfor %}
           </tbody>
         </table>

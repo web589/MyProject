@@ -7,7 +7,16 @@
       <p class="vpp-ready__subtext">{{ section.settings.subtext }}</p>
       <div class="vpp-ready__concepts">
         {% for block in section.blocks %}
-          {% if block.type == 'concept' %}<span class="vpp-ready__concept{% if block.settings.active %} is-active{% endif %}" {{ block.shopify_attributes }}>{% render 'vpp-ready-icon', icon: block.settings.icon %}{{ block.settings.label }}</span>{% endif %}
+          {% if block.type == 'concept' %}
+            <span class="vpp-ready__concept{% if block.settings.active %} is-active{% endif %}" {{ block.shopify_attributes }}>
+              {% if block.settings.icon_image != blank %}
+                {{ block.settings.icon_image | image_url: width: 96 | image_tag: class: 'vpp-ready__concept-icon-image', widths: '48, 72, 96', sizes: '17px', alt: '', loading: 'lazy' }}
+              {% else %}
+                {% render 'vpp-ready-icon', icon: block.settings.icon %}
+              {% endif %}
+              {{ block.settings.label }}
+            </span>
+          {% endif %}
         {% endfor %}
       </div>
       <div class="vpp-ready__table-wrap">
@@ -53,7 +62,7 @@
     {"type":"range","id":"control_size","label":"控件字号","min":11,"max":18,"step":1,"unit":"px","default":14}
   ],
   "blocks":[
-    {"type":"concept","name":"概念标签","settings":[{"type":"text","id":"label","label":"标签文字","default":"Eigenverbrauch"},{"type":"select","id":"icon","label":"线性图标","options":[{"value":"sun","label":"太阳"},{"value":"bolt","label":"闪电"},{"value":"network","label":"网络"}],"default":"sun"},{"type":"checkbox","id":"active","label":"标记为当前主题","default":false}]},
+    {"type":"concept","name":"概念标签","settings":[{"type":"text","id":"label","label":"标签文字","default":"Eigenverbrauch"},{"type":"select","id":"icon","label":"线性图标","options":[{"value":"sun","label":"太阳"},{"value":"bolt","label":"闪电"},{"value":"network","label":"网络"}],"default":"sun"},{"type":"image_picker","id":"icon_image","label":"自定义图标（可选）","info":"上传后会替换上面的默认图标。"},{"type":"checkbox","id":"active","label":"标记为当前主题","default":false}]},
     {"type":"row","name":"对照表行","settings":[{"type":"text","id":"name","label":"名称","default":"Eigenverbrauch"},{"type":"textarea","id":"goal","label":"内容说明","default":"Eigenen Solarstrom speichern und später im Haushalt nutzen."},{"type":"textarea","id":"difference","label":"差异说明","default":"Dafür ist keine VPP-Teilnahme erforderlich."},{"type":"checkbox","id":"highlight","label":"浅蓝背景强调","default":false}]}
   ],
   "max_blocks":8,
