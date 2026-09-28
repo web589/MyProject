@@ -587,6 +587,8 @@
 }
 
 .e-auto-page__timeline-badge[href]:hover {
+  background: var(--eauto-blue);
+  color: #fff;
   box-shadow: 0 5px 14px rgba(11, 145, 232, 0.28);
   transform: translateY(-1px);
 }
@@ -1173,9 +1175,10 @@
   color: var(--eauto-blue-deep);
 }
 
-/* Remove the fractional transparent edge from the two blue E-Auto CTAs at rest. */
+/* Remove the fractional transparent edge from the blue E-Auto CTAs at rest. */
 .main-content--e-auto .e-auto-page__hero .e-auto-page__button--primary,
-.main-content--e-auto .e-auto-page__final .e-auto-page__button--primary {
+.main-content--e-auto .e-auto-page__final .e-auto-page__button--primary,
+.main-content--e-auto .e-auto-page__product-card:first-child .e-auto-page__button {
   border: 0;
   box-shadow: none;
 }
