@@ -188,6 +188,21 @@
   filter: brightness(1.06);
 }
 
+/* Keep the three primary Smart Meter CTAs crisp and stationary. */
+.main-content--smart-meter :is(.sm-hero, .sm-integration, .sm-final) .sm-button--primary {
+  border: 0;
+  box-shadow: none;
+  transform: none;
+}
+
+.main-content--smart-meter :is(.sm-hero, .sm-integration, .sm-final) .sm-button--primary:hover,
+.main-content--smart-meter :is(.sm-hero, .sm-integration, .sm-final) .sm-button--primary:focus-visible {
+  border: 0;
+  box-shadow: none;
+  color: #fff;
+  transform: none;
+}
+
 .main-content--smart-meter .sm-button--secondary {
   border-color: #9bd8ff;
   background: #fff;
@@ -309,6 +324,13 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.6;
+}
+
+.main-content--smart-meter .sm-feature-card__icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .main-content--smart-meter .sm-feature-card .sm-number {

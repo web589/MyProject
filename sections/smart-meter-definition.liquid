@@ -10,11 +10,15 @@
       {% for block in section.blocks %}
         <article class="sm-feature-card" {{ block.shopify_attributes }}>
           <span class="sm-feature-card__icon" aria-hidden="true">
-            {% case block.settings.icon %}
-              {% when 'feed' %}<svg viewBox="0 0 24 24" focusable="false"><path d="M3 12h6l2 4 4-8 2 4h4"/></svg>
-              {% when 'battery' %}<svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="6" width="16" height="13" rx="2"/><path d="M9 10l-2 3h4l-2 3M14 10v6"/></svg>
-              {% else %}<svg viewBox="0 0 24 24" focusable="false"><path d="M3 17h4l2-3 3 5 3-7 2 3h4"/></svg>
-            {% endcase %}
+            {% if block.settings.icon_image != blank %}
+              {{ block.settings.icon_image | image_url: width: 96 | image_tag: class: 'sm-feature-card__icon-image', widths: '48, 72, 96', sizes: '24px', alt: '', loading: 'lazy' }}
+            {% else %}
+              {% case block.settings.icon %}
+                {% when 'feed' %}<svg viewBox="0 0 24 24" focusable="false"><path d="M3 12h6l2 4 4-8 2 4h4"/></svg>
+                {% when 'battery' %}<svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="6" width="16" height="13" rx="2"/><path d="M9 10l-2 3h4l-2 3M14 10v6"/></svg>
+                {% else %}<svg viewBox="0 0 24 24" focusable="false"><path d="M3 17h4l2-3 3 5 3-7 2 3h4"/></svg>
+              {% endcase %}
+            {% endif %}
           </span>
           {% if block.settings.number != blank %}<p class="sm-number">{{ block.settings.number }}</p>{% endif %}
           <h3>{{ block.settings.title }}</h3>
@@ -48,6 +52,7 @@
   "blocks": [
     {"type":"feature","name":"功能卡片","settings":[
       {"type":"select","id":"icon","label":"图标","options":[{"value":"grid","label":"电网波形"},{"value":"feed","label":"电流波形"},{"value":"battery","label":"电池"}],"default":"grid"},
+      {"type":"image_picker","id":"icon_image","label":"自定义图标（可选）","info":"上传后会替换上面的默认图标。"},
       {"type":"text","id":"number","label":"编号标签","default":"01 · NETZBEZUG"},
       {"type":"text","id":"title","label":"标题","default":"Netzbezug erkennen"},
       {"type":"textarea","id":"text","label":"正文","default":"Zeigt, ob dein Zuhause gerade Strom aus dem öffentlichen Netz bezieht."}
