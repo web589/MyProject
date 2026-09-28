@@ -444,7 +444,7 @@
     if (!card) return;
 
     var productUrl = productVariantUrl(item);
-    var renderedTitle = item.title || 'VENUS E';
+    var renderedTitle = 'VENUS E ' + item.family;
     var image = card.querySelector('[data-eauto-card-image]');
     var placeholder = card.querySelector('[data-eauto-card-placeholder]');
     var titleLink = card.querySelector('[data-eauto-card-title-link]');
@@ -461,27 +461,22 @@
       unit: unit
     };
     setText(card, '[data-eauto-card-title]', renderedTitle);
-    setText(card, '[data-eauto-card-variant]', item.variant ? item.variant.title : copy.variantUnavailableLabel);
-    setText(card, '[data-eauto-card-capacity]', cardTemplateValues.product_capacity);
+    setText(card, '[data-eauto-card-capacity]', formatRange(
+      PRODUCT_CONFIG[item.productKey].capacities[0].kwh,
+      PRODUCT_CONFIG[item.productKey].capacities[PRODUCT_CONFIG[item.productKey].capacities.length - 1].kwh,
+      unit
+    ));
     var description = card.querySelector('[data-eauto-card-description]');
     if (description) {
       description.textContent = familyCopy.description || '';
       description.hidden = !familyCopy.description;
     }
-    setText(card, '[data-eauto-card-price]', item.variant ? formatMoney(item.variant.price) : '—');
-
-    var availability = item.preorder
-      ? copy.preorderLabel
-      : item.available
-        ? copy.availableLabel
-        : copy.unavailableLabel;
-    setText(card, '[data-eauto-card-availability]', availability);
     setText(card, '[data-eauto-card-badge]', familyCopy.badge || (index === 0 ? copy.primaryLabel : copy.alternativeLabel));
     setText(card, '[data-eauto-card-action]', interpolateTemplate(copy.cardCtaTemplate, cardTemplateValues));
 
     if (item.image) {
       image.src = item.image;
-      image.alt = renderedTitle;
+      image.alt = item.title || renderedTitle;
       image.hidden = false;
       placeholder.hidden = true;
     } else {

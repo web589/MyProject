@@ -80,14 +80,9 @@
           <div class="e-auto-page__product-card-body">
             <span class="e-auto-page__product-card-badge" data-eauto-card-badge>{{ section.settings.card_recommendation_label }}</span>
             <h3><a data-eauto-card-title-link href="{{ card_fallback_url }}"><span data-eauto-card-title>{{ section.settings.card_loading_label }}</span></a></h3>
-            <p class="e-auto-page__product-card-variant" data-eauto-card-variant></p>
             <p class="e-auto-page__product-card-capacity" data-eauto-card-capacity></p>
             <p class="e-auto-page__product-card-description" data-eauto-card-description hidden></p>
             {% if forloop.first %}<p class="e-auto-page__product-card-hint" data-eauto-card-hint>{{ section.settings.recommendation_hint_template }}</p>{% endif %}
-            <div class="e-auto-page__product-card-meta">
-              <strong data-eauto-card-price>–</strong>
-              <span data-eauto-card-availability>{{ section.settings.card_loading_label }}</span>
-            </div>
             <a class="e-auto-page__button e-auto-page__button--secondary" data-eauto-card-action href="{{ card_fallback_url }}">{{ card_fallback_cta_label }}</a>
           </div>
         </article>
