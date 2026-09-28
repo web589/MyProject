@@ -15,7 +15,7 @@
 >
   <div class="bw-container bw-anchor-nav__inner">
     {% for block in section.blocks %}
-      {% assign link_module = block.settings.module %}
+      {% assign link_module = block.settings.module | default: 'custom' %}
       {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
       {% assign link_target = link_target | strip | remove_first: '#' | handle %}
       {% if block.settings.label != blank and link_target != blank %}
@@ -31,7 +31,7 @@
       {% endif %}
     {% endfor %}
 
-    {% assign cta_module = section.settings.cta_module %}
+    {% assign cta_module = section.settings.cta_module | default: 'custom' %}
     {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
     {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
     {% if section.settings.cta_label != blank and cta_target != blank %}
@@ -93,7 +93,7 @@
         { "value": "eauto_faq", "label": "E-Auto · FAQ" },
         { "value": "custom", "label": "自定义锚点（高级）" }
       ],
-      "default": "eauto_calculator"
+      "default": "custom"
     },
     {
       "type": "text",
@@ -139,7 +139,7 @@
             { "value": "eauto_faq", "label": "E-Auto · FAQ" },
             { "value": "custom", "label": "自定义锚点（高级）" }
           ],
-          "default": "eauto_start"
+          "default": "custom"
         },
         {
           "type": "text",

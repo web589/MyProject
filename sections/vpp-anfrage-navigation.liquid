@@ -47,7 +47,7 @@
 
 {% schema %}
 {
-  "name": "VPP · Ankernavigation",
+  "name": "VPP-Anfrage · Navigation",
   "tag": "section",
   "class": "section-vpp-anchor-navigation",
   "settings": [
@@ -55,7 +55,7 @@
       "type": "text",
       "id": "aria_label",
       "label": "无障碍标签",
-      "default": "Seitennavigation"
+      "default": "Navigation zur VPP-Anfrage"
     },
     {
       "type": "text",
@@ -82,39 +82,18 @@
       "type": "text",
       "id": "cta_label",
       "label": "行动按钮标签",
-      "default": "Jetzt anfragen"
+      "default": "Formular ausfüllen"
     },
     {
       "type": "select",
       "id": "cta_module",
       "label": "行动按钮链接到模块",
       "options": [
-        { "value": "vpp_ready_participation", "label": "VPP-ready · Teilnahme" },
-        { "value": "vpp_ready_start", "label": "VPP-ready · Start" },
-        { "value": "vpp_ready_definition", "label": "VPP-ready · Erklärung" },
-        { "value": "vpp_ready_benefits", "label": "VPP-ready · Vorteile" },
-        { "value": "vpp_ready_function", "label": "VPP-ready · Funktionsweise" },
-        { "value": "vpp_ready_comparison", "label": "VPP-ready · Einordnung" },
-        { "value": "vpp_ready_boundaries", "label": "VPP-ready · Bedingungen" },
-        { "value": "vpp_ready_models", "label": "VPP-ready · Modelle" },
-        { "value": "vpp_ready_faq", "label": "VPP-ready · FAQ" },
-        { "value": "vpp_ready_guides", "label": "VPP-ready · Ratgeber" },
         { "value": "vpp_request_start", "label": "VPP-Anfrage · Start" },
         { "value": "vpp_request_why", "label": "VPP-Anfrage · Warum" },
         { "value": "vpp_request_form", "label": "VPP-Anfrage · Anfrage" },
         { "value": "vpp_request_faq", "label": "VPP-Anfrage · FAQ" },
         { "value": "vpp_request_support", "label": "VPP-Anfrage · Support" },
-        { "value": "ai_start", "label": "AI-Energie · Start" },
-        { "value": "ai_definition", "label": "AI-Energie · Erklärung" },
-        { "value": "ai_function", "label": "AI-Energie · Funktionsweise" },
-        { "value": "ai_meter", "label": "AI-Energie · Smart Meter" },
-        { "value": "ai_compare", "label": "AI-Energie · Vergleich" },
-        { "value": "ai_day", "label": "AI-Energie · Im Alltag" },
-        { "value": "ai_system", "label": "AI-Energie · System" },
-        { "value": "ai_models", "label": "AI-Energie · Modelle" },
-        { "value": "ai_faq", "label": "AI-Energie · FAQ" },
-        { "value": "ai_guides", "label": "AI-Energie · Ratgeber" },
-        { "value": "ai_final", "label": "AI-Energie · Nächster Schritt" },
         { "value": "custom", "label": "自定义锚点（高级）" }
       ],
       "default": "custom"
@@ -137,32 +116,11 @@
           "id": "module",
           "label": "链接到模块",
           "options": [
-            { "value": "vpp_ready_start", "label": "VPP-ready · Start" },
-            { "value": "vpp_ready_definition", "label": "VPP-ready · Erklärung" },
-            { "value": "vpp_ready_benefits", "label": "VPP-ready · Vorteile" },
-            { "value": "vpp_ready_function", "label": "VPP-ready · Funktionsweise" },
-            { "value": "vpp_ready_comparison", "label": "VPP-ready · Einordnung" },
-            { "value": "vpp_ready_participation", "label": "VPP-ready · Teilnahme" },
-            { "value": "vpp_ready_boundaries", "label": "VPP-ready · Bedingungen" },
-            { "value": "vpp_ready_models", "label": "VPP-ready · Modelle" },
-            { "value": "vpp_ready_faq", "label": "VPP-ready · FAQ" },
-            { "value": "vpp_ready_guides", "label": "VPP-ready · Ratgeber" },
             { "value": "vpp_request_start", "label": "VPP-Anfrage · Start" },
             { "value": "vpp_request_why", "label": "VPP-Anfrage · Warum" },
             { "value": "vpp_request_form", "label": "VPP-Anfrage · Anfrage" },
             { "value": "vpp_request_faq", "label": "VPP-Anfrage · FAQ" },
             { "value": "vpp_request_support", "label": "VPP-Anfrage · Support" },
-            { "value": "ai_start", "label": "AI-Energie · Start" },
-            { "value": "ai_definition", "label": "AI-Energie · Erklärung" },
-            { "value": "ai_function", "label": "AI-Energie · Funktionsweise" },
-            { "value": "ai_meter", "label": "AI-Energie · Smart Meter" },
-            { "value": "ai_compare", "label": "AI-Energie · Vergleich" },
-            { "value": "ai_day", "label": "AI-Energie · Im Alltag" },
-            { "value": "ai_system", "label": "AI-Energie · System" },
-            { "value": "ai_models", "label": "AI-Energie · Modelle" },
-            { "value": "ai_faq", "label": "AI-Energie · FAQ" },
-            { "value": "ai_guides", "label": "AI-Energie · Ratgeber" },
-            { "value": "ai_final", "label": "AI-Energie · Nächster Schritt" },
             { "value": "custom", "label": "自定义锚点（高级）" }
           ],
           "default": "custom"

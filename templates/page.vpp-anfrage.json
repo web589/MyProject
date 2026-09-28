@@ -10,36 +10,46 @@
 {
   "sections": {
     "vpp_navigation": {
-      "type": "vpp-anchor-navigation",
+      "type": "vpp-anfrage-navigation",
       "blocks": {
         "nav_start": {
           "type": "link",
           "settings": {
-            "label": "Start"
+            "module": "vpp_request_start",
+            "label": "Start",
+            "target": ""
           }
         },
         "nav_why": {
           "type": "link",
           "settings": {
-            "label": "Warum diese Angaben?"
+            "module": "vpp_request_why",
+            "label": "Warum diese Angaben?",
+            "target": ""
           }
         },
         "nav_form": {
           "type": "link",
           "settings": {
-            "label": "Anfrage"
+            "module": "vpp_request_form",
+            "label": "Anfrage",
+            "target": ""
           }
         },
         "nav_faq": {
           "type": "link",
           "settings": {
-            "label": "FAQ"
+            "module": "vpp_request_faq",
+            "label": "FAQ",
+            "target": ""
           }
         },
         "nav_support": {
           "type": "link",
           "settings": {
-            "label": "Support"
+            "module": "vpp_request_support",
+            "label": "Support",
+            "target": ""
           }
         }
       },
@@ -55,6 +65,7 @@
         "anchor_id": "navigation",
         "nav_text_size": 13.5,
         "cta_label": "Formular ausfüllen",
+        "cta_module": "vpp_request_form",
         "cta_target": ""
       }
     },

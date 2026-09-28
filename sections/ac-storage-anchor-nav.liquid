@@ -15,7 +15,7 @@
 >
   <div class="bw-container bw-anchor-nav__inner">
     {% for block in section.blocks %}
-      {% assign link_module = block.settings.module %}
+      {% assign link_module = block.settings.module | default: 'custom' %}
       {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
       {% assign link_target = link_target | strip | remove_first: '#' | handle %}
       {% if block.type == 'link' and block.settings.label != blank and link_target != blank %}
@@ -96,7 +96,7 @@
             { "value": "ac_blog", "label": "AC-Speicher · Ratgeber" },
             { "value": "custom", "label": "自定义锚点（高级）" }
           ],
-          "default": "ac_definition"
+          "default": "custom"
         },
         {
           "type": "text",
