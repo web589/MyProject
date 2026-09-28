@@ -629,6 +629,17 @@
       });
     });
 
+    root.querySelectorAll('[data-eauto-flow-link]').forEach(function (link) {
+      if (link.dataset.eautoBound === 'true') return;
+      link.dataset.eautoBound = 'true';
+      link.addEventListener('click', function () {
+        var target = buttons.find(function (button) {
+          return button.dataset.eautoFlowToggle === link.dataset.eautoFlowLink;
+        });
+        if (target) renderFlow(target.dataset.eautoFlowToggle);
+      });
+    });
+
     if (buttons.length) {
       var activeButton = buttons.find(function (button) { return button.getAttribute('aria-selected') === 'true'; }) || buttons[0];
       renderFlow(activeButton.dataset.eautoFlowToggle);

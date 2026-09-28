@@ -24,7 +24,13 @@
               {% else %}
                 <div class="e-auto-page__placeholder">{{ block.settings.image_placeholder }}</div>
               {% endif %}
-              {% if block.settings.badge != blank %}<span class="e-auto-page__timeline-badge">{{ block.settings.badge }}</span>{% endif %}
+              {% if block.settings.badge != blank %}
+                {% if block.settings.badge_link != blank %}
+                  <a class="e-auto-page__timeline-badge" href="{{ block.settings.badge_link | escape }}"{% if block.settings.badge_flow_mode != 'none' %} data-eauto-flow-link="{{ block.settings.badge_flow_mode | escape }}"{% endif %}>{{ block.settings.badge }}</a>
+                {% else %}
+                  <span class="e-auto-page__timeline-badge">{{ block.settings.badge }}</span>
+                {% endif %}
+              {% endif %}
             </div>
             <div class="e-auto-page__timeline-copy">
               <h3>{{ block.settings.heading }}</h3>
@@ -62,7 +68,22 @@
     {"type":"range","id":"section_spacing","label":"区块间距","min":40,"max":140,"step":4,"unit":"px","default":68}
   ],
   "blocks": [
-    {"type":"timeline","name":"Typischer Tag","settings":[{"type":"text","id":"time","label":"时间","default":"08:00"},{"type":"url","id":"time_link","label":"时间链接"},{"type":"image_picker","id":"image","label":"图片"},{"type":"text","id":"image_alt","label":"图片替代文字","default":"E-Auto im Tagesverlauf"},{"type":"text","id":"image_placeholder","label":"图片占位文字","default":"Timeline-Bild auswählen"},{"type":"text","id":"heading","label":"标题","default":"Auto unterwegs"},{"type":"textarea","id":"text","label":"文本","default":"Das Auto fährt los, die PV-Anlage startet in den Tag."},{"type":"text","id":"badge","label":"徽标","default":"PV-Überschuss"}]}
+    {
+      "type": "timeline",
+      "name": "Typischer Tag",
+      "settings": [
+        {"type":"text","id":"time","label":"时间","default":"08:00"},
+        {"type":"url","id":"time_link","label":"时间链接"},
+        {"type":"image_picker","id":"image","label":"图片"},
+        {"type":"text","id":"image_alt","label":"图片替代文字","default":"E-Auto im Tagesverlauf"},
+        {"type":"text","id":"image_placeholder","label":"图片占位文字","default":"Timeline-Bild auswählen"},
+        {"type":"text","id":"heading","label":"标题","default":"Auto unterwegs"},
+        {"type":"textarea","id":"text","label":"文本","default":"Das Auto fährt los, die PV-Anlage startet in den Tag."},
+        {"type":"text","id":"badge","label":"徽标","default":"PV-Überschuss"},
+        {"type":"url","id":"badge_link","label":"徽标链接"},
+        {"type":"select","id":"badge_flow_mode","label":"点击徽标时切换能量流程","default":"none","options":[{"value":"none","label":"不切换"},{"value":"day","label":"白天 · 储能"},{"value":"evening","label":"夜间 · 充电"}]}
+      ]
+    }
   ],
   "max_blocks": 4,
   "presets": [{"name":"E-Auto Typischer Tag","blocks":[{"type":"timeline"},{"type":"timeline"},{"type":"timeline"},{"type":"timeline"}] }]

@@ -570,6 +570,22 @@
   line-height: 1.2;
 }
 
+.e-auto-page__timeline-badge[href] {
+  cursor: pointer;
+  text-decoration: none;
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+.e-auto-page__timeline-badge[href]:hover {
+  box-shadow: 0 5px 14px rgba(11, 145, 232, 0.28);
+  transform: translateY(-1px);
+}
+
+.e-auto-page__timeline-badge[href]:focus-visible {
+  outline: 2px solid var(--eauto-ink);
+  outline-offset: 3px;
+}
+
 /* 05 — profiles */
 .e-auto-page__profiles {
   background: #fff;
