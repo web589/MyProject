@@ -3,7 +3,7 @@
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
     <div class="ss-check-list">
       {% for block in section.blocks %}
-        <article class="ss-check-item" {{ block.shopify_attributes }}><span class="ss-icon">{% render 'solar-storage-icon', icon: block.settings.icon %}</span><div><h3>{{ block.settings.title | escape }}</h3><div class="rte">{{ block.settings.text }}</div></div></article>
+        <article class="ss-check-item" {{ block.shopify_attributes }}><span class="ss-icon">{% render 'solar-storage-icon', icon: block.settings.icon, image: block.settings.custom_icon %}</span><div><h3>{{ block.settings.title | escape }}</h3><div class="rte">{{ block.settings.text }}</div></div></article>
       {% endfor %}
     </div>
     {% if section.settings.note != blank %}<div class="ss-note rte">{{ section.settings.note }}</div>{% endif %}
@@ -24,7 +24,8 @@
   ],
   "blocks": [
     { "type": "item", "name": "适用情况", "settings": [
-      { "type": "select", "id": "icon", "label": "线性图标", "options": [{ "value": "day-evening", "label": "昼夜" }, { "value": "home", "label": "住宅" }, { "value": "chart", "label": "用量" }, { "value": "car", "label": "电动车" }, { "value": "shield", "label": "规划" }], "default": "day-evening" },
+      { "type": "image_picker", "id": "custom_icon", "label": "自定义上传图标", "info": "上传后优先显示；建议使用透明背景图标。" },
+      { "type": "select", "id": "icon", "label": "默认图标（未上传时）", "options": [{ "value": "day-evening", "label": "昼夜" }, { "value": "home", "label": "住宅" }, { "value": "chart", "label": "用量" }, { "value": "car", "label": "电动车" }, { "value": "shield", "label": "规划" }], "default": "day-evening" },
       { "type": "text", "id": "title", "label": "标题", "default": "Erzeugung am Tag, Verbrauch am Abend" },
       { "type": "richtext", "id": "text", "label": "说明文字", "default": "<p>Wenn die meiste Solarenergie entsteht, während der Verbrauch im Haushalt niedrig ist, kann ein größerer Teil des Stroms nicht direkt selbst genutzt werden.</p>" }
     ] }

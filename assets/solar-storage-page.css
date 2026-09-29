@@ -80,9 +80,14 @@
 
 .main-content--solar-storage .ss-subtext p { margin: 0; }
 
-.main-content--solar-storage .solar-storage-nav {
+.main-content--solar-storage .section-solar-storage-navigation {
   position: sticky;
   top: 0;
+  z-index: 30;
+}
+
+.main-content--solar-storage .solar-storage-nav {
+  position: relative;
   z-index: 30;
   border-bottom: 1px solid var(--ss-border);
   background: rgba(255, 255, 255, .98);
@@ -268,6 +273,7 @@
 .main-content--solar-storage .ss-icon-card { padding: 26px 26px 28px; }
 .main-content--solar-storage .ss-icon { display: inline-flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; background: var(--ss-blue-soft); }
 .main-content--solar-storage .ss-icon svg { width: 20px; height: 20px; fill: none; stroke: var(--ss-blue); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.6; }
+.main-content--solar-storage .ss-icon img { display: block; width: 20px; height: 20px; object-fit: contain; }
 .main-content--solar-storage .ss-icon-card .ss-icon { margin-bottom: 16px; }
 .main-content--solar-storage .ss-icon-card h3 { font-size: 16.5px; font-weight: 600; line-height: 1.3; }
 
@@ -276,6 +282,7 @@
 .main-content--solar-storage .ss-check-item:first-child { border-top: 0; }
 .main-content--solar-storage .ss-check-item .ss-icon { flex: 0 0 38px; width: 38px; height: 38px; }
 .main-content--solar-storage .ss-check-item .ss-icon svg { width: 19px; height: 19px; }
+.main-content--solar-storage .ss-check-item .ss-icon img { width: 19px; height: 19px; }
 .main-content--solar-storage .ss-check-item h3 { font-size: 15.5px; font-weight: 600; line-height: 1.35; }
 .main-content--solar-storage .ss-check-item .rte { margin-top: 5px; color: var(--ss-muted); font-size: 13.5px; line-height: 1.6; }
 
@@ -301,6 +308,7 @@
 .main-content--solar-storage .ss-capacity-row__copy { margin-top: 10px; color: var(--ss-muted); font-size: 13.5px; line-height: 1.6; }
 .main-content--solar-storage .ss-link-row { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 24px; }
 .main-content--solar-storage .ss-link-row .ss-text-link { display: inline-block; font-size: 14px; }
+.main-content--solar-storage .ss-capacity .ss-note { margin-top: 18px; }
 
 .main-content--solar-storage .ss-retrofit__grid { display: grid; grid-template-columns: minmax(0, 52%) minmax(0, 48%); gap: 36px; align-items: center; margin-top: 32px; }
 .main-content--solar-storage .ss-retrofit__list article { padding: 18px 0; border-top: 1px solid var(--ss-line); }
@@ -325,14 +333,13 @@
 
 .main-content--solar-storage .ss-faq-list { width: 100%; max-width: 1160px; margin-top: 36px; border-top: 1px solid var(--ss-line); background: #fff; }
 .main-content--solar-storage .ss-faq-item { border-bottom: 1px solid var(--ss-line); }
-.main-content--solar-storage .ss-faq-item__button { position: relative; display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 26px; border: 0; background: transparent; color: var(--ss-ink); cursor: pointer; font: inherit; font-size: 16px; font-weight: 500; line-height: 1.4; text-align: left; }
+.main-content--solar-storage .ss-faq-item__button { position: relative; display: block; width: 100%; padding: 22px 40px 22px 26px; border: 0; background: transparent; color: var(--ss-ink); cursor: pointer; font: inherit; font-size: 16px; font-weight: 500; line-height: 1.4; text-align: left; transition: color .15s ease; }
 .main-content--solar-storage .ss-faq-item__button:hover,
-.main-content--solar-storage .ss-faq-item__button:focus-visible,
-.main-content--solar-storage .ss-faq-item__button[aria-expanded='true'] { color: var(--ss-blue); }
-.main-content--solar-storage .ss-faq-item__symbol { flex: 0 0 auto; color: var(--ss-blue); font-size: 20px; font-weight: 400; line-height: 1; }
-.main-content--solar-storage .ss-faq-item__answer { max-height: 0; overflow: hidden; color: var(--ss-muted); font-size: 14.5px; line-height: 1.75; opacity: 0; transition: max-height .34s cubic-bezier(.4, 0, .2, 1), opacity .22s ease .06s; }
-.main-content--solar-storage .ss-faq-item__answer > .rte { max-width: 1000px; padding: 0 40px 24px 26px; }
-.main-content--solar-storage .ss-faq-item.is-open .ss-faq-item__answer { opacity: 1; }
+.main-content--solar-storage .ss-faq-item__button:focus-visible { color: var(--ss-blue); }
+.main-content--solar-storage .ss-faq-item__symbol { position: absolute; top: 50%; right: 20px; color: var(--ss-blue); font-size: 20px; font-weight: 400; line-height: 1; transform: translateY(-50%); }
+.main-content--solar-storage .ss-faq-item__answer { max-height: 0; overflow: hidden; color: var(--ss-muted); font-size: 14.5px; line-height: 1.75; transition: max-height .34s cubic-bezier(.4, 0, .2, 1); }
+.main-content--solar-storage .ss-faq-item__answer > .rte { max-width: 1000px; padding: 0 40px 24px 26px; opacity: 0; transition: opacity .22s ease .06s; }
+.main-content--solar-storage .ss-faq-item.is-open .ss-faq-item__answer > .rte { opacity: 1; }
 
 .main-content--solar-storage .ss-tag { margin-bottom: 10px; color: var(--ss-blue); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; line-height: 1.3; }
 .main-content--solar-storage .ss-final-card { padding: 44px 48px; border: 1px solid var(--ss-border); border-radius: var(--ss-radius); background: #fff; }
@@ -345,6 +352,7 @@
 @media (max-width: 1180px) {
   .main-content--solar-storage .ss-container,
   .main-content--solar-storage .solar-storage-nav__inner { padding-right: 40px; padding-left: 40px; }
+  .main-content--solar-storage .ss-capacity { padding-top: 56px; padding-bottom: 56px; }
   .main-content--solar-storage .ss-card-grid--four,
   .main-content--solar-storage .ss-model-grid,
   .main-content--solar-storage .ss-step-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -378,8 +386,6 @@
   .main-content--solar-storage .ss-comparison-card { padding: 24px 22px; }
   .main-content--solar-storage .ss-final-card { padding: 32px 26px; }
   .main-content--solar-storage .ss-final-card .ss-heading { font-size: 27px; }
-  .main-content--solar-storage .ss-faq-item__button { padding-right: 20px; padding-left: 20px; }
-  .main-content--solar-storage .ss-faq-item__answer > .rte { padding-right: 28px; padding-left: 20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

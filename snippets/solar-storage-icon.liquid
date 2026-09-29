@@ -1,3 +1,6 @@
+{% if image != blank %}
+  {{ image | image_url: width: 80 | image_tag: widths: '38, 40, 80', sizes: '40px', loading: 'lazy', alt: '' }}
+{% else %}
 {% case icon %}
   {% when 'clock' %}
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.2V12l3.2 2"/></svg>
@@ -18,3 +21,4 @@
   {% when 'shield' %}
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.5 7.5 3.6v5c0 4.3-3.1 7.4-7.5 8.4-4.4-1-7.5-4.1-7.5-8.4v-5zM9 12l2 2 4-4"/></svg>
 {% endcase %}
+{% endif %}
