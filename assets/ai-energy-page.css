@@ -218,7 +218,7 @@ body:has(.main-content--ai-energy) .site-header-group:has(#SiteHeader[data-nativ
     padding: var(--ai-section-spacing, 72px) 0;
   }
 
-  .main-content--ai-energy .ai-energy-page .ai-energy__section :is(h1, h2, h3, p) {
+  .main-content--ai-energy .ai-energy-page .ai-energy__section :is(h1, h2, h3, p):not(.ai-energy__eyebrow) {
     margin-bottom: 0;
   }
 
