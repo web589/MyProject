@@ -1,0 +1,36 @@
+<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-definition" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+  <div class="ss-container">
+    {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight %}
+    <div class="ss-answer-box"><p><strong>{{ section.settings.answer_label | escape }}</strong> {{ section.settings.answer | escape }}</p></div>
+    {% if section.settings.note != blank %}<div class="ss-note rte">{{ section.settings.note }}</div>{% endif %}
+    <div class="ss-mini-grid">
+      {% for block in section.blocks %}
+        <article class="ss-mini-card" {{ block.shopify_attributes }}><h3>{{ block.settings.title | escape }}</h3><div class="rte">{{ block.settings.text }}</div></article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "储能专题 · 简单解释",
+  "class": "section-solar-storage-definition",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "erklaert" },
+    { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Kurz erklärt" },
+    { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Solarspeicher einfach" },
+    { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "erklärt" },
+    { "type": "text", "id": "answer_label", "label": "结论标签", "default": "Kurz gesagt:" },
+    { "type": "textarea", "id": "answer", "label": "核心解释", "default": "Ein Solarspeicher nimmt überschüssigen Solarstrom auf, den dein Haushalt gerade nicht braucht, und stellt ihn später wieder bereit – zum Beispiel am Abend." },
+    { "type": "richtext", "id": "note", "label": "补充说明", "default": "<p>Wichtig: Ein Solarspeicher erzeugt keinen zusätzlichen Strom. Er sorgt dafür, dass vorhandener Solarstrom auch dann genutzt werden kann, wenn die Anlage gerade nichts erzeugt.</p>" },
+    { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [
+    { "type": "card", "name": "说明卡", "settings": [
+      { "type": "text", "id": "title", "label": "标题", "default": "Solarstrom speichern" },
+      { "type": "richtext", "id": "text", "label": "说明文字", "default": "<p>Überschüsse aus der PV-Anlage werden aufgenommen, statt sofort ins Netz zu fließen.</p>" }
+    ] }
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "储能专题 · 简单解释" }]
+}
+{% endschema %}

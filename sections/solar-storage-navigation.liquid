@@ -1,0 +1,32 @@
+{% liquid
+  assign anchor_id = section.settings.anchor_id | default: 'ueberblick' | handle
+%}
+<nav id="{{ anchor_id }}" class="solar-storage-nav" data-anchor-nav aria-label="{{ section.settings.aria_label | escape }}" style="--ss-nav-text-size: {{ section.settings.nav_text_size }}px;">
+  <div class="solar-storage-nav__inner anchor-nav__inner">
+    {% for block in section.blocks %}
+      {% assign target = block.settings.target | remove_first: '#' | handle %}
+      {% if block.settings.label != blank and target != blank %}
+        <a class="solar-storage-nav__link" href="#{{ target }}" data-anchor-link data-anchor-nav-link {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</nav>
+{% schema %}
+{
+  "name": "储能专题 · 锚点导航",
+  "class": "section-solar-storage-navigation",
+  "settings": [
+    { "type": "text", "id": "aria_label", "label": "无障碍标签", "default": "Seitennavigation" },
+    { "type": "text", "id": "anchor_id", "label": "导航自身锚点 ID", "info": "不含 #，且必须在页面中唯一。", "default": "ueberblick" },
+    { "type": "range", "id": "nav_text_size", "label": "导航文字大小", "min": 11, "max": 18, "step": 0.5, "unit": "px", "default": 13.5 }
+  ],
+  "blocks": [
+    { "type": "link", "name": "导航链接", "settings": [
+      { "type": "text", "id": "label", "label": "显示文字", "default": "Übersicht" },
+      { "type": "text", "id": "target", "label": "目标锚点 ID", "info": "填写目标 section 的锚点 ID，不含 #。", "default": "ueberblick" }
+    ] }
+  ],
+  "max_blocks": 15,
+  "presets": [{ "name": "储能专题 · 锚点导航" }]
+}
+{% endschema %}

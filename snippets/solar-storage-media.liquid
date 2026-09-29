@@ -1,0 +1,11 @@
+{% liquid
+  assign loading_mode = loading | default: 'lazy'
+  assign image_sizes = sizes | default: '(min-width: 1181px) 1440px, calc(100vw - 44px)'
+%}
+<div class="ss-media {{ class | default: '' }}"{% if ratio != blank %} style="--ss-media-ratio: {{ ratio }};"{% endif %}>
+  {% if image != blank %}
+    {{ image | image_url: width: 1800 | image_tag: widths: '480, 720, 960, 1200, 1440, 1800', sizes: image_sizes, loading: loading_mode, alt: alt, class: 'ss-media__image' }}
+  {% else %}
+    {{ 'image' | placeholder_svg_tag: 'ss-media__placeholder' }}
+  {% endif %}
+</div>

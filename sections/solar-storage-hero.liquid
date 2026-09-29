@@ -1,0 +1,42 @@
+<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-hero" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+  <div class="ss-container ss-hero__grid">
+    <div class="ss-hero__copy">
+      {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext, heading_tag: 'h1' %}
+      {% if section.blocks.size > 0 %}
+        <div class="ss-actions">
+          {% for block in section.blocks %}
+            {% if block.settings.label != blank and block.settings.url != blank %}
+              <a class="ss-button ss-button--{{ block.settings.style }}" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+    {% render 'solar-storage-media', image: section.settings.image, alt: section.settings.image_alt, ratio: '4 / 3', loading: 'eager', sizes: '(min-width: 981px) 50vw, calc(100vw - 44px)', class: 'ss-hero__media' %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "储能专题 · 首屏",
+  "class": "section-solar-storage-hero",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "ueberblick" },
+    { "type": "text", "id": "eyebrow", "label": "眉题", "default": "SOLARSPEICHER ERKLÄRT" },
+    { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Solarspeicher erklärt: Was ein Stromspeicher kann" },
+    { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "und wann er sinnvoll ist" },
+    { "type": "richtext", "id": "subtext", "label": "副标题", "default": "<p>Ein Solarspeicher nimmt Solarstrom auf, den dein Haushalt gerade nicht selbst verbraucht, und stellt ihn später wieder bereit. Auf dieser Seite erfährst du, wie das funktioniert, für wen es passt und welche Größe sinnvoll sein kann.</p>" },
+    { "type": "image_picker", "id": "image", "label": "首屏图片" },
+    { "type": "text", "id": "image_alt", "label": "图片替代文本", "default": "Wohnhaus mit Solarspeicher und PV-Anlage" },
+    { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [
+    { "type": "button", "name": "行动按钮", "settings": [
+      { "type": "text", "id": "label", "label": "按钮文字", "default": "So funktioniert ein Solarspeicher" },
+      { "type": "url", "id": "url", "label": "按钮链接", "default": "#funktioniert" },
+      { "type": "select", "id": "style", "label": "按钮样式", "options": [{ "value": "primary", "label": "主按钮" }, { "value": "secondary", "label": "次按钮" }], "default": "primary" }
+    ] }
+  ],
+  "max_blocks": 3,
+  "presets": [{ "name": "储能专题 · 首屏" }]
+}
+{% endschema %}

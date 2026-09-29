@@ -1,0 +1,61 @@
+<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-models" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+  <div class="ss-container">
+    {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
+    <div class="ss-model-grid">
+      {% for block in section.blocks %}
+        {% liquid
+          assign product_item = block.settings.product
+          assign card_image = block.settings.image
+          if card_image == blank and product_item != blank
+            assign card_image = product_item.featured_image
+          endif
+          assign card_title = block.settings.display_title
+          if card_title == blank and product_item != blank
+            assign card_title = product_item.title
+          endif
+          assign card_url = block.settings.link
+          if product_item != blank
+            assign card_url = product_item.url
+          endif
+        %}
+        <article class="ss-model-card" {{ block.shopify_attributes }}>
+          {% render 'solar-storage-media', image: card_image, alt: block.settings.image_alt, ratio: '4 / 3', loading: 'lazy', sizes: '(min-width: 1181px) 25vw, (min-width: 721px) 50vw, calc(100vw - 44px)' %}
+          <div class="ss-model-card__body"><h3>{{ card_title | escape }}</h3>{% if block.settings.capacity != blank %}<p class="ss-model-card__capacity">{{ block.settings.capacity | escape }}</p>{% endif %}<div class="rte">{{ block.settings.text }}</div>{% if block.settings.link_label != blank and card_url != blank %}<a class="ss-text-link" href="{{ card_url }}">{{ block.settings.link_label | escape }}</a>{% endif %}</div>
+        </article>
+      {% endfor %}
+    </div>
+    {% if section.settings.hint != blank %}<div class="ss-info rte"><span aria-hidden="true">i</span><div>{{ section.settings.hint }}</div></div>{% endif %}
+    {% if section.settings.compare_label != blank and section.settings.compare_link != blank %}<div class="ss-link-row"><a class="ss-text-link" href="{{ section.settings.compare_link }}">{{ section.settings.compare_label | escape }}</a></div>{% endif %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "储能专题 · 产品型号",
+  "class": "section-solar-storage-models",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "modelle" },
+    { "type": "text", "id": "eyebrow", "label": "眉题", "default": "VENUS E Lösungen" },
+    { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Passende VENUS E Solarspeicher" },
+    { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "finden" },
+    { "type": "richtext", "id": "subtext", "label": "副标题", "default": "<p>Vier Modelle für unterschiedliche Ausgangslagen – von der Balkon-PV bis zum größeren Haushalt.</p>" },
+    { "type": "richtext", "id": "hint", "label": "产品提示", "default": "<p>Alle Angaben zu Kapazität und Leistung findest du auf der jeweiligen Produktseite. Welche Funktionen verfügbar sind, hängt vom Modell, vom Softwarestand und von deiner Installation ab.</p>" },
+    { "type": "text", "id": "compare_label", "label": "对比链接文字", "default": "Alle Modelle im Vergleich ansehen →" },
+    { "type": "url", "id": "compare_link", "label": "对比链接地址", "default": "/pages/speicher-vergleich" },
+    { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [
+    { "type": "product", "name": "产品卡", "settings": [
+      { "type": "product", "id": "product", "label": "关联产品" },
+      { "type": "image_picker", "id": "image", "label": "自定义产品图片", "info": "未选择时使用关联产品的主图。" },
+      { "type": "text", "id": "image_alt", "label": "图片替代文本", "default": "VENUS E Mini Solarspeicher" },
+      { "type": "text", "id": "display_title", "label": "显示标题", "info": "留空时使用关联产品名称。", "default": "VENUS E Mini" },
+      { "type": "text", "id": "capacity", "label": "容量范围", "info": "上线前请按最终产品参数核实。", "default": "2–6 kWh" },
+      { "type": "richtext", "id": "text", "label": "说明文字", "default": "<p>Für den Einstieg und für Haushalte mit überschaubarem Abendbedarf.</p>" },
+      { "type": "text", "id": "link_label", "label": "链接文字", "default": "Zum Modell →" },
+      { "type": "url", "id": "link", "label": "备用链接", "info": "关联产品存在时，自动优先使用产品地址。" }
+    ] }
+  ],
+  "max_blocks": 8,
+  "presets": [{ "name": "储能专题 · 产品型号" }]
+}
+{% endschema %}

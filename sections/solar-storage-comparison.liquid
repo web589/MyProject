@@ -1,0 +1,44 @@
+<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-comparison" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+  <div class="ss-container">
+    {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
+    <div class="ss-comparison__media-grid">
+      {% for block in section.blocks %}
+        {% render 'solar-storage-media', image: block.settings.image, alt: block.settings.image_alt, ratio: '4 / 3', loading: 'lazy', sizes: '(min-width: 981px) 50vw, calc(100vw - 44px)', class: 'ss-comparison__media' %}
+      {% endfor %}
+    </div>
+    <div class="ss-comparison__grid">
+      {% for block in section.blocks %}
+        <article class="ss-comparison-card{% if block.settings.emphasis %} is-emphasized{% endif %}" {{ block.shopify_attributes }}>
+          <h3>{{ block.settings.title | escape }}</h3><div class="ss-comparison-card__list rte">{{ block.settings.points }}</div>
+        </article>
+      {% endfor %}
+    </div>
+    {% if section.settings.summary != blank %}<p class="ss-summary-line">{{ section.settings.summary | escape }}</p>{% endif %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "储能专题 · 有无对比",
+  "class": "section-solar-storage-comparison",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "vergleich" },
+    { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Direktvergleich" },
+    { "type": "text", "id": "heading_before", "label": "标题", "default": "Mit Speicher oder ohne: Was ändert sich?" },
+    { "type": "text", "id": "heading_highlight", "label": "标题高亮部分" },
+    { "type": "richtext", "id": "subtext", "label": "副标题", "default": "<p>Der Unterschied zeigt sich vor allem dann, wenn die Anlage gerade wenig oder nichts erzeugt.</p>" },
+    { "type": "textarea", "id": "summary", "label": "对比结论", "default": "Ein Speicher verändert nicht, wie viel Strom erzeugt wird – er verändert, wann du ihn nutzen kannst." },
+    { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [
+    { "type": "column", "name": "对比栏", "settings": [
+      { "type": "image_picker", "id": "image", "label": "场景图片" },
+      { "type": "text", "id": "image_alt", "label": "图片替代文本", "default": "Wohnhaus am Abend mit Solarspeicher" },
+      { "type": "text", "id": "title", "label": "标题", "default": "Mit Solarspeicher" },
+      { "type": "richtext", "id": "points", "label": "要点列表", "default": "<ul><li>Solarstrom aus der Mittagszeit bleibt für den Abend verfügbar.</li><li>Der Eigenverbrauch kann steigen, weil mehr des selbst erzeugten Solarstroms im Haushalt genutzt werden kann.</li><li>Der Netzbezug zu Zeiten ohne eigene Erzeugung kann sinken.</li></ul>" },
+      { "type": "checkbox", "id": "emphasis", "label": "使用强调样式", "default": true }
+    ] }
+  ],
+  "max_blocks": 2,
+  "presets": [{ "name": "储能专题 · 有无对比" }]
+}
+{% endschema %}

@@ -1,0 +1,193 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "solar_navigation": {
+      "type": "solar-storage-navigation",
+      "blocks": {
+        "nav_overview": { "type": "link", "settings": { "label": "Übersicht", "target": "ueberblick" } },
+        "nav_function": { "type": "link", "settings": { "label": "Funktionsweise", "target": "funktioniert" } },
+        "nav_solutions": { "type": "link", "settings": { "label": "Speicherlösungen", "target": "loesungen" } },
+        "nav_capacity": { "type": "link", "settings": { "label": "Speichergröße", "target": "groesse" } },
+        "nav_retrofit": { "type": "link", "settings": { "label": "Nachrüsten", "target": "nachruesten" } },
+        "nav_smart": { "type": "link", "settings": { "label": "Intelligent nutzen", "target": "intelligent" } },
+        "nav_models": { "type": "link", "settings": { "label": "Modelle", "target": "modelle" } },
+        "nav_faq": { "type": "link", "settings": { "label": "FAQ", "target": "faq" } }
+      },
+      "block_order": ["nav_overview", "nav_function", "nav_solutions", "nav_capacity", "nav_retrofit", "nav_smart", "nav_models", "nav_faq"],
+      "settings": { "aria_label": "Navigation zu Solarspeichern", "anchor_id": "navigation", "nav_text_size": 13.5 }
+    },
+    "solar_hero": {
+      "type": "solar-storage-hero",
+      "blocks": {
+        "hero_function": { "type": "button", "settings": { "label": "So funktioniert ein Solarspeicher", "url": "#funktioniert", "style": "primary" } },
+        "hero_capacity": { "type": "button", "settings": { "label": "Passende Speichergröße finden", "url": "#groesse", "style": "secondary" } }
+      },
+      "block_order": ["hero_function", "hero_capacity"],
+      "settings": {}
+    },
+    "solar_definition": {
+      "type": "solar-storage-definition",
+      "blocks": {
+        "definition_store": { "type": "card", "settings": { "title": "Solarstrom speichern", "text": "<p>Überschüsse aus der PV-Anlage werden aufgenommen, statt sofort ins Netz zu fließen.</p>" } },
+        "definition_evening": { "type": "card", "settings": { "title": "Abends nutzen", "text": "<p>Gespeicherter Strom steht bereit, wenn die eigene Anlage nicht mehr oder kaum erzeugt.</p>" } },
+        "definition_self": { "type": "card", "settings": { "title": "Eigenverbrauch erhöhen", "text": "<p>Mehr selbst erzeugter Strom bleibt im Haushalt, weniger Strom wird zugekauft.</p>" } }
+      },
+      "block_order": ["definition_store", "definition_evening", "definition_self"],
+      "settings": {}
+    },
+    "solar_function": {
+      "type": "solar-storage-function",
+      "blocks": {
+        "step_one": { "type": "step", "settings": { "number": "SCHRITT 01", "title": "Strom erzeugen", "text": "<p>Die PV-Anlage erzeugt Strom, solange Sonne auf die Module trifft.</p>" } },
+        "step_two": { "type": "step", "settings": { "number": "SCHRITT 02", "title": "Eigenbedarf decken", "text": "<p>Der Strom fließt zuerst in den Haushalt und deckt den aktuellen Bedarf.</p>" } },
+        "step_three": { "type": "step", "settings": { "number": "SCHRITT 03", "title": "Überschuss speichern", "text": "<p>Was nicht direkt verbraucht wird, lädt den Speicher.</p>" } },
+        "step_four": { "type": "step", "settings": { "number": "SCHRITT 04", "title": "Abends nutzen", "text": "<p>Sinkt die Solarerzeugung, kann der Speicher einen Teil des aktuellen Haushaltsbedarfs decken.</p>" } }
+      },
+      "block_order": ["step_one", "step_two", "step_three", "step_four"],
+      "settings": {}
+    },
+    "solar_comparison": {
+      "type": "solar-storage-comparison",
+      "blocks": {
+        "comparison_with": { "type": "column", "settings": { "image_alt": "Wohnhaus am Abend mit sichtbarem Solarspeicher und eingeschalteter Innenbeleuchtung", "title": "Mit Solarspeicher", "points": "<ul><li>Solarstrom aus der Mittagszeit bleibt für den Abend verfügbar.</li><li>Der Eigenverbrauch kann steigen, weil mehr des selbst erzeugten Solarstroms im Haushalt genutzt werden kann.</li><li>Der Netzbezug zu Zeiten ohne eigene Erzeugung kann sinken.</li></ul>", "emphasis": true } },
+        "comparison_without": { "type": "column", "settings": { "image_alt": "Wohnhaus am Abend mit eingeschalteter Innenbeleuchtung ohne Solarspeicher", "title": "Ohne Solarspeicher", "points": "<ul><li>Überschüssiger Solarstrom kann ins Netz eingespeist werden und steht dem Haushalt später nicht mehr als gespeicherte Energie zur Verfügung.</li><li>Der Eigenverbrauch hängt stark davon ab, ob Erzeugung und Verbrauch gleichzeitig stattfinden.</li><li>Abends und nachts wird der benötigte Strom in der Regel aus dem Netz bezogen.</li></ul>", "emphasis": false } }
+      },
+      "block_order": ["comparison_with", "comparison_without"],
+      "settings": {}
+    },
+    "solar_factors": {
+      "type": "solar-storage-factors",
+      "blocks": {
+        "factor_profile": { "type": "factor", "settings": { "icon": "clock", "title": "Verbrauchsprofil", "text": "<p>Entscheidend ist, wann dein Haushalt Strom benötigt – nicht nur wie viel.</p>" } },
+        "factor_solar": { "type": "factor", "settings": { "icon": "sun", "title": "Solarüberschuss", "text": "<p>Ein Speicher kann nur Energie verschieben, die zuvor erzeugt und nicht direkt verbraucht wurde.</p>" } },
+        "factor_capacity": { "type": "factor", "settings": { "icon": "battery", "title": "Speicherkapazität", "text": "<p>Die Kapazität sollte zum tatsächlichen Verbrauch und zur vorhandenen Solarerzeugung passen.</p>" } },
+        "factor_consumers": { "type": "factor", "settings": { "icon": "plug", "title": "Zusätzliche Verbraucher", "text": "<p>E-Auto, Wärmepumpe oder hoher Abendverbrauch können den Energiebedarf deutlich verändern.</p>" } }
+      },
+      "block_order": ["factor_profile", "factor_solar", "factor_capacity", "factor_consumers"],
+      "settings": {}
+    },
+    "solar_audience": {
+      "type": "solar-storage-audience",
+      "blocks": {
+        "audience_evening": { "type": "item", "settings": { "icon": "day-evening", "title": "Erzeugung am Tag, Verbrauch am Abend", "text": "<p>Wenn die meiste Solarenergie entsteht, während der Verbrauch im Haushalt niedrig ist, kann ein größerer Teil des Stroms nicht direkt selbst genutzt werden.</p>" } },
+        "audience_existing": { "type": "item", "settings": { "icon": "home", "title": "Bereits vorhandene PV-Anlage oder Balkonkraftwerk", "text": "<p>Mit bestehender Erzeugung lässt sich ein Speicher meist einfacher einordnen als ohne.</p>" } },
+        "audience_grid": { "type": "item", "settings": { "icon": "chart", "title": "Wunsch, den Netzbezug zu reduzieren", "text": "<p>Wer weniger Strom zukaufen möchte, profitiert vor allem in den Abendstunden.</p>" } },
+        "audience_extra": { "type": "item", "settings": { "icon": "car", "title": "Zusätzliche Verbraucher wie E-Auto oder Wärmepumpe", "text": "<p>Zusätzliche Verbraucher wie E-Auto oder Wärmepumpe können den Speicherbedarf erhöhen. Entscheidend sind dabei Leistung, Speicherkapazität und das tatsächliche Verbrauchsprofil. <a href=\"/pages/eauto\">Mehr zum Laden mit Speicher →</a></p>" } },
+        "audience_planning": { "type": "item", "settings": { "icon": "shield", "title": "Interesse an späterer Erweiterung oder smarter Steuerung", "text": "<p>Wer später Messdaten oder intelligentes Energiemanagement nutzen möchte, plant den Speicher gleich mit ein.</p>" } }
+      },
+      "block_order": ["audience_evening", "audience_existing", "audience_grid", "audience_extra", "audience_planning"],
+      "settings": {}
+    },
+    "solar_solutions": {
+      "type": "solar-storage-solutions",
+      "blocks": {
+        "solution_balcony": { "type": "solution", "settings": { "image_alt": "Balkonkraftwerk mit kompaktem Solarspeicher", "title": "Balkonkraftwerk mit Speicher", "text": "<p>Kompakte Speicherlösung für Balkon-PV und kleinere Solaranlagen.</p>", "link_label": "Mehr dazu →", "link": "/pages/balkonkraftwerk-mit-speicher" } },
+        "solution_existing": { "type": "solution", "settings": { "image_alt": "Haus mit bestehender Dach-PV und nachgerüstetem Speicher", "title": "Speicher für bestehende PV-Anlagen", "text": "<p>Eine Nachrüstlösung kann eine vorhandene PV-Anlage ergänzen. Welche Anpassungen erforderlich sind, hängt vom bestehenden System ab.</p>", "link_label": "Mehr dazu →", "link": "/pages/solarspeicher-nachruesten" } },
+        "solution_home": { "type": "solution", "settings": { "image_alt": "Größeres Wohnhaus mit Heimspeicher", "title": "Heimspeicher für höheren Energiebedarf", "text": "<p>Für Haushalte mit größerer PV-Anlage, höherem Verbrauch oder zusätzlichen elektrischen Verbrauchern.</p>", "link_label": "Passende Modelle ansehen →", "link": "#modelle" } }
+      },
+      "block_order": ["solution_balcony", "solution_existing", "solution_home"],
+      "settings": {}
+    },
+    "solar_capacity": {
+      "type": "solar-storage-capacity",
+      "blocks": {
+        "capacity_compact": { "type": "range", "settings": { "level": "Kompakter Bedarf", "capacity": "2–6 kWh", "model": "VENUS E Mini", "bar_width": 45, "text": "<p>Einstieg, Balkon-PV oder einzelne Abendstunden mit überschaubarem Bedarf.</p>" } },
+        "capacity_typical": { "type": "range", "settings": { "level": "Typischer Haushaltsbedarf", "capacity": "5–15 kWh", "model": "VENUS E 3.0 / 4.0", "bar_width": 68, "text": "<p>Haushalt mit typischem Abendverbrauch, der Solarstrom zeitversetzt nutzen möchte.</p>" } },
+        "capacity_high": { "type": "range", "settings": { "level": "Höherer Energiebedarf", "capacity": "10–30 kWh", "model": "VENUS E Max", "bar_width": 90, "text": "<p>Höherer Bedarf, mehrere Verbraucher oder geplante Erweiterung.</p>" } },
+        "capacity_compare": { "type": "link", "settings": { "label": "Modelle im Vergleich ansehen →", "url": "/pages/speicher-vergleich" } },
+        "capacity_models": { "type": "link", "settings": { "label": "VENUS E Modelle im Überblick →", "url": "#modelle" } },
+        "capacity_calculator": { "type": "link", "settings": { "label": "Zum Speicherrechner →", "url": "/pages/speicherrechner" } }
+      },
+      "block_order": ["capacity_compact", "capacity_typical", "capacity_high", "capacity_compare", "capacity_models", "capacity_calculator"],
+      "settings": {}
+    },
+    "solar_retrofit": {
+      "type": "solar-storage-retrofit",
+      "blocks": {
+        "retrofit_continue": { "type": "point", "settings": { "title": "Bestehende Anlage häufig weiter nutzen", "text": "<p>Bei vielen Nachrüstungen können vorhandene Komponenten weiter genutzt werden. Welche Anpassungen erforderlich sind, hängt vom bestehenden System ab.</p>" } },
+        "retrofit_ac": { "type": "point", "settings": { "title": "AC-Kopplung als häufiger Weg", "text": "<p>AC-gekoppelte Speicher werden auf der Wechselstromseite angebunden und sind deshalb oft für Nachrüstungen geeignet. <a href=\"/pages/ac-gekoppelter-speicher\">AC-gekoppelten Speicher verstehen →</a></p>" } },
+        "retrofit_case": { "type": "point", "settings": { "title": "Im Einzelfall klären", "text": "<p>Ob und wie eine Nachrüstung möglich ist, hängt von Anlage, Zählerschrank und gewünschter Leistung ab. Das klärst du am besten mit einer Fachkraft.</p>" } }
+      },
+      "block_order": ["retrofit_continue", "retrofit_ac", "retrofit_case"],
+      "settings": {}
+    },
+    "solar_smart": {
+      "type": "solar-storage-smart",
+      "blocks": {
+        "smart_measure": { "type": "feature", "settings": { "title": "Verbrauch erkennen", "text": "<p>Messdaten zeigen, wann im Haushalt wie viel Strom gebraucht wird.</p>", "link_label": "Smart Meter & Energiefluss verstehen →", "link": "/pages/smart-meter-energiefluss" } },
+        "smart_adjust": { "type": "feature", "settings": { "title": "Betrieb anpassen", "text": "<p>Lade- und Entladezeiten können an Erzeugung und Verbrauch ausgerichtet werden.</p>", "link_label": "Intelligentes Energiemanagement verstehen →", "link": "/pages/ai-energiemanagement" } },
+        "smart_vpp": { "type": "feature", "settings": { "title": "Perspektive Vernetzung", "text": "<p>Bei kompatiblen Systemen kann perspektivisch eine Einbindung in ein virtuelles Kraftwerk möglich sein. Die Voraussetzungen hängen von Modell, Software und verfügbarem Programm ab.</p>", "link_label": "VPP-ready erklärt →", "link": "/pages/vpp-ready" } }
+      },
+      "block_order": ["smart_measure", "smart_adjust", "smart_vpp"],
+      "settings": {}
+    },
+    "solar_models": {
+      "type": "solar-storage-models",
+      "blocks": {
+        "model_mini": { "type": "product", "settings": { "product": "venus-e-mini", "image_alt": "VENUS E Mini Solarspeicher", "display_title": "VENUS E Mini", "capacity": "2–6 kWh", "text": "<p>Für den Einstieg und für Haushalte mit überschaubarem Abendbedarf.</p>", "link_label": "Zum Modell →" } },
+        "model_three": { "type": "product", "settings": { "product": "venus-e-3", "image_alt": "VENUS E 3.0 Solarspeicher", "display_title": "VENUS E 3.0", "capacity": "5,12–15,36 kWh", "text": "<p>Für Haushalte, die Solarstrom flexibel speichern und zeitversetzt nutzen möchten.</p>", "link_label": "Zum Modell →" } },
+        "model_four": { "type": "product", "settings": { "product": "venus-e-4", "image_alt": "VENUS E 4.0 Solarspeicher", "display_title": "VENUS E 4.0", "capacity": "5–15 kWh", "text": "<p>Für Haushalte mit höheren Anforderungen an Leistung und Energiemanagement.</p>", "link_label": "Zum Modell →" } },
+        "model_max": { "type": "product", "settings": { "product": "venus-e-max", "image_alt": "VENUS E Max Solarspeicher", "display_title": "VENUS E Max", "capacity": "10–30 kWh", "text": "<p>Für größere Haushalte mit höherem Speicher- und Leistungsbedarf.</p>", "link_label": "Zum Modell →" } }
+      },
+      "block_order": ["model_mini", "model_three", "model_four", "model_max"],
+      "settings": {}
+    },
+    "solar_faq": {
+      "type": "solar-storage-faq",
+      "blocks": {
+        "faq_one": { "type": "faq", "settings": { "question": "Was ist ein Solarspeicher?", "answer": "<p>Ein Solarspeicher ist ein Stromspeicher, der elektrische Energie aus einer PV-Anlage aufnimmt und später wieder abgibt. Er erzeugt keinen Strom, sondern verschiebt dessen Nutzung in eine andere Tageszeit.</p>" } },
+        "faq_two": { "type": "faq", "settings": { "question": "Lohnt sich ein Solarspeicher für ein Balkonkraftwerk?", "answer": "<p>Das hängt von Erzeugung, Verbrauch und deiner Erwartung ab. Ein Speicher kann sinnvoll sein, wenn ein Teil des erzeugten Solarstroms sonst nicht direkt im Haushalt genutzt würde und später Bedarf besteht.</p>" } },
+        "faq_three": { "type": "faq", "settings": { "question": "Kann ich Solarstrom abends nutzen?", "answer": "<p>Ja, genau dafür ist ein Speicher gedacht: Er stellt tagsüber erzeugte Energie zu Zeiten bereit, in denen die Anlage nicht mehr oder kaum erzeugt.</p>" } },
+        "faq_four": { "type": "faq", "settings": { "question": "Wie groß sollte ein Solarspeicher sein?", "answer": "<p>Eine pauschal richtige Größe gibt es nicht. Orientierung bieten der Verbrauch am Abend, die Haushaltsgröße und zusätzliche Verbraucher wie E-Auto oder Wärmepumpe. Eine Einordnung findest du im Abschnitt zur Speichergröße.</p>" } },
+        "faq_five": { "type": "faq", "settings": { "question": "Kann ich einen Solarspeicher nachrüsten?", "answer": "<p>In vielen Fällen ja. Ob es im konkreten Fall möglich ist, hängt von der bestehenden Anlage, dem Zählerschrank und der gewünschten Leistung ab. <a href=\"/pages/ac-gekoppelter-speicher\">Mehr zur AC-Kopplung →</a></p>" } },
+        "faq_six": { "type": "faq", "settings": { "question": "Was ist der Unterschied zwischen AC- und DC-Speicher?", "answer": "<p>AC-gekoppelte Speicher werden auf der Wechselstromseite angebunden und eignen sich häufig für Nachrüstungen. DC-gekoppelte Speicher werden auf der Gleichstromseite des PV-Systems angebunden, häufig in Verbindung mit einem Hybridwechselrichter. Details findest du auf der Seite zur AC-Kopplung.</p>" } },
+        "faq_seven": { "type": "faq", "settings": { "question": "Brauche ich einen Smart Meter?", "answer": "<p>Nicht jeder Speicher benötigt für seine Grundfunktion zwingend einen Smart Meter. Wenn Lade- und Entladezeiten gezielt am Verbrauch ausgerichtet werden sollen, sind Messdaten jedoch hilfreich. <a href=\"/pages/smart-meter-energiefluss\">Smart Meter & Energiefluss verstehen →</a></p>" } },
+        "faq_eight": { "type": "faq", "settings": { "question": "Ist ein Solarspeicher auch für Mieter sinnvoll?", "answer": "<p>Das hängt von den Möglichkeiten am Wohnort ab. Kleine, mobile Lösungen können eine Option sein. Je nach Installationsart können technische Voraussetzungen und gegebenenfalls eine Zustimmung erforderlich sein.</p>" } }
+      },
+      "block_order": ["faq_one", "faq_two", "faq_three", "faq_four", "faq_five", "faq_six", "faq_seven", "faq_eight"],
+      "settings": {}
+    },
+    "solar_topics": {
+      "type": "solar-storage-topics",
+      "blocks": {
+        "topic_balcony": { "type": "topic", "settings": { "image_alt": "Balkonkraftwerk mit Speicherlösung", "title": "Balkonkraftwerk mit Speicher", "text": "<p>Wie sich kleine Anlagen mit einem Speicher kombinieren lassen.</p>", "link_label": "Mehr zum Thema →", "link": "/pages/balkonkraftwerk-mit-speicher" } },
+        "topic_acdc": { "type": "topic", "settings": { "image_alt": "Gegenüberstellung AC- und DC-gekoppelter Speicher", "title": "AC vs. DC Speicher", "text": "<p>Wo der Unterschied liegt und was er für Anschluss und Nachrüstung bedeutet.</p>", "link_label": "Mehr zum Thema →", "link": "/pages/ac-vs-dc-speicher" } },
+        "topic_retrofit": { "type": "topic", "settings": { "image_alt": "Bestehende PV-Anlage mit nachgerüstetem Speicher", "title": "Solarspeicher nachrüsten", "text": "<p>Worauf du achten solltest, wenn bereits eine Anlage existiert.</p>", "link_label": "Mehr zum Thema →", "link": "/pages/solarspeicher-nachruesten" } },
+        "topic_meter": { "type": "link", "settings": { "label": "Smart Meter & Energiefluss →", "url": "/pages/smart-meter-energiefluss" } },
+        "topic_car": { "type": "link", "settings": { "label": "E-Auto laden mit Speicher →", "url": "/pages/eauto" } },
+        "topic_vpp": { "type": "link", "settings": { "label": "VPP-ready erklärt →", "url": "/pages/vpp-ready" } }
+      },
+      "block_order": ["topic_balcony", "topic_acdc", "topic_retrofit", "topic_meter", "topic_car", "topic_vpp"],
+      "settings": {}
+    },
+    "solar_guides": {
+      "type": "solar-storage-guides",
+      "blocks": {
+        "guide_retrofit": { "type": "article", "settings": { "image_alt": "Bestehende PV-Anlage mit nachgerüstetem Solarspeicher", "tag": "RATGEBER", "title": "Solarspeicher nachrüsten: Was bei bestehender PV-Anlage zu prüfen ist", "text": "<p>Welche Komponenten häufig weiter genutzt werden können und welche Anpassungen im Einzelfall nötig sind.</p>", "link_label": "Weiterlesen →", "link": "/pages/ratgeber/solarspeicher-nachruesten" } },
+        "guide_size": { "type": "article", "settings": { "image_alt": "Auswahl der passenden Speichergröße für den Haushalt", "tag": "RATGEBER", "title": "Welche Speichergröße passt zu deinem Haushalt?", "text": "<p>Warum Verbrauchsprofil und Solarüberschuss wichtiger sind als eine möglichst große Zahl.</p>", "link_label": "Weiterlesen →", "link": "/pages/ratgeber/speichergroesse-waehlen" } },
+        "guide_profile": { "type": "article", "settings": { "image_alt": "Typischer Tagesverlauf eines Haushalts mit Solarspeicher", "tag": "RATGEBER", "title": "Wann lädt und entlädt sich ein Solarspeicher sinnvoll?", "text": "<p>Wie sich Lade- und Entladezeiten am eigenen Lastprofil orientieren lassen.</p>", "link_label": "Weiterlesen →", "link": "/pages/ratgeber/lastprofil-und-speicher" } }
+      },
+      "block_order": ["guide_retrofit", "guide_size", "guide_profile"],
+      "settings": {}
+    },
+    "solar_final": {
+      "type": "solar-storage-final",
+      "blocks": {
+        "final_compare": { "type": "action", "settings": { "label": "Modelle vergleichen", "url": "/pages/speicher-vergleich", "style": "primary" } },
+        "final_capacity": { "type": "action", "settings": { "label": "Speichergröße finden", "url": "#groesse", "style": "secondary" } },
+        "final_support": { "type": "action", "settings": { "prefix": "Oder", "label": "Beratung anfragen →", "url": "/pages/kontakt", "style": "text" } }
+      },
+      "block_order": ["final_compare", "final_capacity", "final_support"],
+      "settings": {}
+    }
+  },
+  "order": ["solar_navigation", "solar_hero", "solar_definition", "solar_function", "solar_comparison", "solar_factors", "solar_audience", "solar_solutions", "solar_capacity", "solar_retrofit", "solar_smart", "solar_models", "solar_faq", "solar_topics", "solar_guides", "solar_final"]
+}

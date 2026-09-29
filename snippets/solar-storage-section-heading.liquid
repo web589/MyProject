@@ -1,0 +1,12 @@
+{% liquid
+  assign heading_tag = heading_tag | default: 'h2'
+%}
+{% if eyebrow != blank %}
+  <p class="ss-eyebrow">{{ eyebrow | escape }}</p>
+{% endif %}
+<{{ heading_tag }} class="ss-heading">
+  {{ heading_before | escape }}{% if heading_highlight != blank %} <span>{{ heading_highlight | escape }}</span>{% endif %}
+</{{ heading_tag }}>
+{% if subtext != blank %}
+  <div class="ss-subtext rte">{{ subtext }}</div>
+{% endif %}

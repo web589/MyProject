@@ -1,0 +1,42 @@
+<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-capacity" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+  <div class="ss-container">
+    {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
+    <div class="ss-capacity-list">
+      {% for block in section.blocks %}{% if block.type == 'range' %}
+        <article class="ss-capacity-row" {{ block.shopify_attributes }}><div><span class="ss-capacity-row__level">{{ block.settings.level | escape }}</span><p class="ss-capacity-row__value">{{ block.settings.capacity | escape }}</p><p class="ss-capacity-row__model">{{ block.settings.model | escape }}</p></div><div><div class="ss-capacity-row__track"><span style="width: {{ block.settings.bar_width }}%;"></span></div><div class="ss-capacity-row__copy rte">{{ block.settings.text }}</div></div></article>
+      {% endif %}{% endfor %}
+    </div>
+    <div class="ss-link-row">{% for block in section.blocks %}{% if block.type == 'link' and block.settings.label != blank and block.settings.url != blank %}<a class="ss-text-link" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>{% endif %}{% endfor %}</div>
+    {% if section.settings.note != blank %}<div class="ss-note rte">{{ section.settings.note }}</div>{% endif %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "储能专题 · 容量选择",
+  "class": "section-solar-storage-capacity",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "groesse" },
+    { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Dimensionierung" },
+    { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Welche Speichergröße passt zu deinem" },
+    { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "Bedarf?" },
+    { "type": "richtext", "id": "subtext", "label": "副标题", "default": "<p>Die passende Größe hängt vor allem davon ab, wann und wie viel Strom du außerhalb der Erzeugungszeiten brauchst.</p>" },
+    { "type": "richtext", "id": "note", "label": "说明注释", "default": "<p>Die genannten Bereiche sind Orientierungswerte. Die tatsächlich sinnvolle Größe hängt von deinem Verbrauchsprofil, der Anlagengröße und deinen Zielen ab.</p>" },
+    { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [
+    { "type": "range", "name": "容量档位", "settings": [
+      { "type": "text", "id": "level", "label": "需求层级", "default": "Kompakter Bedarf" },
+      { "type": "text", "id": "capacity", "label": "容量范围", "info": "上线前请按最终产品参数核实。", "default": "2–6 kWh" },
+      { "type": "text", "id": "model", "label": "关联型号", "default": "VENUS E Mini" },
+      { "type": "range", "id": "bar_width", "label": "容量条长度", "min": 10, "max": 100, "step": 1, "unit": "%", "default": 45 },
+      { "type": "richtext", "id": "text", "label": "适用说明", "default": "<p>Einstieg, Balkon-PV oder einzelne Abendstunden mit überschaubarem Bedarf.</p>" }
+    ] },
+    { "type": "link", "name": "文字链接", "settings": [
+      { "type": "text", "id": "label", "label": "链接文字", "default": "Modelle im Vergleich ansehen →" },
+      { "type": "url", "id": "url", "label": "链接地址", "default": "/pages/speicher-vergleich" }
+    ] }
+  ],
+  "max_blocks": 10,
+  "presets": [{ "name": "储能专题 · 容量选择" }]
+}
+{% endschema %}

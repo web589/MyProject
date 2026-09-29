@@ -1,0 +1,30 @@
+<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-retrofit ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+  <div class="ss-container">
+    {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
+    <div class="ss-retrofit__grid"><div class="ss-retrofit__list">{% for block in section.blocks %}<article {{ block.shopify_attributes }}><h3>{{ block.settings.title | escape }}</h3><div class="rte">{{ block.settings.text }}</div></article>{% endfor %}</div>{% render 'solar-storage-media', image: section.settings.image, alt: section.settings.image_alt, ratio: '4 / 3', loading: 'lazy', sizes: '(min-width: 981px) 50vw, calc(100vw - 44px)' %}</div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "储能专题 · 后装说明",
+  "class": "section-solar-storage-retrofit",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "nachruesten" },
+    { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Nachrüstung" },
+    { "type": "text", "id": "heading_before", "label": "标题", "default": "Solarspeicher nachrüsten: auch bei bestehender PV möglich" },
+    { "type": "text", "id": "heading_highlight", "label": "标题高亮部分" },
+    { "type": "richtext", "id": "subtext", "label": "副标题", "default": "<p>Viele Haushalte haben bereits eine PV-Anlage. Ein Speicher lässt sich in vielen Fällen nachträglich ergänzen.</p>" },
+    { "type": "image_picker", "id": "image", "label": "后装场景图片" },
+    { "type": "text", "id": "image_alt", "label": "图片替代文本", "default": "Bestehende PV-Anlage mit nachträglich ergänztem Solarspeicher" },
+    { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [
+    { "type": "point", "name": "后装要点", "settings": [
+      { "type": "text", "id": "title", "label": "标题", "default": "Bestehende Anlage häufig weiter nutzen" },
+      { "type": "richtext", "id": "text", "label": "说明文字", "default": "<p>Bei vielen Nachrüstungen können vorhandene Komponenten weiter genutzt werden. Welche Anpassungen erforderlich sind, hängt vom bestehenden System ab.</p>" }
+    ] }
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "储能专题 · 后装说明" }]
+}
+{% endschema %}

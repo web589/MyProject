@@ -1,0 +1,39 @@
+<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-faq ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;" data-ss-faq>
+  <div class="ss-container">
+    {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight %}
+    <div class="ss-faq-list">
+      {% for block in section.blocks %}
+        {% assign answer_id = 'ss-answer-' | append: section.id | append: '-' | append: block.id %}
+        {% assign question_id = 'ss-question-' | append: section.id | append: '-' | append: block.id %}
+        <article class="ss-faq-item" {{ block.shopify_attributes }}><button id="{{ question_id }}" class="ss-faq-item__button" type="button" aria-expanded="false" aria-controls="{{ answer_id }}"><span>{{ block.settings.question | escape }}</span><span aria-hidden="true" class="ss-faq-item__symbol">+</span></button><div id="{{ answer_id }}" class="ss-faq-item__answer" role="region" aria-labelledby="{{ question_id }}"><div class="rte">{{ block.settings.answer }}</div></div></article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% if section.settings.enable_schema %}
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for block in section.blocks %}{"@type":"Question","name":{{ block.settings.question | strip_html | strip_newlines | json }},"acceptedAnswer":{"@type":"Answer","text":{{ block.settings.answer | strip_html | strip_newlines | json }}}}{% unless forloop.last %},{% endunless %}{% endfor %}]}
+  </script>
+{% endif %}
+{% schema %}
+{
+  "name": "储能专题 · 常见问题",
+  "class": "section-solar-storage-faq",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "faq" },
+    { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Häufige Fragen" },
+    { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "FAQ zu" },
+    { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "Solarspeichern" },
+    { "type": "checkbox", "id": "enable_schema", "label": "输出 FAQ 结构化数据", "default": true },
+    { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [
+    { "type": "faq", "name": "问答", "settings": [
+      { "type": "text", "id": "question", "label": "问题", "default": "Was ist ein Solarspeicher?" },
+      { "type": "richtext", "id": "answer", "label": "答案", "default": "<p>Ein Solarspeicher ist ein Stromspeicher, der elektrische Energie aus einer PV-Anlage aufnimmt und später wieder abgibt. Er erzeugt keinen Strom, sondern verschiebt dessen Nutzung in eine andere Tageszeit.</p>" }
+    ] }
+  ],
+  "max_blocks": 15,
+  "presets": [{ "name": "储能专题 · 常见问题" }]
+}
+{% endschema %}

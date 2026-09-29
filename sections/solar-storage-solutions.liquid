@@ -1,0 +1,41 @@
+<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-solutions ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+  <div class="ss-container">
+    {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
+    <div class="ss-card-grid ss-card-grid--three">
+      {% for block in section.blocks %}
+        <article class="ss-media-card" {{ block.shopify_attributes }}>
+          {% render 'solar-storage-media', image: block.settings.image, alt: block.settings.image_alt, ratio: '16 / 10', loading: 'lazy', sizes: '(min-width: 981px) 33vw, calc(100vw - 44px)' %}
+          <div class="ss-media-card__body"><h3>{{ block.settings.title | escape }}</h3><div class="rte">{{ block.settings.text }}</div>{% if block.settings.link_label != blank and block.settings.link != blank %}<a class="ss-text-link" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>{% endif %}</div>
+        </article>
+      {% endfor %}
+    </div>
+    {% if section.settings.hint != blank %}<div class="ss-info rte"><span aria-hidden="true">i</span><div>{{ section.settings.hint }}</div></div>{% endif %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "储能专题 · 储能方案",
+  "class": "section-solar-storage-solutions",
+  "settings": [
+    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "loesungen" },
+    { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Speicherlösungen" },
+    { "type": "text", "id": "heading_before", "label": "标题", "default": "Welche Solarspeicherlösungen gibt es?" },
+    { "type": "text", "id": "heading_highlight", "label": "标题高亮部分" },
+    { "type": "richtext", "id": "subtext", "label": "副标题", "default": "<p>Je nach Anlage, Platz und Energiebedarf kommen unterschiedliche Speicherlösungen infrage.</p>" },
+    { "type": "richtext", "id": "hint", "label": "技术提示", "default": "<p>Technisch wird zusätzlich zwischen AC- und DC-gekoppelten Speichern unterschieden. Das betrifft vor allem die Frage, wo der Speicher an die bestehende Anlage angebunden wird. <a href=\"/pages/ac-vs-dc-speicher\">AC- vs. DC-Kopplung verstehen →</a></p>" },
+    { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
+  ],
+  "blocks": [
+    { "type": "solution", "name": "方案卡", "settings": [
+      { "type": "image_picker", "id": "image", "label": "场景图片" },
+      { "type": "text", "id": "image_alt", "label": "图片替代文本", "default": "Balkonkraftwerk mit kompaktem Solarspeicher" },
+      { "type": "text", "id": "title", "label": "标题", "default": "Balkonkraftwerk mit Speicher" },
+      { "type": "richtext", "id": "text", "label": "说明文字", "default": "<p>Kompakte Speicherlösung für Balkon-PV und kleinere Solaranlagen.</p>" },
+      { "type": "text", "id": "link_label", "label": "链接文字", "default": "Mehr dazu →" },
+      { "type": "url", "id": "link", "label": "链接地址", "default": "/pages/balkonkraftwerk-mit-speicher" }
+    ] }
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "储能专题 · 储能方案" }]
+}
+{% endschema %}
