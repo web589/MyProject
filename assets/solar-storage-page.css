@@ -48,10 +48,14 @@
 .main-content--solar-storage .ss-text-link { color: var(--ss-blue); font-weight: 500; text-decoration: none; }
 .main-content--solar-storage .ss-section .rte a,
 .main-content--solar-storage .ss-section .ss-text-link { color: var(--ss-blue); }
+.main-content--solar-storage .ss-section .rte a:not(.rte__image):not(.btn) {
+  background-image: none;
+  text-decoration: none;
+}
 .main-content--solar-storage .ss-section .ss-button--primary { color: #fff; }
 .main-content--solar-storage .ss-section .ss-button--secondary { color: var(--ss-blue); }
-.main-content--solar-storage .rte a:hover,
-.main-content--solar-storage .rte a:focus-visible,
+.main-content--solar-storage .ss-section .rte a:not(.rte__image):not(.btn):hover,
+.main-content--solar-storage .ss-section .rte a:not(.rte__image):not(.btn):focus-visible,
 .main-content--solar-storage .ss-text-link:hover,
 .main-content--solar-storage .ss-text-link:focus-visible { color: var(--ss-blue); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 
@@ -280,7 +284,7 @@
 
 .main-content--solar-storage .ss-comparison__media-grid,
 .main-content--solar-storage .ss-comparison__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 32px; }
-.main-content--solar-storage .ss-comparison__grid { margin-top: 24px; }
+.main-content--solar-storage .ss-comparison__grid { margin-top: 24px; margin-bottom: 24px; }
 .main-content--solar-storage .ss-comparison-card { padding: 28px 30px; }
 .main-content--solar-storage .ss-comparison-card.is-emphasized { border-color: #bfe4ff; background: #fbfeff; }
 .main-content--solar-storage .ss-comparison-card h3 { font-size: 18px; font-weight: 600; line-height: normal; }
@@ -290,7 +294,7 @@
 .main-content--solar-storage .ss-comparison-card__list li:first-child { border-top: 0; }
 .main-content--solar-storage .ss-comparison-card__list li::before { position: absolute; top: 19px; left: 0; width: 7px; height: 7px; border-radius: 50%; background: var(--ss-muted-light); content: ''; }
 .main-content--solar-storage .ss-comparison-card.is-emphasized li::before { background: var(--ss-blue); }
-.main-content--solar-storage .ss-summary-line { max-width: 1240px; margin-top: 24px; padding: 20px 24px; border: 1px solid var(--ss-border); border-radius: var(--ss-radius); background: #fff; color: var(--ss-ink); font-size: 16px; font-weight: 500; line-height: 1.5; }
+.main-content--solar-storage .ss-summary-line { max-width: 1240px; margin-top: 0; padding: 20px 24px; border: 1px solid var(--ss-border); border-radius: var(--ss-radius); background: #fff; color: var(--ss-ink); font-size: 16px; font-weight: 500; line-height: 1.5; }
 
 .main-content--solar-storage .ss-icon-card { padding: 26px 26px 28px; }
 .main-content--solar-storage .ss-icon { display: inline-flex; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; background: var(--ss-blue-soft); }
