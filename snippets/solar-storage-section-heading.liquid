@@ -2,7 +2,7 @@
   assign heading_tag = heading_tag | default: 'h2'
 %}
 {% if eyebrow != blank %}
-  <p class="ss-eyebrow">{{ eyebrow | escape }}</p>
+  <div class="ss-eyebrow">{{ eyebrow | escape }}</div>
 {% endif %}
 <{{ heading_tag }} class="ss-heading">
   {{ heading_before | escape }}{% if heading_highlight != blank %} <span>{{ heading_highlight | escape }}</span>{% endif %}
