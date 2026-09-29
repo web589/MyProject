@@ -99,7 +99,7 @@
   line-height: normal;
 }
 
-.main-content--smart-meter .sm-eyebrow {
+.main-content--smart-meter .sm-section .sm-eyebrow {
   margin-bottom: 14px;
 }
 
@@ -119,11 +119,10 @@
 }
 
 .main-content--smart-meter .sm-lead {
-  margin-top: 14px;
   font-size: var(--sm-body-size, 17px);
 }
 
-.main-content--smart-meter .sm-subtext {
+.main-content--smart-meter .sm-section :is(.sm-lead, .sm-subtext) {
   margin-top: 14px;
 }
 
