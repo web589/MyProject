@@ -93,12 +93,13 @@
 .main-content--solar-storage .section-solar-storage-navigation {
   position: sticky;
   top: 0;
-  z-index: 30;
+  /* Keep the page anchor bar below the global header and its expanded mega menu. */
+  z-index: 20;
 }
 
 .main-content--solar-storage .solar-storage-nav {
   position: relative;
-  z-index: 30;
+  z-index: 1;
   border-bottom: 1px solid var(--ss-border);
   background: rgba(255, 255, 255, .98);
   box-shadow: 0 3px 10px rgba(17, 24, 39, .04);
