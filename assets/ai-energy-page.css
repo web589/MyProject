@@ -136,14 +136,14 @@ body:has(.main-content--ai-energy) .site-header-group:has(#SiteHeader[data-nativ
 .ai-energy__comparison-note { margin: 32px 0 18px; color: var(--ai-muted); font-size: var(--ai-note-size,.81rem); line-height: 1.7; }
 .ai-energy__comparison > .ai-energy__container > .ai-energy__text-link { display: inline-block; margin-top: 4px; }
 
-.ai-energy__timeline { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 0; margin: 30px 0 18px; border-top: 1px solid #e3e8ee; }
-.ai-energy__timeline button { position: relative; display: flex; gap: 4px; align-items: baseline; padding: 16px 4px 8px; border: 0; background: none; color: var(--ai-muted); cursor: pointer; font: inherit; text-align: left; transition: color .15s ease; }
+.ai-energy__timeline { display: flex; margin: 40px 0 0; border-top: 1px solid #e3e8ee; }
+.ai-energy__timeline button { position: relative; display: block; flex: 1; padding: 20px 24px 0 0; border: 0; background: none; color: var(--ai-muted); cursor: pointer; font: inherit; text-align: left; transition: color .15s ease; }
 .ai-energy__timeline button::before { position: absolute; top: -6px; left: 0; width: 11px; height: 11px; border: 2px solid #e3e8ee; border-radius: 50%; background: #fff; content: ""; transition: all .18s ease; }
 .ai-energy__timeline button[aria-selected="true"] { color: var(--ai-ink); }
 .ai-energy__timeline button[aria-selected="true"]::before { border-color: var(--ai-blue); background: var(--ai-blue); }
 .ai-energy__timeline button:hover span { color: var(--ai-blue); }
-.ai-energy__timeline strong { color: var(--ai-blue); font-size: var(--ai-eyebrow-size,.62rem); }
-.ai-energy__timeline span { font-size: var(--ai-item-heading-size,.9rem); font-weight: 700; }
+.ai-energy__timeline strong { color: var(--ai-blue); font-size: 12px; font-weight: 600; letter-spacing: .06em; line-height: normal; }
+.ai-energy__timeline span { display: block; margin-top: 6px; color: var(--ai-ink); font-size: var(--ai-item-heading-size,17px); font-weight: 600; letter-spacing: normal; line-height: normal; }
 .ai-energy__day-panel { display: grid; grid-template-columns: minmax(0,.95fr) minmax(0,1.05fr); gap: clamp(30px,5vw,72px); align-items: start; }
 .ai-energy__day-panel[hidden] { display: none; }
 .ai-energy__day-image { width: min(100%,var(--ai-day-image-width,100%)); height: var(--ai-day-image-height,330px); min-height: 0; margin-inline: auto; border-radius: 8px; }
