@@ -37,7 +37,14 @@
 
 .main-content--smart-meter .sm-container {
   width: 100%;
+  max-width: 1440px;
   margin: 0 auto;
+}
+
+.main-content--smart-meter :is(.sm-flow, .sm-solutions, .sm-guides, .sm-final) {
+  width: 100vw;
+  max-width: none;
+  margin-inline: calc(50% - 50vw);
 }
 
 .main-content--smart-meter .sm-section [id] {
