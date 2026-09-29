@@ -5,74 +5,6 @@
     return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
 
-  function bindOptionStates(page) {
-    if (!page || page.dataset.vppAnfrageOptionsBound === 'true') return;
-    page.dataset.vppAnfrageOptionsBound = 'true';
-
-    var options = Array.prototype.slice.call(page.querySelectorAll('[data-vpp-option]'));
-
-    function sync() {
-      options.forEach(function (option) {
-        var input = option.querySelector('input');
-        if (input) option.classList.toggle('is-selected', input.checked);
-      });
-    }
-
-    options.forEach(function (option) {
-      var input = option.querySelector('input');
-      if (!input) return;
-      input.addEventListener('change', sync);
-    });
-
-    sync();
-  }
-
-  function bindComponentValidation(page) {
-    if (!page || page.dataset.vppAnfrageFormBound === 'true') return;
-    page.dataset.vppAnfrageFormBound = 'true';
-
-    var form = page.querySelector('.vpp-anfrage__form-card');
-    var group = page.querySelector('[data-vpp-component-group]');
-    var error = page.querySelector('[data-vpp-component-error]');
-    if (!form || !group || !error) return;
-
-    var inputs = Array.prototype.slice.call(group.querySelectorAll('[data-vpp-component]'));
-    if (!inputs.length) return;
-
-    function hasSelection() {
-      return inputs.some(function (input) {
-        return input.checked;
-      });
-    }
-
-    function showError() {
-      group.classList.add('is-invalid');
-      error.hidden = false;
-    }
-
-    function clearError() {
-      group.classList.remove('is-invalid');
-      error.hidden = true;
-    }
-
-    inputs.forEach(function (input) {
-      input.addEventListener('change', function () {
-        if (hasSelection()) clearError();
-      });
-    });
-
-    form.addEventListener('submit', function (event) {
-      if (hasSelection()) {
-        clearError();
-        return;
-      }
-
-      event.preventDefault();
-      showError();
-      inputs[0].focus();
-    });
-  }
-
   function bindFaqList(list) {
     if (!list || list.dataset.vppAnfrageFaqBound === 'true') return;
     list.dataset.vppAnfrageFaqBound = 'true';
@@ -164,8 +96,6 @@
     }
 
     pages.forEach(function (page) {
-      bindOptionStates(page);
-      bindComponentValidation(page);
       page.querySelectorAll('[data-vpp-anfrage-faq-list]').forEach(bindFaqList);
     });
   }

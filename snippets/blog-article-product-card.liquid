@@ -4,7 +4,6 @@
     assign card_image = card_variant.featured_image | default: product.featured_image
 
     assign automatic_title = product.title
-    assign automatic_specs = blank
     assign title_separator = blank
     if product.title contains ' - '
       assign title_separator = ' - '
@@ -19,16 +18,11 @@
     if title_separator != blank
       assign title_parts = product.title | split: title_separator
       assign automatic_title = title_parts.first | strip
-      assign automatic_specs = title_parts | slice: 1, title_parts.size | join: title_separator | strip
     endif
 
     assign vendor_prefix = product.vendor | append: ' '
     if product.vendor != blank and automatic_title contains vendor_prefix
       assign automatic_title = automatic_title | remove_first: vendor_prefix | strip
-    endif
-
-    if automatic_specs != blank
-      assign automatic_specs = automatic_specs | remove: 'Solarspeicher' | strip
     endif
 
     assign card_title = product.metafields.custom.carousel_title.value | default: automatic_title
@@ -37,156 +31,100 @@
       assign card_title = card_title | remove_first: card_title_vendor_prefix | strip
     endif
 
-    # Keep the display name focused on the VENUS E model, even when a merchant
-    # has included the brand in the optional carousel title metafield.
     if card_title contains 'VENUS E'
       assign card_title_parts = card_title | split: 'VENUS E'
       assign card_title_suffix = card_title_parts | last | strip
       assign card_title = 'VENUS E ' | append: card_title_suffix | strip
     endif
 
-    assign card_specs = product.metafields.custom.carousel_specs.value | default: automatic_specs
-    assign card_image_alt = card_image.alt | default: card_title
-    assign card_badge = badge_override
-    assign card_badge_color = badge_color_override | default: '#dff7e8'
-    assign card_badge_icon = badge_icon_override | default: 'none'
-
-    case card_badge_color
-      when 'blue'
-        assign card_badge_color = '#dff1ff'
-      when 'orange'
-        assign card_badge_color = '#fff0d4'
-    endcase
-
-    assign card_state = 'sold-out'
-    if product.metafields.custom.preorder_enabled.value == true
-      assign card_state = 'preorder'
-      assign preorder_label_override = product.metafields.custom.preorder_button_label.value
-      if preorder_label_override != blank
-        assign card_cta_label = preorder_label_override
-      else
-        assign card_cta_label = 'blogs.article.preorder' | t
-      endif
-    elsif product.available
-      assign card_state = 'available'
-      assign card_cta_label = 'blogs.article.view_product' | t
-    else
-      assign card_cta_label = 'blogs.article.sold_out' | t
+    assign card_price = blank
+    if product.price_varies
+      assign card_min_price = product.price_min | money
+      assign card_price = 'products.general.from_text_html' | t: price: card_min_price
+    elsif card_variant != blank and card_variant.price != blank
+      assign card_price = card_variant.price | money
     endif
 
-    assign card_link = product.url
+    assign card_image_alt = card_image.alt | default: card_title
+    assign card_state = 'available'
+    unless product.available
+      assign card_state = 'sold-out'
+    endunless
   -%}
 
-  <article
+  <a
     class="blog-article-product-card blog-article-product-card--{{ variant | default: 'compact' }} blog-article-product-card--state-{{ card_state }}{% if card_image == blank %} blog-article-product-card--no-image{% endif %}"
-    style="--blog-article-product-badge-color: {{ card_badge_color | escape }};"
+    href="{{ product.url | escape }}"
     data-product-state="{{ card_state }}"
     {% if block_attributes != blank %}{{ block_attributes }}{% endif %}
   >
     {%- if card_image != blank -%}
-      <a class="blog-article-product-card__image" href="{{ card_link | escape }}" aria-label="{{ card_title | escape }}">
+      <span class="blog-article-product-card__image">
         {%- render 'image-element',
           img: card_image,
           alt: card_image_alt,
           loading: 'lazy',
-          sizes: '(min-width: 769px) 92px, 88px',
-          widths: '120, 180, 240',
+          sizes: '52px',
+          widths: '52, 104, 156',
         -%}
-      </a>
+      </span>
     {%- else -%}
-      <div class="blog-article-product-card__image blog-article-product-card__image--placeholder" aria-hidden="true">
+      <span class="blog-article-product-card__image blog-article-product-card__image--placeholder" aria-hidden="true">
         {{ 'product-1' | placeholder_svg_tag }}
-      </div>
+      </span>
     {%- endif -%}
 
-    <div class="blog-article-product-card__content">
-      <div class="blog-article-product-card__details">
-        <h3 class="blog-article-product-card__title">
-          <a href="{{ card_link | escape }}">{{ card_title | escape }}</a>
-        </h3>
+    <span class="blog-article-product-card__content">
+      <span class="blog-article-product-card__title">{{ card_title | escape }}</span>
+      {%- if card_price != blank -%}
+        <span class="blog-article-product-card__price">{{ card_price }}</span>
+      {%- endif -%}
+    </span>
 
-        {%- if card_specs != blank -%}
-          <p class="blog-article-product-card__specs">{{ card_specs | escape }}</p>
-        {%- endif -%}
-
-        {%- if card_variant != blank and card_variant.price != blank -%}
-          <div class="blog-article-product-card__price">
-            {{ card_variant.price | money }}
-            {%- if card_variant.compare_at_price > card_variant.price -%}
-              <s>{{ card_variant.compare_at_price | money }}</s>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
-      </div>
-
-      <div class="blog-article-product-card__actions">
-        {%- if card_badge != blank -%}
-          <span class="blog-article-product-card__badge blog-article-product-card__badge--{{ card_badge_icon }}">
-            {%- case card_badge_icon -%}
-              {%- when 'beginner' -%}
-                <span class="blog-article-product-card__badge-icon" aria-hidden="true">
-                  {{- 'icon.blog-badge-beginner.svg' | inline_asset_content -}}
-                </span>
-              {%- when 'popular' -%}
-                <span class="blog-article-product-card__badge-icon" aria-hidden="true">
-                  {{- 'icon.blog-badge-popular.svg' | inline_asset_content -}}
-                </span>
-              {%- when 'family' -%}
-                <span class="blog-article-product-card__badge-icon" aria-hidden="true">
-                  {{- 'icon.blog-badge-family.svg' | inline_asset_content -}}
-                </span>
-              {%- when 'power' -%}
-                <span class="blog-article-product-card__badge-icon" aria-hidden="true">
-                  {{- 'icon.blog-badge-power.svg' | inline_asset_content -}}
-                </span>
-            {%- endcase -%}
-            <span class="blog-article-product-card__badge-label">{{ card_badge | escape }}</span>
-          </span>
-        {%- endif -%}
-
-        {%- if card_state == 'sold-out' -%}
-          <span class="blog-article-product-card__button blog-article-product-card__button--disabled" aria-disabled="true">
-            {{ card_cta_label | escape }}
-          </span>
-        {%- else -%}
-          <a class="blog-article-product-card__button" href="{{ card_link | escape }}">
-            {{ card_cta_label | escape }}
-          </a>
-        {%- endif -%}
-      </div>
-    </div>
-  </article>
+    <span class="blog-article-product-card__arrow" aria-hidden="true">→</span>
+  </a>
 {%- endif -%}
 
 {% style %}
   .blog-article-product-card {
-    background: #fff;
-    border: 1px solid #e1e4e8;
-    border-radius: 10px;
-    display: grid;
+    align-items: center;
+    border-bottom: 1px solid #edf0f4;
+    border-radius: 6px;
+    color: var(--blog-article-ink, #17283b);
+    display: flex;
     font-family: var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
-    grid-template-columns: 92px minmax(0, 1fr);
-    min-height: 106px;
-    overflow: hidden;
-    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    gap: 14px;
+    min-height: 74px;
+    padding: 11px 6px;
+    text-decoration: none;
+    transition: background 140ms ease;
   }
 
-  .blog-article-product-card:hover {
-    border-color: #a9d9f5;
-    box-shadow: 0 8px 20px rgba(28, 92, 130, 0.1);
-    transform: translateY(-1px);
+  .blog-article-product-card:last-child {
+    border-bottom: 0;
+  }
+
+  .blog-article-product-card:hover,
+  .blog-article-product-card:focus-visible {
+    background: #f5faff;
+    color: var(--blog-article-ink, #17283b);
+  }
+
+  .blog-article-product-card:focus-visible {
+    outline: 2px solid var(--blog-article-blue, #008ff0);
+    outline-offset: 2px;
   }
 
   .blog-article-product-card__image {
     align-items: center;
     background: #f7f9fc;
-    border-right: 1px solid #edf3f8;
+    border-radius: 8px;
     display: flex;
-    height: 100%;
+    flex: 0 0 52px;
+    height: 52px;
     justify-content: center;
-    min-height: 106px;
     overflow: hidden;
-    width: 92px;
+    width: 52px;
   }
 
   .blog-article-product-card__image image-element {
@@ -199,190 +137,45 @@
     display: block;
     height: 100%;
     object-fit: contain;
-    padding: 10px 6px 10px 8px;
+    padding: 0 4px;
     width: 100%;
   }
 
   .blog-article-product-card__image--placeholder svg {
-    height: 58px;
-    width: 58px;
+    height: 34px;
+    width: 34px;
   }
 
   .blog-article-product-card__content {
-    align-items: center;
-    display: grid;
-    gap: 10px;
-    grid-template-columns: minmax(0, 1fr) auto;
+    display: block;
     min-width: 0;
-    padding: 12px 14px 12px 14px;
   }
 
-  .blog-article-product-card__details {
-    min-width: 0;
+  .blog-article-product-card__title,
+  .blog-article-product-card__price {
+    display: block;
   }
 
   .blog-article-product-card__title {
-    color: var(--blog-article-ink, #17283b);
-    font-family: var(--typeHeaderPrimary, var(--typeBasePrimary, sans-serif)), var(--typeHeaderFallback, sans-serif);
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.16;
-    margin: 0 0 3px;
-  }
-
-  .blog-article-product-card__title a {
     color: inherit;
-    text-decoration: none;
-  }
-
-  .blog-article-product-card__specs {
-    color: #617b95;
-    font-size: 14px;
-    line-height: 1.2;
-    margin: 0 0 4px;
+    font-family: var(--typeHeaderPrimary, var(--typeBasePrimary, sans-serif)), var(--typeHeaderFallback, sans-serif);
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.3;
   }
 
   .blog-article-product-card__price {
-    color: #17283b;
-    font-family: var(--typeHeaderPrimary, var(--typeBasePrimary, sans-serif)), var(--typeHeaderFallback, sans-serif);
+    color: var(--blog-article-muted, #6b7f99);
+    font-size: 12.5px;
+    line-height: 1.35;
+    margin-top: 3px;
+  }
+
+  .blog-article-product-card__arrow {
+    color: var(--blog-article-muted, #6b7f99);
+    flex: 0 0 auto;
     font-size: 18px;
-    font-weight: 700;
-    line-height: 1.2;
-    white-space: nowrap;
-  }
-
-  .blog-article-product-card__price s {
-    color: #8a8f98;
-    font-size: 11px;
-    font-weight: 400;
-    margin-left: 4px;
-  }
-
-  .blog-article-product-card__actions {
-    align-items: flex-end;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    height: 100%;
-    justify-content: space-between;
-    min-width: 126px;
-  }
-
-  .blog-article-product-card__badge {
-    background: var(--blog-article-product-badge-color, #dff7e8);
-    border: 1px solid rgba(23, 40, 59, 0.08);
-    border-radius: 999px;
-    color: #1f2937;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-family: var(--typeHeaderPrimary, var(--typeBasePrimary, sans-serif)), var(--typeHeaderFallback, var(--typeBaseFallback, sans-serif));
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    line-height: 1.2;
-    max-width: 100%;
-    overflow: hidden;
-    padding: 6px 10px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .blog-article-product-card__badge--beginner {
-    color: #147a3d;
-  }
-
-  .blog-article-product-card__badge--popular {
-    color: #d52650;
-  }
-
-  .blog-article-product-card__badge--family {
-    color: #aa6500;
-  }
-
-  .blog-article-product-card__badge--power {
-    color: #7134c4;
-  }
-
-  .blog-article-product-card__badge-icon {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 15px;
-    height: 15px;
-    justify-content: center;
-    width: 15px;
-  }
-
-  .blog-article-product-card__badge-icon .element-icon,
-  .blog-article-product-card__badge-icon svg {
-    --element-icon-color: currentColor;
-    --element-icon-size: 15px;
-    display: block;
-    height: 15px;
-    width: 15px;
-  }
-
-  .blog-article-product-card__button {
-    background: #009cf5;
-    border: 1px solid #009cf5;
-    border-radius: 8px;
-    color: #fff;
-    display: block;
-    font-family: var(--typeBasePrimary, sans-serif), var(--typeBaseFallback, sans-serif);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 1.2;
-    min-height: 40px;
-    min-width: 126px;
-    padding: 10px 14px;
-    text-align: center;
-    white-space: nowrap;
-  }
-
-  .blog-article-product-card__button:hover,
-  .blog-article-product-card__button:focus-visible {
-    background: #007fd0;
-    border-color: #007fd0;
-    color: #fff;
-  }
-
-  .blog-article-product-card--state-preorder .blog-article-product-card__button {
-    background: #f59e0b;
-    border-color: #f59e0b;
-  }
-
-  .blog-article-product-card--state-preorder .blog-article-product-card__button:hover,
-  .blog-article-product-card--state-preorder .blog-article-product-card__button:focus-visible {
-    background: #d97706;
-    border-color: #d97706;
-  }
-
-  .blog-article-product-card__button--disabled {
-    background: #eef1f4;
-    border-color: #d9dee5;
-    color: #7b8794;
-    cursor: not-allowed;
-  }
-
-  @media only screen and (max-width: 768px) {
-    .blog-article-product-card {
-      grid-template-columns: 88px minmax(0, 1fr);
-      min-height: 104px;
-    }
-
-    .blog-article-product-card__image {
-      min-height: 104px;
-      width: 88px;
-    }
-
-    .blog-article-product-card__content {
-      gap: 10px;
-      padding: 10px 10px 10px 12px;
-    }
-
-    .blog-article-product-card__actions,
-    .blog-article-product-card__button {
-      min-width: 100px;
-    }
+    line-height: 1;
+    margin-left: auto;
   }
 {% endstyle %}

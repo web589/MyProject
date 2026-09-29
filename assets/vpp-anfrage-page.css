@@ -297,6 +297,25 @@
   background: #fff;
 }
 
+.vpp-anfrage__shopify-forms {
+  width: 100%;
+}
+
+.vpp-anfrage__shopify-forms :is(label, legend, input, select, textarea, button, p) {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.vpp-anfrage__forms-notice {
+  margin: 20px 0 0 !important;
+  border: 1px dashed #b9c5d1;
+  border-radius: 8px;
+  padding: 16px;
+  color: var(--vpp-anfrage-gray-dark);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .vpp-anfrage__field-group {
   min-width: 0;
   margin: 0;
