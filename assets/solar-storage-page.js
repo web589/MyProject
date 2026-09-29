@@ -2,7 +2,20 @@
   'use strict';
 
   var initializedFaqs = new WeakSet();
+  var answerHeights = new WeakMap();
   var motionBound = false;
+
+  function measureAnswer(answer) {
+    if (!answer) return 0;
+    var height = answer.scrollHeight;
+    answerHeights.set(answer, height);
+    return height;
+  }
+
+  function getAnswerHeight(answer) {
+    var height = answerHeights.get(answer);
+    return typeof height === 'number' ? height : measureAnswer(answer);
+  }
 
   function setOpen(item, shouldOpen) {
     var button = item.querySelector('.ss-faq-item__button');
@@ -13,7 +26,7 @@
     item.classList.toggle('is-open', shouldOpen);
     button.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
     if (symbol) symbol.textContent = shouldOpen ? '–' : '+';
-    answer.style.maxHeight = shouldOpen ? answer.scrollHeight + 'px' : '0px';
+    answer.style.maxHeight = shouldOpen ? getAnswerHeight(answer) + 'px' : '0px';
   }
 
   function setupFaq(section) {
@@ -23,6 +36,8 @@
     var items = Array.prototype.slice.call(section.querySelectorAll('.ss-faq-item'));
     items.forEach(function (item) {
       var button = item.querySelector('.ss-faq-item__button');
+      var answer = item.querySelector('.ss-faq-item__answer');
+      measureAnswer(answer);
       if (!button) return;
       button.addEventListener('click', function () {
         var shouldOpen = !item.classList.contains('is-open');
@@ -35,8 +50,13 @@
   function updateOpenAnswers() {
     document.querySelectorAll('[data-ss-faq] .ss-faq-item.is-open').forEach(function (item) {
       var answer = item.querySelector('.ss-faq-item__answer');
-      if (answer) answer.style.maxHeight = answer.scrollHeight + 'px';
+      if (answer) answer.style.maxHeight = measureAnswer(answer) + 'px';
     });
+  }
+
+  function refreshAnswerHeights() {
+    document.querySelectorAll('[data-ss-faq] .ss-faq-item__answer').forEach(measureAnswer);
+    updateOpenAnswers();
   }
 
   function updateVideoMotion() {
@@ -62,6 +82,10 @@
 
   document.addEventListener('shopify:section:load', function (event) { window.setTimeout(function () { boot(event.target); }, 0); });
   window.addEventListener('resize', updateOpenAnswers);
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(refreshAnswerHeights);
+  }
 
   if (!motionBound && window.matchMedia) {
     motionBound = true;
