@@ -27,7 +27,7 @@
       button.addEventListener('click', function () {
         var shouldOpen = !item.classList.contains('is-open');
         items.forEach(function (otherItem) { setOpen(otherItem, otherItem === item && shouldOpen); });
-        window.dispatchEvent(new CustomEvent('anchor-navigation:layout-change'));
+        window.dispatchEvent(new CustomEvent('anchor-navigation:update'));
       });
     });
   }
