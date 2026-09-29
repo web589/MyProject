@@ -3635,11 +3635,25 @@
   }
 }
 
-/* Kaufkriterien reference: keep the supporting line under the main heading
- * while retaining the two-column card grid and its image spacing. */
+/* Keep comparison-module headings and supporting copy wide enough to avoid
+ * premature wrapping while retaining each module's own layout. */
+.main-content--venus-e .section-bw-compare-models .bw-models__intro,
+.main-content--venus-e .section-bw-compare-scenarios .bw-scenarios__intro,
+.main-content--venus-e .section-bw-compare-card-grid .bw-content-grid__intro,
+.main-content--venus-e .section-bw-compare-table .bw-specs__intro,
+.main-content--venus-e .section-bw-compare-capacity .bw-capacity-map__intro,
+.main-content--venus-e .section-bw-compare-smart-energy .bw-smart-energy__intro,
+.main-content--venus-e .section-bw-storage-faq .bw-faq__intro,
+.main-content--venus-e .section-bw-compare-trust .bw-compare-trust__copy h2,
+.main-content--venus-e .section-bw-compare-trust .bw-compare-trust__intro {
+  max-width: min(960px, 100%);
+}
+
+/* Kaufkriterien keeps the supporting line under the main heading while
+ * retaining the two-column card grid and its image spacing. */
 .section-bw-compare-card-grid .bw-content-grid__intro--stacked {
   display: block;
-  max-width: 520px;
+  max-width: min(960px, 100%);
 }
 
 .section-bw-compare-card-grid .bw-content-grid__intro--stacked .bw-rte {

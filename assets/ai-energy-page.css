@@ -37,18 +37,17 @@ body:has(.main-content--ai-energy) .site-header-group:has(#SiteHeader[data-nativ
 .ai-energy__button--secondary { border-color: #bbd9ec; background: #fff; color: var(--ai-blue); }
 .ai-energy__button--secondary:hover { color: var(--ai-blue); background: #f4fbff; }
 
-/* Keep the blue CTA edges crisp on this page at preview and scaled sizes. */
+/* Keep the blue CTA edges crisp while preserving the shared hover feedback. */
 .main-content--ai-energy .ai-energy-page :is(.ai-energy__hero, .ai-energy__smartmeter, .ai-energy__system, .ai-energy__final-cta) .ai-energy__button--primary {
   border: 0;
   border-radius: 8px;
-  box-shadow: none;
-  transform: none;
-  transition: background 180ms ease, color 180ms ease;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease, background 180ms ease;
 }
 
 .main-content--ai-energy .ai-energy-page :is(.ai-energy__hero, .ai-energy__smartmeter, .ai-energy__system, .ai-energy__final-cta) .ai-energy__button--primary:hover {
-  box-shadow: none;
-  transform: none;
+  box-shadow: 0 9px 22px rgba(0,153,254,.23);
+  filter: brightness(1.06);
+  transform: translateY(-1px);
 }
 
 .ai-energy__text-link { color: var(--ai-blue); font-size: var(--ai-control-size,14px); font-weight: 500; text-decoration: none; }
