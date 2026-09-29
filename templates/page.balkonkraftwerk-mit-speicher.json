@@ -15,28 +15,12 @@
         "nav_buy": {
           "type": "link",
           "settings": {
-            "module": "storage_hero",
-            "label": "Balkonkraftwerk kaufen",
+            "module": "storage_why",
+            "label": "Vorteile",
             "target": ""
           }
         },
         "nav_why": {
-          "type": "link",
-          "settings": {
-            "module": "storage_why",
-            "label": "Warum",
-            "target": ""
-          }
-        },
-        "nav_compare": {
-          "type": "link",
-          "settings": {
-            "module": "storage_comparison",
-            "label": "Vergleich",
-            "target": ""
-          }
-        },
-        "nav_flow": {
           "type": "link",
           "settings": {
             "module": "storage_flow",
@@ -44,28 +28,36 @@
             "target": ""
           }
         },
-        "nav_retrofit": {
+        "nav_compare": {
+          "type": "link",
+          "settings": {
+            "module": "storage_models",
+            "label": "Modelle",
+            "target": ""
+          }
+        },
+        "nav_flow": {
           "type": "link",
           "settings": {
             "module": "storage_retrofit",
-            "label": "Nachrüsten",
+            "label": "Nachrüstung",
+            "target": ""
+          }
+        },
+        "nav_retrofit": {
+          "type": "link",
+          "settings": {
+            "module": "storage_capacity",
+            "label": "Speichergröße",
             "target": ""
           }
         },
         "nav_capacity": {
           "type": "link",
           "settings": {
-            "module": "storage_capacity",
-            "label": "Kapazität",
-            "target": ""
-          }
-        },
-        "nav_models": {
-          "type": "link",
-          "settings": {
-            "module": "comparison_models",
-            "label": "Modelle",
-            "target": ""
+            "module": "custom",
+            "label": "Steuerung",
+            "target": "zero-feed"
           }
         },
         "nav_faq": {
@@ -84,7 +76,6 @@
         "nav_flow",
         "nav_retrofit",
         "nav_capacity",
-        "nav_models",
         "nav_faq"
       ],
       "settings": {
@@ -226,7 +217,7 @@
         "anchor_id": "warum-speicher",
         "eyebrow": "WARUM SPEICHER?",
         "heading": "Warum ein Balkonkraftwerk mit Speicher sinnvoll sein kann",
-        "text": "<p><strong>Ein Balkonkraftwerk mit Speicher ist besonders sinnvoll, wenn deine PV-Anlage tagsüber mehr Solarstrom erzeugt, als dein Haushalt gleichzeitig verbraucht.</strong> Statt überschüssigen Solarstrom direkt ins Netz abzugeben, kannst du ihn speichern und später am Abend, in der Nacht oder bei höherem Strombedarf selbst nutzen. So lässt sich der Eigenverbrauch erhöhen und der Netzbezug reduzieren.<br/></p><p><strong>Ob und welche Speichergröße für dich sinnvoll ist, hängt nicht allein von der Haushaltsgröße ab.</strong> Entscheidend sind vor allem dein regelmäßiger Solarüberschuss, die PV-Leistung, deine Verbrauchszeiten und die nutzbare Speicherkapazität. Wenn du deinen Solarstrom bereits tagsüber fast vollständig direkt verbrauchst, ist ein großer Speicher nicht automatisch die bessere Lösung.<br/><br/></p>",
+        "text": "<p>Ein Speicher verschiebt Solarstrom vom Tag in spätere Verbrauchszeiten und kann dadurch den Eigenverbrauch erhöhen und den Netzbezug reduzieren.<br/></p><p><strong>Ein Balkonkraftwerk mit Speicher ist besonders sinnvoll, wenn deine PV-Anlage tagsüber mehr Solarstrom erzeugt, als dein Haushalt gleichzeitig verbraucht.</strong> Statt überschüssigen Solarstrom direkt ins Netz abzugeben, kannst du ihn speichern und später am Abend, in der Nacht oder bei höherem Strombedarf selbst nutzen. So lässt sich der Eigenverbrauch erhöhen und der Netzbezug reduzieren.<br/></p><p><strong>Ob und welche Speichergröße für dich sinnvoll ist, hängt nicht allein von der Haushaltsgröße ab.</strong> Entscheidend sind vor allem dein regelmäßiger Solarüberschuss, die PV-Leistung, deine Verbrauchszeiten und die nutzbare Speicherkapazität. Wenn du deinen Solarstrom bereits tagsüber fast vollständig direkt verbrauchst, ist ein großer Speicher nicht automatisch die bessere Lösung.<br/><br/></p>",
         "image": "shopify://shop_images/2_4387518a-b04b-4568-95dd-a7c2ae10a31f.webp",
         "media_width": 80,
         "media_alignment": "center",
@@ -352,15 +343,15 @@
         "anchor_id": "vergleich",
         "eyebrow": "MIT ODER OHNE SPEICHER?",
         "heading": "Balkonkraftwerk mit Speicher vs. ohne Speicher: Was ändert sich im Alltag?",
-        "text": "<p>Mit einem Balkonkraftwerk mit Speicher kannst du Solarüberschüsse zeitversetzt nutzen. Ohne Speicher steht dir dein Solarstrom dagegen hauptsächlich dann zur Verfügung, wenn er gerade erzeugt wird.</p>"
+        "text": "<p>Mit Speicher kann tagsüber erzeugter Solarstrom später im Haushalt genutzt werden; ohne Speicher hängt der Eigenverbrauch stärker davon ab, ob Erzeugung und Verbrauch gleichzeitig stattfinden.</p>"
       }
     },
     "venus_energy_flow": {
       "type": "bw-storage-energy-flow",
       "settings": {
         "anchor_id": "funktionsweise",
-        "heading": "So funktioniert ein Balkonkraftwerk mit Speicher: Tagsüber speichern, abends nutzen",
-        "text": "Dein Balkonkraftwerk versorgt zuerst den Haushalt. Überschüssiger Solarstrom wird im Solarspeicher gespeichert und steht dir am Abend wieder zur Verfügung – für mehr Eigenverbrauch und weniger Netzbezug.",
+        "heading": "So funktioniert ein Speicher im Alltag: tagsüber speichern, abends nutzen",
+        "text": "Tagsüber deckt der Solarstrom zunächst den aktuellen Haushaltsbedarf. Überschüsse können gespeichert und später über das Hausnetz wieder genutzt werden.",
         "tabs_label": "Tageszeit auswählen",
         "day_label": "Tagsüber speichern",
         "day_icon": "shopify://shop_images/9c2acda4908392328e960a828f3170ba.png",
@@ -432,9 +423,9 @@
         "media_width": 50,
         "media_position": "left",
         "heading": "Balkonkraftwerk mit Speicher nachrüsten",
-        "text": "<p>Du hast bereits ein Balkonkraftwerk? In vielen Fällen lässt sich ein VENUS E Solarspeicher nachträglich in dein bestehendes PV-System integrieren, ohne die komplette Anlage zu ersetzen. So kannst du Solarüberschüsse speichern und später selbst nutzen.</p>",
-        "button_label": "Passenden Speicher finden",
-        "button_link": ""
+        "text": "<p>aDu hast bereits ein Balkonkraftwerk? In vielen Fällen lässt sich ein VENUS E Solarspeicher nachträglich in dein bestehendes PV-System integrieren, ohne die komplette Anlage zu ersetzen. So kannst du Solarüberschüsse speichern und später selbst nutzen.</p>",
+        "button_label": "AC-gekoppelten Speicher verstehen →",
+        "button_link": "shopify://pages/ac-gekoppelter-speicher"
       }
     },
     "venus_capacity": {
@@ -526,7 +517,7 @@
       "settings": {
         "anchor_id": "kapazitaet",
         "heading": "Welche Speichergröße passt zu deinem Balkonkraftwerk?",
-        "text": "Die passende Speicherkapazität hängt vor allem von deinem Solarüberschuss, der PV-Leistung und deinem Verbrauch außerhalb der Sonnenstunden ab – nicht allein von der Haushaltsgröße.",
+        "text": "Die passende Speichergröße hängt vor allem davon ab, wie viel Solarstrom später genutzt werden soll und wann dein Haushalt Strom verbraucht.",
         "presets_label": "Kapazitätsstufen",
         "presets_background_position": "center center",
         "presets_overlay_use_global": true,
@@ -541,7 +532,7 @@
         "annual_label": "JÄHRLICHER STROMVERBRAUCH",
         "annual_default": "4000",
         "result_eyebrow": "Unsere Empfehlung",
-        "result_text": "Orientierungswert für dein persönliches Energieprofil",
+        "result_text": "Basierend auf deinen Angaben zu Verbrauch, Haushalt und Nutzung.",
         "result_button_label": "Passende VENUS E Konfigurationen ansehen",
         "result_note": "Die Empfehlung dient als erste Orientierung. Der tatsächliche Speicherbedarf kann je nach Solarüberschuss, PV-Ertrag, Lastprofil und Nutzungsverhalten abweichen.",
         "low_pv_warning": "Deine PV-Leistung ist im Verhältnis zu deinem Jahresverbrauch relativ niedrig. Du kannst die Empfehlung trotzdem ansehen."
@@ -651,7 +642,7 @@
       "settings": {
         "anchor_id": "zero-feed",
         "heading": "Nulleinspeisung beim Balkonkraftwerk mit Speicher intelligent steuern",
-        "text": "Mit einem kompatiblen Smart Meter erfasst dein VENUS E System Erzeugung und Stromverbrauch in Echtzeit. So kann die Lade- und Entladeleistung bedarfsgerecht geregelt und eine Nulleinspeisung unterstützt werden.",
+        "text": "Mit kompatibler Messung und Steuerung kann die Einspeisung ins öffentliche Netz gezielt geregelt werden.",
         "flow_video": "shopify://files/videos/MARSTEK VENUS E MAX-德语版.mp4",
         "flow_image": "shopify://shop_images/VENUS_E_4.0_mit_3_kW_bidirektionaler_Leistung.webp",
         "flow_image_alt": "Smart Meter, VENUS E, Hausnetz, Speicher und Stromnetz im Energiefluss",
@@ -736,7 +727,7 @@
       ],
       "settings": {
         "anchor_id": "features",
-        "heading": "Mehr als nur speichern: Funktionen für dein Balkonkraftwerk mit Speicher",
+        "heading": "Mehr als nur speichern: intelligente Funktionen im Alltag",
         "text": "Notstrom, intelligentes Energiemanagement, flexible Speicherkapazität und VPP-Fähigkeit machen VENUS E zu mehr als nur einem Solarspeicher."
       }
     },
@@ -841,7 +832,7 @@
       ],
       "settings": {
         "anchor_id": "steps",
-        "heading": "In drei Schritten zum passenden Balkonkraftwerk-Speicher",
+        "heading": "In drei Schritten zum passenden Speicher",
         "text": "Von Solarüberschuss und Stromverbrauch bis zur passenden VENUS E Konfiguration."
       }
     },
@@ -1252,7 +1243,7 @@
         "secondary_label_1": "Passenden VENUS E Speicher finden",
         "secondary_link_1": "",
         "secondary_label_2": "VENUS E Modelle vergleichen",
-        "secondary_link_2": ""
+        "secondary_link_2": "shopify://pages/venus-e-vergleich"
       }
     },
     "venus_newsletter": {
