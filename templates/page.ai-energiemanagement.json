@@ -10,12 +10,12 @@
 {
   "sections": {
     "ai_navigation": {
-      "type": "vpp-anchor-navigation",
+      "type": "ai-energy-navigation",
       "blocks": {
         "nav_start": {
           "type": "link",
           "settings": {
-            "module": "vpp_ready_start",
+            "module": "ai_start",
             "label": "Start",
             "target": ""
           }
@@ -23,7 +23,7 @@
         "nav_definition": {
           "type": "link",
           "settings": {
-            "module": "vpp_ready_definition",
+            "module": "ai_definition",
             "label": "AI-Energie erklärt",
             "target": ""
           }
@@ -110,7 +110,7 @@
         "anchor_id": "navigation",
         "nav_text_size": 13.5,
         "cta_label": "Modelle ansehen",
-        "cta_module": "vpp_ready_participation",
+        "cta_module": "ai_models",
         "cta_target": ""
       }
     },

@@ -1,0 +1,159 @@
+{%- liquid
+  assign navigation_anchor = section.settings.anchor_id | default: 'navigation' | handle
+-%}
+
+<nav
+  id="{{ navigation_anchor }}"
+  class="vpp-anchor-nav"
+  data-vpp-anchor-nav
+  data-anchor-nav
+  data-bw-anchor-controller="modern"
+  data-section-id="{{ section.id }}"
+  aria-label="{{ section.settings.aria_label | escape }}"
+  style="--vpp-anchor-text-size: {{ section.settings.nav_text_size | default: 13.5 }}px;"
+>
+  <div class="vpp-anchor-nav__inner">
+    <div class="vpp-anchor-nav__links">
+      {% for block in section.blocks %}
+        {% assign link_module = block.settings.module | default: 'custom' %}
+        {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
+        {% assign link_target = link_target | strip | remove_first: '#' | handle %}
+        {% if block.settings.label != blank and link_target != blank %}
+          <a
+            class="vpp-anchor-nav__link"
+            href="#{{ link_target }}"
+            data-vpp-anchor-link
+            data-anchor-link
+            data-anchor-nav-link
+            data-bw-anchor-module="{{ link_module | escape }}"
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.label | escape }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% assign cta_module = section.settings.cta_module | default: 'custom' %}
+    {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
+    {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
+    {% if section.settings.cta_label != blank and cta_target != blank %}
+      <a class="vpp-anchor-nav__cta" href="#{{ cta_target }}" data-vpp-anchor-link data-anchor-link data-anchor-nav-cta data-bw-anchor-module="{{ cta_module | escape }}">
+        {{ section.settings.cta_label | escape }}
+      </a>
+    {% endif %}
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "AI-Energie · Navigation",
+  "tag": "section",
+  "class": "section-vpp-anchor-navigation",
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "无障碍标签",
+      "default": "Navigation zum AI-Energiemanagement"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "导航锚点 ID",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "default": "navigation"
+    },
+    {
+      "type": "range",
+      "id": "nav_text_size",
+      "label": "导航文本大小",
+      "min": 11,
+      "max": 18,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13.5
+    },
+    {
+      "type": "header",
+      "content": "突出显示的行动按钮"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "行动按钮标签",
+      "default": "Modelle ansehen"
+    },
+    {
+      "type": "select",
+      "id": "cta_module",
+      "label": "行动按钮链接到模块",
+      "options": [
+        { "value": "ai_start", "label": "AI-Energie · Start" },
+        { "value": "ai_definition", "label": "AI-Energie · Erklärung" },
+        { "value": "ai_function", "label": "AI-Energie · Funktionsweise" },
+        { "value": "ai_meter", "label": "AI-Energie · Smart Meter" },
+        { "value": "ai_compare", "label": "AI-Energie · Vergleich" },
+        { "value": "ai_day", "label": "AI-Energie · Im Alltag" },
+        { "value": "ai_system", "label": "AI-Energie · System" },
+        { "value": "ai_models", "label": "AI-Energie · Modelle" },
+        { "value": "ai_faq", "label": "AI-Energie · FAQ" },
+        { "value": "ai_guides", "label": "AI-Energie · Ratgeber" },
+        { "value": "ai_final", "label": "AI-Energie · Nächster Schritt" },
+        { "value": "custom", "label": "自定义锚点（高级）" }
+      ],
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "cta_target",
+      "label": "自定义锚点 ID（高级）",
+      "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
+      "visible_if": "{{ section.settings.cta_module == 'custom' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "导航链接",
+      "settings": [
+        {
+          "type": "select",
+          "id": "module",
+          "label": "链接到模块",
+          "options": [
+            { "value": "ai_start", "label": "AI-Energie · Start" },
+            { "value": "ai_definition", "label": "AI-Energie · Erklärung" },
+            { "value": "ai_function", "label": "AI-Energie · Funktionsweise" },
+            { "value": "ai_meter", "label": "AI-Energie · Smart Meter" },
+            { "value": "ai_compare", "label": "AI-Energie · Vergleich" },
+            { "value": "ai_day", "label": "AI-Energie · Im Alltag" },
+            { "value": "ai_system", "label": "AI-Energie · System" },
+            { "value": "ai_models", "label": "AI-Energie · Modelle" },
+            { "value": "ai_faq", "label": "AI-Energie · FAQ" },
+            { "value": "ai_guides", "label": "AI-Energie · Ratgeber" },
+            { "value": "ai_final", "label": "AI-Energie · Nächster Schritt" },
+            { "value": "custom", "label": "自定义锚点（高级）" }
+          ],
+          "default": "custom"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "标签",
+          "default": "Navigation",
+          "info": "模块决定链接目标；此处仅用于自定义导航显示文字。"
+        },
+        {
+          "type": "text",
+          "id": "target",
+          "label": "自定义锚点 ID（高级）",
+          "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
+          "visible_if": "{{ block.settings.module == 'custom' }}"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 20
+}
+{% endschema %}

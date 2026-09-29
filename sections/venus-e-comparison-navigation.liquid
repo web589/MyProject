@@ -1,0 +1,169 @@
+{% liquid
+  assign navigation_anchor = section.settings.anchor_id | handle
+  if navigation_anchor == blank
+    assign navigation_anchor = 'navigation'
+  endif
+%}
+
+<nav
+  id="{{ navigation_anchor }}"
+  class="bw-storage bw-storage-section bw-anchor-nav bw-anchor-target"
+  data-bw-module="navigation"
+  data-bw-anchor-nav
+  data-anchor-nav
+  data-bw-anchor-controller="modern"
+  data-section-id="{{ section.id }}"
+  style="--bw-nav-text-size: {{ section.settings.nav_text_size | default: 13 }}px;"
+  aria-label="{{ section.settings.aria_label | escape }}"
+>
+  <div class="bw-container bw-anchor-nav__inner">
+    {% for block in section.blocks %}
+      {% liquid
+        assign link_module = block.settings.module | default: 'custom'
+        assign link_label = block.settings.label
+      %}
+      {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
+      {% assign link_target = link_target | strip | remove_first: '#' | handle %}
+      {% if link_label != blank and link_target != blank %}
+        <span class="bw-anchor-nav__item" {{ block.shopify_attributes }}>
+          <a
+            class="bw-anchor-nav__link"
+            href="#{{ link_target }}"
+            data-bw-anchor-link
+            data-anchor-link
+            data-anchor-nav-link
+            data-bw-anchor-module="{{ link_module | escape }}"
+          >
+            {{ link_label | escape }}
+          </a>
+        </span>
+      {% endif %}
+    {% endfor %}
+
+    {% assign cta_module = section.settings.cta_module | default: 'custom' %}
+    {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
+    {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
+    {% if section.settings.cta_label != blank and cta_target != blank %}
+      <a
+        class="bw-anchor-nav__cta"
+        href="#{{ cta_target }}"
+        data-bw-anchor-link
+        data-anchor-link
+        data-anchor-nav-cta
+        data-bw-anchor-module="{{ cta_module | escape }}"
+      >
+        {{ section.settings.cta_label | escape }}
+      </a>
+    {% endif %}
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "VENUS E Vergleich · Nav",
+  "class": "section-bw-storage-navigation",
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "无障碍标签",
+      "default": "Navigation zum VENUS E Modellvergleich"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "锚点ID",
+      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
+      "default": "navigation"
+    },
+    {
+      "type": "range",
+      "id": "nav_text_size",
+      "label": "导航文本大小",
+      "min": 11,
+      "max": 18,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13.5
+    },
+    {
+      "type": "header",
+      "content": "Hervorgehobener Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "行动按钮标签",
+      "default": "Modelle ansehen"
+    },
+    {
+      "type": "select",
+      "id": "cta_module",
+      "label": "行动按钮链接到模块",
+      "options": [
+        { "value": "comparison_models", "label": "Vergleich · Modelle" },
+        { "value": "comparison_scenarios", "label": "Vergleich · Einsatz" },
+        { "value": "comparison_comparison", "label": "Vergleich · Datenvergleich" },
+        { "value": "comparison_capacity", "label": "Vergleich · Kapazität" },
+        { "value": "comparison_priorities", "label": "Vergleich · Kaufkriterien" },
+        { "value": "comparison_smart", "label": "Vergleich · Smart Energy" },
+        { "value": "comparison_setup", "label": "Vergleich · Installation" },
+        { "value": "comparison_trust", "label": "Vergleich · Vertrauen" },
+        { "value": "comparison_faq", "label": "Vergleich · FAQ" },
+        { "value": "comparison_completion", "label": "Vergleich · Abschluss" },
+        { "value": "custom", "label": "自定义锚点（高级）" }
+      ],
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "cta_target",
+      "label": "自定义锚点 ID（高级）",
+      "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
+      "visible_if": "{{ section.settings.cta_module == 'custom' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Navigationslink",
+      "settings": [
+        {
+          "type": "select",
+          "id": "module",
+          "label": "链接到模块",
+          "options": [
+            { "value": "comparison_models", "label": "Vergleich · Modelle" },
+            { "value": "comparison_scenarios", "label": "Vergleich · Einsatz" },
+            { "value": "comparison_comparison", "label": "Vergleich · Datenvergleich" },
+            { "value": "comparison_capacity", "label": "Vergleich · Kapazität" },
+            { "value": "comparison_priorities", "label": "Vergleich · Kaufkriterien" },
+            { "value": "comparison_smart", "label": "Vergleich · Smart Energy" },
+            { "value": "comparison_setup", "label": "Vergleich · Installation" },
+            { "value": "comparison_trust", "label": "Vergleich · Vertrauen" },
+            { "value": "comparison_faq", "label": "Vergleich · FAQ" },
+            { "value": "comparison_completion", "label": "Vergleich · Abschluss" },
+            { "value": "custom", "label": "自定义锚点（高级）" }
+          ],
+          "default": "custom"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "标签",
+          "default": "Navigation",
+          "info": "默认可使用模块名称；如需保留原文，可在此自定义显示文字。"
+        },
+        {
+          "type": "text",
+          "id": "target",
+          "label": "自定义锚点 ID（高级）",
+          "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
+          "visible_if": "{{ block.settings.module == 'custom' }}"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 20
+}
+{% endschema %}
