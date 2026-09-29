@@ -19,7 +19,10 @@
       %}
       <article class="ss-media-card" {{ block.shopify_attributes }}>{% render 'solar-storage-media', image: card_image, alt: block.settings.image_alt, ratio: '16 / 9', loading: 'lazy', sizes: '(min-width: 981px) 33vw, calc(100vw - 44px)' %}<div class="ss-media-card__body"><p class="ss-tag">{{ block.settings.tag | escape }}</p><h3>{{ article_title | escape }}</h3><div class="rte">{{ block.settings.text }}</div>{% if block.settings.link_label != blank and article_url != blank %}<a class="ss-text-link" href="{{ article_url }}">{{ block.settings.link_label | escape }}</a>{% endif %}</div></article>
     {% endfor %}</div>
-    {% if section.settings.all_label != blank and section.settings.all_link != blank %}<div class="ss-link-row"><a class="ss-text-link" href="{{ section.settings.all_link }}">{{ section.settings.all_label | escape }}</a></div>{% endif %}
+    {% liquid
+      assign all_guides_link = section.settings.all_link | default: '/pages/ratgeber'
+    %}
+    {% if section.settings.all_label != blank %}<div class="ss-link-row"><a class="ss-text-link" href="{{ all_guides_link }}">{{ section.settings.all_label | escape }}</a></div>{% endif %}
   </div>
 </section>
 {% schema %}
@@ -33,7 +36,7 @@
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "Solarspeichern" },
     { "type": "richtext", "id": "subtext", "label": "副标题", "default": "<p>Vertiefe einzelne Fragen mit ausführlichen Artikeln zu Nutzung, Nachrüstung und Alltag mit einem Solarspeicher.</p>" },
     { "type": "text", "id": "all_label", "label": "底部链接文字", "default": "Alle Ratgeber ansehen →" },
-    { "type": "url", "id": "all_link", "label": "底部链接地址" },
+    { "type": "url", "id": "all_link", "label": "底部链接地址", "info": "留空时使用 HTML 原型中的 /pages/ratgeber；上线前请核对真实地址。" },
     { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
   ],
   "blocks": [
