@@ -5,7 +5,15 @@
       {% for block in section.blocks %}
         {% assign answer_id = 'ss-answer-' | append: section.id | append: '-' | append: block.id %}
         {% assign question_id = 'ss-question-' | append: section.id | append: '-' | append: block.id %}
-        <article class="ss-faq-item" {{ block.shopify_attributes }}><button id="{{ question_id }}" class="ss-faq-item__button" type="button" aria-expanded="false" aria-controls="{{ answer_id }}"><span>{{ block.settings.question | escape }}</span><span aria-hidden="true" class="ss-faq-item__symbol">+</span></button><div id="{{ answer_id }}" class="ss-faq-item__answer" role="region" aria-labelledby="{{ question_id }}"><div class="rte">{{ block.settings.answer }}</div></div></article>
+        <article class="ss-faq-item" {{ block.shopify_attributes }}>
+          <button id="{{ question_id }}" class="ss-faq-item__button" type="button" aria-expanded="false" aria-controls="{{ answer_id }}">
+            <span>{{ block.settings.question | escape }}</span>
+            <span aria-hidden="true" class="ss-faq-item__symbol">+</span>
+          </button>
+          <div id="{{ answer_id }}" class="ss-faq-item__answer" role="region" aria-labelledby="{{ question_id }}">
+            {{ block.settings.answer }}
+          </div>
+        </article>
       {% endfor %}
     </div>
   </div>

@@ -2,19 +2,11 @@
   'use strict';
 
   var initializedFaqs = new WeakSet();
-  var answerHeights = new WeakMap();
   var motionBound = false;
 
   function measureAnswer(answer) {
     if (!answer) return 0;
-    var height = answer.scrollHeight;
-    answerHeights.set(answer, height);
-    return height;
-  }
-
-  function getAnswerHeight(answer) {
-    var height = answerHeights.get(answer);
-    return typeof height === 'number' ? height : measureAnswer(answer);
+    return answer.scrollHeight;
   }
 
   function setOpen(item, shouldOpen) {
@@ -26,7 +18,7 @@
     item.classList.toggle('is-open', shouldOpen);
     button.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
     if (symbol) symbol.textContent = shouldOpen ? '–' : '+';
-    answer.style.maxHeight = shouldOpen ? getAnswerHeight(answer) + 'px' : '0px';
+    answer.style.maxHeight = shouldOpen ? measureAnswer(answer) + 'px' : '0px';
   }
 
   function setupFaq(section) {
@@ -36,8 +28,6 @@
     var items = Array.prototype.slice.call(section.querySelectorAll('.ss-faq-item'));
     items.forEach(function (item) {
       var button = item.querySelector('.ss-faq-item__button');
-      var answer = item.querySelector('.ss-faq-item__answer');
-      measureAnswer(answer);
       if (!button) return;
       button.addEventListener('click', function () {
         var shouldOpen = !item.classList.contains('is-open');
@@ -55,7 +45,6 @@
   }
 
   function refreshAnswerHeights() {
-    document.querySelectorAll('[data-ss-faq] .ss-faq-item__answer').forEach(measureAnswer);
     updateOpenAnswers();
   }
 
