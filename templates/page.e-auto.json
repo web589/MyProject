@@ -15,72 +15,48 @@
         "eauto-nav-start": {
           "type": "link",
           "settings": {
-            "module": "eauto_start",
-            "label": "Start",
+            "module": "eauto_flow",
+            "label": "Funktionsweise",
             "target": ""
           }
         },
         "eauto-nav-problem": {
           "type": "link",
           "settings": {
-            "module": "eauto_problem",
-            "label": "Problem",
+            "module": "eauto_profile",
+            "label": "Ladeprofil",
             "target": ""
           }
         },
         "eauto-nav-flow": {
           "type": "link",
           "settings": {
-            "module": "eauto_flow",
-            "label": "Energiefluss",
+            "module": "eauto_calculator",
+            "label": "Speichergröße",
             "target": ""
           }
         },
         "eauto-nav-day": {
           "type": "link",
           "settings": {
-            "module": "eauto_day",
-            "label": "Typischer Tag",
+            "module": "eauto_recommendations",
+            "label": "Modelle",
             "target": ""
           }
         },
         "eauto-nav-profile": {
           "type": "link",
           "settings": {
-            "module": "eauto_profile",
-            "label": "Fahrprofile",
+            "module": "eauto_smart_energy",
+            "label": "Steuerung",
             "target": ""
           }
         },
         "eauto-nav-calculator": {
           "type": "link",
           "settings": {
-            "module": "eauto_calculator",
-            "label": "Rechner",
-            "target": ""
-          }
-        },
-        "eauto-nav-recommendations": {
-          "type": "link",
-          "settings": {
-            "module": "eauto_recommendations",
-            "label": "Empfehlungen",
-            "target": ""
-          }
-        },
-        "eauto-nav-smart-energy": {
-          "type": "link",
-          "settings": {
-            "module": "eauto_start",
-            "label": "Smart Energy",
-            "target": ""
-          }
-        },
-        "eauto-nav-installation": {
-          "type": "link",
-          "settings": {
             "module": "eauto_installation",
-            "label": "Installation",
+            "label": "Wallbox & PV",
             "target": ""
           }
         },
@@ -100,16 +76,13 @@
         "eauto-nav-day",
         "eauto-nav-profile",
         "eauto-nav-calculator",
-        "eauto-nav-recommendations",
-        "eauto-nav-smart-energy",
-        "eauto-nav-installation",
         "eauto-nav-faq"
       ],
       "settings": {
         "aria_label": "E-Auto Seitennavigation",
         "anchor_id": "eauto-navigation",
-        "cta_label": "Passenden Speicher finden",
-        "cta_module": "eauto_calculator",
+        "cta_label": "Speicher auswählen",
+        "cta_module": "eauto_recommendations",
         "cta_target": "",
         "control_size": 13.5
       }
@@ -157,8 +130,8 @@
         "problem_eyebrow": "Das Problem",
         "problem_heading": "Deine PV produziert am Tag. Dein Auto lädt",
         "problem_heading_accent": "abends.",
-        "problem_text": "Die Lösung ist nicht mehr Sonne. Es ist",
-        "problem_text_accent": "der richtige Zeitpunkt – gespeichert.",
+        "problem_text": "Ein Speicher verschiebt tagsüber erzeugten Solarstrom in die Abendstunden, sodass mehr eigener PV-Strom für das Laden deines E-Autos genutzt werden kann.",
+        "problem_text_accent": "",
         "problem_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png",
         "problem_image_alt": "PV-Anlage am Mittag und E-Auto an der Wallbox am Abend",
         "problem_image_placeholder": "Breites Tag-Nacht-Bild auswählen",
@@ -188,7 +161,7 @@
         "flow_heading": "Energiefluss:",
         "flow_heading_accent": "AC-gekoppelt",
         "flow_heading_suffix": "über dein Hausnetz",
-        "flow_text": "Der VENUS E wird an dein Hausnetz angeschlossen – nicht an dein Auto. PV-Überschuss landet zuerst im Speicher, abends fließt er über das Hausnetz zu Wallbox und E-Auto. Fehlt Energie, ergänzt das Netz.",
+        "flow_text": "VENUS E lädt das E-Auto nicht direkt. Der Speicher gibt Energie ins Hausnetz ab, aus dem auch die Wallbox versorgt wird.",
         "flow_toggle_label": "Tageszeit auswählen",
         "flow_day_label": "☀ Tag · Speichern",
         "flow_evening_label": "☾ Abend · Laden",
@@ -367,7 +340,7 @@
         "profile_eyebrow": "Dein Fahrprofil",
         "profile_heading": "Welches Ladeprofil",
         "profile_heading_accent": "passt zu dir?",
-        "profile_text": "Vier typische Alltage. Klicke auf dein Profil – dann siehst du, worauf es bei deinem Speicher ankommt: welche Kapazität sinnvoll ist, wie viel PV-Überschuss du am Tag nutzen solltest und wann dein Auto am besten lädt.",
+        "profile_text": "Für die Speicherwahl zählt nicht nur, wie weit du täglich fährst, sondern vor allem wann, wie oft und mit welcher Leistung dein E-Auto geladen wird. Dein Ladeprofil hilft dabei einzuschätzen, wie viel Solarstrom zeitversetzt genutzt werden soll und welche Speichergröße zu deinem Alltag passen kann.",
         "profile_tab_label": "Fahrprofile auswählen",
         "profile_focus_label": "Speicher-Fokus:",
         "profile_note": "Kein Profil passt exakt? Die Kapazitätswahl unten berücksichtigt deinen realen Bedarf – nicht das Profil.",
@@ -390,7 +363,7 @@
         "calculator_eyebrow": "Schnell-Ermittlung",
         "calculator_heading": "Wie viel Speicher braucht dein",
         "calculator_heading_accent": "E-Auto?",
-        "calculator_text": "Drei Angaben – wir zeigen dir, in welchem Kapazitätsbereich dein VENUS E liegen sollte.",
+        "calculator_text": "Die passende Speichergröße hängt nicht von der Größe des Fahrzeugakkus allein ab, sondern davon, wie viel Solarstrom du typischerweise für spätere Ladezeiten verschieben möchtest.",
         "distance_heading": "Wie weit fährst du am Tag? ø km / Tag",
         "efficiency_heading": "Wie viel Verbrauch hat dein Auto? kWh / 100 km",
         "pv_heading": "Wie viel PV-Überschuss hast du? geschätzt pro Tag",
@@ -501,7 +474,7 @@
         "smart_eyebrow": "Smart Energy",
         "smart_heading": "Intelligent steuern statt einfach entladen",
         "smart_heading_accent": "",
-        "smart_text": "Der VENUS E ist nicht nur ein Stromspeicher – er entscheidet selbst, wann gespeichert, wann geladen und wann entladen wird.",
+        "smart_text": "Mit Messdaten aus Smart Meter und Energiemanagement kann der Speicher seine Lade- und Entladeleistung besser an PV-Erzeugung, Haushaltsverbrauch und Ladebedarf anpassen.",
         "smart_image": "shopify://shop_images/elecway-smart-solar-app.webp",
         "smart_image_alt": "App, Smart Meter und VENUS E im Alltag",
         "smart_image_placeholder": "Smart-Energy-Bild auswählen",
@@ -559,8 +532,8 @@
       ],
       "settings": {
         "installation_eyebrow": "Installation & Nachrüstung",
-        "installation_heading": "Wallbox, Hausnetz & bestehende PV –",
-        "installation_heading_accent": "alles bleibt wie es ist",
+        "installation_heading": "Wallbox, Hausnetz & bestehende PV:",
+        "installation_heading_accent": "Was bleibt, was muss geprüft werden?",
         "installation_text": "",
         "installation_image": "shopify://shop_images/VENUS_E_3.0_Solarspeicher_am_Haus_mit_Photovoltaikanlage.png",
         "installation_image_alt": "Bestehende PV-Anlage, Hausnetz und Wallbox mit VENUS E",
@@ -664,7 +637,7 @@
           "type": "trust",
           "settings": {
             "value": "10",
-            "value_label": "Jahre",
+            "value_label": "Jahre  Herstellergarantie",
             "text": "Herstellergarantie – für Jahre des täglichen Ladezyklus-Alltags."
           }
         },
@@ -679,7 +652,7 @@
         "trust-daily": {
           "type": "trust",
           "settings": {
-            "value": "6.000+",
+            "value": "10.000+",
             "value_label": "Zyklen",
             "text": "Hohe Zyklenfestigkeit – gemacht für tägliches Speichern und Entladen."
           }
