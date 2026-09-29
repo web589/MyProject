@@ -9,6 +9,23 @@
  */
 {
   "sections": {
+    "smart_meter_navigation": {
+      "type": "smart-meter-navigation",
+      "blocks": {
+        "nav_definition": {"type": "link", "settings": {"label": "Grundlagen", "target": "definition"}},
+        "nav_flow": {"type": "link", "settings": {"label": "Funktionsweise", "target": "fluss"}},
+        "nav_everyday": {"type": "link", "settings": {"label": "Im Alltag", "target": "daten"}},
+        "nav_solutions": {"type": "link", "settings": {"label": "Smart Meter", "target": "ct"}},
+        "nav_integration": {"type": "link", "settings": {"label": "Integration", "target": "integration"}},
+        "nav_faq": {"type": "link", "settings": {"label": "FAQ", "target": "faq"}}
+      },
+      "block_order": ["nav_definition", "nav_flow", "nav_everyday", "nav_solutions", "nav_integration", "nav_faq"],
+      "settings": {
+        "aria_label": "Navigation zu Smart Meter & Energiefluss",
+        "anchor_id": "smart-meter-navigation",
+        "nav_text_size": 13.5
+      }
+    },
     "smart_meter_hero": {
       "type": "smart-meter-hero",
       "blocks": {
@@ -194,6 +211,7 @@
     }
   },
   "order": [
+    "smart_meter_navigation",
     "smart_meter_hero",
     "smart_meter_definition",
     "smart_meter_flow",

@@ -1,0 +1,86 @@
+{%- liquid
+  assign navigation_anchor = section.settings.anchor_id | default: 'smart-meter-navigation' | handle
+-%}
+
+<nav
+  id="{{ navigation_anchor }}"
+  class="sm-anchor-nav"
+  data-anchor-nav
+  data-section-id="{{ section.id }}"
+  aria-label="{{ section.settings.aria_label | escape }}"
+  style="--sm-anchor-text-size: {{ section.settings.nav_text_size | default: 13.5 }}px;"
+>
+  <div class="sm-anchor-nav__inner anchor-nav__inner">
+    <div class="sm-anchor-nav__links anchor-nav__links">
+      {% for block in section.blocks %}
+        {% assign link_target = block.settings.target | strip | remove_first: '#' | handle %}
+        {% if block.settings.label != blank and link_target != blank %}
+          <a
+            class="sm-anchor-nav__link anchor-nav__link"
+            href="#{{ link_target }}"
+            data-anchor-link
+            data-anchor-nav-link
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.label | escape }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "智能电表 · 锚点导航",
+  "tag": "section",
+  "class": "section-smart-meter-navigation",
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "无障碍标签",
+      "default": "Navigation zu Smart Meter & Energiefluss"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "导航锚点 ID",
+      "info": "无需输入 #；该 ID 在本页必须唯一。",
+      "default": "smart-meter-navigation"
+    },
+    {
+      "type": "range",
+      "id": "nav_text_size",
+      "label": "导航文本大小",
+      "min": 11,
+      "max": 18,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13.5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "导航链接",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "标签",
+          "default": "Funktionsweise"
+        },
+        {
+          "type": "text",
+          "id": "target",
+          "label": "目标锚点 ID",
+          "info": "可带或不带 #；必须对应本页区块的 ID。",
+          "default": "fluss"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8
+}
+{% endschema %}

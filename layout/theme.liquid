@@ -74,7 +74,7 @@
   {%- if template.suffix == 'vpp-ready' or template.suffix == 'vpp-anfrage' or template.suffix == 'ai-energiemanagement' -%}
     {{ 'vpp-anchor-navigation.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
-  {%- if template.suffix == 'balkonkraftwerk-mit-speicher' or template.suffix == 'venus-e-vergleich' or template.suffix == 'vpp-ready' or template.suffix == 'vpp-anfrage' or template.suffix == 'ai-energiemanagement' or template.suffix == 'solarspeicher-erklaert' -%}
+  {%- if template.suffix == 'balkonkraftwerk-mit-speicher' or template.suffix == 'venus-e-vergleich' or template.suffix == 'vpp-ready' or template.suffix == 'vpp-anfrage' or template.suffix == 'ai-energiemanagement' or template.suffix == 'solarspeicher-erklaert' or template.suffix == 'smart-meter-energiefluss' -%}
     <script src="{{ 'anchor-navigation.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
   {%- if template.suffix == 'venus-e-vergleich' or template.suffix == 'ac-gekoppelter-speicher' or template.suffix == 'ai-energiemanagement' or template.suffix == 'e-auto' or template.suffix == 'smart-meter-energiefluss' or template.suffix == 'faq' or template.suffix == 'solarspeicher-erklaert' -%}
