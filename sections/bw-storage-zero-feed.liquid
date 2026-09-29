@@ -182,6 +182,14 @@
         {% endif %}
       {% endfor %}
     </div>
+
+    {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+      <div class="bw-section-cta bw-zero-feed__cta">
+        <a class="bw-section-cta__link" href="{{ section.settings.cta_link }}">
+          {{ section.settings.cta_label | escape }}
+        </a>
+      </div>
+    {% endif %}
   </div>
 </section>
 
@@ -212,6 +220,8 @@
     {"type":"text","id":"feature_label","label":"Bezeichnung der Funktionspunkte","default":"Funktionen der automatischen Steuerung"},
     {"type":"text","id":"accessory_label","label":"Bezeichnung der Zubehörliste","default":"Passende Smart Meter"},
     {"type":"text","id":"service_label","label":"Bezeichnung der Servicevorteile","default":"Servicevorteile"},
+    {"type":"text","id":"cta_label","label":"CTA-Text","default":"Smart Meter & Energiefluss verstehen →"},
+    {"type":"url","id":"cta_link","label":"CTA-Link"},
     {"type":"product","id":"product_ct002","label":"CT002 Standardprodukt"},
     {"type":"product","id":"product_ct003","label":"CT003 Standardprodukt"},
     {"type":"text","id":"sold_out_label","label":"Text bei Nichtverfügbarkeit","default":"Nicht verfügbar"}

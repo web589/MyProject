@@ -191,6 +191,7 @@
           flex: 0 0, 每个tab下的产品我要自己单独选择，不选择产品系列，请各预留6个产品位置，每个产品的图片我要自己放置。每个tab最后的“Entdecken Sie mehr”我要自己填链接, 每个tab的左右两侧中间都要有按钮，可以左右移动产品卡片, 每个tab下的CTA link不要单独的按钮，链到“Entdecken Sie mehr”这个CTA title上
 {% enddoc %}
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign carousel_anchor_id = block.settings.anchor_id | handle %}
 
 {% style %}
   .ai-product-carousel-{{ ai_gen_id }} {
@@ -893,6 +894,7 @@
 %}
 
 <product-carousel-{{ ai_gen_id }}
+  {% if carousel_anchor_id != blank %}id="{{ carousel_anchor_id }}"{% endif %}
   class="ai-product-carousel-{{ ai_gen_id }}"
   data-modal-invalid-email="{{ block.settings.modal_invalid_email | escape }}"
   data-modal-submission-error="{{ block.settings.modal_error_text | escape }}"
@@ -1507,6 +1509,13 @@
       "id": "title",
       "label": "Title",
       "default": "<p>VENUS E Familie</p>"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Use the same value in navigation links, without the # symbol. Keep it unique on the page.",
+      "default": "product-carousel"
     },
     {
       "type": "richtext",

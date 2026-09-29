@@ -1629,6 +1629,28 @@
   flex: 0 0 20px;
 }
 
+.bw-section-cta {
+  margin-top: 26px;
+  text-align: center;
+}
+
+.bw-section-cta__link {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  color: var(--bw-blue);
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.4;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+
+.bw-section-cta__link:hover,
+.bw-section-cta__link:focus-visible {
+  text-decoration: underline;
+}
+
 .bw-homepage-product-sync {
   width: min(var(--bw-storage-content-max-width, 1500px), calc(100% - 48px));
   margin-inline: auto;
@@ -1732,6 +1754,10 @@
 .bw-steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bw-steps-section__cta {
+  margin-top: 8px;
 }
 
 .bw-step-card {

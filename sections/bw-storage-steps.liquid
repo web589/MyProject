@@ -30,6 +30,14 @@
         </article>
       {% endfor %}
     </div>
+
+    {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+      <div class="bw-section-cta bw-steps-section__cta">
+        <a class="bw-section-cta__link" href="{{ section.settings.cta_link }}">
+          {{ section.settings.cta_label | escape }}
+        </a>
+      </div>
+    {% endif %}
   </div>
 </section>
 
@@ -49,6 +57,17 @@
       "id": "text",
       "label": "Beschreibung",
       "default": "Vom Bedarf bis zur App – ohne Umweg über eine komplizierte Auswahl."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA-Text",
+      "default": "Passenden Speicher auswählen →"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA-Link"
     }
   ],
   "blocks": [
