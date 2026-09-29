@@ -176,6 +176,22 @@
 .main-content--solar-storage .ss-button--secondary:hover,
 .main-content--solar-storage .ss-button--secondary:focus-visible { background: var(--ss-blue-soft); border-color: var(--ss-blue); color: var(--ss-blue); }
 
+/* Keep the two primary CTAs free from the shared button edge effects. */
+.main-content--solar-storage :is(.ss-hero, .ss-final) .ss-button--primary {
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  transform: none;
+}
+
+.main-content--solar-storage :is(.ss-hero, .ss-final) .ss-button--primary:hover,
+.main-content--solar-storage :is(.ss-hero, .ss-final) .ss-button--primary:focus-visible,
+.main-content--solar-storage :is(.ss-hero, .ss-final) .ss-button--primary:active {
+  border: 0;
+  box-shadow: none;
+  transform: none;
+}
+
 .main-content--solar-storage .ss-media,
 .main-content--solar-storage .ss-video {
   position: relative;
