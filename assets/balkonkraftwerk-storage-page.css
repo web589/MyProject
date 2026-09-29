@@ -1638,7 +1638,7 @@
   display: inline-flex;
   max-width: 100%;
   align-items: center;
-  color: var(--bw-blue);
+  color: var(--bw-blue) !important;
   font-size: 0.9rem;
   font-weight: 650;
   line-height: 1.4;
@@ -1648,6 +1648,7 @@
 
 .bw-section-cta__link:hover,
 .bw-section-cta__link:focus-visible {
+  color: var(--bw-blue) !important;
   text-decoration: underline;
 }
 

@@ -1384,6 +1384,9 @@
 }
 
 .e-auto-page__installation-copy ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin: 18px 0 0;
   padding: 0;
   list-style: none;
@@ -1395,7 +1398,8 @@
   align-items: flex-start;
   margin-bottom: 0;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--eauto-line);
+  border-bottom: 1px solid #edf0f4;
+  color: #0e1b2c;
   font-size: calc(var(--eauto-item-text-size, 14.5px) - 1px);
   line-height: 1.4;
 }
@@ -2465,5 +2469,32 @@
   .e-auto-page *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Match the product-page desktop anchor-navigation position. */
+@media (min-width: 1200px) {
+  .main-content--e-auto .section-e-auto-navigation .bw-anchor-nav__inner {
+    position: relative;
+    left: clamp(-80px, -5vw, -48px);
+    width: min(1500px, calc(100% - 48px));
+    justify-content: center;
+    gap: clamp(24px, 2.7vw, 48px);
+  }
+
+  .main-content--e-auto .section-e-auto-navigation .bw-anchor-nav__cta {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    margin-left: 0;
+    transform: translateY(-50%);
+  }
+
+  .main-content--e-auto .section-e-auto-navigation .bw-anchor-nav__cta:hover {
+    transform: translateY(calc(-50% - 1px));
+  }
+
+  .main-content--e-auto .section-e-auto-navigation .bw-anchor-nav__cta:active {
+    transform: translateY(-50%) scale(0.98);
   }
 }
