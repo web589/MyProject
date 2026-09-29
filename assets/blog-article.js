@@ -229,6 +229,8 @@
     var toggle = root.querySelector('[data-blog-article-toc-toggle]');
     var intersectionObserver;
     var headings = [];
+    var isTocNavigating = false;
+    var navigationTimer;
 
     syncStickyOffset(root, blogCenter);
     root.setAttribute('data-blog-article-ready', 'true');
@@ -239,6 +241,8 @@
       if (intersectionObserver) intersectionObserver.disconnect();
 
       intersectionObserver = new IntersectionObserver(function(entries) {
+        if (isTocNavigating) return;
+
         entries.forEach(function(entry) {
           if (entry.isIntersecting) setActiveItem(list, entry.target.id);
         });
@@ -250,6 +254,46 @@
       headings.forEach(function(heading) {
         intersectionObserver.observe(heading);
       });
+    }
+
+    function setActiveItemFromScrollPosition() {
+      var offset = syncStickyOffset(root, blogCenter) + 32;
+      var currentHeading = headings[0];
+
+      headings.forEach(function(heading) {
+        if (heading.getBoundingClientRect().top <= offset) currentHeading = heading;
+      });
+
+      if (currentHeading) setActiveItem(list, currentHeading.id);
+    }
+
+    function finishTocNavigation() {
+      if (!isTocNavigating) return;
+
+      isTocNavigating = false;
+      window.clearTimeout(navigationTimer);
+      setActiveItemFromScrollPosition();
+      observeHeadings();
+    }
+
+    function queueTocNavigationFinish() {
+      if (!isTocNavigating) return;
+
+      window.clearTimeout(navigationTimer);
+      navigationTimer = window.setTimeout(finishTocNavigation, 180);
+    }
+
+    function beginTocNavigation(targetId, smooth) {
+      isTocNavigating = true;
+      window.clearTimeout(navigationTimer);
+      if (intersectionObserver) intersectionObserver.disconnect();
+      setActiveItem(list, targetId);
+
+      if (smooth) {
+        navigationTimer = window.setTimeout(finishTocNavigation, 1000);
+      } else {
+        window.requestAnimationFrame(finishTocNavigation);
+      }
     }
 
     function observeStickyElements() {
@@ -298,12 +342,12 @@
       link.addEventListener('click', function(event) {
         event.preventDefault();
         var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        beginTocNavigation(id, !reduceMotion);
         heading.scrollIntoView({
           behavior: reduceMotion ? 'auto' : 'smooth',
           block: 'start'
         });
         window.history.replaceState(null, '', '#' + id);
-        setActiveItem(list, id);
       });
 
       item.appendChild(link);
@@ -323,6 +367,8 @@
 
     observeHeadings();
     observeStickyElements();
+    window.addEventListener('scroll', queueTocNavigationFinish, { passive: true });
+    document.addEventListener('scrollend', finishTocNavigation);
     window.addEventListener('resize', function() {
       syncStickyOffset(root, blogCenter);
       placeTableOfContents(root, body, toc, toggle);
