@@ -184,6 +184,19 @@
   white-space: nowrap;
 }
 
+/* Match the centered desktop anchor navigation used on the comparison page. */
+@media (min-width: 1200px) {
+  .main-content--solar-storage .solar-storage-nav__inner {
+    position: relative;
+    width: min(1500px, calc(100% - 48px));
+    margin: 0 auto;
+    padding-right: 0;
+    padding-left: 0;
+    justify-content: center;
+    gap: clamp(24px, 2.7vw, 48px);
+  }
+}
+
 .main-content--solar-storage .ss-hero { padding-top: 72px; padding-bottom: 64px; }
 .main-content--solar-storage .ss-hero__grid { display: grid; grid-template-columns: minmax(0, 620px) minmax(0, 1fr); gap: 72px; align-items: center; }
 .main-content--solar-storage .ss-hero .ss-heading { max-width: 620px; margin-top: 20px; font-size: 48px; letter-spacing: -.015em; line-height: 1.16; }
@@ -420,6 +433,11 @@
 @media (max-width: 1180px) {
   .main-content--solar-storage .ss-container,
   .main-content--solar-storage .solar-storage-nav__inner { padding-right: 40px; padding-left: 40px; }
+  .main-content--solar-storage .solar-storage-nav__inner {
+    width: min(100% - 40px, 1024px);
+    padding-right: 0;
+    padding-left: 0;
+  }
   .main-content--solar-storage .ss-capacity { padding-top: 56px; padding-bottom: 56px; }
   .main-content--solar-storage .ss-card-grid--four,
   .main-content--solar-storage .ss-model-grid,
@@ -443,6 +461,11 @@
   .main-content--solar-storage .ss-section { padding: var(--ss-section-spacing-mobile, 44px) 0; }
   .main-content--solar-storage .ss-container,
   .main-content--solar-storage .solar-storage-nav__inner { padding-right: 22px; padding-left: 22px; }
+  .main-content--solar-storage .solar-storage-nav__inner {
+    width: calc(100% - 32px);
+    padding-right: 0;
+    padding-left: 0;
+  }
   .main-content--solar-storage .ss-heading { font-size: 27px; }
   .main-content--solar-storage .ss-hero { padding-top: 44px; padding-bottom: 44px; }
   .main-content--solar-storage .ss-hero .ss-heading { font-size: 30px; }
