@@ -826,6 +826,103 @@
     });
   }
 
+  function bindFaqSections() {
+    document.querySelectorAll('[data-bw-faq]').forEach(function (root) {
+      if (root.dataset.bwFaqInitialized === 'true') return;
+      root.dataset.bwFaqInitialized = 'true';
+      root.dataset.bwFaqEnhanced = 'true';
+
+      root.querySelectorAll('.bw-faq__item').forEach(function (item) {
+        var summary = item.querySelector('summary');
+        var answer = item.querySelector('.bw-faq__answer');
+        if (!summary || !answer) return;
+
+        function reducedMotion() {
+          return prefersReducedMotion();
+        }
+
+        function finishTransition(callback) {
+          var finished = false;
+          var fallbackTimer = null;
+
+          function finish(event) {
+            if (event && (event.target !== answer || event.propertyName !== 'max-height')) return;
+            if (finished) return;
+            finished = true;
+            answer.removeEventListener('transitionend', finish);
+            if (fallbackTimer) window.clearTimeout(fallbackTimer);
+            callback();
+          }
+
+          answer.addEventListener('transitionend', finish);
+          fallbackTimer = window.setTimeout(finish, reducedMotion() ? 40 : 340);
+        }
+
+        function openItem() {
+          item.dataset.bwFaqAnimating = 'true';
+          item.open = true;
+          answer.style.maxHeight = '0px';
+          answer.style.opacity = '0';
+
+          if (reducedMotion()) {
+            answer.style.maxHeight = 'none';
+            answer.style.opacity = '1';
+            delete item.dataset.bwFaqAnimating;
+            return;
+          }
+
+          var targetHeight = answer.scrollHeight;
+          window.requestAnimationFrame(function () {
+            answer.style.maxHeight = targetHeight + 'px';
+            answer.style.opacity = '1';
+          });
+          finishTransition(function () {
+            answer.style.maxHeight = 'none';
+            delete item.dataset.bwFaqAnimating;
+          });
+        }
+
+        function closeItem() {
+          item.dataset.bwFaqAnimating = 'true';
+          answer.style.maxHeight = answer.getBoundingClientRect().height + 'px';
+          answer.style.opacity = '1';
+
+          if (reducedMotion()) {
+            item.open = false;
+            answer.style.maxHeight = '0px';
+            answer.style.opacity = '0';
+            delete item.dataset.bwFaqAnimating;
+            return;
+          }
+
+          window.requestAnimationFrame(function () {
+            answer.style.maxHeight = '0px';
+            answer.style.opacity = '0';
+          });
+          finishTransition(function () {
+            item.open = false;
+            delete item.dataset.bwFaqAnimating;
+          });
+        }
+
+        if (item.open) {
+          answer.style.maxHeight = 'none';
+          answer.style.opacity = '1';
+        } else {
+          answer.style.maxHeight = '0px';
+          answer.style.opacity = '0';
+        }
+
+        summary.addEventListener('click', function (event) {
+          event.preventDefault();
+          if (item.dataset.bwFaqAnimating === 'true') return;
+          if (item.open) closeItem();
+          else openItem();
+        });
+      });
+    });
+  }
+
   function executeScripts(container) {
     container.querySelectorAll('script').forEach(function (oldScript) {
       var script = document.createElement('script');
@@ -1045,6 +1142,7 @@
   function boot() {
     bindCapacity();
     bindFlowSections();
+    bindFaqSections();
     bindHomepageSync();
     bindFinalCta();
     bindAnchorLinks();
