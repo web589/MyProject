@@ -329,7 +329,31 @@
   padding: 12px 22px;
   border-radius: 8px;
   color: #fff;
+  font-size: var(--bw-nav-text-size, 13.5px);
+  font-weight: 500;
+  letter-spacing: normal;
   text-align: center;
+}
+
+/* Keep the BKW navigation CTA interaction aligned with the comparison page. */
+.main-content--bw-storage .section-bw-storage-navigation .bw-anchor-nav__cta {
+  transition: box-shadow 180ms ease, transform 180ms ease, background-position 180ms ease, color 180ms ease;
+}
+
+.main-content--bw-storage .section-bw-storage-navigation .bw-anchor-nav__cta:hover {
+  background-position: right center;
+  box-shadow: 0 9px 20px rgba(0, 153, 252, 0.2);
+  color: #fff;
+}
+
+.main-content--bw-storage .section-bw-storage-navigation .bw-anchor-nav__cta:active {
+  box-shadow: 0 4px 11px rgba(0, 153, 252, 0.16);
+  color: #fff;
+}
+
+.main-content--bw-storage .section-bw-storage-navigation .bw-anchor-nav__cta:focus-visible {
+  outline: 3px solid rgba(0, 153, 252, 0.34);
+  outline-offset: 3px;
 }
 
 @media only screen and (min-width: 1200px) {
