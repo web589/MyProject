@@ -831,6 +831,7 @@
       if (root.dataset.bwFaqInitialized === 'true') return;
       root.dataset.bwFaqInitialized = 'true';
       root.dataset.bwFaqEnhanced = 'true';
+      var editorMode = isDesignMode();
 
       root.querySelectorAll('.bw-faq__item').forEach(function (item) {
         var summary = item.querySelector('summary');
@@ -862,7 +863,7 @@
           item.dataset.bwFaqAnimating = 'true';
           item.open = true;
           answer.style.maxHeight = '0px';
-          answer.style.opacity = '0';
+          answer.style.opacity = editorMode ? '1' : '0';
 
           if (reducedMotion()) {
             answer.style.maxHeight = 'none';
@@ -874,7 +875,7 @@
           var targetHeight = answer.scrollHeight;
           window.requestAnimationFrame(function () {
             answer.style.maxHeight = targetHeight + 'px';
-            answer.style.opacity = '1';
+            if (!editorMode) answer.style.opacity = '1';
           });
           finishTransition(function () {
             answer.style.maxHeight = 'none';
@@ -897,7 +898,7 @@
 
           window.requestAnimationFrame(function () {
             answer.style.maxHeight = '0px';
-            answer.style.opacity = '0';
+            if (!editorMode) answer.style.opacity = '0';
           });
           finishTransition(function () {
             item.open = false;
@@ -910,7 +911,7 @@
           answer.style.opacity = '1';
         } else {
           answer.style.maxHeight = '0px';
-          answer.style.opacity = '0';
+          answer.style.opacity = editorMode ? '1' : '0';
         }
 
         summary.addEventListener('click', function (event) {
