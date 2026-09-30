@@ -2426,7 +2426,7 @@
   .bw-capacity .bw-calculator__result .bw-button--primary,
   .bw-final-cta .bw-final-cta__empty .bw-button--primary
 ):hover:not(:disabled) {
-  background: var(--bw-button-gradient);
+  background: var(--bw-button-gradient, linear-gradient(90deg, #0099fe 0%, #00f0dd 100%));
   background-size: 160% 100%;
   background-position: right center;
   color: #fff !important;
@@ -2457,7 +2457,7 @@
 }
 
 .main-content--bw-storage .bw-homepage-product-sync [class*="ai-btn-primary-"]:hover:not(:disabled) {
-  background: var(--bw-button-gradient);
+  background: var(--bw-button-gradient, linear-gradient(90deg, #0099fe 0%, #00f0dd 100%));
   background-size: 160% 100%;
   background-position: right center;
   color: #fff !important;
