@@ -1,8 +1,5 @@
 {% liquid
-  assign navigation_anchor = section.settings.anchor_id | handle
-  if navigation_anchor == blank
-    assign navigation_anchor = 'navigation'
-  endif
+  assign navigation_anchor = 'navigation'
 %}
 
 <nav
@@ -20,7 +17,47 @@
     {% for block in section.blocks %}
       {% liquid
         assign link_module = block.settings.module | default: 'custom'
-        assign link_label = block.settings.label
+        assign module_label = 'Navigation'
+        case link_module
+          when 'storage_hero'
+            assign module_label = 'Balkonkraftwerk kaufen'
+          when 'storage_why'
+            assign module_label = 'Warum'
+          when 'storage_comparison'
+            assign module_label = 'Vergleich'
+          when 'storage_flow'
+            assign module_label = 'Funktionsweise'
+          when 'storage_retrofit'
+            assign module_label = 'Nachrüsten'
+          when 'storage_capacity'
+            assign module_label = 'Kapazität'
+          when 'storage_models'
+            assign module_label = 'Modelle'
+          when 'storage_faq'
+            assign module_label = 'FAQ'
+          when 'comparison_models'
+            assign module_label = 'Modelle'
+          when 'comparison_scenarios'
+            assign module_label = 'Wohnsituation'
+          when 'comparison_comparison'
+            assign module_label = 'Modellvergleich'
+          when 'comparison_capacity'
+            assign module_label = 'Speichergröße'
+          when 'comparison_priorities'
+            assign module_label = 'Prioritäten'
+          when 'comparison_smart'
+            assign module_label = 'Smart Energy'
+          when 'comparison_setup'
+            assign module_label = 'Installation & Notstrom'
+          when 'comparison_trust'
+            assign module_label = 'Vertrauen'
+          when 'comparison_faq'
+            assign module_label = 'FAQ'
+          when 'comparison_completion'
+            assign module_label = 'Abschluss'
+        endcase
+        assign link_label = block.settings.label | default: module_label
+        assign link_warning_id = 'anchor-warning-' | append: section.id | append: '-' | append: block.id
       %}
       {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
       {% assign link_target = link_target | strip | remove_first: '#' | handle %}
@@ -33,14 +70,17 @@
             data-anchor-link
             data-anchor-nav-link
             data-bw-anchor-module="{{ link_module | escape }}"
+            data-anchor-warning-id="{{ link_warning_id }}"
           >
             {{ link_label | escape }}
           </a>
+          <span id="{{ link_warning_id }}" class="bw-anchor-nav__warning" data-anchor-warning hidden>未找到目标模块：{{ link_label | escape }}</span>
         </span>
       {% endif %}
     {% endfor %}
 
     {% assign cta_module = section.settings.cta_module | default: 'custom' %}
+    {% assign cta_warning_id = 'anchor-warning-' | append: section.id | append: '-cta' %}
     {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
     {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
     {% if section.settings.cta_label != blank and cta_target != blank %}
@@ -51,9 +91,11 @@
         data-anchor-link
         data-anchor-nav-cta
         data-bw-anchor-module="{{ cta_module | escape }}"
+        data-anchor-warning-id="{{ cta_warning_id }}"
       >
         {{ section.settings.cta_label | escape }}
       </a>
+      <span id="{{ cta_warning_id }}" class="bw-anchor-nav__warning" data-anchor-warning hidden>未找到目标模块：{{ section.settings.cta_label | escape }}</span>
     {% endif %}
   </div>
 </nav>
@@ -68,13 +110,6 @@
       "id": "aria_label",
       "label": "无障碍标签",
       "default": "Seitennavigation"
-    },
-    {
-      "type": "text",
-      "id": "anchor_id",
-      "label": "锚点ID",
-      "info": "Ohne # eingeben; die ID muss auf dieser Seite eindeutig sein.",
-      "default": "navigation"
     },
     {
       "type": "range",
@@ -101,14 +136,14 @@
       "id": "cta_module",
       "label": "行动按钮链接到模块",
       "options": [
-        { "value": "storage_capacity", "label": "Speicher · Kapazität" },
-        { "value": "storage_hero", "label": "Speicher · Balkonkraftwerk kaufen" },
-        { "value": "storage_why", "label": "Speicher · Warum" },
-        { "value": "storage_comparison", "label": "Speicher · Vergleich" },
-        { "value": "storage_flow", "label": "Speicher · Funktionsweise" },
-        { "value": "storage_retrofit", "label": "Speicher · Nachrüsten" },
-        { "value": "storage_models", "label": "Speicher · Modelle" },
-        { "value": "storage_faq", "label": "Speicher · FAQ" },
+        { "value": "storage_hero", "label": "Balkonkraftwerk kaufen（首屏）" },
+        { "value": "storage_why", "label": "Warum" },
+        { "value": "storage_comparison", "label": "Vergleich" },
+        { "value": "storage_flow", "label": "Funktionsweise" },
+        { "value": "storage_retrofit", "label": "Nachrüsten" },
+        { "value": "storage_capacity", "label": "Kapazität" },
+        { "value": "storage_models", "label": "Modelle" },
+        { "value": "storage_faq", "label": "FAQ" },
         { "value": "comparison_completion", "label": "Vergleich · Abschluss" },
         { "value": "comparison_models", "label": "Vergleich · Modelle" },
         { "value": "comparison_scenarios", "label": "Vergleich · Einsatz" },
@@ -121,7 +156,7 @@
         { "value": "comparison_faq", "label": "Vergleich · FAQ" },
         { "value": "custom", "label": "自定义锚点（高级）" }
       ],
-      "default": "custom"
+      "default": "storage_models"
     },
     {
       "type": "text",
@@ -141,14 +176,14 @@
           "id": "module",
           "label": "链接到模块",
           "options": [
-            { "value": "storage_hero", "label": "Speicher · Balkonkraftwerk kaufen" },
-            { "value": "storage_why", "label": "Speicher · Warum" },
-            { "value": "storage_comparison", "label": "Speicher · Vergleich" },
-            { "value": "storage_flow", "label": "Speicher · Funktionsweise" },
-            { "value": "storage_retrofit", "label": "Speicher · Nachrüsten" },
-            { "value": "storage_capacity", "label": "Speicher · Kapazität" },
-            { "value": "storage_models", "label": "Speicher · Modelle" },
-            { "value": "storage_faq", "label": "Speicher · FAQ" },
+            { "value": "storage_hero", "label": "Balkonkraftwerk kaufen（首屏）" },
+            { "value": "storage_why", "label": "Warum" },
+            { "value": "storage_comparison", "label": "Vergleich" },
+            { "value": "storage_flow", "label": "Funktionsweise" },
+            { "value": "storage_retrofit", "label": "Nachrüsten" },
+            { "value": "storage_capacity", "label": "Kapazität" },
+            { "value": "storage_models", "label": "Modelle" },
+            { "value": "storage_faq", "label": "FAQ" },
             { "value": "comparison_models", "label": "Vergleich · Modelle" },
             { "value": "comparison_scenarios", "label": "Vergleich · Einsatz" },
             { "value": "comparison_comparison", "label": "Vergleich · Datenvergleich" },
@@ -161,14 +196,13 @@
             { "value": "comparison_completion", "label": "Vergleich · Abschluss" },
             { "value": "custom", "label": "自定义锚点（高级）" }
           ],
-          "default": "custom"
+          "default": "storage_hero"
         },
         {
           "type": "text",
           "id": "label",
           "label": "标签",
-          "default": "Navigation",
-          "info": "默认可使用模块名称；如需保留原文，可在此自定义显示文字。"
+          "info": "留空时使用所选模块的默认导航名称；选择“自定义锚点”时请填写。"
         },
         {
           "type": "text",
@@ -185,14 +219,14 @@
     {
       "name": "VENUS E · Navigation",
       "blocks": [
-        { "type": "link", "settings": { "label": "Balkonkraftwerk kaufen", "module": "storage_hero" } },
-        { "type": "link", "settings": { "label": "Warum", "module": "storage_why" } },
-        { "type": "link", "settings": { "label": "Vergleich", "module": "storage_comparison" } },
-        { "type": "link", "settings": { "label": "Funktionsweise", "module": "storage_flow" } },
-        { "type": "link", "settings": { "label": "Nachrüsten", "module": "storage_retrofit" } },
-        { "type": "link", "settings": { "label": "Kapazität", "module": "storage_capacity" } },
-        { "type": "link", "settings": { "label": "Modelle", "module": "storage_models" } },
-        { "type": "link", "settings": { "label": "FAQ", "module": "storage_faq" } }
+        { "type": "link", "settings": { "module": "storage_hero" } },
+        { "type": "link", "settings": { "module": "storage_why" } },
+        { "type": "link", "settings": { "module": "storage_comparison" } },
+        { "type": "link", "settings": { "module": "storage_flow" } },
+        { "type": "link", "settings": { "module": "storage_retrofit" } },
+        { "type": "link", "settings": { "module": "storage_capacity" } },
+        { "type": "link", "settings": { "module": "storage_models" } },
+        { "type": "link", "settings": { "module": "storage_faq" } }
       ]
     }
   ]

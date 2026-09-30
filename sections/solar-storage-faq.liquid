@@ -1,4 +1,5 @@
-<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-faq ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;" data-ss-faq data-scroll-reveal="off">
+{% assign faq_anchor = 'faq' %}
+<section id="{{ faq_anchor }}" class="ss-section ss-faq ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;" data-ss-faq data-scroll-reveal="off">
   <div class="ss-container">
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight %}
     <div class="ss-faq-list">
@@ -28,7 +29,6 @@
   "name": "储能专题 · 常见问题",
   "class": "section-solar-storage-faq",
   "settings": [
-    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "faq" },
     { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Häufige Fragen" },
     { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "FAQ zu" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "Solarspeichern" },

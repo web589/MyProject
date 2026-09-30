@@ -1,4 +1,5 @@
-<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-function ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+{% assign function_anchor = 'funktionsweise' %}
+<section id="{{ function_anchor }}" class="ss-section ss-function ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
   <div class="ss-container">
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
     <div class="ss-video" style="--ss-media-ratio: 2.2 / 1;">
@@ -23,7 +24,6 @@
   "name": "储能专题 · 工作原理",
   "class": "section-solar-storage-function",
   "settings": [
-    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "funktioniert" },
     { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Funktionsweise" },
     { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "So funktioniert ein Solarspeicher im" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "Alltag" },

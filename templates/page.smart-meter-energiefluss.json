@@ -12,6 +12,7 @@
     "smart_meter_navigation": {
       "type": "smart-meter-navigation",
       "blocks": {
+        "nav_start": {"type": "link", "settings": {"label": "Start", "target": "start"}},
         "nav_definition": {"type": "link", "settings": {"label": "Grundlagen", "target": "definition"}},
         "nav_flow": {"type": "link", "settings": {"label": "Funktionsweise", "target": "fluss"}},
         "nav_everyday": {"type": "link", "settings": {"label": "Im Alltag", "target": "daten"}},
@@ -19,7 +20,7 @@
         "nav_integration": {"type": "link", "settings": {"label": "Integration", "target": "integration"}},
         "nav_faq": {"type": "link", "settings": {"label": "FAQ", "target": "faq"}}
       },
-      "block_order": ["nav_definition", "nav_flow", "nav_everyday", "nav_solutions", "nav_integration", "nav_faq"],
+      "block_order": ["nav_start", "nav_definition", "nav_flow", "nav_everyday", "nav_solutions", "nav_integration", "nav_faq"],
       "settings": {
         "aria_label": "Navigation zu Smart Meter & Energiefluss",
         "anchor_id": "smart-meter-navigation",

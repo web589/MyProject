@@ -1,4 +1,5 @@
-<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-models" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+{% assign models_anchor = 'modelle' %}
+<section id="{{ models_anchor }}" class="ss-section ss-models" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
   <div class="ss-container">
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
     <div class="ss-model-grid">
@@ -33,7 +34,6 @@
   "name": "储能专题 · 产品型号",
   "class": "section-solar-storage-models",
   "settings": [
-    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "modelle" },
     { "type": "text", "id": "eyebrow", "label": "眉题", "default": "VENUS E Lösungen" },
     { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Passende VENUS E Solarspeicher" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "finden" },

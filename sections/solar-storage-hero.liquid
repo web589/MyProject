@@ -1,4 +1,5 @@
-<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-hero" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+{% assign hero_anchor = 'balkonkraftwerk-kaufen' %}
+<section id="{{ hero_anchor }}" class="ss-section ss-hero" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
   <div class="ss-container ss-hero__grid">
     <div class="ss-hero__copy">
       {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext, heading_tag: 'h1' %}
@@ -20,7 +21,6 @@
   "name": "储能专题 · 首屏",
   "class": "section-solar-storage-hero",
   "settings": [
-    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "ueberblick" },
     { "type": "text", "id": "eyebrow", "label": "眉题", "default": "SOLARSPEICHER ERKLÄRT" },
     { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Solarspeicher erklärt: Was ein Stromspeicher kann" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "und wann er sinnvoll ist" },

@@ -1,4 +1,5 @@
-<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-retrofit ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+{% assign retrofit_anchor = 'nachruesten' %}
+<section id="{{ retrofit_anchor }}" class="ss-section ss-retrofit ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
   <div class="ss-container">
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
     <div class="ss-retrofit__grid"><div class="ss-retrofit__list">{% for block in section.blocks %}<article {{ block.shopify_attributes }}><h3>{{ block.settings.title | escape }}</h3><div class="rte">{{ block.settings.text }}</div></article>{% endfor %}</div>{% render 'solar-storage-media', image: section.settings.image, alt: section.settings.image_alt, ratio: '4 / 3', loading: 'lazy', sizes: '(min-width: 981px) 50vw, calc(100vw - 44px)' %}</div>
@@ -9,7 +10,6 @@
   "name": "储能专题 · 后装说明",
   "class": "section-solar-storage-retrofit",
   "settings": [
-    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "nachruesten" },
     { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Nachrüstung" },
     { "type": "text", "id": "heading_before", "label": "标题", "default": "Solarspeicher nachrüsten: auch bei bestehender PV möglich" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分" },

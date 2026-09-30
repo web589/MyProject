@@ -1,12 +1,42 @@
 {% liquid
-  assign anchor_id = section.settings.anchor_id | default: 'ueberblick' | handle
+  assign navigation_anchor = 'navigation'
 %}
-<nav id="{{ anchor_id }}" class="solar-storage-nav" data-anchor-nav aria-label="{{ section.settings.aria_label | escape }}" style="--ss-nav-text-size: {{ section.settings.nav_text_size }}px;">
+<nav id="{{ navigation_anchor }}" class="solar-storage-nav" data-anchor-nav data-anchor-controller="modern" aria-label="{{ section.settings.aria_label | escape }}" style="--ss-nav-text-size: {{ section.settings.nav_text_size }}px;">
   <div class="solar-storage-nav__inner anchor-nav__inner">
     {% for block in section.blocks %}
-      {% assign target = block.settings.target | remove_first: '#' | handle %}
-      {% if block.settings.label != blank and target != blank %}
-        <a class="solar-storage-nav__link" href="#{{ target }}" data-anchor-link data-anchor-nav-link {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+      {% liquid
+        assign link_module = block.settings.module | default: 'custom'
+        assign module_label = 'Navigation'
+        case link_module
+          when 'storage_hero'
+            assign module_label = 'Balkonkraftwerk kaufen'
+          when 'storage_why'
+            assign module_label = 'Warum'
+          when 'storage_comparison'
+            assign module_label = 'Vergleich'
+          when 'storage_flow'
+            assign module_label = 'Funktionsweise'
+          when 'storage_retrofit'
+            assign module_label = 'Nachrüsten'
+          when 'storage_capacity'
+            assign module_label = 'Kapazität'
+          when 'storage_models'
+            assign module_label = 'Modelle'
+          when 'storage_faq'
+            assign module_label = 'FAQ'
+        endcase
+        assign link_label = block.settings.label | default: module_label
+        assign link_warning_id = 'anchor-warning-' | append: section.id | append: '-' | append: block.id
+      %}
+      {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
+      {% assign link_target = link_target | strip | remove_first: '#' | handle %}
+      {% if link_label != blank and link_target != blank %}
+        <span class="solar-storage-nav__item" {{ block.shopify_attributes }}>
+          <a class="solar-storage-nav__link" href="#{{ link_target }}" data-anchor-link data-anchor-nav-link data-bw-anchor-module="{{ link_module | escape }}" data-anchor-warning-id="{{ link_warning_id }}">
+            {{ link_label | escape }}
+          </a>
+          {% if request.design_mode %}<span id="{{ link_warning_id }}" class="solar-storage-nav__warning" data-anchor-warning hidden>未找到目标模块：{{ link_label | escape }}</span>{% endif %}
+        </span>
       {% endif %}
     {% endfor %}
   </div>
@@ -17,16 +47,38 @@
   "class": "section-solar-storage-navigation",
   "settings": [
     { "type": "text", "id": "aria_label", "label": "无障碍标签", "default": "Seitennavigation" },
-    { "type": "text", "id": "anchor_id", "label": "导航自身锚点 ID", "info": "不含 #，且必须在页面中唯一。", "default": "ueberblick" },
     { "type": "range", "id": "nav_text_size", "label": "导航文字大小", "min": 11, "max": 18, "step": 0.5, "unit": "px", "default": 13.5 }
   ],
   "blocks": [
     { "type": "link", "name": "导航链接", "settings": [
-      { "type": "text", "id": "label", "label": "显示文字", "default": "Übersicht" },
-      { "type": "text", "id": "target", "label": "目标锚点 ID", "info": "填写目标 section 的锚点 ID，不含 #。", "default": "ueberblick" }
+      { "type": "select", "id": "module", "label": "链接到模块", "options": [
+        { "value": "storage_hero", "label": "Balkonkraftwerk kaufen（首屏）" },
+        { "value": "storage_why", "label": "Warum" },
+        { "value": "storage_comparison", "label": "Vergleich" },
+        { "value": "storage_flow", "label": "Funktionsweise" },
+        { "value": "storage_retrofit", "label": "Nachrüsten" },
+        { "value": "storage_capacity", "label": "Kapazität" },
+        { "value": "storage_models", "label": "Modelle" },
+        { "value": "storage_faq", "label": "FAQ" },
+        { "value": "custom", "label": "自定义锚点（高级）" }
+      ], "default": "storage_hero" },
+      { "type": "text", "id": "label", "label": "导航显示文字", "info": "留空时使用所选模块的默认名称；特殊情况可自定义显示文字。" },
+      { "type": "text", "id": "target", "label": "自定义锚点 ID（高级）", "info": "仅当选择“自定义锚点”时填写，可带或不带 #。", "visible_if": "{{ block.settings.module == 'custom' }}" }
     ] }
   ],
   "max_blocks": 15,
-  "presets": [{ "name": "储能专题 · 锚点导航" }]
+  "presets": [{
+    "name": "储能专题 · 锚点导航",
+    "blocks": [
+      { "type": "link", "settings": { "module": "storage_hero" } },
+      { "type": "link", "settings": { "module": "storage_why" } },
+      { "type": "link", "settings": { "module": "storage_comparison" } },
+      { "type": "link", "settings": { "module": "storage_flow" } },
+      { "type": "link", "settings": { "module": "storage_retrofit" } },
+      { "type": "link", "settings": { "module": "storage_capacity" } },
+      { "type": "link", "settings": { "module": "storage_models" } },
+      { "type": "link", "settings": { "module": "storage_faq" } }
+    ]
+  }]
 }
 {% endschema %}

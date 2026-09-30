@@ -1,4 +1,5 @@
-<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-definition" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+{% assign definition_anchor = 'warum-speicher' %}
+<section id="{{ definition_anchor }}" class="ss-section ss-definition" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
   <div class="ss-container">
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight %}
     <div class="ss-answer-box"><p><strong>{{ section.settings.answer_label | escape }}</strong> {{ section.settings.answer | escape }}</p></div>
@@ -15,7 +16,6 @@
   "name": "储能专题 · 简单解释",
   "class": "section-solar-storage-definition",
   "settings": [
-    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "erklaert" },
     { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Kurz erklärt" },
     { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Solarspeicher einfach" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "erklärt" },

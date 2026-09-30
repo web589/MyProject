@@ -29,6 +29,14 @@
     }
   }
 
+  function updateMissingTargetWarning(link, missing) {
+    var warningId = link && link.getAttribute('data-anchor-warning-id');
+    if (!warningId) return;
+
+    var warning = document.getElementById(warningId);
+    if (warning) warning.hidden = !missing;
+  }
+
   function locationTarget() {
     var hash = window.location.hash || '';
     if (hash.charAt(0) !== '#' || hash.length < 2) return null;
@@ -103,7 +111,10 @@
         link.classList.remove('is-missing-target');
         link.removeAttribute('data-anchor-validation');
 
-        if (!target && isDesignMode()) {
+        var missingTarget = !target && isDesignMode();
+        updateMissingTargetWarning(link, missingTarget);
+
+        if (missingTarget) {
           link.classList.add('is-missing-target');
           link.setAttribute('data-anchor-validation', 'missing');
           if (link.dataset.anchorWarningShown !== 'true') {

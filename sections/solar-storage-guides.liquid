@@ -1,4 +1,5 @@
-<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-guides" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+{% assign guides_anchor = 'ratgeber' %}
+<section id="{{ guides_anchor }}" class="ss-section ss-guides" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
   <div class="ss-container">
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
     <div class="ss-card-grid ss-card-grid--three">{% for block in section.blocks %}
@@ -30,7 +31,6 @@
   "name": "储能专题 · 精选文章",
   "class": "section-solar-storage-guides",
   "settings": [
-    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "ratgeber" },
     { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Ratgeber" },
     { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Ratgeber zu" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "Solarspeichern" },

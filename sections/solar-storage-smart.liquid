@@ -1,4 +1,5 @@
-<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-smart" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+{% assign smart_anchor = 'intelligent' %}
+<section id="{{ smart_anchor }}" class="ss-section ss-smart" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
   <div class="ss-container">
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
     <div class="ss-card-grid ss-card-grid--three">{% for block in section.blocks %}<article class="ss-smart-card" {{ block.shopify_attributes }}><h3>{{ block.settings.title | escape }}</h3><div class="rte">{{ block.settings.text }}</div>{% if block.settings.link_label != blank and block.settings.link != blank %}<a class="ss-text-link" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>{% endif %}</article>{% endfor %}</div>
@@ -9,7 +10,6 @@
   "name": "储能专题 · 智能使用",
   "class": "section-solar-storage-smart",
   "settings": [
-    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "intelligent" },
     { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Intelligente Nutzung" },
     { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Mehr als speichern: Solarspeicher" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "intelligent nutzen" },

@@ -1,4 +1,5 @@
-<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-final ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+{% assign final_anchor = 'abschluss' %}
+<section id="{{ final_anchor }}" class="ss-section ss-final ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
   <div class="ss-container"><div class="ss-final-card">{% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight %}<div class="ss-final-card__text rte">{{ section.settings.text }}</div><div class="ss-actions">{% for block in section.blocks %}{% if block.settings.label != blank and block.settings.url != blank %}{% if block.settings.style == 'text' %}<a class="ss-text-link ss-final-card__text-link" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>{{ block.settings.prefix | escape }} {{ block.settings.label | escape }}</a>{% else %}<a class="ss-button ss-button--{{ block.settings.style }}" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>{% endif %}{% endif %}{% endfor %}</div></div></div>
 </section>
 {% schema %}
@@ -6,7 +7,6 @@
   "name": "储能专题 · 结尾行动",
   "class": "section-solar-storage-final",
   "settings": [
-    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "abschluss" },
     { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Nächster Schritt" },
     { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Finde den passenden Solarspeicher für dein" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "Zuhause" },

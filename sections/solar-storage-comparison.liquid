@@ -1,4 +1,5 @@
-<section id="{{ section.settings.anchor_id | handle }}" class="ss-section ss-comparison" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+{% assign comparison_anchor = 'vergleich' %}
+<section id="{{ comparison_anchor }}" class="ss-section ss-comparison" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
   <div class="ss-container">
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
     <div class="ss-comparison__media-grid">
@@ -21,7 +22,6 @@
   "name": "储能专题 · 有无对比",
   "class": "section-solar-storage-comparison",
   "settings": [
-    { "type": "text", "id": "anchor_id", "label": "锚点 ID", "default": "vergleich" },
     { "type": "text", "id": "eyebrow", "label": "眉题", "default": "Direktvergleich" },
     { "type": "text", "id": "heading_before", "label": "标题", "default": "Mit Speicher oder ohne: Was ändert sich?" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分" },

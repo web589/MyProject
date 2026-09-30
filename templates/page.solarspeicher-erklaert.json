@@ -12,23 +12,23 @@
     "solar_navigation": {
       "type": "solar-storage-navigation",
       "blocks": {
-        "nav_overview": { "type": "link", "settings": { "label": "Übersicht", "target": "ueberblick" } },
-        "nav_function": { "type": "link", "settings": { "label": "Funktionsweise", "target": "funktioniert" } },
-        "nav_solutions": { "type": "link", "settings": { "label": "Speicherlösungen", "target": "loesungen" } },
-        "nav_capacity": { "type": "link", "settings": { "label": "Speichergröße", "target": "groesse" } },
-        "nav_retrofit": { "type": "link", "settings": { "label": "Nachrüsten", "target": "nachruesten" } },
-        "nav_smart": { "type": "link", "settings": { "label": "Intelligent nutzen", "target": "intelligent" } },
-        "nav_models": { "type": "link", "settings": { "label": "Modelle", "target": "modelle" } },
-        "nav_faq": { "type": "link", "settings": { "label": "FAQ", "target": "faq" } }
+        "nav_hero": { "type": "link", "settings": { "module": "storage_hero" } },
+        "nav_why": { "type": "link", "settings": { "module": "storage_why" } },
+        "nav_comparison": { "type": "link", "settings": { "module": "storage_comparison" } },
+        "nav_function": { "type": "link", "settings": { "module": "storage_flow" } },
+        "nav_retrofit": { "type": "link", "settings": { "module": "storage_retrofit" } },
+        "nav_capacity": { "type": "link", "settings": { "module": "storage_capacity" } },
+        "nav_models": { "type": "link", "settings": { "module": "storage_models" } },
+        "nav_faq": { "type": "link", "settings": { "module": "storage_faq" } }
       },
-      "block_order": ["nav_overview", "nav_function", "nav_solutions", "nav_capacity", "nav_retrofit", "nav_smart", "nav_models", "nav_faq"],
-      "settings": { "aria_label": "Navigation zu Solarspeichern", "anchor_id": "navigation", "nav_text_size": 13.5 }
+      "block_order": ["nav_hero", "nav_why", "nav_comparison", "nav_function", "nav_retrofit", "nav_capacity", "nav_models", "nav_faq"],
+      "settings": { "aria_label": "Navigation zu Solarspeichern", "nav_text_size": 13.5 }
     },
     "solar_hero": {
       "type": "solar-storage-hero",
       "blocks": {
-        "hero_function": { "type": "button", "settings": { "label": "So funktioniert ein Solarspeicher", "url": "#funktioniert", "style": "primary" } },
-        "hero_capacity": { "type": "button", "settings": { "label": "Passende Speichergröße finden", "url": "#groesse", "style": "secondary" } }
+        "hero_function": { "type": "button", "settings": { "label": "So funktioniert ein Solarspeicher", "url": "#funktionsweise", "style": "primary" } },
+        "hero_capacity": { "type": "button", "settings": { "label": "Passende Speichergröße finden", "url": "#kapazitaet", "style": "secondary" } }
       },
       "block_order": ["hero_function", "hero_capacity"],
       "settings": {}
@@ -182,7 +182,7 @@
       "type": "solar-storage-final",
       "blocks": {
         "final_compare": { "type": "action", "settings": { "label": "Modelle vergleichen", "url": "/pages/speicher-vergleich", "style": "primary" } },
-        "final_capacity": { "type": "action", "settings": { "label": "Speichergröße finden", "url": "#groesse", "style": "secondary" } },
+        "final_capacity": { "type": "action", "settings": { "label": "Speichergröße finden", "url": "#kapazitaet", "style": "secondary" } },
         "final_support": { "type": "action", "settings": { "prefix": "Oder", "label": "Beratung anfragen →", "url": "/pages/kontakt", "style": "text" } }
       },
       "block_order": ["final_compare", "final_capacity", "final_support"],

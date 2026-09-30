@@ -1,6 +1,6 @@
 {%- assign page_id = 'smart-meter-hero-' | append: section.id -%}
 
-<section class="smart-meter-page sm-section sm-hero" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %} --sm-hero-image-height: {{ section.settings.hero_image_height | default: 480 }}px; --sm-hero-image-width: {{ section.settings.hero_image_width | default: 100 }}%;">
+<section id="start" class="smart-meter-page sm-section sm-hero" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %} --sm-hero-image-height: {{ section.settings.hero_image_height | default: 480 }}px; --sm-hero-image-width: {{ section.settings.hero_image_width | default: 100 }}%;">
   <div class="sm-container sm-hero__grid">
     <div class="sm-hero__copy">
       {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
