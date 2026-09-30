@@ -2417,7 +2417,7 @@
   border-radius: 8px;
   box-shadow: none;
   transform: none;
-  transition: box-shadow 180ms ease, background-position 180ms ease, background-color 180ms ease;
+  transition: box-shadow 180ms ease, transform 180ms ease, background-position 180ms ease, background-color 180ms ease, color 180ms ease;
 }
 
 .main-content--bw-storage :is(
@@ -2426,8 +2426,12 @@
   .bw-capacity .bw-calculator__result .bw-button--primary,
   .bw-final-cta .bw-final-cta__empty .bw-button--primary
 ):hover:not(:disabled) {
+  background: var(--bw-button-gradient);
+  background-size: 160% 100%;
+  background-position: right center;
+  color: #fff !important;
   box-shadow: 0 9px 20px rgba(0, 153, 252, 0.2);
-  transform: none;
+  transform: translateY(-1px);
 }
 
 .main-content--bw-storage :is(
@@ -2436,8 +2440,9 @@
   .bw-capacity .bw-calculator__result .bw-button--primary,
   .bw-final-cta .bw-final-cta__empty .bw-button--primary
 ):active:not(:disabled) {
+  color: #fff !important;
   box-shadow: 0 4px 11px rgba(0, 153, 252, 0.16);
-  transform: none;
+  transform: translateY(0) scale(0.98);
 }
 
 /* The synced carousel has generated button class suffixes, so scope by its mount. */
@@ -2447,16 +2452,28 @@
   box-shadow: none;
   transform: none;
   animation: none !important;
-  transition: background-color 0.2s ease, background-position 0.25s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  color: #fff !important;
+  transition: background-color 0.2s ease, background-position 0.25s ease, filter 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, color 0.2s ease;
 }
 
 .main-content--bw-storage .bw-homepage-product-sync [class*="ai-btn-primary-"]:hover:not(:disabled) {
+  background: var(--bw-button-gradient);
+  background-size: 160% 100%;
+  background-position: right center;
+  color: #fff !important;
+  filter: saturate(1.12) brightness(0.96);
   box-shadow: 0 9px 20px rgba(0, 153, 252, 0.28);
-  transform: none !important;
+  transform: translateY(-3px) !important;
   animation: none !important;
 }
 
 .main-content--bw-storage .bw-homepage-product-sync [class*="ai-btn-primary-"]:active:not(:disabled) {
+  color: #fff !important;
   box-shadow: 0 3px 9px rgba(0, 153, 252, 0.18);
-  transform: none !important;
+  transform: translateY(-1px) !important;
+}
+
+/* The global a:hover rule must not turn page-specific blue CTA labels dark. */
+.main-content--bw-storage :is(.bw-accessory-card__button, .bw-anchor-nav__cta):is(:hover, :focus-visible) {
+  color: #fff !important;
 }
