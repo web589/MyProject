@@ -86,6 +86,86 @@
     });
   }
 
+  function normalizedText(element) {
+    return (element.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function markFormQuestionLabels(host) {
+    var questionTexts = [
+      'Welches VENUS E Modell nutzt du oder planst du zu nutzen?',
+      'Land',
+      'Welche Komponenten sind bereits vorhanden?'
+    ];
+    var candidates = host.querySelectorAll('p, legend, label, span, div');
+
+    questionTexts.forEach(function (questionText) {
+      Array.prototype.forEach.call(candidates, function (element) {
+        if (normalizedText(element) === questionText) {
+          element.classList.add('vpp-anfrage__form-question');
+        }
+      });
+    });
+
+    return questionTexts.every(function (questionText) {
+      return host.querySelector('.vpp-anfrage__form-question') &&
+        Array.prototype.some.call(candidates, function (element) {
+          return normalizedText(element) === questionText && element.classList.contains('vpp-anfrage__form-question');
+        });
+    });
+  }
+
+  function installationCheckboxGroup(host) {
+    var checkboxes = Array.prototype.slice.call(host.querySelectorAll('input[type="checkbox"]'));
+    var noInstallation = checkboxes.find(function (checkbox) {
+      var labelText = checkbox.labels ? Array.prototype.map.call(checkbox.labels, normalizedText).join(' ') : '';
+      return /noch keine installation/i.test(labelText || checkbox.id || checkbox.getAttribute('aria-label') || '');
+    });
+
+    if (!noInstallation) return null;
+
+    var separator = noInstallation.id.lastIndexOf('-');
+    var groupPrefix = separator > -1 ? noInstallation.id.slice(0, separator + 1) : '';
+    var groupCheckboxes = checkboxes.filter(function (checkbox) {
+      if (checkbox === noInstallation) return true;
+      if (groupPrefix && checkbox.id.indexOf(groupPrefix) === 0) return true;
+      return Boolean(noInstallation.name && checkbox.name === noInstallation.name);
+    });
+
+    return {
+      noInstallation: noInstallation,
+      others: groupCheckboxes.filter(function (checkbox) {
+        return checkbox !== noInstallation;
+      })
+    };
+  }
+
+  function bindFormHost(host) {
+    if (!host || host.dataset.vppAnfrageFormBound === 'true') return;
+    host.dataset.vppAnfrageFormBound = 'true';
+
+    host.addEventListener('change', function (event) {
+      var changedCheckbox = event.target;
+      if (!changedCheckbox || changedCheckbox.type !== 'checkbox' || !changedCheckbox.checked) return;
+
+      var group = installationCheckboxGroup(host);
+      if (!group) return;
+
+      var peers = changedCheckbox === group.noInstallation ? group.others :
+        (group.others.indexOf(changedCheckbox) > -1 ? [group.noInstallation] : []);
+
+      peers.forEach(function (checkbox) {
+        if (checkbox.checked) checkbox.click();
+      });
+    });
+
+    if (!markFormQuestionLabels(host) && window.MutationObserver) {
+      var observer = new MutationObserver(function () {
+        if (markFormQuestionLabels(host)) observer.disconnect();
+      });
+      observer.observe(host, { childList: true, characterData: true, subtree: true });
+    }
+  }
+
   function init(root) {
     var scope = root || document;
     var pages = [];
@@ -97,6 +177,7 @@
 
     pages.forEach(function (page) {
       page.querySelectorAll('[data-vpp-anfrage-faq-list]').forEach(bindFaqList);
+      page.querySelectorAll('[data-vpp-anfrage-form-host]').forEach(bindFormHost);
     });
   }
 
