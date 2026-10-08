@@ -1,4 +1,4 @@
-<section class="acdc-section acdc-articles" aria-labelledby="acdc-articles-title-{{ section.id }}">
+<section id="acdc-ratgeber" class="acdc-section acdc-articles" aria-labelledby="acdc-articles-title-{{ section.id }}">
   <div class="acdc-inner">
     {%- if section.settings.eyebrow != blank -%}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{%- endif -%}
     <h2 id="acdc-articles-title-{{ section.id }}" class="acdc-h2">{{ section.settings.heading | escape }} <span class="acdc-accent">{{ section.settings.heading_accent | escape }}</span></h2>

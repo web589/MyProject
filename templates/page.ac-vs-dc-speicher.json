@@ -9,6 +9,25 @@
  */
 {
   "sections": {
+    "acdc_navigation": {
+      "type": "acdc-anchor-navigation",
+      "settings": {},
+      "blocks": {
+        "nav_01": {"type":"link","settings":{"module":"acdc_start"}},
+        "nav_02": {"type":"link","settings":{"module":"acdc_definition"}},
+        "nav_03": {"type":"link","settings":{"module":"acdc_architecture"}},
+        "nav_04": {"type":"link","settings":{"module":"acdc_comparison"}},
+        "nav_05": {"type":"link","settings":{"module":"acdc_retrofit"}},
+        "nav_06": {"type":"link","settings":{"module":"acdc_new_pv"}},
+        "nav_07": {"type":"link","settings":{"module":"acdc_decision"}},
+        "nav_08": {"type":"link","settings":{"module":"acdc_criteria"}},
+        "nav_09": {"type":"link","settings":{"module":"acdc_venus_ac"}},
+        "nav_10": {"type":"link","settings":{"module":"acdc_energy_flow"}},
+        "nav_11": {"type":"link","settings":{"module":"acdc_models"}},
+        "nav_12": {"type":"link","settings":{"module":"acdc_faq"}}
+      },
+      "block_order": ["nav_01","nav_02","nav_03","nav_04","nav_05","nav_06","nav_07","nav_08","nav_09","nav_10","nav_11","nav_12"]
+    },
     "acdc_01_hero": {
       "type": "acdc-01-hero",
       "settings": {},
@@ -714,6 +733,7 @@
     }
   },
   "order": [
+    "acdc_navigation",
     "acdc_01_hero",
     "acdc_02_definition",
     "acdc_03_architecture",

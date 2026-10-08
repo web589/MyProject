@@ -237,4 +237,8 @@
   document.addEventListener('shopify:section:load', function (event) {
     window.setTimeout(function () { boot(event.target); }, 0);
   });
+
+  document.addEventListener('shopify:section:unload', function () {
+    window.setTimeout(function () { boot(document); }, 0);
+  });
 }());
