@@ -599,6 +599,8 @@
     var buttons = Array.prototype.slice.call(root.querySelectorAll('[data-eauto-flow-toggle]'));
     var dayPanel = root.querySelector('[data-eauto-flow-panel="day"]');
     var dayVideo = dayPanel && dayPanel.querySelector('video');
+    var eveningPanel = root.querySelector('[data-eauto-flow-panel="evening"]');
+    var eveningVideo = eveningPanel && eveningPanel.querySelector('video');
 
     function renderFlow(mode) {
       buttons.forEach(function (toggle) {
@@ -622,6 +624,9 @@
           return;
         }
 
+        if (video.ended) {
+          try { video.currentTime = 0; } catch (error) { /* The stream is not seekable yet. */ }
+        }
         var playPromise = video.play();
         if (playPromise && typeof playPromise.catch === 'function') {
           playPromise.catch(function () {});
@@ -629,15 +634,19 @@
       });
     }
 
-    if (dayVideo && dayVideo.dataset.eautoEndBound !== 'true') {
-      dayVideo.dataset.eautoEndBound = 'true';
-      dayVideo.addEventListener('ended', function () {
-        var eveningButton = buttons.find(function (button) {
-          return button.dataset.eautoFlowToggle === 'evening';
+    function bindVideoEnd(video, nextMode) {
+      if (!video || video.dataset.eautoEndBound === 'true') return;
+      video.dataset.eautoEndBound = 'true';
+      video.addEventListener('ended', function () {
+        var nextButton = buttons.find(function (button) {
+          return button.dataset.eautoFlowToggle === nextMode;
         });
-        if (eveningButton) renderFlow(eveningButton.dataset.eautoFlowToggle);
+        if (nextButton) renderFlow(nextButton.dataset.eautoFlowToggle);
       });
     }
+
+    bindVideoEnd(dayVideo, 'evening');
+    bindVideoEnd(eveningVideo, 'day');
 
     buttons.forEach(function (button, index) {
       if (button.dataset.eautoBound === 'true') return;

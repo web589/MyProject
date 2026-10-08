@@ -27,7 +27,7 @@
     <div id="{{ page_id }}-flow-panel-evening" class="e-auto-page__flow-panel" data-eauto-flow-panel="evening" role="tabpanel" aria-labelledby="{{ page_id }}-flow-tab-evening" hidden>
       <div class="e-auto-page__media e-auto-page__media--flow">
         {% if section.settings.flow_evening_video != blank %}
-          {{ section.settings.flow_evening_video | video_tag: controls: false, autoplay: true, loop: true, muted: true, playsinline: true, preload: 'metadata' }}
+          {{ section.settings.flow_evening_video | video_tag: controls: false, autoplay: true, loop: false, muted: true, playsinline: true, preload: 'metadata' }}
         {% elsif section.settings.flow_evening_image != blank %}
           {{ section.settings.flow_evening_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '(min-width: 960px) 58vw, 100vw', alt: section.settings.flow_evening_image_alt }}
         {% else %}
