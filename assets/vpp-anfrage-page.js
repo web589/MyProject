@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  var boundFormRoots = new WeakSet();
+
   function reducedMotion() {
     return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
@@ -90,13 +92,13 @@
     return (element.textContent || '').replace(/\s+/g, ' ').trim();
   }
 
-  function markFormQuestionLabels(host) {
+  function markFormQuestionLabels(shadowRoot) {
     var questionTexts = [
       'Welches VENUS E Modell nutzt du oder planst du zu nutzen?',
       'Land',
       'Welche Komponenten sind bereits vorhanden?'
     ];
-    var candidates = host.querySelectorAll('p, legend, label, span, div');
+    var candidates = shadowRoot.querySelectorAll('legend, label, p, span');
 
     questionTexts.forEach(function (questionText) {
       Array.prototype.forEach.call(candidates, function (element) {
@@ -107,15 +109,29 @@
     });
 
     return questionTexts.every(function (questionText) {
-      return host.querySelector('.vpp-anfrage__form-question') &&
-        Array.prototype.some.call(candidates, function (element) {
-          return normalizedText(element) === questionText && element.classList.contains('vpp-anfrage__form-question');
-        });
+      return Array.prototype.some.call(candidates, function (element) {
+        return normalizedText(element) === questionText && element.classList.contains('vpp-anfrage__form-question');
+      });
     });
   }
 
-  function installationCheckboxGroup(host) {
-    var checkboxes = Array.prototype.slice.call(host.querySelectorAll('input[type="checkbox"]'));
+  function installFormQuestionStyles(shadowRoot) {
+    if (shadowRoot.querySelector('style[data-vpp-anfrage-question-style]')) return;
+
+    var style = document.createElement('style');
+    style.setAttribute('data-vpp-anfrage-question-style', '');
+    style.textContent = [
+      '.vpp-anfrage__form-question {',
+      '  font-size: calc(var(--vpp-anfrage-item-text-size, 14px) + 1px) !important;',
+      '  font-weight: 600 !important;',
+      '  line-height: 1.5;',
+      '}'
+    ].join('\n');
+    shadowRoot.appendChild(style);
+  }
+
+  function installationCheckboxGroup(shadowRoot) {
+    var checkboxes = Array.prototype.slice.call(shadowRoot.querySelectorAll('input[type="checkbox"]'));
     var noInstallation = checkboxes.find(function (checkbox) {
       var labelText = checkbox.labels ? Array.prototype.map.call(checkbox.labels, normalizedText).join(' ') : '';
       return /noch keine installation/i.test(labelText || checkbox.id || checkbox.getAttribute('aria-label') || '');
@@ -127,8 +143,8 @@
     var groupPrefix = separator > -1 ? noInstallation.id.slice(0, separator + 1) : '';
     var groupCheckboxes = checkboxes.filter(function (checkbox) {
       if (checkbox === noInstallation) return true;
-      if (groupPrefix && checkbox.id.indexOf(groupPrefix) === 0) return true;
-      return Boolean(noInstallation.name && checkbox.name === noInstallation.name);
+      if (noInstallation.name && checkbox.name === noInstallation.name) return true;
+      return Boolean(groupPrefix && checkbox.id.indexOf(groupPrefix) === 0);
     });
 
     return {
@@ -139,15 +155,19 @@
     };
   }
 
-  function bindFormHost(host) {
-    if (!host || host.dataset.vppAnfrageFormBound === 'true') return;
-    host.dataset.vppAnfrageFormBound = 'true';
+  function bindShopifyFormsEmbed(formEmbed) {
+    var shadowRoot = formEmbed && formEmbed.shadowRoot;
+    if (!shadowRoot || boundFormRoots.has(shadowRoot)) return;
 
-    host.addEventListener('change', function (event) {
+    boundFormRoots.add(shadowRoot);
+    installFormQuestionStyles(shadowRoot);
+    markFormQuestionLabels(shadowRoot);
+
+    shadowRoot.addEventListener('change', function (event) {
       var changedCheckbox = event.target;
       if (!changedCheckbox || changedCheckbox.type !== 'checkbox' || !changedCheckbox.checked) return;
 
-      var group = installationCheckboxGroup(host);
+      var group = installationCheckboxGroup(shadowRoot);
       if (!group) return;
 
       var peers = changedCheckbox === group.noInstallation ? group.others :
@@ -158,11 +178,31 @@
       });
     });
 
-    if (!markFormQuestionLabels(host) && window.MutationObserver) {
+    if (window.MutationObserver) {
       var observer = new MutationObserver(function () {
-        if (markFormQuestionLabels(host)) observer.disconnect();
+        markFormQuestionLabels(shadowRoot);
       });
-      observer.observe(host, { childList: true, characterData: true, subtree: true });
+      observer.observe(shadowRoot, { childList: true, characterData: true, subtree: true });
+    }
+  }
+
+  function bindFormHost(host) {
+    if (!host || host.dataset.vppAnfrageFormBound === 'true') return;
+    host.dataset.vppAnfrageFormBound = 'true';
+
+    function discoverFormsEmbed() {
+      host.querySelectorAll('shopify-forms-embed').forEach(bindShopifyFormsEmbed);
+    }
+
+    discoverFormsEmbed();
+
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(discoverFormsEmbed);
+      observer.observe(host, { childList: true, subtree: true });
+    }
+
+    if (window.customElements && window.customElements.whenDefined) {
+      window.customElements.whenDefined('shopify-forms-embed').then(discoverFormsEmbed);
     }
   }
 
