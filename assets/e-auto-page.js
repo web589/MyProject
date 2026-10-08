@@ -610,6 +610,20 @@
         panel.hidden = !active;
         panel.classList.toggle('is-active', active);
         panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+
+        var video = panel.querySelector('video');
+        if (!video) return;
+        var reducedMotion = prefersReducedMotion();
+        video.controls = reducedMotion;
+        if (!active || reducedMotion) {
+          video.pause();
+          return;
+        }
+
+        var playPromise = video.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+          playPromise.catch(function () {});
+        }
       });
     }
 
