@@ -89,8 +89,19 @@
 }
 .main-content--acdc .acdc-btn-primary,
 .main-content--acdc .acdc-btn-primary:hover { color: #fff; }
-.main-content--acdc .acdc-btn-primary { background: linear-gradient(90deg, #0099fe, #00c6ff); }
-.main-content--acdc .acdc-btn-primary:hover { filter: brightness(1.06); }
+.main-content--acdc .acdc-btn-primary {
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #0099fe, #00c6ff);
+  box-shadow: none;
+  transform: none;
+  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+}
+.main-content--acdc .acdc-btn-primary:hover {
+  box-shadow: 0 6px 18px rgba(0, 153, 254, .35);
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+}
 .main-content--acdc .acdc-btn-ghost { background: #fff; border-color: #9bd8ff; }
 .main-content--acdc .acdc-btn-ghost:hover { border-color: var(--acdc-blue); background: var(--acdc-blue-soft); }
 .main-content--acdc :is(.acdc-link, .acdc-lnk) {
