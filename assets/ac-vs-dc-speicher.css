@@ -102,8 +102,8 @@
   filter: brightness(1.06);
   transform: translateY(-2px);
 }
-.main-content--acdc .acdc-btn-ghost { background: #fff; border-color: #9bd8ff; }
-.main-content--acdc .acdc-btn-ghost:hover { border-color: var(--acdc-blue); background: var(--acdc-blue-soft); }
+.main-content--acdc .acdc-btn-ghost { background: #fff; border-color: #9bd8ff; transition: background .18s ease, border-color .18s ease, transform .18s ease; }
+.main-content--acdc .acdc-btn-ghost:hover { border-color: var(--acdc-blue); background: var(--acdc-blue-soft); transform: translateY(-2px); }
 .main-content--acdc :is(.acdc-link, .acdc-lnk) {
   display: inline-block;
   color: var(--acdc-blue);
