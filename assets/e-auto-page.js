@@ -597,6 +597,8 @@
 
   function bindFlow(root) {
     var buttons = Array.prototype.slice.call(root.querySelectorAll('[data-eauto-flow-toggle]'));
+    var dayPanel = root.querySelector('[data-eauto-flow-panel="day"]');
+    var dayVideo = dayPanel && dayPanel.querySelector('video');
 
     function renderFlow(mode) {
       buttons.forEach(function (toggle) {
@@ -624,6 +626,16 @@
         if (playPromise && typeof playPromise.catch === 'function') {
           playPromise.catch(function () {});
         }
+      });
+    }
+
+    if (dayVideo && dayVideo.dataset.eautoEndBound !== 'true') {
+      dayVideo.dataset.eautoEndBound = 'true';
+      dayVideo.addEventListener('ended', function () {
+        var eveningButton = buttons.find(function (button) {
+          return button.dataset.eautoFlowToggle === 'evening';
+        });
+        if (eveningButton) renderFlow(eveningButton.dataset.eautoFlowToggle);
       });
     }
 
