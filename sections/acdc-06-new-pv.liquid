@@ -13,12 +13,16 @@
         {% if block.type == 'point' %}
           <li {{ block.shopify_attributes }}>
             <span class="acdc-point-icon acdc-ic-mini" aria-hidden="true">
-              {% case block.settings.icon %}
-                {% when 'system' %}<svg viewBox="0 0 24 24"><rect x="2.5" y="7" width="7" height="10" rx="1.6"/><rect x="13.5" y="8" width="7.5" height="8" rx="1.8"/><path d="M9.5 12h4M21 10.5v3"/></svg>
-                {% when 'needs' %}<svg viewBox="0 0 24 24"><circle cx="6" cy="13" r="2.4"/><circle cx="18" cy="13" r="2.4"/><circle cx="12" cy="6.5" r="2.4"/><path d="M7.7 11.6l2.6-3.1M16.3 11.6l-2.6-3.1M8.4 13h7.2"/></svg>
-                {% when 'flexible' %}<svg viewBox="0 0 24 24"><path d="M9 4H4v5M15 20h5v-5M4 4l7 7M20 20l-7-7"/></svg>
-                {% else %}<svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9h17M9 9v11.5"/></svg>
-              {% endcase %}
+              {% if block.settings.icon_image != blank %}
+                {{ block.settings.icon_image | image_url: width: 72 | image_tag: class: 'acdc-custom-icon-image', widths: '36, 54, 72', sizes: '18px', loading: 'lazy', alt: '' }}
+              {% else %}
+                {% case block.settings.icon %}
+                  {% when 'system' %}<svg viewBox="0 0 24 24"><rect x="2.5" y="7" width="7" height="10" rx="1.6"/><rect x="13.5" y="8" width="7.5" height="8" rx="1.8"/><path d="M9.5 12h4M21 10.5v3"/></svg>
+                  {% when 'needs' %}<svg viewBox="0 0 24 24"><circle cx="6" cy="13" r="2.4"/><circle cx="18" cy="13" r="2.4"/><circle cx="12" cy="6.5" r="2.4"/><path d="M7.7 11.6l2.6-3.1M16.3 11.6l-2.6-3.1M8.4 13h7.2"/></svg>
+                  {% when 'flexible' %}<svg viewBox="0 0 24 24"><path d="M9 4H4v5M15 20h5v-5M4 4l7 7M20 20l-7-7"/></svg>
+                  {% else %}<svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9h17M9 9v11.5"/></svg>
+                {% endcase %}
+              {% endif %}
             </span>
             <div>
               {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
@@ -61,7 +65,8 @@
   ],
   "blocks": [
     {"type":"point","name":"场景要点","settings":[
-      {"type":"select","id":"icon","label":"图标","options":[{"value":"plan","label":"整体规划"},{"value":"system","label":"系统连接"},{"value":"needs","label":"用能需求"},{"value":"flexible","label":"扩展灵活性"}],"default":"plan"},
+      {"type":"select","id":"icon","label":"默认线性图标","options":[{"value":"plan","label":"整体规划"},{"value":"system","label":"系统连接"},{"value":"needs","label":"用能需求"},{"value":"flexible","label":"扩展灵活性"}],"default":"plan"},
+      {"type":"image_picker","id":"icon_image","label":"自定义图标图片","info":"上传后替换默认线性图标；留空时显示默认图标。"},
       {"type":"text","id":"title","label":"要点标题","default":"Gemeinsame Planung"},
       {"type":"textarea","id":"text","label":"要点说明","default":"PV-Anlage, Speicher und Wechselrichter werden von Anfang an als gemeinsames System ausgelegt."}
     ]}

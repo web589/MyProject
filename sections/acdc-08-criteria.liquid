@@ -8,14 +8,18 @@
       {% if block.type == 'criterion' %}
         <div class="acdc-criterion-card" {{ block.shopify_attributes }}>
           <span class="acdc-criterion-icon" aria-hidden="true">
-            {% case block.settings.icon %}
-              {% when 'power' %}<svg viewBox="0 0 24 24"><path d="M13 2.5 5.5 13.5H11l-.8 8L18.5 10H13z"/></svg>
-              {% when 'compatible' %}<svg viewBox="0 0 24 24"><path d="M9 15l-3 3 3 3M15 9l3-3-3-3M6 18h6a4 4 0 000-8H9"/></svg>
-              {% when 'expand' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="10" width="7" height="7" rx="1.6"/><rect x="13.5" y="10" width="7" height="7" rx="1.6"/><path d="M7 10V7M17 10V7"/></svg>
-              {% when 'management' %}<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.2V12l3.2 2"/></svg>
-              {% when 'warranty' %}<svg viewBox="0 0 24 24"><path d="M12 3.5l7.5 3.6v5c0 4.3-3.1 7.4-7.5 8.4-4.4-1-7.5-4.1-7.5-8.4v-5zM9 12l2 2 4-4"/></svg>
-              {% else %}<svg viewBox="0 0 24 24"><rect x="2.5" y="7.5" width="16" height="9.5" rx="2.2"/><path d="M21 11v2.5M6 10.2h6.5v3.8H6z"/></svg>
-            {% endcase %}
+            {% if block.settings.icon_image != blank %}
+              {{ block.settings.icon_image | image_url: width: 80 | image_tag: class: 'acdc-custom-icon-image', widths: '40, 60, 80', sizes: '20px', loading: 'lazy', alt: '' }}
+            {% else %}
+              {% case block.settings.icon %}
+                {% when 'power' %}<svg viewBox="0 0 24 24"><path d="M13 2.5 5.5 13.5H11l-.8 8L18.5 10H13z"/></svg>
+                {% when 'compatible' %}<svg viewBox="0 0 24 24"><path d="M9 15l-3 3 3 3M15 9l3-3-3-3M6 18h6a4 4 0 000-8H9"/></svg>
+                {% when 'expand' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="10" width="7" height="7" rx="1.6"/><rect x="13.5" y="10" width="7" height="7" rx="1.6"/><path d="M7 10V7M17 10V7"/></svg>
+                {% when 'management' %}<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.2V12l3.2 2"/></svg>
+                {% when 'warranty' %}<svg viewBox="0 0 24 24"><path d="M12 3.5l7.5 3.6v5c0 4.3-3.1 7.4-7.5 8.4-4.4-1-7.5-4.1-7.5-8.4v-5zM9 12l2 2 4-4"/></svg>
+                {% else %}<svg viewBox="0 0 24 24"><rect x="2.5" y="7.5" width="16" height="9.5" rx="2.2"/><path d="M21 11v2.5M6 10.2h6.5v3.8H6z"/></svg>
+              {% endcase %}
+            {% endif %}
           </span>
           {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
           {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
@@ -49,7 +53,8 @@
   ],
   "blocks": [
     {"type":"criterion","name":"选购标准卡","settings":[
-      {"type":"select","id":"icon","label":"线性图标","options":[{"value":"capacity","label":"容量"},{"value":"power","label":"功率"},{"value":"compatible","label":"兼容性"},{"value":"expand","label":"扩展性"},{"value":"management","label":"能源管理"},{"value":"warranty","label":"保修"}],"default":"capacity"},
+      {"type":"select","id":"icon","label":"默认线性图标","options":[{"value":"capacity","label":"容量"},{"value":"power","label":"功率"},{"value":"compatible","label":"兼容性"},{"value":"expand","label":"扩展性"},{"value":"management","label":"能源管理"},{"value":"warranty","label":"保修"}],"default":"capacity"},
+      {"type":"image_picker","id":"icon_image","label":"自定义图标图片","info":"上传后替换默认线性图标；留空时显示默认图标。"},
       {"type":"text","id":"title","label":"卡片标题","default":"Speicherkapazität"},
       {"type":"textarea","id":"text","label":"卡片说明","default":"Wie viel Energie aufgenommen werden kann – abgestimmt auf Verbrauch und Solarerzeugung."},
       {"type":"text","id":"link_1_label","label":"第一个链接文字"},

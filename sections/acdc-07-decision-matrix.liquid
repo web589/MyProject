@@ -13,13 +13,17 @@
         <div class="acdc-matrix-row" {{ block.shopify_attributes }}>
           <div class="acdc-matrix-situation">
             <span class="acdc-matrix-icon" aria-hidden="true">
-              {% case block.settings.icon %}
-                {% when 'new' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
-                {% when 'expand' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="10" width="7" height="7" rx="1.6"/><rect x="13.5" y="10" width="7" height="7" rx="1.6"/><path d="M7 10V7M17 10V7"/></svg>
-                {% when 'balcony' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="17" height="7" rx="1.4"/><path d="M7 14.5V20M17 14.5V20M3.5 20h17M9 7.5l3 7M15 7.5l-3 7"/></svg>
-                {% when 'inverter' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="7" width="7" height="10" rx="1.6"/><path d="M14 8.5l4.5 3.5-4.5 3.5M6 10.5h2.5"/></svg>
-                {% else %}<svg viewBox="0 0 24 24"><path d="M3.5 11 12 4.5l8.5 6.5M6 10.5V20h12v-9.5M9.5 20v-4h5v4"/></svg>
-              {% endcase %}
+              {% if block.settings.icon_image != blank %}
+                {{ block.settings.icon_image | image_url: width: 80 | image_tag: class: 'acdc-custom-icon-image', widths: '40, 60, 80', sizes: '20px', loading: 'lazy', alt: '' }}
+              {% else %}
+                {% case block.settings.icon %}
+                  {% when 'new' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
+                  {% when 'expand' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="10" width="7" height="7" rx="1.6"/><rect x="13.5" y="10" width="7" height="7" rx="1.6"/><path d="M7 10V7M17 10V7"/></svg>
+                  {% when 'balcony' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="17" height="7" rx="1.4"/><path d="M7 14.5V20M17 14.5V20M3.5 20h17M9 7.5l3 7M15 7.5l-3 7"/></svg>
+                  {% when 'inverter' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="7" width="7" height="10" rx="1.6"/><path d="M14 8.5l4.5 3.5-4.5 3.5M6 10.5h2.5"/></svg>
+                  {% else %}<svg viewBox="0 0 24 24"><path d="M3.5 11 12 4.5l8.5 6.5M6 10.5V20h12v-9.5M9.5 20v-4h5v4"/></svg>
+                {% endcase %}
+              {% endif %}
             </span>
             {{ block.settings.situation | escape }}
           </div>
@@ -47,7 +51,8 @@
   ],
   "blocks": [
     {"type":"row","name":"决策矩阵行","settings":[
-      {"type":"select","id":"icon","label":"左列图标","options":[{"value":"house","label":"已有住宅"},{"value":"new","label":"新建系统"},{"value":"expand","label":"扩展系统"},{"value":"balcony","label":"阳台光伏"},{"value":"inverter","label":"逆变器"}],"default":"house"},
+      {"type":"select","id":"icon","label":"默认线性图标","options":[{"value":"house","label":"已有住宅"},{"value":"new","label":"新建系统"},{"value":"expand","label":"扩展系统"},{"value":"balcony","label":"阳台光伏"},{"value":"inverter","label":"逆变器"}],"default":"house"},
+      {"type":"image_picker","id":"icon_image","label":"自定义图标图片","info":"上传后替换默认线性图标；留空时显示默认图标。"},
       {"type":"text","id":"situation","label":"使用场景","default":"Du hast bereits eine PV-Anlage"},
       {"type":"textarea","id":"assessment","label":"判断说明","default":"AC-Kopplung ist hier häufig interessant, weil der Speicher auf der Wechselstromseite ergänzt werden kann."},
       {"type":"text","id":"link_label","label":"可选链接文字"},
