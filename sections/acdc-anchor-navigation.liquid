@@ -64,6 +64,24 @@
         </span>
       {% endif %}
     {% endfor %}
+
+    {% liquid
+      assign cta_module = section.settings.cta_module | default: 'acdc_final'
+      assign cta_label = section.settings.cta_label
+      assign cta_warning_id = 'acdc-anchor-cta-warning-' | append: section.id
+    %}
+    {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
+    {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
+    {% if cta_label != blank and cta_target != blank %}
+      <a
+        class="acdc-anchor-nav__cta"
+        href="#{{ cta_target }}"
+        data-anchor-link
+        data-anchor-nav-cta
+        data-anchor-module="{{ cta_module | escape }}"
+        data-anchor-warning-id="{{ cta_warning_id }}"
+      >{{ cta_label | escape }}</a>
+    {% endif %}
   </div>
 
   {% if request.design_mode %}
@@ -113,6 +131,49 @@
           <span id="{{ link_warning_id }}" class="acdc-anchor-nav__warning" data-anchor-warning hidden>未找到目标模块：{{ link_label | escape }}</span>
         {% endif %}
       {% endfor %}
+      {% liquid
+        assign cta_module = section.settings.cta_module | default: 'acdc_final'
+        assign cta_label = section.settings.cta_label
+        assign cta_warning_id = 'acdc-anchor-cta-warning-' | append: section.id
+        assign cta_module_label = '自定义锚点'
+        case cta_module
+          when 'acdc_start'
+            assign cta_module_label = '主视觉'
+          when 'acdc_definition'
+            assign cta_module_label = '基础定义'
+          when 'acdc_architecture'
+            assign cta_module_label = '系统架构'
+          when 'acdc_comparison'
+            assign cta_module_label = '直接对比表'
+          when 'acdc_retrofit'
+            assign cta_module_label = '已有光伏后装'
+          when 'acdc_new_pv'
+            assign cta_module_label = '新建光伏场景'
+          when 'acdc_decision'
+            assign cta_module_label = '场景决策矩阵'
+          when 'acdc_criteria'
+            assign cta_module_label = '选购标准'
+          when 'acdc_venus_ac'
+            assign cta_module_label = 'VENUS E 交流耦合'
+          when 'acdc_energy_flow'
+            assign cta_module_label = '家庭能量流'
+          when 'acdc_models'
+            assign cta_module_label = 'VENUS E 型号'
+          when 'acdc_faq'
+            assign cta_module_label = '常见问题'
+          when 'acdc_topics'
+            assign cta_module_label = '相关专题轮播'
+          when 'acdc_articles'
+            assign cta_module_label = '精选文章'
+          when 'acdc_final'
+            assign cta_module_label = '结尾行动区'
+        endcase
+      %}
+      {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
+      {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
+      {% if cta_label != blank and cta_target != blank %}
+        <span id="{{ cta_warning_id }}" class="acdc-anchor-nav__warning" data-anchor-warning hidden>未找到目标模块：{{ cta_label | escape }}（{{ cta_module_label | escape }}）</span>
+      {% endif %}
     </div>
   {% endif %}
 </nav>
@@ -124,7 +185,28 @@
   "class": "acdc-anchor-navigation-section",
   "settings": [
     {"type":"text","id":"aria_label","label":"无障碍标签","default":"Navigation zu AC- und DC-Speichern"},
-    {"type":"range","id":"nav_text_size","label":"导航文字大小","min":11,"max":18,"step":0.5,"unit":"px","default":13.5}
+    {"type":"range","id":"nav_text_size","label":"导航文字大小","min":11,"max":18,"step":0.5,"unit":"px","default":13.5},
+    {"type":"header","content":"右侧行动按钮"},
+    {"type":"text","id":"cta_label","label":"按钮文字","default":"Beratung anfragen"},
+    {"type":"select","id":"cta_module","label":"按钮链接到模块","options":[
+      {"value":"acdc_start","label":"01 主视觉"},
+      {"value":"acdc_definition","label":"02 基础定义"},
+      {"value":"acdc_architecture","label":"03 系统架构"},
+      {"value":"acdc_comparison","label":"04 直接对比表"},
+      {"value":"acdc_retrofit","label":"05 已有光伏后装"},
+      {"value":"acdc_new_pv","label":"06 新建光伏场景"},
+      {"value":"acdc_decision","label":"07 场景决策矩阵"},
+      {"value":"acdc_criteria","label":"08 选购标准"},
+      {"value":"acdc_venus_ac","label":"09 VENUS E 交流耦合"},
+      {"value":"acdc_energy_flow","label":"10 家庭能量流"},
+      {"value":"acdc_models","label":"11 VENUS E 型号"},
+      {"value":"acdc_faq","label":"12 常见问题"},
+      {"value":"acdc_topics","label":"13 相关专题轮播"},
+      {"value":"acdc_articles","label":"14 精选文章"},
+      {"value":"acdc_final","label":"15 结尾行动区"},
+      {"value":"custom","label":"自定义锚点（高级）"}
+    ],"default":"acdc_final"},
+    {"type":"text","id":"cta_target","label":"自定义锚点 ID（高级）","info":"仅选择“自定义锚点”时填写；输入 ID 即可，不需要 #。","visible_if":"{{ section.settings.cta_module == 'custom' }}"}
   ],
   "blocks": [
     {"type":"link","name":"导航链接","settings":[
