@@ -3,6 +3,7 @@
 
   const page = document.querySelector('.main-content--acdc');
   if (!page) return;
+  if (window.Shopify && window.Shopify.designMode) page.classList.add('acdc-design-mode');
 
   const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -65,7 +66,7 @@
     if (!track || !card) return;
     const gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
     const direction = arrow.matches('.acdc-carousel-prev, [data-acdc-dir="prev"]') ? -1 : 1;
-    track.scrollBy({ left: direction * (card.getBoundingClientRect().width + gap), behavior: prefersReducedMotion() ? 'instant' : 'smooth' });
+    track.scrollBy({ left: direction * (card.getBoundingClientRect().width + gap), behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
   });
 
   page.addEventListener('scroll', (event) => {
