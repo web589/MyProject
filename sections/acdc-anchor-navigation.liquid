@@ -9,7 +9,8 @@
   aria-label="{{ section.settings.aria_label | escape }}"
   style="--acdc-nav-text-size: {{ section.settings.nav_text_size | default: 13.5 }}px;"
 >
-  <div class="acdc-anchor-nav__inner anchor-nav__inner">
+  <div class="acdc-anchor-nav__layout">
+    <div class="acdc-anchor-nav__inner anchor-nav__inner">
     {% for block in section.blocks %}
       {% liquid
         assign link_module = block.settings.module | default: 'custom'
@@ -64,6 +65,7 @@
         </span>
       {% endif %}
     {% endfor %}
+    </div>
 
     {% liquid
       assign cta_module = section.settings.cta_module | default: 'acdc_final'
