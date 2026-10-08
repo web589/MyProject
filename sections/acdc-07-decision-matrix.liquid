@@ -1,0 +1,66 @@
+<div class="acdc-inner" id="ausgangslage">
+  {% if section.settings.eyebrow != blank %}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
+  <h2 class="acdc-heading acdc-h2">{{ section.settings.title_before | escape }} {% if section.settings.title_accent != blank %}<span class="acdc-accent">{{ section.settings.title_accent | escape }}</span>{% endif %}</h2>
+  {% if section.settings.subtitle != blank %}<p class="acdc-sub">{{ section.settings.subtitle | escape }}</p>{% endif %}
+
+  <div class="acdc-matrix">
+    <div class="acdc-matrix-row acdc-matrix-row--head">
+      <div>{{ section.settings.situation_heading | escape }}</div>
+      <div>{{ section.settings.assessment_heading | escape }}</div>
+    </div>
+    {% for block in section.blocks %}
+      {% if block.type == 'row' %}
+        <div class="acdc-matrix-row" {{ block.shopify_attributes }}>
+          <div class="acdc-matrix-situation">
+            <span class="acdc-matrix-icon" aria-hidden="true">
+              {% case block.settings.icon %}
+                {% when 'new' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
+                {% when 'expand' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="10" width="7" height="7" rx="1.6"/><rect x="13.5" y="10" width="7" height="7" rx="1.6"/><path d="M7 10V7M17 10V7"/></svg>
+                {% when 'balcony' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="17" height="7" rx="1.4"/><path d="M7 14.5V20M17 14.5V20M3.5 20h17M9 7.5l3 7M15 7.5l-3 7"/></svg>
+                {% when 'inverter' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="7" width="7" height="10" rx="1.6"/><path d="M14 8.5l4.5 3.5-4.5 3.5M6 10.5h2.5"/></svg>
+                {% else %}<svg viewBox="0 0 24 24"><path d="M3.5 11 12 4.5l8.5 6.5M6 10.5V20h12v-9.5M9.5 20v-4h5v4"/></svg>
+              {% endcase %}
+            </span>
+            {{ block.settings.situation | escape }}
+          </div>
+          <div class="acdc-matrix-assessment">{{ block.settings.assessment | escape }}{% if block.settings.link_label != blank and block.settings.link_url != blank %} <a class="acdc-link" href="{{ block.settings.link_url | escape }}">{{ block.settings.link_label | escape }}</a>{% endif %}</div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% if section.settings.note != blank %}<p class="acdc-note">{{ section.settings.note | escape }}</p>{% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "07 场景决策矩阵",
+  "tag": "section",
+  "class": "acdc-section acdc-section--07",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Einordnung"},
+    {"type":"text","id":"title_before","label":"标题普通文字","default":"Welche Lösung passt zu welcher"},
+    {"type":"text","id":"title_accent","label":"标题蓝色文字","default":"Ausgangslage?"},
+    {"type":"textarea","id":"subtitle","label":"副标题","default":"Statt pauschaler Empfehlungen hilft ein Blick auf die eigene Situation. Diese Einordnung ersetzt keine Fachplanung, macht die Entscheidung aber greifbarer."},
+    {"type":"text","id":"situation_heading","label":"左列表头","default":"Ausgangslage"},
+    {"type":"text","id":"assessment_heading","label":"右列表头","default":"Einordnung"},
+    {"type":"textarea","id":"note","label":"底部说明","default":"Es gibt keine pauschal bessere Lösung. Ausschlaggebend sind deine vorhandene Anlage, deine Pläne für Ausbau und Steuerung sowie die Komponenten, die bereits verbaut sind."}
+  ],
+  "blocks": [
+    {"type":"row","name":"决策矩阵行","settings":[
+      {"type":"select","id":"icon","label":"左列图标","options":[{"value":"house","label":"已有住宅"},{"value":"new","label":"新建系统"},{"value":"expand","label":"扩展系统"},{"value":"balcony","label":"阳台光伏"},{"value":"inverter","label":"逆变器"}],"default":"house"},
+      {"type":"text","id":"situation","label":"使用场景","default":"Du hast bereits eine PV-Anlage"},
+      {"type":"textarea","id":"assessment","label":"判断说明","default":"AC-Kopplung ist hier häufig interessant, weil der Speicher auf der Wechselstromseite ergänzt werden kann."},
+      {"type":"text","id":"link_label","label":"可选链接文字"},
+      {"type":"url","id":"link_url","label":"可选链接目标"}
+    ]}
+  ],
+  "max_blocks": 12,
+  "presets": [{"name":"07 场景决策矩阵","blocks":[
+    {"type":"row","settings":{"icon":"house","situation":"Du hast bereits eine PV-Anlage","assessment":"AC-Kopplung ist hier häufig interessant, weil der Speicher auf der Wechselstromseite ergänzt werden kann."}},
+    {"type":"row","settings":{"icon":"new","situation":"Du planst PV und Speicher gleichzeitig","assessment":"Sowohl AC als auch DC kommen infrage. Welche Variante sinnvoll ist, hängt vom Systemkonzept ab."}},
+    {"type":"row","settings":{"icon":"expand","situation":"Du möchtest später flexibel erweitern","assessment":"Dann sind Systemkompatibilität und Modularität besonders wichtig – unabhängig von der Kopplungsart."}},
+    {"type":"row","settings":{"icon":"balcony","situation":"Du nutzt ein Balkonkraftwerk","assessment":"Für Balkonkraftwerke kommen kompakte, nachrüstbare Speicherlösungen infrage. Entscheidend sind Anschlussart, Leistung und Systemkompatibilität.","link_label":"Mehr dazu →"}},
+    {"type":"row","settings":{"icon":"inverter","situation":"Du möchtest den vorhandenen Wechselrichter möglichst weiter nutzen","assessment":"Dann ist AC-Kopplung häufig besonders prüfenswert. Ob der vorhandene Wechselrichter tatsächlich weiter genutzt werden kann, hängt vom bestehenden System ab."}}
+  ]}]
+}
+{% endschema %}

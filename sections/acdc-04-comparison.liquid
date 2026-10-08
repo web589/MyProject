@@ -1,0 +1,56 @@
+<div class="acdc-section acdc-comparison" id="vergleich">
+  <div class="acdc-container">
+    {% if section.settings.eyebrow != blank %}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
+    <h2>{{ section.settings.heading | escape }}{% if section.settings.heading_accent != blank %} <span class="acdc-acc">{{ section.settings.heading_accent | escape }}</span>{% endif %}</h2>
+    {% if section.settings.subtitle != blank %}<p class="acdc-sub">{{ section.settings.subtitle | escape }}</p>{% endif %}
+    <div class="acdc-cmp">
+      <div class="acdc-cmp-scroll" role="region" aria-label="{{ section.settings.table_label | escape }}" tabindex="0">
+        <table>
+          <thead><tr><th scope="col">{{ section.settings.column_one | escape }}</th><th scope="col">{{ section.settings.column_two | escape }}</th><th scope="col">{{ section.settings.column_three | escape }}</th></tr></thead>
+          <tbody>
+            {% for block in section.blocks %}
+              <tr {{ block.shopify_attributes }}><th scope="row">{{ block.settings.criterion | escape }}</th><td>{{ block.settings.ac | escape }}</td><td>{{ block.settings.dc | escape }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% if section.settings.note != blank %}<p class="acdc-cmp-note">{{ section.settings.note | escape }}</p>{% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "04 直接对比表",
+  "tag": "section",
+  "class": "acdc-section-wrap acdc-comparison-wrap",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Direktvergleich"},
+    {"type":"text","id":"heading","label":"标题普通文字","default":"AC vs. DC Speicher im"},
+    {"type":"text","id":"heading_accent","label":"标题蓝色文字","default":"direkten Vergleich"},
+    {"type":"textarea","id":"subtitle","label":"副标题","default":"Die folgende Übersicht ordnet typische Unterschiede ein – ohne Bewertung, welche Variante „besser“ ist."},
+    {"type":"text","id":"table_label","label":"对比表无障碍名称","default":"AC- und DC-Speicher im Vergleich"},
+    {"type":"text","id":"column_one","label":"第一列表头","default":"Kriterium"},
+    {"type":"text","id":"column_two","label":"第二列表头","default":"AC-gekoppelt"},
+    {"type":"text","id":"column_three","label":"第三列表头","default":"DC-gekoppelt"},
+    {"type":"textarea","id":"note","label":"表格下方说明","default":"Die Einordnung beschreibt typische Ausprägungen, keine festen Regeln. Welche Punkte im Einzelfall zutreffen, hängt von der vorhandenen Anlage, den verbauten Komponenten und der geplanten Nutzung ab."}
+  ],
+  "blocks": [
+    {"type":"row","name":"对比表行","settings":[
+      {"type":"text","id":"criterion","label":"对比项目","default":"Kriterium"},
+      {"type":"textarea","id":"ac","label":"交流耦合内容","default":"AC-gekoppelt"},
+      {"type":"textarea","id":"dc","label":"直流耦合内容","default":"DC-gekoppelt"}
+    ]}
+  ],
+  "max_blocks": 16,
+  "presets": [{"name":"04 直接对比表","blocks":[
+    {"type":"row","settings":{"criterion":"Einbindung","ac":"Wechselstromseite","dc":"Gleichstromseite"}},
+    {"type":"row","settings":{"criterion":"Nachrüstung","ac":"häufig gut geeignet","dc":"stärker vom bestehenden System abhängig"}},
+    {"type":"row","settings":{"criterion":"Neue PV-Anlage","ac":"möglich","dc":"häufig als Gesamtsystem geplant"}},
+    {"type":"row","settings":{"criterion":"Bestehender Wechselrichter","ac":"kann häufig weiter genutzt werden","dc":"Systemarchitektur muss passen"}},
+    {"type":"row","settings":{"criterion":"Erweiterbarkeit","ac":"häufig flexibel","dc":"abhängig vom Gesamtsystem"}},
+    {"type":"row","settings":{"criterion":"Wandlungspfad","ac":"Speicherung erfolgt über die AC-Seite; dadurch unterscheidet sich der Wandlungspfad vom DC-System.","dc":"Speicher ist in die DC-Seite integriert; der Wandlungspfad hängt vom jeweiligen Systemaufbau ab."}},
+    {"type":"row","settings":{"criterion":"Planung","ac":"oft modular","dc":"häufig stärker integriert"}}
+  ]}]
+}
+{% endschema %}

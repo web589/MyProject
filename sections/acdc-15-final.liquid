@@ -1,0 +1,62 @@
+<section class="acdc-section acdc-final" aria-labelledby="acdc-final-title-{{ section.id }}">
+  <div class="acdc-inner">
+    <div class="acdc-final-card">
+      {%- if section.settings.eyebrow != blank -%}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{%- endif -%}
+      <h2 id="acdc-final-title-{{ section.id }}" class="acdc-h2">{{ section.settings.heading | escape }} <span class="acdc-accent">{{ section.settings.heading_accent | escape }}</span></h2>
+      {%- if section.settings.description != blank -%}<p class="acdc-final-copy">{{ section.settings.description | escape }}</p>{%- endif -%}
+      <div class="acdc-final-cta">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.link != blank -%}
+            {%- case block.settings.style -%}
+              {%- when 'text' -%}
+                <div class="acdc-final-alt" {{ block.shopify_attributes }}>
+                  {%- if section.settings.alt_prefix != blank -%}{{ section.settings.alt_prefix | escape }} {%- endif -%}
+                  <a class="acdc-link" href="{{ block.settings.link }}">{{ block.settings.label | escape }}</a>
+                </div>
+              {%- when 'secondary' -%}
+                <a class="acdc-btn acdc-btn-ghost" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+              {%- else -%}
+                <a class="acdc-btn acdc-btn-primary" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+            {%- endcase -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name":"15 结尾行动区",
+  "class":"acdc-final-section",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Nächster Schritt"},
+    {"type":"text","id":"heading","label":"标题前半部分","default":"Welche Speicherlösung passt zu deinem"},
+    {"type":"text","id":"heading_accent","label":"标题蓝色部分","default":"Zuhause?"},
+    {"type":"textarea","id":"description","label":"说明文字","default":"Vergleiche die VENUS E Modelle oder erfahre mehr darüber, wie ein AC-gekoppelter Speicher in eine bestehende PV-Anlage integriert werden kann."},
+    {"type":"text","id":"alt_prefix","label":"文字链接前缀","default":"Oder"}
+  ],
+  "blocks":[
+    {
+      "type":"action_link",
+      "name":"行动链接",
+      "settings":[
+        {"type":"select","id":"style","label":"链接样式","options":[{"value":"primary","label":"主要按钮"},{"value":"secondary","label":"次要按钮"},{"value":"text","label":"文字链接"}],"default":"primary"},
+        {"type":"text","id":"label","label":"链接文字","default":"Mehr erfahren"},
+        {"type":"url","id":"link","label":"链接目标"}
+      ]
+    }
+  ],
+  "max_blocks":5,
+  "presets":[
+    {
+      "name":"15 结尾行动区",
+      "blocks":[
+        {"type":"action_link","settings":{"style":"primary","label":"VENUS E Modelle vergleichen","link":"/pages/speicher-vergleich"}},
+        {"type":"action_link","settings":{"style":"secondary","label":"AC-gekoppelten Speicher verstehen","link":"/pages/ac-gekoppelter-speicher"}},
+        {"type":"action_link","settings":{"style":"text","label":"Beratung anfragen →","link":"/pages/kontakt"}}
+      ]
+    }
+  ]
+}
+{% endschema %}

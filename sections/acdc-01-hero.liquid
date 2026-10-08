@@ -1,0 +1,55 @@
+<div class="acdc-section acdc-hero">
+  <div class="acdc-container">
+    <div class="acdc-hero-grid">
+      <div class="acdc-hero-copy">
+        {% if section.settings.eyebrow != blank %}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
+        <h1>{{ section.settings.heading | escape }}{% if section.settings.heading_accent != blank %} <span class="acdc-acc">{{ section.settings.heading_accent | escape }}</span>{% endif %}</h1>
+        {% if section.settings.subtitle != blank %}<p class="acdc-sub">{{ section.settings.subtitle | escape }}</p>{% endif %}
+        {% if section.blocks.size > 0 %}
+          <div class="acdc-hero-cta">
+            {% for block in section.blocks %}
+              {% if block.settings.label != blank and block.settings.link != blank %}
+                <a class="acdc-btn {% if block.settings.style == 'primary' %}acdc-btn-primary{% else %}acdc-btn-ghost{% endif %}" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="acdc-media acdc-hero-media">
+        {% if section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 1800 | image_tag: loading: 'eager', widths: '640, 960, 1280, 1600, 1800', sizes: '(min-width: 1181px) 48vw, (min-width: 981px) 42vw, 100vw', alt: section.settings.image_alt }}
+        {% else %}
+          <div class="acdc-ph acdc-hero-ph" aria-hidden="true"></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "01 主视觉",
+  "tag": "section",
+  "class": "acdc-section-wrap acdc-hero-wrap",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"AC VS. DC SPEICHER"},
+    {"type":"text","id":"heading","label":"主标题普通文字","default":"AC vs. DC Speicher: Welche Speicherlösung passt zu deiner"},
+    {"type":"text","id":"heading_accent","label":"主标题蓝色文字","default":"PV-Anlage?"},
+    {"type":"textarea","id":"subtitle","label":"副标题","default":"AC- und DC-gekoppelte Speicher unterscheiden sich vor allem darin, wo sie in das PV-System eingebunden werden. Hier erfährst du, was das für Nachrüstung, Neuinstallation und deinen Alltag bedeutet."},
+    {"type":"image_picker","id":"image","label":"主视觉图片"},
+    {"type":"text","id":"image_alt","label":"图片替代文字","default":"Gegenüberstellung von AC- und DC-gekoppeltem Solarspeicher an einem Wohnhaus"}
+  ],
+  "blocks": [
+    {"type":"button","name":"按钮","settings":[
+      {"type":"text","id":"label","label":"按钮文字","default":"Mehr erfahren"},
+      {"type":"url","id":"link","label":"跳转链接"},
+      {"type":"select","id":"style","label":"按钮样式","default":"primary","options":[{"value":"primary","label":"蓝色主按钮"},{"value":"ghost","label":"白色描边按钮"}]}
+    ]}
+  ],
+  "max_blocks": 4,
+  "presets": [{"name":"01 主视觉","blocks":[
+    {"type":"button","settings":{"label":"AC und DC vergleichen","link":"#vergleich","style":"primary"}},
+    {"type":"button","settings":{"label":"Passende Lösung finden","link":"#ausgangslage","style":"ghost"}}
+  ]}]
+}
+{% endschema %}

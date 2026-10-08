@@ -1,0 +1,67 @@
+<div class="acdc-inner">
+  {% if section.settings.eyebrow != blank %}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
+  <h2 class="acdc-heading acdc-h2">{{ section.settings.title_before | escape }} {% if section.settings.title_accent != blank %}<span class="acdc-accent">{{ section.settings.title_accent | escape }}</span>{% endif %}</h2>
+  {% if section.settings.subtitle != blank %}<p class="acdc-sub">{{ section.settings.subtitle | escape }}</p>{% endif %}
+
+  <div class="acdc-flow-media">
+    {% if section.settings.video != blank %}
+      {% assign video_poster = section.settings.poster | default: section.settings.video.preview_image %}
+      <video class="acdc-flow-video" autoplay loop muted playsinline preload="metadata" aria-label="{{ section.settings.video_alt | escape }}"{% if video_poster != blank %} poster="{{ video_poster | image_url: width: 1600 | escape }}"{% endif %}>
+        {% for source in section.settings.video.sources %}
+          <source src="{{ source.url | escape }}" type="{{ source.mime_type | escape }}">
+        {% endfor %}
+        {% if video_poster != blank %}{{ video_poster | image_url: width: 1600 | image_tag: loading: 'lazy', alt: section.settings.video_alt }}{% endif %}
+      </video>
+    {% elsif section.settings.poster != blank %}
+      {{ section.settings.poster | image_url: width: 1800 | image_tag: widths: '450, 750, 1000, 1400, 1800', sizes: '100vw', loading: 'lazy', alt: section.settings.video_alt }}
+    {% else %}
+      <div class="acdc-placeholder acdc-ph" aria-hidden="true"></div>
+      <span class="acdc-media-badge" aria-hidden="true">VIDEO</span>
+    {% endif %}
+  </div>
+
+  <div class="acdc-steps">
+    {% for block in section.blocks %}
+      {% if block.type == 'step' %}
+        <div class="acdc-step" {{ block.shopify_attributes }}>
+          {% if block.settings.label != blank %}<div class="acdc-step-label">{{ block.settings.label | escape }}</div>{% endif %}
+          {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
+          {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% if section.settings.note != blank %}<p class="acdc-note">{{ section.settings.note | escape }}</p>{% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "10 家庭能量流",
+  "tag": "section",
+  "class": "acdc-section acdc-section--10",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Im Hausnetz"},
+    {"type":"text","id":"title_before","label":"标题普通文字","default":"So arbeitet ein AC-gekoppelter Speicher im"},
+    {"type":"text","id":"title_accent","label":"标题蓝色文字","default":"Hausnetz"},
+    {"type":"textarea","id":"subtitle","label":"副标题","default":"Bei einem AC-gekoppelten Speicher fließt der Solarstrom nicht direkt von der PV-Anlage in den Speicher. Die Kopplung erfolgt über das Hausnetz."},
+    {"type":"video","id":"video","label":"能量流视频","info":"建议上传 10 至 15 秒静音循环视频，画面比例 2.2:1。"},
+    {"type":"image_picker","id":"poster","label":"视频封面图片","info":"视频尚未上传时也会单独显示。"},
+    {"type":"text","id":"video_alt","label":"视频与封面替代文字","default":"Energiefluss eines AC-gekoppelten Speichers im Hausnetz"},
+    {"type":"textarea","id":"note","label":"底部说明","default":"Ein Smart Meter liefert in diesem Aufbau Mess- und Datensignale für die Steuerung. Er ist kein Teil der elektrischen Hauptverbindung zwischen PV-Anlage, Hausnetz und Speicher."}
+  ],
+  "blocks": [
+    {"type":"step","name":"能量流步骤","settings":[
+      {"type":"text","id":"label","label":"步骤标记","default":"TAGSÜBER"},
+      {"type":"text","id":"title","label":"步骤标题","default":"Strom fließt zuerst in den Haushalt"},
+      {"type":"textarea","id":"text","label":"步骤说明","default":"Die PV-Anlage speist ins Hausnetz ein. Der aktuelle Bedarf des Haushalts wird zuerst gedeckt."}
+    ]}
+  ],
+  "max_blocks": 8,
+  "presets": [{"name":"10 家庭能量流","blocks":[
+    {"type":"step","settings":{"label":"TAGSÜBER","title":"Strom fließt zuerst in den Haushalt","text":"Die PV-Anlage speist ins Hausnetz ein. Der aktuelle Bedarf des Haushalts wird zuerst gedeckt."}},
+    {"type":"step","settings":{"label":"ÜBERSCHUSS","title":"Überschuss lädt den Speicher","text":"Energie, die gerade nicht gebraucht wird, kann in den VENUS E Speicher fließen."}},
+    {"type":"step","settings":{"label":"ABENDS","title":"Gespeicherter Strom wird genutzt","text":"Sinkt die eigene Erzeugung, gibt der Speicher Energie zurück ins Hausnetz und kann einen Teil des aktuellen Haushaltsbedarfs decken."}},
+    {"type":"step","settings":{"label":"ERGÄNZUNG","title":"Stromnetz bleibt eingebunden","text":"Reicht die gespeicherte Energie nicht aus, wird der restliche Bedarf wie gewohnt aus dem Stromnetz bezogen."}}
+  ]}]
+}
+{% endschema %}

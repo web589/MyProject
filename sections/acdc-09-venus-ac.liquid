@@ -1,0 +1,64 @@
+<div class="acdc-inner">
+  {% if section.settings.eyebrow != blank %}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
+  <h2 class="acdc-heading acdc-h2">{{ section.settings.title_before | escape }} {% if section.settings.title_accent != blank %}<span class="acdc-accent">{{ section.settings.title_accent | escape }}</span>{% endif %}</h2>
+  {% if section.settings.subtitle != blank %}<p class="acdc-sub">{{ section.settings.subtitle | escape }}</p>{% endif %}
+
+  <div class="acdc-split">
+    <ul class="acdc-point-list acdc-pt-list acdc-point-list--plain">
+      {% for block in section.blocks %}
+        {% if block.type == 'point' %}
+          <li {{ block.shopify_attributes }}>
+            <div>
+              {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
+              {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
+              {% if block.settings.link_label != blank and block.settings.link_url != blank %}<a class="acdc-link" href="{{ block.settings.link_url | escape }}">{{ block.settings.link_label | escape }}</a>{% endif %}
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <div class="acdc-media acdc-media--landscape acdc-split-media">
+      {% if section.settings.image != blank %}
+        {% assign media_alt = section.settings.image_alt | default: section.settings.image.alt %}
+        {{ section.settings.image | image_url: width: 1600 | image_tag: widths: '450, 750, 1000, 1200, 1600', sizes: '(max-width: 980px) 100vw, 50vw', loading: 'lazy', alt: media_alt }}
+      {% else %}
+        <div class="acdc-placeholder acdc-ph acdc-split-ph" aria-hidden="true"></div>
+      {% endif %}
+    </div>
+  </div>
+  {% if section.settings.note_bold != blank or section.settings.note_rest != blank %}
+    <p class="acdc-brand-note">{% if section.settings.note_bold != blank %}<strong>{{ section.settings.note_bold | escape }}</strong>{% endif %} {{ section.settings.note_rest | escape }}</p>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "09 VENUS E 交流耦合",
+  "tag": "section",
+  "class": "acdc-section acdc-section--09",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"VENUS E Ansatz"},
+    {"type":"text","id":"title_before","label":"标题普通文字","default":"VENUS E setzt auf"},
+    {"type":"text","id":"title_accent","label":"标题蓝色文字","default":"AC-Kopplung"},
+    {"type":"textarea","id":"subtitle","label":"副标题","default":"Die VENUS E Speicher werden auf der Wechselstromseite in das Energiesystem des Haushalts eingebunden."},
+    {"type":"image_picker","id":"image","label":"品牌场景图片"},
+    {"type":"text","id":"image_alt","label":"图片替代文字","default":"VENUS E Speicher im Energiesystem eines Wohnhauses"},
+    {"type":"textarea","id":"note_bold","label":"底部强调说明","default":"Diese Architektur passt zu unserem Ansatz einer flexibel erweiterbaren Speicherlösung."},
+    {"type":"textarea","id":"note_rest","label":"底部补充说明","default":"Welche Kopplungsart sinnvoll ist, hängt dennoch von der jeweiligen Anlage und Planung ab."}
+  ],
+  "blocks": [
+    {"type":"point","name":"品牌要点","settings":[
+      {"type":"text","id":"title","label":"要点标题","default":"Bestehende Systeme ergänzen"},
+      {"type":"textarea","id":"text","label":"要点说明","default":"Durch die Einbindung auf der Wechselstromseite kann VENUS E in vielen Fällen bestehende PV-Systeme ergänzen, ohne dass die gesamte Anlage neu aufgebaut werden muss."},
+      {"type":"text","id":"link_label","label":"可选链接文字"},
+      {"type":"url","id":"link_url","label":"可选链接目标"}
+    ]}
+  ],
+  "max_blocks": 8,
+  "presets": [{"name":"09 VENUS E 交流耦合","blocks":[
+    {"type":"point","settings":{"title":"Bestehende Systeme ergänzen","text":"Durch die Einbindung auf der Wechselstromseite kann VENUS E in vielen Fällen bestehende PV-Systeme ergänzen, ohne dass die gesamte Anlage neu aufgebaut werden muss."}},
+    {"type":"point","settings":{"title":"Flexibel planen und erweitern","text":"Welche Erweiterungen möglich sind, hängt vom Modell und von der vorhandenen Installation ab. Je nach Konfiguration stehen unterschiedliche Ausbaumöglichkeiten zur Verfügung."}},
+    {"type":"point","settings":{"title":"Smart Meter & Energiemanagement integrieren","text":"Messdaten und Steuerung lassen sich einbinden, um den Einsatz besser an den eigenen Verbrauch anzupassen.","link_label":"Smart Meter & Energiefluss verstehen →"}}
+  ]}]
+}
+{% endschema %}

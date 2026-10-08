@@ -1,0 +1,56 @@
+<section class="acdc-section acdc-faq" aria-labelledby="acdc-faq-title-{{ section.id }}" data-acdc-faq>
+  <div class="acdc-inner">
+    {%- if section.settings.eyebrow != blank -%}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{%- endif -%}
+    <h2 id="acdc-faq-title-{{ section.id }}" class="acdc-h2">{{ section.settings.heading | escape }} <span class="acdc-accent">{{ section.settings.heading_accent | escape }}</span></h2>
+    <div class="acdc-faq-wrap">
+      {%- for block in section.blocks -%}
+        {%- assign question_id = 'acdc-faq-q-' | append: block.id -%}
+        {%- assign answer_id = 'acdc-faq-a-' | append: block.id -%}
+        <div class="acdc-faq-item" {{ block.shopify_attributes }}>
+          <h3 class="acdc-faq-heading"><button class="acdc-faq-q" id="{{ question_id }}" type="button" aria-expanded="false" aria-controls="{{ answer_id }}">{{ block.settings.question | escape }}</button></h3>
+          <div class="acdc-faq-a" id="{{ answer_id }}" role="region" aria-labelledby="{{ question_id }}" aria-hidden="true" inert>
+            {{ block.settings.answer }}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name":"12 常见问题",
+  "class":"acdc-faq-section",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Häufige Fragen"},
+    {"type":"text","id":"heading","label":"标题前半部分","default":"FAQ zu"},
+    {"type":"text","id":"heading_accent","label":"标题蓝色部分","default":"AC- und DC-Speichern"}
+  ],
+  "blocks":[
+    {
+      "type":"question",
+      "name":"问答条目",
+      "settings":[
+        {"type":"text","id":"question","label":"问题","default":"Frage zu AC- und DC-Speichern"},
+        {"type":"richtext","id":"answer","label":"答案","default":"<p>Antwort auf die Frage.</p>"}
+      ]
+    }
+  ],
+  "max_blocks":16,
+  "presets":[
+    {
+      "name":"12 常见问题",
+      "blocks":[
+        {"type":"question","settings":{"question":"Was ist der wichtigste Unterschied zwischen AC- und DC-Speicher?","answer":"<p>Der Unterschied liegt in der Einbindung. Ein AC-gekoppelter Speicher wird auf der Wechselstromseite des PV-Systems angebunden, ein DC-gekoppelter Speicher auf der Gleichstromseite. Daraus ergeben sich unterschiedliche Anforderungen an Umbau, Komponenten und Planung.</p>"}},
+        {"type":"question","settings":{"question":"Ist AC oder DC besser?","answer":"<p>Es gibt keine pauschal bessere Lösung. Beide Architekturen sind etabliert. Welche passt, hängt davon ab, ob eine PV-Anlage bereits existiert, ob Erzeugung und Speicher gemeinsam geplant werden und welche Erweiterungen später vorgesehen sind.</p>"}},
+        {"type":"question","settings":{"question":"Welcher Speicher eignet sich für die Nachrüstung?","answer":"<p>Bei bestehenden Anlagen wird häufig ein AC-gekoppelter Speicher gewählt, weil er auf der Wechselstromseite ergänzt werden kann. Ob das im Einzelfall passt, hängt von Anlage, Zählerschrank und gewünschter Leistung ab. <a href=\"/pages/ac-gekoppelter-speicher\">AC-Kopplung verstehen →</a></p>"}},
+        {"type":"question","settings":{"question":"Muss der Wechselrichter bei einem AC-Speicher ersetzt werden?","answer":"<p>Nicht zwingend. Bei AC-gekoppelten Speichern kann ein vorhandener Wechselrichter häufig weiter genutzt werden. Das ist eine der Eigenschaften, die diese Architektur für Nachrüstungen interessant macht, ersetzt aber keine Prüfung im Einzelfall.</p>"}},
+        {"type":"question","settings":{"question":"Ist ein DC-Speicher effizienter?","answer":"<p>Bei DC-gekoppelten Systemen kann Energie innerhalb der Gleichstromstruktur direkter geführt werden, bei AC-gekoppelten Systemen kann eine zusätzliche Wandlung anfallen. Wie stark sich diese Unterschiede im realen Betrieb auswirken, hängt von der konkreten Systemarchitektur, den Komponenten und dem Betriebszustand ab. Deshalb lässt sich daraus keine pauschale Effizienzaussage ableiten.</p>"}},
+        {"type":"question","settings":{"question":"Welche Lösung eignet sich für ein Balkonkraftwerk?","answer":"<p>Für Balkonkraftwerke kommen kompakte, nachrüstbare Speicherlösungen infrage. Entscheidend sind Anschluss, Leistung und die Frage, welche Verbraucher versorgt werden sollen. <a href=\"/pages/balkonkraftwerk-mit-speicher\">Balkonkraftwerk mit Speicher →</a></p>"}},
+        {"type":"question","settings":{"question":"Brauche ich für einen AC-Speicher einen Smart Meter?","answer":"<p>Nicht jeder AC-Speicher benötigt für seine Grundfunktion zwingend einen Smart Meter. Für eine verbrauchsabhängige Steuerung sind Messdaten jedoch in der Regel wichtig. <a href=\"/pages/smart-meter-energiefluss\">Smart Meter &amp; Energiefluss verstehen →</a></p>"}},
+        {"type":"question","settings":{"question":"Kann ich den Speicher später erweitern?","answer":"<p>Das hängt vom Modell und von der vorhandenen Installation ab. Bei modular aufgebauten Systemen ist eine Erweiterung häufig vorgesehen; die Bedingungen stehen auf der jeweiligen Produktseite.</p>"}}
+      ]
+    }
+  ]
+}
+{% endschema %}

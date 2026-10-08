@@ -77,8 +77,12 @@
   {%- if template.suffix == 'balkonkraftwerk-mit-speicher' or template.suffix == 'venus-e-vergleich' or template.suffix == 'vpp-ready' or template.suffix == 'vpp-anfrage' or template.suffix == 'ai-energiemanagement' or template.suffix == 'solarspeicher-erklaert' or template.suffix == 'smart-meter-energiefluss' -%}
     <script src="{{ 'anchor-navigation.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
-  {%- if template.suffix == 'venus-e-vergleich' or template.suffix == 'ac-gekoppelter-speicher' or template.suffix == 'ai-energiemanagement' or template.suffix == 'e-auto' or template.suffix == 'smart-meter-energiefluss' or template.suffix == 'faq' or template.suffix == 'solarspeicher-erklaert' -%}
+  {%- if template.suffix == 'venus-e-vergleich' or template.suffix == 'ac-gekoppelter-speicher' or template.suffix == 'ai-energiemanagement' or template.suffix == 'e-auto' or template.suffix == 'smart-meter-energiefluss' or template.suffix == 'faq' or template.suffix == 'solarspeicher-erklaert' or template.suffix == 'ac-vs-dc-speicher' -%}
     {{ 'venus-e-design-system.css' | asset_url | stylesheet_tag }}
+  {%- endif -%}
+  {%- if template.suffix == 'ac-vs-dc-speicher' -%}
+    {{ 'ac-vs-dc-speicher.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'ac-vs-dc-speicher.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
   {%- if template.suffix == 'faq' -%}
     <script src="{{ 'faq-page.js' | asset_url }}" defer="defer"></script>
@@ -457,7 +461,7 @@
     {%- sections 'popup-group' -%}
 
       <main
-        class="main-content{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}{% if template.suffix == 'venus-e-vergleich' %} main-content--venus-e{% endif %}{% if template.suffix == 'ac-gekoppelter-speicher' %} main-content--ac-storage{% endif %}{% if template.suffix == 'e-auto' %} main-content--e-auto{% endif %}{% if template.suffix == 'ai-energiemanagement' %} main-content--ai-energy{% endif %}{% if template.suffix == 'solarspeicher-erklaert' %} main-content--solar-storage{% endif %}{% if template.suffix == 'smart-meter-energiefluss' %} main-content--smart-meter{% endif %}{% if template.suffix == 'faq' %} main-content--faq{% endif %}{% if template.suffix == 'vpp-ready' %} main-content--vpp-ready{% endif %}{% if template.suffix == 'vpp-anfrage' %} main-content--vpp-anfrage{% endif %}"
+        class="main-content{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}{% if template.suffix == 'venus-e-vergleich' %} main-content--venus-e{% endif %}{% if template.suffix == 'ac-gekoppelter-speicher' %} main-content--ac-storage{% endif %}{% if template.suffix == 'ac-vs-dc-speicher' %} main-content--acdc{% endif %}{% if template.suffix == 'e-auto' %} main-content--e-auto{% endif %}{% if template.suffix == 'ai-energiemanagement' %} main-content--ai-energy{% endif %}{% if template.suffix == 'solarspeicher-erklaert' %} main-content--solar-storage{% endif %}{% if template.suffix == 'smart-meter-energiefluss' %} main-content--smart-meter{% endif %}{% if template.suffix == 'faq' %} main-content--faq{% endif %}{% if template.suffix == 'vpp-ready' %} main-content--vpp-ready{% endif %}{% if template.suffix == 'vpp-anfrage' %} main-content--vpp-anfrage{% endif %}"
         id="MainContent"
         {% if template.suffix == 'balkonkraftwerk-mit-speicher' %}
           style="--bw-storage-content-max-width: {{ settings.bw_storage_content_max_width | default: 1500 }}px;"

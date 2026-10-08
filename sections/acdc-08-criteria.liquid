@@ -1,0 +1,71 @@
+<div class="acdc-inner">
+  {% if section.settings.eyebrow != blank %}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
+  <h2 class="acdc-heading acdc-h2">{{ section.settings.title_before | escape }} {% if section.settings.title_accent != blank %}<span class="acdc-accent">{{ section.settings.title_accent | escape }}</span>{% endif %} {{ section.settings.title_after | escape }}</h2>
+  {% if section.settings.subtitle != blank %}<p class="acdc-sub">{{ section.settings.subtitle | escape }}</p>{% endif %}
+
+  <div class="acdc-criteria-grid">
+    {% for block in section.blocks %}
+      {% if block.type == 'criterion' %}
+        <div class="acdc-criterion-card" {{ block.shopify_attributes }}>
+          <span class="acdc-criterion-icon" aria-hidden="true">
+            {% case block.settings.icon %}
+              {% when 'power' %}<svg viewBox="0 0 24 24"><path d="M13 2.5 5.5 13.5H11l-.8 8L18.5 10H13z"/></svg>
+              {% when 'compatible' %}<svg viewBox="0 0 24 24"><path d="M9 15l-3 3 3 3M15 9l3-3-3-3M6 18h6a4 4 0 000-8H9"/></svg>
+              {% when 'expand' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="10" width="7" height="7" rx="1.6"/><rect x="13.5" y="10" width="7" height="7" rx="1.6"/><path d="M7 10V7M17 10V7"/></svg>
+              {% when 'management' %}<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.2V12l3.2 2"/></svg>
+              {% when 'warranty' %}<svg viewBox="0 0 24 24"><path d="M12 3.5l7.5 3.6v5c0 4.3-3.1 7.4-7.5 8.4-4.4-1-7.5-4.1-7.5-8.4v-5zM9 12l2 2 4-4"/></svg>
+              {% else %}<svg viewBox="0 0 24 24"><rect x="2.5" y="7.5" width="16" height="9.5" rx="2.2"/><path d="M21 11v2.5M6 10.2h6.5v3.8H6z"/></svg>
+            {% endcase %}
+          </span>
+          {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
+          {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
+          {% assign has_first_link = false %}
+          {% assign has_second_link = false %}
+          {% if block.settings.link_1_label != blank and block.settings.link_1_url != blank %}{% assign has_first_link = true %}{% endif %}
+          {% if block.settings.link_2_label != blank and block.settings.link_2_url != blank %}{% assign has_second_link = true %}{% endif %}
+          {% if has_first_link or has_second_link %}
+            <div class="acdc-criterion-links">
+              {% if has_first_link %}<a class="acdc-link" href="{{ block.settings.link_1_url | escape }}">{{ block.settings.link_1_label | escape }}</a>{% endif %}
+              {% if has_second_link %}<a class="acdc-link" href="{{ block.settings.link_2_url | escape }}">{{ block.settings.link_2_label | escape }}</a>{% endif %}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "08 选购标准",
+  "tag": "section",
+  "class": "acdc-section acdc-section--08",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Weitere Kriterien"},
+    {"type":"text","id":"title_before","label":"标题普通文字（前）","default":"Nicht nur AC oder DC: Darauf kommt es bei einem"},
+    {"type":"text","id":"title_accent","label":"标题蓝色文字","default":"Solarspeicher"},
+    {"type":"text","id":"title_after","label":"标题普通文字（后）","default":"außerdem an"},
+    {"type":"textarea","id":"subtitle","label":"副标题","default":"Die Kopplungsart beschreibt nur, wo der Speicher eingebunden wird. Für den Alltag zählen weitere Kriterien mindestens genauso."}
+  ],
+  "blocks": [
+    {"type":"criterion","name":"选购标准卡","settings":[
+      {"type":"select","id":"icon","label":"线性图标","options":[{"value":"capacity","label":"容量"},{"value":"power","label":"功率"},{"value":"compatible","label":"兼容性"},{"value":"expand","label":"扩展性"},{"value":"management","label":"能源管理"},{"value":"warranty","label":"保修"}],"default":"capacity"},
+      {"type":"text","id":"title","label":"卡片标题","default":"Speicherkapazität"},
+      {"type":"textarea","id":"text","label":"卡片说明","default":"Wie viel Energie aufgenommen werden kann – abgestimmt auf Verbrauch und Solarerzeugung."},
+      {"type":"text","id":"link_1_label","label":"第一个链接文字"},
+      {"type":"url","id":"link_1_url","label":"第一个链接目标"},
+      {"type":"text","id":"link_2_label","label":"第二个链接文字"},
+      {"type":"url","id":"link_2_url","label":"第二个链接目标"}
+    ]}
+  ],
+  "max_blocks": 12,
+  "presets": [{"name":"08 选购标准","blocks":[
+    {"type":"criterion","settings":{"icon":"capacity","title":"Speicherkapazität","text":"Wie viel Energie aufgenommen werden kann – abgestimmt auf Verbrauch und Solarerzeugung."}},
+    {"type":"criterion","settings":{"icon":"power","title":"Leistung","text":"Welche Leistung der Speicher im Hausnetz bereitstellen kann – etwa bei höherem Abendverbrauch oder zusätzlichem Bedarf durch eine Wallbox."}},
+    {"type":"criterion","settings":{"icon":"compatible","title":"Kompatibilität","text":"Ob Speicher, Wechselrichter und vorhandene Installation zusammenpassen."}},
+    {"type":"criterion","settings":{"icon":"expand","title":"Erweiterbarkeit","text":"Ob Kapazität später ergänzt werden kann und welche Bedingungen dafür gelten.","link_1_label":"Nachrüstung ansehen →"}},
+    {"type":"criterion","settings":{"icon":"management","title":"Energiemanagement","text":"Wie Lade- und Entladezeiten gesteuert werden und welche Daten dafür verfügbar sind.","link_1_label":"Energiemanagement verstehen →","link_2_label":"Smart Meter & Energiefluss →"}},
+    {"type":"criterion","settings":{"icon":"warranty","title":"Garantie und Lebensdauer","text":"Welche Bedingungen der Hersteller nennt und wie sie zur geplanten Nutzungsdauer passen."}}
+  ]}]
+}
+{% endschema %}

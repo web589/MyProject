@@ -1,0 +1,75 @@
+<section class="acdc-section acdc-topics" aria-labelledby="acdc-topics-title-{{ section.id }}">
+  <div class="acdc-inner">
+    {%- if section.settings.eyebrow != blank -%}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{%- endif -%}
+    <h2 id="acdc-topics-title-{{ section.id }}" class="acdc-h2">{{ section.settings.heading | escape }} <span class="acdc-accent">{{ section.settings.heading_accent | escape }}</span></h2>
+    {%- if section.settings.subtext != blank -%}<p class="acdc-sub">{{ section.settings.subtext | escape }}</p>{%- endif -%}
+    <div class="acdc-carousel" data-acdc-carousel>
+      <button class="acdc-carousel-btn acdc-carousel-prev" type="button" aria-label="Zurück" data-acdc-dir="prev" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <div class="acdc-carousel-track" tabindex="0" aria-label="Weiterführende Themen">
+        {%- for block in section.blocks -%}
+          <article class="acdc-art" {{ block.shopify_attributes }}>
+            <div class="acdc-art-media">
+              {%- if block.settings.image != blank -%}
+                {%- assign card_alt = block.settings.image_alt | default: block.settings.title -%}
+                {{ block.settings.image | image_url: width: 1200 | image_tag: class: 'acdc-art-image', alt: card_alt, loading: 'lazy', widths: '360, 540, 720, 960, 1200', sizes: '(max-width: 720px) 100vw, (max-width: 1180px) 50vw, 33vw' }}
+              {%- else -%}
+                <div class="acdc-media-placeholder" aria-hidden="true"></div>
+              {%- endif -%}
+            </div>
+            <div class="acdc-art-body">
+              {%- if block.settings.title != blank -%}<h3>{{ block.settings.title | escape }}</h3>{%- endif -%}
+              {%- if block.settings.description != blank -%}<p>{{ block.settings.description | escape }}</p>{%- endif -%}
+              {%- if block.settings.link != blank -%}<a class="acdc-link" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>{%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+      <button class="acdc-carousel-btn acdc-carousel-next" type="button" aria-label="Weiter" data-acdc-dir="next">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name":"13 相关专题轮播",
+  "class":"acdc-topics-section",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Weiterführende Themen"},
+    {"type":"text","id":"heading","label":"标题前半部分","default":"Weiterführende Themen zu"},
+    {"type":"text","id":"heading_accent","label":"标题蓝色部分","default":"Speichertechnik"},
+    {"type":"textarea","id":"subtext","label":"副标题","default":"Vertiefe einzelne Themen zu Technik, Nachrüstung und Nutzung."}
+  ],
+  "blocks":[
+    {
+      "type":"topic_card",
+      "name":"专题卡片",
+      "settings":[
+        {"type":"image_picker","id":"image","label":"卡片图片","info":"建议使用 16:9 图片。"},
+        {"type":"text","id":"image_alt","label":"图片替代文字","info":"简要描述画面；留空时使用卡片标题。"},
+        {"type":"text","id":"title","label":"卡片标题","default":"Speichertechnik"},
+        {"type":"textarea","id":"description","label":"卡片说明","default":"Mehr über dieses Thema erfahren."},
+        {"type":"text","id":"link_label","label":"链接文字","default":"Mehr zum Thema →"},
+        {"type":"url","id":"link","label":"专题链接"}
+      ]
+    }
+  ],
+  "max_blocks":12,
+  "presets":[
+    {
+      "name":"13 相关专题轮播",
+      "blocks":[
+        {"type":"topic_card","settings":{"title":"AC-gekoppelter Speicher","description":"Wie die Einbindung auf der Wechselstromseite funktioniert und wann sie passt.","image_alt":"AC-gekoppelter Solarspeicher im Hausnetz","link":"/pages/ac-gekoppelter-speicher"}},
+        {"type":"topic_card","settings":{"title":"Solarspeicher erklärt","description":"Grundlagen: Funktion, Nutzen, passende Größe und Nachrüstung.","image_alt":"Solarspeicher an einem Wohnhaus mit PV-Anlage","link":"/pages/solarspeicher-erklaert"}},
+        {"type":"topic_card","settings":{"title":"Solarspeicher nachrüsten","description":"Worauf du achten solltest, wenn bereits eine Anlage existiert.","image_alt":"Bestehende PV-Anlage mit nachgerüstetem Speicher","link":"/pages/solarspeicher-nachruesten"}},
+        {"type":"topic_card","settings":{"title":"Smart Meter & Energiefluss","description":"Wie Messung und Steuerung den Speichereinsatz an deinen Verbrauch anpassen.","image_alt":"Smart Meter misst den Energiefluss im Haushalt","link":"/pages/smart-meter-energiefluss"}},
+        {"type":"topic_card","settings":{"title":"AI-Energiemanagement","description":"Wie künstliche Intelligenz Lade- und Entladezeiten optimiert.","image_alt":"KI-gestütztes Energiemanagement mit der MARSTEK App","link":"/pages/ai-energiemanagement"}},
+        {"type":"topic_card","settings":{"title":"Balkonkraftwerk mit Speicher","description":"Kompakte Speicherlösungen für den Balkon: Anschluss, Leistung, Kompatibilität.","image_alt":"Balkonkraftwerk mit kompakt nachrüstbarem Speicher","link":"/pages/balkonkraftwerk-mit-speicher"}}
+      ]
+    }
+  ]
+}
+{% endschema %}

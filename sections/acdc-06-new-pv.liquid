@@ -1,0 +1,77 @@
+<div class="acdc-inner">
+  {% if section.settings.eyebrow != blank %}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
+  <h2 class="acdc-heading acdc-h2">
+    {{ section.settings.title_before | escape }}
+    {% if section.settings.title_accent != blank %}<span class="acdc-accent">{{ section.settings.title_accent | escape }}</span>{% endif %}
+    {{ section.settings.title_after | escape }}
+  </h2>
+  {% if section.settings.subtitle != blank %}<p class="acdc-sub">{{ section.settings.subtitle | escape }}</p>{% endif %}
+
+  <div class="acdc-split acdc-split--reverse">
+    <ul class="acdc-point-list acdc-pt-list acdc-point-list--icons">
+      {% for block in section.blocks %}
+        {% if block.type == 'point' %}
+          <li {{ block.shopify_attributes }}>
+            <span class="acdc-point-icon acdc-ic-mini" aria-hidden="true">
+              {% case block.settings.icon %}
+                {% when 'system' %}<svg viewBox="0 0 24 24"><rect x="2.5" y="7" width="7" height="10" rx="1.6"/><rect x="13.5" y="8" width="7.5" height="8" rx="1.8"/><path d="M9.5 12h4M21 10.5v3"/></svg>
+                {% when 'needs' %}<svg viewBox="0 0 24 24"><circle cx="6" cy="13" r="2.4"/><circle cx="18" cy="13" r="2.4"/><circle cx="12" cy="6.5" r="2.4"/><path d="M7.7 11.6l2.6-3.1M16.3 11.6l-2.6-3.1M8.4 13h7.2"/></svg>
+                {% when 'flexible' %}<svg viewBox="0 0 24 24"><path d="M9 4H4v5M15 20h5v-5M4 4l7 7M20 20l-7-7"/></svg>
+                {% else %}<svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9h17M9 9v11.5"/></svg>
+              {% endcase %}
+            </span>
+            <div>
+              {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
+              {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <div class="acdc-media acdc-media--landscape acdc-split-media">
+      {% if section.settings.image != blank %}
+        {% assign media_alt = section.settings.image_alt | default: section.settings.image.alt %}
+        {{ section.settings.image | image_url: width: 1600 | image_tag: widths: '450, 750, 1000, 1200, 1600', sizes: '(max-width: 980px) 100vw, 50vw', loading: 'lazy', alt: media_alt }}
+      {% else %}
+        <div class="acdc-placeholder acdc-ph acdc-split-ph" aria-hidden="true"></div>
+      {% endif %}
+    </div>
+  </div>
+  {% if section.settings.note != blank or section.settings.note_link_text != blank %}
+    <p class="acdc-note">{{ section.settings.note | escape }}{% if section.settings.note_link_text != blank and section.settings.note_link_url != blank %} <a class="acdc-link" href="{{ section.settings.note_link_url | escape }}">{{ section.settings.note_link_text | escape }}</a>{% endif %}</p>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "06 新建光伏场景",
+  "tag": "section",
+  "class": "acdc-section acdc-section--06",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Neuinstallation"},
+    {"type":"text","id":"title_before","label":"标题普通文字（前）","default":"Neue PV-Anlage: Wann kommt"},
+    {"type":"text","id":"title_accent","label":"标题蓝色文字","default":"DC-Kopplung"},
+    {"type":"text","id":"title_after","label":"标题普通文字（后）","default":"infrage?"},
+    {"type":"textarea","id":"subtitle","label":"副标题","default":"Wer PV-Anlage und Speicher gemeinsam plant, kann beide von Anfang an aufeinander abstimmen – hier kommt häufig die DC-Kopplung ins Spiel."},
+    {"type":"image_picker","id":"image","label":"新建光伏场景图片"},
+    {"type":"text","id":"image_alt","label":"图片替代文字","default":"Neu geplante PV-Anlage mit Speicherlösung an einem Wohnhaus"},
+    {"type":"textarea","id":"note","label":"底部说明","default":"Bei gemeinsam geplanten PV- und Speichersystemen kann die DC-Kopplung eine passende Architektur sein. Entscheidend ist, dass Komponenten und geplante Nutzung zusammenpassen."},
+    {"type":"text","id":"note_link_text","label":"底部链接文字","default":"Grundlagen zum Solarspeicher →"},
+    {"type":"url","id":"note_link_url","label":"底部链接目标"}
+  ],
+  "blocks": [
+    {"type":"point","name":"场景要点","settings":[
+      {"type":"select","id":"icon","label":"图标","options":[{"value":"plan","label":"整体规划"},{"value":"system","label":"系统连接"},{"value":"needs","label":"用能需求"},{"value":"flexible","label":"扩展灵活性"}],"default":"plan"},
+      {"type":"text","id":"title","label":"要点标题","default":"Gemeinsame Planung"},
+      {"type":"textarea","id":"text","label":"要点说明","default":"PV-Anlage, Speicher und Wechselrichter werden von Anfang an als gemeinsames System ausgelegt."}
+    ]}
+  ],
+  "max_blocks": 8,
+  "presets": [{"name":"06 新建光伏场景","blocks":[
+    {"type":"point","settings":{"icon":"plan","title":"Gemeinsame Planung","text":"PV-Anlage, Speicher und Wechselrichter werden von Anfang an als gemeinsames System ausgelegt."}},
+    {"type":"point","settings":{"icon":"system","title":"Aufeinander abgestimmte Architektur","text":"Erzeugung und Speicher sind auf der DC-Seite integriert, häufig über einen Hybridwechselrichter."}},
+    {"type":"point","settings":{"icon":"needs","title":"Auf den Bedarf ausgelegt","text":"Leistung und Speicherkapazität können bei einer Neuinstallation von Anfang an auf den geplanten Energiebedarf abgestimmt werden."}},
+    {"type":"point","settings":{"icon":"flexible","title":"Flexibilität im Blick behalten","text":"Wie gut spätere Erweiterungen möglich sind, hängt von der gewählten Systemarchitektur ab."}}
+  ]}]
+}
+{% endschema %}

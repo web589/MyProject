@@ -1,0 +1,74 @@
+<div class="acdc-section acdc-retrofit acdc-gray-sec">
+  <div class="acdc-container">
+    {% if section.settings.eyebrow != blank %}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
+    <h2>{{ section.settings.heading | escape }}{% if section.settings.heading_accent != blank %} <span class="acdc-acc">{{ section.settings.heading_accent | escape }}</span>{% endif %}{% if section.settings.heading_after != blank %} {{ section.settings.heading_after | escape }}{% endif %}</h2>
+    {% if section.settings.subtitle != blank %}<p class="acdc-sub">{{ section.settings.subtitle | escape }}</p>{% endif %}
+    <div class="acdc-split">
+      {% if section.blocks.size > 0 %}
+        <ul class="acdc-pt-list">
+          {% for block in section.blocks %}
+            <li {{ block.shopify_attributes }}>
+              <span class="acdc-ic-mini" aria-hidden="true">
+                {% if block.settings.icon != blank %}
+                  {{ block.settings.icon | image_url: width: 72 | image_tag: loading: 'lazy', widths: '36, 72', sizes: '18px', alt: '' }}
+                {% else %}
+                  {% case block.settings.icon_type %}
+                    {% when 'storage' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="7.5" width="13" height="9" rx="2"/><path d="M20 10.5v3"/><path d="M8 12h4M10 10v4"/></svg>
+                    {% when 'expand' %}<svg viewBox="0 0 24 24"><rect x="3.5" y="10" width="7" height="7" rx="1.6"/><rect x="13.5" y="10" width="7" height="7" rx="1.6"/><path d="M7 10V7M17 10V6"/><path d="M15 8h4"/></svg>
+                    {% else %}<svg viewBox="0 0 24 24"><rect x="3.5" y="7" width="7" height="10" rx="1.6"/><path d="M14 8.5l4.5 3.5-4.5 3.5"/><path d="M6 10.5h2.5"/></svg>
+                  {% endcase %}
+                {% endif %}
+              </span>
+              <div>
+                {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
+                {% if block.settings.description != blank or block.settings.link_text != blank %}
+                  <p>{{ block.settings.description | escape }}{% if block.settings.link_text != blank and block.settings.link != blank %} <a class="acdc-lnk" href="{{ block.settings.link }}">{{ block.settings.link_text | escape }}</a>{% endif %}</p>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <div class="acdc-media acdc-split-media">
+        {% if section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1600', sizes: '(min-width: 981px) 45vw, 100vw', alt: section.settings.image_alt }}
+        {% else %}
+          <div class="acdc-ph acdc-split-ph" aria-hidden="true"></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "05 已有光伏后装",
+  "tag": "section",
+  "class": "acdc-section-wrap acdc-retrofit-wrap",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Nachrüstung"},
+    {"type":"text","id":"heading","label":"标题前半部分","default":"Bestehende PV-Anlage: Wann ist"},
+    {"type":"text","id":"heading_accent","label":"标题蓝色文字","default":"AC-Kopplung"},
+    {"type":"text","id":"heading_after","label":"标题后半部分","default":"besonders interessant?"},
+    {"type":"textarea","id":"subtitle","label":"副标题","default":"Bei bestehenden PV-Anlagen zählt vor allem, wie sich ein Speicher sinnvoll in das vorhandene System integrieren lässt."},
+    {"type":"image_picker","id":"image","label":"场景图片"},
+    {"type":"text","id":"image_alt","label":"图片替代文字","default":"Wohnhaus mit bestehender PV-Anlage und nachgerüstetem AC-Speicher"}
+  ],
+  "blocks": [
+    {"type":"point","name":"场景要点","settings":[
+      {"type":"select","id":"icon_type","label":"默认图标类型","default":"inverter","options":[{"value":"inverter","label":"逆变器"},{"value":"storage","label":"储能"},{"value":"expand","label":"扩展"}]},
+      {"type":"image_picker","id":"icon","label":"自定义图标图片","info":"选择后替换默认线性图标。"},
+      {"type":"text","id":"title","label":"要点标题","default":"Bestehender Wechselrichter"},
+      {"type":"textarea","id":"description","label":"要点正文","default":"Die bestehende Anlage kann häufig ergänzt werden."},
+      {"type":"text","id":"link_text","label":"补充链接文字"},
+      {"type":"url","id":"link","label":"补充链接地址"}
+    ]}
+  ],
+  "max_blocks": 8,
+  "presets": [{"name":"05 已有光伏后装","blocks":[
+    {"type":"point","settings":{"icon_type":"inverter","title":"Bestehender Wechselrichter","description":"Ein vorhandener Wechselrichter kann häufig weiter genutzt werden. Ob das im konkreten System möglich ist, muss individuell geprüft werden."}},
+    {"type":"point","settings":{"icon_type":"storage","title":"Speicher nachträglich ergänzen","description":"AC-gekoppelte Speicher werden auf der Wechselstromseite ergänzt und sind deshalb für viele Nachrüstungen interessant.","link_text":"AC-gekoppelten Speicher genauer verstehen →","link":"/pages/ac-gekoppelter-speicher"}},
+    {"type":"point","settings":{"icon_type":"expand","title":"System flexibel erweitern","description":"Je nach System können Kapazität, Messung oder Energiemanagement später ergänzt werden."}}
+  ]}]
+}
+{% endschema %}

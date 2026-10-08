@@ -1,0 +1,60 @@
+<div class="acdc-section acdc-definition">
+  <div class="acdc-container">
+    {% if section.settings.eyebrow != blank %}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
+    <h2>{{ section.settings.heading | escape }}{% if section.settings.heading_accent != blank %} <span class="acdc-acc">{{ section.settings.heading_accent | escape }}</span>{% endif %}</h2>
+    {% if section.settings.answer != blank %}
+      <div class="acdc-answer-box"><p>{% if section.settings.answer_label != blank %}<strong>{{ section.settings.answer_label | escape }}</strong> {% endif %}{{ section.settings.answer | escape }}</p></div>
+    {% endif %}
+    {% if section.settings.note != blank %}<p class="acdc-ans-note">{{ section.settings.note | escape }}</p>{% endif %}
+    {% if section.blocks.size > 0 %}
+      <div class="acdc-mini-cards acdc-mini-cards-two">
+        {% for block in section.blocks %}
+          <article class="acdc-mini-card" {{ block.shopify_attributes }}>
+            <span class="acdc-ic" aria-hidden="true">
+              {% if block.settings.icon != blank %}
+                {{ block.settings.icon | image_url: width: 72 | image_tag: loading: 'lazy', widths: '36, 72', sizes: '18px', alt: '' }}
+              {% elsif block.settings.side == 'dc' %}
+                <svg viewBox="0 0 24 24"><rect x="6.5" y="7" width="12" height="9" rx="1.8"/><path d="M21.5 10.5v3"/><path d="M9.5 11.5h6"/></svg>
+              {% else %}
+                <svg viewBox="0 0 24 24"><path d="M2.5 12c1.8-5.5 3.6-5.5 5.4 0s3.6 5.5 5.4 0 3.6-5.5 5.4 0"/></svg>
+              {% endif %}
+            </span>
+            {% if block.settings.side_label != blank %}<span class="acdc-side">{{ block.settings.side_label | escape }}</span>{% endif %}
+            {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
+            {% if block.settings.description != blank %}<p>{{ block.settings.description | escape }}</p>{% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "02 基础定义",
+  "tag": "section",
+  "class": "acdc-section-wrap acdc-definition-wrap",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Kurz erklärt"},
+    {"type":"text","id":"heading","label":"标题普通文字","default":"AC- und DC-Speicher"},
+    {"type":"text","id":"heading_accent","label":"标题蓝色文字","default":"kurz erklärt"},
+    {"type":"text","id":"answer_label","label":"简答加粗标签","default":"Kurz gesagt:"},
+    {"type":"textarea","id":"answer","label":"简答内容","default":"Der wichtigste Unterschied für die Systemarchitektur liegt darin, wo der Speicher in das PV-System eingebunden wird – auf der Wechselstromseite oder auf der Gleichstromseite."},
+    {"type":"textarea","id":"note","label":"简答下方说明","default":"Beide Ansätze sind verbreitet. Welcher zu deiner Situation passt, hängt vor allem davon ab, ob bereits eine PV-Anlage existiert oder ob Erzeugung und Speicher gemeinsam geplant werden."}
+  ],
+  "blocks": [
+    {"type":"definition","name":"定义卡","settings":[
+      {"type":"select","id":"side","label":"默认图标类型","default":"ac","options":[{"value":"ac","label":"交流侧图标"},{"value":"dc","label":"直流侧图标"}]},
+      {"type":"image_picker","id":"icon","label":"自定义图标图片","info":"选择后替换默认线性图标。"},
+      {"type":"text","id":"side_label","label":"卡片简称","default":"AC"},
+      {"type":"text","id":"title","label":"卡片标题","default":"Speicher"},
+      {"type":"textarea","id":"description","label":"卡片正文","default":"Beschreibung des Speichers."}
+    ]}
+  ],
+  "max_blocks": 6,
+  "presets": [{"name":"02 基础定义","blocks":[
+    {"type":"definition","settings":{"side":"ac","side_label":"AC","title":"AC-gekoppelter Speicher","description":"Ein AC-gekoppelter Speicher wird auf der Wechselstromseite des PV-Systems eingebunden. Dadurch lässt er sich häufig gut in bestehende Anlagen integrieren."}},
+    {"type":"definition","settings":{"side":"dc","side_label":"DC","title":"DC-gekoppelter Speicher","description":"Ein DC-gekoppelter Speicher wird auf der Gleichstromseite des PV-Systems eingebunden und ist häufig Teil einer von Anfang an gemeinsam geplanten PV- und Speicherlösung."}}
+  ]}]
+}
+{% endschema %}

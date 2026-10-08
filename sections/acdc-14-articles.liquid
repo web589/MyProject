@@ -1,0 +1,75 @@
+<section class="acdc-section acdc-articles" aria-labelledby="acdc-articles-title-{{ section.id }}">
+  <div class="acdc-inner">
+    {%- if section.settings.eyebrow != blank -%}<div class="acdc-eyebrow">{{ section.settings.eyebrow | escape }}</div>{%- endif -%}
+    <h2 id="acdc-articles-title-{{ section.id }}" class="acdc-h2">{{ section.settings.heading | escape }} <span class="acdc-accent">{{ section.settings.heading_accent | escape }}</span></h2>
+    {%- if section.settings.subtext != blank -%}<p class="acdc-sub">{{ section.settings.subtext | escape }}</p>{%- endif -%}
+    <div class="acdc-art-grid">
+      {%- for block in section.blocks -%}
+        {%- assign selected_article = block.settings.article -%}
+        {%- assign card_title = block.settings.title | default: selected_article.title -%}
+        {%- assign card_image = block.settings.image | default: selected_article.image -%}
+        <article class="acdc-art" {{ block.shopify_attributes }}>
+          <div class="acdc-art-media">
+            {%- if card_image != blank -%}
+              {%- assign card_alt = block.settings.image_alt | default: card_image.alt | default: card_title -%}
+              {{ card_image | image_url: width: 1200 | image_tag: class: 'acdc-art-image', alt: card_alt, loading: 'lazy', widths: '360, 540, 720, 960, 1200', sizes: '(max-width: 720px) 100vw, (max-width: 1180px) 50vw, 33vw' }}
+            {%- else -%}
+              <div class="acdc-media-placeholder" aria-hidden="true"></div>
+            {%- endif -%}
+          </div>
+          <div class="acdc-art-body">
+            {%- if block.settings.tag != blank -%}<span class="acdc-tag">{{ block.settings.tag | escape }}</span>{%- endif -%}
+            {%- if card_title != blank -%}<h3>{{ card_title | escape }}</h3>{%- endif -%}
+            {%- if block.settings.description != blank -%}<p>{{ block.settings.description | escape }}</p>{%- endif -%}
+            {%- if selected_article != blank -%}<a class="acdc-link" href="{{ selected_article.url }}">{{ block.settings.link_label | escape }}</a>{%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.all_articles_link != blank -%}
+      <div class="acdc-topic-links"><a class="acdc-link" href="{{ section.settings.all_articles_link }}">{{ section.settings.all_articles_label | escape }}</a></div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name":"14 精选文章",
+  "class":"acdc-articles-section",
+  "settings":[
+    {"type":"text","id":"eyebrow","label":"眉题","default":"Ratgeber"},
+    {"type":"text","id":"heading","label":"标题前半部分","default":"Ratgeber zu"},
+    {"type":"text","id":"heading_accent","label":"标题蓝色部分","default":"Speichertechnik und Nachrüstung"},
+    {"type":"textarea","id":"subtext","label":"副标题","default":"Ausführliche Artikel zu den Fragen, die bei der Entscheidung am häufigsten auftauchen."},
+    {"type":"text","id":"all_articles_label","label":"全部文章链接文字","default":"Alle Ratgeber ansehen →"},
+    {"type":"url","id":"all_articles_link","label":"全部文章链接"}
+  ],
+  "blocks":[
+    {
+      "type":"article_card",
+      "name":"精选文章卡片",
+      "settings":[
+        {"type":"article","id":"article","label":"选择文章","info":"仅在选择真实文章后显示“继续阅读”链接。"},
+        {"type":"image_picker","id":"image","label":"自定义配图","info":"留空时使用文章主图；建议使用 16:9 图片。"},
+        {"type":"text","id":"image_alt","label":"图片替代文字","info":"简要描述画面。"},
+        {"type":"text","id":"tag","label":"卡片标记","default":"RATGEBER"},
+        {"type":"text","id":"title","label":"卡片标题","info":"留空时使用所选文章标题。"},
+        {"type":"textarea","id":"description","label":"卡片摘要"},
+        {"type":"text","id":"link_label","label":"阅读链接文字","default":"Weiterlesen →"}
+      ]
+    }
+  ],
+  "max_blocks":6,
+  "presets":[
+    {
+      "name":"14 精选文章",
+      "settings":{"all_articles_link":"/pages/ratgeber"},
+      "blocks":[
+        {"type":"article_card","settings":{"title":"AC- oder DC-Speicher bei bestehender PV?","description":"Welche Architektur zu einer vorhandenen Anlage passt und welche Punkte vorher zu klären sind.","image_alt":"Bestehende PV-Anlage mit Solarspeicher"}},
+        {"type":"article_card","settings":{"title":"Speicher nachrüsten: Was muss zum Wechselrichter passen?","description":"Warum die Frage nach dem Wechselrichter bei Nachrüstungen eine zentrale Rolle spielt.","image_alt":"Wechselrichter und Speicher im Hausanschlussraum"}},
+        {"type":"article_card","settings":{"title":"PV-Speicher erweitern: Welche Komponenten müssen zusammenspielen?","description":"Wie Speicher, Messung und Steuerung bei einer Erweiterung aufeinander abgestimmt werden.","image_alt":"Erweiterung einer PV-Speicherlösung im Hausanschlussraum"}}
+      ]
+    }
+  ]
+}
+{% endschema %}
