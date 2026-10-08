@@ -9,6 +9,10 @@
       assign card_image = article.image
     endif
     assign card_title = block.settings.title | default: content_item.title
+    assign card_title_parts = card_title | split: ' | VENUS E'
+    if card_title_parts.size > 1 and card_title_parts.last == blank
+      assign card_title = card_title_parts.first
+    endif
     assign card_description = block.settings.description
     if card_description == blank and card_page == blank and article != blank
       assign card_description = article.excerpt | strip_html | truncatewords: 42
