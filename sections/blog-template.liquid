@@ -194,6 +194,10 @@
     transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
   }
 
+  .blog-card[hidden] {
+    display: none;
+  }
+
   .blog-card:hover,
   .blog-card:focus-within {
     border-color: var(--blog-accent);
@@ -370,6 +374,10 @@
     justify-content: center;
     margin: 48px 0 0;
     padding: 0;
+  }
+
+  .blog-page .blog-pagination:empty {
+    display: none;
   }
 
   .blog-page .pagination > span {
@@ -575,11 +583,18 @@
         {%- endfor -%}
 
         <section>
-          <div class="blog-card-grid">
+          <div class="blog-card-grid" data-blog-card-grid data-page-size="9">
             {%- for article in all_articles offset: 1 -%}
               {%- render 'blog-card', blog: blog, article: article -%}
             {%- endfor -%}
           </div>
+          <nav
+            class="pagination blog-pagination"
+            data-blog-pagination
+            data-previous-label="{{ 'general.pagination.previous' | t | escape }}"
+            data-next-label="{{ 'general.pagination.next' | t | escape }}"
+            aria-label="{{ 'blogs.article.blog_center' | t | escape }}"
+          ></nav>
         </section>
       {%- else -%}
         <p class="blog-empty-state">{{ 'home_page.onboarding.no_content' | t }}</p>
@@ -611,6 +626,10 @@
     {%- endif -%}
   </div>
 </div>
+
+{%- if is_all_blog_view -%}
+  <script src="{{ 'blog-pagination.js' | asset_url }}" defer></script>
+{%- endif -%}
 
 {% schema %}
 {
