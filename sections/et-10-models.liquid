@@ -23,7 +23,7 @@
               {% if block.settings.show_capacity and block.settings.capacity != blank %}<div class="et-cap">{{ block.settings.capacity | escape }}</div>{% endif %}
               {% if product_text != blank %}<p>{{ product_text | escape }}</p>{% endif %}
               {% if block.settings.link_label != blank and product_link != blank %}<a class="et-lnk" href="{{ product_link | escape }}">{{ block.settings.link_label | escape }}</a>{% endif %}
-              {% if request.design_mode and block.settings.show_capacity and block.settings.capacity != blank and block.settings.verified == false %}<p class="et-editor-note">容量尚未核实，请按对应型号的正式参数表填写；可关闭“显示容量”。</p>{% endif %}
+              
             </div>
           </article>
         {%- endif -%}

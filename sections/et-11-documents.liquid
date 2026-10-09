@@ -28,7 +28,7 @@
               {%- endfor -%}
             </div>
             {% if block.settings.link_label != blank and block.settings.link != blank %}<a class="et-lnk et-dlink" href="{{ block.settings.link | escape }}">{{ block.settings.link_label | escape }}</a>{% endif %}
-            {% if request.design_mode and block.settings.verified == false %}<p class="et-editor-note">文档尚未核实：请填写真实资料并确认对应型号；缺少资料时关闭“显示此区块”。</p>{% endif %}
+            
           </article>
         {%- endif -%}
       {%- endfor -%}
