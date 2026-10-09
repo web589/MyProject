@@ -56,6 +56,7 @@ body:has(.main-content--ai-energy) .site-header-group:has(#SiteHeader[data-nativ
 .ai-energy__center-cta { display: flex; width: fit-content; margin: 32px auto 0; }
 .ai-energy__media, .ai-energy__visual, .ai-energy__day-image, .ai-energy__bento-media, .ai-energy__model-media, .ai-energy__guide-media { overflow: hidden; background: #edf1f5; }
 .ai-energy__media img, .ai-energy__visual img, .ai-energy__day-image img, .ai-energy__bento-media img, .ai-energy__model-media img, .ai-energy__guide-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ai-energy__model-media img { object-fit: contain; }
 .ai-energy__media > .ph, .ai-energy__visual > .ph, .ai-energy__day-image > .ph, .ai-energy__bento-media > .ph, .ai-energy__model-media > .ph, .ai-energy__guide-media > .ph { min-height: inherit; height: 100%; }
 
 .ai-energy__hero { padding-top: clamp(70px,8vw,120px); }
