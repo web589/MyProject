@@ -1,0 +1,216 @@
+{%- if section.settings.show_section -%}
+  {% capture section_content %}
+    {% render 'et-heading', section: section %}
+    <div class="et-scn">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.show_block -%}
+          <article class="et-card" {{ block.shopify_attributes }}>
+            {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
+            {% if block.settings.text != blank %}<p>{{ block.settings.text | escape }}</p>{% endif %}
+            {% if block.settings.link_label != blank and block.settings.link != blank %}<a class="et-lnk" href="{{ block.settings.link | escape }}">{{ block.settings.link_label | escape }}</a>{% endif %}
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {% endcapture %}
+  {% render 'et-section', section: section, anchor_id: 'erfahrungen', extra_class: 'et-scenarios', content: section_content %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "经验测试 · 09 使用场景",
+  "tag": "div",
+  "class": "section-et-09-scenarios",
+  "limit": 1,
+  "enabled_on": {
+    "templates": [
+      "page"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示此模块",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "Im Alltag"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题",
+      "default": "So kann VENUS E in unterschiedlichen"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题强调部分",
+      "default": "Haushalten genutzt werden"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "副标题",
+      "default": "Hier zeigen wir typische Anwendungsbeispiele – keine Kundenbewertungen, sondern Szenarien, die zeigen, wofür ein Speicher sinnvoll eingesetzt werden kann."
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "模块背景色",
+      "default": "#F5F7F9"
+    },
+    {
+      "type": "header",
+      "content": "模块间距"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "桌面上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "桌面下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "label": "平板上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "label": "平板下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "手机上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "手机下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    }
+  ],
+  "blocks": [
+    {
+      "type": "scenario",
+      "name": "使用场景卡",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示此区块",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "场景标题"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "场景说明"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "链接文字"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "专题链接"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "经验测试 · 09 使用场景",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "scenario",
+          "settings": {
+            "show_block": true,
+            "title": "Balkonkraftwerk",
+            "text": "Tagsüber Solarstrom speichern und später im Haushalt nutzen.",
+            "link_label": "Mehr dazu →",
+            "link": "/pages/balkonkraftwerk-mit-speicher"
+          }
+        },
+        {
+          "type": "scenario",
+          "settings": {
+            "show_block": true,
+            "title": "Bestehende Dach-PV",
+            "text": "Eine bestehende PV-Anlage um einen Speicher ergänzen. Welche Anpassungen nötig sind, hängt vom vorhandenen System ab.",
+            "link_label": "Nachrüstung ansehen →",
+            "link": "/pages/solarspeicher-nachruesten"
+          }
+        },
+        {
+          "type": "scenario",
+          "settings": {
+            "show_block": true,
+            "title": "E-Auto",
+            "text": "Gespeicherten Solarstrom über das Hausnetz für spätere Ladezeiten nutzen.",
+            "link_label": "E-Auto & Speicher →",
+            "link": "/pages/e-auto-laden-mit-speicher"
+          }
+        },
+        {
+          "type": "scenario",
+          "settings": {
+            "show_block": true,
+            "title": "Wärmepumpe / hoher Abendverbrauch",
+            "text": "Energie zeitlich verschieben, wenn der Bedarf außerhalb der Solarstunden steigt.",
+            "link_label": "Solchen Bedarf planen →",
+            "link": "/pages/solarspeicher-erklaert"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

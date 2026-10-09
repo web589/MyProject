@@ -1,0 +1,8 @@
+<section
+  id="{{ anchor_id | escape }}"
+  class="et-section {{ extra_class | escape }}"
+  {% if section.settings.heading != blank or section.settings.heading_accent != blank %}aria-labelledby="et-heading-{{ section.id }}"{% endif %}
+  style="background: {{ section.settings.background }}; --et-padding-top: {{ section.settings.padding_top }}px; --et-padding-bottom: {{ section.settings.padding_bottom }}px; --et-padding-top-tablet: {{ section.settings.padding_top_tablet }}px; --et-padding-bottom-tablet: {{ section.settings.padding_bottom_tablet }}px; --et-padding-top-mobile: {{ section.settings.padding_top_mobile }}px; --et-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;"
+>
+  <div class="et-inner">{{ content }}</div>
+</section>

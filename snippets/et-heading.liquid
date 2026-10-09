@@ -1,0 +1,13 @@
+{% if section.settings.eyebrow != blank %}
+  <div class="et-eyebrow">{{ section.settings.eyebrow | escape }}</div>
+{% endif %}
+{% if section.settings.heading != blank or section.settings.heading_accent != blank %}
+  {% if level == 'h1' %}
+    <h1 id="et-heading-{{ section.id }}">{{ section.settings.heading | escape }}{% if section.settings.heading_accent != blank %} <span class="et-acc">{{ section.settings.heading_accent | escape }}</span>{% endif %}</h1>
+  {% else %}
+    <h2 id="et-heading-{{ section.id }}">{{ section.settings.heading | escape }}{% if section.settings.heading_accent != blank %} <span class="et-acc">{{ section.settings.heading_accent | escape }}</span>{% endif %}</h2>
+  {% endif %}
+{% endif %}
+{% if section.settings.subtitle != blank %}
+  <p class="et-sub">{{ section.settings.subtitle | escape }}</p>
+{% endif %}

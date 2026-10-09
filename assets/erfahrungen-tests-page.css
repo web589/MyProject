@@ -1,0 +1,348 @@
+/* Erfahrungen & Tests: styles are isolated to this page template. */
+.main-content--erfahrungen-tests {
+  --et-blue: #0099fe;
+  --et-blue-soft: #e8f4ff;
+  --et-ink: #0e1b2c;
+  --et-gray: #8a97a6;
+  --et-gray-dark: #5b6b7c;
+  --et-border: #e3e8ee;
+  --et-line: #edf0f4;
+  --et-bg: #f5f7f9;
+  --et-radius: 10px;
+  background: #fff;
+  color: var(--et-ink);
+  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.main-content--erfahrungen-tests .et-section,
+.main-content--erfahrungen-tests .et-section * { box-sizing: border-box; }
+.main-content--erfahrungen-tests .et-section * {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: none;
+}
+.main-content--erfahrungen-tests .et-section :is(h1, h2, h3, p, ul, ol, li) { margin: 0; padding: 0; }
+.main-content--erfahrungen-tests .et-section :is(h1, h2, h3) { color: var(--et-ink); font-style: normal; }
+.main-content--erfahrungen-tests .et-section [hidden] { display: none !important; }
+.main-content--erfahrungen-tests .et-section [id],
+.main-content--erfahrungen-tests .et-section[id] { scroll-margin-top: 110px; }
+.main-content--erfahrungen-tests .et-section {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--et-section-bg, #fff);
+}
+.main-content--erfahrungen-tests .et-inner {
+  width: 100%;
+  max-width: 1640px;
+  margin: 0 auto;
+  padding: var(--et-padding-top, 72px) 100px var(--et-padding-bottom, 72px);
+}
+.main-content--erfahrungen-tests .et-section h2 {
+  width: 100%;
+  max-width: none;
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+}
+.main-content--erfahrungen-tests .et-acc { color: var(--et-blue); }
+.main-content--erfahrungen-tests .et-eyebrow {
+  margin-bottom: 14px;
+  color: var(--et-blue);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  line-height: normal;
+}
+.main-content--erfahrungen-tests .et-section .et-sub {
+  max-width: none;
+  margin-top: 14px;
+  color: var(--et-gray-dark);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.65;
+}
+.main-content--erfahrungen-tests .et-section .et-note {
+  max-width: none;
+  margin-top: 18px;
+  color: var(--et-gray);
+  font-size: 13.5px;
+  font-weight: 400;
+  line-height: 1.7;
+}
+.main-content--erfahrungen-tests .et-section .et-note :is(p, li) { font: inherit; color: inherit; }
+.main-content--erfahrungen-tests .et-note p + p,
+.main-content--erfahrungen-tests .et-answer-box p + p { margin-top: 12px; }
+.main-content--erfahrungen-tests .et-note :is(ul, ol),
+.main-content--erfahrungen-tests .et-answer-box :is(ul, ol) { padding-left: 20px; }
+.main-content--erfahrungen-tests .et-section :is(b, strong) { font-weight: 700; }
+.main-content--erfahrungen-tests .et-section a { color: var(--et-blue); text-decoration: none; }
+.main-content--erfahrungen-tests .et-section a:hover { color: var(--et-blue); }
+.main-content--erfahrungen-tests .et-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  width: auto;
+  margin: 0;
+  padding: 14px 30px;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: normal;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  appearance: none;
+  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+}
+.main-content--erfahrungen-tests .et-btn::before,
+.main-content--erfahrungen-tests .et-btn::after { content: none; }
+.main-content--erfahrungen-tests .et-section .et-btn-primary {
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #0099fe, #00c6ff);
+  color: #fff;
+  box-shadow: none;
+  transform: none;
+}
+.main-content--erfahrungen-tests .et-section .et-btn-primary:hover {
+  border: 0;
+  color: #fff;
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(14, 27, 44, .16);
+}
+.main-content--erfahrungen-tests .et-section .et-btn-ghost { background: #fff; color: var(--et-blue); border: 1px solid #9bd8ff; }
+.main-content--erfahrungen-tests .et-section .et-btn-ghost:hover { border-color: var(--et-blue); background: var(--et-blue-soft); color: var(--et-blue); }
+.main-content--erfahrungen-tests .et-lnk,
+.main-content--erfahrungen-tests .et-note a {
+  display: inline-block;
+  color: var(--et-blue);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: inherit;
+  letter-spacing: normal;
+  text-decoration: none;
+}
+.main-content--erfahrungen-tests .et-lnk:hover,
+.main-content--erfahrungen-tests .et-note a:hover { color: var(--et-blue); text-decoration: underline; }
+.main-content--erfahrungen-tests .et-section :is(a, button):focus-visible { outline: 2px solid var(--et-blue); outline-offset: 4px; }
+.main-content--erfahrungen-tests .et-media { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--et-radius); }
+.main-content--erfahrungen-tests .et-media-image { display: block; width: 100%; height: 100%; max-width: none; object-fit: var(--et-image-fit, cover); }
+.main-content--erfahrungen-tests .et-media-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 1.5px dashed #c4cdd7;
+  border-radius: inherit;
+  background: #edf1f5;
+  color: #7c8b9c;
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: center;
+}
+.main-content--erfahrungen-tests .et-media .et-media-badge { position: absolute; top: 14px; left: 16px; padding: 2px 7px; border: 1px solid #c4cdd7; border-radius: 4px; background: #fff; color: #7c8b9c; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; }
+
+/* 01: first screen. Both columns grow with the page instead of capping the copy. */
+.main-content--erfahrungen-tests .et-hero-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 72px; align-items: center; }
+.main-content--erfahrungen-tests .et-hero-grid > * { min-width: 0; }
+.main-content--erfahrungen-tests .et-hero h1 { max-width: none; margin-top: 20px; font-size: 48px; font-weight: 600; letter-spacing: -.015em; line-height: 1.16; }
+.main-content--erfahrungen-tests .et-hero .et-sub { font-size: 16.5px; }
+.main-content--erfahrungen-tests .et-hero-cta { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* 02: trust figures. */
+.main-content--erfahrungen-tests .et-trust { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 32px; }
+.main-content--erfahrungen-tests .et-stat { min-width: 0; position: relative; background: #fff; border: 1px solid var(--et-border); border-radius: var(--et-radius); padding: 28px 26px; }
+.main-content--erfahrungen-tests .et-stat::before { content: ''; position: absolute; top: 0; left: 26px; width: 34px; height: 3px; background: var(--et-blue); border-radius: 0 0 2px 2px; }
+.main-content--erfahrungen-tests .et-stat .et-num { font-size: 34px; font-weight: 600; letter-spacing: -.02em; color: var(--et-blue); line-height: 1.1; }
+.main-content--erfahrungen-tests .et-stat .et-num small { display: inline; margin-left: 4px; font-size: 15px; font-weight: 500; color: var(--et-gray-dark); }
+.main-content--erfahrungen-tests .et-stat .et-lab { margin-top: 12px; font-size: 14px; font-weight: 600; color: var(--et-ink); line-height: 1.6; }
+.main-content--erfahrungen-tests .et-stat .et-src { margin-top: 10px; font-size: 12px; font-weight: 400; color: var(--et-gray); line-height: normal; }
+
+/* 03 / 04 / 09: definitions, criteria and scenarios. */
+.main-content--erfahrungen-tests .et-answer-box { margin-top: 26px; border-left: 3px solid var(--et-blue); background: var(--et-blue-soft); border-radius: 0 var(--et-radius) var(--et-radius) 0; padding: 24px 30px; font-size: 18px; font-weight: 400; line-height: 1.7; }
+.main-content--erfahrungen-tests .et-answer-box :is(p, li) { font-size: 18px; font-weight: 400; line-height: 1.7; }
+.main-content--erfahrungen-tests .et-answer-box :is(b, strong) { font-weight: 600; }
+.main-content--erfahrungen-tests .et-evid,
+.main-content--erfahrungen-tests .et-cards3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 32px; }
+.main-content--erfahrungen-tests .et-scn { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 32px; }
+.main-content--erfahrungen-tests .et-card { min-width: 0; background: #fff; border: 1px solid var(--et-border); border-radius: var(--et-radius); padding: 26px 26px 28px; }
+.main-content--erfahrungen-tests .et-card .et-ic { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--et-blue-soft); margin-bottom: 16px; }
+.main-content--erfahrungen-tests .et-card .et-ic svg { width: 20px; height: 20px; stroke: var(--et-blue); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.main-content--erfahrungen-tests .et-card .et-ic img { width: 20px; height: 20px; object-fit: contain; }
+.main-content--erfahrungen-tests .et-card h3 { font-size: 16.5px; font-weight: 600; letter-spacing: normal; line-height: normal; }
+.main-content--erfahrungen-tests .et-card p { font-size: 13.5px; color: var(--et-gray-dark); margin-top: 9px; font-weight: 400; line-height: 1.65; }
+.main-content--erfahrungen-tests .et-card-copy { color: var(--et-gray-dark); font-size: 13.5px; font-weight: 400; line-height: 1.65; }
+.main-content--erfahrungen-tests .et-card .et-lnk { margin-top: 12px; }
+
+/* 05 / 08: installation and the App. */
+.main-content--erfahrungen-tests .et-split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; margin-top: 32px; align-items: center; }
+.main-content--erfahrungen-tests .et-pt-list { list-style: none; }
+.main-content--erfahrungen-tests .et-pt-list > li { display: flex; gap: 14px; align-items: flex-start; padding: 18px 0; border-top: 1px solid var(--et-line); }
+.main-content--erfahrungen-tests .et-pt-list > li:first-child { border-top: 0; padding-top: 0; }
+.main-content--erfahrungen-tests .et-ic-mini { flex: 0 0 34px; width: 34px; height: 34px; border-radius: 50%; background: var(--et-blue-soft); display: flex; align-items: center; justify-content: center; }
+.main-content--erfahrungen-tests .et-ic-mini svg { width: 18px; height: 18px; stroke: var(--et-blue); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.main-content--erfahrungen-tests .et-ic-mini img { width: 18px; height: 18px; object-fit: contain; }
+.main-content--erfahrungen-tests .et-pt-list h3 { font-size: 16.5px; font-weight: 600; letter-spacing: normal; line-height: normal; }
+.main-content--erfahrungen-tests .et-pt-list p { margin-top: 8px; color: var(--et-gray-dark); font-size: 14px; font-weight: 400; line-height: 1.65; }
+.main-content--erfahrungen-tests .et-point-copy { color: var(--et-gray-dark); font-size: 14px; font-weight: 400; line-height: 1.65; }
+.main-content--erfahrungen-tests :is(.et-point-copy, .et-card-copy, .et-step-copy) :is(ul, ol) { margin-top: 10px; padding-left: 20px; }
+.main-content--erfahrungen-tests :is(.et-point-copy, .et-card-copy, .et-step-copy) ul { list-style: disc; }
+.main-content--erfahrungen-tests :is(.et-point-copy, .et-card-copy, .et-step-copy) ol { list-style: decimal; }
+
+/* 06: discrete sound references and an independent product marker. */
+.main-content--erfahrungen-tests .et-db { margin-top: 34px; background: #fff; border: 1px solid var(--et-border); border-radius: var(--et-radius); padding: 30px 34px 26px; position: relative; }
+.main-content--erfahrungen-tests .et-db .et-venus { position: absolute; top: 22px; left: var(--et-marker-position, 30%); transform: translateX(-50%); text-align: center; }
+.main-content--erfahrungen-tests .et-db .et-venus .et-badge { display: inline-block; font-size: 11px; font-weight: 700; color: #fff; background: var(--et-blue); border-radius: 4px; padding: 3px 9px; }
+.main-content--erfahrungen-tests .et-db .et-venus .et-num { display: block; font-size: 20px; font-weight: 600; letter-spacing: -.01em; color: var(--et-ink); margin-top: 7px; white-space: nowrap; }
+.main-content--erfahrungen-tests .et-db .et-scale { position: relative; height: 66px; margin-top: 92px; }
+.main-content--erfahrungen-tests .et-db .et-bar { position: absolute; top: 50px; left: 0; right: 0; height: 6px; border-radius: 6px; background: linear-gradient(90deg, #e8f4ff, #0099fe); }
+.main-content--erfahrungen-tests .et-db .et-vconn { position: absolute; top: -44px; left: var(--et-marker-position, 30%); width: 2px; height: 88px; background: var(--et-blue); opacity: .55; }
+.main-content--erfahrungen-tests .et-db .et-vdot { position: absolute; top: 44px; left: var(--et-marker-position, 30%); width: 12px; height: 12px; border-radius: 50%; background: var(--et-blue); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--et-blue); transform: translateX(-50%); }
+.main-content--erfahrungen-tests .et-db .et-mark { position: absolute; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+.main-content--erfahrungen-tests .et-db .et-mark .et-t { order: 1; font-size: 12px; font-weight: 400; color: var(--et-gray-dark); white-space: nowrap; }
+.main-content--erfahrungen-tests .et-db .et-mark .et-dot { position: absolute; top: 45px; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid var(--et-blue); }
+.main-content--erfahrungen-tests .et-db .et-mark.et-edge-l { transform: none; align-items: flex-start; }
+.main-content--erfahrungen-tests .et-db .et-mark.et-edge-l .et-dot { left: 0; transform: none; }
+.main-content--erfahrungen-tests .et-db .et-mark.et-edge-r { transform: translateX(-100%); align-items: flex-end; }
+.main-content--erfahrungen-tests .et-db .et-mark.et-edge-r .et-dot { left: auto; right: 0; transform: none; }
+.main-content--erfahrungen-tests .et-db .et-scenes { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--et-line); }
+.main-content--erfahrungen-tests .et-db .et-scene-label { font-size: 12.5px; font-weight: 600; color: var(--et-gray-dark); width: 100%; margin-bottom: 2px; }
+.main-content--erfahrungen-tests .et-db .et-scene { font-size: 13px; font-weight: 400; color: var(--et-gray-dark); background: var(--et-bg); border: 1px solid var(--et-line); border-radius: 6px; padding: 8px 13px; }
+.main-content--erfahrungen-tests .et-db .et-scene-note { width: 100%; font-size: 12px; font-weight: 400; color: var(--et-gray); margin-top: 2px; }
+
+/* 07: image, crawlable energy flow and steps. */
+.main-content--erfahrungen-tests .et-flow-media { aspect-ratio: 2.2 / 1; margin-top: 30px; }
+.main-content--erfahrungen-tests .et-ef-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 28px; }
+.main-content--erfahrungen-tests .et-ef-flow .et-node { font-size: 14px; font-weight: 500; color: var(--et-ink); background: #fff; border: 1px solid var(--et-border); border-radius: 8px; padding: 12px 18px; }
+.main-content--erfahrungen-tests .et-ef-flow .et-arrow { color: var(--et-blue); font-weight: 600; }
+.main-content--erfahrungen-tests .et-ef-flow .et-group-arrow { font-size: 20px; }
+.main-content--erfahrungen-tests .et-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 26px; }
+.main-content--erfahrungen-tests .et-step { min-width: 0; background: #fff; border: 1px solid var(--et-border); border-radius: var(--et-radius); padding: 24px 24px 26px; }
+.main-content--erfahrungen-tests .et-step .et-num { font-size: 12px; font-weight: 600; letter-spacing: .06em; color: var(--et-blue); }
+.main-content--erfahrungen-tests .et-step h3 { font-size: 16.5px; font-weight: 600; letter-spacing: normal; line-height: normal; margin-top: 10px; }
+.main-content--erfahrungen-tests .et-step p { font-size: 13.5px; font-weight: 400; color: var(--et-gray-dark); margin-top: 9px; line-height: 1.65; }
+.main-content--erfahrungen-tests .et-step-copy { color: var(--et-gray-dark); font-size: 13.5px; font-weight: 400; line-height: 1.65; }
+
+/* 10: models and the editable information icon. */
+.main-content--erfahrungen-tests .et-prod-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 32px; }
+.main-content--erfahrungen-tests .et-prod { min-width: 0; background: #fff; border: 1px solid var(--et-border); border-radius: var(--et-radius); overflow: hidden; }
+.main-content--erfahrungen-tests .et-prod .et-media,
+.main-content--erfahrungen-tests .et-art .et-media { border-radius: 0; border-bottom: 1px solid var(--et-line); }
+.main-content--erfahrungen-tests .et-prod .et-media-placeholder,
+.main-content--erfahrungen-tests .et-art .et-media-placeholder { border: 0; border-radius: 0; }
+.main-content--erfahrungen-tests .et-prod-body { padding: 20px 22px 24px; }
+.main-content--erfahrungen-tests .et-prod h3 { font-size: 17px; font-weight: 600; letter-spacing: normal; line-height: normal; }
+.main-content--erfahrungen-tests .et-prod .et-cap { margin-top: 6px; font-size: 13px; font-weight: 600; color: var(--et-blue); }
+.main-content--erfahrungen-tests .et-prod p { margin-top: 10px; font-size: 13.5px; font-weight: 400; color: var(--et-gray-dark); line-height: 1.65; }
+.main-content--erfahrungen-tests .et-prod .et-lnk { margin-top: 14px; }
+.main-content--erfahrungen-tests .et-prod-hint { margin-top: 22px; display: flex; gap: 11px; align-items: flex-start; font-size: 13px; font-weight: 400; color: var(--et-gray-dark); line-height: 1.7; background: #fff; border: 1px solid var(--et-border); border-radius: var(--et-radius); padding: 16px 20px; }
+.main-content--erfahrungen-tests .et-prod-hint .et-i { flex: 0 0 18px; width: 18px; height: 18px; border-radius: 50%; border: 1.4px solid var(--et-blue); color: var(--et-blue); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.main-content--erfahrungen-tests .et-prod-hint .et-i svg,
+.main-content--erfahrungen-tests .et-prod-hint .et-i img { display: block; width: 14px; height: 14px; object-fit: contain; }
+.main-content--erfahrungen-tests .et-prod-hint .et-i.et-i-custom { border: 0; }
+.main-content--erfahrungen-tests .et-prod-hint .et-i.et-i-custom img { width: 18px; height: 18px; }
+.main-content--erfahrungen-tests .et-prod-hint p { font: inherit; color: inherit; }
+.main-content--erfahrungen-tests .et-range-links,
+.main-content--erfahrungen-tests .et-topic-links { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 12px 28px; }
+
+/* 11: documents, including source fields rather than fabricated trust badges. */
+.main-content--erfahrungen-tests .et-cert { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 32px; }
+.main-content--erfahrungen-tests .et-doc-card { min-width: 0; background: #fff; border: 1px solid var(--et-border); border-radius: var(--et-radius); padding: 24px 24px 22px; display: flex; flex-direction: column; }
+.main-content--erfahrungen-tests .et-doc-card h3 { font-size: 16px; font-weight: 600; letter-spacing: -.01em; line-height: normal; }
+.main-content--erfahrungen-tests .et-doc-card .et-lead { font-size: 13px; font-weight: 400; color: var(--et-gray-dark); margin-top: 8px; line-height: 1.6; }
+.main-content--erfahrungen-tests .et-doc-card .et-rows { margin-top: 16px; border-top: 1px solid var(--et-line); }
+.main-content--erfahrungen-tests .et-doc-card .et-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--et-line); font-size: 13px; }
+.main-content--erfahrungen-tests .et-doc-card .et-k { color: var(--et-gray); }
+.main-content--erfahrungen-tests .et-doc-card .et-v { color: var(--et-ink); font-weight: 500; text-align: right; }
+.main-content--erfahrungen-tests .et-doc-card .et-v.et-todo { color: var(--et-gray); font-weight: 400; font-style: italic; }
+.main-content--erfahrungen-tests .et-doc-card .et-dlink { margin-top: 16px; }
+.main-content--erfahrungen-tests .et-documents .et-answer-box { background: #fff; border-left-color: var(--et-gray); }
+
+/* 12: one open FAQ, with the reference easing and answer fade. */
+.main-content--erfahrungen-tests .et-faq-wrap { width: 100%; max-width: 1160px; margin-top: 36px; border-top: 1px solid var(--et-line); background: #fff; }
+.main-content--erfahrungen-tests .et-faq-item { border-bottom: 1px solid var(--et-line); }
+.main-content--erfahrungen-tests .et-faq-item h3 { margin: 0; font: inherit; }
+.main-content--erfahrungen-tests .et-faq-q { width: 100%; margin: 0; text-align: left; font-size: 16px; font-weight: 500; letter-spacing: normal; line-height: normal; color: var(--et-ink); background: none; border: 0; border-radius: 0; box-shadow: none; cursor: pointer; padding: 22px 40px 22px 26px; position: relative; appearance: none; transition: color .15s ease; }
+.main-content--erfahrungen-tests .et-faq-q:hover { color: var(--et-blue); }
+.main-content--erfahrungen-tests .et-faq-q::before { content: none; }
+.main-content--erfahrungen-tests .et-faq-q::after { content: '+'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 20px; font-weight: 400; color: var(--et-blue); transition: transform .25s ease, opacity .2s ease; }
+.main-content--erfahrungen-tests .et-faq-item.is-open .et-faq-q::after { content: '–'; }
+.main-content--erfahrungen-tests .et-faq-a { max-height: none; overflow: hidden; transition: max-height .34s cubic-bezier(.4, 0, .2, 1); }
+.main-content--erfahrungen-tests .et-faq-answer { max-width: 1000px; padding: 0 40px 24px 26px; font-size: 14.5px; font-weight: 400; color: var(--et-gray-dark); line-height: 1.75; opacity: 1; transition: opacity .22s ease .06s; }
+.main-content--erfahrungen-tests.et-faq-ready .et-faq-a { max-height: 0; }
+.main-content--erfahrungen-tests.et-faq-ready .et-faq-answer { opacity: 0; }
+.main-content--erfahrungen-tests .et-faq-answer p { font-size: 14.5px; font-weight: 400; color: var(--et-gray-dark); line-height: 1.75; }
+.main-content--erfahrungen-tests .et-faq-answer p + p { margin-top: 12px; }
+.main-content--erfahrungen-tests .et-faq-answer :is(ul, ol) { margin-top: 10px; padding-left: 20px; }
+.main-content--erfahrungen-tests.et-faq-ready .et-faq-item.is-open .et-faq-answer { opacity: 1; }
+.main-content--erfahrungen-tests.et-design-mode.et-faq-ready .et-faq-answer { opacity: 1; transition: none; }
+.main-content--erfahrungen-tests .et-faq-a a { color: var(--et-blue); font-size: 14px; font-weight: 500; text-decoration: none; }
+.main-content--erfahrungen-tests .et-faq-a a:hover { color: var(--et-blue); text-decoration: underline; }
+.main-content--erfahrungen-tests .et-faq-a .et-lnk { margin-top: 8px; }
+
+/* 13 / 14: guides and closing actions. */
+.main-content--erfahrungen-tests .et-art-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin-top: 32px; }
+.main-content--erfahrungen-tests .et-art { min-width: 0; background: #fff; border: 1px solid var(--et-border); border-radius: var(--et-radius); overflow: hidden; }
+.main-content--erfahrungen-tests .et-article-media { aspect-ratio: 16 / 9; }
+.main-content--erfahrungen-tests .et-art-body { padding: 18px 20px 22px; }
+.main-content--erfahrungen-tests .et-art h3 { font-size: 15.5px; font-weight: 600; letter-spacing: normal; line-height: normal; }
+.main-content--erfahrungen-tests .et-art p { font-size: 13px; font-weight: 400; color: var(--et-gray-dark); margin-top: 8px; line-height: 1.6; }
+.main-content--erfahrungen-tests .et-art .et-lnk { margin-top: 12px; font-size: 13.5px; }
+.main-content--erfahrungen-tests .et-tag { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; color: var(--et-blue); margin-bottom: 10px; }
+.main-content--erfahrungen-tests .et-final-card { background: #fff; border: 1px solid var(--et-border); border-radius: var(--et-radius); padding: 44px 48px; }
+.main-content--erfahrungen-tests .et-section.et-final h2 { font-size: 30px; }
+.main-content--erfahrungen-tests .et-final .et-final-copy { max-width: none; margin-top: 14px; font-size: 15.5px; font-weight: 400; color: var(--et-gray-dark); line-height: 1.7; }
+.main-content--erfahrungen-tests .et-final-cta { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.main-content--erfahrungen-tests .et-final .et-final-alt { margin-top: 16px; font-size: 15.5px; font-weight: 400; color: var(--et-gray-dark); line-height: 1.7; }
+.main-content--erfahrungen-tests .et-section .et-editor-note { margin-top: 16px; padding: 12px 16px; border: 1px dashed #d49f38; border-radius: 6px; background: #fff8e5; color: #70531e; font-size: 13px; font-weight: 400; line-height: 1.6; }
+
+@media (max-width: 1180px) {
+  .main-content--erfahrungen-tests .et-inner { padding: var(--et-padding-top-tablet, 56px) 40px var(--et-padding-bottom-tablet, 56px); }
+  .main-content--erfahrungen-tests :is(.et-steps, .et-prod-grid, .et-art-grid, .et-cards3, .et-trust, .et-cert, .et-evid, .et-scn) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 980px) {
+  .main-content--erfahrungen-tests .et-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .main-content--erfahrungen-tests .et-hero h1 { font-size: 36px; }
+  .main-content--erfahrungen-tests :is(.et-split, .et-cards3, .et-trust, .et-evid, .et-scn, .et-cert) { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .main-content--erfahrungen-tests .et-inner { padding: var(--et-padding-top-mobile, 44px) 22px var(--et-padding-bottom-mobile, 44px); }
+  .main-content--erfahrungen-tests .et-section h2 { font-size: 27px; }
+  .main-content--erfahrungen-tests .et-hero h1 { font-size: 30px; }
+  .main-content--erfahrungen-tests :is(.et-steps, .et-prod-grid, .et-art-grid) { grid-template-columns: minmax(0, 1fr); }
+  .main-content--erfahrungen-tests .et-db .et-scale { height: auto; margin-top: 26px; }
+  .main-content--erfahrungen-tests .et-db .et-venus { position: static; transform: none; text-align: left; }
+  .main-content--erfahrungen-tests .et-db .et-venus .et-num { display: inline; margin-left: 10px; }
+  .main-content--erfahrungen-tests .et-db :is(.et-bar, .et-vconn, .et-vdot) { display: none; }
+  .main-content--erfahrungen-tests .et-db .et-mark,
+  .main-content--erfahrungen-tests .et-db .et-mark.et-edge-l,
+  .main-content--erfahrungen-tests .et-db .et-mark.et-edge-r { position: static; transform: none; flex-direction: row; align-items: center; gap: 10px; text-align: left; margin-top: 14px; }
+  .main-content--erfahrungen-tests .et-db .et-mark .et-dot,
+  .main-content--erfahrungen-tests .et-db .et-mark.et-edge-l .et-dot,
+  .main-content--erfahrungen-tests .et-db .et-mark.et-edge-r .et-dot { position: static; transform: none; order: 1; flex: 0 0 12px; margin: 0; }
+  .main-content--erfahrungen-tests .et-db .et-mark .et-t { order: 2; margin-top: 0; white-space: normal; }
+  .main-content--erfahrungen-tests .et-final-card { padding: 32px 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .main-content--erfahrungen-tests .et-section :is(.et-btn, .et-faq-q, .et-faq-q::after, .et-faq-a, .et-faq-answer) { transition: none; }
+  .main-content--erfahrungen-tests .et-section .et-btn-primary:hover { transform: none; }
+}

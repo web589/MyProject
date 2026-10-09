@@ -1,0 +1,25 @@
+{% liquid
+  assign media_alt = alt | default: image.alt
+  assign media_sizes = sizes | default: '(max-width: 980px) 100vw, 50vw'
+  assign media_fit = fit | default: 'cover'
+  assign media_loading = 'lazy'
+  assign media_priority = 'auto'
+  assign media_width = 1600
+  assign media_widths = '360, 600, 900, 1200, 1600'
+  if eager
+    assign media_loading = 'eager'
+    assign media_priority = 'high'
+  endif
+  if media_fit == 'contain'
+    assign media_width = 900
+    assign media_widths = '320, 480, 640, 900'
+  endif
+%}
+<div class="et-media {{ wrapper_class | escape }}" style="--et-image-fit: {{ media_fit | escape }};">
+  {% if image != blank %}
+    {{ image | image_url: width: media_width | image_tag: class: 'et-media-image', alt: media_alt, loading: media_loading, fetchpriority: media_priority, decoding: 'async', widths: media_widths, sizes: media_sizes }}
+  {% else %}
+    <div class="et-media-placeholder" aria-hidden="true"></div>
+  {% endif %}
+  {% if badge != blank %}<span class="et-media-badge">{{ badge | escape }}</span>{% endif %}
+</div>

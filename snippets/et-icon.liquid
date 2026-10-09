@@ -1,0 +1,21 @@
+{% if image != blank %}
+  {{ image | image_url: width: 80 | image_tag: class: 'et-custom-icon', loading: 'lazy', widths: '36, 54, 80', sizes: '20px', alt: '' }}
+{% elsif type == 'info' %}
+  <span class="et-info-glyph">i</span>
+{% else %}
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    {% case type %}
+      {% when 'battery' %}<rect x="2.5" y="7.5" width="16" height="9.5" rx="2.2"/><path d="M21 11v2.5"/><path d="M6 10.2h6.5v3.8H6z"/>
+      {% when 'quiet' %}<path d="M4 14v3a3 3 0 003 3h10a3 3 0 003-3v-3"/><path d="M12 4v9"/><path d="M9 7l3-3 3 3"/>
+      {% when 'flow' %}<path d="M4 12h4l2-5 4 10 2-5h4"/>
+      {% when 'meter' %}<circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/>
+      {% when 'app' %}<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 18h4"/>
+      {% when 'expand' %}<rect x="3.5" y="10" width="7" height="7" rx="1.6"/><rect x="13.5" y="10" width="7" height="7" rx="1.6"/><path d="M7 10V7M17 10V7"/>
+      {% when 'retrofit' %}<rect x="3.5" y="7" width="7" height="10" rx="1.6"/><path d="M14 8.5l4.5 3.5-4.5 3.5"/><path d="M6 10.5h2.5"/>
+      {% when 'coupling' %}<rect x="3.5" y="7.5" width="13" height="9" rx="2"/><path d="M20 10.5v3"/><path d="M8 12h4M10 10v4"/>
+      {% when 'smart_meter' %}<circle cx="12" cy="12" r="7.4"/><path d="M12 8.5V12l2.4 1.5"/>
+      {% when 'settings' %}<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>
+      {% else %}<path d="M4 12h4l2-5 4 10 2-5h4"/>
+    {% endcase %}
+  </svg>
+{% endif %}

@@ -1,0 +1,232 @@
+{%- if section.settings.show_section -%}
+  {% capture section_content %}
+    <div class="et-final-card" style="background: {{ section.settings.card_background }};">
+      {% capture final_heading %}{% render 'et-heading', section: section %}{% endcapture %}
+      {{ final_heading | replace: 'class="et-sub"', 'class="et-final-copy"' }}
+      <div class="et-final-cta">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.show_block and block.settings.style != 'text' and block.settings.label != blank and block.settings.link != blank -%}
+            <a class="et-btn et-btn-{{ block.settings.style }}" href="{{ block.settings.link | escape }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      {%- for block in section.blocks -%}
+        {%- if block.settings.show_block and block.settings.style == 'text' and block.settings.label != blank and block.settings.link != blank -%}
+          <p class="et-final-alt" {{ block.shopify_attributes }}>{% if block.settings.prefix != blank %}{{ block.settings.prefix | escape }} {% endif %}<a class="et-lnk" href="{{ block.settings.link | escape }}">{{ block.settings.label | escape }}</a></p>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {% endcapture %}
+  {% render 'et-section', section: section, anchor_id: 'et-abschluss', extra_class: 'et-final', content: section_content %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "经验测试 · 14 结尾行动区",
+  "tag": "div",
+  "class": "section-et-14-final",
+  "limit": 1,
+  "enabled_on": {
+    "templates": [
+      "page"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示此模块",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "Nächster Schritt"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题",
+      "default": "Finde den VENUS E Speicher, der zu deinem"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题强调部分",
+      "default": "Alltag passt"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "副标题",
+      "default": "Vergleiche die Modelle nach Kapazität, Leistung und Einsatzbereich oder finde heraus, welche Speichergröße zu deinem Haushalt passt."
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "模块背景色",
+      "default": "#F5F7F9"
+    },
+    {
+      "type": "header",
+      "content": "模块间距"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "桌面上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "桌面下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "label": "平板上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "label": "平板下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "手机上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "手机下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "行动卡背景色",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "action",
+      "name": "行动按钮或文字链接",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示此区块",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "显示样式",
+          "options": [
+            {
+              "value": "primary",
+              "label": "蓝色主按钮"
+            },
+            {
+              "value": "ghost",
+              "label": "次级描边按钮"
+            },
+            {
+              "value": "text",
+              "label": "文字链接"
+            }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "按钮或链接文字"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "目标链接",
+          "info": "可选择站内页面；页内跳转使用参考模块固定锚点，例如 #modelle。"
+        },
+        {
+          "type": "text",
+          "id": "prefix",
+          "label": "文字链接前缀",
+          "default": "Oder",
+          "visible_if": "{{ block.settings.style == 'text' }}"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "经验测试 · 14 结尾行动区",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "action",
+          "settings": {
+            "show_block": true,
+            "style": "primary",
+            "label": "VENUS E Modelle vergleichen",
+            "link": "/pages/speicher-vergleich"
+          }
+        },
+        {
+          "type": "action",
+          "settings": {
+            "show_block": true,
+            "style": "ghost",
+            "label": "VENUS E Speicher ansehen",
+            "link": "#modelle"
+          }
+        },
+        {
+          "type": "action",
+          "settings": {
+            "show_block": true,
+            "style": "text",
+            "label": "Beratung anfragen →",
+            "link": "/pages/kontakt",
+            "prefix": "Oder"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

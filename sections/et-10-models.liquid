@@ -1,0 +1,372 @@
+{%- if section.settings.show_section -%}
+  {% capture section_content %}
+    {% render 'et-heading', section: section %}
+    <div class="et-prod-grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'product_card' and block.settings.show_block -%}
+          {%- liquid
+            assign selected_product = block.settings.product
+            assign product_image = block.settings.image | default: selected_product.featured_image
+            assign product_title = block.settings.custom_title | default: selected_product.title | default: block.settings.fallback_title
+            assign product_text = block.settings.custom_text
+            if product_text == blank and selected_product != blank
+              assign product_text = selected_product.description | strip_html | strip | truncate: 180
+            endif
+            assign product_text = product_text | default: block.settings.fallback_text
+            assign product_link = block.settings.link | default: selected_product.url | default: block.settings.fallback_link
+            assign product_alt = block.settings.image_alt | default: product_image.alt | default: product_title
+          -%}
+          <article class="et-prod" {{ block.shopify_attributes }}>
+            {% render 'et-media', image: product_image, alt: product_alt, wrapper_class: 'et-product-media', sizes: '(min-width: 1640px) 345px, (min-width: 1181px) 23vw, (min-width: 721px) 45vw, 100vw', fit: 'contain' %}
+            <div class="et-prod-body">
+              {% if product_title != blank %}<h3>{{ product_title | escape }}</h3>{% endif %}
+              {% if block.settings.show_capacity and block.settings.capacity != blank %}<div class="et-cap">{{ block.settings.capacity | escape }}</div>{% endif %}
+              {% if product_text != blank %}<p>{{ product_text | escape }}</p>{% endif %}
+              {% if block.settings.link_label != blank and product_link != blank %}<a class="et-lnk" href="{{ product_link | escape }}">{{ block.settings.link_label | escape }}</a>{% endif %}
+              {% if request.design_mode and block.settings.show_capacity and block.settings.capacity != blank and block.settings.verified == false %}<p class="et-editor-note">容量尚未核实，请按对应型号的正式参数表填写；可关闭“显示容量”。</p>{% endif %}
+            </div>
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'hint' and block.settings.show_block -%}
+        <div class="et-prod-hint" {{ block.shopify_attributes }}>
+          <span class="et-i{% if block.settings.custom_icon != blank %} et-i-custom{% endif %}" aria-hidden="true">{% if block.settings.custom_icon != blank %}{% render 'et-icon', image: block.settings.custom_icon, type: 'info' %}{% else %}i{% endif %}</span>
+          <span>{{ block.settings.text | escape }}</span>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+    {% if section.settings.link_label != blank and section.settings.link != blank %}<div class="et-range-links"><a class="et-lnk" href="{{ section.settings.link | escape }}">{{ section.settings.link_label | escape }}</a></div>{% endif %}
+  {% endcapture %}
+  {% render 'et-section', section: section, anchor_id: 'modelle', extra_class: 'et-models', content: section_content %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "经验测试 · 10 产品型号",
+  "tag": "div",
+  "class": "section-et-10-models",
+  "limit": 1,
+  "enabled_on": {
+    "templates": [
+      "page"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示此模块",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "Nach Modell"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题",
+      "default": "Welcher VENUS E passt zu welchem"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题强调部分",
+      "default": "Alltag?"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "副标题",
+      "default": "Vier Modelle für unterschiedliche Ausgangslagen – vom Balkonkraftwerk bis zum größeren Haushalt."
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "模块背景色",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "模块间距"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "桌面上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "桌面下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "label": "平板上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "label": "平板下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "手机上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "手机下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "型号比较链接文字",
+      "default": "Alle Modelle vergleichen →"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "型号比较链接"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "产品卡",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示此区块",
+          "default": true
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "选择商品"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "自定义产品图",
+          "info": "自定义图优先；留空使用所选商品主图。建议 4:3，显示完整产品。"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "图片替代文字"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "自定义标题",
+          "info": "留空使用所选商品标题；未选商品时使用备用标题。"
+        },
+        {
+          "type": "textarea",
+          "id": "custom_text",
+          "label": "自定义说明",
+          "info": "留空使用所选商品简介；未选商品时使用备用说明。"
+        },
+        {
+          "type": "text",
+          "id": "capacity",
+          "label": "容量",
+          "info": "参考容量为占位值，请按该型号的正式参数表核实。"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_capacity",
+          "label": "显示容量",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "容量已按正式资料核实",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "链接文字",
+          "default": "Zum Modell →"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "自定义链接",
+          "info": "留空跟随所选商品链接；未选商品时使用备用链接。"
+        },
+        {
+          "type": "header",
+          "content": "未选择商品时的备用内容"
+        },
+        {
+          "type": "text",
+          "id": "fallback_title",
+          "label": "备用标题"
+        },
+        {
+          "type": "textarea",
+          "id": "fallback_text",
+          "label": "备用说明"
+        },
+        {
+          "type": "url",
+          "id": "fallback_link",
+          "label": "备用链接"
+        }
+      ]
+    },
+    {
+      "type": "hint",
+      "name": "型号信息提示",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示此区块",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "自定义提示图标",
+          "info": "上传后替换默认信息图标；留空显示原图标。"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "提示说明",
+          "default": "Konkrete Kapazität und Funktionen nennen wir auf der jeweiligen Produktseite. Welche Funktionen verfügbar sind, hängt vom Modell, vom Softwarestand und von deiner Installation ab."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "经验测试 · 10 产品型号",
+      "settings": {
+        "link": "/pages/speicher-vergleich"
+      },
+      "blocks": [
+        {
+          "type": "product_card",
+          "settings": {
+            "show_block": true,
+            "product": "venus-e-mini",
+            "custom_title": "VENUS E Mini",
+            "custom_text": "Für kompakte Anwendungen und Balkonkraftwerk.",
+            "fallback_title": "VENUS E Mini",
+            "fallback_text": "Für kompakte Anwendungen und Balkonkraftwerk.",
+            "capacity": "2–6 kWh",
+            "show_capacity": true,
+            "verified": false,
+            "fallback_link": "/products/venus-e-mini",
+            "image_alt": "VENUS E Mini Solarspeicher",
+            "link_label": "Zum Modell →"
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "show_block": true,
+            "product": "venus-e-3",
+            "custom_title": "VENUS E 3.0",
+            "custom_text": "Für typische Haushalte und flexible Nachrüstung.",
+            "fallback_title": "VENUS E 3.0",
+            "fallback_text": "Für typische Haushalte und flexible Nachrüstung.",
+            "capacity": "5,12–15,36 kWh",
+            "show_capacity": true,
+            "verified": false,
+            "fallback_link": "/products/venus-e-3-0",
+            "image_alt": "VENUS E 3.0 Solarspeicher",
+            "link_label": "Zum Modell →"
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "show_block": true,
+            "product": "venus-e-4",
+            "custom_title": "VENUS E 4.0",
+            "custom_text": "Für höheren Leistungs- und Steuerungsbedarf.",
+            "fallback_title": "VENUS E 4.0",
+            "fallback_text": "Für höheren Leistungs- und Steuerungsbedarf.",
+            "capacity": "5–15 kWh",
+            "show_capacity": true,
+            "verified": false,
+            "fallback_link": "/products/venus-e-4-0",
+            "image_alt": "VENUS E 4.0 Solarspeicher",
+            "link_label": "Zum Modell →"
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "show_block": true,
+            "product": "venus-e-max",
+            "custom_title": "VENUS E Max",
+            "custom_text": "Für größere Haushalte und höheren Speicherbedarf.",
+            "fallback_title": "VENUS E Max",
+            "fallback_text": "Für größere Haushalte und höheren Speicherbedarf.",
+            "capacity": "10–30 kWh",
+            "show_capacity": true,
+            "verified": false,
+            "fallback_link": "/products/venus-e-max",
+            "image_alt": "VENUS E Max Solarspeicher",
+            "link_label": "Zum Modell →"
+          }
+        },
+        {
+          "type": "hint",
+          "settings": {
+            "show_block": true,
+            "text": "Konkrete Kapazität und Funktionen nennen wir auf der jeweiligen Produktseite. Welche Funktionen verfügbar sind, hängt vom Modell, vom Softwarestand und von deiner Installation ab."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,347 @@
+{%- if section.settings.show_section -%}
+  {% capture section_content %}
+    {% render 'et-heading', section: section %}
+    {% render 'et-answer', content: section.settings.answer %}
+    <div class="et-cert">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.show_block -%}
+          <article class="et-doc-card" {{ block.shopify_attributes }}>
+            {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
+            {% if block.settings.text != blank %}<p class="et-lead">{{ block.settings.text | escape }}</p>{% endif %}
+            <div class="et-rows">
+              {%- for row_number in (1..3) -%}
+                {%- liquid
+                  assign key_id = 'row_' | append: row_number | append: '_key'
+                  assign value_id = 'row_' | append: row_number | append: '_value'
+                  assign pending_id = 'row_' | append: row_number | append: '_pending'
+                  assign row_key = block.settings[key_id]
+                  assign row_value = block.settings[value_id]
+                  assign row_pending = block.settings[pending_id]
+                  assign show_row = true
+                  if row_pending and block.settings.show_pending_values == false
+                    assign show_row = false
+                  endif
+                -%}
+                {%- if show_row and row_key != blank and row_value != blank -%}
+                  <div class="et-row"><span class="et-k">{{ row_key | escape }}</span><span class="et-v{% if row_pending %} et-todo{% endif %}">{{ row_value | escape }}</span></div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            {% if block.settings.link_label != blank and block.settings.link != blank %}<a class="et-lnk et-dlink" href="{{ block.settings.link | escape }}">{{ block.settings.link_label | escape }}</a>{% endif %}
+            {% if request.design_mode and block.settings.verified == false %}<p class="et-editor-note">文档尚未核实：请填写真实资料并确认对应型号；缺少资料时关闭“显示此区块”。</p>{% endif %}
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {% if section.settings.note != blank %}<div class="et-note">{{ section.settings.note | replace: '<a ', '<a class="et-lnk" ' }}</div>{% endif %}
+  {% endcapture %}
+  {% render 'et-section', section: section, anchor_id: 'nachweise', extra_class: 'et-documents', content: section_content %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "经验测试 · 11 证明与文档",
+  "tag": "div",
+  "class": "section-et-11-documents",
+  "limit": 1,
+  "enabled_on": {
+    "templates": [
+      "page"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示此模块",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "Nachweise"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题",
+      "default": "Prüfnachweise, Konformität &"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题强调部分",
+      "default": "technische Dokumente"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "副标题"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "模块背景色",
+      "default": "#F5F7F9"
+    },
+    {
+      "type": "header",
+      "content": "模块间距"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "桌面上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "桌面下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "label": "平板上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "label": "平板下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "手机上间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "手机下间距",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "richtext",
+      "id": "answer",
+      "label": "直接回答",
+      "default": "<p>Wir zeigen nur Unterlagen, die einer konkreten Quelle und einem konkreten Modell eindeutig zugeordnet werden können.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "note",
+      "label": "补充说明",
+      "default": "<p>Unabhängige Medientests werden nur dann genannt, wenn sie tatsächlich vorliegen – mit Quelle, Datum und getestetem Modell. Bewusst keine erfundenen Testsiegel, Logos oder Bewertungen. <a href=\"/pages/downloads\">Downloads &amp; Dokumente ansehen →</a></p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "document",
+      "name": "证明与文档卡",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示此区块",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "文档标题"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "说明"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "资料及对应型号已核实",
+          "default": false,
+          "info": "只能根据真实文档确认；缺少真实资料时隐藏整张卡。CE 属于符合性声明，不是独立第三方测试。"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_pending_values",
+          "label": "显示待核实字段",
+          "default": true,
+          "info": "保留参考稿的占位字段用于预览。正式上线前请核实替换，或隐藏对应字段及卡片。"
+        },
+        {
+          "type": "header",
+          "content": "字段 1"
+        },
+        {
+          "type": "text",
+          "id": "row_1_key",
+          "label": "字段名称"
+        },
+        {
+          "type": "text",
+          "id": "row_1_value",
+          "label": "字段内容"
+        },
+        {
+          "type": "checkbox",
+          "id": "row_1_pending",
+          "label": "使用待核实样式",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "字段 2"
+        },
+        {
+          "type": "text",
+          "id": "row_2_key",
+          "label": "字段名称"
+        },
+        {
+          "type": "text",
+          "id": "row_2_value",
+          "label": "字段内容"
+        },
+        {
+          "type": "checkbox",
+          "id": "row_2_pending",
+          "label": "使用待核实样式",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "字段 3"
+        },
+        {
+          "type": "text",
+          "id": "row_3_key",
+          "label": "字段名称"
+        },
+        {
+          "type": "text",
+          "id": "row_3_value",
+          "label": "字段内容"
+        },
+        {
+          "type": "checkbox",
+          "id": "row_3_pending",
+          "label": "使用待核实样式",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "链接文字",
+          "default": "Dokument ansehen →"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "文档链接"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "经验测试 · 11 证明与文档",
+      "settings": {},
+      "blocks": [
+        {
+          "type": "document",
+          "settings": {
+            "show_block": true,
+            "verified": false,
+            "show_pending_values": true,
+            "title": "Prüf- und Zertifizierungsnachweise",
+            "text": "Konkrete Prüfberichte und Zertifikate, sofern sie dem jeweiligen Modell zugeordnet werden können.",
+            "row_1_key": "Dokument",
+            "row_1_value": "vor Veröffentlichung ersetzen",
+            "row_1_pending": true,
+            "row_2_key": "Prüfstelle",
+            "row_2_value": "vor Veröffentlichung ersetzen",
+            "row_2_pending": true,
+            "row_3_key": "Modell",
+            "row_3_value": "vor Veröffentlichung ersetzen",
+            "row_3_pending": true,
+            "link_label": "Dokument ansehen →",
+            "link": "/pages/downloads"
+          }
+        },
+        {
+          "type": "document",
+          "settings": {
+            "show_block": true,
+            "verified": false,
+            "show_pending_values": true,
+            "title": "EU-Konformität",
+            "text": "CE-Kennzeichnung und zugehörige Konformitätsunterlagen – Konformität, keine eigenständige Prüfung.",
+            "row_1_key": "Kennzeichnung",
+            "row_1_value": "CE",
+            "row_1_pending": false,
+            "row_2_key": "Unterlagen",
+            "row_2_value": "Konformitätserklärung",
+            "row_2_pending": false,
+            "row_3_key": "Modell",
+            "row_3_value": "vor Veröffentlichung prüfen",
+            "row_3_pending": true,
+            "link_label": "Dokument ansehen →",
+            "link": "/pages/downloads"
+          }
+        },
+        {
+          "type": "document",
+          "settings": {
+            "show_block": true,
+            "verified": false,
+            "show_pending_values": true,
+            "title": "Technische Dokumente",
+            "text": "Datenblatt, Handbuch und Garantiebedingungen je Modell.",
+            "row_1_key": "Datenblatt",
+            "row_1_value": "pro Modell",
+            "row_1_pending": false,
+            "row_2_key": "Handbuch",
+            "row_2_value": "pro Modell",
+            "row_2_pending": false,
+            "row_3_key": "Garantiebedingungen",
+            "row_3_value": "pro Modell",
+            "row_3_pending": false,
+            "link_label": "Downloads →",
+            "link": "/pages/downloads"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
