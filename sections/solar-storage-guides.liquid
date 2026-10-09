@@ -15,10 +15,12 @@
             assign article_summary = article.excerpt_or_content | strip_html | strip | truncatewords: 28
           %}
           <article class="ss-media-card">
-            {% render 'solar-storage-media', image: card_image, alt: card_alt, ratio: '16 / 9', loading: 'lazy', sizes: '(min-width: 981px) 33vw, calc(100vw - 44px)' %}
+            <a class="ss-media-card__image-link" href="{{ article.url }}">
+              {% render 'solar-storage-media', image: card_image, alt: card_alt, ratio: '16 / 9', loading: 'lazy', sizes: '(min-width: 981px) 33vw, calc(100vw - 44px)' %}
+            </a>
             <div class="ss-media-card__body">
               <p class="ss-tag">{{ section.settings.tag | escape }}</p>
-              <h3>{{ article.title | escape }}</h3>
+              <h3><a class="ss-media-card__title-link" href="{{ article.url }}">{{ article.title | escape }}</a></h3>
               {% if article_summary != blank %}<div class="rte"><p>{{ article_summary | escape }}</p></div>{% endif %}
               {% if section.settings.link_label != blank %}<a class="ss-text-link" href="{{ article.url }}">{{ section.settings.link_label | escape }}</a>{% endif %}
             </div>

@@ -370,6 +370,12 @@
 .main-content--solar-storage .ss-media-card__body { padding: 20px 22px 24px; }
 .main-content--solar-storage .ss-media-card__body h3,
 .main-content--solar-storage .ss-model-card__body h3 { font-size: 17px; font-weight: 600; line-height: normal; }
+.main-content--solar-storage .ss-media-card__image-link { display: block; color: inherit; }
+.main-content--solar-storage .ss-media-card__title-link { color: inherit; text-decoration: none; }
+.main-content--solar-storage .ss-media-card__title-link:hover,
+.main-content--solar-storage .ss-media-card__title-link:focus-visible { color: var(--ss-blue); text-decoration: underline; text-underline-offset: 3px; }
+.main-content--solar-storage .ss-media-card__image-link:focus-visible,
+.main-content--solar-storage .ss-media-card__title-link:focus-visible { outline: 2px solid var(--ss-blue); outline-offset: -2px; }
 .main-content--solar-storage .ss-media-card__body .ss-text-link,
 .main-content--solar-storage .ss-model-card__body .ss-text-link,
 .main-content--solar-storage .ss-smart-card .ss-text-link { display: inline-block; align-self: flex-start; margin-top: auto; padding-top: 14px; font-size: 14px; }

@@ -55,7 +55,8 @@
     transition: background-color 160ms ease, color 160ms ease;
   }
 
-  .mega-menu-products__category-item.is-menu-category > .mega-menu-products__category-link:hover,
+  .mega-menu-products__category-item > .mega-menu-products__category-link:hover,
+  .mega-menu-products__category-item > .mega-menu-products__category-link:focus-visible,
   .mega-menu-products__category-item.is-menu-category.is-active > .mega-menu-products__category-link {
     background-color: var(--mega-menu-brand-soft);
     color: var(--mega-menu-brand);
