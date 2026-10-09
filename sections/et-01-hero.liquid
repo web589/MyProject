@@ -11,7 +11,7 @@
         {% endfor %}
       </div>
     </div>
-    {% render 'et-media', image: section.settings.image, alt: section.settings.image_alt, wrapper_class: 'et-hero-media', sizes: '(min-width: 1181px) 44vw, (min-width: 981px) 46vw, 100vw', eager: true %}
+    {% render 'et-media', image: section.settings.image, alt: section.settings.image_alt, wrapper_class: 'et-hero-media', sizes: '(min-width: 1640px) 748px, (min-width: 1181px) calc(100vw - 892px), (min-width: 981px) calc(100vw - 772px), (min-width: 721px) calc(100vw - 80px), calc(100vw - 44px)', eager: true %}
   </div>
   {% endcapture %}
   {% render 'et-section', section: section, anchor_id: 'et-start', extra_class: 'et-hero', content: section_content %}
