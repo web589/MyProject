@@ -20,7 +20,7 @@
           endif
         %}
         <article class="ss-model-card" {{ block.shopify_attributes }}>
-          {% render 'solar-storage-media', image: card_image, alt: block.settings.image_alt, ratio: '4 / 3', loading: 'lazy', sizes: '(min-width: 1181px) 25vw, (min-width: 721px) 50vw, calc(100vw - 44px)' %}
+          {% render 'solar-storage-media', image: card_image, alt: block.settings.image_alt, ratio: '3 / 2', loading: 'lazy', sizes: '(min-width: 1181px) 25vw, (min-width: 721px) 50vw, calc(100vw - 44px)' %}
           <div class="ss-model-card__body"><h3>{{ card_title | escape }}</h3>{% if block.settings.capacity != blank %}<p class="ss-model-card__capacity">{{ block.settings.capacity | escape }}</p>{% endif %}<div class="rte">{{ block.settings.text }}</div>{% if block.settings.link_label != blank and card_url != blank %}<a class="ss-text-link" href="{{ card_url }}">{{ block.settings.link_label | escape }}</a>{% endif %}</div>
         </article>
       {% endfor %}
