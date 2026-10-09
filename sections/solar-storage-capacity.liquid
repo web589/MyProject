@@ -7,7 +7,20 @@
         <article class="ss-capacity-row" {{ block.shopify_attributes }}><div><span class="ss-capacity-row__level">{{ block.settings.level | escape }}</span><div class="ss-capacity-row__value">{{ block.settings.capacity | escape }}</div><div class="ss-capacity-row__model">{{ block.settings.model | escape }}</div></div><div><div class="ss-capacity-row__track"><span style="width: {{ block.settings.bar_width }}%;"></span></div><div class="ss-capacity-row__copy rte">{{ block.settings.text }}</div></div></article>
       {% endif %}{% endfor %}
     </div>
-    <div class="ss-link-row">{% for block in section.blocks %}{% if block.type == 'link' and block.settings.label != blank and block.settings.url != blank %}<a class="ss-text-link" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>{% endif %}{% endfor %}</div>
+    <div class="ss-link-row">
+      {% for block in section.blocks %}
+        {% if block.type == 'link' and block.settings.label != blank and block.settings.url != blank %}
+          {% liquid
+            assign link_url = block.settings.url
+            assign anchor_id = block.settings.anchor | strip | remove_first: '#'
+            if anchor_id != blank
+              assign link_url = link_url | split: '#' | first | append: '#' | append: anchor_id
+            endif
+          %}
+          <a class="ss-text-link" href="{{ link_url | escape }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
     {% if section.settings.note != blank %}<div class="ss-note rte">{{ section.settings.note }}</div>{% endif %}
   </div>
 </section>
@@ -33,7 +46,8 @@
     ] },
     { "type": "link", "name": "文字链接", "settings": [
       { "type": "text", "id": "label", "label": "链接文字", "default": "Modelle im Vergleich ansehen →" },
-      { "type": "url", "id": "url", "label": "链接地址" }
+      { "type": "url", "id": "url", "label": "目标页面链接", "info": "可选择页面、产品或其他链接；下面的模块 ID 会附加到此地址。" },
+      { "type": "text", "id": "anchor", "label": "目标模块 ID（可选）", "info": "填写目标页面区块的 HTML ID，例如 eauto-calculator；不需要输入 #。" }
     ] }
   ],
   "max_blocks": 10,
