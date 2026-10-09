@@ -2,7 +2,6 @@
   {% capture section_content %}
   {% render 'et-heading', section: section %}
   {% if section.settings.show_values %}{% render 'et-answer', content: section.settings.answer %}{% endif %}
-  {% if request.design_mode and section.settings.verified == false %}<p class="et-editor-note">噪音数值尚未核实，请按对应型号的正式资料确认后再发布。</p>{% endif %}
   <div class="et-db">
     {% if section.settings.show_values %}
       <div class="et-venus" style="left: {{ section.settings.marker_position }}%;">

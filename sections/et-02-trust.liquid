@@ -8,7 +8,6 @@
           {% if section.settings.show_values and block.settings.show_values %}<div class="et-num">{{ block.settings.value | escape }}{% if block.settings.unit != blank %} <small>{{ block.settings.unit | escape }}</small>{% endif %}</div>{% endif %}
           {% if block.settings.label != blank %}<div class="et-lab">{{ block.settings.label | escape }}</div>{% endif %}
           {% if block.settings.source != blank %}<div class="et-src">{{ block.settings.source | escape }}</div>{% endif %}
-          {% if request.design_mode and section.settings.verified == false and block.settings.verified == false %}<p class="et-editor-note">此数字尚未核实，请按对应型号的正式资料确认后再发布。</p>{% endif %}
         </div>
       {% endif %}
     {% endfor %}
