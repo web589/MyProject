@@ -1,28 +1,33 @@
-{% assign guides_anchor = 'ratgeber' %}
+{% liquid
+  assign guides_anchor = 'ratgeber'
+  assign source_blog = blogs['solarspeicher']
+  assign all_guides_link = section.settings.all_link | default: source_blog.url | default: '/blogs/solarspeicher'
+%}
 <section id="{{ guides_anchor }}" class="ss-section ss-guides" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
   <div class="ss-container">
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
-    <div class="ss-card-grid ss-card-grid--three">{% for block in section.blocks %}
-      {% liquid
-        assign chosen_article = block.settings.article
-        assign card_image = block.settings.image
-        if card_image == blank and chosen_article != blank
-          assign card_image = chosen_article.image
-        endif
-        assign article_url = block.settings.link
-        if chosen_article != blank
-          assign article_url = chosen_article.url
-        endif
-        assign article_title = block.settings.title
-        if article_title == blank and chosen_article != blank
-          assign article_title = chosen_article.title
-        endif
-      %}
-      <article class="ss-media-card" {{ block.shopify_attributes }}>{% render 'solar-storage-media', image: card_image, alt: block.settings.image_alt, ratio: '16 / 9', loading: 'lazy', sizes: '(min-width: 981px) 33vw, calc(100vw - 44px)' %}<div class="ss-media-card__body"><p class="ss-tag">{{ block.settings.tag | escape }}</p><h3>{{ article_title | escape }}</h3><div class="rte">{{ block.settings.text }}</div>{% if block.settings.link_label != blank and article_url != blank %}<a class="ss-text-link" href="{{ article_url }}">{{ block.settings.link_label | escape }}</a>{% endif %}</div></article>
-    {% endfor %}</div>
-    {% liquid
-      assign all_guides_link = section.settings.all_link | default: '/pages/ratgeber'
-    %}
+    {% if source_blog != blank and source_blog.articles_count > 0 %}
+      <div class="ss-card-grid ss-card-grid--three">
+        {% for article in source_blog.articles limit: 3 %}
+          {% liquid
+            assign card_image = article.image
+            assign card_alt = card_image.alt | default: article.title
+            assign article_summary = article.excerpt_or_content | strip_html | strip | truncatewords: 28
+          %}
+          <article class="ss-media-card">
+            {% render 'solar-storage-media', image: card_image, alt: card_alt, ratio: '16 / 9', loading: 'lazy', sizes: '(min-width: 981px) 33vw, calc(100vw - 44px)' %}
+            <div class="ss-media-card__body">
+              <p class="ss-tag">{{ section.settings.tag | escape }}</p>
+              <h3>{{ article.title | escape }}</h3>
+              {% if article_summary != blank %}<div class="rte"><p>{{ article_summary | escape }}</p></div>{% endif %}
+              {% if section.settings.link_label != blank %}<a class="ss-text-link" href="{{ article.url }}">{{ section.settings.link_label | escape }}</a>{% endif %}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% elsif request.design_mode %}
+      <p class="ss-guides__empty">Solarspeicher 博客暂时没有可显示的文章。</p>
+    {% endif %}
     {% if section.settings.all_label != blank %}<div class="ss-link-row"><a class="ss-text-link" href="{{ all_guides_link }}">{{ section.settings.all_label | escape }}</a></div>{% endif %}
   </div>
 </section>
@@ -35,23 +40,12 @@
     { "type": "text", "id": "heading_before", "label": "标题前半部分", "default": "Ratgeber zu" },
     { "type": "text", "id": "heading_highlight", "label": "标题高亮部分", "default": "Solarspeichern" },
     { "type": "richtext", "id": "subtext", "label": "副标题", "default": "<p>Vertiefe einzelne Fragen mit ausführlichen Artikeln zu Nutzung, Nachrüstung und Alltag mit einem Solarspeicher.</p>" },
+    { "type": "text", "id": "tag", "label": "文章标签", "default": "RATGEBER" },
+    { "type": "text", "id": "link_label", "label": "文章链接文字", "default": "Weiterlesen →" },
     { "type": "text", "id": "all_label", "label": "底部链接文字", "default": "Alle Ratgeber ansehen →" },
-    { "type": "url", "id": "all_link", "label": "底部链接地址", "info": "留空时使用 HTML 原型中的 /pages/ratgeber；上线前请核对真实地址。" },
+    { "type": "url", "id": "all_link", "label": "底部链接地址", "info": "留空时跳转到 Solarspeicher 博客。" },
     { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
   ],
-  "blocks": [
-    { "type": "article", "name": "精选文章", "settings": [
-      { "type": "article", "id": "article", "label": "关联博客文章", "info": "选择后自动使用文章链接，图片未设置时使用文章主图。" },
-      { "type": "image_picker", "id": "image", "label": "自定义文章图片" },
-      { "type": "text", "id": "image_alt", "label": "图片替代文本", "default": "Bestehende PV-Anlage mit nachgerüstetem Solarspeicher" },
-      { "type": "text", "id": "tag", "label": "标签", "default": "RATGEBER" },
-      { "type": "text", "id": "title", "label": "显示标题", "info": "留空时使用关联文章标题。", "default": "Solarspeicher nachrüsten: Was bei bestehender PV-Anlage zu prüfen ist" },
-      { "type": "richtext", "id": "text", "label": "摘要", "default": "<p>Welche Komponenten häufig weiter genutzt werden können und welche Anpassungen im Einzelfall nötig sind.</p>" },
-      { "type": "text", "id": "link_label", "label": "链接文字", "default": "Weiterlesen →" },
-      { "type": "url", "id": "link", "label": "备用链接", "info": "上线前请替换成真实博客文章或使用上方文章选择器。" }
-    ] }
-  ],
-  "max_blocks": 6,
   "presets": [{ "name": "储能专题 · 精选文章" }]
 }
 {% endschema %}
