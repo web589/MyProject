@@ -128,8 +128,8 @@
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(14, 27, 44, .16);
 }
-.main-content--erfahrungen-tests .et-section .et-btn-ghost { background: #fff; color: var(--et-blue); border: 1px solid #9bd8ff; }
-.main-content--erfahrungen-tests .et-section .et-btn-ghost:hover { border-color: var(--et-blue); background: var(--et-blue-soft); color: var(--et-blue); }
+.main-content--erfahrungen-tests .et-section .et-btn-ghost { background: #fff; color: var(--et-blue); border: 1px solid #9bd8ff; transform: none; }
+.main-content--erfahrungen-tests .et-section .et-btn-ghost:hover { border-color: var(--et-blue); background: var(--et-blue-soft); color: var(--et-blue); transform: translateY(-1px); }
 .main-content--erfahrungen-tests .et-lnk,
 .main-content--erfahrungen-tests .et-note a {
   display: inline-block;
@@ -346,4 +346,5 @@
 @media (prefers-reduced-motion: reduce) {
   .main-content--erfahrungen-tests .et-section :is(.et-btn, .et-faq-q, .et-faq-q::after, .et-faq-a, .et-faq-answer) { transition: none; }
   .main-content--erfahrungen-tests .et-section .et-btn-primary:hover { transform: none; }
+  .main-content--erfahrungen-tests .et-section .et-btn-ghost:hover { transform: none; }
 }
