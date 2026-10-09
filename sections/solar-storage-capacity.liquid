@@ -12,7 +12,12 @@
         {% if block.type == 'link' and block.settings.label != blank and block.settings.url != blank %}
           {% liquid
             assign link_url = block.settings.url
-            assign anchor_id = block.settings.anchor | strip | remove_first: '#'
+            assign target_module = block.settings.target_module | default: 'none'
+            assign anchor_id = ''
+          %}
+          {% capture anchor_id %}{% render 'anchor-navigation-target', module: target_module %}{% endcapture %}
+          {% liquid
+            assign anchor_id = anchor_id | strip | remove_first: '#'
             if anchor_id != blank
               assign link_url = link_url | split: '#' | first | append: '#' | append: anchor_id
             endif
@@ -46,8 +51,19 @@
     ] },
     { "type": "link", "name": "文字链接", "settings": [
       { "type": "text", "id": "label", "label": "链接文字", "default": "Modelle im Vergleich ansehen →" },
-      { "type": "url", "id": "url", "label": "目标页面链接", "info": "可选择页面、产品或其他链接；下面的模块 ID 会附加到此地址。" },
-      { "type": "text", "id": "anchor", "label": "目标模块 ID（可选）", "info": "填写目标页面区块的 HTML ID，例如 eauto-calculator；不需要输入 #。" }
+      { "type": "url", "id": "url", "label": "目标页面链接", "info": "先选择目标页面，再选择页面中的目标模块。" },
+      { "type": "select", "id": "target_module", "label": "链接到哪个模块", "default": "none", "options": [
+        { "value": "none", "label": "不定位模块（页面顶部）" },
+        { "value": "storage_hero", "label": "储能专题 / 首屏" },
+        { "value": "storage_why", "label": "储能专题 / 为什么需要储能" },
+        { "value": "storage_comparison", "label": "储能专题 / 方案对比" },
+        { "value": "storage_flow", "label": "储能专题 / 工作原理" },
+        { "value": "storage_retrofit", "label": "储能专题 / 后装说明" },
+        { "value": "storage_capacity", "label": "容量选择 / Speicherrechner" },
+        { "value": "storage_models", "label": "储能专题 / 产品型号" },
+        { "value": "storage_faq", "label": "储能专题 / 常见问题" },
+        { "value": "eauto_calculator", "label": "E-Auto 页面 / 容量计算器" }
+      ] }
     ] }
   ],
   "max_blocks": 10,
