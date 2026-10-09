@@ -161,8 +161,8 @@
 }
 .main-content--erfahrungen-tests .et-media .et-media-badge { position: absolute; top: 14px; left: 16px; padding: 2px 7px; border: 1px solid #c4cdd7; border-radius: 4px; background: #fff; color: #7c8b9c; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; }
 
-/* 01: first screen. Both columns grow with the page instead of capping the copy. */
-.main-content--erfahrungen-tests .et-hero-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 72px; align-items: center; }
+/* 01: keep the copy at the reference HTML width; the image fills the remaining space. */
+.main-content--erfahrungen-tests .et-hero-grid { display: grid; grid-template-columns: 620px minmax(0, 1fr); gap: 72px; align-items: center; }
 .main-content--erfahrungen-tests .et-hero-grid > * { min-width: 0; }
 .main-content--erfahrungen-tests .et-hero h1 { max-width: none; margin-top: 20px; font-size: 48px; font-weight: 600; letter-spacing: -.015em; line-height: 1.16; }
 .main-content--erfahrungen-tests .et-hero .et-sub { font-size: 16.5px; }
