@@ -1,5 +1,6 @@
 /* AC vs. DC Speicher: scoped to the alternate page template. */
 .main-content--acdc {
+  --acdc-anchor-scroll-offset: 110px;
   --acdc-blue: #0099fe;
   --acdc-blue-soft: #e8f4ff;
   --acdc-ink: #0e1b2c;
@@ -20,7 +21,7 @@
 .main-content--acdc .acdc-section :is(h1, h2, h3, p, a, button, span, th, td) { font-family: inherit; }
 .main-content--acdc .acdc-section :is(ul, ol) { margin: 0; padding: 0; }
 .main-content--acdc .acdc-section [hidden] { display: none !important; }
-.main-content--acdc [id] { scroll-margin-top: 110px; }
+.main-content--acdc [id] { scroll-margin-top: var(--acdc-anchor-scroll-offset); }
 .main-content--acdc .acdc-container,
 .main-content--acdc .acdc-inner {
   width: 100%;
@@ -76,6 +77,7 @@
   z-index: 20;
 }
 .main-content--acdc .acdc-anchor-nav {
+  --anchor-nav-active-line: 111px;
   position: relative;
   z-index: 20;
   border-bottom: 1px solid var(--acdc-border);

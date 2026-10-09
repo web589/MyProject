@@ -166,7 +166,11 @@
       scheduled = false;
       if (!activeLinks.length) return;
 
-      var activationLine = Math.max(0, nav.getBoundingClientRect().bottom) + 36;
+      var navBottom = Math.max(0, nav.getBoundingClientRect().bottom);
+      var configuredActivationLine = parseFloat(window.getComputedStyle(nav).getPropertyValue('--anchor-nav-active-line'));
+      var activationLine = Number.isFinite(configuredActivationLine)
+        ? Math.max(navBottom, configuredActivationLine)
+        : navBottom + 36;
       var activeItem = activeLinks[0];
 
       activeLinks.forEach(function (item) {
