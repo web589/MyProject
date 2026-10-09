@@ -1,25 +1,5 @@
 {%- assign animation_row = 1 -%}
 {%- assign drawer_position = 'right' -%}
-{%- assign blog_center_menu = linklists['blog-center'] -%}
-{%- assign blog_center_home_link = blank -%}
-{%- assign blog_center_page = pages['blogs'] -%}
-{%- assign blog_center_url = blank -%}
-{%- if blog_center_page != blank and blog_center_page.url != blank -%}
-  {%- assign blog_center_url = blog_center_page.url -%}
-{%- elsif blog_center_menu != blank and blog_center_menu.links.size > 0 -%}
-  {%- assign blog_center_home_link = blog_center_menu.links | first -%}
-  {%- assign blog_center_url = blog_center_home_link.url -%}
-{%- endif -%}
-{%- if blog_center_url != blank -%}
-  {%- unless blog_center_url contains '/pages/' or blog_center_url contains 'view=' -%}
-    {%- if blog_center_url contains '?' -%}
-      {%- assign blog_center_url = blog_center_url | append: '&view=all' -%}
-    {%- else -%}
-      {%- assign blog_center_url = blog_center_url | append: '?view=all' -%}
-    {%- endif -%}
-  {%- endunless -%}
-{%- endif -%}
-{%- assign blog_center_url = '/blogs/blog-center' -%}
 {% if logo_alignment == 'center' %}
   {%- assign drawer_position = 'left' -%}
 {% endif %}
@@ -41,11 +21,7 @@
       <ul class="mobile-nav{% if settings.type_navigation_style == 'heading' %} mobile-nav--heading-style{% endif %}" role="navigation" aria-label="Primary">
         {%- for link in main_menu.links -%}
           {%- assign animation_row = animation_row | plus: 1 -%}
-          {%- assign link_title_handle = link.title | handleize -%}
           {%- assign link_url = link.url -%}
-          {%- if link_title_handle == 'blog' and blog_center_url != blank -%}
-            {%- assign link_url = blog_center_url -%}
-          {%- endif -%}
           {%- assign child_list_handle = link_url | handleize | append: forloop.index -%}
           {%- assign has_dropdown = false -%}
           {%- if link.links != blank -%}
@@ -114,9 +90,6 @@
                         assign grand_child_list_handle = childlink.url | handleize | append: forloop.index
                         assign childlink_url = childlink.url
                         assign childlink_title_handle = childlink.title | handleize
-                        if childlink_title_handle == 'blog' and blog_center_url != blank
-                          assign childlink_url = blog_center_url
-                        endif
                         if childlink_title_handle == 'venus-e-mini'
                           assign childlink_url = '/products/venus-e-mini'
                         endif

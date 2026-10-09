@@ -6,36 +6,12 @@
     assign offset = 0
   endunless
 
-  assign blog_center_menu = linklists['blog-center']
-  assign blog_center_home_link = blank
-  assign blog_center_page = pages['blogs']
-  assign blog_center_url = blank
-  if blog_center_page != blank and blog_center_page.url != blank
-    assign blog_center_url = blog_center_page.url
-  elsif blog_center_menu != blank and blog_center_menu.links.size > 0
-    assign blog_center_home_link = blog_center_menu.links | first
-    assign blog_center_url = blog_center_home_link.url
-  endif
-  if blog_center_url != blank
-    unless blog_center_url contains '/pages/' or blog_center_url contains 'view='
-      if blog_center_url contains '?'
-        assign blog_center_url = blog_center_url | append: '&view=all'
-      else
-        assign blog_center_url = blog_center_url | append: '?view=all'
-      endif
-    endunless
-  endif
-  assign blog_center_url = '/blogs/blog-center'
 -%}
 
 <ul class="site-nav site-navigation small--hide">
   {%- for link in main_menu.links limit: limit offset: offset -%}
     {%- liquid
       assign link_url = link.url
-      assign link_title_handle = link.title | handleize
-      if link_title_handle == 'blog' and blog_center_url != blank
-        assign link_url = blog_center_url
-      endif
       assign mega_menu_block = nil
       assign link_handle = link.title | handleize
       assign menu_card_block_count = 0
@@ -151,9 +127,6 @@
                     {%- liquid
                       assign childlink_url = childlink.url
                       assign childlink_title_handle = childlink.title | handleize
-                      if childlink_title_handle == 'blog' and blog_center_url != blank
-                        assign childlink_url = blog_center_url
-                      endif
                       if childlink_title_handle == 'venus-e-mini'
                         assign childlink_url = '/products/venus-e-mini'
                       endif
@@ -380,9 +353,6 @@
                     {%- liquid
                       assign childlink_url = childlink.url
                       assign childlink_title_handle = childlink.title | handleize
-                      if childlink_title_handle == 'blog' and blog_center_url != blank
-                        assign childlink_url = blog_center_url
-                      endif
                       if childlink_title_handle contains 'venus-e-mini'
                         assign childlink_url = '/products/venus-e-mini'
                       endif
@@ -447,9 +417,6 @@
               assign has_sub_dropdown = false
               assign childlink_url = childlink.url
               assign childlink_title_handle = childlink.title | handleize
-              if childlink_title_handle == 'blog' and blog_center_url != blank
-                assign childlink_url = blog_center_url
-              endif
               if childlink_title_handle == 'venus-e-mini'
                 assign childlink_url = '/products/venus-e-mini'
               endif
