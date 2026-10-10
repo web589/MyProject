@@ -144,6 +144,8 @@
 .main-content--kontakt .kt-final .kt-sub { margin-top: 14px; }
 .main-content--kontakt .kt-editor-warning { padding: 12px; margin-top: 12px; border: 1px solid #c79a2f; background: #fff8df; font-size: 13px; color: #715215; }
 html .main-content--kontakt .kt-section :is(a, button, input, select, textarea):focus-visible { outline: 2px solid var(--kt-blue); outline-offset: 4px; }
+/* Keep form-control focus feedback aligned with the original Kontakt HTML. */
+html .main-content--kontakt .kt-field :is(input, select, textarea):focus-visible { outline: none; outline-offset: 0; border-color: var(--kt-blue); box-shadow: 0 0 0 3px rgba(0, 153, 254, .12); }
 @media (max-width: 1180px) {
   .main-content--kontakt .kt-inner { padding: var(--kt-padding-top-tablet, 56px) 40px var(--kt-padding-bottom-tablet, 56px); }
   .main-content--kontakt :is(.kt-anliegen, .kt-self-help, .kt-cards3) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
