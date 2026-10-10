@@ -55,6 +55,7 @@ body:has(.main-content--ai-energy) .site-header-group:has(#SiteHeader[data-nativ
 .main-content--ai-energy .ai-energy-page .ai-energy__text-link:focus-visible { color: var(--ai-blue); text-decoration: underline; }
 .ai-energy__center-cta { display: flex; width: fit-content; margin: 32px auto 0; }
 .ai-energy__media, .ai-energy__visual, .ai-energy__day-image, .ai-energy__bento-media, .ai-energy__model-media, .ai-energy__guide-media { overflow: hidden; background: #edf1f5; }
+.main-content--ai-energy .ai-energy-page .ai-energy__models .ai-energy__model-media { background: #fff; }
 .ai-energy__media img, .ai-energy__visual img, .ai-energy__day-image img, .ai-energy__bento-media img, .ai-energy__model-media img, .ai-energy__guide-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .ai-energy__model-media img { object-fit: contain; }
 .ai-energy__media > .ph, .ai-energy__visual > .ph, .ai-energy__day-image > .ph, .ai-energy__bento-media > .ph, .ai-energy__model-media > .ph, .ai-energy__guide-media > .ph { min-height: inherit; height: 100%; }
@@ -846,10 +847,14 @@ body:has(.main-content--ai-energy) .site-header-group:has(#SiteHeader[data-nativ
     box-shadow: none;
   }
 
+  .main-content--ai-energy .ai-energy-page .ai-energy__model-card {
+    border-color: #fff;
+  }
+
   .main-content--ai-energy .ai-energy-page .ai-energy__model-media {
     height: var(--ai-model-image-height, 210px);
     min-height: 0;
-    border-bottom: 1px solid #edf0f4;
+    border-bottom: 0;
   }
 
   .main-content--ai-energy .ai-energy-page .ai-energy__model-copy {

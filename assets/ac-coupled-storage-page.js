@@ -3,23 +3,109 @@
 
   var navigationObserver = null;
 
-  function setFlowState(root, state) {
+  function setupFlowControls(root) {
     var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-ac-flow-toggle]'));
     var panels = Array.prototype.slice.call(root.querySelectorAll('[data-ac-flow-panel]'));
+    if (!tabs.length || !panels.length) return;
 
-    tabs.forEach(function (tab) {
-      var active = tab.dataset.acFlowToggle === state;
-      tab.classList.toggle('is-active', active);
-      tab.setAttribute('aria-selected', active ? 'true' : 'false');
-      tab.tabIndex = active ? 0 : -1;
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var hasPairedVideos = panels.length === 2 && panels.every(function (panel) {
+      return Boolean(panel.querySelector('video'));
+    });
+    var shouldAutoPlay = !reducedMotion;
+    var shouldAutoCycle = hasPairedVideos && shouldAutoPlay;
+    var isInViewport = false;
+
+    function activePanel() {
+      return panels.find(function (panel) { return panel.classList.contains('is-active'); }) || panels[0] || null;
+    }
+
+    function pauseVideos(exceptPanel) {
+      panels.forEach(function (panel) {
+        if (panel === exceptPanel) return;
+        panel.querySelectorAll('video').forEach(function (video) { video.pause(); });
+      });
+    }
+
+    function playPanelVideo(panel, restart, userInitiated) {
+      if (!panel || !isInViewport || (!shouldAutoPlay && !userInitiated)) return;
+      var video = panel.querySelector('video');
+      if (!video) return;
+      pauseVideos(panel);
+      video.muted = true;
+      video.playsInline = true;
+      if (restart) {
+        try { video.currentTime = 0; } catch (error) { /* The video may not be seekable yet. */ }
+      }
+      var playPromise = video.play();
+      if (playPromise && typeof playPromise.catch === 'function') playPromise.catch(function () {});
+    }
+
+    function activate(tab, options) {
+      if (!tab) return;
+      var settings = options || {};
+      var state = tab.dataset.acFlowToggle;
+      tabs.forEach(function (button) {
+        var active = button === tab;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-selected', active ? 'true' : 'false');
+        button.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach(function (panel) {
+        var active = panel.dataset.acFlowPanel === state;
+        panel.classList.toggle('is-active', active);
+        panel.hidden = !active;
+        panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+        if (active) playPanelVideo(panel, Boolean(settings.restart), Boolean(settings.userInitiated));
+        else panel.querySelectorAll('video').forEach(function (video) { video.pause(); });
+      });
+    }
+
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener('click', function () { activate(tab, { restart: true, userInitiated: true }); });
+      tab.addEventListener('keydown', function (event) {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        var direction = event.key === 'ArrowRight' ? 1 : -1;
+        var next = tabs[(index + direction + tabs.length) % tabs.length];
+        activate(next, { restart: true, userInitiated: true });
+        next.focus();
+      });
     });
 
     panels.forEach(function (panel) {
-      var active = panel.dataset.acFlowPanel === state;
-      panel.classList.toggle('is-active', active);
-      panel.hidden = !active;
-      panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+      panel.querySelectorAll('video').forEach(function (video) {
+        video.addEventListener('ended', function () {
+          if (!shouldAutoCycle || !isInViewport || !panel.classList.contains('is-active')) return;
+          var activeTabIndex = tabs.findIndex(function (tab) {
+            return tab.dataset.acFlowToggle === panel.dataset.acFlowPanel;
+          });
+          activate(tabs[(activeTabIndex + 1) % tabs.length], { restart: true });
+        });
+      });
     });
+
+    var initialTab = tabs.find(function (tab) { return tab.classList.contains('is-active'); }) || tabs[0];
+    activate(initialTab);
+
+    function updateViewport(isVisible) {
+      isInViewport = isVisible;
+      if (!isInViewport) {
+        pauseVideos(null);
+        return;
+      }
+      if (shouldAutoPlay) playPanelVideo(activePanel(), false, false);
+    }
+
+    if (typeof window.IntersectionObserver === 'function') {
+      var observer = new window.IntersectionObserver(function (entries) {
+        var entry = entries[0];
+        updateViewport(Boolean(entry && entry.isIntersecting && entry.intersectionRatio >= 0.25));
+      }, { threshold: [0, 0.25] });
+      observer.observe(root);
+    } else {
+      updateViewport(true);
+    }
   }
 
   function setFaqState(item, open) {
@@ -138,24 +224,7 @@
     if (!root || root.dataset.acStorageInitialized === 'true') return;
     root.dataset.acStorageInitialized = 'true';
 
-    var flowTabs = Array.prototype.slice.call(root.querySelectorAll('[data-ac-flow-toggle]'));
-    flowTabs.forEach(function (tab, index) {
-      tab.addEventListener('click', function () {
-        setFlowState(root, tab.dataset.acFlowToggle);
-      });
-      tab.addEventListener('keydown', function (event) {
-        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-        event.preventDefault();
-        var direction = event.key === 'ArrowRight' ? 1 : -1;
-        var next = flowTabs[(index + direction + flowTabs.length) % flowTabs.length];
-        setFlowState(root, next.dataset.acFlowToggle);
-        next.focus();
-      });
-    });
-    if (flowTabs.length) {
-      var initialTab = flowTabs.find(function (tab) { return tab.classList.contains('is-active'); }) || flowTabs[0];
-      setFlowState(root, initialTab.dataset.acFlowToggle);
-    }
+    setupFlowControls(root);
 
     var faqItems = Array.prototype.slice.call(root.querySelectorAll('[data-ac-faq-item]'));
     faqItems.forEach(function (item) {

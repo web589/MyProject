@@ -268,18 +268,11 @@
 .main-content--solar-storage .ss-media__placeholder { padding: 16%; fill: #c4cdd7; }
 .main-content--solar-storage .ss-video { margin-top: 30px; border: 1px solid var(--ss-border); }
 .main-content--solar-storage .ss-video__media { display: block; }
-.main-content--solar-storage .ss-media-badge {
-  position: absolute;
-  top: 14px;
-  left: 16px;
-  padding: 2px 7px;
-  border: 1px solid #c4cdd7;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, .94);
-  color: #7c8b9c;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: .08em;
+@media (min-width: 1181px) {
+  .main-content--solar-storage .ss-video {
+    height: var(--ss-video-height, 650px);
+    aspect-ratio: auto;
+  }
 }
 
 .main-content--solar-storage .ss-answer-box {

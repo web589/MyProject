@@ -1,5 +1,5 @@
 {% assign function_anchor = 'funktionsweise' %}
-<section id="{{ function_anchor }}" class="ss-section ss-function ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px;">
+<section id="{{ function_anchor }}" class="ss-section ss-function ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px; --ss-video-height: {{ section.settings.video_height | default: 650 }}px;">
   <div class="ss-container">
     {% render 'solar-storage-section-heading', eyebrow: section.settings.eyebrow, heading_before: section.settings.heading_before, heading_highlight: section.settings.heading_highlight, subtext: section.settings.subtext %}
     <div class="ss-video" style="--ss-media-ratio: 2.2 / 1;">
@@ -10,7 +10,6 @@
       {% else %}
         {{ 'lifestyle-1' | placeholder_svg_tag: 'ss-media__placeholder' }}
       {% endif %}
-      <span class="ss-media-badge">VIDEO</span>
     </div>
     <div class="ss-step-grid">
       {% for block in section.blocks %}
@@ -31,6 +30,7 @@
     { "type": "video", "id": "video", "label": "循环视频" },
     { "type": "image_picker", "id": "poster", "label": "视频封面图" },
     { "type": "text", "id": "poster_alt", "label": "封面图替代文本", "default": "Wohnhaus mit PV-Anlage und Solarspeicher im Tagesverlauf" },
+    { "type": "range", "id": "video_height", "label": "视频高度（桌面）", "min": 300, "max": 900, "step": 10, "unit": "px", "default": 650 },
     { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
   ],
   "blocks": [
