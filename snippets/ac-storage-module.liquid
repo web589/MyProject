@@ -122,12 +122,16 @@
         <div id="{{ page_id }}-day" class="ac-storage-page__flow-panel" data-ac-flow-panel="day" role="tabpanel" aria-hidden="false">
           <div class="ac-storage-page__media ac-storage-page__media--flow">
             {% if section.settings.day_video != blank %}
+              {% assign day_mp4_sources = section.settings.day_video.sources | where: 'format', 'mp4' | sort: 'height' %}
+              {% assign day_best_mp4 = day_mp4_sources | last %}
               {% assign day_flow_poster = section.settings.day_video.preview_image | default: section.settings.day_image %}
-              <video class="ac-storage-page__flow-video" aria-label="{{ section.settings.day_image_alt | escape }}" muted playsinline preload="metadata"{% if day_flow_poster != blank %} poster="{{ day_flow_poster | image_url: width: 1600 | escape }}"{% endif %}>
-                {% for source in section.settings.day_video.sources %}
-                  <source src="{{ source.url | escape }}" type="{{ source.mime_type | escape }}">
-                {% endfor %}
-              </video>
+              {% if day_best_mp4 != blank %}
+                <video class="ac-storage-page__flow-video" aria-label="{{ section.settings.day_image_alt | escape }}" muted playsinline preload="metadata"{% if day_flow_poster != blank %} poster="{{ day_flow_poster | image_url: width: 1600 | escape }}"{% endif %}>
+                  <source src="{{ day_best_mp4.url | escape }}" type="{{ day_best_mp4.mime_type | escape }}">
+                </video>
+              {% else %}
+                {{ section.settings.day_video | video_tag: image_size: '1600x', muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'ac-storage-page__flow-video' }}
+              {% endif %}
             {% elsif section.settings.day_image != blank %}
               {{ section.settings.day_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '100vw', alt: section.settings.day_image_alt }}
             {% else %}
@@ -144,12 +148,16 @@
         <div id="{{ page_id }}-evening" class="ac-storage-page__flow-panel" data-ac-flow-panel="evening" role="tabpanel" aria-hidden="true" hidden>
           <div class="ac-storage-page__media ac-storage-page__media--flow">
             {% if section.settings.evening_video != blank %}
+              {% assign evening_mp4_sources = section.settings.evening_video.sources | where: 'format', 'mp4' | sort: 'height' %}
+              {% assign evening_best_mp4 = evening_mp4_sources | last %}
               {% assign evening_flow_poster = section.settings.evening_video.preview_image | default: section.settings.evening_image %}
-              <video class="ac-storage-page__flow-video" aria-label="{{ section.settings.evening_image_alt | escape }}" muted playsinline preload="metadata"{% if evening_flow_poster != blank %} poster="{{ evening_flow_poster | image_url: width: 1600 | escape }}"{% endif %}>
-                {% for source in section.settings.evening_video.sources %}
-                  <source src="{{ source.url | escape }}" type="{{ source.mime_type | escape }}">
-                {% endfor %}
-              </video>
+              {% if evening_best_mp4 != blank %}
+                <video class="ac-storage-page__flow-video" aria-label="{{ section.settings.evening_image_alt | escape }}" muted playsinline preload="metadata"{% if evening_flow_poster != blank %} poster="{{ evening_flow_poster | image_url: width: 1600 | escape }}"{% endif %}>
+                  <source src="{{ evening_best_mp4.url | escape }}" type="{{ evening_best_mp4.mime_type | escape }}">
+                </video>
+              {% else %}
+                {{ section.settings.evening_video | video_tag: image_size: '1600x', muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'ac-storage-page__flow-video' }}
+              {% endif %}
             {% elsif section.settings.evening_image != blank %}
               {{ section.settings.evening_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '640, 960, 1280, 1600', sizes: '100vw', alt: section.settings.evening_image_alt }}
             {% else %}
