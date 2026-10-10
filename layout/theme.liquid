@@ -77,7 +77,7 @@
   {%- if template.suffix == 'balkonkraftwerk-mit-speicher' or template.suffix == 'venus-e-vergleich' or template.suffix == 'vpp-ready' or template.suffix == 'vpp-anfrage' or template.suffix == 'ai-energiemanagement' or template.suffix == 'solarspeicher-erklaert' or template.suffix == 'smart-meter-energiefluss' or template.suffix == 'ac-vs-dc-speicher' -%}
     <script src="{{ 'anchor-navigation.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
-  {%- if template.suffix == 'venus-e-vergleich' or template.suffix == 'ac-gekoppelter-speicher' or template.suffix == 'ai-energiemanagement' or template.suffix == 'e-auto' or template.suffix == 'smart-meter-energiefluss' or template.suffix == 'faq' or template.suffix == 'solarspeicher-erklaert' or template.suffix == 'ac-vs-dc-speicher' or template.suffix == 'erfahrungen-tests' or template.suffix == 'contact' -%}
+  {%- if template.suffix == 'venus-e-vergleich' or template.suffix == 'ac-gekoppelter-speicher' or template.suffix == 'ai-energiemanagement' or template.suffix == 'e-auto' or template.suffix == 'smart-meter-energiefluss' or template.suffix == 'faq' or template.suffix == 'solarspeicher-erklaert' or template.suffix == 'ac-vs-dc-speicher' or template.suffix == 'erfahrungen-tests' or template.suffix == 'contact' or template.suffix == 'kontakt' -%}
     {{ 'venus-e-design-system.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
   {%- if template.suffix == 'ac-vs-dc-speicher' -%}
@@ -91,7 +91,7 @@
     {{ 'erfahrungen-tests-page.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'erfahrungen-tests-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
-  {%- if template.suffix == 'contact' -%}
+  {%- if template.suffix == 'kontakt' -%}
     {{ 'kontakt-page.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'kontakt-page.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
@@ -469,7 +469,7 @@
     {%- sections 'popup-group' -%}
 
       <main
-        class="main-content{% if template.suffix == 'contact' %} main-content--kontakt{% endif %}{% if template.suffix == 'erfahrungen-tests' %} main-content--erfahrungen-tests{% endif %}{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}{% if template.suffix == 'venus-e-vergleich' %} main-content--venus-e{% endif %}{% if template.suffix == 'ac-gekoppelter-speicher' %} main-content--ac-storage{% endif %}{% if template.suffix == 'ac-vs-dc-speicher' %} main-content--acdc{% endif %}{% if template.suffix == 'e-auto' %} main-content--e-auto{% endif %}{% if template.suffix == 'ai-energiemanagement' %} main-content--ai-energy{% endif %}{% if template.suffix == 'solarspeicher-erklaert' %} main-content--solar-storage{% endif %}{% if template.suffix == 'smart-meter-energiefluss' %} main-content--smart-meter{% endif %}{% if template.suffix == 'faq' %} main-content--faq{% endif %}{% if template.suffix == 'vpp-ready' %} main-content--vpp-ready{% endif %}{% if template.suffix == 'vpp-anfrage' %} main-content--vpp-anfrage{% endif %}"
+        class="main-content{% if template.suffix == 'kontakt' %} main-content--kontakt{% endif %}{% if template.suffix == 'erfahrungen-tests' %} main-content--erfahrungen-tests{% endif %}{% if template.suffix == 'balkonkraftwerk-mit-speicher' %} main-content--bw-storage{% endif %}{% if template.suffix == 'venus-e-vergleich' %} main-content--venus-e{% endif %}{% if template.suffix == 'ac-gekoppelter-speicher' %} main-content--ac-storage{% endif %}{% if template.suffix == 'ac-vs-dc-speicher' %} main-content--acdc{% endif %}{% if template.suffix == 'e-auto' %} main-content--e-auto{% endif %}{% if template.suffix == 'ai-energiemanagement' %} main-content--ai-energy{% endif %}{% if template.suffix == 'solarspeicher-erklaert' %} main-content--solar-storage{% endif %}{% if template.suffix == 'smart-meter-energiefluss' %} main-content--smart-meter{% endif %}{% if template.suffix == 'faq' %} main-content--faq{% endif %}{% if template.suffix == 'vpp-ready' %} main-content--vpp-ready{% endif %}{% if template.suffix == 'vpp-anfrage' %} main-content--vpp-anfrage{% endif %}"
         id="MainContent"
         {% if template.suffix == 'balkonkraftwerk-mit-speicher' %}
           style="--bw-storage-content-max-width: {{ settings.bw_storage_content_max_width | default: 1500 }}px;"
