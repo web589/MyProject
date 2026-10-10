@@ -3,12 +3,36 @@
   assign article = block.settings.article
   assign content_item = card_page | default: article
 
+  assign custom_card_has_content = false
+  if block.settings.image != blank or block.settings.title != blank or block.settings.description != blank or block.settings.link != blank
+    assign custom_card_has_content = true
+  endif
+  if block.settings.metric_1_value != blank or block.settings.metric_1_label != blank
+    assign custom_card_has_content = true
+  endif
+  if block.settings.metric_2_value != blank or block.settings.metric_2_label != blank
+    assign custom_card_has_content = true
+  endif
+  if block.settings.metric_3_value != blank or block.settings.metric_3_label != blank
+    assign custom_card_has_content = true
+  endif
+
+  assign article_card_is_renderable = false
   if content_item != blank
+    assign article_card_is_renderable = true
+  elsif block.settings.custom_content_enabled and block.settings.category_handle != blank and custom_card_has_content
+    assign article_card_is_renderable = true
+  endif
+
+  if article_card_is_renderable
     assign card_image = block.settings.image
     if card_image == blank and card_page == blank and article != blank
       assign card_image = article.image
     endif
-    assign card_title = block.settings.title | default: content_item.title
+    assign card_title = block.settings.title
+    if card_title == blank and content_item != blank
+      assign card_title = content_item.title
+    endif
     assign card_title_parts = card_title | split: ' | VENUS E'
     if card_title_parts.size > 1 and card_title_parts.last == blank
       assign card_title = card_title_parts.first
@@ -17,10 +41,13 @@
     if card_description == blank and card_page == blank and article != blank
       assign card_description = article.excerpt | strip_html | truncatewords: 42
     endif
-    if card_description == blank
+    if card_description == blank and content_item != blank
       assign card_description = content_item.content | strip_html | truncatewords: 42
     endif
-    assign card_link = block.settings.link | default: content_item.url
+    assign card_link = block.settings.link
+    if card_link == blank and content_item != blank
+      assign card_link = content_item.url
+    endif
     assign content_image_width = block.settings.content_image_width | default: 58
     assign title_font_size = block.settings.title_font_size | default: 32
     assign description_font_size = block.settings.description_font_size | default: 18
@@ -32,7 +59,7 @@
   endif
 -%}
 
-{%- if content_item != blank -%}
+{%- if article_card_is_renderable -%}
   <article
     class="mega-menu-products__card mega-menu-products__card--article"
     style="
@@ -47,11 +74,11 @@
     "
   >
     <div class="mega-menu-products__article-main">
-      <a
-        class="mega-menu-products__article-media"
-        href="{{ card_link | escape }}"
-        aria-label="{{ card_title | escape }}"
-      >
+      {%- if card_link != blank -%}
+        <a class="mega-menu-products__article-media" href="{{ card_link | escape }}" aria-label="{{ card_title | escape }}">
+      {%- else -%}
+        <div class="mega-menu-products__article-media">
+      {%- endif -%}
         {%- if card_image != blank -%}
           {%- render 'image-element',
             img: card_image,
@@ -64,16 +91,26 @@
         {%- else -%}
           {{ 'image' | placeholder_svg_tag: 'mega-menu-products__card-image' }}
         {%- endif -%}
-      </a>
+      {%- if card_link != blank -%}
+        </a>
+      {%- else -%}
+        </div>
+      {%- endif -%}
 
       <div class="mega-menu-products__article-copy">
-        <h3 class="mega-menu-products__article-title">
-          <a href="{{ card_link | escape }}">{{ card_title | escape }}</a>
-        </h3>
+        {%- if card_title != blank -%}
+          <h3 class="mega-menu-products__article-title">
+            {%- if card_link != blank -%}
+              <a href="{{ card_link | escape }}">{{ card_title | escape }}</a>
+            {%- else -%}
+              {{ card_title | escape }}
+            {%- endif -%}
+          </h3>
+        {%- endif -%}
         {%- if card_description != blank -%}
           <p class="mega-menu-products__article-description">{{ card_description | escape | newline_to_br }}</p>
         {%- endif -%}
-        {%- if block.settings.button_label != blank -%}
+        {%- if block.settings.button_label != blank and card_link != blank -%}
           <a class="mega-menu-products__article-cta" href="{{ card_link | escape }}">
             <span>{{ block.settings.button_label | escape }}</span>
             <span aria-hidden="true">&#8594;</span>

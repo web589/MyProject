@@ -52,6 +52,9 @@
           endif
         elsif block.type == 'mega_menu_article'
           assign content_card = block.settings.page | default: block.settings.article
+          if block.settings.custom_content_enabled
+            assign content_card = content_card | default: block.settings.category_handle
+          endif
           if content_card != blank
             assign article_menu_handle = block.settings.menu_handle | handleize
             if article_menu_handle == link_handle
@@ -169,6 +172,9 @@
                           endif
                         elsif menu_block.type == 'mega_menu_article'
                           assign content_card = menu_block.settings.page | default: menu_block.settings.article
+                          if menu_block.settings.custom_content_enabled
+                            assign content_card = content_card | default: menu_block.settings.category_handle
+                          endif
                           if content_card != blank
                             assign block_menu_handle = menu_block.settings.menu_handle | handleize
                             if block_menu_handle == link_handle
@@ -255,6 +261,9 @@
                     {%- endif -%}
                   {%- elsif menu_block.type == 'mega_menu_article' -%}
                     {%- assign content_card = menu_block.settings.page | default: menu_block.settings.article -%}
+                    {%- if menu_block.settings.custom_content_enabled -%}
+                      {%- assign content_card = content_card | default: menu_block.settings.category_handle -%}
+                    {%- endif -%}
                     {%- if content_card != blank -%}
                       {%- assign article_menu_handle = menu_block.settings.menu_handle | handleize -%}
                       {%- if article_menu_handle == link_handle -%}

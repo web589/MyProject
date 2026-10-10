@@ -958,6 +958,13 @@
           "info": "Choose a page or a blog article. A selected page takes priority."
         },
         {
+          "type": "checkbox",
+          "id": "custom_content_enabled",
+          "label": "Use custom content without an article or page",
+          "default": false,
+          "info": "When enabled, the custom image, title, description, and metrics can render without selecting an article or page. Set a category handle to match a child item in the menu."
+        },
+        {
           "type": "image_picker",
           "id": "image",
           "label": "Card image",
@@ -979,7 +986,7 @@
           "type": "url",
           "id": "link",
           "label": "Link override",
-          "info": "Optional. If blank, the selected page or article URL is used."
+          "info": "Overrides the selected page or article URL. For custom content without a selection, this is the card link."
         },
         {
           "type": "header",
@@ -990,7 +997,7 @@
           "id": "button_label",
           "label": "Button label",
           "default": "Mehr erfahren",
-          "info": "Leave blank to hide the button."
+          "info": "Leave blank to hide the button. The button is also hidden when no card link is available."
         },
         {
           "type": "header",
