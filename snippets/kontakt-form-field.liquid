@@ -1,0 +1,133 @@
+{%- liquid
+  assign field_id = 'Kontakt-' | append: section.id | append: '-' | append: key
+  assign error_id = field_id | append: '-error'
+  assign help_id = field_id | append: '-help'
+  assign full_width = true
+  assign required_field = false
+  assign input_type = 'text'
+  case key
+    when 'topic'
+      assign default_label = 'Worum geht es?'
+      assign default_placeholder = 'Bitte Anliegen auswählen'
+      assign default_error = 'Bitte wähle ein Anliegen aus.'
+      assign input_name = 'contact[Anliegen]'
+      assign required_field = true
+    when 'product'
+      assign default_label = 'Welches Produkt betrifft deine Anfrage?'
+      assign default_placeholder = 'Produkt auswählen'
+      assign input_name = 'contact[Produkt]'
+    when 'order'
+      assign default_label = 'Bestellnummer'
+      assign default_placeholder = 'z. B. #1234'
+      assign default_helper = 'Falls deine Anfrage eine bestehende Bestellung betrifft.'
+      assign input_name = 'contact[Bestellnummer]'
+    when 'serial'
+      assign default_label = 'Seriennummer'
+      assign default_placeholder = 'Seriennummer eingeben'
+      assign default_helper = 'Hilfreich bei technischen Fragen oder Serviceanfragen.'
+      assign input_name = 'contact[Seriennummer]'
+    when 'name'
+      assign default_label = 'Name'
+      assign default_placeholder = 'Dein Name'
+      assign default_error = 'Bitte gib deinen Namen ein.'
+      assign input_name = 'contact[name]'
+      assign required_field = true
+      assign full_width = false
+      assign input_value = form.name | default: customer.name
+    when 'email'
+      assign default_label = 'E-Mail-Adresse'
+      assign default_placeholder = 'name@beispiel.de'
+      assign default_error = 'Bitte gib eine gültige E-Mail-Adresse ein.'
+      assign input_name = 'contact[email]'
+      assign input_type = 'email'
+      assign required_field = true
+      assign full_width = false
+      assign input_value = form.email | default: customer.email
+    when 'phone'
+      assign default_label = 'Telefonnummer'
+      assign default_placeholder = 'Telefonnummer eingeben'
+      assign default_helper = 'Optional'
+      assign input_name = 'contact[phone]'
+      assign input_type = 'tel'
+      assign full_width = false
+      assign input_value = form.phone
+    when 'message'
+      assign default_label = 'Wie können wir dir helfen?'
+      assign default_placeholder = 'Beschreibe kurz dein Anliegen und teile uns mit, was du bereits geprüft oder ausprobiert hast.'
+      assign default_error = 'Bitte beschreibe kurz dein Anliegen.'
+      assign input_name = 'contact[body]'
+      assign required_field = true
+      assign input_value = form.body
+    when 'privacy'
+      assign default_label = 'Ich habe die'
+      assign default_error = 'Bitte bestätige die Datenschutzerklärung.'
+      assign input_name = 'contact[Datenschutz]'
+      assign required_field = true
+  endcase
+  assign field_label = block.settings.label | default: default_label
+  assign field_placeholder = block.settings.placeholder | default: default_placeholder
+  assign field_error = block.settings.error | default: default_error
+  if block
+    assign field_helper = block.settings.helper
+  else
+    assign field_helper = default_helper
+  endif
+  assign description_ids = error_id
+  if field_helper != blank
+    assign description_ids = description_ids | append: ' ' | append: help_id
+  endif
+-%}
+<div
+  id="{{ field_id }}-wrapper"
+  class="kt-field{% if full_width %} kt-field--full{% endif %}{% if key == 'privacy' %} kt-field--check{% endif %}"
+  data-kt-field-wrap="{{ key }}"
+  data-kt-error="{{ field_error | escape }}"
+  {% if key == 'order' or key == 'serial' %}data-kt-condition="{{ key }}" hidden{% endif %}
+  {% if block %}style="{% render 'kontakt-typography', settings: block.settings, prefix: 'title' %}{% render 'kontakt-typography', settings: block.settings, prefix: 'body' %}" {{ block.shopify_attributes }}{% endif %}
+>
+  {%- unless key == 'privacy' -%}
+    <label for="{{ field_id }}">{{ field_label | escape }}{% if required_field %}<span class="kt-req" aria-hidden="true">*</span>{% endif %}</label>
+  {%- endunless -%}
+  {%- case key -%}
+    {%- when 'topic' -%}
+      <select id="{{ field_id }}" name="{{ input_name }}" data-kt-field="topic" required aria-describedby="{{ description_ids }}">
+        <option value="" selected>{{ field_placeholder | escape }}</option>
+        <option value="produktberatung">{{ block.settings.label_produktberatung | default: 'Produktberatung' | escape }}</option>
+        <option value="bestellung">{{ block.settings.label_bestellung | default: 'Bestellung & Lieferung' | escape }}</option>
+        <option value="installation">{{ block.settings.label_installation | default: 'Installation & Technik' | escape }}</option>
+        <option value="rueckgabe">{{ block.settings.label_rueckgabe | default: 'Rückgabe & Garantie' | escape }}</option>
+        <option value="sonstiges">{{ block.settings.label_sonstiges | default: 'Sonstiges' | escape }}</option>
+      </select>
+    {%- when 'product' -%}
+      <select id="{{ field_id }}" name="{{ input_name }}" data-kt-field="product" aria-describedby="{{ description_ids }}">
+        <option value="" selected>{{ field_placeholder | escape }}</option>
+        {%- assign product_options = section.blocks | where: 'type', 'product_option' -%}
+        {%- for option in product_options -%}
+          {%- if option.settings.label != blank -%}<option value="{{ option.settings.label | escape }}">{{ option.settings.label | escape }}</option>{%- endif -%}
+        {%- endfor -%}
+      </select>
+    {%- when 'message' -%}
+      <textarea id="{{ field_id }}" name="{{ input_name }}" data-kt-field="message" required placeholder="{{ field_placeholder | escape }}" rows="4" aria-describedby="{{ description_ids }}">{{ input_value | escape }}</textarea>
+    {%- when 'privacy' -%}
+      {%- liquid
+        assign privacy_url = block.settings.privacy_url | default: '/pages/datenschutz'
+        assign privacy_link_label = block.settings.link_label | default: 'Datenschutzerklärung'
+        assign privacy_label_after = block.settings.label_after | default: 'zur Kenntnis genommen.'
+      -%}
+      <input id="{{ field_id }}" name="{{ input_name }}" data-kt-field="privacy" type="checkbox" value="Zur Kenntnis genommen" required aria-describedby="{{ description_ids }}">
+      <label for="{{ field_id }}">{{ field_label | escape }} <a href="{{ privacy_url }}">{{ privacy_link_label | escape }}</a> {{ privacy_label_after | escape }}<span class="kt-req" aria-hidden="true">*</span></label>
+    {%- else -%}
+      <input
+        id="{{ field_id }}" name="{{ input_name }}" data-kt-field="{{ key }}" type="{{ input_type }}"
+        value="{{ input_value | escape }}" placeholder="{{ field_placeholder | escape }}"
+        aria-describedby="{{ description_ids }}"
+        {% if required_field %}required{% endif %}
+        {% if key == 'name' %}autocomplete="name"{% elsif key == 'email' %}autocomplete="email" autocapitalize="off" spellcheck="false"{% elsif key == 'phone' %}autocomplete="tel"{% endif %}
+      >
+  {%- endcase -%}
+  {%- if field_helper != blank -%}<span class="kt-help" id="{{ help_id }}">{{ field_helper | escape }}</span>{%- endif -%}
+  <span class="kt-err-msg" id="{{ error_id }}" aria-live="polite">{{ field_error | escape }}</span>
+</div>
+{% if key == 'order' or key == 'serial' %}
+  <noscript><style>#{{ field_id }} { display:block; } #{{ field_id }}-wrapper { display:flex !important; }</style></noscript>
+{% endif %}

@@ -1,0 +1,522 @@
+{% if section.settings.show_section %}
+  {% capture section_content %}
+    <div class="kt-hero-grid{% if section.settings.image == blank and section.settings.show_placeholder == false and request.design_mode == false %} kt-hero-grid--no-media{% endif %}">
+      <div class="kt-hero-copy">
+        {% render 'kontakt-heading', section: section, level: 'h1' %}
+        <div class="kt-hero-cta">
+          {% for block in section.blocks %}
+            {% if block.settings.show_block and block.settings.label != blank and block.settings.link != blank %}
+              <a class="kt-button kt-button--{{ block.settings.style | escape }}" href="{{ block.settings.link | escape }}" style="{% render 'kontakt-typography', settings: block.settings, prefix: 'action' %}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% if section.settings.image != blank %}
+        <div class="kt-media">
+          {% assign image_alt = section.settings.image_alt | default: section.settings.image.alt %}
+          {{ section.settings.image | image_url: width: 1600 | image_tag: class: 'kt-media-image', widths: '400, 600, 800, 1000, 1200, 1600', sizes: '(min-width: 1640px) 748px, (min-width: 1181px) calc(100vw - 892px), (min-width: 981px) calc(100vw - 772px), (min-width: 721px) calc(100vw - 80px), calc(100vw - 44px)', loading: 'eager', fetchpriority: 'high', alt: image_alt }}
+        </div>
+      {% elsif section.settings.show_placeholder or request.design_mode %}
+        <div class="kt-media kt-media-placeholder">
+          {% if request.design_mode %}
+          <span>上传首屏图片：产品与真实家庭场景</span>
+          <span>建议 4:3，1200 × 900；可轻量组合手机或笔记本</span>
+          {% else %}
+            <span>VENUS E Support</span>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  {% endcapture %}
+  {% render 'kontakt-section', section: section, anchor_id: 'kontakt-start', extra_class: 'kt-hero', content: section_content %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "联系页 01 首屏",
+  "tag": "div",
+  "class": "kt-section-wrap",
+  "limit": 1,
+  "enabled_on": {
+    "templates": [
+      "page"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示模块",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "VENUS E SUPPORT"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题普通前文",
+      "default": "Kontakt & Support für"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题蓝色强调文字",
+      "default": "VENUS E"
+    },
+    {
+      "type": "text",
+      "id": "heading_suffix",
+      "label": "标题普通后文"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "副标题",
+      "default": "Du hast Fragen zu einem VENUS E Speicher, deiner Bestellung oder zur Installation? Wähle dein Anliegen und sende uns die wichtigsten Informationen – so können wir deine Anfrage besser einordnen."
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "背景颜色",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "模块间距"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "桌面顶部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "桌面底部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "label": "平板顶部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "label": "平板底部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "手机顶部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "手机底部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "header",
+      "content": "标题字体"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 60,
+      "step": 0.5,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "heading_size_tablet",
+      "label": "平板字号",
+      "min": 10,
+      "max": 60,
+      "step": 0.5,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "手机字号",
+      "min": 10,
+      "max": 60,
+      "step": 0.5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "字体粗细",
+      "default": "600",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "加粗（700）"
+        }
+      ]
+    },
+    {
+      "type": "number",
+      "id": "heading_line",
+      "label": "行高百分比",
+      "default": 116,
+      "info": "例如 165 表示 1.65 倍行高；0 表示正常行高。"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "字间距",
+      "min": -5,
+      "max": 10,
+      "step": 0.5,
+      "default": -1.5,
+      "info": "数值按 0.01em 计算；例如 -1 表示 -0.01em。"
+    },
+    {
+      "type": "header",
+      "content": "副标题字体"
+    },
+    {
+      "type": "range",
+      "id": "sub_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 60,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16.5
+    },
+    {
+      "type": "range",
+      "id": "sub_size_tablet",
+      "label": "平板字号",
+      "min": 10,
+      "max": 60,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16.5
+    },
+    {
+      "type": "range",
+      "id": "sub_size_mobile",
+      "label": "手机字号",
+      "min": 10,
+      "max": 60,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16.5
+    },
+    {
+      "type": "select",
+      "id": "sub_weight",
+      "label": "字体粗细",
+      "default": "400",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "加粗（700）"
+        }
+      ]
+    },
+    {
+      "type": "number",
+      "id": "sub_line",
+      "label": "行高百分比",
+      "default": 165,
+      "info": "例如 165 表示 1.65 倍行高；0 表示正常行高。"
+    },
+    {
+      "type": "range",
+      "id": "sub_spacing",
+      "label": "字间距",
+      "min": -5,
+      "max": 10,
+      "step": 0.5,
+      "default": 0,
+      "info": "数值按 0.01em 计算；例如 -1 表示 -0.01em。"
+    },
+    {
+      "type": "header",
+      "content": "眉题字体"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "字号",
+      "min": 10,
+      "max": 24,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_weight",
+      "label": "字体粗细",
+      "default": "600",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "加粗（700）"
+        }
+      ]
+    },
+    {
+      "type": "number",
+      "id": "eyebrow_line",
+      "label": "行高百分比",
+      "default": 0,
+      "info": "0 表示正常行高。"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_spacing",
+      "label": "字间距",
+      "min": -5,
+      "max": 10,
+      "step": 0.5,
+      "default": 2,
+      "info": "数值按 0.01em 计算。"
+    },
+    {
+      "type": "header",
+      "content": "首屏图片"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "首屏图片",
+      "info": "建议使用 4:3、1200×900 的产品与真实家庭场景；可轻量组合手机或笔记本，不使用客服人物素材。"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "图片替代文字",
+      "default": "VENUS E Speicher mit App auf Smartphone in einem deutschen Haushalt"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_placeholder",
+      "label": "图片留空时显示占位",
+      "default": true,
+      "info": "开发预览保留 4:3 图片区域；上线前请上传真实图片，或关闭此选项。"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "行动按钮",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示区块",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "按钮文字",
+          "default": "Anfrage starten ↓"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "跳转链接",
+          "info": "可选择页面或填写页内链接；联系表单固定链接为 #kontaktformular。"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "按钮样式",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "蓝色主按钮"
+            },
+            {
+              "value": "ghost",
+              "label": "白色描边按钮"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "按钮文字字体"
+        },
+        {
+          "type": "range",
+          "id": "action_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "range",
+          "id": "action_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "range",
+          "id": "action_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "select",
+          "id": "action_weight",
+          "label": "字体粗细",
+          "default": "500",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "number",
+          "id": "action_line",
+          "label": "行高百分比",
+          "default": 0,
+          "info": "例如 160 表示 1.6 倍行高；0 表示正常行高。"
+        },
+        {
+          "type": "range",
+          "id": "action_spacing",
+          "label": "字间距",
+          "min": -5,
+          "max": 10,
+          "step": 0.5,
+          "default": 0,
+          "info": "数值按 0.01em 计算。"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "联系页 01 首屏",
+      "blocks": [
+        {
+          "type": "button",
+          "settings": {
+            "label": "Anfrage starten ↓",
+            "link": "#kontaktformular",
+            "style": "primary"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "FAQ ansehen →",
+            "link": "/pages/faq",
+            "style": "ghost"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

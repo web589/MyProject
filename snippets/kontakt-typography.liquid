@@ -1,0 +1,22 @@
+{%- liquid
+  assign size_key = prefix | append: '_size'
+  assign tablet_key = prefix | append: '_size_tablet'
+  assign mobile_key = prefix | append: '_size_mobile'
+  assign weight_key = prefix | append: '_weight'
+  assign line_key = prefix | append: '_line'
+  assign spacing_key = prefix | append: '_spacing'
+  assign fallback_size = 16
+  if prefix == 'heading'
+    assign fallback_size = 34
+  elsif prefix == 'eyebrow'
+    assign fallback_size = 13
+  endif
+  assign font_size = settings[size_key] | default: fallback_size
+  assign tablet_size = settings[tablet_key] | default: font_size
+  assign mobile_size = settings[mobile_key] | default: tablet_size
+  assign font_weight = settings[weight_key] | default: '400'
+  assign font_line = settings[line_key] | default: 0 | plus: 0
+  assign font_spacing = settings[spacing_key] | default: 0 | divided_by: 100.0
+-%}
+--kt-{{ prefix }}-size: {{ font_size }}px; --kt-{{ prefix }}-size-tablet: {{ tablet_size }}px; --kt-{{ prefix }}-size-mobile: {{ mobile_size }}px; --kt-{{ prefix }}-weight: {{ font_weight }}; --kt-{{ prefix }}-line: {% if font_line == 0 %}normal{% else %}{{ font_line | divided_by: 100.0 }}{% endif %}; --kt-{{ prefix }}-spacing: {{ font_spacing }}em;
+

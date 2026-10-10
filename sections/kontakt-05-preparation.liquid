@@ -1,0 +1,600 @@
+{% capture section_content %}
+  {% render 'kontakt-heading', section: section, level: 'h2' %}
+  <div class="kt-cards3">
+    {% for block in section.blocks %}
+      {% if block.settings.show_block %}
+        <article class="kt-card" {{ block.shopify_attributes }}>
+          <span class="kt-icon" aria-hidden="true">
+            {% render 'kontakt-icon', type: block.settings.icon_type, image: block.settings.icon_image %}
+          </span>
+          {% if block.settings.title != blank %}
+            <h3 class="kt-card-title" style="{% render 'kontakt-typography', settings: block.settings, prefix: 'title' %}">{{ block.settings.title | escape }}</h3>
+          {% endif %}
+          {% if block.settings.body != blank %}
+            <div class="kt-card-body" style="{% render 'kontakt-typography', settings: block.settings, prefix: 'body' %}">{{ block.settings.body }}</div>
+          {% endif %}
+        </article>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endcapture %}
+{% render 'kontakt-section', section: section, anchor_id: 'kt-preparation', extra_class: 'kt-preparation', content: section_content %}
+
+{% schema %}
+{
+  "name": "联系页 · 05 咨询准备",
+  "class": "section-kontakt-preparation",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示此模块",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "内容与背景"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "Gute Vorbereitung"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题普通前文",
+      "default": "Diese Angaben helfen bei der"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题蓝色强调文字",
+      "default": "Einordnung"
+    },
+    {
+      "type": "text",
+      "id": "heading_suffix",
+      "label": "标题普通后文",
+      "default": "deiner Anfrage"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "副标题",
+      "default": "Je nach Anliegen sind unterschiedliche Informationen hilfreich."
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "模块背景色",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "标题字体"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "heading_size_tablet",
+      "label": "平板字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "手机字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 27
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "字体粗细",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "粗体（700）"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "heading_line",
+      "label": "行高",
+      "info": "数值为字号的百分比；设为零时使用字体默认行高。",
+      "min": 0,
+      "max": 250,
+      "step": 5,
+      "unit": "%",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "字间距",
+      "info": "每个数值单位等于 0.01 倍字号；负数使文字更紧凑。",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "default": -1
+    },
+    {
+      "type": "header",
+      "content": "副标题字体"
+    },
+    {
+      "type": "range",
+      "id": "sub_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "sub_size_tablet",
+      "label": "平板字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "sub_size_mobile",
+      "label": "手机字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "sub_weight",
+      "label": "字体粗细",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "粗体（700）"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "sub_line",
+      "label": "行高",
+      "info": "数值为字号的百分比；设为零时使用字体默认行高。",
+      "min": 0,
+      "max": 250,
+      "step": 5,
+      "unit": "%",
+      "default": 165
+    },
+    {
+      "type": "range",
+      "id": "sub_spacing",
+      "label": "字间距",
+      "info": "每个数值单位等于 0.01 倍字号；负数使文字更紧凑。",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "眉题字体"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_weight",
+      "label": "字体粗细",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "粗体（700）"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_line",
+      "label": "行高",
+      "info": "数值为字号的百分比；设为零时使用字体默认行高。",
+      "min": 0,
+      "max": 250,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_spacing",
+      "label": "字间距",
+      "info": "每个数值单位等于 0.01 倍字号；负数使文字更紧凑。",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "上下间距"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "桌面上边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "桌面下边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "label": "平板上边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "label": "平板下边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "手机上边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "手机下边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "准备说明卡片",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示此卡片",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "标题",
+          "default": "Bei Bestellungen"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "正文",
+          "default": "<p>Halte deine Bestellnummer bereit, wenn es um Versand, Lieferung oder Rückgabe geht.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "自定义图标",
+          "info": "上传图片将替换默认线性图标；留空时显示下方选择的默认图标。"
+        },
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "默认图标",
+          "options": [
+            {
+              "value": "package",
+              "label": "包裹"
+            },
+            {
+              "value": "tools",
+              "label": "工具"
+            },
+            {
+              "value": "camera",
+              "label": "相机"
+            }
+          ],
+          "default": "package"
+        },
+        {
+          "type": "header",
+          "content": "卡片标题字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 58,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16.5
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 58,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16.5
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 58,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16.5
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "粗体（700）"
+            }
+          ],
+          "default": "600"
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高",
+          "info": "数值为字号的百分比；设为零时使用字体默认行高。",
+          "min": 0,
+          "max": 250,
+          "step": 5,
+          "unit": "%",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距",
+          "info": "每个数值单位等于 0.01 倍字号；负数使文字更紧凑。",
+          "min": -10,
+          "max": 10,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "卡片正文字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 58,
+          "step": 0.5,
+          "unit": "px",
+          "default": 13.5
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 58,
+          "step": 0.5,
+          "unit": "px",
+          "default": 13.5
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 58,
+          "step": 0.5,
+          "unit": "px",
+          "default": 13.5
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "粗体（700）"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高",
+          "info": "数值为字号的百分比；设为零时使用字体默认行高。",
+          "min": 0,
+          "max": 250,
+          "step": 5,
+          "unit": "%",
+          "default": 165
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距",
+          "info": "每个数值单位等于 0.01 倍字号；负数使文字更紧凑。",
+          "min": -10,
+          "max": 10,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "联系页 · 05 咨询准备",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "title": "Bei Bestellungen",
+            "body": "<p>Halte deine Bestellnummer bereit, wenn es um Versand, Lieferung oder Rückgabe geht.</p>",
+            "icon_type": "package"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Bei technischen Fragen",
+            "body": "<p>Produktmodell, Seriennummer und eine kurze Beschreibung des Verhaltens helfen bei der Einordnung.</p>",
+            "icon_type": "tools"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Bei Installationsfragen",
+            "body": "<p>Beschreibe deine Installation möglichst konkret und nenne sichtbare Fehlermeldungen oder Anzeigen am Gerät.</p>",
+            "icon_type": "camera"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

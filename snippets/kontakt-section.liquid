@@ -1,0 +1,10 @@
+{% if section.settings.show_section %}
+<section
+  id="{{ anchor_id | escape }}"
+  class="kt-section {{ extra_class | escape }}"
+  {% if section.settings.heading != blank or section.settings.heading_accent != blank or section.settings.heading_suffix != blank %}aria-labelledby="kt-heading-{{ section.id }}"{% endif %}
+  style="background: {{ section.settings.background | default: '#FFFFFF' }}; --kt-padding-top: {{ section.settings.padding_top | default: 72 }}px; --kt-padding-bottom: {{ section.settings.padding_bottom | default: 72 }}px; --kt-padding-top-tablet: {{ section.settings.padding_top_tablet | default: 56 }}px; --kt-padding-bottom-tablet: {{ section.settings.padding_bottom_tablet | default: 56 }}px; --kt-padding-top-mobile: {{ section.settings.padding_top_mobile | default: 44 }}px; --kt-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile | default: 44 }}px; {% render 'kontakt-typography', settings: section.settings, prefix: 'heading' %}{% render 'kontakt-typography', settings: section.settings, prefix: 'sub' %}{% render 'kontakt-typography', settings: section.settings, prefix: 'eyebrow' %}"
+>
+  <div class="kt-inner">{{ content }}</div>
+</section>
+{% endif %}

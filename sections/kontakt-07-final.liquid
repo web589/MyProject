@@ -1,0 +1,484 @@
+{% capture section_content %}
+  <div class="kt-final-card">
+    <div class="kt-final-copy">
+      {% render 'kontakt-heading', section: section, level: 'h2' %}
+    </div>
+    <div class="kt-final-cta">
+      {% for block in section.blocks %}
+        {% if block.settings.show_block and block.settings.label != blank %}
+          {% assign button_link = block.settings.link | default: '#kontaktformular' %}
+          <a class="kt-button kt-button--{{ block.settings.style }}" href="{{ button_link | escape }}" style="{% render 'kontakt-typography', settings: block.settings, prefix: 'action' %}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endcapture %}
+{% render 'kontakt-section', section: section, anchor_id: 'kt-final', extra_class: 'kt-final', content: section_content %}
+
+{% schema %}
+{
+  "name": "联系页 · 07 结尾行动区",
+  "class": "section-kontakt-final",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示此模块",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "内容与背景"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "NOCH FRAGEN?"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题普通前文",
+      "default": "Dein Anliegen ist noch"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题蓝色强调文字",
+      "default": "offen?"
+    },
+    {
+      "type": "text",
+      "id": "heading_suffix",
+      "label": "标题普通后文"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "副标题",
+      "default": "Sende uns die wichtigsten Informationen über das Kontaktformular."
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "模块背景色",
+      "default": "#F5F7F9"
+    },
+    {
+      "type": "header",
+      "content": "标题字体"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "heading_size_tablet",
+      "label": "平板字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "手机字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "字体粗细",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "粗体（700）"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "heading_line",
+      "label": "行高",
+      "info": "数值为字号的百分比；设为零时使用字体默认行高。",
+      "min": 0,
+      "max": 250,
+      "step": 5,
+      "unit": "%",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "字间距",
+      "info": "每个数值单位等于 0.01 倍字号；负数使文字更紧凑。",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "default": -1
+    },
+    {
+      "type": "header",
+      "content": "副标题字体"
+    },
+    {
+      "type": "range",
+      "id": "sub_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 15.5
+    },
+    {
+      "type": "range",
+      "id": "sub_size_tablet",
+      "label": "平板字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 15.5
+    },
+    {
+      "type": "range",
+      "id": "sub_size_mobile",
+      "label": "手机字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 15.5
+    },
+    {
+      "type": "select",
+      "id": "sub_weight",
+      "label": "字体粗细",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "粗体（700）"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "sub_line",
+      "label": "行高",
+      "info": "数值为字号的百分比；设为零时使用字体默认行高。",
+      "min": 0,
+      "max": 250,
+      "step": 5,
+      "unit": "%",
+      "default": 170
+    },
+    {
+      "type": "range",
+      "id": "sub_spacing",
+      "label": "字间距",
+      "info": "每个数值单位等于 0.01 倍字号；负数使文字更紧凑。",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "眉题字体"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 58,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_weight",
+      "label": "字体粗细",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "粗体（700）"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_line",
+      "label": "行高",
+      "info": "数值为字号的百分比；设为零时使用字体默认行高。",
+      "min": 0,
+      "max": 250,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_spacing",
+      "label": "字间距",
+      "info": "每个数值单位等于 0.01 倍字号；负数使文字更紧凑。",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "上下间距"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "桌面上边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "桌面下边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "label": "平板上边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "label": "平板下边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "手机上边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "手机下边距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "行动按钮",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示此按钮",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "按钮文案",
+          "default": "Anfrage starten ↑"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "按钮链接",
+          "info": "留空时默认返回本页联系表单。可选择其他页面或填写完整链接。"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "按钮样式",
+          "options": [
+            {
+              "value": "primary",
+              "label": "蓝色主按钮"
+            },
+            {
+              "value": "ghost",
+              "label": "描边次按钮"
+            }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "header",
+          "content": "按钮文字字体"
+        },
+        {
+          "type": "range",
+          "id": "action_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 58,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "range",
+          "id": "action_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 58,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "range",
+          "id": "action_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 58,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "select",
+          "id": "action_weight",
+          "label": "字体粗细",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "粗体（700）"
+            }
+          ],
+          "default": "500"
+        },
+        {
+          "type": "range",
+          "id": "action_line",
+          "label": "行高",
+          "info": "数值为字号的百分比；设为零时使用字体默认行高。",
+          "min": 0,
+          "max": 250,
+          "step": 5,
+          "unit": "%",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "action_spacing",
+          "label": "字间距",
+          "info": "每个数值单位等于 0.01 倍字号；负数使文字更紧凑。",
+          "min": -10,
+          "max": 10,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "联系页 · 07 结尾行动区",
+      "blocks": [
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

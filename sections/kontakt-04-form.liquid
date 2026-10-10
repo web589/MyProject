@@ -1,0 +1,3003 @@
+{% if section.settings.show_section %}
+{%- liquid
+  assign form_id = 'KontaktForm-' | append: section.id
+  assign submit_block = section.blocks | where: 'type', 'submit' | first
+  assign success_block = section.blocks | where: 'type', 'success' | first
+  assign error_block = section.blocks | where: 'type', 'error' | first
+-%}
+{%- capture form_content -%}
+  {%- form 'contact', id: form_id, return_to: 'back', data-kt-form: '' -%}
+    {%- liquid
+      assign form_state = 'form'
+      if form.posted_successfully?
+        assign form_state = 'success'
+      elsif form.errors
+        assign form_state = 'error'
+      endif
+    -%}
+    {% render 'kontakt-heading', section: section %}
+    <div data-kt-view="form"{% unless form_state == 'form' %} hidden{% endunless %}>
+      <div class="kt-form-grid">
+        {%- assign field_keys = 'topic,product,order,serial,name,email,phone,message,privacy' | split: ',' -%}
+        {%- for key in field_keys -%}
+          {%- liquid
+            assign field_block = section.blocks | where: 'type', key | first
+            assign render_field = false
+            if key == 'topic' or key == 'name' or key == 'email' or key == 'message' or key == 'privacy'
+              assign render_field = true
+            elsif field_block and field_block.settings.show_field
+              assign render_field = true
+            endif
+          -%}
+          {%- if render_field -%}{% render 'kontakt-form-field', section: section, block: field_block, key: key, form: form %}{%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="kt-form-cta"{% if submit_block %} style="{% render 'kontakt-typography', settings: submit_block.settings, prefix: 'action' %}" {{ submit_block.shopify_attributes }}{% endif %}>
+        <button type="submit" class="kt-button kt-button--primary">{{ submit_block.settings.label | default: 'Anfrage senden' | escape }}</button>
+      </div>
+      {%- if submit_block.settings.footnote != blank -%}<p class="kt-form-foot">{{ submit_block.settings.footnote | escape }}</p>{%- endif -%}
+      <div class="kt-spam-disclaimer">{{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}</div>
+    </div>
+    <div data-kt-view="success"{% unless form_state == 'success' %} hidden{% endunless %}>
+      <div class="kt-success" tabindex="-1" data-kt-status-focus{% if success_block %} style="{% render 'kontakt-typography', settings: success_block.settings, prefix: 'title' %}{% render 'kontakt-typography', settings: success_block.settings, prefix: 'body' %}{% render 'kontakt-typography', settings: success_block.settings, prefix: 'action' %}" {{ success_block.shopify_attributes }}{% endif %}>
+        <div class="kt-status-icon" aria-hidden="true">{% render 'kontakt-icon', type: 'success', image: success_block.settings.icon_image %}</div>
+        <h3 class="kt-status-title">{{ success_block.settings.heading | default: 'Danke für deine Anfrage' | escape }}</h3>
+        <p class="kt-status-body">{{ success_block.settings.body | default: 'Deine Nachricht wurde übermittelt. Wir prüfen deine Angaben und melden uns über die von dir angegebene E-Mail-Adresse.' | escape | newline_to_br }}</p>
+        <div class="kt-final-cta"><a class="kt-button kt-button--primary" href="{{ success_block.settings.primary_url | default: '/' }}">{{ success_block.settings.primary_label | default: 'Zurück zur Startseite' | escape }}</a></div>
+        {%- assign success_links = section.blocks | where: 'type', 'success_link' -%}
+        {%- if success_links.size > 0 -%}
+          <p class="kt-final-alt">{{ success_block.settings.alt_prefix | default: 'Oder' | escape }}
+            {%- for block in success_links -%}
+              {%- if block.settings.label != blank and block.settings.url != blank -%}
+                {% unless forloop.first %} · {% endunless %}<a class="kt-link" href="{{ block.settings.url }}" style="{% render 'kontakt-typography', settings: block.settings, prefix: 'action' %}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          </p>
+        {%- endif -%}
+      </div>
+    </div>
+    <div data-kt-view="error"{% unless form_state == 'error' %} hidden{% endunless %}>
+      <div class="kt-success kt-success--error" tabindex="-1" data-kt-status-focus{% if error_block %} style="{% render 'kontakt-typography', settings: error_block.settings, prefix: 'title' %}{% render 'kontakt-typography', settings: error_block.settings, prefix: 'body' %}{% render 'kontakt-typography', settings: error_block.settings, prefix: 'action' %}" {{ error_block.shopify_attributes }}{% endif %}>
+        <div class="kt-status-icon" aria-hidden="true">{% render 'kontakt-icon', type: 'error', image: error_block.settings.icon_image %}</div>
+        <h3 class="kt-status-title">{{ error_block.settings.heading | default: 'Das hat leider nicht funktioniert.' | escape }}</h3>
+        <p class="kt-status-body">{{ error_block.settings.body | default: 'Deine Anfrage konnte nicht gesendet werden. Bitte versuche es erneut.' | escape | newline_to_br }}</p>
+        {%- if form.errors -%}<div class="kt-server-errors" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+        <div class="kt-final-cta"><button class="kt-button kt-button--primary" type="button" data-kt-retry>{{ error_block.settings.retry_label | default: 'Erneut versuchen' | escape }}</button></div>
+        <noscript><style>#{{ form_id }} [data-kt-view="form"][hidden] { display:block !important; }</style></noscript>
+      </div>
+    </div>
+  {%- endform -%}
+{%- endcapture -%}
+{%- capture content -%}<div class="kt-form-card" data-kt-form-root data-kt-form-state="{{ form_state }}" style="--kt-form-background: {{ section.settings.form_background | default: '#E8F4FF' }}; --kt-form-border: {{ section.settings.form_border | default: '#CDEBFF' }};">{{ form_content }}</div>{%- endcapture -%}
+{% render 'kontakt-section', section: section, anchor_id: 'kontaktformular', extra_class: 'kt-form-section', content: content %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "联系页 04 联系表单",
+  "tag": "div",
+  "class": "kontakt-section-wrapper",
+  "limit": 1,
+  "max_blocks": 26,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示此模块",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉标题",
+      "default": "KONTAKTFORMULAR"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题普通前文",
+      "default": "Schreib uns dein Anliegen"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题蓝色强调文字"
+    },
+    {
+      "type": "text",
+      "id": "heading_suffix",
+      "label": "标题普通后文"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "副标题",
+      "default": "Je genauer deine Angaben sind, desto besser können wir deine Anfrage einordnen. Pflichtfelder sind mit * gekennzeichnet."
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "模块背景色",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "form_background",
+      "label": "表单卡片背景色",
+      "default": "#E8F4FF"
+    },
+    {
+      "type": "color",
+      "id": "form_border",
+      "label": "表单卡片边框色",
+      "default": "#CDEBFF"
+    },
+    {
+      "type": "header",
+      "content": "模块间距"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "桌面上间距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "桌面下间距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "label": "平板上间距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 56,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "label": "平板下间距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 56,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "手机上间距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 44,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "手机下间距",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 44,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "标题字体"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 60,
+      "step": 0.5,
+      "default": 28,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_tablet",
+      "label": "平板字号",
+      "min": 10,
+      "max": 60,
+      "step": 0.5,
+      "default": 28,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "手机字号",
+      "min": 10,
+      "max": 60,
+      "step": 0.5,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "字体粗细",
+      "default": "600",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "加粗（700）"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_line",
+      "label": "行高（0 为字体默认）",
+      "min": 0,
+      "max": 240,
+      "step": 5,
+      "default": 120,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "字间距（百分之一 em）",
+      "min": -5,
+      "max": 20,
+      "step": 1,
+      "default": -1
+    },
+    {
+      "type": "header",
+      "content": "副标题字体"
+    },
+    {
+      "type": "range",
+      "id": "sub_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 32,
+      "step": 0.5,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "sub_size_tablet",
+      "label": "平板字号",
+      "min": 10,
+      "max": 32,
+      "step": 0.5,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "sub_size_mobile",
+      "label": "手机字号",
+      "min": 10,
+      "max": 32,
+      "step": 0.5,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "sub_weight",
+      "label": "字体粗细",
+      "default": "400",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "加粗（700）"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "sub_line",
+      "label": "行高（0 为字体默认）",
+      "min": 0,
+      "max": 240,
+      "step": 5,
+      "default": 165,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "sub_spacing",
+      "label": "字间距（百分之一 em）",
+      "min": -5,
+      "max": 20,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "眉标题字体"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "桌面字号",
+      "min": 10,
+      "max": 32,
+      "step": 0.5,
+      "default": 13,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_tablet",
+      "label": "平板字号",
+      "min": 10,
+      "max": 32,
+      "step": 0.5,
+      "default": 13,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_mobile",
+      "label": "手机字号",
+      "min": 10,
+      "max": 32,
+      "step": 0.5,
+      "default": 13,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_weight",
+      "label": "字体粗细",
+      "default": "600",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规（400）"
+        },
+        {
+          "value": "500",
+          "label": "中等（500）"
+        },
+        {
+          "value": "600",
+          "label": "半粗（600）"
+        },
+        {
+          "value": "700",
+          "label": "加粗（700）"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_line",
+      "label": "行高（0 为字体默认）",
+      "min": 0,
+      "max": 240,
+      "step": 5,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_spacing",
+      "label": "字间距（百分之一 em）",
+      "min": -5,
+      "max": 20,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "paragraph",
+      "content": "字段顺序与提交名称由代码固定。五项必需字段的配置区块即使删除，仍显示默认字段。产品、订单号、序列号和电话可通过对应区块关闭。成功和失败视图只依据 Shopify 的实际返回状态显示。"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "topic",
+      "name": "咨询类别",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "字段标签",
+          "default": "Worum geht es?"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "占位提示",
+          "default": "Bitte Anliegen auswählen"
+        },
+        {
+          "type": "text",
+          "id": "helper",
+          "label": "辅助说明"
+        },
+        {
+          "type": "text",
+          "id": "error",
+          "label": "校验错误提示",
+          "default": "Bitte wähle ein Anliegen aus."
+        },
+        {
+          "type": "header",
+          "content": "咨询类别显示名称"
+        },
+        {
+          "type": "text",
+          "id": "label_produktberatung",
+          "label": "产品咨询",
+          "default": "Produktberatung"
+        },
+        {
+          "type": "text",
+          "id": "label_bestellung",
+          "label": "订单与配送",
+          "default": "Bestellung & Lieferung"
+        },
+        {
+          "type": "text",
+          "id": "label_installation",
+          "label": "安装与技术",
+          "default": "Installation & Technik"
+        },
+        {
+          "type": "text",
+          "id": "label_rueckgabe",
+          "label": "退货与保修",
+          "default": "Rückgabe & Garantie"
+        },
+        {
+          "type": "text",
+          "id": "label_sonstiges",
+          "label": "其他咨询",
+          "default": "Sonstiges"
+        },
+        {
+          "type": "paragraph",
+          "content": "只修改前台显示名称；内部类别值固定，用于分类卡片预选和条件字段联动。"
+        },
+        {
+          "type": "header",
+          "content": "字段标签字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "600",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "输入内容字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "产品选择",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_field",
+          "label": "显示此字段",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "字段标签",
+          "default": "Welches Produkt betrifft deine Anfrage?"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "占位提示",
+          "default": "Produkt auswählen"
+        },
+        {
+          "type": "text",
+          "id": "helper",
+          "label": "辅助说明"
+        },
+        {
+          "type": "header",
+          "content": "字段标签字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "600",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "输入内容字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "order",
+      "name": "订单号",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_field",
+          "label": "显示此字段",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "字段标签",
+          "default": "Bestellnummer"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "占位提示",
+          "default": "z. B. #1234"
+        },
+        {
+          "type": "text",
+          "id": "helper",
+          "label": "辅助说明",
+          "default": "Falls deine Anfrage eine bestehende Bestellung betrifft."
+        },
+        {
+          "type": "header",
+          "content": "字段标签字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "600",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "输入内容字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "serial",
+      "name": "序列号",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_field",
+          "label": "显示此字段",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "字段标签",
+          "default": "Seriennummer"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "占位提示",
+          "default": "Seriennummer eingeben"
+        },
+        {
+          "type": "text",
+          "id": "helper",
+          "label": "辅助说明",
+          "default": "Hilfreich bei technischen Fragen oder Serviceanfragen."
+        },
+        {
+          "type": "header",
+          "content": "字段标签字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "600",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "输入内容字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "name",
+      "name": "姓名",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "字段标签",
+          "default": "Name"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "占位提示",
+          "default": "Dein Name"
+        },
+        {
+          "type": "text",
+          "id": "helper",
+          "label": "辅助说明"
+        },
+        {
+          "type": "text",
+          "id": "error",
+          "label": "校验错误提示",
+          "default": "Bitte gib deinen Namen ein."
+        },
+        {
+          "type": "header",
+          "content": "字段标签字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "600",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "输入内容字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "email",
+      "name": "电子邮箱",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "字段标签",
+          "default": "E-Mail-Adresse"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "占位提示",
+          "default": "name@beispiel.de"
+        },
+        {
+          "type": "text",
+          "id": "helper",
+          "label": "辅助说明"
+        },
+        {
+          "type": "text",
+          "id": "error",
+          "label": "校验错误提示",
+          "default": "Bitte gib eine gültige E-Mail-Adresse ein."
+        },
+        {
+          "type": "header",
+          "content": "字段标签字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "600",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "输入内容字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "phone",
+      "name": "电话号码",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_field",
+          "label": "显示此字段",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "字段标签",
+          "default": "Telefonnummer"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "占位提示",
+          "default": "Telefonnummer eingeben"
+        },
+        {
+          "type": "text",
+          "id": "helper",
+          "label": "辅助说明",
+          "default": "Optional"
+        },
+        {
+          "type": "header",
+          "content": "字段标签字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "600",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "输入内容字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "message",
+      "name": "咨询内容",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "字段标签",
+          "default": "Wie können wir dir helfen?"
+        },
+        {
+          "type": "textarea",
+          "id": "placeholder",
+          "label": "占位提示",
+          "default": "Beschreibe kurz dein Anliegen und teile uns mit, was du bereits geprüft oder ausprobiert hast."
+        },
+        {
+          "type": "text",
+          "id": "helper",
+          "label": "辅助说明"
+        },
+        {
+          "type": "text",
+          "id": "error",
+          "label": "校验错误提示",
+          "default": "Bitte beschreibe kurz dein Anliegen."
+        },
+        {
+          "type": "header",
+          "content": "字段标签字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "600",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "输入内容字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 160,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "privacy",
+      "name": "隐私确认",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "隐私链接前文",
+          "default": "Ich habe die"
+        },
+        {
+          "type": "text",
+          "id": "helper",
+          "label": "辅助说明"
+        },
+        {
+          "type": "text",
+          "id": "error",
+          "label": "校验错误提示",
+          "default": "Bitte bestätige die Datenschutzerklärung."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "隐私链接文字",
+          "default": "Datenschutzerklärung"
+        },
+        {
+          "type": "url",
+          "id": "privacy_url",
+          "label": "隐私政策链接",
+          "default": "/pages/datenschutz"
+        },
+        {
+          "type": "text",
+          "id": "label_after",
+          "label": "隐私链接后文",
+          "default": "zur Kenntnis genommen."
+        },
+        {
+          "type": "header",
+          "content": "隐私文字字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 13.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 160,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "输入内容字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "product_option",
+      "name": "产品选项",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "选项显示文字",
+          "default": "VENUS E Mini"
+        },
+        {
+          "type": "paragraph",
+          "content": "产品下拉框按这些区块的排序输出；显示文字也会随表单提交。默认空选项由“产品选择”区块配置。"
+        }
+      ]
+    },
+    {
+      "type": "submit",
+      "name": "提交按钮",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "按钮文字",
+          "default": "Anfrage senden"
+        },
+        {
+          "type": "text",
+          "id": "footnote",
+          "label": "按钮下方说明"
+        },
+        {
+          "type": "header",
+          "content": "按钮字体"
+        },
+        {
+          "type": "range",
+          "id": "action_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "action_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "action_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "action_weight",
+          "label": "字体粗细",
+          "default": "500",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "action_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "action_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "success",
+      "name": "提交成功状态",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "成功图标图片",
+          "info": "上传图片替换默认线性图标；留空显示默认图标。"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "标题",
+          "default": "Danke für deine Anfrage"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "正文",
+          "default": "Deine Nachricht wurde übermittelt. Wir prüfen deine Angaben und melden uns über die von dir angegebene E-Mail-Adresse."
+        },
+        {
+          "type": "text",
+          "id": "primary_label",
+          "label": "主按钮文字",
+          "default": "Zurück zur Startseite"
+        },
+        {
+          "type": "url",
+          "id": "primary_url",
+          "label": "主按钮链接",
+          "default": "/"
+        },
+        {
+          "type": "text",
+          "id": "alt_prefix",
+          "label": "帮助链接前文",
+          "default": "Oder"
+        },
+        {
+          "type": "header",
+          "content": "状态标题字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 24,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 24,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 24,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "600",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "状态正文字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 15,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 15,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 15,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 170,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "主按钮字体"
+        },
+        {
+          "type": "range",
+          "id": "action_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "action_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "action_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "action_weight",
+          "label": "字体粗细",
+          "default": "500",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "action_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "action_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "提交失败状态",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "失败图标图片",
+          "info": "上传图片替换默认线性图标；留空显示默认图标。"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "标题",
+          "default": "Das hat leider nicht funktioniert."
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "正文",
+          "default": "Deine Anfrage konnte nicht gesendet werden. Bitte versuche es erneut."
+        },
+        {
+          "type": "text",
+          "id": "retry_label",
+          "label": "重试按钮文字",
+          "default": "Erneut versuchen"
+        },
+        {
+          "type": "header",
+          "content": "状态标题字体"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 24,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 24,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 24,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "字体粗细",
+          "default": "600",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "title_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "状态正文字体"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 15,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 15,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 15,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "字体粗细",
+          "default": "400",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "body_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 170,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "重试按钮字体"
+        },
+        {
+          "type": "range",
+          "id": "action_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "action_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14.5,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "action_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14.5,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "action_weight",
+          "label": "字体粗细",
+          "default": "500",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "action_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "action_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "success_link",
+      "name": "成功状态帮助链接",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "链接文字",
+          "default": "FAQ ansehen →"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "链接目标",
+          "default": "/pages/faq"
+        },
+        {
+          "type": "header",
+          "content": "链接字体"
+        },
+        {
+          "type": "range",
+          "id": "action_size",
+          "label": "桌面字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "action_size_tablet",
+          "label": "平板字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "action_size_mobile",
+          "label": "手机字号",
+          "min": 10,
+          "max": 40,
+          "step": 0.5,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "action_weight",
+          "label": "字体粗细",
+          "default": "500",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规（400）"
+            },
+            {
+              "value": "500",
+              "label": "中等（500）"
+            },
+            {
+              "value": "600",
+              "label": "半粗（600）"
+            },
+            {
+              "value": "700",
+              "label": "加粗（700）"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "action_line",
+          "label": "行高（0 为字体默认）",
+          "min": 0,
+          "max": 240,
+          "step": 5,
+          "default": 0,
+          "unit": "%"
+        },
+        {
+          "type": "range",
+          "id": "action_spacing",
+          "label": "字间距（百分之一 em）",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "联系页 04 联系表单",
+      "blocks": [
+        {
+          "type": "topic"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "order"
+        },
+        {
+          "type": "serial"
+        },
+        {
+          "type": "name"
+        },
+        {
+          "type": "email"
+        },
+        {
+          "type": "phone"
+        },
+        {
+          "type": "message"
+        },
+        {
+          "type": "privacy"
+        },
+        {
+          "type": "product_option",
+          "settings": {
+            "label": "VENUS E Mini"
+          }
+        },
+        {
+          "type": "product_option",
+          "settings": {
+            "label": "VENUS E 3.0"
+          }
+        },
+        {
+          "type": "product_option",
+          "settings": {
+            "label": "VENUS E 4.0"
+          }
+        },
+        {
+          "type": "product_option",
+          "settings": {
+            "label": "VENUS E Max"
+          }
+        },
+        {
+          "type": "product_option",
+          "settings": {
+            "label": "Smart Meter CT002"
+          }
+        },
+        {
+          "type": "product_option",
+          "settings": {
+            "label": "Smart Meter CT003"
+          }
+        },
+        {
+          "type": "product_option",
+          "settings": {
+            "label": "Noch nicht sicher"
+          }
+        },
+        {
+          "type": "product_option",
+          "settings": {
+            "label": "Anderes / kein Produkt"
+          }
+        },
+        {
+          "type": "submit"
+        },
+        {
+          "type": "success"
+        },
+        {
+          "type": "error"
+        },
+        {
+          "type": "success_link",
+          "settings": {
+            "label": "FAQ ansehen →",
+            "url": "/pages/faq"
+          }
+        },
+        {
+          "type": "success_link",
+          "settings": {
+            "label": "Downloads ansehen →",
+            "url": "/pages/downloads"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "custom.popups"
+    ]
+  }
+}
+{% endschema %}
