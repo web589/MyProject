@@ -130,6 +130,14 @@
         }
       });
 
+      // This opt-in follows the actual module order when merchants rearrange sections.
+      if (nav.getAttribute('data-anchor-order') === 'document') {
+        activeLinks.sort(function (left, right) {
+          if (left.target === right.target) return 0;
+          return left.target.compareDocumentPosition(right.target) & 4 ? -1 : 1;
+        });
+      }
+
       if (window.ResizeObserver) {
         layoutObserver = new ResizeObserver(function () { scheduleUpdate(); });
         activeLinks.forEach(function (item) { layoutObserver.observe(item.target); });
@@ -244,5 +252,12 @@
 
   document.addEventListener('shopify:section:unload', function () {
     window.setTimeout(function () { boot(document); }, 0);
+  });
+
+  document.addEventListener('shopify:section:reorder', function () {
+    document.querySelectorAll('[data-anchor-nav][data-anchor-order="document"]').forEach(function (nav) {
+      var controller = navControllers.get(nav);
+      if (controller) controller.refresh();
+    });
   });
 }());

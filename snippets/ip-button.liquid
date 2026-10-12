@@ -1,0 +1,7 @@
+{%- liquid
+  assign button_link = block.settings.link | default: default_link
+  assign button_style = block.settings.style | default: 'primary'
+-%}
+{% if block.settings.show_block and block.settings.label != blank and button_link != blank %}
+  <a class="{% if button_style == 'link' %}ip-link{% else %}ip-button ip-button--{{ button_style | escape }}{% endif %}" href="{{ button_link | escape }}"{% if button_link contains '#' %} data-anchor-link{% endif %} style="{% render 'ip-typography', settings: block.settings, prefix: 'action' %}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+{% endif %}

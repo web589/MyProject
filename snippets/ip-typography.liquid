@@ -1,0 +1,15 @@
+{%- liquid
+  assign size_key = prefix | append: '_size'
+  assign tablet_key = prefix | append: '_size_tablet'
+  assign mobile_key = prefix | append: '_size_mobile'
+  assign weight_key = prefix | append: '_weight'
+  assign line_key = prefix | append: '_line'
+  assign spacing_key = prefix | append: '_spacing'
+  assign font_size = settings[size_key] | default: 16
+  assign tablet_size = settings[tablet_key] | default: font_size
+  assign mobile_size = settings[mobile_key] | default: tablet_size
+  assign font_weight = settings[weight_key] | default: '400'
+  assign font_line = settings[line_key] | default: 0 | plus: 0
+  assign font_spacing = settings[spacing_key] | default: 0 | divided_by: 100.0
+-%}
+--ip-{{ prefix }}-size: {{ font_size }}px; --ip-{{ prefix }}-size-tablet: {{ tablet_size }}px; --ip-{{ prefix }}-size-mobile: {{ mobile_size }}px; --ip-{{ prefix }}-weight: {{ font_weight }}; --ip-{{ prefix }}-line: {% if font_line == 0 %}normal{% else %}{{ font_line | divided_by: 100.0 }}{% endif %}; --ip-{{ prefix }}-spacing: {{ font_spacing }}em;

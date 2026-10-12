@@ -1,0 +1,7 @@
+{% if section.settings.show_section %}
+<section id="{{ anchor_id | escape }}" class="ip-section {{ extra_class | escape }}"
+  {% if section.settings.heading != blank or section.settings.heading_accent != blank %}aria-labelledby="ip-heading-{{ section.id }}"{% endif %}
+  style="background: {{ section.settings.background | default: '#FFFFFF' }}; --ip-padding-top: {{ section.settings.padding_top }}px; --ip-padding-bottom: {{ section.settings.padding_bottom }}px; --ip-padding-top-tablet: {{ section.settings.padding_top_tablet }}px; --ip-padding-bottom-tablet: {{ section.settings.padding_bottom_tablet }}px; --ip-padding-top-mobile: {{ section.settings.padding_top_mobile }}px; --ip-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px; {% render 'ip-typography', settings: section.settings, prefix: 'heading' %}{% render 'ip-typography', settings: section.settings, prefix: 'sub' %}{% render 'ip-typography', settings: section.settings, prefix: 'eyebrow' %}">
+  <div class="ip-inner">{{ content }}</div>
+</section>
+{% endif %}

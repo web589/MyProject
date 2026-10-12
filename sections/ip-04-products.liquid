@@ -1,0 +1,1913 @@
+{% if section.settings.show_section %}
+  {% capture section_content %}
+{% render 'ip-heading', section: section, level: 'h2' %}
+{% for block in section.blocks %}
+  {% if block.type == 'intro' and block.settings.show_block and block.settings.body != blank %}
+    <p class="ip-sub ip-intro" style="{% render 'ip-typography', settings: block.settings, prefix: 'sub' %}" {{ block.shopify_attributes }}>{{ block.settings.body | escape | newline_to_br }}</p>
+  {% endif %}
+{% endfor %}
+<div class="ip-prod">{% for block in section.blocks %}
+  {% if block.type == 'storage' and block.settings.show_block %}
+    {% liquid
+      assign item_product = block.settings.product
+      assign item_image = block.settings.image | default: item_product.featured_image
+      assign item_link = item_product.url | default: block.settings.link
+      assign item_title = block.settings.title | default: item_product.title
+      assign item_alt = block.settings.image_alt | default: item_image.alt | default: item_title
+    %}
+    <article class="ip-p-card" style="{% render 'ip-typography', settings: block.settings, prefix: 'title' %}{% render 'ip-typography', settings: block.settings, prefix: 'body' %}{% render 'ip-typography', settings: block.settings, prefix: 'action' %}--ip-image-scale: {{ block.settings.image_scale | default: 100 }}%;" {{ block.shopify_attributes }}>
+      <div class="ip-p-img">{% render 'ip-media', image: item_image, alt: item_alt, hero: false, placeholder: item_title, scale: block.settings.image_scale %}</div>
+      <div class="ip-p-body">
+        {% if block.settings.tag != blank %}<span class="ip-ptag">{{ block.settings.tag | escape }}</span>{% endif %}
+        {% if item_title != blank %}<h3 class="ip-pmodel">{{ item_title | escape }}</h3>{% endif %}
+        {% if block.settings.body != blank %}<p class="ip-pdesc">{{ block.settings.body | escape | newline_to_br }}</p>{% endif %}
+        {% if item_link != blank and block.settings.label != blank %}<a class="ip-link" href="{{ item_link | escape }}">{{ block.settings.label | escape }}</a>{% endif %}
+      </div>
+    </article>
+  {% endif %}
+{% endfor %}</div>
+<div class="ip-prod-smart">{% for block in section.blocks %}
+  {% if block.type == 'smart_meter' and block.settings.show_block %}
+    {% liquid
+      assign item_product = block.settings.product
+      assign item_image = block.settings.image | default: item_product.featured_image
+      assign item_link = item_product.url | default: block.settings.link
+      assign item_title = block.settings.title | default: item_product.title
+      assign item_alt = block.settings.image_alt | default: item_image.alt | default: item_title
+    %}
+    <article class="ip-p-card ip-smart-h" style="{% render 'ip-typography', settings: block.settings, prefix: 'title' %}{% render 'ip-typography', settings: block.settings, prefix: 'body' %}{% render 'ip-typography', settings: block.settings, prefix: 'action' %}--ip-image-scale: {{ block.settings.image_scale | default: 100 }}%;" {{ block.shopify_attributes }}>
+      <div class="ip-p-img">{% render 'ip-media', image: item_image, alt: item_alt, hero: false, placeholder: item_title, scale: block.settings.image_scale %}</div>
+      <div class="ip-p-body">
+        {% if block.settings.tag != blank %}<span class="ip-ptag">{{ block.settings.tag | escape }}</span>{% endif %}
+        {% if item_title != blank %}<h3 class="ip-pmodel">{{ item_title | escape }}</h3>{% endif %}
+        {% if block.settings.body != blank %}<p class="ip-pdesc">{{ block.settings.body | escape | newline_to_br }}</p>{% endif %}
+        {% if item_link != blank and block.settings.label != blank %}<a class="ip-link" href="{{ item_link | escape }}">{{ block.settings.label | escape }}</a>{% endif %}
+      </div>
+    </article>
+  {% endif %}
+{% endfor %}</div>
+<div class="ip-prod-foot">{% for block in section.blocks %}
+  {% if block.type == 'button' %}{% render 'ip-button', block: block, default_link: '/pages/speicher-vergleich' %}{% endif %}
+{% endfor %}</div>
+  {% endcapture %}
+  {% render 'ip-section', section: section, anchor_id: 'ip-systeme', extra_class: 'ip-products', content: section_content %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "安装伙伴 04 产品系统",
+  "tag": "div",
+  "class": "ip-section-wrap",
+  "limit": 1,
+  "enabled_on": {
+    "templates": [
+      "page"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示模块",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "PRODUKTPORTFOLIO"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题普通文字",
+      "default": "VENUS E Speicher und Smart Meter im"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题强调文字",
+      "default": "Überblick"
+    },
+    {
+      "type": "text",
+      "id": "heading_suffix",
+      "label": "标题普通后文"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "副标题"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "背景颜色",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "桌面顶部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "桌面底部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "label": "平板顶部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "label": "平板底部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "手机顶部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "手机底部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "header",
+      "content": "字体与排版"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "标题桌面字号",
+      "min": 20,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "heading_size_tablet",
+      "label": "标题平板字号",
+      "min": 20,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "标题手机字号",
+      "min": 20,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 27
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "标题字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "粗体"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "select",
+      "id": "heading_line",
+      "label": "标题行高",
+      "options": [
+        {
+          "value": "0",
+          "label": "默认"
+        },
+        {
+          "value": "100",
+          "label": "1.00"
+        },
+        {
+          "value": "110",
+          "label": "1.10"
+        },
+        {
+          "value": "116",
+          "label": "1.16"
+        },
+        {
+          "value": "120",
+          "label": "1.20"
+        },
+        {
+          "value": "130",
+          "label": "1.30"
+        },
+        {
+          "value": "140",
+          "label": "1.40"
+        },
+        {
+          "value": "150",
+          "label": "1.50"
+        },
+        {
+          "value": "155",
+          "label": "1.55"
+        },
+        {
+          "value": "160",
+          "label": "1.60"
+        },
+        {
+          "value": "165",
+          "label": "1.65"
+        },
+        {
+          "value": "170",
+          "label": "1.70"
+        },
+        {
+          "value": "175",
+          "label": "1.75"
+        },
+        {
+          "value": "180",
+          "label": "1.80"
+        },
+        {
+          "value": "200",
+          "label": "2.00"
+        }
+      ],
+      "default": "120"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "标题字间距",
+      "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+      "min": -4,
+      "max": 6,
+      "step": 0.5,
+      "default": -1
+    },
+    {
+      "type": "range",
+      "id": "sub_size",
+      "label": "副标题桌面字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "sub_size_tablet",
+      "label": "副标题平板字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "sub_size_mobile",
+      "label": "副标题手机字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "sub_weight",
+      "label": "副标题字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "粗体"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "sub_line",
+      "label": "副标题行高",
+      "options": [
+        {
+          "value": "0",
+          "label": "默认"
+        },
+        {
+          "value": "100",
+          "label": "1.00"
+        },
+        {
+          "value": "110",
+          "label": "1.10"
+        },
+        {
+          "value": "116",
+          "label": "1.16"
+        },
+        {
+          "value": "120",
+          "label": "1.20"
+        },
+        {
+          "value": "130",
+          "label": "1.30"
+        },
+        {
+          "value": "140",
+          "label": "1.40"
+        },
+        {
+          "value": "150",
+          "label": "1.50"
+        },
+        {
+          "value": "155",
+          "label": "1.55"
+        },
+        {
+          "value": "160",
+          "label": "1.60"
+        },
+        {
+          "value": "165",
+          "label": "1.65"
+        },
+        {
+          "value": "170",
+          "label": "1.70"
+        },
+        {
+          "value": "175",
+          "label": "1.75"
+        },
+        {
+          "value": "180",
+          "label": "1.80"
+        },
+        {
+          "value": "200",
+          "label": "2.00"
+        }
+      ],
+      "default": "165"
+    },
+    {
+      "type": "range",
+      "id": "sub_spacing",
+      "label": "副标题字间距",
+      "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+      "min": -4,
+      "max": 6,
+      "step": 0.5,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "眉题桌面字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_tablet",
+      "label": "眉题平板字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_mobile",
+      "label": "眉题手机字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_weight",
+      "label": "眉题字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "粗体"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_line",
+      "label": "眉题行高",
+      "options": [
+        {
+          "value": "0",
+          "label": "默认"
+        },
+        {
+          "value": "100",
+          "label": "1.00"
+        },
+        {
+          "value": "110",
+          "label": "1.10"
+        },
+        {
+          "value": "116",
+          "label": "1.16"
+        },
+        {
+          "value": "120",
+          "label": "1.20"
+        },
+        {
+          "value": "130",
+          "label": "1.30"
+        },
+        {
+          "value": "140",
+          "label": "1.40"
+        },
+        {
+          "value": "150",
+          "label": "1.50"
+        },
+        {
+          "value": "155",
+          "label": "1.55"
+        },
+        {
+          "value": "160",
+          "label": "1.60"
+        },
+        {
+          "value": "165",
+          "label": "1.65"
+        },
+        {
+          "value": "170",
+          "label": "1.70"
+        },
+        {
+          "value": "175",
+          "label": "1.75"
+        },
+        {
+          "value": "180",
+          "label": "1.80"
+        },
+        {
+          "value": "200",
+          "label": "2.00"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_spacing",
+      "label": "眉题字间距",
+      "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+      "min": -4,
+      "max": 6,
+      "step": 0.5,
+      "default": 2
+    }
+  ],
+  "blocks": [
+    {
+      "type": "intro",
+      "name": "介绍文字",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示区块",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "介绍文案",
+          "default": "Das VENUS E Portfolio umfasst Speicher und Smart Meter für unterschiedliche Anwendungen. Welche Komponenten infrage kommen, hängt von Installation, Energiebedarf und geplantem Einsatz ab."
+        },
+        {
+          "type": "range",
+          "id": "sub_size",
+          "label": "副标题桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "sub_size_tablet",
+          "label": "副标题平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "sub_size_mobile",
+          "label": "副标题手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "sub_weight",
+          "label": "副标题字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "select",
+          "id": "sub_line",
+          "label": "副标题行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "165"
+        },
+        {
+          "type": "range",
+          "id": "sub_spacing",
+          "label": "副标题字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "storage",
+      "name": "储能产品",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示区块",
+          "default": true
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "关联商品",
+          "info": "关联后使用真实商品链接；未上传独立图片时使用商品主图。"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "产品图片",
+          "info": "上传图片优先于商品主图。建议透明背景、统一视角；保持真实产品比例，避免把小型号放大成大型号。"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "图片替代文字"
+        },
+        {
+          "type": "range",
+          "id": "image_scale",
+          "label": "图片显示比例",
+          "min": 30,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 100
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "产品分类",
+          "default": "Speicher"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "产品名称",
+          "default": "VENUS E Mini"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "产品介绍",
+          "default": "Kompakter Einstieg für kleinere Speicherbedarfe."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "链接文案",
+          "default": "VENUS E Mini ansehen →"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "未关联商品时的链接"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "区块标题桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "区块标题平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "区块标题手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 18
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "区块标题字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "600"
+        },
+        {
+          "type": "select",
+          "id": "title_line",
+          "label": "区块标题行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "区块标题字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "区块正文桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 13
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "区块正文平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 13
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "区块正文手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 13
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "区块正文字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "select",
+          "id": "body_line",
+          "label": "区块正文行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "160"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "区块正文字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "action_size",
+          "label": "按钮文字桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "action_size_tablet",
+          "label": "按钮文字平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "action_size_mobile",
+          "label": "按钮文字手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "select",
+          "id": "action_weight",
+          "label": "按钮文字字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "500"
+        },
+        {
+          "type": "select",
+          "id": "action_line",
+          "label": "按钮文字行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "range",
+          "id": "action_spacing",
+          "label": "按钮文字字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "smart_meter",
+      "name": "智能电表",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示区块",
+          "default": true
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "关联商品",
+          "info": "关联后使用真实商品链接；未上传独立图片时使用商品主图。"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "产品图片",
+          "info": "上传图片优先于商品主图。建议透明背景、统一视角；保持真实产品比例，避免把小型号放大成大型号。"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "图片替代文字"
+        },
+        {
+          "type": "range",
+          "id": "image_scale",
+          "label": "图片显示比例",
+          "min": 30,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 100
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "产品分类",
+          "default": "Smart Meter"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "产品名称",
+          "default": "Smart Meter CT002"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "产品介绍",
+          "default": "Messlösung für passende dreiphasige Installationen."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "链接文案",
+          "default": "CT002 ansehen →"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "未关联商品时的链接"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "区块标题桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "区块标题平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "区块标题手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 18
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "区块标题字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "600"
+        },
+        {
+          "type": "select",
+          "id": "title_line",
+          "label": "区块标题行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "区块标题字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "区块正文桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 13
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "区块正文平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 13
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "区块正文手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 13
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "区块正文字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "select",
+          "id": "body_line",
+          "label": "区块正文行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "160"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "区块正文字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "action_size",
+          "label": "按钮文字桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "action_size_tablet",
+          "label": "按钮文字平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "action_size_mobile",
+          "label": "按钮文字手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "select",
+          "id": "action_weight",
+          "label": "按钮文字字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "500"
+        },
+        {
+          "type": "select",
+          "id": "action_line",
+          "label": "按钮文字行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "range",
+          "id": "action_spacing",
+          "label": "按钮文字字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "比较按钮",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示区块",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "按钮文案",
+          "default": "VENUS E Modelle vergleichen →"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "按钮链接"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "按钮样式",
+          "options": [
+            {
+              "value": "primary",
+              "label": "蓝色主要按钮"
+            },
+            {
+              "value": "ghost",
+              "label": "白色次级按钮"
+            },
+            {
+              "value": "link",
+              "label": "文字链接"
+            }
+          ],
+          "default": "ghost"
+        },
+        {
+          "type": "range",
+          "id": "action_size",
+          "label": "按钮文字桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "range",
+          "id": "action_size_tablet",
+          "label": "按钮文字平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "range",
+          "id": "action_size_mobile",
+          "label": "按钮文字手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "select",
+          "id": "action_weight",
+          "label": "按钮文字字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "500"
+        },
+        {
+          "type": "select",
+          "id": "action_line",
+          "label": "按钮文字行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "range",
+          "id": "action_spacing",
+          "label": "按钮文字字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "max_blocks": 50,
+  "presets": [
+    {
+      "name": "安装伙伴 04 产品系统",
+      "blocks": [
+        {
+          "type": "intro",
+          "settings": {
+            "body": "Das VENUS E Portfolio umfasst Speicher und Smart Meter für unterschiedliche Anwendungen. Welche Komponenten infrage kommen, hängt von Installation, Energiebedarf und geplantem Einsatz ab."
+          }
+        },
+        {
+          "type": "storage",
+          "settings": {
+            "title": "VENUS E Mini",
+            "tag": "Speicher",
+            "body": "Kompakter Einstieg für kleinere Speicherbedarfe.",
+            "label": "VENUS E Mini ansehen →",
+            "link": "/products/venus-e-mini",
+            "image_scale": 100
+          }
+        },
+        {
+          "type": "storage",
+          "settings": {
+            "title": "VENUS E 3.0",
+            "tag": "Speicher",
+            "body": "Speicherlösung für typische Haushalts- und PV-Anwendungen.",
+            "label": "VENUS E 3.0 ansehen →",
+            "link": "/products/venus-e-3-0",
+            "image_scale": 100
+          }
+        },
+        {
+          "type": "storage",
+          "settings": {
+            "title": "VENUS E 4.0",
+            "tag": "Speicher",
+            "body": "Für höhere Speicheranforderungen und erweiterte Nutzungsszenarien.",
+            "label": "VENUS E 4.0 ansehen →",
+            "link": "/products/venus-e-4-0",
+            "image_scale": 100
+          }
+        },
+        {
+          "type": "storage",
+          "settings": {
+            "title": "VENUS E Max",
+            "tag": "Speicher",
+            "body": "Für größere Energiebedarfe und anspruchsvollere Systemkonfigurationen.",
+            "label": "VENUS E Max ansehen →",
+            "link": "/products/venus-e-max",
+            "image_scale": 100
+          }
+        },
+        {
+          "type": "smart_meter",
+          "settings": {
+            "title": "Smart Meter CT002",
+            "tag": "Smart Meter",
+            "body": "Messlösung für passende dreiphasige Installationen.",
+            "label": "CT002 ansehen →",
+            "link": "/products/smart-meter-ct002",
+            "image_scale": 100
+          }
+        },
+        {
+          "type": "smart_meter",
+          "settings": {
+            "title": "Smart Meter CT003",
+            "tag": "Smart Meter",
+            "body": "Messlösung für kompatible digitale Zähler über unterstützte Schnittstellen.",
+            "label": "CT003 ansehen →",
+            "link": "/products/smart-meter-ct003",
+            "image_scale": 100
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "VENUS E Modelle vergleichen →",
+            "style": "ghost",
+            "link": "/pages/speicher-vergleich"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,278 @@
+{% if section.settings.show_section %}
+<nav id="ip-navigation" class="ip-anchor-nav" data-anchor-nav data-anchor-order="document" aria-label="{{ section.settings.aria_label | escape }}" style="--ip-nav-text-size: {{ section.settings.nav_text_size }}px;">
+  <div class="ip-anchor-nav__layout">
+    <div class="ip-anchor-nav__links anchor-nav__links">
+      {% for block in section.blocks %}
+        {% if block.settings.show_block %}
+          {% capture target %}{% render 'anchor-navigation-target', module: block.settings.module, fallback: block.settings.target %}{% endcapture %}
+          {% assign target = target | strip | remove_first: '#' %}
+          {% capture module_label %}{% render 'ip-module-label', module: block.settings.module %}{% endcapture %}
+          {% assign label = block.settings.label | default: module_label %}
+          {% assign warning_id = 'ip-warning-' | append: section.id | append: '-' | append: block.id %}
+          {% if target != blank or request.design_mode %}
+            <span class="ip-anchor-nav__item" {{ block.shopify_attributes }}><a class="ip-anchor-nav__link" href="#{{ target | escape }}" data-anchor-link data-anchor-nav-link data-anchor-module="{{ block.settings.module | escape }}" data-anchor-warning-id="{{ warning_id }}">{{ label | strip | escape }}</a></span>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% if section.settings.show_cta and section.settings.cta_label != blank %}
+      {% capture cta_target %}{% render 'anchor-navigation-target', module: section.settings.cta_module, fallback: section.settings.cta_target %}{% endcapture %}
+      {% assign cta_target = cta_target | strip | remove_first: '#' %}
+      {% assign cta_warning_id = 'ip-warning-' | append: section.id | append: '-cta' %}
+      {% if cta_target != blank or request.design_mode %}<a class="ip-anchor-nav__cta" href="#{{ cta_target | escape }}" data-anchor-link data-anchor-nav-cta data-anchor-warning-id="{{ cta_warning_id }}">{{ section.settings.cta_label | escape }}</a>{% endif %}
+    {% endif %}
+  </div>
+  {% if request.design_mode %}
+    <div class="ip-anchor-nav__warnings" aria-live="polite">
+      {% for block in section.blocks %}
+        {% if block.settings.show_block %}<span id="ip-warning-{{ section.id }}-{{ block.id }}" class="ip-anchor-nav__warning" hidden>未找到目标模块</span>{% endif %}
+      {% endfor %}
+      {% if section.settings.show_cta and section.settings.cta_label != blank %}<span id="{{ cta_warning_id }}" class="ip-anchor-nav__warning" hidden>未找到目标模块</span>{% endif %}
+    </div>
+  {% endif %}
+</nav>
+{% endif %}
+
+{% schema %}
+{
+  "name": "安装合作 00 锚点导航",
+  "tag": "div",
+  "class": "ip-nav-wrap",
+  "limit": 1,
+  "enabled_on": {
+    "templates": [
+      "page"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示导航模块",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "导航无障碍名称",
+      "default": "Navigation für Installateure und Partner"
+    },
+    {
+      "type": "range",
+      "id": "nav_text_size",
+      "label": "导航字号",
+      "min": 11,
+      "max": 18,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13.5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "显示右侧行动按钮",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "行动按钮文案",
+      "default": "Kooperation anfragen"
+    },
+    {
+      "type": "select",
+      "id": "cta_module",
+      "label": "行动按钮链接到模块",
+      "options": [
+        {
+          "value": "ip_hero",
+          "label": "01 首屏"
+        },
+        {
+          "value": "ip_audience",
+          "label": "02 目标人群"
+        },
+        {
+          "value": "ip_planning",
+          "label": "03 规划与咨询"
+        },
+        {
+          "value": "ip_products",
+          "label": "04 产品与系统"
+        },
+        {
+          "value": "ip_resources",
+          "label": "05 技术资料"
+        },
+        {
+          "value": "ip_cooperation",
+          "label": "06 合作方式"
+        },
+        {
+          "value": "ip_process",
+          "label": "07 申请流程"
+        },
+        {
+          "value": "ip_form",
+          "label": "08 B2B 询盘表单"
+        },
+        {
+          "value": "ip_faq",
+          "label": "09 常见问题"
+        },
+        {
+          "value": "ip_final",
+          "label": "10 结尾行动区"
+        },
+        {
+          "value": "custom",
+          "label": "自定义锚点（高级）"
+        }
+      ],
+      "default": "ip_final"
+    },
+    {
+      "type": "text",
+      "id": "cta_target",
+      "label": "自定义锚点（高级）",
+      "info": "仅用于特殊目标，可带或不带 #；普通模块请使用上方下拉选择。",
+      "visible_if": "{{ section.settings.cta_module == 'custom' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "导航链接",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示区块",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "导航文案",
+          "info": "留空时自动显示所选模块的德语名称。"
+        },
+        {
+          "type": "select",
+          "id": "module",
+          "label": "链接到模块",
+          "options": [
+            {
+              "value": "ip_hero",
+              "label": "01 首屏"
+            },
+            {
+              "value": "ip_audience",
+              "label": "02 目标人群"
+            },
+            {
+              "value": "ip_planning",
+              "label": "03 规划与咨询"
+            },
+            {
+              "value": "ip_products",
+              "label": "04 产品与系统"
+            },
+            {
+              "value": "ip_resources",
+              "label": "05 技术资料"
+            },
+            {
+              "value": "ip_cooperation",
+              "label": "06 合作方式"
+            },
+            {
+              "value": "ip_process",
+              "label": "07 申请流程"
+            },
+            {
+              "value": "ip_form",
+              "label": "08 B2B 询盘表单"
+            },
+            {
+              "value": "ip_faq",
+              "label": "09 常见问题"
+            },
+            {
+              "value": "ip_final",
+              "label": "10 结尾行动区"
+            },
+            {
+              "value": "custom",
+              "label": "自定义锚点（高级）"
+            }
+          ],
+          "default": "ip_audience"
+        },
+        {
+          "type": "text",
+          "id": "target",
+          "label": "自定义锚点（高级）",
+          "info": "只在选择自定义锚点时填写；普通模块的 ID 由代码自动生成。",
+          "visible_if": "{{ block.settings.module == 'custom' }}"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "安装合作 00 锚点导航",
+      "blocks": [
+        {
+          "type": "link",
+          "settings": {
+            "module": "ip_audience"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "module": "ip_planning"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "module": "ip_products"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "module": "ip_resources"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "module": "ip_cooperation"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "module": "ip_process"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "module": "ip_form"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "module": "ip_faq"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

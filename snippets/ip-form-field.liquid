@@ -1,0 +1,209 @@
+{%- liquid
+  assign field_id = 'IP-' | append: section.id | append: '-' | append: key
+  assign error_id = field_id | append: '-error'
+  assign help_id = field_id | append: '-help'
+  assign required_field = true
+  assign full_width = false
+  assign input_type = 'text'
+  case key
+    when 'company'
+      assign default_label = 'Unternehmen'
+      assign default_placeholder = 'Name des Unternehmens'
+      assign default_error = 'Bitte gib den Firmennamen ein.'
+      assign input_name = 'contact[Unternehmen]'
+    when 'name'
+      assign default_label = 'Ansprechpartner'
+      assign default_placeholder = 'Dein Name'
+      assign default_error = 'Bitte gib deinen Namen ein.'
+      assign input_name = 'contact[name]'
+      assign input_value = form.name | default: customer.name
+    when 'role'
+      assign default_label = 'Deine Rolle'
+      assign default_placeholder = 'Rolle auswählen'
+      assign default_error = 'Bitte wähle deine Rolle aus.'
+      assign input_name = 'contact[Rolle]'
+      assign option_type = 'role_option'
+      assign default_option_keys = 'elektroinstallateur,solarteur,fachhaendler,distributor,energieberater,planer,sonstiges' | split: ','
+      assign default_option_labels = 'Elektroinstallateur|Solarteur / PV-Fachbetrieb|Fachhändler|Distributor|Energieberater|Planer|Sonstiges' | split: '|'
+    when 'email'
+      assign default_label = 'E-Mail-Adresse'
+      assign default_placeholder = 'name@unternehmen.de'
+      assign default_error = 'Bitte gib eine gültige E-Mail-Adresse ein.'
+      assign input_name = 'contact[email]'
+      assign input_type = 'email'
+      assign input_value = form.email | default: customer.email
+    when 'phone'
+      assign default_label = 'Telefonnummer'
+      assign default_placeholder = 'Telefonnummer eingeben'
+      assign default_helper = 'Optional'
+      assign input_name = 'contact[phone]'
+      assign input_type = 'tel'
+      assign required_field = false
+      assign input_value = form.phone
+    when 'country'
+      assign default_label = 'Land / Region'
+      assign default_placeholder = 'Land / Region auswählen'
+      assign default_error = 'Bitte wähle ein Land / eine Region aus.'
+      assign input_name = 'contact[Land / Region]'
+      assign option_type = 'country_option'
+      assign default_option_keys = 'deutschland,niederlande,belgien,sonstiges' | split: ','
+      assign default_option_labels = 'Deutschland|Niederlande|Belgien|Sonstiges' | split: '|'
+    when 'website'
+      assign default_label = 'Website des Unternehmens'
+      assign default_placeholder = 'https://www.unternehmen.de'
+      assign default_helper = 'Optional – hilft uns bei der Einordnung deines Unternehmens'
+      assign default_error = 'Bitte gib eine gültige Website-Adresse ein.'
+      assign input_name = 'contact[Website]'
+      assign input_type = 'url'
+      assign required_field = false
+      assign full_width = true
+    when 'interest'
+      assign default_label = 'Wofür interessierst du dich?'
+      assign default_error = 'Bitte wähle mindestens einen Bereich aus.'
+      assign full_width = true
+      assign option_type = 'interest_option'
+      assign default_option_keys = 'installation,vertrieb,projektanfrage,technische-zusammenarbeit,sonstiges' | split: ','
+      assign default_option_labels = 'Installation|Vertrieb|Projektanfrage|Technische Zusammenarbeit|Sonstiges' | split: '|'
+    when 'message'
+      assign default_label = 'Nachricht'
+      assign default_placeholder = 'Beschreibe kurz dein Unternehmen, deinen Einsatzbereich und was du von einer möglichen Zusammenarbeit erwartest.'
+      assign default_error = 'Bitte beschreibe kurz dein Anliegen.'
+      assign input_name = 'contact[body]'
+      assign full_width = true
+      assign input_value = form.body
+    when 'privacy'
+      assign default_label = 'Ich habe die'
+      assign default_error = 'Bitte bestätige die Datenschutzerklärung.'
+      assign input_name = 'contact[Datenschutz]'
+      assign full_width = true
+  endcase
+  assign field_label = block.settings.label | default: default_label
+  assign field_placeholder = block.settings.placeholder | default: default_placeholder
+  assign field_error = block.settings.error | default: default_error
+  if block
+    assign field_helper = block.settings.helper
+  else
+    assign field_helper = default_helper
+  endif
+  assign description_ids = error_id
+  if field_helper != blank
+    assign description_ids = description_ids | append: ' ' | append: help_id
+  endif
+  assign tag_name = 'div'
+  if key == 'interest'
+    assign tag_name = 'fieldset'
+  endif
+-%}
+<{{ tag_name }}
+  id="{{ field_id }}-wrapper"
+  class="ip-field{% if full_width %} ip-field--full{% endif %}{% if key == 'privacy' %} ip-field--check{% endif %}"
+  data-ip-field-wrap="{{ key }}" data-ip-error="{{ field_error | escape }}"
+  {% if key == 'interest' %}data-ip-field="interest" aria-required="true" aria-describedby="{{ description_ids }}"{% endif %}
+  style="{% if block %}{% render 'ip-typography', settings: block.settings, prefix: 'title' %}{% render 'ip-typography', settings: block.settings, prefix: 'body' %}{% else %}--ip-title-size:13.5px;--ip-title-size-tablet:13.5px;--ip-title-size-mobile:13.5px;--ip-title-weight:{% if key == 'privacy' %}400{% else %}600{% endif %};--ip-title-line:{% if key == 'privacy' %}1.6{% else %}normal{% endif %};--ip-title-spacing:0em;--ip-body-size:14px;--ip-body-size-tablet:14px;--ip-body-size-mobile:14px;--ip-body-weight:400;--ip-body-line:normal;--ip-body-spacing:0em;{% endif %}"{% if block %} {{ block.shopify_attributes }}{% endif %}
+>
+  {%- if key == 'interest' -%}
+    <legend>{{ field_label | escape }}<span class="ip-req" aria-hidden="true">*</span></legend>
+  {%- elsif key != 'privacy' -%}
+    <label for="{{ field_id }}">{{ field_label | escape }}{% if required_field %}<span class="ip-req" aria-hidden="true">*</span>{% endif %}</label>
+  {%- endif -%}
+  {%- case key -%}
+    {%- when 'role', 'country', 'interest' -%}
+      {%- if key == 'interest' -%}
+        <div class="ip-chk-group">
+      {%- else -%}
+        <select id="{{ field_id }}" name="{{ input_name }}" data-ip-field="{{ key }}" required aria-describedby="{{ description_ids }}">
+          <option value="" disabled selected>{{ field_placeholder | escape }}</option>
+      {%- endif -%}
+      {%- liquid
+        assign option_blocks = section.blocks | where: 'type', option_type
+        assign used_option_keys = '|'
+      -%}
+      {%- for option_key in default_option_keys -%}
+        {%- liquid
+          assign default_option_label = ''
+          case option_key
+            when 'elektroinstallateur'
+              assign default_option_label = 'Elektroinstallateur'
+            when 'solarteur'
+              assign default_option_label = 'Solarteur / PV-Fachbetrieb'
+            when 'fachhaendler'
+              assign default_option_label = 'Fachhändler'
+            when 'distributor'
+              assign default_option_label = 'Distributor'
+            when 'energieberater'
+              assign default_option_label = 'Energieberater'
+            when 'planer'
+              assign default_option_label = 'Planer'
+            when 'deutschland'
+              assign default_option_label = 'Deutschland'
+            when 'niederlande'
+              assign default_option_label = 'Niederlande'
+            when 'belgien'
+              assign default_option_label = 'Belgien'
+            when 'installation'
+              assign default_option_label = 'Installation'
+            when 'vertrieb'
+              assign default_option_label = 'Vertrieb'
+            when 'projektanfrage'
+              assign default_option_label = 'Projektanfrage'
+            when 'technische-zusammenarbeit'
+              assign default_option_label = 'Technische Zusammenarbeit'
+            when 'sonstiges'
+              assign default_option_label = 'Sonstiges'
+          endcase
+        -%}
+        {%- if option_blocks.size == 0 -%}
+          {% if key == 'interest' %}
+            <label class="ip-chk" for="{{ field_id }}-{{ option_key }}"><input id="{{ field_id }}-{{ option_key }}" type="checkbox" name="contact[Interesse_{{ option_key }}]" value="{{ default_option_label | escape }}" data-ip-interest="{{ option_key }}" aria-describedby="{{ description_ids }}">{{ default_option_label | escape }}</label>
+          {% else %}
+            <option value="{{ option_key }}">{{ default_option_label | escape }}</option>
+          {% endif %}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- for option in option_blocks -%}
+        {%- liquid
+          assign option_key = option.settings.key
+          assign key_token = '|' | append: option_key | append: '|'
+          assign option_valid = false
+          assign option_label = option.settings.label
+          if option_label == blank
+            for default_key in default_option_keys
+              if default_key == option_key
+                assign option_label = default_option_labels[forloop.index0]
+              endif
+            endfor
+          endif
+          if default_option_keys contains option_key
+            unless used_option_keys contains key_token
+              assign option_valid = true
+              assign used_option_keys = used_option_keys | append: option_key | append: '|'
+            endunless
+          endif
+        -%}
+        {%- if option_valid -%}
+          {% if key == 'interest' %}
+            <label class="ip-chk" for="{{ field_id }}-{{ option_key }}" {{ option.shopify_attributes }}><input id="{{ field_id }}-{{ option_key }}" type="checkbox" name="contact[Interesse_{{ option_key }}]" value="{{ option_label | escape }}" data-ip-interest="{{ option_key }}" aria-describedby="{{ description_ids }}">{{ option_label | escape }}</label>
+          {% else %}
+            <option value="{{ option_key }}" {{ option.shopify_attributes }}>{{ option_label | escape }}</option>
+          {% endif %}
+        {%- elsif request.design_mode -%}
+          {% if key == 'interest' %}<span class="ip-editor-warning" {{ option.shopify_attributes }}>此选项的业务值无效或重复，请重新选择。</span>{% endif %}
+        {%- endif -%}
+      {%- endfor -%}
+      {% if key == 'interest' %}</div>{% else %}</select>{% endif %}
+    {%- when 'message' -%}
+      <textarea id="{{ field_id }}" name="{{ input_name }}" data-ip-field="message" required placeholder="{{ field_placeholder | escape }}" rows="4" aria-describedby="{{ description_ids }}">{{ input_value | escape }}</textarea>
+    {%- when 'privacy' -%}
+      {%- liquid
+        assign privacy_url = block.settings.privacy_url | default: '/pages/datenschutz'
+        assign privacy_link_label = block.settings.link_label | default: 'Datenschutzerklärung'
+        assign privacy_label_after = block.settings.label_after | default: 'zur Kenntnis genommen.'
+      -%}
+      <input id="{{ field_id }}" name="{{ input_name }}" data-ip-field="privacy" type="checkbox" value="Zur Kenntnis genommen" required aria-describedby="{{ description_ids }}">
+      <label for="{{ field_id }}">{{ field_label | escape }} <a href="{{ privacy_url }}">{{ privacy_link_label | escape }}</a> {{ privacy_label_after | escape }}<span class="ip-req" aria-hidden="true">*</span></label>
+    {%- else -%}
+      <input id="{{ field_id }}" name="{{ input_name }}" data-ip-field="{{ key }}" type="{{ input_type }}" value="{{ input_value | escape }}" placeholder="{{ field_placeholder | escape }}" aria-describedby="{{ description_ids }}"{% if required_field %} required{% endif %}{% if key == 'company' %} autocomplete="organization"{% elsif key == 'name' %} autocomplete="name"{% elsif key == 'email' %} autocomplete="email" autocapitalize="off" spellcheck="false"{% elsif key == 'phone' %} autocomplete="tel"{% elsif key == 'website' %} autocomplete="url"{% endif %}>
+  {%- endcase -%}
+  {%- if field_helper != blank -%}<span class="ip-help" id="{{ help_id }}">{{ field_helper | escape }}</span>{%- endif -%}
+  <span class="ip-err-msg" id="{{ error_id }}" aria-live="polite"></span>
+</{{ tag_name }}>

@@ -1,0 +1,23 @@
+{% if image != blank %}
+  {{ image | image_url: width: 112 | image_tag: class: 'ip-custom-icon', widths: '40, 56, 80, 112', sizes: '28px', loading: 'lazy', alt: '' }}
+{% else %}
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    {% case type %}
+      {% when 'tool' %}<path d="M14.5 4.5l5 5L9 20l-5 1 1-5 10.5-11.5z"/><path d="M12.5 6.5l5 5"/><path d="M4 20l2-5"/>
+      {% when 'tool_plain' %}<path d="M14.5 4.5l5 5L9 20l-5 1 1-5 10.5-11.5z"/><path d="M12.5 6.5l5 5"/>
+      {% when 'building' %}<path d="M3 21h18"/><path d="M5 21V9l4-3 4 3v12"/><path d="M14 21V11l3-2 3 2v12"/><path d="M9 12h0M9 16h0"/>
+      {% when 'box' %}<path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/><path d="M3 12l9 4 9-4"/>
+      {% when 'box_plain' %}<path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/>
+      {% when 'box_distribution' %}<path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/><path d="M12 7v4"/>
+      {% when 'list' %}<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/>
+      {% when 'integration' %}<circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8.4 6H15a3 3 0 013 3v6.6"/><path d="M6 8.4V15a3 3 0 003 3h6.6"/>
+      {% when 'download' %}<path d="M12 3v11"/><path d="M8 7l4-4 4 4"/><path d="M5 14v4a3 3 0 003 3h8a3 3 0 003-3v-4"/>
+      {% when 'file' %}<path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/>
+      {% when 'manual' %}<path d="M4 5h16v14H4z"/><path d="M8 9h8M8 12h8M8 15h5"/>
+      {% when 'cycle' %}<path d="M4 12a8 8 0 0113.7-5.6L20 8"/><path d="M20 4v4h-4"/><path d="M20 12a8 8 0 01-13.7 5.6L4 16"/><path d="M4 20v-4h4"/>
+      {% when 'success' %}<path d="M5 12l4 4L19 6"/>
+      {% when 'error' %}<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h0"/>
+      {% else %}<path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>
+    {% endcase %}
+  </svg>
+{% endif %}

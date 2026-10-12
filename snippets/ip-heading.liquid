@@ -1,0 +1,9 @@
+{% if section.settings.eyebrow != blank %}<div class="ip-eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
+{% if section.settings.heading != blank or section.settings.heading_accent != blank or section.settings.heading_suffix != blank %}
+  {% if level == 'h1' %}
+    <h1 id="ip-heading-{{ section.id }}">{{ section.settings.heading | escape }}{% if section.settings.heading_accent != blank %} <span class="ip-acc">{{ section.settings.heading_accent | escape }}</span>{% endif %}{% if section.settings.heading_suffix != blank %} {{ section.settings.heading_suffix | escape }}{% endif %}</h1>
+  {% else %}
+    <h2 id="ip-heading-{{ section.id }}">{{ section.settings.heading | escape }}{% if section.settings.heading_accent != blank %} <span class="ip-acc">{{ section.settings.heading_accent | escape }}</span>{% endif %}{% if section.settings.heading_suffix != blank %} {{ section.settings.heading_suffix | escape }}{% endif %}</h2>
+  {% endif %}
+{% endif %}
+{% if section.settings.subtitle != blank %}<p class="ip-sub">{{ section.settings.subtitle | escape | newline_to_br }}</p>{% endif %}

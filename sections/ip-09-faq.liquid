@@ -1,0 +1,1023 @@
+{% if section.settings.show_section %}
+  {% capture section_content %}
+{% render 'ip-heading', section: section, level: 'h2' %}
+{% for block in section.blocks %}
+  {% if block.type == 'intro' and block.settings.show_block and block.settings.body != blank %}
+    <p class="ip-sub ip-intro" style="{% render 'ip-typography', settings: block.settings, prefix: 'sub' %}" {{ block.shopify_attributes }}>{{ block.settings.body | escape | newline_to_br }}</p>
+  {% endif %}
+{% endfor %}
+<div class="ip-faq-wrap" data-ip-faq>
+  {% for block in section.blocks %}
+    {% if block.type == 'faq' and block.settings.show_block and block.settings.title != blank %}
+      {% assign question_id = 'ip-question-' | append: section.id | append: '-' | append: block.id %}
+      {% assign answer_id = 'ip-answer-' | append: section.id | append: '-' | append: block.id %}
+      <article class="ip-faq-item" data-ip-faq-item {{ block.shopify_attributes }}>
+        <button id="{{ question_id }}" class="ip-faq-q" type="button" aria-expanded="true" aria-controls="{{ answer_id }}" data-ip-faq-question style="{% render 'ip-typography', settings: block.settings, prefix: 'title' %}">{{ block.settings.title | escape }}</button>
+        <div id="{{ answer_id }}" class="ip-faq-a" role="region" aria-labelledby="{{ question_id }}" aria-hidden="false" data-ip-faq-answer>
+          <div class="ip-faq-answer" style="{% render 'ip-typography', settings: block.settings, prefix: 'body' %}">{{ block.settings.body }}</div>
+        </div>
+      </article>
+    {% endif %}
+  {% endfor %}
+</div>
+  {% endcapture %}
+  {% render 'ip-section', section: section, anchor_id: 'ip-faq', extra_class: 'ip-faq', content: section_content %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "安装伙伴 09 常见问题",
+  "tag": "div",
+  "class": "ip-section-wrap",
+  "limit": 1,
+  "enabled_on": {
+    "templates": [
+      "page"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "显示模块",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "眉题",
+      "default": "HÄUFIGE FRAGEN"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题普通文字",
+      "default": "FAQ für"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "标题强调文字",
+      "default": "Installateure & Partner"
+    },
+    {
+      "type": "text",
+      "id": "heading_suffix",
+      "label": "标题普通后文"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "副标题"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "背景颜色",
+      "default": "#F5F7F9"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "桌面顶部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "桌面底部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "label": "平板顶部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "label": "平板底部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "手机顶部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "手机底部间距",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "header",
+      "content": "字体与排版"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "标题桌面字号",
+      "min": 20,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "heading_size_tablet",
+      "label": "标题平板字号",
+      "min": 20,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "标题手机字号",
+      "min": 20,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 27
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "标题字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "粗体"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "select",
+      "id": "heading_line",
+      "label": "标题行高",
+      "options": [
+        {
+          "value": "0",
+          "label": "默认"
+        },
+        {
+          "value": "100",
+          "label": "1.00"
+        },
+        {
+          "value": "110",
+          "label": "1.10"
+        },
+        {
+          "value": "116",
+          "label": "1.16"
+        },
+        {
+          "value": "120",
+          "label": "1.20"
+        },
+        {
+          "value": "130",
+          "label": "1.30"
+        },
+        {
+          "value": "140",
+          "label": "1.40"
+        },
+        {
+          "value": "150",
+          "label": "1.50"
+        },
+        {
+          "value": "155",
+          "label": "1.55"
+        },
+        {
+          "value": "160",
+          "label": "1.60"
+        },
+        {
+          "value": "165",
+          "label": "1.65"
+        },
+        {
+          "value": "170",
+          "label": "1.70"
+        },
+        {
+          "value": "175",
+          "label": "1.75"
+        },
+        {
+          "value": "180",
+          "label": "1.80"
+        },
+        {
+          "value": "200",
+          "label": "2.00"
+        }
+      ],
+      "default": "120"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "标题字间距",
+      "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+      "min": -4,
+      "max": 6,
+      "step": 0.5,
+      "default": -1
+    },
+    {
+      "type": "range",
+      "id": "sub_size",
+      "label": "副标题桌面字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "sub_size_tablet",
+      "label": "副标题平板字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "sub_size_mobile",
+      "label": "副标题手机字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "sub_weight",
+      "label": "副标题字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "粗体"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "sub_line",
+      "label": "副标题行高",
+      "options": [
+        {
+          "value": "0",
+          "label": "默认"
+        },
+        {
+          "value": "100",
+          "label": "1.00"
+        },
+        {
+          "value": "110",
+          "label": "1.10"
+        },
+        {
+          "value": "116",
+          "label": "1.16"
+        },
+        {
+          "value": "120",
+          "label": "1.20"
+        },
+        {
+          "value": "130",
+          "label": "1.30"
+        },
+        {
+          "value": "140",
+          "label": "1.40"
+        },
+        {
+          "value": "150",
+          "label": "1.50"
+        },
+        {
+          "value": "155",
+          "label": "1.55"
+        },
+        {
+          "value": "160",
+          "label": "1.60"
+        },
+        {
+          "value": "165",
+          "label": "1.65"
+        },
+        {
+          "value": "170",
+          "label": "1.70"
+        },
+        {
+          "value": "175",
+          "label": "1.75"
+        },
+        {
+          "value": "180",
+          "label": "1.80"
+        },
+        {
+          "value": "200",
+          "label": "2.00"
+        }
+      ],
+      "default": "165"
+    },
+    {
+      "type": "range",
+      "id": "sub_spacing",
+      "label": "副标题字间距",
+      "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+      "min": -4,
+      "max": 6,
+      "step": 0.5,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "眉题桌面字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_tablet",
+      "label": "眉题平板字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_mobile",
+      "label": "眉题手机字号",
+      "min": 10,
+      "max": 48,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_weight",
+      "label": "眉题字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "粗体"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_line",
+      "label": "眉题行高",
+      "options": [
+        {
+          "value": "0",
+          "label": "默认"
+        },
+        {
+          "value": "100",
+          "label": "1.00"
+        },
+        {
+          "value": "110",
+          "label": "1.10"
+        },
+        {
+          "value": "116",
+          "label": "1.16"
+        },
+        {
+          "value": "120",
+          "label": "1.20"
+        },
+        {
+          "value": "130",
+          "label": "1.30"
+        },
+        {
+          "value": "140",
+          "label": "1.40"
+        },
+        {
+          "value": "150",
+          "label": "1.50"
+        },
+        {
+          "value": "155",
+          "label": "1.55"
+        },
+        {
+          "value": "160",
+          "label": "1.60"
+        },
+        {
+          "value": "165",
+          "label": "1.65"
+        },
+        {
+          "value": "170",
+          "label": "1.70"
+        },
+        {
+          "value": "175",
+          "label": "1.75"
+        },
+        {
+          "value": "180",
+          "label": "1.80"
+        },
+        {
+          "value": "200",
+          "label": "2.00"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_spacing",
+      "label": "眉题字间距",
+      "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+      "min": -4,
+      "max": 6,
+      "step": 0.5,
+      "default": 2
+    }
+  ],
+  "blocks": [
+    {
+      "type": "intro",
+      "name": "介绍文字",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示区块",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "介绍文案"
+        },
+        {
+          "type": "range",
+          "id": "sub_size",
+          "label": "副标题桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "sub_size_tablet",
+          "label": "副标题平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "sub_size_mobile",
+          "label": "副标题手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "sub_weight",
+          "label": "副标题字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "select",
+          "id": "sub_line",
+          "label": "副标题行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "165"
+        },
+        {
+          "type": "range",
+          "id": "sub_spacing",
+          "label": "副标题字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "常见问题",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_block",
+          "label": "显示区块",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "问题",
+          "default": "Für wen ist die B2B-Anfrage gedacht?"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "回答",
+          "default": "<p>Die Anfrage richtet sich an Unternehmen und Fachleute aus den Bereichen Elektroinstallation, Photovoltaik, Energiespeicher, Fachhandel und angrenzenden Bereichen der Energietechnik.</p>"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "区块标题桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "title_size_tablet",
+          "label": "区块标题平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "label": "区块标题手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "区块标题字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "500"
+        },
+        {
+          "type": "select",
+          "id": "title_line",
+          "label": "区块标题行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "range",
+          "id": "title_spacing",
+          "label": "区块标题字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "区块正文桌面字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "range",
+          "id": "body_size_tablet",
+          "label": "区块正文平板字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "range",
+          "id": "body_size_mobile",
+          "label": "区块正文手机字号",
+          "min": 10,
+          "max": 48,
+          "step": 0.5,
+          "unit": "px",
+          "default": 14.5
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "区块正文字重",
+          "options": [
+            {
+              "value": "400",
+              "label": "常规"
+            },
+            {
+              "value": "500",
+              "label": "中等"
+            },
+            {
+              "value": "600",
+              "label": "半粗"
+            },
+            {
+              "value": "700",
+              "label": "粗体"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "select",
+          "id": "body_line",
+          "label": "区块正文行高",
+          "options": [
+            {
+              "value": "0",
+              "label": "默认"
+            },
+            {
+              "value": "100",
+              "label": "1.00"
+            },
+            {
+              "value": "110",
+              "label": "1.10"
+            },
+            {
+              "value": "116",
+              "label": "1.16"
+            },
+            {
+              "value": "120",
+              "label": "1.20"
+            },
+            {
+              "value": "130",
+              "label": "1.30"
+            },
+            {
+              "value": "140",
+              "label": "1.40"
+            },
+            {
+              "value": "150",
+              "label": "1.50"
+            },
+            {
+              "value": "155",
+              "label": "1.55"
+            },
+            {
+              "value": "160",
+              "label": "1.60"
+            },
+            {
+              "value": "165",
+              "label": "1.65"
+            },
+            {
+              "value": "170",
+              "label": "1.70"
+            },
+            {
+              "value": "175",
+              "label": "1.75"
+            },
+            {
+              "value": "180",
+              "label": "1.80"
+            },
+            {
+              "value": "200",
+              "label": "2.00"
+            }
+          ],
+          "default": "175"
+        },
+        {
+          "type": "range",
+          "id": "body_spacing",
+          "label": "区块正文字间距",
+          "info": "数值按百分之一 em 计算；0 为正常字距，-1 表示 -0.01em。",
+          "min": -4,
+          "max": 6,
+          "step": 0.5,
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "max_blocks": 50,
+  "presets": [
+    {
+      "name": "安装伙伴 09 常见问题",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "title": "Für wen ist die B2B-Anfrage gedacht?",
+            "body": "<p>Die Anfrage richtet sich an Unternehmen und Fachleute aus den Bereichen Elektroinstallation, Photovoltaik, Energiespeicher, Fachhandel und angrenzenden Bereichen der Energietechnik.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "title": "Kann ich VENUS E in bestehende PV-Systeme integrieren?",
+            "body": "<p>VENUS E arbeitet mit einer AC-gekoppelten Speicherarchitektur. Ob und wie eine Integration möglich ist, hängt von der vorhandenen Anlage, dem jeweiligen Modell und den Installationsbedingungen ab. <a href=\"/pages/ac-gekoppelter-speicher\">AC-gekoppelten Speicher verstehen →</a></p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "title": "Wo finde ich technische Unterlagen?",
+            "body": "<p>Verfügbare Datenblätter, Handbücher und technische Dokumente findest du im Download-Bereich. <a href=\"/pages/downloads\">Downloads ansehen →</a></p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "title": "Gibt es besondere Konditionen für Fachbetriebe oder Händler?",
+            "body": "<p>Mögliche Konditionen hängen von Art und Umfang der Zusammenarbeit ab und werden im Rahmen einer konkreten B2B-Anfrage geklärt.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "title": "Bedeutet eine Anfrage automatisch eine Partnerschaft?",
+            "body": "<p>Nein. Eine Anfrage dient zunächst dazu, Unternehmen, Einsatzbereich und mögliche Form der Zusammenarbeit einzuordnen.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

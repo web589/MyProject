@@ -1,0 +1,471 @@
+/* Installateure & Partner: page-specific styles and editable typography. */
+.main-content--installateure-partner {
+  --ip-blue: #0099fe;
+  --ip-blue-soft: #e8f4ff;
+  --ip-ink: #0e1b2c;
+  --ip-gray: #8a97a6;
+  --ip-gray-dark: #5b6b7c;
+  --ip-border: #e3e8ee;
+  --ip-line: #edf0f4;
+  --ip-bg: #f5f7f9;
+  --ip-radius: 10px;
+  width: 100%;
+  background: #fff;
+  color: var(--ip-ink);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+.main-content--installateure-partner,
+.main-content--installateure-partner * { box-sizing: border-box; }
+
+.main-content--installateure-partner [hidden] { display: none !important; }
+
+.main-content--installateure-partner :is(h1, h2, h3, h4, p, fieldset, legend) {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  font-style: normal;
+  text-transform: none;
+}
+
+.main-content--installateure-partner :is(button, input, select, textarea) { font-family: inherit; }
+.main-content--installateure-partner :is(b, strong) { font-weight: 700; }
+.main-content--installateure-partner :is(a, button) { -webkit-tap-highlight-color: transparent; }
+.main-content--installateure-partner [id] { scroll-margin-top: var(--anchor-scroll-offset, 110px); }
+
+.main-content--installateure-partner .ip-section {
+  padding-top: var(--ip-padding-top, 72px);
+  padding-bottom: var(--ip-padding-bottom, 72px);
+}
+
+.main-content--installateure-partner .ip-inner {
+  width: 100%;
+  max-width: 1640px;
+  margin-inline: auto;
+  padding-inline: 100px;
+}
+
+/* Recompute responsive sizes at each element so block overrides remain local. */
+.main-content--installateure-partner .ip-section,
+.main-content--installateure-partner .ip-section * {
+  --ip-heading-active-size: var(--ip-heading-size, 34px);
+  --ip-sub-active-size: var(--ip-sub-size, 16px);
+  --ip-eyebrow-active-size: var(--ip-eyebrow-size, 13px);
+  --ip-title-active-size: var(--ip-title-size, 16.5px);
+  --ip-body-active-size: var(--ip-body-size, 13.5px);
+  --ip-action-active-size: var(--ip-action-size, 14px);
+}
+
+.main-content--installateure-partner .ip-section :is(h1, h2) {
+  max-width: none;
+  color: var(--ip-ink);
+  font-size: var(--ip-heading-active-size);
+  font-weight: var(--ip-heading-weight, 600);
+  line-height: var(--ip-heading-line, 1.2);
+  letter-spacing: var(--ip-heading-spacing, -0.01em);
+  overflow-wrap: normal;
+}
+
+.main-content--installateure-partner .ip-acc { color: var(--ip-blue); }
+
+.main-content--installateure-partner .ip-eyebrow,
+.main-content--installateure-partner .ip-f-eyebrow {
+  margin-bottom: 14px;
+  color: var(--ip-blue);
+  font-size: var(--ip-eyebrow-active-size);
+  font-weight: var(--ip-eyebrow-weight, 600);
+  line-height: var(--ip-eyebrow-line, normal);
+  letter-spacing: var(--ip-eyebrow-spacing, 0.02em);
+}
+
+.main-content--installateure-partner .ip-sub {
+  max-width: none;
+  margin-top: 14px;
+  color: var(--ip-gray-dark);
+  font-size: var(--ip-sub-active-size);
+  font-weight: var(--ip-sub-weight, 400);
+  line-height: var(--ip-sub-line, 1.65);
+  letter-spacing: var(--ip-sub-spacing, normal);
+}
+
+.main-content--installateure-partner .ip-note {
+  margin-top: 18px;
+  color: var(--ip-gray);
+  font-size: var(--ip-body-active-size);
+  font-weight: var(--ip-body-weight, 400);
+  line-height: var(--ip-body-line, 1.7);
+  letter-spacing: var(--ip-body-spacing, normal);
+}
+
+.main-content--installateure-partner .ip-button,
+.main-content--installateure-partner .ip-anchor-nav__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 0;
+  min-width: 0;
+  width: auto;
+  margin: 0;
+  font-family: inherit;
+  font-size: var(--ip-action-active-size, var(--ip-action-size, 14.5px));
+  font-weight: var(--ip-action-weight, 500);
+  line-height: var(--ip-action-line, normal);
+  letter-spacing: var(--ip-action-spacing, normal);
+  text-transform: none;
+  text-decoration: none;
+  padding: 14px 30px;
+  border: 0;
+  border-radius: 8px;
+  appearance: none;
+  text-align: center;
+  cursor: pointer;
+  transition: filter 180ms ease, transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.main-content--installateure-partner .ip-button--primary,
+.main-content--installateure-partner .ip-anchor-nav__cta {
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #0099fe, #00c6ff);
+  color: #fff;
+  box-shadow: none;
+  transform: none;
+}
+
+.main-content--installateure-partner .ip-button--primary::before,
+.main-content--installateure-partner .ip-button--primary::after,
+.main-content--installateure-partner .ip-anchor-nav__cta::before,
+.main-content--installateure-partner .ip-anchor-nav__cta::after {
+  content: none;
+  border: 0;
+  box-shadow: none;
+}
+
+.main-content--installateure-partner .ip-button--primary:hover,
+.main-content--installateure-partner .ip-anchor-nav__cta:hover {
+  color: #fff;
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 153, 254, 0.2);
+}
+
+.main-content--installateure-partner .ip-button--ghost {
+  border: 1px solid #9bd8ff;
+  background: #fff;
+  color: var(--ip-blue);
+  box-shadow: none;
+}
+
+.main-content--installateure-partner .ip-button--ghost:hover {
+  border-color: var(--ip-blue);
+  background: var(--ip-blue-soft);
+  color: var(--ip-blue);
+}
+
+.main-content--installateure-partner :is(.ip-button, .ip-link, .ip-faq-q, .ip-anchor-nav__link, .ip-anchor-nav__cta):focus-visible {
+  outline: 2px solid var(--ip-blue);
+  outline-offset: 4px;
+}
+
+.main-content--installateure-partner .ip-link {
+  display: inline-block;
+  color: var(--ip-blue);
+  font-size: var(--ip-action-active-size, 14px);
+  font-weight: var(--ip-action-weight, 500);
+  line-height: var(--ip-action-line, normal);
+  letter-spacing: var(--ip-action-spacing, normal);
+  text-decoration: none;
+}
+
+.main-content--installateure-partner .ip-link:hover { text-decoration: underline; }
+
+/* Sticky navigation is contained in the Shopify section wrapper. */
+.main-content--installateure-partner .ip-nav-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.main-content--installateure-partner .ip-anchor-nav {
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom: 1px solid var(--ip-border);
+  box-shadow: 0 3px 10px rgba(14, 27, 44, 0.04);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.main-content--installateure-partner .ip-anchor-nav__layout {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: var(--anchor-nav-height, 64px);
+  max-width: 1640px;
+  margin-inline: auto;
+  padding-inline: 100px;
+}
+
+.main-content--installateure-partner .ip-anchor-nav__links {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  gap: 24px;
+  min-width: 0;
+  min-height: var(--anchor-nav-height, 64px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.main-content--installateure-partner .ip-anchor-nav__links::-webkit-scrollbar { display: none; }
+.main-content--installateure-partner .ip-anchor-nav__item { flex: 0 0 auto; align-self: stretch; display: flex; }
+
+.main-content--installateure-partner .ip-anchor-nav__link {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  align-self: stretch;
+  flex: 0 0 auto;
+  padding: 0 2px;
+  color: var(--ip-gray-dark);
+  font-size: var(--ip-nav-text-size, 13.5px);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.main-content--installateure-partner .ip-anchor-nav__link::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  content: "";
+  background: var(--ip-blue);
+  transform: scaleX(0);
+  transition: transform 180ms ease;
+}
+
+.main-content--installateure-partner .ip-anchor-nav__link:is(:hover, :focus-visible, .is-active) { color: var(--ip-blue); }
+.main-content--installateure-partner .ip-anchor-nav__link.is-active { font-weight: 600; }
+.main-content--installateure-partner .ip-anchor-nav__link.is-active::after { transform: scaleX(1); }
+
+.main-content--installateure-partner .ip-anchor-nav__cta {
+  flex: 0 0 auto;
+  padding: 13px 22px;
+  font-size: var(--ip-nav-text-size, 13.5px);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.main-content--installateure-partner .ip-anchor-nav__warnings { max-width: 1640px; margin: 0 auto; padding: 0 100px 12px; }
+.main-content--installateure-partner .ip-anchor-nav__warning { color: #b42318; font-size: 13px; line-height: 1.5; }
+.main-content--installateure-partner .is-missing-target { text-decoration: underline wavy #b42318; text-underline-offset: 4px; }
+
+/* Hero and uploaded images. */
+.main-content--installateure-partner .ip-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 72px; align-items: center; }
+.main-content--installateure-partner .ip-hero-grid--no-media { grid-template-columns: minmax(0, 1fr); }
+.main-content--installateure-partner .ip-hero-copy { min-width: 0; }
+.main-content--installateure-partner .ip-hero h1 { margin-top: 20px; line-height: var(--ip-heading-line, 1.16); letter-spacing: var(--ip-heading-spacing, -0.015em); }
+.main-content--installateure-partner .ip-hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.main-content--installateure-partner .ip-media { display: flex; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--ip-radius); background: #edf1f5; }
+.main-content--installateure-partner .ip-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.main-content--installateure-partner .ip-media-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 100%; padding: 24px; color: #7c8b9c; font-size: 13px; line-height: 1.7; text-align: center; }
+.main-content--installateure-partner .ip-media-placeholder svg { width: 56px; height: 56px; fill: none; stroke: currentColor; stroke-width: 1.3; }
+
+/* Shared line icons can be replaced by an uploaded block image. */
+.main-content--installateure-partner .ip-ic { display: flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 40px; height: 40px; margin-bottom: 16px; border-radius: 50%; background: var(--ip-blue-soft); }
+.main-content--installateure-partner .ip-ic svg { width: 20px; height: 20px; stroke: var(--ip-blue); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.main-content--installateure-partner .ip-ic img { width: 20px; height: 20px; object-fit: contain; display: block; }
+
+.main-content--installateure-partner :is(.ip-ziel, .ip-cards3) { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 32px; }
+.main-content--installateure-partner .ip-ziel-card { display: flex; flex-direction: column; padding: 26px 24px 24px; border: 1px solid var(--ip-border); border-radius: var(--ip-radius); background: #fff; transition: border-color 180ms ease, box-shadow 180ms ease; }
+.main-content--installateure-partner :is(.ip-ziel-card, .ip-p-card):hover { border-color: var(--ip-blue); box-shadow: 0 4px 16px rgba(0, 153, 254, 0.1); }
+.main-content--installateure-partner :is(.ip-ziel-card, .ip-card, .ip-info-item, .ip-step) h3 { color: var(--ip-ink); font-size: var(--ip-title-active-size); font-weight: var(--ip-title-weight, 600); line-height: var(--ip-title-line, normal); letter-spacing: var(--ip-title-spacing, normal); }
+.main-content--installateure-partner :is(.ip-ziel-card, .ip-card, .ip-info-item, .ip-step) p { color: var(--ip-gray-dark); margin-top: 9px; font-size: var(--ip-body-active-size); font-weight: var(--ip-body-weight, 400); line-height: var(--ip-body-line, 1.65); letter-spacing: var(--ip-body-spacing, normal); }
+.main-content--installateure-partner .ip-ziel-card p { flex: 1; line-height: var(--ip-body-line, 1.6); }
+.main-content--installateure-partner .ip-ziel-note { max-width: 860px; margin-top: 24px; padding: 4px 0 4px 16px; border-left: 3px solid var(--ip-blue); color: var(--ip-gray); font-size: var(--ip-body-active-size); font-weight: var(--ip-body-weight, 400); line-height: var(--ip-body-line, 1.7); letter-spacing: var(--ip-body-spacing, normal); }
+.main-content--installateure-partner .ip-card { padding: 26px 26px 28px; border: 1px solid var(--ip-border); border-radius: var(--ip-radius); background: #fff; }
+.main-content--installateure-partner .ip-card .ip-link { margin-top: 14px; }
+.main-content--installateure-partner .ip-info3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 32px; margin-top: 32px; }
+.main-content--installateure-partner .ip-info-item { display: flex; flex-direction: column; }
+.main-content--installateure-partner .ip-info-item .ip-ic { margin-bottom: 14px; }
+
+/* Product portfolio and horizontal smart-meter cards. */
+.main-content--installateure-partner .ip-prod { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 32px; }
+.main-content--installateure-partner .ip-p-card { display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--ip-border); border-radius: var(--ip-radius); overflow: hidden; background: #fff; transition: border-color 180ms ease, box-shadow 180ms ease; }
+.main-content--installateure-partner .ip-p-img { display: flex; align-items: center; justify-content: center; padding: 18px; aspect-ratio: 4 / 3; background: #f1f5f8; overflow: hidden; }
+.main-content--installateure-partner .ip-p-img img { display: block; width: var(--ip-image-scale, 100%); height: var(--ip-image-scale, 100%); max-width: 100%; max-height: 100%; object-fit: contain; }
+.main-content--installateure-partner .ip-p-img .ip-media-placeholder { padding: 0; }
+.main-content--installateure-partner .ip-p-img .ip-media-placeholder svg { width: 44px; height: 44px; }
+.main-content--installateure-partner .ip-p-body { display: flex; flex-direction: column; flex: 1; padding: 18px 20px 20px; }
+.main-content--installateure-partner .ip-ptag { color: var(--ip-blue); font-size: 11.5px; font-weight: 600; line-height: normal; letter-spacing: 0.03em; text-transform: uppercase; }
+.main-content--installateure-partner .ip-pmodel { margin-top: 8px; color: var(--ip-ink); font-size: var(--ip-title-active-size, 18px); font-weight: var(--ip-title-weight, 600); line-height: var(--ip-title-line, normal); letter-spacing: var(--ip-title-spacing, normal); }
+.main-content--installateure-partner .ip-pdesc { flex: 1; margin-top: 10px; color: var(--ip-gray-dark); font-size: var(--ip-body-active-size, 13px); font-weight: var(--ip-body-weight, 400); line-height: var(--ip-body-line, 1.6); letter-spacing: var(--ip-body-spacing, normal); }
+.main-content--installateure-partner .ip-p-card .ip-link { margin-top: 16px; }
+.main-content--installateure-partner .ip-prod-smart { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
+.main-content--installateure-partner .ip-p-card.ip-smart-h { flex-direction: row; align-items: stretch; }
+.main-content--installateure-partner .ip-smart-h .ip-p-img { aspect-ratio: auto; width: 38%; flex-shrink: 0; }
+.main-content--installateure-partner .ip-smart-h .ip-p-body { padding: 22px 24px; }
+.main-content--installateure-partner .ip-prod-foot { margin-top: 24px; }
+
+/* Resources and cooperation. */
+.main-content--installateure-partner .ip-res-layout { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 56px; align-items: start; margin-top: 30px; }
+.main-content--installateure-partner .ip-res-list { display: flex; flex-direction: column; gap: 14px; }
+.main-content--installateure-partner .ip-res-item { display: flex; gap: 16px; align-items: flex-start; padding: 20px 22px; background: #fff; border: 1px solid var(--ip-border); border-radius: var(--ip-radius); transition: border-color 180ms ease; }
+.main-content--installateure-partner .ip-res-item:hover { border-color: var(--ip-blue); }
+.main-content--installateure-partner .ip-res-item .ip-ic { width: 38px; height: 38px; margin-bottom: 0; }
+.main-content--installateure-partner .ip-res-item .ip-ic :is(svg, img) { width: 19px; height: 19px; }
+.main-content--installateure-partner .ip-rbody { flex: 1; min-width: 0; }
+.main-content--installateure-partner .ip-res-item h3 { font-size: var(--ip-title-active-size, 15.5px); font-weight: var(--ip-title-weight, 600); line-height: var(--ip-title-line, normal); letter-spacing: var(--ip-title-spacing, normal); }
+.main-content--installateure-partner .ip-res-item p { color: var(--ip-gray-dark); margin-top: 6px; font-size: var(--ip-body-active-size, 13px); font-weight: var(--ip-body-weight, 400); line-height: var(--ip-body-line, 1.55); letter-spacing: var(--ip-body-spacing, normal); }
+.main-content--installateure-partner .ip-res-item .ip-link { margin-top: 10px; }
+.main-content--installateure-partner .ip-res-foot { margin-top: 18px; }
+.main-content--installateure-partner .ip-coop-card { cursor: pointer; }
+.main-content--installateure-partner .ip-coop-card:focus-visible { outline: 2px solid var(--ip-blue); outline-offset: 2px; }
+.main-content--installateure-partner .ip-pick { display: inline-block; margin-top: 16px; color: var(--ip-blue); font-size: var(--ip-action-active-size, 14px); font-weight: var(--ip-action-weight, 500); line-height: var(--ip-action-line, normal); letter-spacing: var(--ip-action-spacing, normal); }
+.main-content--installateure-partner .ip-coop-note { max-width: 980px; margin-top: 24px; padding: 16px 20px; border-radius: var(--ip-radius); background: var(--ip-blue-soft); color: var(--ip-gray-dark); font-size: var(--ip-body-active-size, 13.5px); font-weight: var(--ip-body-weight, 400); line-height: var(--ip-body-line, 1.7); letter-spacing: var(--ip-body-spacing, normal); }
+.main-content--installateure-partner .ip-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 36px; }
+.main-content--installateure-partner .ip-step { position: relative; padding: 28px 26px 30px; border: 1px solid var(--ip-border); border-radius: var(--ip-radius); background: #fff; }
+.main-content--installateure-partner .ip-num { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; margin-bottom: 16px; border-radius: 50%; background: var(--ip-blue); color: #fff; font-size: 16px; font-weight: 600; }
+.main-content--installateure-partner .ip-num :is(svg, img) { width: 20px; height: 20px; object-fit: contain; }
+.main-content--installateure-partner .ip-num svg { fill: none; stroke: currentColor; stroke-width: 1.6; }
+
+/* Native Shopify contact form. */
+.main-content--installateure-partner .ip-form-card { margin-top: 30px; padding: 40px 44px; background: var(--ip-blue-soft); border: 1px solid #cdebff; border-radius: var(--ip-radius); }
+.main-content--installateure-partner .ip-form-card .ip-f-eyebrow { margin-bottom: 10px; }
+.main-content--installateure-partner .ip-f-note { max-width: none; margin-top: 12px; color: var(--ip-gray-dark); font-size: var(--ip-sub-active-size, 14px); font-weight: var(--ip-sub-weight, 400); line-height: var(--ip-sub-line, 1.65); letter-spacing: var(--ip-sub-spacing, normal); }
+.main-content--installateure-partner .ip-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 22px; margin-top: 26px; }
+.main-content--installateure-partner .ip-field { display: flex; flex-direction: column; min-width: 0; border: 0; }
+.main-content--installateure-partner .ip-field--full { grid-column: 1 / -1; }
+.main-content--installateure-partner .ip-field :is(label, legend) { margin: 0 0 8px; color: var(--ip-ink); font-size: var(--ip-title-active-size, 13.5px); font-weight: var(--ip-title-weight, 600); line-height: var(--ip-title-line, normal); letter-spacing: var(--ip-title-spacing, normal); }
+.main-content--installateure-partner .ip-field legend { float: none; width: 100%; }
+.main-content--installateure-partner .ip-req { margin-left: 2px; color: var(--ip-blue); font-weight: 700; }
+.main-content--installateure-partner .ip-help { margin-top: 6px; color: var(--ip-gray); font-size: 12px; line-height: normal; }
+.main-content--installateure-partner .ip-field :is(input, select, textarea) { width: 100%; padding: 12px 14px; border: 1px solid var(--ip-border); border-radius: 8px; background: #fff; color: var(--ip-ink); font-size: var(--ip-body-active-size, 14px); font-weight: var(--ip-body-weight, 400); line-height: var(--ip-body-line, normal); letter-spacing: var(--ip-body-spacing, normal); transition: border-color 150ms ease, box-shadow 150ms ease; }
+.main-content--installateure-partner .ip-field select { appearance: auto; -webkit-appearance: auto; }
+.main-content--installateure-partner .ip-field input::placeholder,
+.main-content--installateure-partner .ip-field textarea::placeholder { color: #a9b4c0; opacity: 1; }
+.main-content--installateure-partner .ip-field textarea { resize: vertical; min-height: 128px; line-height: 1.6; }
+.main-content--installateure-partner .ip-field :is(input, select, textarea):focus { outline: none; border-color: var(--ip-blue); box-shadow: 0 0 0 3px rgba(0, 153, 254, 0.12); }
+.main-content--installateure-partner .ip-field:is(.invalid, .is-invalid) :is(input, select, textarea) { border-color: #e23b3b; box-shadow: 0 0 0 3px rgba(226, 59, 59, 0.12); }
+.main-content--installateure-partner .ip-err-msg { display: none; margin-top: 6px; color: #e23b3b; font-size: 13px; font-weight: 400; line-height: 1.5; }
+.main-content--installateure-partner .ip-field:is(.invalid, .is-invalid) .ip-err-msg { display: block; }
+.main-content--installateure-partner .ip-chk-group { display: flex; flex-wrap: wrap; gap: 10px 14px; margin-top: 4px; }
+.main-content--installateure-partner .ip-field .ip-chk { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 8px; padding: 9px 14px; border: 1px solid var(--ip-border); border-radius: 8px; background: #fff; color: var(--ip-ink); cursor: pointer; font-size: var(--ip-title-active-size, 13.5px); font-weight: var(--ip-title-weight, 600); transition: border-color 150ms ease; }
+.main-content--installateure-partner .ip-chk:hover { border-color: var(--ip-blue); }
+.main-content--installateure-partner .ip-chk input { width: auto; margin: 0; padding: 0; accent-color: var(--ip-blue); }
+.main-content--installateure-partner .ip-field--check { flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 0 10px; }
+.main-content--installateure-partner .ip-field--check input { width: auto; margin-top: 3px; padding: 0; accent-color: var(--ip-blue); }
+.main-content--installateure-partner .ip-field--check label { flex: 1; margin: 0; color: var(--ip-gray-dark); font-size: var(--ip-title-active-size, 13.5px); font-weight: var(--ip-title-weight, 400); line-height: var(--ip-title-line, 1.6); }
+.main-content--installateure-partner .ip-field--check label a { color: var(--ip-blue); text-decoration: none; }
+.main-content--installateure-partner .ip-field--check label a:hover { text-decoration: underline; }
+.main-content--installateure-partner .ip-field--check .ip-err-msg { flex-basis: 100%; }
+.main-content--installateure-partner .ip-form-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; }
+.main-content--installateure-partner .ip-form-foot { margin-top: 14px; color: var(--ip-gray); font-size: 12.5px; line-height: 1.6; }
+.main-content--installateure-partner .ip-spam-disclaimer { margin-top: 14px; color: var(--ip-gray-dark); font-size: 12px; line-height: 1.6; }
+.main-content--installateure-partner .ip-spam-disclaimer a { color: var(--ip-blue); }
+.main-content--installateure-partner .ip-success { padding: 6px 2px; }
+.main-content--installateure-partner .ip-status-icon { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: var(--ip-blue); }
+.main-content--installateure-partner .ip-status-icon svg { width: 28px; height: 28px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.main-content--installateure-partner .ip-status-icon img { width: 28px; height: 28px; object-fit: contain; }
+.main-content--installateure-partner .ip-success--error .ip-status-icon { background: #e5533c; }
+.main-content--installateure-partner .ip-success :is(h3, .ip-status-title) { margin-top: 18px; font-size: var(--ip-title-active-size, 24px); font-weight: var(--ip-title-weight, 600); line-height: var(--ip-title-line, normal); letter-spacing: var(--ip-title-spacing, normal); }
+.main-content--installateure-partner .ip-success :is(p, .ip-status-body) { max-width: none; margin-top: 10px; color: var(--ip-gray-dark); font-size: var(--ip-body-active-size, 15px); font-weight: var(--ip-body-weight, 400); line-height: var(--ip-body-line, 1.7); letter-spacing: var(--ip-body-spacing, normal); }
+.main-content--installateure-partner .ip-success .ip-final-cta { margin-top: 22px; }
+.main-content--installateure-partner .ip-success .ip-final-alt { margin-top: 14px; color: var(--ip-gray-dark); font-size: 14px; }
+.main-content--installateure-partner .ip-server-errors { margin-top: 14px; color: #b42318; font-size: 14px; line-height: 1.6; }
+.main-content--installateure-partner .ip-server-errors ul { margin: 0; padding-left: 20px; }
+.main-content--installateure-partner .ip-editor-warning { color: #b42318; font-size: 13px; line-height: 1.5; }
+
+/* FAQ: one answer open at a time, animated by the page controller. */
+.main-content--installateure-partner .ip-faq-wrap { width: 100%; max-width: 1160px; margin-top: 36px; border-top: 1px solid var(--ip-line); background: #fff; }
+.main-content--installateure-partner .ip-faq-item { border-bottom: 1px solid var(--ip-line); }
+.main-content--installateure-partner .ip-faq-q { position: relative; display: block; width: 100%; padding: 22px 40px 22px 26px; border: 0; border-radius: 0; background: none; color: var(--ip-ink); box-shadow: none; text-align: left; font-family: inherit; font-size: var(--ip-title-active-size, 16px); font-weight: var(--ip-title-weight, 500); line-height: var(--ip-title-line, normal); letter-spacing: var(--ip-title-spacing, normal); cursor: pointer; transition: color 150ms ease; }
+.main-content--installateure-partner .ip-faq-q:hover { color: var(--ip-blue); }
+.main-content--installateure-partner .ip-faq-q::after { position: absolute; right: 20px; top: 50%; content: "+"; color: var(--ip-blue); font-size: 20px; font-weight: 400; transform: translateY(-50%); transition: transform 250ms ease, opacity 200ms ease; }
+.main-content--installateure-partner .ip-faq-item:is(.open, .is-open) .ip-faq-q::after { content: "–"; }
+.main-content--installateure-partner .ip-faq-a { max-height: 0; overflow: hidden; transition: max-height 340ms cubic-bezier(0.4, 0, 0.2, 1); }
+.main-content--installateure-partner .ip-faq-answer { max-width: 1000px; padding: 0 40px 24px 26px; opacity: 0; color: var(--ip-gray-dark); font-size: var(--ip-body-active-size, 14.5px); font-weight: var(--ip-body-weight, 400); line-height: var(--ip-body-line, 1.75); letter-spacing: var(--ip-body-spacing, normal); transition: opacity 220ms ease 60ms; }
+.main-content--installateure-partner .ip-faq-answer p { font: inherit; }
+.main-content--installateure-partner .ip-faq-answer p + p { margin-top: 12px; }
+.main-content--installateure-partner .ip-faq-answer a { color: var(--ip-blue); }
+.main-content--installateure-partner .ip-faq-answer :is(ul, ol) { padding-left: 20px; }
+.main-content--installateure-partner .ip-faq-item:is(.open, .is-open) .ip-faq-answer { opacity: 1; }
+.main-content--installateure-partner .ip-faq-wrap:not([data-ip-faq-ready]) .ip-faq-a { max-height: none; }
+.main-content--installateure-partner .ip-faq-wrap:not([data-ip-faq-ready]) .ip-faq-answer { opacity: 1; }
+.main-content--installateure-partner .ip-faq-a .ip-link { margin-top: 8px; }
+
+.main-content--installateure-partner .ip-final-card { padding: 44px 48px; border: 1px solid var(--ip-border); border-radius: var(--ip-radius); background: #fff; }
+.main-content--installateure-partner .ip-final-copy,
+.main-content--installateure-partner .ip-final .ip-sub { max-width: none; margin-top: 14px; color: var(--ip-gray-dark); font-size: var(--ip-sub-active-size, 15.5px); font-weight: var(--ip-sub-weight, 400); line-height: var(--ip-sub-line, 1.7); letter-spacing: var(--ip-sub-spacing, normal); }
+.main-content--installateure-partner .ip-final-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 26px; }
+
+@media (max-width: 1180px) {
+  .main-content--installateure-partner .ip-section { padding-top: var(--ip-padding-top-tablet, 56px); padding-bottom: var(--ip-padding-bottom-tablet, 56px); }
+  .main-content--installateure-partner .ip-inner,
+  .main-content--installateure-partner .ip-anchor-nav__layout { padding-inline: 40px; }
+  .main-content--installateure-partner .ip-anchor-nav__warnings { padding-inline: 40px; }
+  .main-content--installateure-partner .ip-prod { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .main-content--installateure-partner .ip-res-layout { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .main-content--installateure-partner .ip-section,
+  .main-content--installateure-partner .ip-section * {
+    --ip-heading-active-size: var(--ip-heading-size-tablet, var(--ip-heading-size, 34px));
+    --ip-sub-active-size: var(--ip-sub-size-tablet, var(--ip-sub-size, 16px));
+    --ip-eyebrow-active-size: var(--ip-eyebrow-size-tablet, var(--ip-eyebrow-size, 13px));
+    --ip-title-active-size: var(--ip-title-size-tablet, var(--ip-title-size, 16.5px));
+    --ip-body-active-size: var(--ip-body-size-tablet, var(--ip-body-size, 13.5px));
+    --ip-action-active-size: var(--ip-action-size-tablet, var(--ip-action-size, 14px));
+  }
+}
+
+@media (max-width: 980px) {
+  .main-content--installateure-partner .ip-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .main-content--installateure-partner :is(.ip-ziel, .ip-cards3, .ip-info3, .ip-steps, .ip-form-grid) { grid-template-columns: minmax(0, 1fr); }
+  .main-content--installateure-partner .ip-anchor-nav__layout { gap: 12px; }
+  .main-content--installateure-partner .ip-anchor-nav__links { gap: 18px; }
+}
+
+@media (min-width: 981px) and (max-width: 1180px) {
+  .main-content--installateure-partner .ip-hero h1 { --ip-heading-active-size: var(--ip-heading-size, 48px); }
+}
+
+/* The theme enforces 16px inputs on small screens; preserve this page's editable size. */
+@media (max-width: 959px) {
+  .main-content--installateure-partner .ip-field :is(input, select, textarea) { font-size: var(--ip-body-active-size, 14px) !important; }
+}
+
+@media (max-width: 720px) {
+  .main-content--installateure-partner .ip-section { padding-top: var(--ip-padding-top-mobile, 44px); padding-bottom: var(--ip-padding-bottom-mobile, 44px); }
+  .main-content--installateure-partner .ip-inner { padding-inline: 22px; }
+  .main-content--installateure-partner .ip-anchor-nav__layout { padding-inline: 12px; gap: 10px; }
+  .main-content--installateure-partner .ip-anchor-nav__warnings { padding-inline: 22px; }
+  .main-content--installateure-partner .ip-anchor-nav__cta { padding-inline: 14px; font-size: 12px; }
+  .main-content--installateure-partner .ip-form-card { padding: 30px 26px; }
+  .main-content--installateure-partner .ip-button { max-width: 100%; white-space: normal; }
+  .main-content--installateure-partner .ip-final-card { padding: 32px 26px; }
+  .main-content--installateure-partner :is(.ip-prod, .ip-prod-smart) { grid-template-columns: minmax(0, 1fr); }
+  .main-content--installateure-partner .ip-p-card.ip-smart-h { flex-direction: column; align-items: stretch; }
+  .main-content--installateure-partner .ip-smart-h .ip-p-img { width: 100%; aspect-ratio: 4 / 3; }
+  .main-content--installateure-partner .ip-section,
+  .main-content--installateure-partner .ip-section * {
+    --ip-heading-active-size: var(--ip-heading-size-mobile, var(--ip-heading-size, 27px));
+    --ip-sub-active-size: var(--ip-sub-size-mobile, var(--ip-sub-size, 16px));
+    --ip-eyebrow-active-size: var(--ip-eyebrow-size-mobile, var(--ip-eyebrow-size, 13px));
+    --ip-title-active-size: var(--ip-title-size-mobile, var(--ip-title-size, 16.5px));
+    --ip-body-active-size: var(--ip-body-size-mobile, var(--ip-body-size, 13.5px));
+    --ip-action-active-size: var(--ip-action-size-mobile, var(--ip-action-size, 14px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-content--installateure-partner *,
+  .main-content--installateure-partner *::before,
+  .main-content--installateure-partner *::after { transition: none !important; animation: none !important; }
+  .main-content--installateure-partner .ip-button--primary:hover,
+  .main-content--installateure-partner .ip-anchor-nav__cta:hover { transform: none; }
+}

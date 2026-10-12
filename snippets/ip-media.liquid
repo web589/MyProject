@@ -1,0 +1,14 @@
+{%- liquid
+  assign media_alt = alt | default: image.alt | default: placeholder
+  assign media_scale = scale | default: 100
+-%}
+{% if image != blank %}
+  {% capture media_style %}--ip-image-scale: {{ media_scale }}%;{% endcapture %}
+  {% if hero %}
+    {{ image | image_url: width: 1800 | image_tag: class: 'ip-media-image', widths: '400, 640, 960, 1280, 1600, 1800', sizes: '(min-width: 1640px) 684px, (min-width: 1181px) calc((100vw - 272px) / 2), (min-width: 981px) calc((100vw - 152px) / 2), (min-width: 721px) calc(100vw - 80px), calc(100vw - 44px)', loading: 'eager', fetchpriority: 'high', alt: media_alt, style: media_style }}
+  {% else %}
+    {{ image | image_url: width: 1000 | image_tag: class: 'ip-media-image', widths: '200, 320, 480, 640, 800, 1000', sizes: '(min-width: 1181px) 25vw, (min-width: 721px) 50vw, 100vw', loading: 'lazy', alt: media_alt, style: media_style }}
+  {% endif %}
+{% else %}
+  <div class="ip-media-placeholder"><span>{{ placeholder | escape }}</span></div>
+{% endif %}
