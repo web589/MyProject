@@ -195,7 +195,7 @@
       <textarea id="{{ field_id }}" name="{{ input_name }}" data-ip-field="message" required placeholder="{{ field_placeholder | escape }}" rows="4" aria-describedby="{{ description_ids }}">{{ input_value | escape }}</textarea>
     {%- when 'privacy' -%}
       {%- liquid
-        assign privacy_url = block.settings.privacy_url | default: '/pages/datenschutz'
+        assign privacy_url = block.settings.privacy_url | default: '/policies/privacy-policy'
         assign privacy_link_label = block.settings.link_label | default: 'Datenschutzerklärung'
         assign privacy_label_after = block.settings.label_after | default: 'zur Kenntnis genommen.'
       -%}
