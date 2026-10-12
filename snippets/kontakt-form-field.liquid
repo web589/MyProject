@@ -5,6 +5,7 @@
   assign full_width = true
   assign required_field = false
   assign input_type = 'text'
+  assign max_length = 0
   case key
     when 'topic'
       assign default_label = 'Worum geht es?'
@@ -21,11 +22,13 @@
       assign default_placeholder = 'z. B. #1234'
       assign default_helper = 'Falls deine Anfrage eine bestehende Bestellung betrifft.'
       assign input_name = 'contact[Bestellnummer]'
+      assign max_length = 64
     when 'serial'
       assign default_label = 'Seriennummer'
       assign default_placeholder = 'Seriennummer eingeben'
       assign default_helper = 'Hilfreich bei technischen Fragen oder Serviceanfragen.'
       assign input_name = 'contact[Seriennummer]'
+      assign max_length = 100
     when 'name'
       assign default_label = 'Name'
       assign default_placeholder = 'Dein Name'
@@ -34,6 +37,7 @@
       assign required_field = true
       assign full_width = false
       assign input_value = form.name | default: customer.name
+      assign max_length = 100
     when 'email'
       assign default_label = 'E-Mail-Adresse'
       assign default_placeholder = 'name@beispiel.de'
@@ -43,6 +47,7 @@
       assign required_field = true
       assign full_width = false
       assign input_value = form.email | default: customer.email
+      assign max_length = 254
     when 'phone'
       assign default_label = 'Telefonnummer'
       assign default_placeholder = 'Telefonnummer eingeben'
@@ -51,6 +56,7 @@
       assign input_type = 'tel'
       assign full_width = false
       assign input_value = form.phone
+      assign max_length = 32
     when 'message'
       assign default_label = 'Wie können wir dir helfen?'
       assign default_placeholder = 'Beschreibe kurz dein Anliegen und teile uns mit, was du bereits geprüft oder ausprobiert hast.'
@@ -58,6 +64,7 @@
       assign input_name = 'contact[body]'
       assign required_field = true
       assign input_value = form.body
+      assign max_length = 2000
     when 'privacy'
       assign default_label = 'Ich habe die'
       assign default_error = 'Bitte bestätige die Datenschutzerklärung.'
@@ -107,7 +114,7 @@
         {%- endfor -%}
       </select>
     {%- when 'message' -%}
-      <textarea id="{{ field_id }}" name="{{ input_name }}" data-kt-field="message" required placeholder="{{ field_placeholder | escape }}" rows="4" aria-describedby="{{ description_ids }}">{{ input_value | escape }}</textarea>
+      <textarea id="{{ field_id }}" name="{{ input_name }}" data-kt-field="message" data-kt-autogrow maxlength="{{ max_length }}" required placeholder="{{ field_placeholder | escape }}" rows="4" aria-describedby="{{ description_ids }}">{{ input_value | escape }}</textarea>
     {%- when 'privacy' -%}
       {%- liquid
         assign privacy_url = block.settings.privacy_url | default: '/pages/datenschutz'
@@ -121,6 +128,7 @@
         id="{{ field_id }}" name="{{ input_name }}" data-kt-field="{{ key }}" type="{{ input_type }}"
         value="{{ input_value | escape }}" placeholder="{{ field_placeholder | escape }}"
         aria-describedby="{{ description_ids }}"
+        {% if max_length > 0 %}maxlength="{{ max_length }}"{% endif %}
         {% if required_field %}required{% endif %}
         {% if key == 'name' %}autocomplete="name"{% elsif key == 'email' %}autocomplete="email" autocapitalize="off" spellcheck="false"{% elsif key == 'phone' %}autocomplete="tel"{% endif %}
       >

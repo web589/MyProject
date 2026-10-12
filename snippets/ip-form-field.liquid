@@ -5,18 +5,21 @@
   assign required_field = true
   assign full_width = false
   assign input_type = 'text'
+  assign max_length = 0
   case key
     when 'company'
       assign default_label = 'Unternehmen'
       assign default_placeholder = 'Name des Unternehmens'
       assign default_error = 'Bitte gib den Firmennamen ein.'
       assign input_name = 'contact[Unternehmen]'
+      assign max_length = 120
     when 'name'
       assign default_label = 'Ansprechpartner'
       assign default_placeholder = 'Dein Name'
       assign default_error = 'Bitte gib deinen Namen ein.'
       assign input_name = 'contact[name]'
       assign input_value = form.name | default: customer.name
+      assign max_length = 100
     when 'role'
       assign default_label = 'Deine Rolle'
       assign default_placeholder = 'Rolle auswählen'
@@ -32,6 +35,7 @@
       assign input_name = 'contact[email]'
       assign input_type = 'email'
       assign input_value = form.email | default: customer.email
+      assign max_length = 254
     when 'phone'
       assign default_label = 'Telefonnummer'
       assign default_placeholder = 'Telefonnummer eingeben'
@@ -40,6 +44,7 @@
       assign input_type = 'tel'
       assign required_field = false
       assign input_value = form.phone
+      assign max_length = 32
     when 'country'
       assign default_label = 'Land / Region'
       assign default_placeholder = 'Land / Region auswählen'
@@ -57,6 +62,7 @@
       assign input_type = 'url'
       assign required_field = false
       assign full_width = true
+      assign max_length = 2048
     when 'interest'
       assign default_label = 'Wofür interessierst du dich?'
       assign default_error = 'Bitte wähle mindestens einen Bereich aus.'
@@ -71,6 +77,7 @@
       assign input_name = 'contact[body]'
       assign full_width = true
       assign input_value = form.body
+      assign max_length = 2000
     when 'privacy'
       assign default_label = 'Ich habe die'
       assign default_error = 'Bitte bestätige die Datenschutzerklärung.'
@@ -192,7 +199,7 @@
       {%- endfor -%}
       {% if key == 'interest' %}</div>{% else %}</select>{% endif %}
     {%- when 'message' -%}
-      <textarea id="{{ field_id }}" name="{{ input_name }}" data-ip-field="message" required placeholder="{{ field_placeholder | escape }}" rows="4" aria-describedby="{{ description_ids }}">{{ input_value | escape }}</textarea>
+      <textarea id="{{ field_id }}" name="{{ input_name }}" data-ip-field="message" data-ip-autogrow maxlength="{{ max_length }}" required placeholder="{{ field_placeholder | escape }}" rows="4" aria-describedby="{{ description_ids }}">{{ input_value | escape }}</textarea>
     {%- when 'privacy' -%}
       {%- liquid
         assign privacy_url = block.settings.privacy_url | default: '/policies/privacy-policy'
@@ -202,7 +209,7 @@
       <input id="{{ field_id }}" name="{{ input_name }}" data-ip-field="privacy" type="checkbox" value="Zur Kenntnis genommen" required aria-describedby="{{ description_ids }}">
       <label for="{{ field_id }}">{{ field_label | escape }} <a href="{{ privacy_url }}">{{ privacy_link_label | escape }}</a> {{ privacy_label_after | escape }}<span class="ip-req" aria-hidden="true">*</span></label>
     {%- else -%}
-      <input id="{{ field_id }}" name="{{ input_name }}" data-ip-field="{{ key }}" type="{{ input_type }}" value="{{ input_value | escape }}" placeholder="{{ field_placeholder | escape }}" aria-describedby="{{ description_ids }}"{% if required_field %} required{% endif %}{% if key == 'company' %} autocomplete="organization"{% elsif key == 'name' %} autocomplete="name"{% elsif key == 'email' %} autocomplete="email" autocapitalize="off" spellcheck="false"{% elsif key == 'phone' %} autocomplete="tel"{% elsif key == 'website' %} autocomplete="url"{% endif %}>
+      <input id="{{ field_id }}" name="{{ input_name }}" data-ip-field="{{ key }}" type="{{ input_type }}" value="{{ input_value | escape }}" placeholder="{{ field_placeholder | escape }}" aria-describedby="{{ description_ids }}"{% if max_length > 0 %} maxlength="{{ max_length }}"{% endif %}{% if required_field %} required{% endif %}{% if key == 'company' %} autocomplete="organization"{% elsif key == 'name' %} autocomplete="name"{% elsif key == 'email' %} autocomplete="email" autocapitalize="off" spellcheck="false"{% elsif key == 'phone' %} autocomplete="tel"{% elsif key == 'website' %} autocomplete="url"{% endif %}>
   {%- endcase -%}
   {%- if field_helper != blank -%}<span class="ip-help" id="{{ help_id }}">{{ field_helper | escape }}</span>{%- endif -%}
   <span class="ip-err-msg" id="{{ error_id }}" aria-live="polite"></span>

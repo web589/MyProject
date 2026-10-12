@@ -98,7 +98,7 @@
 .main-content--kontakt .kt-field :is(input, select, textarea) { display: block; width: 100%; margin: 0; padding: 12px 14px; border: 1px solid var(--kt-border); border-radius: 8px; box-shadow: none; color: var(--kt-ink); background: #fff; font-size: var(--kt-body-size, 14px); font-weight: var(--kt-body-weight, 400); line-height: var(--kt-body-line, normal); letter-spacing: var(--kt-body-spacing, normal); transition: border-color .15s ease, box-shadow .15s ease; }
 .main-content--kontakt .kt-field :is(input, textarea)::placeholder { color: #a9b4c0; opacity: 1; }
 .main-content--kontakt .kt-field select { appearance: auto; background-image: none; }
-.main-content--kontakt .kt-field textarea { min-height: 128px; resize: vertical; line-height: var(--kt-body-line, 1.6); }
+.main-content--kontakt .kt-field textarea { min-height: 128px; resize: none; overflow-y: hidden; line-height: var(--kt-body-line, 1.6); }
 .main-content--kontakt .kt-field :is(input, select, textarea):focus { outline: none; border-color: var(--kt-blue); box-shadow: 0 0 0 3px rgba(0, 153, 254, .12); }
 .main-content--kontakt .kt-field.invalid :is(input, select, textarea) { border-color: #e23b3b; box-shadow: 0 0 0 3px rgba(226, 59, 59, .12); }
 .main-content--kontakt .kt-err-msg { display: none; margin-top: 6px; color: #e23b3b; font-size: 13px; line-height: 1.4; }

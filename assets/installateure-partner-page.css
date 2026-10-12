@@ -166,6 +166,8 @@
   border-color: var(--ip-blue);
   background: var(--ip-blue-soft);
   color: var(--ip-blue);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 153, 254, 0.2);
 }
 
 .main-content--installateure-partner :is(.ip-button, .ip-link, .ip-faq-q, .ip-anchor-nav__link, .ip-anchor-nav__cta):focus-visible {
@@ -353,7 +355,7 @@
 .main-content--installateure-partner .ip-field select { appearance: auto; -webkit-appearance: auto; }
 .main-content--installateure-partner .ip-field input::placeholder,
 .main-content--installateure-partner .ip-field textarea::placeholder { color: #a9b4c0; opacity: 1; }
-.main-content--installateure-partner .ip-field textarea { resize: vertical; min-height: 128px; line-height: var(--ip-body-line, 1.6); }
+.main-content--installateure-partner .ip-field textarea { resize: none; overflow-y: hidden; min-height: 128px; line-height: var(--ip-body-line, 1.6); }
 .main-content--installateure-partner .ip-field :is(input, select, textarea):focus { outline: none; border-color: var(--ip-blue); box-shadow: 0 0 0 3px rgba(0, 153, 254, 0.12); }
 .main-content--installateure-partner .ip-field:is(.invalid, .is-invalid) :is(input, select, textarea) { border-color: #e23b3b; box-shadow: 0 0 0 3px rgba(226, 59, 59, 0.12); }
 .main-content--installateure-partner .ip-err-msg { display: none; margin-top: 6px; color: #e23b3b; font-size: 13px; font-weight: 400; line-height: 1.5; }

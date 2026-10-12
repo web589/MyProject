@@ -14,6 +14,16 @@
     return form.querySelector('[data-ip-field="' + key + '"]');
   }
 
+  function resizeMessage(field) {
+    if (!field || !field.matches('[data-ip-autogrow]')) return;
+    field.style.height = 'auto';
+    field.style.height = Math.max(field.scrollHeight, parseFloat(window.getComputedStyle(field).minHeight) || 0) + 'px';
+  }
+
+  function resizeMessages(root) {
+    root.querySelectorAll('[data-ip-autogrow]').forEach(resizeMessage);
+  }
+
   function focusField(field) {
     var target = field && field.matches('[data-ip-field="interest"]') ? field.querySelector('[data-ip-interest]') : field;
     if (target) target.focus({ preventScroll: true });
@@ -104,6 +114,7 @@
     if (state === 'success') clearDraft(root);
     else restoreDraft(root);
     showView(root, state);
+    resizeMessages(root);
     if (state !== 'form') {
       var status = root.querySelector('[data-ip-view="' + state + '"] [data-ip-status-focus]');
       if (status) status.focus({ preventScroll: true });
@@ -165,6 +176,7 @@
     if (retry) {
       var root = retry.closest('[data-ip-form-root]');
       showView(root, 'form');
+      resizeMessages(root);
       focusField(fieldFor(root, 'company'));
       scrollToElement(root.closest('.ip-section'));
     }
@@ -178,6 +190,7 @@
 
   function fieldChanged(event) {
     if (!(event.target instanceof Element)) return;
+    resizeMessage(event.target);
     var wrapper = event.target.closest('[data-ip-field-wrap]');
     if (!wrapper || !wrapper.closest(scopeSelector) || !wrapper.classList.contains('invalid')) return;
     var field = fieldFor(wrapper, wrapper.getAttribute('data-ip-field-wrap'));
@@ -218,7 +231,10 @@
     var item = event.target.closest('[data-ip-faq-item]');
     if (item) openFaq(item, true);
   });
-  window.addEventListener('resize', function () { document.querySelectorAll(scopeSelector + ' [data-ip-faq-item].open').forEach(function (item) { setFaq(item, true); }); });
+  window.addEventListener('resize', function () {
+    document.querySelectorAll(scopeSelector + ' [data-ip-autogrow]').forEach(resizeMessage);
+    document.querySelectorAll(scopeSelector + ' [data-ip-faq-item].open').forEach(function (item) { setFaq(item, true); });
+  });
   window.addEventListener('pageshow', function (event) { if (event.persisted) initialize(); });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { initialize(); });
   else initialize();

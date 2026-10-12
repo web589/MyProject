@@ -13,6 +13,16 @@
     return document.querySelector(scopeSelector + ' [data-kt-form-root]');
   }
 
+  function resizeMessage(field) {
+    if (!field || !field.matches('[data-kt-autogrow]')) return;
+    field.style.height = 'auto';
+    field.style.height = Math.max(field.scrollHeight, parseFloat(window.getComputedStyle(field).minHeight) || 0) + 'px';
+  }
+
+  function resizeMessages(root) {
+    root.querySelectorAll('[data-kt-autogrow]').forEach(resizeMessage);
+  }
+
   function setInvalid(field, invalid) {
     var wrapper = field.closest('[data-kt-field-wrap]');
     if (!wrapper) return;
@@ -99,6 +109,7 @@
     else restoreDraft(root);
     updateConditions(root);
     showView(root, state);
+    resizeMessages(root);
     if (state !== 'form') {
       var status = root.querySelector('[data-kt-view="' + state + '"] [data-kt-status-focus]');
       if (status) status.focus({ preventScroll: true });
@@ -156,6 +167,7 @@
       var root = retry.closest('[data-kt-form-root]');
       showView(root, 'form');
       updateConditions(root);
+      resizeMessages(root);
       var first = root.querySelector('[data-kt-field="topic"]');
       if (first) first.focus({ preventScroll: true });
       scrollToElement(root.closest('.kt-section'));
@@ -175,12 +187,17 @@
     if (!(event.target instanceof Element)) return;
     var field = event.target.closest('[data-kt-field]');
     if (!field || !field.closest(scopeSelector)) return;
+    resizeMessage(field);
     if (field.getAttribute('data-kt-field') === 'topic') updateConditions(field.closest('[data-kt-form-root]'));
     var wrapper = field.closest('[data-kt-field-wrap]');
     if (wrapper && wrapper.classList.contains('invalid')) setInvalid(field, !validField(field));
   }
   document.addEventListener('input', fieldChanged);
   document.addEventListener('change', fieldChanged);
+  window.addEventListener('resize', function () {
+    document.querySelectorAll(scopeSelector + ' [data-kt-autogrow]').forEach(resizeMessage);
+    document.querySelectorAll(scopeSelector + ' [data-kt-faq-item].open').forEach(function (item) { setFaq(item, true); });
+  });
 
   // Capture validation before Shopify's native CAPTCHA submission handlers.
   document.addEventListener('submit', function (event) {
@@ -214,9 +231,6 @@
     if (item) {
       item.closest('[data-kt-faq]').querySelectorAll('[data-kt-faq-item]').forEach(function (other) { setFaq(other, other === item); });
     }
-  });
-  window.addEventListener('resize', function () {
-    document.querySelectorAll(scopeSelector + ' [data-kt-faq-item].open').forEach(function (item) { setFaq(item, true); });
   });
   window.addEventListener('pageshow', function (event) {
     if (event.persisted) document.querySelectorAll(scopeSelector + ' [data-kt-form-root]').forEach(function (root) { updateConditions(root); });
