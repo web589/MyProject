@@ -62,7 +62,7 @@
       assign input_type = 'url'
       assign required_field = false
       assign full_width = true
-      assign max_length = 2048
+      assign max_length = 254
     when 'interest'
       assign default_label = 'Wofür interessierst du dich?'
       assign default_error = 'Bitte wähle mindestens einen Bereich aus.'
@@ -104,21 +104,41 @@
 <{{ tag_name }}
   id="{{ field_id }}-wrapper"
   class="ip-field{% if full_width %} ip-field--full{% endif %}{% if key == 'privacy' %} ip-field--check{% endif %}"
-  data-ip-field-wrap="{{ key }}" data-ip-error="{{ field_error | escape }}"
-  {% if key == 'interest' %}data-ip-field="interest" aria-required="true" aria-describedby="{{ description_ids }}"{% endif %}
-  style="{% if block %}{% render 'ip-typography', settings: block.settings, prefix: 'title' %}{% render 'ip-typography', settings: block.settings, prefix: 'body' %}{% else %}--ip-title-size:13.5px;--ip-title-size-tablet:13.5px;--ip-title-size-mobile:13.5px;--ip-title-weight:{% if key == 'privacy' %}400{% else %}600{% endif %};--ip-title-line:{% if key == 'privacy' %}1.6{% else %}normal{% endif %};--ip-title-spacing:0em;--ip-body-size:14px;--ip-body-size-tablet:14px;--ip-body-size-mobile:14px;--ip-body-weight:400;--ip-body-line:normal;--ip-body-spacing:0em;{% endif %}"{% if block %} {{ block.shopify_attributes }}{% endif %}
+  data-ip-field-wrap="{{ key }}"
+  data-ip-error="{{ field_error | escape }}"
+  {% if key == 'interest' %}
+    data-ip-field="interest" aria-required="true" aria-describedby="{{ description_ids }}"
+  {% endif %}
+  style="{% if block %}{% render 'ip-typography', settings: block.settings, prefix: 'title' %}{% render 'ip-typography', settings: block.settings, prefix: 'body' %}{% else %}--ip-title-size:13.5px;--ip-title-size-tablet:13.5px;--ip-title-size-mobile:13.5px;--ip-title-weight:{% if key == 'privacy' %}400{% else %}600{% endif %};--ip-title-line:{% if key == 'privacy' %}1.6{% else %}normal{% endif %};--ip-title-spacing:0em;--ip-body-size:14px;--ip-body-size-tablet:14px;--ip-body-size-mobile:14px;--ip-body-weight:400;--ip-body-line:normal;--ip-body-spacing:0em;{% endif %}"
+  {% if block %}
+    {{ block.shopify_attributes -}}
+  {% endif %}
 >
   {%- if key == 'interest' -%}
-    <legend>{{ field_label | escape }}<span class="ip-req" aria-hidden="true">*</span></legend>
+    <legend>
+      {{ field_label | escape -}}
+      <span class="ip-req" aria-hidden="true">*</span>
+    </legend>
   {%- elsif key != 'privacy' -%}
-    <label for="{{ field_id }}">{{ field_label | escape }}{% if required_field %}<span class="ip-req" aria-hidden="true">*</span>{% endif %}</label>
+    <label for="{{ field_id }}">
+      {{- field_label | escape -}}
+      {%- if required_field -%}
+        <span class="ip-req" aria-hidden="true">*</span>
+      {%- endif -%}
+    </label>
   {%- endif -%}
   {%- case key -%}
     {%- when 'role', 'country', 'interest' -%}
       {%- if key == 'interest' -%}
         <div class="ip-chk-group">
       {%- else -%}
-        <select id="{{ field_id }}" name="{{ input_name }}" data-ip-field="{{ key }}" required aria-describedby="{{ description_ids }}">
+        <select
+          id="{{ field_id }}"
+          name="{{ input_name }}"
+          data-ip-field="{{ key }}"
+          required
+          aria-describedby="{{ description_ids }}"
+        >
           <option value="" disabled selected>{{ field_placeholder | escape }}</option>
       {%- endif -%}
       {%- liquid
@@ -161,7 +181,17 @@
         -%}
         {%- if option_blocks.size == 0 -%}
           {% if key == 'interest' %}
-            <label class="ip-chk" for="{{ field_id }}-{{ option_key }}"><input id="{{ field_id }}-{{ option_key }}" type="checkbox" name="contact[Interesse_{{ option_key }}]" value="{{ default_option_label | escape }}" data-ip-interest="{{ option_key }}" aria-describedby="{{ description_ids }}">{{ default_option_label | escape }}</label>
+            <label class="ip-chk" for="{{ field_id }}-{{ option_key }}"
+              ><input
+                id="{{ field_id }}-{{ option_key }}"
+                type="checkbox"
+                name="contact[Interesse_{{ option_key }}]"
+                value="{{ default_option_label | escape }}"
+                data-ip-interest="{{ option_key }}"
+                aria-describedby="{{ description_ids }}"
+              >
+              {{- default_option_label | escape -}}
+            </label>
           {% else %}
             <option value="{{ option_key }}">{{ default_option_label | escape }}</option>
           {% endif %}
@@ -189,28 +219,91 @@
         -%}
         {%- if option_valid -%}
           {% if key == 'interest' %}
-            <label class="ip-chk" for="{{ field_id }}-{{ option_key }}" {{ option.shopify_attributes }}><input id="{{ field_id }}-{{ option_key }}" type="checkbox" name="contact[Interesse_{{ option_key }}]" value="{{ option_label | escape }}" data-ip-interest="{{ option_key }}" aria-describedby="{{ description_ids }}">{{ option_label | escape }}</label>
+            <label class="ip-chk" for="{{ field_id }}-{{ option_key }}" {{ option.shopify_attributes }}
+              ><input
+                id="{{ field_id }}-{{ option_key }}"
+                type="checkbox"
+                name="contact[Interesse_{{ option_key }}]"
+                value="{{ option_label | escape }}"
+                data-ip-interest="{{ option_key }}"
+                aria-describedby="{{ description_ids }}"
+              >
+              {{- option_label | escape -}}
+            </label>
           {% else %}
             <option value="{{ option_key }}" {{ option.shopify_attributes }}>{{ option_label | escape }}</option>
           {% endif %}
         {%- elsif request.design_mode -%}
-          {% if key == 'interest' %}<span class="ip-editor-warning" {{ option.shopify_attributes }}>此选项的业务值无效或重复，请重新选择。</span>{% endif %}
+          {% if key == 'interest' -%}
+            <span class="ip-editor-warning" {{ option.shopify_attributes }}
+              >此选项的业务值无效或重复，请重新选择。</span
+            >
+          {%- endif %}
         {%- endif -%}
       {%- endfor -%}
       {% if key == 'interest' %}</div>{% else %}</select>{% endif %}
     {%- when 'message' -%}
-      <textarea id="{{ field_id }}" name="{{ input_name }}" data-ip-field="message" data-ip-autogrow maxlength="{{ max_length }}" required placeholder="{{ field_placeholder | escape }}" rows="4" aria-describedby="{{ description_ids }}">{{ input_value | escape }}</textarea>
+      <textarea
+        id="{{ field_id }}"
+        name="{{ input_name }}"
+        data-ip-field="message"
+        data-ip-autogrow
+        maxlength="{{ max_length }}"
+        required
+        placeholder="{{ field_placeholder | escape }}"
+        rows="4"
+        aria-describedby="{{ description_ids }}"
+      >{{ input_value | escape }}</textarea>
     {%- when 'privacy' -%}
       {%- liquid
         assign privacy_url = block.settings.privacy_url | default: '/policies/privacy-policy'
         assign privacy_link_label = block.settings.link_label | default: 'Datenschutzerklärung'
         assign privacy_label_after = block.settings.label_after | default: 'zur Kenntnis genommen.'
       -%}
-      <input id="{{ field_id }}" name="{{ input_name }}" data-ip-field="privacy" type="checkbox" value="Zur Kenntnis genommen" required aria-describedby="{{ description_ids }}">
-      <label for="{{ field_id }}">{{ field_label | escape }} <a href="{{ privacy_url }}">{{ privacy_link_label | escape }}</a> {{ privacy_label_after | escape }}<span class="ip-req" aria-hidden="true">*</span></label>
+      <input
+        id="{{ field_id }}"
+        name="{{ input_name }}"
+        data-ip-field="privacy"
+        type="checkbox"
+        value="Zur Kenntnis genommen"
+        required
+        aria-describedby="{{ description_ids }}"
+      >
+      <label for="{{ field_id }}">
+        {{- field_label | escape }}
+        <a href="{{ privacy_url }}">{{ privacy_link_label | escape }}</a> {{ privacy_label_after | escape -}}
+        <span class="ip-req" aria-hidden="true">*</span></label
+      >
     {%- else -%}
-      <input id="{{ field_id }}" name="{{ input_name }}" data-ip-field="{{ key }}" type="{{ input_type }}" value="{{ input_value | escape }}" placeholder="{{ field_placeholder | escape }}" aria-describedby="{{ description_ids }}"{% if max_length > 0 %} maxlength="{{ max_length }}"{% endif %}{% if required_field %} required{% endif %}{% if key == 'company' %} autocomplete="organization"{% elsif key == 'name' %} autocomplete="name"{% elsif key == 'email' %} autocomplete="email" autocapitalize="off" spellcheck="false"{% elsif key == 'phone' %} autocomplete="tel"{% elsif key == 'website' %} autocomplete="url"{% endif %}>
+      <input
+        id="{{ field_id }}"
+        name="{{ input_name }}"
+        data-ip-field="{{ key }}"
+        type="{{ input_type }}"
+        value="{{ input_value | escape }}"
+        placeholder="{{ field_placeholder | escape }}"
+        aria-describedby="{{ description_ids }}"
+        {% if max_length > 0 %}
+          maxlength="{{ max_length }}"
+        {% endif -%}
+        {% if required_field %}
+          required
+        {% endif -%}
+        {% if key == 'company' %}
+          autocomplete="organization"
+        {% elsif key == 'name' %}
+          autocomplete="name"
+        {% elsif key == 'email' %}
+          autocomplete="email" autocapitalize="off" spellcheck="false"
+        {% elsif key == 'phone' %}
+          autocomplete="tel"
+        {% elsif key == 'website' %}
+          autocomplete="url"
+        {% endif %}
+      >
   {%- endcase -%}
-  {%- if field_helper != blank -%}<span class="ip-help" id="{{ help_id }}">{{ field_helper | escape }}</span>{%- endif -%}
+  {%- if field_helper != blank -%}
+    <span class="ip-help" id="{{ help_id }}">{{ field_helper | escape }}</span>
+  {%- endif -%}
   <span class="ip-err-msg" id="{{ error_id }}" aria-live="polite"></span>
 </{{ tag_name }}>
