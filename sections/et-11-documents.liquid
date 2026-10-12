@@ -8,8 +8,9 @@
           <article class="et-doc-card" {{ block.shopify_attributes }}>
             {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
             {% if block.settings.text != blank %}<p class="et-lead">{{ block.settings.text | escape }}</p>{% endif %}
-            <div class="et-rows">
-              {%- for row_number in (1..3) -%}
+            <div class="et-doc-footer">
+              <div class="et-rows">
+                {%- for row_number in (1..3) -%}
                 {%- liquid
                   assign key_id = 'row_' | append: row_number | append: '_key'
                   assign value_id = 'row_' | append: row_number | append: '_value'
@@ -25,9 +26,10 @@
                 {%- if show_row and row_key != blank and row_value != blank -%}
                   <div class="et-row"><span class="et-k">{{ row_key | escape }}</span><span class="et-v{% if row_pending %} et-todo{% endif %}">{{ row_value | escape }}</span></div>
                 {%- endif -%}
-              {%- endfor -%}
-            </div>
+                {%- endfor -%}
+              </div>
             {% if block.settings.link_label != blank and block.settings.link != blank %}<a class="et-lnk et-dlink" href="{{ block.settings.link | escape }}">{{ block.settings.link_label | escape }}</a>{% endif %}
+            </div>
           </article>
         {%- endif -%}
       {%- endfor -%}
