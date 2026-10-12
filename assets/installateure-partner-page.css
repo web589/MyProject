@@ -341,6 +341,7 @@
 .main-content--installateure-partner .ip-f-note { max-width: none; margin-top: 12px; color: var(--ip-gray-dark); font-size: var(--ip-sub-active-size, 14px); font-weight: var(--ip-sub-weight, 400); line-height: var(--ip-sub-line, 1.65); letter-spacing: var(--ip-sub-spacing, normal); }
 .main-content--installateure-partner .ip-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 22px; margin-top: 26px; }
 .main-content--installateure-partner .ip-field { display: flex; flex-direction: column; min-width: 0; border: 0; }
+.main-content--installateure-partner .ip-field :is(label, legend, input, select, textarea) { text-transform: none; }
 .main-content--installateure-partner .ip-field--full { grid-column: 1 / -1; }
 .main-content--installateure-partner .ip-field :is(label, legend) { margin: 0 0 8px; color: var(--ip-ink); font-size: var(--ip-title-active-size, 13.5px); font-weight: var(--ip-title-weight, 600); line-height: var(--ip-title-line, normal); letter-spacing: var(--ip-title-spacing, normal); }
 .main-content--installateure-partner .ip-field legend { float: none; width: 100%; }
