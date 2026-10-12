@@ -8,23 +8,23 @@
   {% endif %}
 {% endfor %}
   </div>
-  <div class="ip-res-content">
-    <div class="ip-res-list">
-      {% for block in section.blocks %}
-        {% if block.type == 'resource' and block.settings.show_block %}
-          <article class="ip-res-item" style="{% render 'ip-typography', settings: block.settings, prefix: 'title' %}{% render 'ip-typography', settings: block.settings, prefix: 'body' %}{% render 'ip-typography', settings: block.settings, prefix: 'action' %}" {{ block.shopify_attributes }}>
-            <span class="ip-ic" aria-hidden="true">{% render 'ip-icon', type: block.settings.icon_type, image: block.settings.icon_image %}</span>
-            <div class="ip-rbody">
-              {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
-              {% if block.settings.body != blank %}<p>{{ block.settings.body | escape | newline_to_br }}</p>{% endif %}
-            </div>
-          </article>
-        {% endif %}
-      {% endfor %}
-    </div>
-    <div class="ip-res-foot">{% for block in section.blocks %}
-  {% if block.type == 'button' %}{% render 'ip-button', block: block, default_link: '/pages/downloads' %}{% endif %}
-{% endfor %}</div>
+  <div class="ip-res-list">
+    {% for block in section.blocks %}
+      {% if block.type == 'resource' and block.settings.show_block %}
+        <article class="ip-res-item" style="{% render 'ip-typography', settings: block.settings, prefix: 'title' %}{% render 'ip-typography', settings: block.settings, prefix: 'body' %}{% render 'ip-typography', settings: block.settings, prefix: 'action' %}" {{ block.shopify_attributes }}>
+          <span class="ip-ic" aria-hidden="true">{% render 'ip-icon', type: block.settings.icon_type, image: block.settings.icon_image %}</span>
+          <div class="ip-rbody">
+            {% if block.settings.title != blank %}<h3>{{ block.settings.title | escape }}</h3>{% endif %}
+            {% if block.settings.body != blank %}<p>{{ block.settings.body | escape | newline_to_br }}</p>{% endif %}
+          </div>
+        </article>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div class="ip-res-foot">
+    {% for block in section.blocks %}
+      {% if block.type == 'button' %}{% render 'ip-button', block: block, default_link: '/pages/downloads' %}{% endif %}
+    {% endfor %}
   </div>
 </div>
   {% endcapture %}
