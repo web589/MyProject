@@ -12,22 +12,6 @@
     "ai_navigation": {
       "type": "ai-energy-navigation",
       "blocks": {
-        "nav_start": {
-          "type": "link",
-          "settings": {
-            "module": "ai_start",
-            "label": "Start",
-            "target": ""
-          }
-        },
-        "nav_definition": {
-          "type": "link",
-          "settings": {
-            "module": "ai_definition",
-            "label": "AI-Energie erklärt",
-            "target": ""
-          }
-        },
         "nav_function": {
           "type": "link",
           "settings": {
@@ -44,11 +28,19 @@
             "target": ""
           }
         },
+        "link_E3N9PQ": {
+          "type": "link",
+          "settings": {
+            "module": "ai_compare",
+            "label": "Vergleich",
+            "target": ""
+          }
+        },
         "nav_day": {
           "type": "link",
           "settings": {
             "module": "ai_day",
-            "label": "Im Alltag",
+            "label": "Alltag",
             "target": ""
           }
         },
@@ -56,7 +48,7 @@
           "type": "link",
           "settings": {
             "module": "ai_system",
-            "label": "System",
+            "label": "VENUS E System",
             "target": ""
           }
         },
@@ -75,41 +67,22 @@
             "label": "FAQ",
             "target": ""
           }
-        },
-        "nav_guides": {
-          "type": "link",
-          "settings": {
-            "module": "ai_guides",
-            "label": "Ratgeber",
-            "target": ""
-          }
-        },
-        "nav_final": {
-          "type": "link",
-          "settings": {
-            "module": "ai_final",
-            "label": "Nächster Schritt",
-            "target": ""
-          }
         }
       },
       "block_order": [
-        "nav_start",
-        "nav_definition",
         "nav_function",
         "nav_meter",
+        "link_E3N9PQ",
         "nav_day",
         "nav_system",
         "nav_models",
-        "nav_faq",
-        "nav_guides",
-        "nav_final"
+        "nav_faq"
       ],
       "settings": {
         "aria_label": "Navigation zum AI-Energiemanagement",
         "anchor_id": "navigation",
         "nav_text_size": 13.5,
-        "cta_label": "Modelle ansehen",
+        "cta_label": "Speicher auswählen",
         "cta_module": "ai_models",
         "cta_target": ""
       }
@@ -193,9 +166,9 @@
       "settings": {
         "eyebrow": "Definition",
         "heading_before": "Was bedeutet",
-        "heading_highlight": "intelligentes Energiemanagement?",
+        "heading_highlight": "AI-Energiemanagement bei einem Solarspeicher?",
         "answer_label": "Kurz gesagt:",
-        "answer": "AI-Energiemanagement beschreibt ein intelligentes System, das Energieflüsse im Haushalt erkennt, analysiert und die Nutzung von Solarstrom optimiert.",
+        "answer": "AI-Energiemanagement nutzt Messdaten zu Solarerzeugung, Verbrauch und Speicherstatus, um Lade- und Entladezeiten gezielter an den Energiebedarf anzupassen.",
         "subtext": "Es geht dabei nicht um „automatisch Geld verdienen“, sondern um etwas Nüchternes: die Energie, die dein Haushalt selbst erzeugt, möglichst gut im eigenen Alltag zu nutzen.",
         "eyebrow_size": 13,
         "item_heading_size": 18,
@@ -286,7 +259,7 @@
       "settings": {
         "eyebrow": "Funktionsweise",
         "heading_before": "So arbeitet",
-        "heading_highlight": "intelligentes Energiemanagement",
+        "heading_highlight": "intelligentes Energiemanagement mit Messdaten",
         "subtext": "Drei Schritte, die sich laufend wiederholen: Daten erfassen, Situation bewerten, Energie gezielt steuern. Entscheidend ist nicht ein einzelner Schritt, sondern der Kreislauf dazwischen.",
         "function_home_image": "shopify://shop_images/2_1_fa829135-ca96-4653-8a1c-64a6689bbe1d.webp",
         "function_home_alt": "Photovoltaikanlage, VENUS E Speicher und Smart Meter im Haushalt",
@@ -342,9 +315,9 @@
       ],
       "settings": {
         "eyebrow": "Datenbasis",
-        "heading_before": "Smart Meter: Die Grundlage für",
+        "heading_before": "Smart Meter als Datenbasis für",
         "heading_highlight": "intelligente Steuerung",
-        "subtext": "Ohne aktuelle Energiedaten kann ein Speicher nur reagieren. Mit Smart Meter erkennt VENUS E, was im Haushalt passiert, und kann Energieflüsse gezielter steuern.",
+        "subtext": "Ein Smart Meter erfasst Energieflüsse am Messpunkt und stellt Messdaten bereit, die das Energiemanagement für eine bedarfsgerechtere Steuerung des Speichers nutzen kann.",
         "smart_meter_image": "shopify://shop_images/3_1_83240cad-5a00-433d-baae-687abe216b81.webp",
         "smart_meter_alt": "MARSTEK Smart Meter im Verteilerkasten",
         "ct002_image": "shopify://shop_images/3_2_7ef36ca2-bea3-479a-95ba-06c05ebaa37e.webp",
@@ -425,12 +398,12 @@
       ],
       "settings": {
         "eyebrow": "Einordnung",
-        "heading_before": "Klassischer Speicher oder intelligentes Energiemanagement:",
-        "heading_highlight": "Was ist der Unterschied?",
+        "heading_before": "Klassische Speichersteuerung vs. intelligentes Energiemanagement:",
+        "heading_highlight": "Was ändert sich?",
         "subtext": "Ein klassischer Speicher erfüllt seinen Zweck zuverlässig: Energie aufnehmen und wieder abgeben. Ein intelligentes System ergänzt diesen Ansatz um Messdaten und eine laufende Bewertung.",
         "feature_heading": "Funktion",
-        "classic_heading": "Klassischer Speicher",
-        "smart_heading": "Intelligentes System",
+        "classic_heading": "Klassische Steuerung",
+        "smart_heading": "Intelligente Steuerung",
         "note": "Die Gegenüberstellung ist keine Bewertung von „gut oder schlecht“. Sie zeigt vor allem, welche zusätzlichen Informationen ein System braucht, um Energie nicht nur zu puffern, sondern situationsbezogen einzusetzen.",
         "cta_label": "Mehr zum Thema Eigenverbrauch erhöhen →",
         "cta_url": "/pages/balkonkraftwerk-mit-speicher#warum-speicher",
@@ -504,7 +477,7 @@
       ],
       "settings": {
         "eyebrow": "Im Alltag",
-        "heading_before": "Intelligente Energie",
+        "heading_before": "Intelligentes Energiemanagement",
         "heading_highlight": "im Alltag",
         "subtext": "Was bedeutet das konkret über den Tag verteilt? Vier typische Situationen – und was das System daraus macht.",
         "timeline_label": "Tageszeiten",
@@ -582,9 +555,9 @@
       ],
       "settings": {
         "eyebrow": "VENUS E System",
-        "heading_before": "Ein System, das mit deinem",
-        "heading_highlight": "Energiebedarf mitdenkt",
-        "subtext": "Vier Rollen, ein System: der Speicher als Kern, die App als Fenster zum System, der Smart Meter als Datenquelle – und eine Architektur, die für mehr ausgelegt ist. Sie arbeiten nicht nebeneinander, sondern greifen ineinander.",
+        "heading_before": "VENUS E verbindet Speicher,",
+        "heading_highlight": "Smart Meter & App",
+        "subtext": "Je nach Modell und Installation arbeiten Speicher, Smart Meter und MARSTEK App zusammen, um Energieflüsse sichtbar zu machen und den Speicher gezielter zu steuern.",
         "cta_label": "Passende VENUS E Lösung finden",
         "cta_url": "#modelle",
         "cta_style": "primary",
@@ -655,7 +628,7 @@
         "heading_before": "Welche VENUS E Lösung passt zu deinem",
         "heading_highlight": "Energiebedarf?",
         "subtext": "Die Entscheidung hängt weniger von technischen Details ab als von deinem Alltag: Wie viel Energie verbrauchst du, wann brauchst du sie, und wie willst du weiter ausbauen?",
-        "cta_label": "Alle Modelle im Vergleich →",
+        "cta_label": "VENUS E Modelle vergleichen →",
         "cta_url": "/pages/venus-e-vergleich",
         "cta_style": "secondary",
         "eyebrow_size": 13,
@@ -727,7 +700,7 @@
       "settings": {
         "eyebrow": "Häufige Fragen",
         "heading_before": "Fragen zum",
-        "heading_highlight": "Energiemanagement",
+        "heading_highlight": "AI-Energiemanagement",
         "subtext": "",
         "cta_label": "",
         "cta_url": "",
