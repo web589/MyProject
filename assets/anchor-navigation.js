@@ -107,6 +107,10 @@
 
       links.forEach(function (link) {
         var target = targetFor(link);
+        if (nav.getAttribute('data-anchor-order') === 'document') {
+          link.classList.remove('is-active');
+          link.removeAttribute('aria-current');
+        }
         link.hidden = false;
         link.classList.remove('is-missing-target');
         link.removeAttribute('data-anchor-validation');
