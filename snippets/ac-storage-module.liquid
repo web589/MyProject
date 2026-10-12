@@ -49,7 +49,7 @@
                     {% assign hero_button_url = '#funktion' %}
                   {% endif %}
                 {% endif %}
-                <a class="ac-storage-page__button ac-storage-page__button--{{ hero_button_style }}" href="{{ hero_button_url }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+                <a class="ac-storage-page__button ac-storage-page__button--{{ hero_button_style }}" href="{{ hero_button_url }}" data-anchor-link {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
               {% endif %}
             {% endfor %}
           </div>
@@ -241,7 +241,7 @@
           {% endfor %}
         </div>
         <div class="ac-storage-page__center-cta">
-          <a class="ac-storage-page__button ac-storage-page__button--primary" href="{{ why_cta_url }}">{{ section.settings.cta_label }}</a>
+          <a class="ac-storage-page__button ac-storage-page__button--primary" href="{{ why_cta_url }}" data-anchor-link>{{ section.settings.cta_label }}</a>
         </div>
       </div>
     </section>
