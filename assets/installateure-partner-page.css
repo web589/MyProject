@@ -268,14 +268,15 @@
 .main-content--installateure-partner .is-missing-target { text-decoration: underline wavy #b42318; text-underline-offset: 4px; }
 
 /* Hero and uploaded images. */
-.main-content--installateure-partner .ip-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 72px; align-items: center; }
+.main-content--installateure-partner .ip-hero-grid { display: grid; grid-template-columns: minmax(0, 620px) minmax(0, 1fr); gap: 72px; align-items: center; }
 .main-content--installateure-partner .ip-hero-grid--no-media { grid-template-columns: minmax(0, 1fr); }
 .main-content--installateure-partner .ip-hero-copy { min-width: 0; }
 .main-content--installateure-partner .ip-hero h1 { margin-top: 20px; line-height: var(--ip-heading-line, 1.16); letter-spacing: var(--ip-heading-spacing, -0.015em); }
 .main-content--installateure-partner .ip-hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 .main-content--installateure-partner .ip-media { display: flex; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--ip-radius); background: #edf1f5; }
+.main-content--installateure-partner .ip-media--placeholder { border: 1.5px dashed #c4cdd7; }
 .main-content--installateure-partner .ip-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.main-content--installateure-partner .ip-media-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 100%; padding: 24px; color: #7c8b9c; font-size: 13px; line-height: 1.7; text-align: center; }
+.main-content--installateure-partner .ip-media-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 100%; padding: 0 24px; color: #7c8b9c; font-size: 13px; line-height: 1.7; text-align: center; }
 .main-content--installateure-partner .ip-media-placeholder svg { width: 56px; height: 56px; fill: none; stroke: currentColor; stroke-width: 1.3; }
 
 /* Shared line icons can be replaced by an uploaded block image. */

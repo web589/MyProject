@@ -13,7 +13,7 @@
 {% endfor %}</div>
   </div>
   {% if section.settings.image != blank or section.settings.show_placeholder or request.design_mode %}
-    <div class="ip-media ip-hero-media">{% render 'ip-media', image: section.settings.image, alt: section.settings.image_alt, hero: true, placeholder: 'VENUS E für Installateure & Partner', scale: 100 %}</div>
+    <div class="ip-media ip-hero-media{% if section.settings.image == blank %} ip-media--placeholder{% endif %}">{% render 'ip-media', image: section.settings.image, alt: section.settings.image_alt, hero: true, placeholder: 'VENUS E für Installateure & Partner', scale: 100 %}</div>
   {% endif %}
 </div>
   {% endcapture %}
