@@ -1,5 +1,6 @@
 {% assign function_anchor = 'funktionsweise' %}
 {% assign video_height = section.settings.video_height | default: 650 %}
+{% if video_height < 100 %}{% assign video_height = 100 %}{% endif %}
 {% assign video_width = video_height | times: 2.2 %}
 <section id="{{ function_anchor }}" class="ss-section ss-function ss-section--soft" style="--ss-section-spacing: {{ section.settings.section_spacing }}px; --ss-video-width: {{ video_width }}px;">
   <div class="ss-container">
@@ -32,7 +33,7 @@
     { "type": "video", "id": "video", "label": "循环视频" },
     { "type": "image_picker", "id": "poster", "label": "视频封面图" },
     { "type": "text", "id": "poster_alt", "label": "封面图替代文本", "default": "Wohnhaus mit PV-Anlage und Solarspeicher im Tagesverlauf" },
-    { "type": "range", "id": "video_height", "label": "视频高度（等比例缩放）", "info": "高度变化会按 2.2:1 同步调整宽度；小屏下宽度不超过容器。", "min": 300, "max": 650, "step": 10, "unit": "px", "default": 650 },
+    { "type": "number", "id": "video_height", "label": "视频高度（等比例缩放）", "info": "直接输入高度像素值，宽度按 2.2:1 同步缩放；超过屏幕宽度时会自动适配。", "default": 650 },
     { "type": "range", "id": "section_spacing", "label": "区块上下间距", "min": 48, "max": 100, "step": 4, "unit": "px", "default": 72 }
   ],
   "blocks": [

@@ -38,6 +38,14 @@
     root.classList.add('et-faq-ready');
   }
 
+  function focusAnchorTarget(target) {
+    if (!target.hasAttribute('tabindex')) {
+      target.setAttribute('tabindex', '-1');
+      target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+    }
+    target.focus({ preventScroll: true });
+  }
+
   root.addEventListener('click', (event) => {
     if (!(event.target instanceof Element)) return;
     const button = event.target.closest('.et-faq-q');
@@ -60,6 +68,10 @@
     }
     const target = document.getElementById(id);
     if (!target || !root.contains(target)) return;
+    if (link.closest('[data-anchor-nav]')) {
+      focusAnchorTarget(target);
+      return;
+    }
     event.preventDefault();
     const offset = parseFloat(getComputedStyle(target).scrollMarginTop) || 110;
     window.scrollTo({
@@ -67,11 +79,7 @@
       behavior: reducedMotion.matches ? 'auto' : 'smooth'
     });
     // Move keyboard focus without undoing the offset scroll.
-    if (!target.hasAttribute('tabindex')) {
-      target.setAttribute('tabindex', '-1');
-      target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
-    }
-    target.focus({ preventScroll: true });
+    focusAnchorTarget(target);
     if (!designMode && window.location.hash !== hash) {
       window.history.pushState(null, '', hash);
     }

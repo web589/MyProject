@@ -9,6 +9,39 @@
  */
 {
   "sections": {
+    "et_anchor_navigation": {
+      "type": "et-anchor-navigation",
+      "settings": {
+        "aria_label": "Navigation zu VENUS E Erfahrungen und Tests",
+        "nav_text_size": 13.5,
+        "cta_label": "VENUS E auswählen",
+        "cta_module": "et_final"
+      },
+      "blocks": {
+        "etnav_definition": {"type":"link","settings":{"module":"et_definition"}},
+        "etnav_criteria": {"type":"link","settings":{"module":"et_criteria"}},
+        "etnav_installation": {"type":"link","settings":{"module":"et_installation"}},
+        "etnav_noise": {"type":"link","settings":{"module":"et_noise"}},
+        "etnav_energy_flow": {"type":"link","settings":{"module":"et_energy_flow"}},
+        "etnav_app": {"type":"link","settings":{"module":"et_app"}},
+        "etnav_scenarios": {"type":"link","settings":{"module":"et_scenarios"}},
+        "etnav_models": {"type":"link","settings":{"module":"et_models"}},
+        "etnav_documents": {"type":"link","settings":{"module":"et_documents"}},
+        "etnav_faq": {"type":"link","settings":{"module":"et_faq"}}
+      },
+      "block_order": [
+        "etnav_definition",
+        "etnav_criteria",
+        "etnav_installation",
+        "etnav_noise",
+        "etnav_energy_flow",
+        "etnav_app",
+        "etnav_scenarios",
+        "etnav_models",
+        "etnav_documents",
+        "etnav_faq"
+      ]
+    },
     "et_01_hero": {
       "type": "et-01-hero",
       "settings": {
@@ -1036,6 +1069,7 @@
     }
   },
   "order": [
+    "et_anchor_navigation",
     "et_01_hero",
     "et_02_trust",
     "et_03_definition",

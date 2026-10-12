@@ -1,0 +1,244 @@
+{% liquid
+  assign navigation_anchor = 'et-anchor-navigation'
+%}
+
+<section id="{{ navigation_anchor }}" class="et-anchor-navigation-section">
+  <nav
+    class="et-anchor-nav"
+    data-anchor-nav
+    aria-label="{{ section.settings.aria_label | escape }}"
+    style="--et-anchor-nav-text-size: {{ section.settings.nav_text_size | default: 13.5 }}px;"
+  >
+    <div class="et-anchor-nav__layout">
+      <div class="et-anchor-nav__inner anchor-nav__inner">
+        {% for block in section.blocks %}
+          {% liquid
+            assign link_module = block.settings.module | default: 'et_definition'
+            assign module_label = 'Individueller Anker'
+            case link_module
+              when 'et_hero'
+                assign module_label = 'Start'
+              when 'et_trust'
+                assign module_label = 'Vertrauen'
+              when 'et_definition'
+                assign module_label = 'Einordnung'
+              when 'et_criteria'
+                assign module_label = 'Testkriterien'
+              when 'et_installation'
+                assign module_label = 'Installation'
+              when 'et_noise'
+                assign module_label = 'Lautstärke'
+              when 'et_energy_flow'
+                assign module_label = 'Energiefluss'
+              when 'et_app'
+                assign module_label = 'App'
+              when 'et_scenarios'
+                assign module_label = 'Erfahrungen'
+              when 'et_models'
+                assign module_label = 'Modelle'
+              when 'et_documents'
+                assign module_label = 'Nachweise'
+              when 'et_faq'
+                assign module_label = 'FAQ'
+              when 'et_articles'
+                assign module_label = 'Ratgeber'
+              when 'et_final'
+                assign module_label = 'Nächster Schritt'
+            endcase
+            assign link_label = block.settings.label | default: module_label
+            assign link_warning_id = 'et-anchor-warning-' | append: section.id | append: '-' | append: block.id
+          %}
+          {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
+          {% assign link_target = link_target | strip | remove_first: '#' | handle %}
+          {% if link_target != blank and link_label != blank %}
+            <span class="et-anchor-nav__item" {{ block.shopify_attributes }}>
+              <a
+                class="et-anchor-nav__link"
+                href="#{{ link_target }}"
+                data-anchor-link
+                data-anchor-nav-link
+                data-anchor-module="{{ link_module | escape }}"
+                data-anchor-warning-id="{{ link_warning_id }}"
+              >{{ link_label | escape }}</a>
+            </span>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {% liquid
+        assign cta_module = section.settings.cta_module | default: 'et_final'
+        assign cta_label = section.settings.cta_label
+        assign cta_warning_id = 'et-anchor-warning-' | append: section.id | append: '-cta'
+      %}
+      {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
+      {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
+      {% if cta_label != blank and cta_target != blank %}
+        <a
+          class="et-anchor-nav__cta"
+          href="#{{ cta_target }}"
+          data-anchor-link
+          data-anchor-nav-cta
+          data-anchor-module="{{ cta_module | escape }}"
+          data-anchor-warning-id="{{ cta_warning_id }}"
+        >{{ cta_label | escape }}</a>
+      {% endif %}
+    </div>
+
+    {% if request.design_mode %}
+      <div class="et-anchor-nav__warnings" aria-live="polite">
+        {% for block in section.blocks %}
+          {% liquid
+            assign link_module = block.settings.module | default: 'et_definition'
+            assign link_warning_id = 'et-anchor-warning-' | append: section.id | append: '-' | append: block.id
+          %}
+          {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
+          {% assign link_target = link_target | strip | remove_first: '#' | handle %}
+          {% if link_target != blank %}
+            <span id="{{ link_warning_id }}" class="et-anchor-nav__warning" data-anchor-warning hidden>未找到目标模块</span>
+          {% else %}
+            <span id="{{ link_warning_id }}" class="et-anchor-nav__warning" data-anchor-warning {{ block.shopify_attributes }}>未找到目标模块</span>
+          {% endif %}
+        {% endfor %}
+        {% if cta_label != blank %}
+          {% if cta_target != blank %}
+            <span id="{{ cta_warning_id }}" class="et-anchor-nav__warning" data-anchor-warning hidden>未找到目标模块</span>
+          {% else %}
+            <span id="{{ cta_warning_id }}" class="et-anchor-nav__warning" data-anchor-warning>未找到目标模块</span>
+          {% endif %}
+        {% endif %}
+      </div>
+    {% endif %}
+  </nav>
+</section>
+
+{% schema %}
+{
+  "name": "00 锚点导航",
+  "tag": "section",
+  "class": "et-anchor-navigation-section",
+  "limit": 1,
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "无障碍标签",
+      "default": "Navigation zu VENUS E Erfahrungen und Tests"
+    },
+    {
+      "type": "range",
+      "id": "nav_text_size",
+      "label": "导航文字大小",
+      "min": 11,
+      "max": 18,
+      "step": 0.5,
+      "unit": "px",
+      "default": 13.5
+    },
+    {
+      "type": "header",
+      "content": "右侧行动按钮"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "按钮文字",
+      "default": "VENUS E auswählen"
+    },
+    {
+      "type": "select",
+      "id": "cta_module",
+      "label": "按钮链接到模块",
+      "options": [
+        {"value":"et_hero","label":"01 首屏"},
+        {"value":"et_trust","label":"02 信任数字"},
+        {"value":"et_definition","label":"03 经验与测试定义"},
+        {"value":"et_criteria","label":"04 评价标准"},
+        {"value":"et_installation","label":"05 安装与后装"},
+        {"value":"et_noise","label":"06 噪音说明"},
+        {"value":"et_energy_flow","label":"07 能源流"},
+        {"value":"et_app","label":"08 App 与管理"},
+        {"value":"et_scenarios","label":"09 使用场景"},
+        {"value":"et_models","label":"10 产品型号"},
+        {"value":"et_documents","label":"11 证明与文档"},
+        {"value":"et_faq","label":"12 常见问题"},
+        {"value":"et_articles","label":"13 指南文章"},
+        {"value":"et_final","label":"14 结尾行动区"},
+        {"value":"custom","label":"自定义锚点（高级）"}
+      ],
+      "default": "et_final"
+    },
+    {
+      "type": "text",
+      "id": "cta_target",
+      "label": "自定义锚点 ID（高级）",
+      "info": "仅选择“自定义锚点”时填写；输入 ID 即可，不需要 #。",
+      "visible_if": "{{ section.settings.cta_module == 'custom' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "导航链接",
+      "settings": [
+        {
+          "type": "select",
+          "id": "module",
+          "label": "链接到模块",
+          "options": [
+            {"value":"et_hero","label":"01 首屏"},
+            {"value":"et_trust","label":"02 信任数字"},
+            {"value":"et_definition","label":"03 经验与测试定义"},
+            {"value":"et_criteria","label":"04 评价标准"},
+            {"value":"et_installation","label":"05 安装与后装"},
+            {"value":"et_noise","label":"06 噪音说明"},
+            {"value":"et_energy_flow","label":"07 能源流"},
+            {"value":"et_app","label":"08 App 与管理"},
+            {"value":"et_scenarios","label":"09 使用场景"},
+            {"value":"et_models","label":"10 产品型号"},
+            {"value":"et_documents","label":"11 证明与文档"},
+            {"value":"et_faq","label":"12 常见问题"},
+            {"value":"et_articles","label":"13 指南文章"},
+            {"value":"et_final","label":"14 结尾行动区"},
+            {"value":"custom","label":"自定义锚点（高级）"}
+          ],
+          "default": "et_definition"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "导航显示文字",
+          "info": "留空时使用所选模块的德语名称；特殊情况可自行填写。"
+        },
+        {
+          "type": "text",
+          "id": "target",
+          "label": "自定义锚点 ID（高级）",
+          "info": "仅选择“自定义锚点”时填写；输入 ID 即可，不需要 #。",
+          "visible_if": "{{ block.settings.module == 'custom' }}"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 15,
+  "presets": [
+    {
+      "name": "00 锚点导航",
+      "blocks": [
+        {"type":"link","settings":{"module":"et_definition"}},
+        {"type":"link","settings":{"module":"et_criteria"}},
+        {"type":"link","settings":{"module":"et_installation"}},
+        {"type":"link","settings":{"module":"et_noise"}},
+        {"type":"link","settings":{"module":"et_energy_flow"}},
+        {"type":"link","settings":{"module":"et_app"}},
+        {"type":"link","settings":{"module":"et_scenarios"}},
+        {"type":"link","settings":{"module":"et_models"}},
+        {"type":"link","settings":{"module":"et_documents"}},
+        {"type":"link","settings":{"module":"et_faq"}}
+      ]
+    }
+  ]
+}
+{% endschema %}

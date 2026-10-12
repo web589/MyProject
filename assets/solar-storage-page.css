@@ -267,9 +267,12 @@
 
 .main-content--solar-storage .ss-media__placeholder { padding: 16%; fill: #c4cdd7; }
 .main-content--solar-storage .ss-video {
-  width: min(var(--ss-video-width, 1430px), 100%);
+  position: relative;
+  left: 50%;
+  width: min(var(--ss-video-width, 1430px), calc(100vw - 32px));
   margin: 30px auto 0;
   border: 1px solid var(--ss-border);
+  transform: translateX(-50%);
 }
 .main-content--solar-storage .ss-video__media { display: block; }
 
