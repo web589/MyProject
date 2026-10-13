@@ -12,24 +12,17 @@
     "smart_meter_navigation": {
       "type": "smart-meter-navigation",
       "blocks": {
-        "nav_start": {
-          "type": "link",
-          "settings": {
-            "label": "Start",
-            "module": "smart_meter_hero"
-          }
-        },
-        "nav_definition": {
-          "type": "link",
-          "settings": {
-            "label": "Grundlagen",
-            "module": "smart_meter_definition"
-          }
-        },
         "nav_flow": {
           "type": "link",
           "settings": {
             "label": "Funktionsweise",
+            "module": "smart_meter_definition"
+          }
+        },
+        "link_ELFh9A": {
+          "type": "link",
+          "settings": {
+            "label": "Messdaten",
             "module": "smart_meter_flow"
           }
         },
@@ -63,9 +56,8 @@
         }
       },
       "block_order": [
-        "nav_start",
-        "nav_definition",
         "nav_flow",
+        "link_ELFh9A",
         "nav_everyday",
         "nav_solutions",
         "nav_integration",
@@ -102,8 +94,8 @@
       ],
       "settings": {
         "eyebrow": "Smart Meter für deinen Speicher",
-        "heading_before": "Smart Meter & Energiefluss: Daten für",
-        "heading_highlight": "deinen VENUS E Speicher",
+        "heading_before": "Smart Meter & Energiefluss: Messdaten für",
+        "heading_highlight": "deinen VENUS E  Solarspeicher",
         "subtext": "CT002 misst elektrische Werte, CT003 (P1) liest Daten deines kompatiblen Stromzählers aus. Mit diesen Informationen kann VENUS E seine Lade- und Entladeleistung gezielter an Netzbezug und Einspeisung anpassen.",
         "hero_image": "shopify://shop_images/01_5c6cad3f-51d9-4c64-b67f-66343bc2e8c3.webp",
         "hero_alt": "Kompatibler digitaler Stromzähler mit Smart Meter CT003 und VENUS E Speicher",
@@ -160,7 +152,7 @@
         "eyebrow": "Definition",
         "heading_before": "Was macht ein Smart Meter für",
         "heading_highlight": "deinen Speicher?",
-        "answer": "<p><strong>Kurz gesagt:</strong> Ein Smart Meter liefert Messdaten für die Speichersteuerung. Bei einer passenden Messkonfiguration zeigen diese Werte, ob dein Zuhause Strom aus dem Netz bezieht oder ins Netz einspeist. VENUS E kann die Informationen nutzen, um seine Lade- und Entladeleistung entsprechend anzupassen.</p>",
+        "answer": "<p>Ein Smart Meter misst den Energiefluss am Messpunkt und stellt diese Daten für die Speichersteuerung bereit.<br/>So kann das Energiemanagement erkennen, wie sich Erzeugung, Verbrauch, Netzbezug und Einspeisung verändern.<br/></p>",
         "note": "Auf dieser Seite geht es um Smart Meter für die Steuerung deines VENUS E Speichers.",
         "heading_size": 34,
         "body_size": 16,
@@ -321,9 +313,9 @@
       ],
       "settings": {
         "eyebrow": "Sichtbarkeit",
-        "heading_before": "Dein Energiefluss",
+        "heading_before": "Energiefluss in der MARSTEK App",
         "heading_highlight": "auf einen Blick",
-        "subtext": "Die MARSTEK App zeigt dir verfügbare Mess- und Speicherdaten. Welche Ansichten und Werte du siehst, hängt von den verbundenen Geräten und deiner Konfiguration ab.",
+        "subtext": "In der MARSTEK App kannst du Energieflüsse, Speicherstatus und relevante Messwerte übersichtlich nachvollziehen.",
         "image": "shopify://shop_images/App_66cef87e-1ecc-472b-9dd8-fa7369dd0b75.webp",
         "image_alt": "MARSTEK App mit Energiedaten eines Smart Meters",
         "image_placeholder": "MARSTEK-App-Ansicht auswählen",
@@ -391,8 +383,8 @@
       ],
       "settings": {
         "eyebrow": "Lösungen",
-        "heading_before": "Welcher Smart Meter passt zu",
-        "heading_highlight": "deinem System?",
+        "heading_before": "CT002 oder CT003: Welcher Smart Meter passt zu",
+        "heading_highlight": "deiner Installation?",
         "subtext": "CT002 und CT003 (P1) unterstützen die Speichersteuerung auf unterschiedlichen Wegen. Entscheidend sind deine Messkonfiguration, die Schnittstellen deines Stromzählers und die Kompatibilität mit deinem VENUS E Modell.",
         "bottom_link_label": "Anschluss und Kompatibilität prüfen →",
         "bottom_link_url": "#integration",
@@ -458,7 +450,7 @@
         "eyebrow": "Integration",
         "heading_before": "Vor dem Kauf: Anschluss und",
         "heading_highlight": "Kompatibilität prüfen",
-        "subtext": "Prüfe zuerst deinen Stromzähler, die vorhandenen Schnittstellen und dein VENUS E Modell. Danach lässt sich die passende Messlösung gezielt auswählen.",
+        "subtext": "Welcher Smart Meter passt, hängt vor allem vom vorhandenen Zähler, der verfügbaren Schnittstelle und der Installation ab.",
         "help_text": "Du bist unsicher? Nenne uns dein VENUS E Modell und die Modellbezeichnung deines Stromzählers.",
         "heading_size": 34,
         "body_size": 16,
@@ -476,8 +468,8 @@
         "ai_energy": {
           "type": "link",
           "settings": {
-            "label": "Intelligentes Energiemanagement verstehen →",
-            "url": "/pages/ai-energiemanagement",
+            "label": "AI-Energiemanagement verstehen →",
+            "url": "shopify://pages/ai-energiemanagement",
             "style": "text"
           }
         }
@@ -489,7 +481,7 @@
         "eyebrow": "Verbindung",
         "heading_before": "Aus Messdaten wird",
         "heading_highlight": "gezielte Speichersteuerung",
-        "text": "Die Messlösung liefert Informationen zum Netzfluss. Das Energiemanagement berücksichtigt diese zusammen mit Ladezustand und Einstellungen, um den Speicher passend zur aktuellen Situation zu steuern.",
+        "text": "Messdaten allein steuern den Speicher nicht. Das Energiemanagement nutzt sie, um Lade- und Entladevorgänge besser an Erzeugung und Verbrauch anzupassen.",
         "heading_size": 34,
         "body_size": 17,
         "eyebrow_size": 13,
