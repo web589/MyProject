@@ -12,25 +12,18 @@
     "smart_meter_navigation": {
       "type": "smart-meter-navigation",
       "blocks": {
-        "nav_start": {
-          "type": "link",
-          "settings": {
-            "label": "Start",
-            "target": "start"
-          }
-        },
-        "nav_definition": {
-          "type": "link",
-          "settings": {
-            "label": "Grundlagen",
-            "target": "definition"
-          }
-        },
         "nav_flow": {
           "type": "link",
           "settings": {
             "label": "Funktionsweise",
-            "target": "fluss"
+            "target": "Definition"
+          }
+        },
+        "link_ELFh9A": {
+          "type": "link",
+          "settings": {
+            "label": "Messdaten",
+            "target": "Funktionsweise"
           }
         },
         "nav_everyday": {
@@ -63,9 +56,8 @@
         }
       },
       "block_order": [
-        "nav_start",
-        "nav_definition",
         "nav_flow",
+        "link_ELFh9A",
         "nav_everyday",
         "nav_solutions",
         "nav_integration",
