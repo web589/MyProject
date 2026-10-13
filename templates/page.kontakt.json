@@ -7,20 +7,54 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-/*
- * Generated from the Kontakt section presets. Editable in the Shopify theme editor.
- */
 {
   "sections": {
     "kontakt_01": {
       "type": "kontakt-01-hero",
+      "blocks": {
+        "button_1": {
+          "type": "button",
+          "settings": {
+            "show_block": true,
+            "label": "Anfrage starten ↓",
+            "link": "#kontaktformular",
+            "style": "primary",
+            "action_size": 14.5,
+            "action_size_tablet": 14.5,
+            "action_size_mobile": 14.5,
+            "action_weight": "500",
+            "action_line": 0,
+            "action_spacing": 0
+          }
+        },
+        "button_2": {
+          "type": "button",
+          "settings": {
+            "show_block": true,
+            "label": "FAQ ansehen →",
+            "link": "/pages/faq",
+            "style": "ghost",
+            "action_size": 14.5,
+            "action_size_tablet": 14.5,
+            "action_size_mobile": 14.5,
+            "action_weight": "500",
+            "action_line": 0,
+            "action_spacing": 0
+          }
+        }
+      },
+      "block_order": [
+        "button_1",
+        "button_2"
+      ],
       "settings": {
         "show_section": true,
         "eyebrow": "VENUS E SUPPORT",
         "heading": "Kontakt & Support für",
         "heading_accent": "VENUS E",
+        "heading_suffix": "",
         "subtitle": "Du hast Fragen zu einem VENUS E Speicher, deiner Bestellung oder zur Installation? Wähle dein Anliegen und sende uns die wichtigsten Informationen – so können wir deine Anfrage besser einordnen.",
-        "background": "#FFFFFF",
+        "background": "#ffffff",
         "padding_top": 72,
         "padding_bottom": 64,
         "padding_top_tablet": 56,
@@ -43,78 +77,13 @@
         "eyebrow_weight": "600",
         "eyebrow_line": 0,
         "eyebrow_spacing": 2,
+        "image": "shopify://shop_images/banner_2e07b896-5101-40e9-967c-4a041cba29ab.webp",
         "image_alt": "VENUS E Speicher mit App auf Smartphone in einem deutschen Haushalt",
         "show_placeholder": true
-      },
-      "blocks": {
-        "button_1": {
-          "type": "button",
-          "settings": {
-            "show_block": true,
-            "label": "Anfrage starten ↓",
-            "style": "primary",
-            "action_size": 14.5,
-            "action_size_tablet": 14.5,
-            "action_size_mobile": 14.5,
-            "action_weight": "500",
-            "action_line": 0,
-            "action_spacing": 0,
-            "link": "#kontaktformular"
-          }
-        },
-        "button_2": {
-          "type": "button",
-          "settings": {
-            "show_block": true,
-            "label": "FAQ ansehen →",
-            "style": "ghost",
-            "action_size": 14.5,
-            "action_size_tablet": 14.5,
-            "action_size_mobile": 14.5,
-            "action_weight": "500",
-            "action_line": 0,
-            "action_spacing": 0,
-            "link": "/pages/faq"
-          }
-        }
-      },
-      "block_order": [
-        "button_1",
-        "button_2"
-      ]
+      }
     },
     "kontakt_02": {
       "type": "kontakt-02-anliegen",
-      "settings": {
-        "show_section": true,
-        "eyebrow": "Anliegen",
-        "heading": "Worum geht es bei deiner",
-        "heading_accent": "Anfrage?",
-        "subtitle": "Wähle den Bereich, der am besten zu deinem Anliegen passt.",
-        "background": "#FFFFFF",
-        "padding_top": 72,
-        "padding_bottom": 72,
-        "padding_top_tablet": 56,
-        "padding_bottom_tablet": 56,
-        "padding_top_mobile": 44,
-        "padding_bottom_mobile": 44,
-        "heading_size": 34,
-        "heading_size_tablet": 34,
-        "heading_size_mobile": 27,
-        "heading_weight": "600",
-        "heading_line": 120,
-        "heading_spacing": -1,
-        "sub_size": 16,
-        "sub_size_tablet": 16,
-        "sub_size_mobile": 16,
-        "sub_weight": "400",
-        "sub_line": 165,
-        "sub_spacing": 0,
-        "eyebrow_size": 13,
-        "eyebrow_weight": "600",
-        "eyebrow_line": 0,
-        "eyebrow_spacing": 2
-      },
       "blocks": {
         "topic_1": {
           "type": "topic",
@@ -238,17 +207,15 @@
         "topic_2",
         "topic_3",
         "topic_4"
-      ]
-    },
-    "kontakt_03": {
-      "type": "kontakt-03-self-help",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "Selbsthilfe",
-        "heading": "Vielleicht findest du die Antwort",
-        "heading_accent": "direkt",
-        "subtitle": "Viele Anliegen lassen sich direkt über unsere Support-Bereiche klären.",
-        "background": "#F5F7F9",
+        "eyebrow": "Anliegen",
+        "heading": "Worum geht es bei deiner",
+        "heading_accent": "Anfrage?",
+        "heading_suffix": "",
+        "subtitle": "Wähle den Bereich, der am besten zu deinem Anliegen passt.",
+        "background": "#ffffff",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
@@ -271,7 +238,10 @@
         "eyebrow_weight": "600",
         "eyebrow_line": 0,
         "eyebrow_spacing": 2
-      },
+      }
+    },
+    "kontakt_03": {
+      "type": "kontakt-03-self-help",
       "blocks": {
         "help_1": {
           "type": "help",
@@ -281,6 +251,7 @@
             "body": "Antworten auf häufige Fragen zu VENUS E, Bestellung, Nutzung und Service.",
             "icon_type": "question",
             "label": "FAQ ansehen →",
+            "link": "/pages/faq",
             "title_size": 16,
             "title_size_tablet": 16,
             "title_size_mobile": 16,
@@ -298,8 +269,7 @@
             "action_size_mobile": 14,
             "action_weight": "500",
             "action_line": 0,
-            "action_spacing": 0,
-            "link": "/pages/faq"
+            "action_spacing": 0
           }
         },
         "help_2": {
@@ -310,6 +280,7 @@
             "body": "Finde verfügbare Handbücher, Datenblätter und technische Dokumente zu VENUS E.",
             "icon_type": "download",
             "label": "Downloads ansehen →",
+            "link": "/pages/downloads",
             "title_size": 16,
             "title_size_tablet": 16,
             "title_size_mobile": 16,
@@ -327,8 +298,7 @@
             "action_size_mobile": 14,
             "action_weight": "500",
             "action_line": 0,
-            "action_spacing": 0,
-            "link": "/pages/downloads"
+            "action_spacing": 0
           }
         },
         "help_3": {
@@ -339,6 +309,7 @@
             "body": "Informationen zu Rückgabe, Widerruf und Herstellergarantie.",
             "icon_type": "shield",
             "label": "Garantie & Rückgabe ansehen →",
+            "link": "/pages/garantie-rueckgabe",
             "title_size": 16,
             "title_size_tablet": 16,
             "title_size_mobile": 16,
@@ -356,8 +327,7 @@
             "action_size_mobile": 14,
             "action_weight": "500",
             "action_line": 0,
-            "action_spacing": 0,
-            "link": "/pages/garantie-rueckgabe"
+            "action_spacing": 0
           }
         }
       },
@@ -365,49 +335,48 @@
         "help_1",
         "help_2",
         "help_3"
-      ]
-    },
-    "kontakt_04": {
-      "type": "kontakt-04-form",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "KONTAKTFORMULAR",
-        "heading": "Schreib uns dein Anliegen",
-        "subtitle": "Je genauer deine Angaben sind, desto besser können wir deine Anfrage einordnen. Pflichtfelder sind mit * gekennzeichnet.",
-        "background": "#FFFFFF",
-        "form_background": "#E8F4FF",
-        "form_border": "#CDEBFF",
+        "eyebrow": "Selbsthilfe",
+        "heading": "Vielleicht findest du die Antwort",
+        "heading_accent": "direkt",
+        "heading_suffix": "",
+        "subtitle": "Viele Anliegen lassen sich direkt über unsere Support-Bereiche klären.",
+        "background": "#f5f7f9",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
         "padding_bottom_tablet": 56,
         "padding_top_mobile": 44,
         "padding_bottom_mobile": 44,
-        "heading_size": 28,
-        "heading_size_tablet": 28,
-        "heading_size_mobile": 24,
+        "heading_size": 34,
+        "heading_size_tablet": 34,
+        "heading_size_mobile": 27,
         "heading_weight": "600",
         "heading_line": 120,
         "heading_spacing": -1,
-        "sub_size": 14,
-        "sub_size_tablet": 14,
-        "sub_size_mobile": 14,
+        "sub_size": 16,
+        "sub_size_tablet": 16,
+        "sub_size_mobile": 16,
         "sub_weight": "400",
         "sub_line": 165,
         "sub_spacing": 0,
         "eyebrow_size": 13,
-        "eyebrow_size_tablet": 13,
-        "eyebrow_size_mobile": 13,
         "eyebrow_weight": "600",
         "eyebrow_line": 0,
         "eyebrow_spacing": 2
-      },
+      }
+    },
+    "kontakt_04": {
+      "type": "kontakt-04-form",
       "blocks": {
         "topic_1": {
           "type": "topic",
           "settings": {
             "label": "Worum geht es?",
             "placeholder": "Bitte Anliegen auswählen",
+            "helper": "",
             "error": "Bitte wähle ein Anliegen aus.",
             "label_produktberatung": "Produktberatung",
             "label_bestellung": "Bestellung & Lieferung",
@@ -434,6 +403,7 @@
             "show_field": true,
             "label": "Welches Produkt betrifft deine Anfrage?",
             "placeholder": "Produkt auswählen",
+            "helper": "",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
             "title_size_mobile": 13.5,
@@ -495,6 +465,7 @@
           "settings": {
             "label": "Name",
             "placeholder": "Dein Name",
+            "helper": "",
             "error": "Bitte gib deinen Namen ein.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -515,6 +486,7 @@
           "settings": {
             "label": "E-Mail-Adresse",
             "placeholder": "name@beispiel.de",
+            "helper": "",
             "error": "Bitte gib eine gültige E-Mail-Adresse ein.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -556,6 +528,7 @@
           "settings": {
             "label": "Wie können wir dir helfen?",
             "placeholder": "Beschreibe kurz dein Anliegen und teile uns mit, was du bereits geprüft oder ausprobiert hast.",
+            "helper": "",
             "error": "Bitte beschreibe kurz dein Anliegen.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -575,6 +548,7 @@
           "type": "privacy",
           "settings": {
             "label": "Ich habe die",
+            "helper": "",
             "error": "Bitte bestätige die Datenschutzerklärung.",
             "link_label": "Datenschutzerklärung",
             "privacy_url": "/pages/datenschutz",
@@ -645,6 +619,7 @@
           "type": "submit",
           "settings": {
             "label": "Anfrage senden",
+            "footnote": "",
             "action_size": 14.5,
             "action_size_tablet": 14.5,
             "action_size_mobile": 14.5,
@@ -757,41 +732,45 @@
         "error_20",
         "success_link_21",
         "success_link_22"
-      ]
-    },
-    "kontakt_05": {
-      "type": "kontakt-05-preparation",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "Gute Vorbereitung",
-        "heading": "Diese Angaben helfen bei der",
-        "heading_accent": "Einordnung",
-        "heading_suffix": "deiner Anfrage",
-        "subtitle": "Je nach Anliegen sind unterschiedliche Informationen hilfreich.",
-        "background": "#FFFFFF",
-        "heading_size": 34,
-        "heading_size_tablet": 34,
-        "heading_size_mobile": 27,
-        "heading_weight": "600",
-        "heading_line": 120,
-        "heading_spacing": -1,
-        "sub_size": 16,
-        "sub_size_tablet": 16,
-        "sub_size_mobile": 16,
-        "sub_weight": "400",
-        "sub_line": 165,
-        "sub_spacing": 0,
-        "eyebrow_size": 13,
-        "eyebrow_weight": "600",
-        "eyebrow_line": 0,
-        "eyebrow_spacing": 2,
+        "eyebrow": "KONTAKTFORMULAR",
+        "heading": "Schreib uns dein Anliegen",
+        "heading_accent": "",
+        "heading_suffix": "",
+        "subtitle": "Je genauer deine Angaben sind, desto besser können wir deine Anfrage einordnen. Pflichtfelder sind mit * gekennzeichnet.",
+        "background": "#ffffff",
+        "form_background": "#e8f4ff",
+        "form_border": "#cdebff",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
         "padding_bottom_tablet": 56,
         "padding_top_mobile": 44,
-        "padding_bottom_mobile": 44
-      },
+        "padding_bottom_mobile": 44,
+        "heading_size": 28,
+        "heading_size_tablet": 28,
+        "heading_size_mobile": 24,
+        "heading_weight": "600",
+        "heading_line": 120,
+        "heading_spacing": -1,
+        "sub_size": 14,
+        "sub_size_tablet": 14,
+        "sub_size_mobile": 14,
+        "sub_weight": "400",
+        "sub_line": 165,
+        "sub_spacing": 0,
+        "eyebrow_size": 13,
+        "eyebrow_size_tablet": 13,
+        "eyebrow_size_mobile": 13,
+        "eyebrow_weight": "600",
+        "eyebrow_line": 0,
+        "eyebrow_spacing": 2
+      }
+    },
+    "kontakt_05": {
+      "type": "kontakt-05-preparation",
       "blocks": {
         "card_1": {
           "type": "card",
@@ -861,16 +840,15 @@
         "card_1",
         "card_2",
         "card_3"
-      ]
-    },
-    "kontakt_06": {
-      "type": "kontakt-06-faq",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "Häufige Fragen",
-        "heading": "FAQ zur",
-        "heading_accent": "Kontaktaufnahme",
-        "background": "#F5F7F9",
+        "eyebrow": "Gute Vorbereitung",
+        "heading": "Diese Angaben helfen bei der",
+        "heading_accent": "Einordnung",
+        "heading_suffix": "deiner Anfrage",
+        "subtitle": "Je nach Anliegen sind unterschiedliche Informationen hilfreich.",
+        "background": "#ffffff",
         "heading_size": 34,
         "heading_size_tablet": 34,
         "heading_size_mobile": 27,
@@ -893,7 +871,10 @@
         "padding_bottom_tablet": 56,
         "padding_top_mobile": 44,
         "padding_bottom_mobile": 44
-      },
+      }
+    },
+    "kontakt_06": {
+      "type": "kontakt-06-faq",
       "blocks": {
         "faq_1": {
           "type": "faq",
@@ -981,17 +962,69 @@
         "faq_2",
         "faq_3",
         "faq_4"
-      ]
+      ],
+      "settings": {
+        "show_section": true,
+        "eyebrow": "Häufige Fragen",
+        "heading": "FAQ zur",
+        "heading_accent": "Kontaktaufnahme",
+        "heading_suffix": "",
+        "subtitle": "",
+        "background": "#f5f7f9",
+        "heading_size": 34,
+        "heading_size_tablet": 34,
+        "heading_size_mobile": 27,
+        "heading_weight": "600",
+        "heading_line": 120,
+        "heading_spacing": -1,
+        "sub_size": 16,
+        "sub_size_tablet": 16,
+        "sub_size_mobile": 16,
+        "sub_weight": "400",
+        "sub_line": 165,
+        "sub_spacing": 0,
+        "eyebrow_size": 13,
+        "eyebrow_weight": "600",
+        "eyebrow_line": 0,
+        "eyebrow_spacing": 2,
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "padding_top_tablet": 56,
+        "padding_bottom_tablet": 56,
+        "padding_top_mobile": 44,
+        "padding_bottom_mobile": 44
+      }
     },
     "kontakt_07": {
       "type": "kontakt-07-final",
+      "blocks": {
+        "button_1": {
+          "type": "button",
+          "settings": {
+            "show_block": true,
+            "label": "Anfrage starten ↑",
+            "link": "",
+            "style": "primary",
+            "action_size": 14.5,
+            "action_size_tablet": 14.5,
+            "action_size_mobile": 14.5,
+            "action_weight": "500",
+            "action_line": 0,
+            "action_spacing": 0
+          }
+        }
+      },
+      "block_order": [
+        "button_1"
+      ],
       "settings": {
         "show_section": true,
         "eyebrow": "NOCH FRAGEN?",
         "heading": "Dein Anliegen ist noch",
         "heading_accent": "offen?",
+        "heading_suffix": "",
         "subtitle": "Sende uns die wichtigsten Informationen über das Kontaktformular.",
-        "background": "#F5F7F9",
+        "background": "#f5f7f9",
         "heading_size": 30,
         "heading_size_tablet": 30,
         "heading_size_mobile": 30,
@@ -1014,26 +1047,7 @@
         "padding_bottom_tablet": 56,
         "padding_top_mobile": 44,
         "padding_bottom_mobile": 44
-      },
-      "blocks": {
-        "button_1": {
-          "type": "button",
-          "settings": {
-            "show_block": true,
-            "label": "Anfrage starten ↑",
-            "style": "primary",
-            "action_size": 14.5,
-            "action_size_tablet": 14.5,
-            "action_size_mobile": 14.5,
-            "action_weight": "500",
-            "action_line": 0,
-            "action_spacing": 0
-          }
-        }
-      },
-      "block_order": [
-        "button_1"
-      ]
+      }
     }
   },
   "order": [
