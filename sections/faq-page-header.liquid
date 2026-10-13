@@ -1,5 +1,7 @@
 {%- if template.name == 'page' and template.suffix == 'faq' -%}
 {%- liquid
+  assign faq_banner_image = section.settings.banner_image | default: section.settings.banner_image_mobile
+  assign faq_banner_image_mobile = section.settings.banner_image_mobile | default: faq_banner_image
   assign faq_banner_overlay_color = section.settings.banner_overlay_color | default: '#041830'
   assign faq_banner_overlay_red = faq_banner_overlay_color | color_extract: 'red'
   assign faq_banner_overlay_green = faq_banner_overlay_color | color_extract: 'green'
@@ -33,6 +35,7 @@
     background: linear-gradient(115deg, var(--dark) 0%, var(--navy) 52%, var(--blue) 100%);
   }
 
+  {%- if faq_banner_image == blank -%}
   #shopify-section-{{ section.id }} .faq-page-header__banner::after {
     position: absolute;
     inset: 0;
@@ -42,6 +45,7 @@
       linear-gradient(135deg, rgba(4, 24, 48, 0.24), transparent 62%);
     content: '';
   }
+  {%- endif -%}
 
   #shopify-section-{{ section.id }} .faq-page-header__media,
   #shopify-section-{{ section.id }} .faq-page-header__media img,
@@ -302,8 +306,6 @@
 </style>
 
 {%- liquid
-  assign faq_banner_image = section.settings.banner_image | default: section.settings.banner_image_mobile
-  assign faq_banner_image_mobile = section.settings.banner_image_mobile | default: faq_banner_image
   assign faq_banner_alt = faq_banner_image.alt | default: section.settings.banner_title | default: 'FAQ'
   assign faq_page_title = section.settings.title | default: 'FAQs'
 -%}
