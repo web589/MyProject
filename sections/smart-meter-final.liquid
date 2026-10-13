@@ -1,6 +1,6 @@
 {%- assign page_id = 'smart-meter-final-' | append: section.id -%}
 
-<section class="smart-meter-page sm-section sm-final" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %}">
+<section id="smart-meter-final" class="smart-meter-page sm-section sm-final" data-smart-meter-page aria-labelledby="{{ page_id }}-heading" style="{% render 'smart-meter-style', section: section %}">
   <div class="sm-container">
     <div class="sm-final-card">
       {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}

@@ -1,9 +1,5 @@
-{%- liquid
-  assign navigation_anchor = section.settings.anchor_id | default: 'smart-meter-navigation' | handle
--%}
-
 <nav
-  id="{{ navigation_anchor }}"
+  id="smart-meter-navigation"
   class="sm-anchor-nav"
   data-anchor-nav
   data-section-id="{{ section.id }}"
@@ -13,17 +9,55 @@
   <div class="sm-anchor-nav__inner anchor-nav__inner">
     <div class="sm-anchor-nav__links anchor-nav__links">
       {% for block in section.blocks %}
-        {% assign link_target = block.settings.target | strip | remove_first: '#' | handle %}
-        {% if block.settings.label != blank and link_target != blank %}
-          <a
-            class="sm-anchor-nav__link anchor-nav__link"
-            href="#{{ link_target }}"
-            data-anchor-link
-            data-anchor-nav-link
-            {{ block.shopify_attributes }}
-          >
-            {{ block.settings.label | escape }}
-          </a>
+        {% liquid
+          assign link_module = block.settings.module | default: 'custom'
+          assign module_label = 'Eigener Abschnitt'
+          case link_module
+            when 'smart_meter_hero'
+              assign module_label = 'Start'
+            when 'smart_meter_definition'
+              assign module_label = 'Grundlagen'
+            when 'smart_meter_flow'
+              assign module_label = 'Funktionsweise'
+            when 'smart_meter_everyday'
+              assign module_label = 'Im Alltag'
+            when 'smart_meter_app'
+              assign module_label = 'App & Daten'
+            when 'smart_meter_solutions'
+              assign module_label = 'Smart Meter'
+            when 'smart_meter_integration'
+              assign module_label = 'Integration'
+            when 'smart_meter_bridge'
+              assign module_label = 'Energiemanagement'
+            when 'smart_meter_faq'
+              assign module_label = 'FAQ'
+            when 'smart_meter_guides'
+              assign module_label = 'Ratgeber'
+            when 'smart_meter_final'
+              assign module_label = 'Nächster Schritt'
+          endcase
+          assign link_label = block.settings.label | default: module_label
+          assign link_warning_id = 'anchor-warning-' | append: section.id | append: '-' | append: block.id
+        %}
+        {% capture link_target %}{% render 'anchor-navigation-target', module: link_module, fallback: block.settings.target %}{% endcapture %}
+        {% assign link_target = link_target | strip | remove_first: '#' | handle %}
+        {% if link_label != blank %}
+          <span class="sm-anchor-nav__item" {{ block.shopify_attributes }}>
+            {% if link_target != blank %}
+              <a
+                class="sm-anchor-nav__link anchor-nav__link"
+                href="#{{ link_target }}"
+                data-anchor-link
+                data-anchor-nav-link
+                data-anchor-warning-id="{{ link_warning_id }}"
+              >
+                {{ link_label | escape }}
+              </a>
+            {% endif %}
+            {% if request.design_mode %}
+              <span id="{{ link_warning_id }}" class="sm-anchor-nav__warning" data-anchor-warning{% if link_target != blank %} hidden{% endif %}>未找到目标模块：{{ link_label | escape }}</span>
+            {% endif %}
+          </span>
         {% endif %}
       {% endfor %}
     </div>
@@ -43,13 +77,6 @@
       "default": "Navigation zu Smart Meter & Energiefluss"
     },
     {
-      "type": "text",
-      "id": "anchor_id",
-      "label": "导航锚点 ID",
-      "info": "无需输入 #；该 ID 在本页必须唯一。",
-      "default": "smart-meter-navigation"
-    },
-    {
       "type": "range",
       "id": "nav_text_size",
       "label": "导航文本大小",
@@ -66,21 +93,56 @@
       "name": "导航链接",
       "settings": [
         {
+          "type": "select",
+          "id": "module",
+          "label": "链接到模块",
+          "info": "选择本页模块，代码自动生成固定锚点，无需填写 ID。",
+          "options": [
+            { "value": "smart_meter_hero", "label": "首屏" },
+            { "value": "smart_meter_definition", "label": "定义" },
+            { "value": "smart_meter_flow", "label": "数据流" },
+            { "value": "smart_meter_everyday", "label": "日常示例" },
+            { "value": "smart_meter_app", "label": "应用数据" },
+            { "value": "smart_meter_solutions", "label": "方案选择" },
+            { "value": "smart_meter_integration", "label": "兼容性检查" },
+            { "value": "smart_meter_bridge", "label": "能源管理衔接" },
+            { "value": "smart_meter_faq", "label": "常见问题" },
+            { "value": "smart_meter_guides", "label": "指南" },
+            { "value": "smart_meter_final", "label": "最终行动" },
+            { "value": "custom", "label": "自定义锚点（高级）" }
+          ],
+          "default": "smart_meter_flow"
+        },
+        {
           "type": "text",
           "id": "label",
-          "label": "标签",
-          "default": "Funktionsweise"
+          "label": "导航显示文字",
+          "info": "留空时使用所选模块的默认名称。"
         },
         {
           "type": "text",
           "id": "target",
-          "label": "目标锚点 ID",
-          "info": "可带或不带 #；必须对应本页区块的 ID。",
-          "default": "fluss"
+          "label": "自定义锚点 ID（高级）",
+          "info": "仅在选择“自定义锚点”时填写，可带或不带 #。",
+          "visible_if": "{{ block.settings.module == 'custom' }}"
         }
       ]
     }
   ],
-  "max_blocks": 8
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "智能电表 · 锚点导航",
+      "blocks": [
+        { "type": "link", "settings": { "module": "smart_meter_hero" } },
+        { "type": "link", "settings": { "module": "smart_meter_definition" } },
+        { "type": "link", "settings": { "module": "smart_meter_flow" } },
+        { "type": "link", "settings": { "module": "smart_meter_everyday" } },
+        { "type": "link", "settings": { "module": "smart_meter_solutions" } },
+        { "type": "link", "settings": { "module": "smart_meter_integration" } },
+        { "type": "link", "settings": { "module": "smart_meter_faq" } }
+      ]
+    }
+  ]
 }
 {% endschema %}

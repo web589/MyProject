@@ -127,7 +127,11 @@
           }
         }
 
-        if (!target || target.hidden) return;
+        if (!target || target.hidden) {
+          link.classList.remove('is-active');
+          link.removeAttribute('aria-current');
+          return;
+        }
 
         if (link.matches(navLinkSelector) && !link.hasAttribute('data-anchor-nav-cta')) {
           activeLinks.push({ link: link, target: target });
@@ -255,7 +259,12 @@
   });
 
   document.addEventListener('shopify:section:unload', function () {
-    window.setTimeout(function () { boot(document); }, 0);
+    window.setTimeout(function () {
+      document.querySelectorAll(navSelector).forEach(function (nav) {
+        var controller = navControllers.get(nav);
+        if (controller) controller.refresh();
+      });
+    }, 0);
   });
 
   document.addEventListener('shopify:section:reorder', function () {
