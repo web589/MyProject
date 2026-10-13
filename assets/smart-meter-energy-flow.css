@@ -51,8 +51,8 @@
   width: min(1440px, calc(100% - 48px));
   min-height: var(--anchor-nav-height);
   align-items: center;
+  gap: clamp(12px, 2vw, 24px);
   margin: 0 auto;
-  overflow: hidden;
 }
 
 .main-content--smart-meter .sm-anchor-nav__links {
@@ -61,7 +61,7 @@
   min-height: var(--anchor-nav-height);
   flex: 1 1 auto;
   align-items: center;
-  justify-content: center;
+  justify-content: safe center;
   gap: clamp(18px, 3vw, 38px);
   overflow-x: auto;
   scrollbar-width: none;
@@ -88,6 +88,58 @@
 
 .main-content--smart-meter .sm-anchor-nav__warning[hidden] {
   display: none;
+}
+
+.main-content--smart-meter .sm-anchor-nav__cta-item {
+  display: flex;
+  max-width: 45%;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  margin-left: auto;
+}
+
+.main-content--smart-meter .sm-anchor-nav__cta {
+  display: inline-flex;
+  width: 100%;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #0099fe, #00c6ff);
+  color: #fff;
+  font-size: var(--sm-anchor-text-size, 13.5px);
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: center;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: filter 180ms ease;
+}
+
+.main-content--smart-meter .sm-anchor-nav__cta:hover,
+.main-content--smart-meter .sm-anchor-nav__cta:active {
+  color: #fff;
+  filter: brightness(1.06);
+}
+
+.main-content--smart-meter .sm-anchor-nav__cta:focus-visible {
+  outline: 3px solid rgba(0, 153, 252, 0.34);
+  outline-offset: 3px;
+}
+
+.main-content--smart-meter .sm-anchor-nav__cta.is-missing-target {
+  border-color: #b42318;
+}
+
+.main-content--smart-meter .sm-anchor-nav__warning--cta {
+  max-width: 100%;
+  padding: 6px 0;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .main-content--smart-meter .sm-anchor-nav__link {
@@ -1095,9 +1147,25 @@
   }
 }
 
+@media (max-width: 899px) {
+  .main-content--smart-meter .sm-anchor-nav__inner {
+    width: calc(100% - 32px);
+    gap: 12px;
+  }
+
+  .main-content--smart-meter .sm-anchor-nav__links {
+    gap: 20px;
+  }
+
+  .main-content--smart-meter .sm-anchor-nav__cta {
+    padding: 8px 12px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .main-content--smart-meter .sm-anchor-nav__link,
-  .main-content--smart-meter .sm-anchor-nav__link::after {
+  .main-content--smart-meter .sm-anchor-nav__link::after,
+  .main-content--smart-meter .sm-anchor-nav__cta {
     transition: none;
   }
 

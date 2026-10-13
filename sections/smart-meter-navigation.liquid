@@ -6,7 +6,7 @@
   aria-label="{{ section.settings.aria_label | escape }}"
   style="--sm-anchor-text-size: {{ section.settings.nav_text_size | default: 13.5 }}px;"
 >
-  <div class="sm-anchor-nav__inner anchor-nav__inner">
+  <div class="sm-anchor-nav__inner">
     <div class="sm-anchor-nav__links anchor-nav__links">
       {% for block in section.blocks %}
         {% liquid
@@ -61,6 +61,32 @@
         {% endif %}
       {% endfor %}
     </div>
+    {% if section.settings.cta_label != blank %}
+      {% liquid
+        assign cta_module = section.settings.cta_module | default: 'smart_meter_final'
+        assign cta_warning_id = 'anchor-warning-' | append: section.id | append: '-cta'
+      %}
+      {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
+      {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
+      {% if cta_target != blank or request.design_mode %}
+        <div class="sm-anchor-nav__cta-item">
+          {% if cta_target != blank %}
+            <a
+              class="sm-anchor-nav__cta"
+              href="#{{ cta_target }}"
+              data-anchor-link
+              data-anchor-nav-cta
+              data-anchor-warning-id="{{ cta_warning_id }}"
+            >
+              {{ section.settings.cta_label | escape }}
+            </a>
+          {% endif %}
+          {% if request.design_mode %}
+            <span id="{{ cta_warning_id }}" class="sm-anchor-nav__warning sm-anchor-nav__warning--cta" data-anchor-warning{% if cta_target != blank %} hidden{% endif %}>未找到目标模块：{{ section.settings.cta_label | escape }}</span>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endif %}
   </div>
 </nav>
 
@@ -85,6 +111,45 @@
       "step": 0.5,
       "unit": "px",
       "default": 13.5
+    },
+    {
+      "type": "header",
+      "content": "右侧行动按钮"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "行动按钮文案",
+      "info": "建议使用简短文案；留空时隐藏按钮。",
+      "default": "Smart Meter finden"
+    },
+    {
+      "type": "select",
+      "id": "cta_module",
+      "label": "行动按钮链接到模块",
+      "info": "代码自动生成固定锚点，默认跳到页面结尾的最终行动区。",
+      "options": [
+        { "value": "smart_meter_hero", "label": "首屏" },
+        { "value": "smart_meter_definition", "label": "定义" },
+        { "value": "smart_meter_flow", "label": "数据流" },
+        { "value": "smart_meter_everyday", "label": "日常示例" },
+        { "value": "smart_meter_app", "label": "应用数据" },
+        { "value": "smart_meter_solutions", "label": "方案选择" },
+        { "value": "smart_meter_integration", "label": "兼容性检查" },
+        { "value": "smart_meter_bridge", "label": "能源管理衔接" },
+        { "value": "smart_meter_faq", "label": "常见问题" },
+        { "value": "smart_meter_guides", "label": "指南" },
+        { "value": "smart_meter_final", "label": "最终行动" },
+        { "value": "custom", "label": "自定义锚点（高级）" }
+      ],
+      "default": "smart_meter_final"
+    },
+    {
+      "type": "text",
+      "id": "cta_target",
+      "label": "行动按钮自定义锚点 ID（高级）",
+      "info": "仅在选择“自定义锚点”时填写，可带或不带 #。",
+      "visible_if": "{{ section.settings.cta_module == 'custom' }}"
     }
   ],
   "blocks": [
