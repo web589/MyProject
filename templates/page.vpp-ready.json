@@ -12,19 +12,11 @@
     "vpp_navigation": {
       "type": "vpp-ready-navigation",
       "blocks": {
-        "nav_start": {
-          "type": "link",
-          "settings": {
-            "module": "vpp_ready_start",
-            "label": "Start",
-            "target": ""
-          }
-        },
         "nav_definition": {
           "type": "link",
           "settings": {
             "module": "vpp_ready_definition",
-            "label": "VPP-ready erklärt",
+            "label": "VPP-ready",
             "target": ""
           }
         },
@@ -32,7 +24,7 @@
           "type": "link",
           "settings": {
             "module": "vpp_ready_benefits",
-            "label": "Vorteile",
+            "label": "Nutzen",
             "target": ""
           }
         },
@@ -48,7 +40,7 @@
           "type": "link",
           "settings": {
             "module": "vpp_ready_comparison",
-            "label": "Einordnung",
+            "label": "Vergleich",
             "target": ""
           }
         },
@@ -56,15 +48,7 @@
           "type": "link",
           "settings": {
             "module": "vpp_ready_participation",
-            "label": "Teilnahme",
-            "target": ""
-          }
-        },
-        "nav_boundaries": {
-          "type": "link",
-          "settings": {
-            "module": "vpp_ready_boundaries",
-            "label": "Bedingungen",
+            "label": "Voraussetzungen",
             "target": ""
           }
         },
@@ -83,34 +67,23 @@
             "label": "FAQ",
             "target": ""
           }
-        },
-        "nav_guides": {
-          "type": "link",
-          "settings": {
-            "module": "vpp_ready_guides",
-            "label": "Ratgeber",
-            "target": ""
-          }
         }
       },
       "block_order": [
-        "nav_start",
         "nav_definition",
         "nav_benefits",
         "nav_function",
         "nav_comparison",
         "nav_participation",
-        "nav_boundaries",
         "nav_models",
-        "nav_faq",
-        "nav_guides"
+        "nav_faq"
       ],
       "settings": {
         "aria_label": "Navigation zu VPP-ready",
         "anchor_id": "navigation",
         "nav_text_size": 13.5,
-        "cta_label": "VPP-Möglichkeiten anfragen",
-        "cta_module": "vpp_ready_participation",
+        "cta_label": "VPP-Möglichkeiten klären",
+        "cta_module": "vpp_ready_models",
         "cta_target": ""
       }
     },
@@ -140,8 +113,8 @@
       ],
       "settings": {
         "eyebrow": "Vernetzte Energie",
-        "heading_before": "VPP-ready: vorbereitet auf",
-        "heading_highlight": "virtuelle Kraftwerke",
+        "heading_before": "VPP-ready erklärt: Wie Speicher Teil eines virtuellen",
+        "heading_highlight": "Kraftwerks werden können",
         "subtext": "Ein VPP-ready-Speicher kann nicht nur Solarstrom speichern, sondern perspektivisch auch Teil eines vernetzten Energiesystems werden. Erfahre, wie virtuelle Kraftwerke funktionieren, welche Vorteile sie bieten und was für eine Teilnahme wichtig ist.",
         "note": "Teilnahme und mögliche Vergütung hängen vom Modell, vom Anbieter und vom verfügbaren Programm ab.",
         "image": "shopify://shop_images/1_3c72e39b-c7d7-4391-94d0-b80a300c494a.webp",
@@ -194,7 +167,7 @@
         "heading_before": "Was bedeutet",
         "heading_highlight": "VPP-ready?",
         "answer_label": "Kurz gesagt:",
-        "answer": "VPP steht für „Virtual Power Plant“, auf Deutsch „virtuelles Kraftwerk“. Dabei werden verteilte Speicher, Erzeugungsanlagen oder flexible Verbraucher digital koordiniert. VPP-ready beschreibt hier die technische Vorbereitung auf eine solche Einbindung – noch keine bereits aktive Teilnahme.",
+        "answer": "VPP-ready bedeutet, dass ein Speicher technisch für eine mögliche Einbindung in ein virtuelles Kraftwerk vorbereitet ist. Ob eine Teilnahme tatsächlich möglich ist, hängt zusätzlich von Modell, Software, Standort und dem verfügbaren VPP-Programm ab.aVPP-ready ist daher keine Zusage für eine aktive Teilnahme, Freischaltung oder Vergütung.",
         "note": "Ein virtuelles Kraftwerk koordiniert verteilte Anlagen über eine gemeinsame Steuerung. Die Häuser werden dafür nicht durch eine eigene Leitung miteinander verbunden.",
         "image": "shopify://shop_images/Was_bedeutet_VPP-ready.webp",
         "image_alt": "Infografik: VENUS E Speicher, technische Vorbereitung, VPP-Programm und aktive Teilnahme",
@@ -246,7 +219,7 @@
         "eyebrow": "Zusätzliche Möglichkeiten",
         "heading_before": "Welchen Nutzen kann ein",
         "heading_highlight": "virtuelles Kraftwerk bieten?",
-        "subtext": "In einem passenden VPP-Programm kann die Flexibilität deines Speichers zusätzlich genutzt werden. Je nach Einsatz entstehen daraus Möglichkeiten für Vergütung und einen besser abgestimmten Betrieb im Stromsystem.",
+        "subtext": "Ein virtuelles Kraftwerk bündelt verteilte Energieanlagen digital und kann deren Flexibilität je nach Programm für Netz- oder Marktaufgaben nutzbar machen. Welche Vorteile für einen Haushalt entstehen, hängt vom konkreten Anbieter und Teilnahmeprogramm ab.",
         "image": "shopify://shop_images/Welchen_Nutzen_kann_ein_virtuelles_Kraftwerk_bieten.webp",
         "image_alt": "VENUS E Speicher an einem Einfamilienhaus",
         "image_placeholder": "请选择单户家庭储能与电网场景图",
@@ -305,7 +278,7 @@
         "eyebrow": "Funktionsweise",
         "heading_before": "Wie funktioniert ein virtuelles Kraftwerk mit",
         "heading_highlight": "Heimspeichern?",
-        "subtext": "Ein virtuelles Kraftwerk verbindet verteilte Speicher digital über eine Plattform und koordiniert ihre verfügbare Flexibilität innerhalb festgelegter Betriebsgrenzen. Die Speicher bleiben dabei an ihrem jeweiligen Standort.",
+        "subtext": "Ein virtuelles Kraftwerk verbindet Heimspeicher nicht physisch miteinander, sondern koordiniert sie digital über eine Plattform.",
         "image_alt": "Schematische Darstellung mehrerer Heimspeicher, die über eine VPP-Plattform digital koordiniert werden",
         "image_placeholder": "请选择多户社区 VPP 场景图，不使用方框流程图",
         "caption": "Prinzipdarstellung eines virtuellen Kraftwerks, kein Installationsplan.",
@@ -386,9 +359,9 @@
       ],
       "settings": {
         "eyebrow": "Richtig einordnen",
-        "heading_before": "Eigenverbrauch, dynamischer Tarif oder",
-        "heading_highlight": "VPP?",
-        "subtext": "Diese Anwendungen verfolgen unterschiedliche Ziele. Sie können zusammenwirken, sind aber nicht dasselbe.",
+        "heading_before": "Eigenverbrauch, dynamischer Stromtarif oder VPP:",
+        "heading_highlight": "drei unterschiedliche Modelle",
+        "subtext": "Eigenverbrauchsoptimierung, dynamischer Stromtarif und VPP sind nicht dasselbe. Sie verfolgen unterschiedliche Ziele und können sich je nach System ergänzen.",
         "name_heading": "Anwendung",
         "goal_heading": "Worum es geht",
         "difference_heading": "Wichtiger Unterschied",
@@ -474,9 +447,9 @@
       ],
       "settings": {
         "eyebrow": "Teilnahme prüfen",
-        "heading_before": "Was brauchst du für die",
-        "heading_highlight": "VPP-Teilnahme?",
-        "subtext": "Entscheidend ist das konkrete Programm. Prüfe, ob dein Speichermodell, dein Standort und deine Installation die Anforderungen des Anbieters erfüllen.",
+        "heading_before": "Welche Voraussetzungen können für eine",
+        "heading_highlight": "VPP-Teilnahme gelten?",
+        "subtext": "Ob eine Teilnahme möglich ist, hängt nicht allein vom Speicher ab. Entscheidend sind unter anderem kompatibles Modell und Software, Standort, verfügbares VPP-Programm sowie dessen Mess-, Kommunikations- und Vertragsanforderungen.",
         "image": "shopify://shop_images/Was_brauchst_du_fur_die_VPP-Teilnahme.webp",
         "image_alt": "VENUS E Speicher und Verteiler in einem Hauswirtschaftsraum",
         "image_placeholder": "请选择 VENUS E 与配电箱横幅图片",
@@ -574,7 +547,7 @@
             "tag": "",
             "fallback_title": "VENUS E Mini",
             "text": "Kompakter Speicher für kleinere Energiemengen und wenig Platz.",
-            "link_label": "Details ansehen →"
+            "link_label": "VENUS E Mini ansehen →"
           }
         },
         "model_3": {
@@ -584,7 +557,7 @@
             "tag": "",
             "fallback_title": "VENUS E 3.0",
             "text": "Für Haushalte, die Solarstrom flexibel speichern und zeitversetzt nutzen möchten.",
-            "link_label": "Details ansehen →"
+            "link_label": "VENUS E 3.0 ansehen →"
           }
         },
         "model_4": {
@@ -594,7 +567,7 @@
             "tag": "",
             "fallback_title": "VENUS E 4.0",
             "text": "Für Haushalte mit höheren Anforderungen an Leistung und Energiemanagement.",
-            "link_label": "Details ansehen →"
+            "link_label": "VENUS E 4.0 ansehen →"
           }
         },
         "model_max": {
@@ -604,7 +577,7 @@
             "tag": "",
             "fallback_title": "VENUS E Max",
             "text": "Für größere Haushalte mit höherem Speicher- und Leistungsbedarf.",
-            "link_label": "Details ansehen →"
+            "link_label": "VENUS E Max ansehen →"
           }
         }
       },
@@ -619,7 +592,7 @@
         "heading_before": "Welcher VENUS E passt zu",
         "heading_highlight": "deinem Zuhause?",
         "subtext": "Wähle deinen Speicher nach Strombedarf, Solarüberschuss, Kapazität und Leistung. Die Teilnahme an einem konkreten VPP-Programm wird zusätzlich geprüft.",
-        "hint": "VPP-Funktionen hängen vom Modell, Softwarestand und verfügbaren Programmen ab.",
+        "hint": "Die gezeigte Produktauswahl ist keine Zusage zur VPP-Teilnahme. VPP-Funktionen und Verfügbarkeit hängen von Modell, Software, Standort und verfügbarem Programm ab.",
         "cta_label": "Alle Speichermodelle vergleichen →",
         "cta_url": "/pages/venus-e-vergleich",
         "section_padding": 72,
