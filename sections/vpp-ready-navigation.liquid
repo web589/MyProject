@@ -34,11 +34,29 @@
       {% endfor %}
     </div>
 
-    {% assign cta_module = section.settings.cta_module | default: 'custom' %}
-    {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
-    {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
-    {% if section.settings.cta_label != blank and cta_target != blank %}
-      <a class="vpp-anchor-nav__cta" href="#{{ cta_target }}" data-vpp-anchor-link data-anchor-link data-anchor-nav-cta data-bw-anchor-module="{{ cta_module | escape }}">
+    {% assign cta_type = section.settings.cta_type | default: 'anchor' %}
+    {% assign cta_href = '' %}
+    {% if cta_type == 'link' %}
+      {% assign cta_href = section.settings.cta_link %}
+    {% else %}
+      {% assign cta_module = section.settings.cta_module | default: 'custom' %}
+      {% capture cta_target %}{% render 'anchor-navigation-target', module: cta_module, fallback: section.settings.cta_target %}{% endcapture %}
+      {% assign cta_target = cta_target | strip | remove_first: '#' | handle %}
+      {% if cta_target != blank %}
+        {% assign cta_href = cta_target | prepend: '#' %}
+      {% endif %}
+    {% endif %}
+    {% if section.settings.cta_label != blank and cta_href != blank %}
+      <a
+        class="vpp-anchor-nav__cta"
+        href="{{ cta_href | escape }}"
+        data-anchor-nav-cta
+        {% unless cta_type == 'link' %}
+          data-vpp-anchor-link
+          data-anchor-link
+          data-bw-anchor-module="{{ cta_module | escape }}"
+        {% endunless %}
+      >
         {{ section.settings.cta_label | escape }}
       </a>
     {% endif %}
@@ -86,6 +104,23 @@
     },
     {
       "type": "select",
+      "id": "cta_type",
+      "label": "行动按钮跳转方式",
+      "options": [
+        { "value": "anchor", "label": "定位本页模块" },
+        { "value": "link", "label": "跳转其他页面" }
+      ],
+      "default": "anchor"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "行动按钮页面链接",
+      "info": "可选择店铺页面、产品或集合，也可填写完整网址；链接末尾可带 #锚点以定位目标页面的模块。",
+      "visible_if": "{{ section.settings.cta_type == 'link' }}"
+    },
+    {
+      "type": "select",
       "id": "cta_module",
       "label": "行动按钮链接到模块",
       "options": [
@@ -101,14 +136,15 @@
         { "value": "vpp_ready_guides", "label": "VPP-ready · Ratgeber" },
         { "value": "custom", "label": "自定义锚点（高级）" }
       ],
-      "default": "custom"
+      "default": "custom",
+      "visible_if": "{{ section.settings.cta_type == 'anchor' }}"
     },
     {
       "type": "text",
       "id": "cta_target",
       "label": "自定义锚点 ID（高级）",
       "info": "仅当上方选择“自定义锚点”时填写，可带或不带 #。",
-      "visible_if": "{{ section.settings.cta_module == 'custom' }}"
+      "visible_if": "{{ section.settings.cta_type == 'anchor' and section.settings.cta_module == 'custom' }}"
     }
   ],
   "blocks": [
