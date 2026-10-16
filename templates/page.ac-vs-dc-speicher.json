@@ -11,26 +11,128 @@
   "sections": {
     "acdc_navigation": {
       "type": "acdc-anchor-navigation",
-      "settings": {"cta_label":"Beratung anfragen","cta_module":"acdc_final"},
       "blocks": {
-        "nav_01": {"type":"link","settings":{"module":"acdc_start"}},
-        "nav_02": {"type":"link","settings":{"module":"acdc_definition"}},
-        "nav_03": {"type":"link","settings":{"module":"acdc_architecture"}},
-        "nav_04": {"type":"link","settings":{"module":"acdc_comparison"}},
-        "nav_05": {"type":"link","settings":{"module":"acdc_retrofit"}},
-        "nav_06": {"type":"link","settings":{"module":"acdc_new_pv"}},
-        "nav_07": {"type":"link","settings":{"module":"acdc_decision"}},
-        "nav_08": {"type":"link","settings":{"module":"acdc_criteria"}},
-        "nav_09": {"type":"link","settings":{"module":"acdc_venus_ac"}},
-        "nav_10": {"type":"link","settings":{"module":"acdc_energy_flow"}},
-        "nav_11": {"type":"link","settings":{"module":"acdc_models"}},
-        "nav_12": {"type":"link","settings":{"module":"acdc_faq"}}
+        "nav_01": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_start",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_02": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_definition",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_03": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_architecture",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_04": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_comparison",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_05": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_retrofit",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_06": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_new_pv",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_07": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_decision",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_08": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_criteria",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_09": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_venus_ac",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_10": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_energy_flow",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_11": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_models",
+            "label": "",
+            "target": ""
+          }
+        },
+        "nav_12": {
+          "type": "link",
+          "settings": {
+            "module": "acdc_faq",
+            "label": "",
+            "target": ""
+          }
+        }
       },
-      "block_order": ["nav_01","nav_02","nav_03","nav_04","nav_05","nav_06","nav_07","nav_08","nav_09","nav_10","nav_11","nav_12"]
+      "block_order": [
+        "nav_01",
+        "nav_02",
+        "nav_03",
+        "nav_04",
+        "nav_05",
+        "nav_06",
+        "nav_07",
+        "nav_08",
+        "nav_09",
+        "nav_10",
+        "nav_11",
+        "nav_12"
+      ],
+      "settings": {
+        "aria_label": "Navigation zu AC- und DC-Speichern",
+        "nav_text_size": 13.5,
+        "cta_label": "Beratung anfragen",
+        "cta_module": "acdc_final",
+        "cta_target": ""
+      }
     },
     "acdc_01_hero": {
       "type": "acdc-01-hero",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "button",
@@ -52,11 +154,18 @@
       "block_order": [
         "item_01",
         "item_02"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "AC VS. DC SPEICHER",
+        "heading": "AC vs. DC Speicher: Welche Speicherlösung passt zu deiner",
+        "heading_accent": "PV-Anlage?",
+        "subtitle": "AC- und DC-gekoppelte Speicher unterscheiden sich vor allem darin, wo sie in das PV-System eingebunden werden. Hier erfährst du, was das für Nachrüstung, Neuinstallation und deinen Alltag bedeutet.",
+        "image": "shopify://shop_images/1_f97bb346-0e84-42d8-b7da-4dec4ceb4b24.webp",
+        "image_alt": "Gegenüberstellung von AC- und DC-gekoppeltem Solarspeicher an einem Wohnhaus"
+      }
     },
     "acdc_02_definition": {
       "type": "acdc-02-definition",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "definition",
@@ -80,15 +189,23 @@
       "block_order": [
         "item_01",
         "item_02"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Kurz erklärt",
+        "heading": "AC- und DC-Speicher",
+        "heading_accent": "kurz erklärt",
+        "answer_label": "Kurz gesagt:",
+        "answer": "Der wichtigste Unterschied für die Systemarchitektur liegt darin, wo der Speicher in das PV-System eingebunden wird – auf der Wechselstromseite oder auf der Gleichstromseite.",
+        "note": "Beide Ansätze sind verbreitet. Welcher zu deiner Situation passt, hängt vor allem davon ab, ob bereits eine PV-Anlage existiert oder ob Erzeugung und Speicher gemeinsam geplant werden."
+      }
     },
     "acdc_03_architecture": {
       "type": "acdc-03-architecture",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "architecture",
           "settings": {
+            "image": "shopify://shop_images/2_1_20db83fb-0f80-4e1c-8e63-5b5a91b4ed37.webp",
             "image_alt": "Struktur eines AC-gekoppelten Solarspeichers im Hausnetz",
             "badge": "AC",
             "title": "AC-Kopplung: Einbindung auf der Wechselstromseite",
@@ -100,6 +217,7 @@
         "item_02": {
           "type": "architecture",
           "settings": {
+            "image": "shopify://shop_images/2_2_f6f88719-5d76-45a2-943f-c9ec6c4b10b5.webp",
             "image_alt": "Struktur eines DC-gekoppelten Solarspeichers mit Hybridwechselrichter",
             "badge": "DC",
             "title": "DC-Kopplung: Einbindung auf der Gleichstromseite",
@@ -112,11 +230,18 @@
       "block_order": [
         "item_01",
         "item_02"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Systemarchitektur",
+        "heading": "So unterscheiden sich AC- und",
+        "heading_accent": "DC-gekoppelte Speicher",
+        "subtitle": "Der Unterschied liegt in der Einbindung: AC-Speicher arbeiten auf der Wechselstromseite, DC-Speicher auf der Gleichstromseite der PV-Anlage.",
+        "flow_label": "ENERGIEFLUSS",
+        "note": "Beide Architekturen sind bei PV-Speichersystemen verbreitet. Entscheidend ist nicht die eine „richtige“ Technik, sondern welche Architektur zu deiner vorhandenen Anlage und zu deinen Plänen passt."
+      }
     },
     "acdc_04_comparison": {
       "type": "acdc-04-comparison",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "row",
@@ -183,18 +308,30 @@
         "item_05",
         "item_06",
         "item_07"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Direktvergleich",
+        "heading": "AC vs. DC Speicher im",
+        "heading_accent": "direkten Vergleich",
+        "subtitle": "Die folgende Übersicht ordnet typische Unterschiede ein – ohne Bewertung, welche Variante „besser“ ist.",
+        "table_label": "AC- und DC-Speicher im Vergleich",
+        "column_one": "Kriterium",
+        "column_two": "AC-gekoppelt",
+        "column_three": "DC-gekoppelt",
+        "note": "Die Einordnung beschreibt typische Ausprägungen, keine festen Regeln. Welche Punkte im Einzelfall zutreffen, hängt von der vorhandenen Anlage, den verbauten Komponenten und der geplanten Nutzung ab."
+      }
     },
     "acdc_05_retrofit": {
       "type": "acdc-05-retrofit",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "point",
           "settings": {
             "icon_type": "inverter",
             "title": "Bestehender Wechselrichter",
-            "description": "Ein vorhandener Wechselrichter kann häufig weiter genutzt werden. Ob das im konkreten System möglich ist, muss individuell geprüft werden."
+            "description": "Ein vorhandener Wechselrichter kann häufig weiter genutzt werden. Ob das im konkreten System möglich ist, muss individuell geprüft werden.",
+            "link_text": "",
+            "link": ""
           }
         },
         "item_02": {
@@ -212,7 +349,9 @@
           "settings": {
             "icon_type": "expand",
             "title": "System flexibel erweitern",
-            "description": "Je nach System können Kapazität, Messung oder Energiemanagement später ergänzt werden."
+            "description": "Je nach System können Kapazität, Messung oder Energiemanagement später ergänzt werden.",
+            "link_text": "",
+            "link": ""
           }
         }
       },
@@ -220,13 +359,19 @@
         "item_01",
         "item_02",
         "item_03"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Nachrüstung",
+        "heading": "Bestehende PV-Anlage: Wann ist",
+        "heading_accent": "AC-Kopplung",
+        "heading_after": "besonders interessant?",
+        "subtitle": "Bei bestehenden PV-Anlagen zählt vor allem, wie sich ein Speicher sinnvoll in das vorhandene System integrieren lässt.",
+        "image": "shopify://shop_images/3_2f6665b9-4067-4e53-9576-1a00ea0cccf4.webp",
+        "image_alt": "Wohnhaus mit bestehender PV-Anlage und nachgerüstetem AC-Speicher"
+      }
     },
     "acdc_06_new_pv": {
       "type": "acdc-06-new-pv",
-      "settings": {
-        "note_link_url": "/pages/solarspeicher-erklaert"
-      },
       "blocks": {
         "item_01": {
           "type": "point",
@@ -266,18 +411,31 @@
         "item_02",
         "item_03",
         "item_04"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Neuinstallation",
+        "title_before": "Neue PV-Anlage: Wann kommt",
+        "title_accent": "DC-Kopplung",
+        "title_after": "infrage?",
+        "subtitle": "Wer PV-Anlage und Speicher gemeinsam plant, kann beide von Anfang an aufeinander abstimmen – hier kommt häufig die DC-Kopplung ins Spiel.",
+        "image": "shopify://shop_images/4_ed2f18e7-d730-4288-8b15-371836075fbc.webp",
+        "image_alt": "Neu geplante PV-Anlage mit Speicherlösung an einem Wohnhaus",
+        "note": "Bei gemeinsam geplanten PV- und Speichersystemen kann die DC-Kopplung eine passende Architektur sein. Entscheidend ist, dass Komponenten und geplante Nutzung zusammenpassen.",
+        "note_link_text": "Grundlagen zum Solarspeicher →",
+        "note_link_url": "/pages/solarspeicher-erklaert"
+      }
     },
     "acdc_07_decision_matrix": {
       "type": "acdc-07-decision-matrix",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "row",
           "settings": {
             "icon": "house",
             "situation": "Du hast bereits eine PV-Anlage",
-            "assessment": "AC-Kopplung ist hier häufig interessant, weil der Speicher auf der Wechselstromseite ergänzt werden kann."
+            "assessment": "AC-Kopplung ist hier häufig interessant, weil der Speicher auf der Wechselstromseite ergänzt werden kann.",
+            "link_label": "",
+            "link_url": ""
           }
         },
         "item_02": {
@@ -285,7 +443,9 @@
           "settings": {
             "icon": "new",
             "situation": "Du planst PV und Speicher gleichzeitig",
-            "assessment": "Sowohl AC als auch DC kommen infrage. Welche Variante sinnvoll ist, hängt vom Systemkonzept ab."
+            "assessment": "Sowohl AC als auch DC kommen infrage. Welche Variante sinnvoll ist, hängt vom Systemkonzept ab.",
+            "link_label": "",
+            "link_url": ""
           }
         },
         "item_03": {
@@ -293,7 +453,9 @@
           "settings": {
             "icon": "expand",
             "situation": "Du möchtest später flexibel erweitern",
-            "assessment": "Dann sind Systemkompatibilität und Modularität besonders wichtig – unabhängig von der Kopplungsart."
+            "assessment": "Dann sind Systemkompatibilität und Modularität besonders wichtig – unabhängig von der Kopplungsart.",
+            "link_label": "",
+            "link_url": ""
           }
         },
         "item_04": {
@@ -311,7 +473,9 @@
           "settings": {
             "icon": "inverter",
             "situation": "Du möchtest den vorhandenen Wechselrichter möglichst weiter nutzen",
-            "assessment": "Dann ist AC-Kopplung häufig besonders prüfenswert. Ob der vorhandene Wechselrichter tatsächlich weiter genutzt werden kann, hängt vom bestehenden System ab."
+            "assessment": "Dann ist AC-Kopplung häufig besonders prüfenswert. Ob der vorhandene Wechselrichter tatsächlich weiter genutzt werden kann, hängt vom bestehenden System ab.",
+            "link_label": "",
+            "link_url": ""
           }
         }
       },
@@ -321,18 +485,30 @@
         "item_03",
         "item_04",
         "item_05"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Einordnung",
+        "title_before": "Welche Lösung passt zu welcher",
+        "title_accent": "Ausgangslage?",
+        "subtitle": "Statt pauschaler Empfehlungen hilft ein Blick auf die eigene Situation. Diese Einordnung ersetzt keine Fachplanung, macht die Entscheidung aber greifbarer.",
+        "situation_heading": "Ausgangslage",
+        "assessment_heading": "Einordnung",
+        "note": "Es gibt keine pauschal bessere Lösung. Ausschlaggebend sind deine vorhandene Anlage, deine Pläne für Ausbau und Steuerung sowie die Komponenten, die bereits verbaut sind."
+      }
     },
     "acdc_08_criteria": {
       "type": "acdc-08-criteria",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "criterion",
           "settings": {
             "icon": "capacity",
             "title": "Speicherkapazität",
-            "text": "Wie viel Energie aufgenommen werden kann – abgestimmt auf Verbrauch und Solarerzeugung."
+            "text": "Wie viel Energie aufgenommen werden kann – abgestimmt auf Verbrauch und Solarerzeugung.",
+            "link_1_label": "",
+            "link_1_url": "",
+            "link_2_label": "",
+            "link_2_url": ""
           }
         },
         "item_02": {
@@ -340,7 +516,11 @@
           "settings": {
             "icon": "power",
             "title": "Leistung",
-            "text": "Welche Leistung der Speicher im Hausnetz bereitstellen kann – etwa bei höherem Abendverbrauch oder zusätzlichem Bedarf durch eine Wallbox."
+            "text": "Welche Leistung der Speicher im Hausnetz bereitstellen kann – etwa bei höherem Abendverbrauch oder zusätzlichem Bedarf durch eine Wallbox.",
+            "link_1_label": "",
+            "link_1_url": "",
+            "link_2_label": "",
+            "link_2_url": ""
           }
         },
         "item_03": {
@@ -348,7 +528,11 @@
           "settings": {
             "icon": "compatible",
             "title": "Kompatibilität",
-            "text": "Ob Speicher, Wechselrichter und vorhandene Installation zusammenpassen."
+            "text": "Ob Speicher, Wechselrichter und vorhandene Installation zusammenpassen.",
+            "link_1_label": "",
+            "link_1_url": "",
+            "link_2_label": "",
+            "link_2_url": ""
           }
         },
         "item_04": {
@@ -358,7 +542,9 @@
             "title": "Erweiterbarkeit",
             "text": "Ob Kapazität später ergänzt werden kann und welche Bedingungen dafür gelten.",
             "link_1_label": "Nachrüstung ansehen →",
-            "link_1_url": "/pages/solarspeicher-nachruesten"
+            "link_1_url": "/pages/solarspeicher-nachruesten",
+            "link_2_label": "",
+            "link_2_url": ""
           }
         },
         "item_05": {
@@ -368,8 +554,8 @@
             "title": "Energiemanagement",
             "text": "Wie Lade- und Entladezeiten gesteuert werden und welche Daten dafür verfügbar sind.",
             "link_1_label": "Energiemanagement verstehen →",
-            "link_2_label": "Smart Meter & Energiefluss →",
             "link_1_url": "/pages/ai-energiemanagement",
+            "link_2_label": "Smart Meter & Energiefluss →",
             "link_2_url": "/pages/smart-meter-energiefluss"
           }
         },
@@ -378,7 +564,11 @@
           "settings": {
             "icon": "warranty",
             "title": "Garantie und Lebensdauer",
-            "text": "Welche Bedingungen der Hersteller nennt und wie sie zur geplanten Nutzungsdauer passen."
+            "text": "Welche Bedingungen der Hersteller nennt und wie sie zur geplanten Nutzungsdauer passen.",
+            "link_1_label": "",
+            "link_1_url": "",
+            "link_2_label": "",
+            "link_2_url": ""
           }
         }
       },
@@ -389,24 +579,34 @@
         "item_04",
         "item_05",
         "item_06"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Weitere Kriterien",
+        "title_before": "Nicht nur AC oder DC: Darauf kommt es bei einem",
+        "title_accent": "Solarspeicher",
+        "title_after": "außerdem an",
+        "subtitle": "Die Kopplungsart beschreibt nur, wo der Speicher eingebunden wird. Für den Alltag zählen weitere Kriterien mindestens genauso."
+      }
     },
     "acdc_09_venus_ac": {
       "type": "acdc-09-venus-ac",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "point",
           "settings": {
             "title": "Bestehende Systeme ergänzen",
-            "text": "Durch die Einbindung auf der Wechselstromseite kann VENUS E in vielen Fällen bestehende PV-Systeme ergänzen, ohne dass die gesamte Anlage neu aufgebaut werden muss."
+            "text": "Durch die Einbindung auf der Wechselstromseite kann VENUS E in vielen Fällen bestehende PV-Systeme ergänzen, ohne dass die gesamte Anlage neu aufgebaut werden muss.",
+            "link_label": "",
+            "link_url": ""
           }
         },
         "item_02": {
           "type": "point",
           "settings": {
             "title": "Flexibel planen und erweitern",
-            "text": "Welche Erweiterungen möglich sind, hängt vom Modell und von der vorhandenen Installation ab. Je nach Konfiguration stehen unterschiedliche Ausbaumöglichkeiten zur Verfügung."
+            "text": "Welche Erweiterungen möglich sind, hängt vom Modell und von der vorhandenen Installation ab. Je nach Konfiguration stehen unterschiedliche Ausbaumöglichkeiten zur Verfügung.",
+            "link_label": "",
+            "link_url": ""
           }
         },
         "item_03": {
@@ -423,11 +623,20 @@
         "item_01",
         "item_02",
         "item_03"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "VENUS E Ansatz",
+        "title_before": "VENUS E setzt auf",
+        "title_accent": "AC-Kopplung",
+        "subtitle": "Die VENUS E Speicher werden auf der Wechselstromseite in das Energiesystem des Haushalts eingebunden.",
+        "image": "shopify://shop_images/5_03849681-c60d-48e4-a996-5f268c3bde3a.webp",
+        "image_alt": "VENUS E Speicher im Energiesystem eines Wohnhauses",
+        "note_bold": "Diese Architektur passt zu unserem Ansatz einer flexibel erweiterbaren Speicherlösung.",
+        "note_rest": "Welche Kopplungsart sinnvoll ist, hängt dennoch von der jeweiligen Anlage und Planung ab."
+      }
     },
     "acdc_10_energy_flow": {
       "type": "acdc-10-energy-flow",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "step",
@@ -467,13 +676,18 @@
         "item_02",
         "item_03",
         "item_04"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Im Hausnetz",
+        "title_before": "So arbeitet ein AC-gekoppelter Speicher im",
+        "title_accent": "Hausnetz",
+        "subtitle": "Bei einem AC-gekoppelten Speicher fließt der Solarstrom nicht direkt von der PV-Anlage in den Speicher. Die Kopplung erfolgt über das Hausnetz.",
+        "video_alt": "Energiefluss eines AC-gekoppelten Speichers im Hausnetz",
+        "note": "Ein Smart Meter liefert in diesem Aufbau Mess- und Datensignale für die Steuerung. Er ist kein Teil der elektrischen Hauptverbindung zwischen PV-Anlage, Hausnetz und Speicher."
+      }
     },
     "acdc_11_models": {
       "type": "acdc-11-models",
-      "settings": {
-        "compare_url": "/pages/speicher-vergleich"
-      },
       "blocks": {
         "item_01": {
           "type": "product_card",
@@ -481,7 +695,9 @@
             "product": "venus-e-mini",
             "title": "VENUS E Mini",
             "description": "Für den Einstieg, Balkon-PV und Haushalte mit überschaubarem Abendbedarf.",
-            "image_alt": "VENUS E Mini Solarspeicher"
+            "capacity": "",
+            "image_alt": "VENUS E Mini Solarspeicher",
+            "link_label": "Zum Modell →"
           }
         },
         "item_02": {
@@ -490,7 +706,9 @@
             "product": "venus-e-3",
             "title": "VENUS E 3.0",
             "description": "Für Haushalte mit typischem Verbrauch, die Solarstrom zeitversetzt nutzen möchten.",
-            "image_alt": "VENUS E 3.0 Solarspeicher"
+            "capacity": "",
+            "image_alt": "VENUS E 3.0 Solarspeicher",
+            "link_label": "Zum Modell →"
           }
         },
         "item_03": {
@@ -499,7 +717,9 @@
             "product": "venus-e-4",
             "title": "VENUS E 4.0",
             "description": "Für Haushalte mit höheren Anforderungen an Leistung und Steuerung.",
-            "image_alt": "VENUS E 4.0 Solarspeicher"
+            "capacity": "",
+            "image_alt": "VENUS E 4.0 Solarspeicher",
+            "link_label": "Zum Modell →"
           }
         },
         "item_04": {
@@ -508,7 +728,9 @@
             "product": "venus-e-max",
             "title": "VENUS E Max",
             "description": "Für größere Haushalte mit höherem Speicher- und Leistungsbedarf.",
-            "image_alt": "VENUS E Max Solarspeicher"
+            "capacity": "",
+            "image_alt": "VENUS E Max Solarspeicher",
+            "link_label": "Zum Modell →"
           }
         }
       },
@@ -517,11 +739,19 @@
         "item_02",
         "item_03",
         "item_04"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "VENUS E Modelle",
+        "heading": "Passende VENUS E Speicher",
+        "heading_accent": "entdecken",
+        "subtext": "Vier Modelle für unterschiedliche Ausgangslagen – vom Balkonkraftwerk bis zum größeren Haushalt.",
+        "hint": "Alle Angaben zu Kapazität und Leistung findest du auf der jeweiligen Produktseite. Welche Funktionen verfügbar sind, hängt vom Modell, vom Softwarestand und von deiner Installation ab.",
+        "compare_label": "Alle VENUS E Modelle vergleichen →",
+        "compare_url": "/pages/speicher-vergleich"
+      }
     },
     "acdc_12_faq": {
       "type": "acdc-12-faq",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "question",
@@ -589,63 +819,79 @@
         "item_06",
         "item_07",
         "item_08"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Häufige Fragen",
+        "heading": "FAQ zu",
+        "heading_accent": "AC- und DC-Speichern"
+      }
     },
     "acdc_13_topics": {
       "type": "acdc-13-topics",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "topic_card",
           "settings": {
+            "image": "shopify://shop_images/6_1_bc1b65ed-8ce9-4876-a6ee-ce7e2d148c2c.webp",
+            "image_alt": "AC-gekoppelter Solarspeicher im Hausnetz",
             "title": "AC-gekoppelter Speicher",
             "description": "Wie die Einbindung auf der Wechselstromseite funktioniert und wann sie passt.",
-            "image_alt": "AC-gekoppelter Solarspeicher im Hausnetz",
+            "link_label": "Mehr zum Thema →",
             "link": "/pages/ac-gekoppelter-speicher"
           }
         },
         "item_02": {
           "type": "topic_card",
           "settings": {
+            "image": "shopify://shop_images/6_2_0da7a231-96e4-4a2b-b682-526ffdcc104c.webp",
+            "image_alt": "Solarspeicher an einem Wohnhaus mit PV-Anlage",
             "title": "Solarspeicher erklärt",
             "description": "Grundlagen: Funktion, Nutzen, passende Größe und Nachrüstung.",
-            "image_alt": "Solarspeicher an einem Wohnhaus mit PV-Anlage",
+            "link_label": "Mehr zum Thema →",
             "link": "/pages/solarspeicher-erklaert"
           }
         },
         "item_03": {
           "type": "topic_card",
           "settings": {
+            "image": "shopify://shop_images/6_3_7f71dfc7-0092-477a-983b-11f864371140.webp",
+            "image_alt": "Bestehende PV-Anlage mit nachgerüstetem Speicher",
             "title": "Solarspeicher nachrüsten",
             "description": "Worauf du achten solltest, wenn bereits eine Anlage existiert.",
-            "image_alt": "Bestehende PV-Anlage mit nachgerüstetem Speicher",
+            "link_label": "Mehr zum Thema →",
             "link": "/pages/solarspeicher-nachruesten"
           }
         },
         "item_04": {
           "type": "topic_card",
           "settings": {
+            "image": "shopify://shop_images/6_4.webp",
+            "image_alt": "Smart Meter misst den Energiefluss im Haushalt",
             "title": "Smart Meter & Energiefluss",
             "description": "Wie Messung und Steuerung den Speichereinsatz an deinen Verbrauch anpassen.",
-            "image_alt": "Smart Meter misst den Energiefluss im Haushalt",
+            "link_label": "Mehr zum Thema →",
             "link": "/pages/smart-meter-energiefluss"
           }
         },
         "item_05": {
           "type": "topic_card",
           "settings": {
+            "image": "shopify://shop_images/6_5.webp",
+            "image_alt": "KI-gestütztes Energiemanagement mit der MARSTEK App",
             "title": "AI-Energiemanagement",
             "description": "Wie künstliche Intelligenz Lade- und Entladezeiten optimiert.",
-            "image_alt": "KI-gestütztes Energiemanagement mit der MARSTEK App",
+            "link_label": "Mehr zum Thema →",
             "link": "/pages/ai-energiemanagement"
           }
         },
         "item_06": {
           "type": "topic_card",
           "settings": {
+            "image": "shopify://shop_images/6_6.webp",
+            "image_alt": "Balkonkraftwerk mit kompakt nachrüstbarem Speicher",
             "title": "Balkonkraftwerk mit Speicher",
             "description": "Kompakte Speicherlösungen für den Balkon: Anschluss, Leistung, Kompatibilität.",
-            "image_alt": "Balkonkraftwerk mit kompakt nachrüstbarem Speicher",
+            "link_label": "Mehr zum Thema →",
             "link": "/pages/balkonkraftwerk-mit-speicher"
           }
         }
@@ -657,36 +903,48 @@
         "item_04",
         "item_05",
         "item_06"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Weiterführende Themen",
+        "heading": "Weiterführende Themen zu",
+        "heading_accent": "Speichertechnik",
+        "subtext": "Vertiefe einzelne Themen zu Technik, Nachrüstung und Nutzung."
+      }
     },
     "acdc_14_articles": {
       "type": "acdc-14-articles",
-      "settings": {
-        "all_articles_link": "/pages/ratgeber"
-      },
       "blocks": {
         "item_01": {
           "type": "article_card",
           "settings": {
+            "article": "",
+            "image_alt": "Bestehende PV-Anlage mit Solarspeicher",
+            "tag": "RATGEBER",
             "title": "AC- oder DC-Speicher bei bestehender PV?",
             "description": "Welche Architektur zu einer vorhandenen Anlage passt und welche Punkte vorher zu klären sind.",
-            "image_alt": "Bestehende PV-Anlage mit Solarspeicher"
+            "link_label": "Weiterlesen →"
           }
         },
         "item_02": {
           "type": "article_card",
           "settings": {
+            "article": "",
+            "image_alt": "Wechselrichter und Speicher im Hausanschlussraum",
+            "tag": "RATGEBER",
             "title": "Speicher nachrüsten: Was muss zum Wechselrichter passen?",
             "description": "Warum die Frage nach dem Wechselrichter bei Nachrüstungen eine zentrale Rolle spielt.",
-            "image_alt": "Wechselrichter und Speicher im Hausanschlussraum"
+            "link_label": "Weiterlesen →"
           }
         },
         "item_03": {
           "type": "article_card",
           "settings": {
+            "article": "",
+            "image_alt": "Erweiterung einer PV-Speicherlösung im Hausanschlussraum",
+            "tag": "RATGEBER",
             "title": "PV-Speicher erweitern: Welche Komponenten müssen zusammenspielen?",
             "description": "Wie Speicher, Messung und Steuerung bei einer Erweiterung aufeinander abgestimmt werden.",
-            "image_alt": "Erweiterung einer PV-Speicherlösung im Hausanschlussraum"
+            "link_label": "Weiterlesen →"
           }
         }
       },
@@ -694,11 +952,18 @@
         "item_01",
         "item_02",
         "item_03"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Ratgeber",
+        "heading": "Ratgeber zu",
+        "heading_accent": "Speichertechnik und Nachrüstung",
+        "subtext": "Ausführliche Artikel zu den Fragen, die bei der Entscheidung am häufigsten auftauchen.",
+        "all_articles_label": "Alle Ratgeber ansehen →",
+        "all_articles_link": "/pages/ratgeber"
+      }
     },
     "acdc_15_final": {
       "type": "acdc-15-final",
-      "settings": {},
       "blocks": {
         "item_01": {
           "type": "action_link",
@@ -729,7 +994,14 @@
         "item_01",
         "item_02",
         "item_03"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Nächster Schritt",
+        "heading": "Welche Speicherlösung passt zu deinem",
+        "heading_accent": "Zuhause?",
+        "description": "Vergleiche die VENUS E Modelle oder erfahre mehr darüber, wie ein AC-gekoppelter Speicher in eine bestehende PV-Anlage integriert werden kann.",
+        "alt_prefix": "Oder"
+      }
     }
   },
   "order": [
