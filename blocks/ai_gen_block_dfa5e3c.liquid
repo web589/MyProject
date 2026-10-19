@@ -481,6 +481,12 @@
   assign blog_three = blogs[block.settings.blog_3]
   assign post_limit = block.settings.post_limit | default: 4
   assign article_count = 0
+  assign view_all_text = block.settings.view_all_text | strip_html | strip
+  assign view_all_link = block.settings.view_all_link
+
+  if view_all_link == blank
+    assign view_all_link = routes.root_url | append: 'blogs/blog-center'
+  endif
 
   if blog_one != blank
     assign all_articles = blog_one.articles
@@ -515,9 +521,9 @@
           <div class="ai-custom-blog-subtitle-{{ ai_gen_id }} rte">{{ block.settings.subtitle }}</div>
         {% endif %}
       </div>
-      {% if block.settings.show_view_all %}
-        <a href="{{ routes.root_url }}blogs/blog-center" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
-          {{ block.settings.view_all_text | escape }}
+      {% if block.settings.show_view_all and view_all_text != blank %}
+        <a href="{{ view_all_link | escape }}" class="ai-custom-blog-all-link-{{ ai_gen_id }}">
+          {{ view_all_text | escape }}
           <svg class="ai-custom-blog-arrow-{{ ai_gen_id }}" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -654,10 +660,16 @@
       "default": true
     },
     {
-      "type": "inline_richtext",
+      "type": "text",
       "id": "view_all_text",
       "label": "View all text",
       "default": "Alle Beiträge"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link",
+      "info": "Leave blank to link to the blog center."
     },
     {
       "type": "header",
