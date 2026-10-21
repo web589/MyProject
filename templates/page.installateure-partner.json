@@ -11,69 +11,77 @@
   "sections": {
     "ip_00_navigation": {
       "type": "ip-anchor-navigation",
-      "settings": {
-        "show_section": true,
-        "aria_label": "Navigation für Installateure und Partner",
-        "nav_text_size": 13.5,
-        "show_cta": true,
-        "cta_label": "Kooperation anfragen",
-        "cta_module": "ip_final"
-      },
       "blocks": {
         "link_1": {
           "type": "link",
           "settings": {
             "show_block": true,
-            "module": "ip_audience"
+            "label": "",
+            "module": "ip_audience",
+            "target": ""
           }
         },
         "link_2": {
           "type": "link",
           "settings": {
             "show_block": true,
-            "module": "ip_planning"
+            "label": "",
+            "module": "ip_planning",
+            "target": ""
           }
         },
         "link_3": {
           "type": "link",
           "settings": {
             "show_block": true,
-            "module": "ip_products"
+            "label": "",
+            "module": "ip_products",
+            "target": ""
           }
         },
         "link_4": {
           "type": "link",
           "settings": {
             "show_block": true,
-            "module": "ip_resources"
+            "label": "",
+            "module": "ip_resources",
+            "target": ""
           }
         },
         "link_5": {
           "type": "link",
           "settings": {
             "show_block": true,
-            "module": "ip_cooperation"
+            "label": "",
+            "module": "ip_cooperation",
+            "target": ""
           }
         },
         "link_6": {
           "type": "link",
           "settings": {
             "show_block": true,
-            "module": "ip_process"
+            "label": "",
+            "module": "ip_process",
+            "target": ""
           }
         },
         "link_7": {
           "type": "link",
           "settings": {
             "show_block": true,
-            "module": "ip_form"
+            "label": "",
+            "module": "ip_form",
+            "target": ""
           }
         },
         "link_8": {
           "type": "link",
           "settings": {
             "show_block": true,
-            "module": "ip_faq"
+            "label": "",
+            "module": "ip_faq",
+            "target": ""
           }
         }
       },
@@ -86,16 +94,77 @@
         "link_6",
         "link_7",
         "link_8"
-      ]
+      ],
+      "settings": {
+        "show_section": true,
+        "aria_label": "Navigation für Installateure und Partner",
+        "nav_text_size": 13.5,
+        "show_cta": true,
+        "cta_label": "Kooperation anfragen",
+        "cta_module": "ip_final",
+        "cta_target": ""
+      }
     },
     "ip_01_hero": {
       "type": "ip-01-hero",
+      "blocks": {
+        "intro_1": {
+          "type": "intro",
+          "settings": {
+            "show_block": true,
+            "body": "Du arbeitest mit PV-Anlagen, Energiespeichern oder moderner Haustechnik? Entdecke VENUS E Speicherlösungen, technische Unterlagen und Möglichkeiten für eine Zusammenarbeit in Installation, Planung und Vertrieb.",
+            "sub_size": 16.5,
+            "sub_size_tablet": 16.5,
+            "sub_size_mobile": 16.5,
+            "sub_weight": "400",
+            "sub_line": "165",
+            "sub_spacing": 0
+          }
+        },
+        "button_1": {
+          "type": "button",
+          "settings": {
+            "show_block": true,
+            "label": "Kooperation anfragen ↓",
+            "link": "#b2bformular",
+            "style": "primary",
+            "action_size": 14.5,
+            "action_size_tablet": 14.5,
+            "action_size_mobile": 14.5,
+            "action_weight": "500",
+            "action_line": "0",
+            "action_spacing": 0
+          }
+        },
+        "button_2": {
+          "type": "button",
+          "settings": {
+            "show_block": true,
+            "label": "Technische Unterlagen ansehen →",
+            "link": "/pages/downloads",
+            "style": "ghost",
+            "action_size": 14.5,
+            "action_size_tablet": 14.5,
+            "action_size_mobile": 14.5,
+            "action_weight": "500",
+            "action_line": "0",
+            "action_spacing": 0
+          }
+        }
+      },
+      "block_order": [
+        "intro_1",
+        "button_1",
+        "button_2"
+      ],
       "settings": {
         "show_section": true,
         "eyebrow": "FÜR INSTALLATEURE & PARTNER",
         "heading": "VENUS E für Installateure, Fachbetriebe &",
         "heading_accent": "Partner",
-        "background": "#FFFFFF",
+        "heading_suffix": "",
+        "subtitle": "",
+        "background": "#ffffff",
         "padding_top": 72,
         "padding_bottom": 64,
         "padding_top_tablet": 56,
@@ -120,93 +189,13 @@
         "eyebrow_weight": "600",
         "eyebrow_line": "0",
         "eyebrow_spacing": 2,
+        "image": "shopify://shop_images/1_5c25f4c0-9ea0-4f18-a2aa-74d317b054e7.webp",
         "image_alt": "VENUS E Speicher mit technischen Unterlagen auf Tablet bei Installation an einem deutschen Einfamilienhaus",
         "show_placeholder": true
-      },
-      "blocks": {
-        "intro_1": {
-          "type": "intro",
-          "settings": {
-            "show_block": true,
-            "body": "Du arbeitest mit PV-Anlagen, Energiespeichern oder moderner Haustechnik? Entdecke VENUS E Speicherlösungen, technische Unterlagen und Möglichkeiten für eine Zusammenarbeit in Installation, Planung und Vertrieb.",
-            "sub_size": 16.5,
-            "sub_size_tablet": 16.5,
-            "sub_size_mobile": 16.5,
-            "sub_weight": "400",
-            "sub_line": "165",
-            "sub_spacing": 0
-          }
-        },
-        "button_1": {
-          "type": "button",
-          "settings": {
-            "show_block": true,
-            "label": "Kooperation anfragen ↓",
-            "style": "primary",
-            "action_size": 14.5,
-            "action_size_tablet": 14.5,
-            "action_size_mobile": 14.5,
-            "action_weight": "500",
-            "action_line": "0",
-            "action_spacing": 0,
-            "link": "#b2bformular"
-          }
-        },
-        "button_2": {
-          "type": "button",
-          "settings": {
-            "show_block": true,
-            "label": "Technische Unterlagen ansehen →",
-            "style": "ghost",
-            "action_size": 14.5,
-            "action_size_tablet": 14.5,
-            "action_size_mobile": 14.5,
-            "action_weight": "500",
-            "action_line": "0",
-            "action_spacing": 0,
-            "link": "/pages/downloads"
-          }
-        }
-      },
-      "block_order": [
-        "intro_1",
-        "button_1",
-        "button_2"
-      ]
+      }
     },
     "ip_02_audience": {
       "type": "ip-02-audience",
-      "settings": {
-        "show_section": true,
-        "eyebrow": "ZIELGRUPPEN",
-        "heading": "Für wen ist",
-        "heading_accent": "VENUS E interessant?",
-        "background": "#FFFFFF",
-        "padding_top": 72,
-        "padding_bottom": 72,
-        "padding_top_tablet": 56,
-        "padding_bottom_tablet": 56,
-        "padding_top_mobile": 44,
-        "padding_bottom_mobile": 44,
-        "heading_size": 34,
-        "heading_size_tablet": 34,
-        "heading_size_mobile": 27,
-        "heading_weight": "600",
-        "heading_line": "120",
-        "heading_spacing": -1,
-        "sub_size": 16,
-        "sub_size_tablet": 16,
-        "sub_size_mobile": 16,
-        "sub_weight": "400",
-        "sub_line": "165",
-        "sub_spacing": 0,
-        "eyebrow_size": 13,
-        "eyebrow_size_tablet": 13,
-        "eyebrow_size_mobile": 13,
-        "eyebrow_weight": "600",
-        "eyebrow_line": "0",
-        "eyebrow_spacing": 2
-      },
       "blocks": {
         "intro_1": {
           "type": "intro",
@@ -304,16 +293,15 @@
         "card_2",
         "card_3",
         "note_1"
-      ]
-    },
-    "ip_03_planning": {
-      "type": "ip-03-planning",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "PLANUNG & BERATUNG",
-        "heading": "Informationen für Planung und",
-        "heading_accent": "Beratung",
-        "background": "#F5F7F9",
+        "eyebrow": "ZIELGRUPPEN",
+        "heading": "Für wen ist",
+        "heading_accent": "VENUS E interessant?",
+        "heading_suffix": "",
+        "subtitle": "",
+        "background": "#ffffff",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
@@ -338,7 +326,10 @@
         "eyebrow_weight": "600",
         "eyebrow_line": "0",
         "eyebrow_spacing": 2
-      },
+      }
+    },
+    "ip_03_planning": {
+      "type": "ip-03-planning",
       "blocks": {
         "intro_1": {
           "type": "intro",
@@ -422,16 +413,15 @@
         "card_1",
         "card_2",
         "card_3"
-      ]
-    },
-    "ip_04_products": {
-      "type": "ip-04-products",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "PRODUKTPORTFOLIO",
-        "heading": "VENUS E Speicher und Smart Meter im",
-        "heading_accent": "Überblick",
-        "background": "#FFFFFF",
+        "eyebrow": "PLANUNG & BERATUNG",
+        "heading": "Informationen für Planung und",
+        "heading_accent": "Beratung",
+        "heading_suffix": "",
+        "subtitle": "",
+        "background": "#f5f7f9",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
@@ -456,7 +446,10 @@
         "eyebrow_weight": "600",
         "eyebrow_line": "0",
         "eyebrow_spacing": 2
-      },
+      }
+    },
+    "ip_04_products": {
+      "type": "ip-04-products",
       "blocks": {
         "intro_1": {
           "type": "intro",
@@ -475,11 +468,14 @@
           "type": "storage",
           "settings": {
             "show_block": true,
+            "product": "venus-e-mini",
+            "image_alt": "",
             "image_scale": 100,
             "tag": "Speicher",
             "title": "VENUS E Mini",
             "body": "Kompakter Einstieg für kleinere Speicherbedarfe.",
             "label": "VENUS E Mini ansehen →",
+            "link": "/products/venus-e-mini",
             "title_size": 18,
             "title_size_tablet": 18,
             "title_size_mobile": 18,
@@ -497,20 +493,21 @@
             "action_size_mobile": 14,
             "action_weight": "500",
             "action_line": "0",
-            "action_spacing": 0,
-            "link": "/products/venus-e-mini",
-            "product": "venus-e-mini"
+            "action_spacing": 0
           }
         },
         "storage_2": {
           "type": "storage",
           "settings": {
             "show_block": true,
+            "product": "venus-e-3",
+            "image_alt": "",
             "image_scale": 100,
             "tag": "Speicher",
             "title": "VENUS E 3.0",
             "body": "Speicherlösung für typische Haushalts- und PV-Anwendungen.",
             "label": "VENUS E 3.0 ansehen →",
+            "link": "/products/venus-e-3",
             "title_size": 18,
             "title_size_tablet": 18,
             "title_size_mobile": 18,
@@ -528,20 +525,21 @@
             "action_size_mobile": 14,
             "action_weight": "500",
             "action_line": "0",
-            "action_spacing": 0,
-            "link": "/products/venus-e-3",
-            "product": "venus-e-3"
+            "action_spacing": 0
           }
         },
         "storage_3": {
           "type": "storage",
           "settings": {
             "show_block": true,
+            "product": "venus-e-4",
+            "image_alt": "",
             "image_scale": 100,
             "tag": "Speicher",
             "title": "VENUS E 4.0",
             "body": "Für höhere Speicheranforderungen und erweiterte Nutzungsszenarien.",
             "label": "VENUS E 4.0 ansehen →",
+            "link": "/products/venus-e-4",
             "title_size": 18,
             "title_size_tablet": 18,
             "title_size_mobile": 18,
@@ -559,20 +557,21 @@
             "action_size_mobile": 14,
             "action_weight": "500",
             "action_line": "0",
-            "action_spacing": 0,
-            "link": "/products/venus-e-4",
-            "product": "venus-e-4"
+            "action_spacing": 0
           }
         },
         "storage_4": {
           "type": "storage",
           "settings": {
             "show_block": true,
+            "product": "venus-e-max",
+            "image_alt": "",
             "image_scale": 100,
             "tag": "Speicher",
             "title": "VENUS E Max",
             "body": "Für größere Energiebedarfe und anspruchsvollere Systemkonfigurationen.",
             "label": "VENUS E Max ansehen →",
+            "link": "/products/venus-e-max",
             "title_size": 18,
             "title_size_tablet": 18,
             "title_size_mobile": 18,
@@ -590,20 +589,21 @@
             "action_size_mobile": 14,
             "action_weight": "500",
             "action_line": "0",
-            "action_spacing": 0,
-            "link": "/products/venus-e-max",
-            "product": "venus-e-max"
+            "action_spacing": 0
           }
         },
         "smart_meter_1": {
           "type": "smart_meter",
           "settings": {
             "show_block": true,
+            "product": "ct002-smart-meter",
+            "image_alt": "",
             "image_scale": 100,
             "tag": "Smart Meter",
             "title": "Smart Meter CT002",
             "body": "Messlösung für passende dreiphasige Installationen.",
             "label": "CT002 ansehen →",
+            "link": "/products/ct002-smart-meter",
             "title_size": 18,
             "title_size_tablet": 18,
             "title_size_mobile": 18,
@@ -621,20 +621,21 @@
             "action_size_mobile": 14,
             "action_weight": "500",
             "action_line": "0",
-            "action_spacing": 0,
-            "link": "/products/ct002-smart-meter",
-            "product": "ct002-smart-meter"
+            "action_spacing": 0
           }
         },
         "smart_meter_2": {
           "type": "smart_meter",
           "settings": {
             "show_block": true,
+            "product": "ct003-smart-meter",
+            "image_alt": "",
             "image_scale": 100,
             "tag": "Smart Meter",
             "title": "Smart Meter CT003",
             "body": "Messlösung für kompatible digitale Zähler über unterstützte Schnittstellen.",
             "label": "CT003 ansehen →",
+            "link": "/products/ct003-smart-meter",
             "title_size": 18,
             "title_size_tablet": 18,
             "title_size_mobile": 18,
@@ -652,9 +653,7 @@
             "action_size_mobile": 14,
             "action_weight": "500",
             "action_line": "0",
-            "action_spacing": 0,
-            "link": "/products/ct003-smart-meter",
-            "product": "ct003-smart-meter"
+            "action_spacing": 0
           }
         },
         "button_1": {
@@ -662,14 +661,14 @@
           "settings": {
             "show_block": true,
             "label": "VENUS E Modelle vergleichen →",
+            "link": "/pages/venus-e-vergleich",
             "style": "ghost",
             "action_size": 14.5,
             "action_size_tablet": 14.5,
             "action_size_mobile": 14.5,
             "action_weight": "500",
             "action_line": "0",
-            "action_spacing": 0,
-            "link": "/pages/venus-e-vergleich"
+            "action_spacing": 0
           }
         }
       },
@@ -682,16 +681,15 @@
         "smart_meter_1",
         "smart_meter_2",
         "button_1"
-      ]
-    },
-    "ip_05_resources": {
-      "type": "ip-05-resources",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "TECHNISCHE RESSOURCEN",
-        "heading": "Unterlagen für Beratung, Planung &",
-        "heading_accent": "Installation",
-        "background": "#F5F7F9",
+        "eyebrow": "PRODUKTPORTFOLIO",
+        "heading": "VENUS E Speicher und Smart Meter im",
+        "heading_accent": "Überblick",
+        "heading_suffix": "",
+        "subtitle": "",
+        "background": "#ffffff",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
@@ -716,7 +714,10 @@
         "eyebrow_weight": "600",
         "eyebrow_line": "0",
         "eyebrow_spacing": 2
-      },
+      }
+    },
+    "ip_05_resources": {
+      "type": "ip-05-resources",
       "blocks": {
         "intro_1": {
           "type": "intro",
@@ -799,14 +800,14 @@
           "settings": {
             "show_block": true,
             "label": "Alle Downloads ansehen →",
+            "link": "/pages/downloads",
             "style": "ghost",
             "action_size": 14.5,
             "action_size_tablet": 14.5,
             "action_size_mobile": 14.5,
             "action_weight": "500",
             "action_line": "0",
-            "action_spacing": 0,
-            "link": "/pages/downloads"
+            "action_spacing": 0
           }
         }
       },
@@ -816,17 +817,15 @@
         "resource_2",
         "resource_3",
         "button_1"
-      ]
-    },
-    "ip_06_cooperation": {
-      "type": "ip-06-cooperation",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "ZUSAMMENARBEIT",
-        "heading": "Welche Art der",
-        "heading_accent": "Zusammenarbeit",
-        "heading_suffix": "interessiert dich?",
-        "background": "#FFFFFF",
+        "eyebrow": "TECHNISCHE RESSOURCEN",
+        "heading": "Unterlagen für Beratung, Planung &",
+        "heading_accent": "Installation",
+        "heading_suffix": "",
+        "subtitle": "",
+        "background": "#f5f7f9",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
@@ -851,7 +850,10 @@
         "eyebrow_weight": "600",
         "eyebrow_line": "0",
         "eyebrow_spacing": 2
-      },
+      }
+    },
+    "ip_06_cooperation": {
+      "type": "ip-06-cooperation",
       "blocks": {
         "intro_1": {
           "type": "intro",
@@ -973,17 +975,15 @@
         "card_2",
         "card_3",
         "note_1"
-      ]
-    },
-    "ip_07_process": {
-      "type": "ip-07-process",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "ABLAUF",
-        "heading": "So läuft deine",
-        "heading_accent": "B2B-Anfrage",
-        "heading_suffix": "ab",
-        "background": "#F5F7F9",
+        "eyebrow": "ZUSAMMENARBEIT",
+        "heading": "Welche Art der",
+        "heading_accent": "Zusammenarbeit",
+        "heading_suffix": "interessiert dich?",
+        "subtitle": "",
+        "background": "#ffffff",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
@@ -1008,7 +1008,10 @@
         "eyebrow_weight": "600",
         "eyebrow_line": "0",
         "eyebrow_spacing": 2
-      },
+      }
+    },
+    "ip_07_process": {
+      "type": "ip-07-process",
       "blocks": {
         "step_1": {
           "type": "step",
@@ -1078,31 +1081,30 @@
         "step_1",
         "step_2",
         "step_3"
-      ]
-    },
-    "ip_08_form": {
-      "type": "ip-08-form",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "B2B-ANFRAGE",
-        "heading": "Zusammenarbeit anfragen",
-        "subtitle": "Erzähl uns kurz etwas über dein Unternehmen und wie du mit VENUS E zusammenarbeiten möchtest. Pflichtfelder sind mit * gekennzeichnet.",
-        "background": "#FFFFFF",
+        "eyebrow": "ABLAUF",
+        "heading": "So läuft deine",
+        "heading_accent": "B2B-Anfrage",
+        "heading_suffix": "ab",
+        "subtitle": "",
+        "background": "#f5f7f9",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
         "padding_bottom_tablet": 56,
         "padding_top_mobile": 44,
         "padding_bottom_mobile": 44,
-        "heading_size": 28,
-        "heading_size_tablet": 28,
-        "heading_size_mobile": 24,
+        "heading_size": 34,
+        "heading_size_tablet": 34,
+        "heading_size_mobile": 27,
         "heading_weight": "600",
         "heading_line": "120",
         "heading_spacing": -1,
-        "sub_size": 14,
-        "sub_size_tablet": 14,
-        "sub_size_mobile": 14,
+        "sub_size": 16,
+        "sub_size_tablet": 16,
+        "sub_size_mobile": 16,
         "sub_weight": "400",
         "sub_line": "165",
         "sub_spacing": 0,
@@ -1111,16 +1113,18 @@
         "eyebrow_size_mobile": 13,
         "eyebrow_weight": "600",
         "eyebrow_line": "0",
-        "eyebrow_spacing": 2,
-        "form_background": "#E8F4FF",
-        "form_border": "#CDEBFF"
-      },
+        "eyebrow_spacing": 2
+      }
+    },
+    "ip_08_form": {
+      "type": "ip-08-form",
       "blocks": {
         "company_01": {
           "type": "company",
           "settings": {
             "label": "Unternehmen",
             "placeholder": "Name des Unternehmens",
+            "helper": "",
             "error": "Bitte gib den Firmennamen ein.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -1141,6 +1145,7 @@
           "settings": {
             "label": "Ansprechpartner",
             "placeholder": "Dein Name",
+            "helper": "",
             "error": "Bitte gib deinen Namen ein.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -1161,6 +1166,7 @@
           "settings": {
             "label": "Deine Rolle",
             "placeholder": "Rolle auswählen",
+            "helper": "",
             "error": "Bitte wähle deine Rolle aus.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -1181,6 +1187,7 @@
           "settings": {
             "label": "E-Mail-Adresse",
             "placeholder": "name@unternehmen.de",
+            "helper": "",
             "error": "Bitte gib eine gültige E-Mail-Adresse ein.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -1222,6 +1229,7 @@
           "settings": {
             "label": "Land / Region",
             "placeholder": "Land / Region auswählen",
+            "helper": "",
             "error": "Bitte wähle ein Land / eine Region aus.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -1263,6 +1271,7 @@
           "type": "interest",
           "settings": {
             "label": "Wofür interessierst du dich?",
+            "helper": "",
             "error": "Bitte wähle mindestens einen Bereich aus.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -1283,6 +1292,7 @@
           "settings": {
             "label": "Nachricht",
             "placeholder": "Beschreibe kurz dein Unternehmen, deinen Einsatzbereich und was du von einer möglichen Zusammenarbeit erwartest.",
+            "helper": "",
             "error": "Bitte beschreibe kurz dein Anliegen.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -1302,8 +1312,10 @@
           "type": "privacy",
           "settings": {
             "label": "Ich habe die",
+            "helper": "",
             "error": "Bitte bestätige die Datenschutzerklärung.",
             "link_label": "Datenschutzerklärung",
+            "privacy_url": "",
             "label_after": "zur Kenntnis genommen.",
             "title_size": 13.5,
             "title_size_tablet": 13.5,
@@ -1435,6 +1447,7 @@
           "type": "submit",
           "settings": {
             "label": "B2B-Anfrage senden",
+            "footnote": "",
             "action_size": 14.5,
             "action_size_tablet": 14.5,
             "action_size_mobile": 14.5,
@@ -1449,6 +1462,7 @@
             "heading": "Danke für deine B2B-Anfrage",
             "body": "Deine Nachricht wurde übermittelt. Wir prüfen Unternehmen, Einsatzbereich und die wichtigsten Angaben deiner Anfrage und melden uns über die von dir angegebene E-Mail-Adresse.",
             "primary_label": "Zurück zur Startseite",
+            "primary_url": "/",
             "alt_prefix": "Oder",
             "title_size": 24,
             "title_size_tablet": 24,
@@ -1467,8 +1481,7 @@
             "action_size_mobile": 14.5,
             "action_weight": "500",
             "action_line": "0",
-            "action_spacing": 0,
-            "primary_url": "/"
+            "action_spacing": 0
           }
         },
         "error_29": {
@@ -1502,13 +1515,13 @@
           "settings": {
             "show_block": true,
             "label": "Downloads ansehen →",
+            "url": "/pages/downloads",
             "action_size": 14,
             "action_size_tablet": 14,
             "action_size_mobile": 14,
             "action_weight": "500",
             "action_line": "0",
-            "action_spacing": 0,
-            "url": "/pages/downloads"
+            "action_spacing": 0
           }
         }
       },
@@ -1543,31 +1556,29 @@
         "success_28",
         "error_29",
         "success_link_30"
-      ]
-    },
-    "ip_09_faq": {
-      "type": "ip-09-faq",
+      ],
       "settings": {
         "show_section": true,
-        "eyebrow": "HÄUFIGE FRAGEN",
-        "heading": "FAQ für",
-        "heading_accent": "Installateure & Partner",
-        "background": "#F5F7F9",
+        "eyebrow": "B2B-ANFRAGE",
+        "heading": "Zusammenarbeit anfragen",
+        "heading_accent": "",
+        "subtitle": "Erzähl uns kurz etwas über dein Unternehmen und wie du mit VENUS E zusammenarbeiten möchtest. Pflichtfelder sind mit * gekennzeichnet.",
+        "background": "#ffffff",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
         "padding_bottom_tablet": 56,
         "padding_top_mobile": 44,
         "padding_bottom_mobile": 44,
-        "heading_size": 34,
-        "heading_size_tablet": 34,
-        "heading_size_mobile": 27,
+        "heading_size": 28,
+        "heading_size_tablet": 28,
+        "heading_size_mobile": 24,
         "heading_weight": "600",
         "heading_line": "120",
         "heading_spacing": -1,
-        "sub_size": 16,
-        "sub_size_tablet": 16,
-        "sub_size_mobile": 16,
+        "sub_size": 14,
+        "sub_size_tablet": 14,
+        "sub_size_mobile": 14,
         "sub_weight": "400",
         "sub_line": "165",
         "sub_spacing": 0,
@@ -1576,8 +1587,13 @@
         "eyebrow_size_mobile": 13,
         "eyebrow_weight": "600",
         "eyebrow_line": "0",
-        "eyebrow_spacing": 2
-      },
+        "eyebrow_spacing": 2,
+        "form_background": "#e8f4ff",
+        "form_border": "#cdebff"
+      }
+    },
+    "ip_09_faq": {
+      "type": "ip-09-faq",
       "blocks": {
         "faq_1": {
           "type": "faq",
@@ -1686,16 +1702,101 @@
         "faq_3",
         "faq_4",
         "faq_5"
-      ]
+      ],
+      "settings": {
+        "show_section": true,
+        "eyebrow": "HÄUFIGE FRAGEN",
+        "heading": "FAQ für",
+        "heading_accent": "Installateure & Partner",
+        "heading_suffix": "",
+        "subtitle": "",
+        "background": "#f5f7f9",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "padding_top_tablet": 56,
+        "padding_bottom_tablet": 56,
+        "padding_top_mobile": 44,
+        "padding_bottom_mobile": 44,
+        "heading_size": 34,
+        "heading_size_tablet": 34,
+        "heading_size_mobile": 27,
+        "heading_weight": "600",
+        "heading_line": "120",
+        "heading_spacing": -1,
+        "sub_size": 16,
+        "sub_size_tablet": 16,
+        "sub_size_mobile": 16,
+        "sub_weight": "400",
+        "sub_line": "165",
+        "sub_spacing": 0,
+        "eyebrow_size": 13,
+        "eyebrow_size_tablet": 13,
+        "eyebrow_size_mobile": 13,
+        "eyebrow_weight": "600",
+        "eyebrow_line": "0",
+        "eyebrow_spacing": 2
+      }
     },
     "ip_10_final": {
       "type": "ip-10-final",
+      "blocks": {
+        "intro_1": {
+          "type": "intro",
+          "settings": {
+            "show_block": true,
+            "body": "Sende uns deine B2B-Anfrage und beschreibe kurz deinen Einsatzbereich.",
+            "sub_size": 15.5,
+            "sub_size_tablet": 15.5,
+            "sub_size_mobile": 15.5,
+            "sub_weight": "400",
+            "sub_line": "170",
+            "sub_spacing": 0
+          }
+        },
+        "button_1": {
+          "type": "button",
+          "settings": {
+            "show_block": true,
+            "label": "Kooperation anfragen ↑",
+            "link": "#b2bformular",
+            "style": "primary",
+            "action_size": 14.5,
+            "action_size_tablet": 14.5,
+            "action_size_mobile": 14.5,
+            "action_weight": "500",
+            "action_line": "0",
+            "action_spacing": 0
+          }
+        },
+        "button_2": {
+          "type": "button",
+          "settings": {
+            "show_block": true,
+            "label": "Downloads ansehen →",
+            "link": "/pages/downloads",
+            "style": "ghost",
+            "action_size": 14.5,
+            "action_size_tablet": 14.5,
+            "action_size_mobile": 14.5,
+            "action_weight": "500",
+            "action_line": "0",
+            "action_spacing": 0
+          }
+        }
+      },
+      "block_order": [
+        "intro_1",
+        "button_1",
+        "button_2"
+      ],
       "settings": {
         "show_section": true,
         "eyebrow": "ZUSAMMENARBEIT",
         "heading": "Interesse an VENUS E für dein",
         "heading_accent": "Unternehmen?",
-        "background": "#F5F7F9",
+        "heading_suffix": "",
+        "subtitle": "",
+        "background": "#f5f7f9",
         "padding_top": 72,
         "padding_bottom": 72,
         "padding_top_tablet": 56,
@@ -1720,57 +1821,7 @@
         "eyebrow_weight": "600",
         "eyebrow_line": "0",
         "eyebrow_spacing": 2
-      },
-      "blocks": {
-        "intro_1": {
-          "type": "intro",
-          "settings": {
-            "show_block": true,
-            "body": "Sende uns deine B2B-Anfrage und beschreibe kurz deinen Einsatzbereich.",
-            "sub_size": 15.5,
-            "sub_size_tablet": 15.5,
-            "sub_size_mobile": 15.5,
-            "sub_weight": "400",
-            "sub_line": "170",
-            "sub_spacing": 0
-          }
-        },
-        "button_1": {
-          "type": "button",
-          "settings": {
-            "show_block": true,
-            "label": "Kooperation anfragen ↑",
-            "style": "primary",
-            "action_size": 14.5,
-            "action_size_tablet": 14.5,
-            "action_size_mobile": 14.5,
-            "action_weight": "500",
-            "action_line": "0",
-            "action_spacing": 0,
-            "link": "#b2bformular"
-          }
-        },
-        "button_2": {
-          "type": "button",
-          "settings": {
-            "show_block": true,
-            "label": "Downloads ansehen →",
-            "style": "ghost",
-            "action_size": 14.5,
-            "action_size_tablet": 14.5,
-            "action_size_mobile": 14.5,
-            "action_weight": "500",
-            "action_line": "0",
-            "action_spacing": 0,
-            "link": "/pages/downloads"
-          }
-        }
-      },
-      "block_order": [
-        "intro_1",
-        "button_1",
-        "button_2"
-      ]
+      }
     }
   },
   "order": [
