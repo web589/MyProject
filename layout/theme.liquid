@@ -430,6 +430,9 @@
   {%- endif -%}
 
   <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  {{ 'pdp-media.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'pdp-media.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'homepage-section-sync.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'scroll-reveal.js' | asset_url }}" defer="defer"></script>
 
   {%- if request.page_type contains 'customers/' -%}

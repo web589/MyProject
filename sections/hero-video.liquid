@@ -67,18 +67,28 @@
 {%- endstyle -%}
 
 {% assign pdp_anchor_id = section.settings.anchor_id | handle %}
+{% liquid
+  assign has_managed_video = false
+  if section.settings.hosted_video != blank or section.settings.video_url contains '.mp4' or section.settings.video_url contains '.MP4'
+    assign has_managed_video = true
+  endif
+%}
 
 <div
   {% if pdp_anchor_id != blank %}id="{{ pdp_anchor_id }}"{% endif %}
   data-section-id="{{ section.id }}"
   data-section-type="video-section"
-  class="pdp-anchor-target video-parent-section hero hero--{{ section.id }} hero--{{ section.settings.section_height }} hero--mobile--{{ section.settings.mobile_height }}{% if section.settings.constrain_video_width %} hero--constrained{% endif %}{% if section.settings.remove_media_overlay %} hero--no-media-overlay{% endif %}"
+  class="pdp-anchor-target video-parent-section hero hero--{{ section.id }} hero--{{ section.settings.section_height }} hero--mobile--{{ section.settings.mobile_height }}{% if section.settings.constrain_video_width %} hero--constrained{% endif %}{% if section.settings.remove_media_overlay %} hero--no-media-overlay{% endif %}{% if has_managed_video %} loaded{% endif %}"
   data-mobile-natural="false"
   data-aos="hero__animation">
 
   <div class="hero__media hero__media--{{ section.id }}">
     <div class="hero__media-container">
 
+      {%- if has_managed_video -%}
+        {% assign hero_video_id = 'Mp4Video-' | append: section.id %}
+        {% render 'pdp-video', hosted_video: section.settings.hosted_video, video_url: section.settings.video_url, poster: section.settings.video_poster, video_id: hero_video_id, autoplay: section.settings.autoplay_video, controls: true, fit: section.settings.video_object_fit, target_height: 1080 %}
+      {%- else -%}
       {%- if section.settings.video_url contains 'youtube.com/watch' -%}
         {%- assign video_id = section.settings.video_url | split: 'v=' -%}
         {%- assign video_id = video_id[1] | split: '&' | first -%}
@@ -109,14 +119,6 @@
           data-video-id="{{ video_id }}"></div>
       {%- endif -%}
 
-      {%- if section.settings.video_url contains '.mp4' or section.settings.video_url contains '.MP4' -%}
-        <video
-          id="Mp4Video-{{ section.id }}"
-          class="video-div"
-          data-type="mp4"
-          data-video-src="{{ section.settings.video_url | escape }}"
-          preload="none"
-          loop muted playsinline></video>
       {%- endif -%}
 
     </div>
@@ -127,7 +129,7 @@
       <div class="hero__text-content {{ section.settings.text_align }}">
         {% unless section.settings.title == blank and section.settings.subheading == blank and section.settings.link_text == blank %}
         <div class="hero__text-shadow">
-          {%- if section.settings.video_url contains 'vimeo.com' -%}
+          {%- if has_managed_video == false and section.settings.video_url contains 'vimeo.com' -%}
             <button type="button" id="VimeoTrigger-{{ section.id }}" class="vimeo-mobile-trigger medium-up--hide">
               <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-play" viewBox="18.24 17.35 24.52 28.3"><path fill="#323232" d="M22.1 19.151v25.5l20.4-13.489-20.4-12.011z"/></svg>
             </button>
@@ -267,6 +269,24 @@
       "label": "t:sections.hero-video.settings.video_url.label",
       "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
       "info": "t:sections.hero-video.settings.video_url.info"
+    },
+    {
+      "type": "video",
+      "id": "hosted_video",
+      "label": "Shopify video",
+      "info": "Uses an optimized rendition and matching poster. Takes priority over the video URL."
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster",
+      "label": "Video poster"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay_video",
+      "label": "Autoplay MP4 when visible",
+      "default": true,
+      "info": "Automatically starts when visible and pauses when outside the viewport."
     },
     {
       "type": "checkbox",

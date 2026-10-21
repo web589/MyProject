@@ -312,8 +312,10 @@
     z-index: 10;
   }
 
-  .pdp-main-img-{{ ai_gen_id }}:hover .pdp-zoom-overlay-{{ ai_gen_id }} {
-    opacity: 1;
+  @media (hover: hover) and (pointer: fine) {
+    .pdp-main-img-{{ ai_gen_id }}:hover .pdp-zoom-overlay-{{ ai_gen_id }} {
+      opacity: 1;
+    }
   }
 
   .pdp-thumb-wrap-{{ ai_gen_id }} {
@@ -321,6 +323,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    max-width: calc({{ block.settings.thumb_size | times: 4 }}px + {{ block.settings.thumb_gap | times: 3 }}px + 80px);
   }
 
   .pdp-thumb-arrow-{{ ai_gen_id }} {
@@ -351,6 +354,7 @@
 
   .pdp-thumb-viewport-{{ ai_gen_id }} {
     flex: 1;
+    min-width: 0;
     overflow: hidden;
   }
 
@@ -361,8 +365,9 @@
   }
 
   .pdp-thumb-item-{{ ai_gen_id }} {
-    width: {{ block.settings.thumb_size }}px;
-    height: {{ block.settings.thumb_size }}px;
+    width: calc((100% - {{ block.settings.thumb_gap | times: 3 }}px) / 4);
+    height: auto;
+    aspect-ratio: 1;
     border-radius: 8px;
     border: 2px solid transparent;
     cursor: pointer;
@@ -1036,20 +1041,21 @@
     endif
   endfor
 
-  assign bundle_media_widths = '800,1200,1600,2000,2400,3200' | split: ','
+  assign bundle_media_widths = '360,540,720,900,1100,1400,1800' | split: ','
   assign bundle_max_width = block.settings.max_width | default: 1400
   assign bundle_padding_x = block.settings.padding_x | default: 24
   assign bundle_content_max_width = bundle_max_width | minus: bundle_padding_x | minus: bundle_padding_x
   assign bundle_media_width_percent = block.settings.left_width_percent | default: 40
   assign bundle_media_max_width = bundle_content_max_width | times: bundle_media_width_percent | divided_by: 100.0 | round
   assign bundle_horizontal_padding = bundle_padding_x | times: 2
-  assign bundle_media_sizes = '(min-width: 990px) min(' | append: bundle_media_max_width | append: 'px, ' | append: bundle_media_width_percent | append: 'vw), calc(100vw - ' | append: bundle_horizontal_padding | append: 'px)'
+  assign bundle_media_viewport_padding = bundle_horizontal_padding | times: bundle_media_width_percent | divided_by: 100.0
+  assign bundle_media_sizes = '(min-width: 990px) min(' | append: bundle_media_max_width | append: 'px, calc(' | append: bundle_media_width_percent | append: 'vw - ' | append: bundle_media_viewport_padding | append: 'px)), min(' | append: bundle_content_max_width | append: 'px, calc(100vw - ' | append: bundle_horizontal_padding | append: 'px))'
 %}
 
 <pdp-bundle-{{ ai_gen_id }}{% if pdp_anchor_id != blank %} id="{{ pdp_anchor_id }}"{% endif %} class="pdp-anchor-target pdp-bundle-{{ ai_gen_id }}" data-scroll-reveal="off" data-pdp-bundle data-de-vat-candidate="{{ bundle_is_de_vat_candidate }}" {{ block.shopify_attributes }}>
   <div class="pdp-bundle-grid-{{ ai_gen_id }}">
     <div class="pdp-left-{{ ai_gen_id }}">
-      {% assign first_thumb = bundle_product.featured_image | default: bundle_product.images.first %}
+      {% assign first_thumb = bundle_product.selected_or_first_available_variant.featured_image | default: bundle_product.featured_image | default: bundle_product.images.first %}
       
       <div class="pdp-main-img-{{ ai_gen_id }}" data-main-img>
         {% if first_thumb %}
@@ -1058,8 +1064,8 @@
               {{ first_thumb | image_url: width: bundle_media_width }} {{ bundle_media_width }}w{% unless forloop.last %}, {% endunless %}
             {%- endfor -%}
           {%- endcapture -%}
-          <img src="{{ first_thumb | image_url: width: 1200 }}" srcset="{{ bundle_main_srcset }}" sizes="{{ bundle_media_sizes }}" alt="{{ first_thumb.alt | escape }}" width="1200" height="1200" data-main-img-el>
-          <div class="pdp-zoom-overlay-{{ ai_gen_id }}" data-zoom-overlay style="background-image: url('{{ first_thumb | image_url: width: 2400 }}');"></div>
+          <img src="{{ first_thumb | image_url: width: 900 }}" srcset="{{ bundle_main_srcset }}" sizes="{{ bundle_media_sizes }}" alt="{{ first_thumb.alt | default: bundle_product.title | escape }}" width="{{ first_thumb.width }}" height="{{ first_thumb.height }}" loading="eager" fetchpriority="high" decoding="async" data-main-img-el data-image-id="{{ first_thumb.id }}" data-fallback-src="{{ first_thumb | image_url: width: 900 }}">
+          <div class="pdp-zoom-overlay-{{ ai_gen_id }}" data-zoom-overlay data-zoom-src="{{ first_thumb | image_url: width: 2400 }}"></div>
         {% else %}
           <div class="pdp-img-placeholder-{{ ai_gen_id }}">
             {{ 'product-1' | placeholder_svg_tag }}
@@ -1068,22 +1074,22 @@
       </div>
 
       <div class="pdp-thumb-wrap-{{ ai_gen_id }}">
-        <button class="pdp-thumb-arrow-{{ ai_gen_id }}" data-thumb-prev aria-label="Previous">‹</button>
+        <button type="button" class="pdp-thumb-arrow-{{ ai_gen_id }}" data-thumb-prev aria-label="Previous">‹</button>
         <div class="pdp-thumb-viewport-{{ ai_gen_id }}">
           <div class="pdp-thumb-track-{{ ai_gen_id }}" data-thumb-track>
             {% for thumb_img in bundle_product.images limit: 12 %}
-              <div class="pdp-thumb-item-{{ ai_gen_id }} {% if forloop.first %}active{% endif %}" data-thumb-item data-thumb-index="{{ forloop.index0 }}">
+              <div class="pdp-thumb-item-{{ ai_gen_id }}{% if thumb_img.id == first_thumb.id %} active{% endif %}" data-thumb-item data-thumb-index="{{ forloop.index0 }}" data-image-id="{{ thumb_img.id }}" role="button" tabindex="0" aria-label="{{ thumb_img.alt | default: bundle_product.title | escape }}" aria-pressed="{% if thumb_img.id == first_thumb.id %}true{% else %}false{% endif %}">
                 {%- capture bundle_thumb_srcset -%}
                   {%- for bundle_media_width in bundle_media_widths -%}
                     {{ thumb_img | image_url: width: bundle_media_width }} {{ bundle_media_width }}w{% unless forloop.last %}, {% endunless %}
                   {%- endfor -%}
                 {%- endcapture -%}
-                <img src="{{ thumb_img | image_url: width: 200 }}" alt="{{ thumb_img.alt | default: bundle_product.title | escape }}" width="200" height="200" data-thumb-src="{{ thumb_img | image_url: width: 1200 }}" data-thumb-srcset="{{ bundle_thumb_srcset | escape }}" data-thumb-zoom="{{ thumb_img | image_url: width: 2400 }}">
+                <img {% if forloop.index <= 4 %}src="{{ thumb_img | image_url: width: 240 }}"{% endif %} data-thumbnail-src="{{ thumb_img | image_url: width: 240 }}" alt="{{ thumb_img.alt | default: bundle_product.title | escape }}" width="240" height="240" loading="lazy" decoding="async" data-thumb-src="{{ thumb_img | image_url: width: 900 }}" data-thumb-srcset="{{ bundle_thumb_srcset | escape }}" data-thumb-zoom="{{ thumb_img | image_url: width: 2400 }}">
               </div>
             {% endfor %}
           </div>
         </div>
-        <button class="pdp-thumb-arrow-{{ ai_gen_id }}" data-thumb-next aria-label="Next">›</button>
+        <button type="button" class="pdp-thumb-arrow-{{ ai_gen_id }}" data-thumb-next aria-label="Next">›</button>
       </div>
     </div>
 
@@ -1382,11 +1388,8 @@
 
 <script>
 (function() {
-  class PdpBundle{{ ai_gen_id }} extends HTMLElement {
-    constructor() {
-      super();
-      this.currentPage = 0;
-      this.thumbsPerPage = 4;
+  const tagName = 'pdp-bundle-{{ ai_gen_id }}';
+  const configure = function() {
       this.zoomLevel = {{ block.settings.zoom_level }};
       // Config: option data from Liquid settings
       this.optionConfig = {
@@ -1401,7 +1404,14 @@
                 endif
                 assign option_image = option_variant.featured_image | default: bundle_product.featured_image
               %}
-              { productTitle: {{ bundle_product.title | json }}, title: {{ option_title | json }}, price: '', origPrice: '', image: {% if option_image %}{{ option_image | image_url: width: 400 | json }}{% else %}{{ '' | json }}{% endif %}, variantId: {{ option_variant.id | json }}, priceCents: {{ option_variant.price | json }}, compareAtPriceCents: {{ option_variant.compare_at_price | json }}, available: {{ option_variant.available | json }}, inventoryManagement: {{ option_variant.inventory_management | json }}, inventoryPolicy: {{ option_variant.inventory_policy | json }}, inventoryQuantity: {{ option_variant.inventory_quantity | json }}, packSize: {{ forloop.index | json }} }{% unless forloop.last %},{% endunless %}
+              {%- capture option_image_srcset -%}
+                {%- if option_image -%}
+                  {%- for bundle_media_width in bundle_media_widths -%}
+                    {{ option_image | image_url: width: bundle_media_width }} {{ bundle_media_width }}w{% unless forloop.last %}, {% endunless %}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endcapture -%}
+              { productTitle: {{ bundle_product.title | json }}, title: {{ option_title | json }}, price: '', origPrice: '', image: {% if option_image %}{{ option_image | image_url: width: 400 | json }}{% else %}{{ '' | json }}{% endif %}, imageId: {{ option_image.id | json }}, mainImage: {% if option_image %}{{ option_image | image_url: width: 900 | json }}{% else %}null{% endif %}, imageSrcset: {{ option_image_srcset | strip | json }}, zoomImage: {% if option_image %}{{ option_image | image_url: width: 2400 | json }}{% else %}null{% endif %}, imageAlt: {{ option_image.alt | default: bundle_product.title | json }}, variantId: {{ option_variant.id | json }}, priceCents: {{ option_variant.price | json }}, compareAtPriceCents: {{ option_variant.compare_at_price | json }}, available: {{ option_variant.available | json }}, inventoryManagement: {{ option_variant.inventory_management | json }}, inventoryPolicy: {{ option_variant.inventory_policy | json }}, inventoryQuantity: {{ option_variant.inventory_quantity | json }}, packSize: {{ forloop.index | json }} }{% unless forloop.last %},{% endunless %}
             {% endfor %}
           ]
         },
@@ -1436,9 +1446,33 @@
       this.useNativeBundleCartValidation = {{ block.settings.use_native_bundle_cart_validation | json }};
       this.productHandle = {{ bundle_product.handle | json }};
       this.unavailableOptionKeys = new Set();
+  };
+  const existingDefinition = customElements.get(tagName);
+  if (existingDefinition) {
+    existingDefinition.configure = configure;
+    const currentBlock = document.currentScript && document.currentScript.previousElementSibling;
+    const currentBlocks = currentBlock && currentBlock.localName === tagName ? [currentBlock] : document.querySelectorAll(tagName);
+    currentBlocks.forEach(instance => {
+      if (!instance.isConnected) return;
+      instance.disconnectedCallback();
+      instance.connectedCallback();
+    });
+    return;
+  }
+
+  class PdpBundle{{ ai_gen_id }} extends HTMLElement {
+    constructor() {
+      super();
+      this.currentPage = 0;
+      this.thumbsPerPage = 4;
     }
 
     connectedCallback() {
+      if (this.connected) return;
+      this.connected = true;
+      this.connectionId = (this.connectionId || 0) + 1;
+      this.eventAbort = new AbortController();
+      this.constructor.configure.call(this);
       this.mainImg = this.querySelector('[data-main-img]');
       this.mainImgEl = this.querySelector('[data-main-img-el]');
       this.zoomOverlay = this.querySelector('[data-zoom-overlay]');
@@ -1469,13 +1503,14 @@
       this.buyNowButtons = document.querySelectorAll('[data-bundle-action="buy-now"]');
       this.actionButtons = [...this.addToCartButtons, ...this.buyNowButtons];
       this.handleActionClick = this.handleActionClick.bind(this);
-      this.actionButtons.forEach(button => button.addEventListener('click', this.handleActionClick));
+      this.actionButtons.forEach(button => this.listen(button, 'click', this.handleActionClick));
 
       this.setupZoom();
       this.setupTabs();
       this.setupDescriptionScroller();
       this.setupThumbnails();
       this.ensureValidInitialSelection();
+      this.selectVariantImage();
       this.hydrateOptionCards();
       this.setupOptions();
       this.updateThumbButtons();
@@ -1487,6 +1522,10 @@
       // Initialize sticky bar with first selection
       // Retry with delay to handle component loading order
       this.initStickyBarSync();
+    }
+
+    listen(target, type, listener, options = {}) {
+      if (target) target.addEventListener(type, listener, { ...options, signal: this.eventAbort.signal });
     }
 
     setupTabs() {
@@ -1535,8 +1574,8 @@
       };
 
       this.tabButtons.forEach(tab => {
-        tab.addEventListener('click', this.handleTabClick);
-        tab.addEventListener('keydown', this.handleTabKeydown);
+        this.listen(tab, 'click', this.handleTabClick);
+        this.listen(tab, 'keydown', this.handleTabKeydown);
       });
     }
 
@@ -1549,8 +1588,8 @@
         });
       };
 
-      window.addEventListener('scroll', this.handleStickyMediaPosition, { passive: true });
-      window.addEventListener('resize', this.handleStickyMediaPosition, { passive: true });
+      this.listen(window, 'scroll', this.handleStickyMediaPosition, { passive: true });
+      this.listen(window, 'resize', this.handleStickyMediaPosition, { passive: true });
 
       const stickyTitle = document.querySelector('[data-sticky-title]');
       this.stickyBuyBar = stickyTitle ? stickyTitle.closest('[class*="sticky-buy-bar-"]') : null;
@@ -1589,17 +1628,20 @@
         this.descScroll.scrollTo({ top: maxScroll * ratio, behavior: 'smooth' });
       };
 
-      this.descScroll.addEventListener('scroll', this.handleDescriptionScroll, { passive: true });
-      if (this.descUp) this.descUp.addEventListener('click', this.handleDescriptionUp);
-      if (this.descDown) this.descDown.addEventListener('click', this.handleDescriptionDown);
-      if (this.descTrack) this.descTrack.addEventListener('click', this.handleDescriptionTrack);
+      this.listen(this.descScroll, 'scroll', this.handleDescriptionScroll, { passive: true });
+      this.listen(this.descUp, 'click', this.handleDescriptionUp);
+      this.listen(this.descDown, 'click', this.handleDescriptionDown);
+      this.listen(this.descTrack, 'click', this.handleDescriptionTrack);
 
       if (typeof ResizeObserver !== 'undefined') {
         this.descResizeObserver = new ResizeObserver(this.handleDescriptionResize);
         this.descResizeObserver.observe(this.descScroll);
       }
 
-      requestAnimationFrame(() => this.updateDescriptionScroller());
+      this.descriptionFrame = requestAnimationFrame(() => {
+        this.descriptionFrame = null;
+        if (this.connected) this.updateDescriptionScroller();
+      });
     }
 
     updateDescriptionScroller() {
@@ -1630,8 +1672,9 @@
       // Check if sticky bar elements were found; if not, retry
       const found = document.querySelector('[data-sticky-title]');
       if (!found) {
-        setTimeout(() => this.syncStickyBar(), 100);
-        setTimeout(() => this.syncStickyBar(), 500);
+        this.stickySyncTimers = [100, 500].map(delay => setTimeout(() => {
+          if (this.connected) this.syncStickyBar();
+        }, delay));
       }
     }
 
@@ -1759,45 +1802,135 @@
 
     setupZoom() {
       if (!this.mainImg || !this.zoomOverlay) return;
-
-      this.mainImg.addEventListener('mousemove', (e) => {
+      this.zoomIntent = false;
+      this.listen(this.mainImg, 'pointerenter', (event) => {
+        if (event.pointerType === 'touch' || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        this.zoomIntent = true;
+        this.loadZoomImage();
+      });
+      this.listen(this.mainImg, 'pointermove', (e) => {
+        if (!this.zoomIntent || e.pointerType === 'touch') return;
         const rect = this.mainImg.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
-        const xPercent = (x / rect.width) * 100;
-        const yPercent = (y / rect.height) * 100;
-        
+        const xPercent = Math.max(0, Math.min(100, (x / rect.width) * 100));
+        const yPercent = Math.max(0, Math.min(100, (y / rect.height) * 100));
         this.zoomOverlay.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
       });
+      this.listen(this.mainImg, 'pointerleave', () => { this.zoomIntent = false; });
+      if (this.mainImgEl) {
+        this.listen(this.mainImgEl, 'error', () => this.retryMainImage());
+        if (this.mainImgEl.complete && !this.mainImgEl.naturalWidth) this.retryMainImage();
+      }
+    }
+
+    retryMainImage() {
+      if (!this.mainImgEl || this.mainImgEl.dataset.fallbackAttempted === 'true') return;
+      const fallback = this.mainImgEl.dataset.fallbackSrc;
+      if (!fallback) return;
+      this.mainImgEl.dataset.fallbackAttempted = 'true';
+      this.mainImgEl.removeAttribute('srcset');
+      this.mainImgEl.src = fallback;
+    }
+
+    loadZoomImage() {
+      const source = this.zoomOverlay && this.zoomOverlay.dataset.zoomSrc;
+      if (!this.zoomIntent || !source || this.zoomSource === source) return;
+      if (this.zoomLoad) this.zoomLoad.onload = this.zoomLoad.onerror = null;
+      const connectionId = this.connectionId;
+      const image = new Image();
+      this.zoomLoad = image;
+      this.zoomSource = source;
+      image.onload = () => {
+        if (!this.connected || connectionId !== this.connectionId || this.zoomOverlay.dataset.zoomSrc !== source) return;
+        this.zoomOverlay.style.backgroundImage = `url(${JSON.stringify(source)})`;
+      };
+      image.onerror = () => { if (this.zoomSource === source) this.zoomSource = null; };
+      image.src = source;
+    }
+
+    selectGalleryImage(media, thumb) {
+      if (!this.mainImgEl || !media.src) return;
+      if (this.galleryLoad) {
+        this.galleryLoad.onload = this.galleryLoad.onerror = null;
+        this.galleryLoad = null;
+      }
+      if (String(this.mainImgEl.dataset.imageId) === String(media.imageId) && media.imageId) {
+        this.markSelectedThumbnail(thumb);
+        return;
+      }
+      const connectionId = this.connectionId;
+      const image = new Image();
+      this.galleryLoad = image;
+      image.decoding = 'async';
+      image.fetchPriority = 'high';
+      image.onload = () => {
+        if (!this.connected || connectionId !== this.connectionId || this.galleryLoad !== image) return;
+        if (media.srcset) this.mainImgEl.srcset = media.srcset;
+        else this.mainImgEl.removeAttribute('srcset');
+        this.mainImgEl.src = media.src;
+        this.mainImgEl.alt = media.alt || '';
+        this.mainImgEl.dataset.imageId = media.imageId || '';
+        this.mainImgEl.dataset.fallbackSrc = media.src;
+        delete this.mainImgEl.dataset.fallbackAttempted;
+        if (this.zoomOverlay) {
+          this.zoomOverlay.style.backgroundImage = '';
+          this.zoomOverlay.dataset.zoomSrc = media.zoom || media.src;
+          this.zoomSource = null;
+          this.loadZoomImage();
+        }
+        this.markSelectedThumbnail(thumb);
+        this.galleryLoad = null;
+      };
+      // Retain the visible image if a new selection cannot be downloaded.
+      image.onerror = () => { if (this.galleryLoad === image) this.galleryLoad = null; };
+      if (media.srcset) {
+        image.sizes = this.mainImgEl.sizes;
+        image.srcset = media.srcset;
+      }
+      image.src = media.src;
+    }
+
+    markSelectedThumbnail(thumb) {
+      this.thumbItems.forEach(item => {
+        const selected = item === thumb;
+        item.classList.toggle('active', selected);
+        item.setAttribute('aria-pressed', String(selected));
+      });
+      if (thumb) {
+        this.currentPage = Math.floor(Array.from(this.thumbItems).indexOf(thumb) / this.thumbsPerPage);
+        this.updateThumbPosition();
+      }
+    }
+
+    selectVariantImage() {
+      const option = this.optionConfig.group1.options[this.selectedIndex.group1];
+      if (!option || !option.mainImage) return;
+      const thumb = Array.from(this.thumbItems).find(item => String(item.dataset.imageId) === String(option.imageId));
+      this.selectGalleryImage({ src: option.mainImage, srcset: option.imageSrcset, zoom: option.zoomImage, alt: option.imageAlt, imageId: option.imageId }, thumb);
     }
 
     setupThumbnails() {
       if (!this.thumbItems.length) return;
-
-      this.thumbItems.forEach((thumb, index) => {
-        thumb.addEventListener('click', () => {
-          this.thumbItems.forEach(t => t.classList.remove('active'));
-          thumb.classList.add('active');
-          
+      const activeIndex = Array.from(this.thumbItems).findIndex(item => item.classList.contains('active'));
+      this.currentPage = Math.max(0, Math.floor(activeIndex / this.thumbsPerPage));
+      this.thumbItems.forEach(thumb => {
+        const selectThumb = () => {
           const img = thumb.querySelector('img');
-          if (img && this.mainImgEl && this.zoomOverlay) {
-            const mainSrc = img.dataset.thumbSrc || img.src.replace(/width=\d+/, 'width=1200');
-            const zoomSrc = img.dataset.thumbZoom || img.src.replace(/width=\d+/, 'width=2400');
-            
-            if (img.dataset.thumbSrcset) {
-              this.mainImgEl.srcset = img.dataset.thumbSrcset;
-            } else {
-              this.mainImgEl.removeAttribute('srcset');
-            }
-            this.mainImgEl.src = mainSrc;
-            this.zoomOverlay.style.backgroundImage = `url('${zoomSrc}')`;
-          }
+          if (!img) return;
+          this.selectGalleryImage({ src: img.dataset.thumbSrc, srcset: img.dataset.thumbSrcset, zoom: img.dataset.thumbZoom, alt: img.alt, imageId: thumb.dataset.imageId }, thumb);
+        };
+        this.listen(thumb, 'click', selectThumb);
+        this.listen(thumb, 'keydown', (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          selectThumb();
         });
       });
 
       if (this.thumbPrev) {
-        this.thumbPrev.addEventListener('click', () => {
+        this.listen(this.thumbPrev, 'click', () => {
           if (this.currentPage > 0) {
             this.currentPage--;
             this.updateThumbPosition();
@@ -1806,7 +1939,7 @@
       }
 
       if (this.thumbNext) {
-        this.thumbNext.addEventListener('click', () => {
+        this.listen(this.thumbNext, 'click', () => {
           const maxPage = Math.ceil(this.thumbItems.length / this.thumbsPerPage) - 1;
           if (this.currentPage < maxPage) {
             this.currentPage++;
@@ -1814,14 +1947,26 @@
           }
         });
       }
+      if (typeof ResizeObserver !== 'undefined' && this.thumbTrack) {
+        this.thumbResizeObserver = new ResizeObserver(() => this.updateThumbPosition());
+        this.thumbResizeObserver.observe(this.thumbTrack);
+      }
+      this.updateThumbPosition();
     }
 
     updateThumbPosition() {
-      if (!this.thumbTrack) return;
-      const thumbWidth = {{ block.settings.thumb_size }};
-      const gap = {{ block.settings.thumb_gap }};
-      const offset = this.currentPage * this.thumbsPerPage * (thumbWidth + gap);
+      if (!this.thumbTrack || !this.thumbItems.length) return;
+      const maxPage = Math.ceil(this.thumbItems.length / this.thumbsPerPage) - 1;
+      this.currentPage = Math.max(0, Math.min(this.currentPage, maxPage));
+      const startIndex = this.currentPage * this.thumbsPerPage;
+      const first = this.thumbItems[0];
+      const target = this.thumbItems[startIndex];
+      const offset = target ? target.offsetLeft - first.offsetLeft : 0;
       this.thumbTrack.style.transform = `translateX(-${offset}px)`;
+      Array.from(this.thumbItems).slice(startIndex, startIndex + this.thumbsPerPage).forEach(item => {
+        const image = item.querySelector('img');
+        if (image && !image.getAttribute('src') && image.dataset.thumbnailSrc) image.src = image.dataset.thumbnailSrc;
+      });
       this.updateThumbButtons();
     }
 
@@ -1983,6 +2128,7 @@
           this.updateActionAvailability();
 
           if (group === '1') {
+            this.selectVariantImage();
             const selectedOption = this.optionConfig.group1.options[this.selectedIndex.group1];
             if (selectedOption && selectedOption.variantId) {
               document.dispatchEvent(new CustomEvent('variant:change', {
@@ -1996,9 +2142,9 @@
           }
         };
 
-        card.addEventListener('click', selectCard);
+        this.listen(card, 'click', selectCard);
         if (card.dataset.optionGroup === '2') {
-          card.addEventListener('keydown', (event) => {
+          this.listen(card, 'keydown', (event) => {
             if (event.key === 'Enter' || event.key === ' ') {
               event.preventDefault();
               selectCard();
@@ -2020,6 +2166,8 @@
 
     async refreshSelectedAvailability() {
       if (!this.productHandle) return;
+      const connectionId = this.connectionId;
+      const signal = this.eventAbort.signal;
 
       const root = window.Shopify && window.Shopify.routes ? window.Shopify.routes.root : '/';
       const pageUrl = new URL(window.location.href);
@@ -2031,11 +2179,13 @@
         const response = await fetch(productUrl, {
           credentials: 'same-origin',
           cache: 'no-store',
+          signal,
           headers: { Accept: 'application/json' }
         });
         if (!response.ok) return;
 
         const liveProduct = await response.json();
+        if (!this.connected || connectionId !== this.connectionId) return;
         const liveVariants = new Map((liveProduct.variants || []).map(variant => [String(variant.id), variant]));
         this.optionConfig.group1.options.forEach(option => {
           const liveVariant = liveVariants.get(String(option.variantId));
@@ -2065,6 +2215,7 @@
             const response = await fetch(optionUrl, {
               credentials: 'same-origin',
               cache: 'no-store',
+              signal,
               headers: { Accept: 'application/json' }
             });
             if (!response.ok) return null;
@@ -2073,6 +2224,7 @@
             return null;
           }
         }));
+        if (!this.connected || connectionId !== this.connectionId) return;
         const liveGroup2ByHandle = new Map(liveGroup2Products.filter(Boolean));
         this.optionConfig.group2.options.forEach(option => {
           const liveProduct = liveGroup2ByHandle.get(option.productHandle);
@@ -2574,11 +2726,20 @@
     }
 
     disconnectedCallback() {
+      this.connected = false;
+      if (this.eventAbort) this.eventAbort.abort();
+      if (this.galleryLoad) this.galleryLoad.onload = this.galleryLoad.onerror = null;
+      if (this.zoomLoad) this.zoomLoad.onload = this.zoomLoad.onerror = null;
+      this.galleryLoad = this.zoomLoad = null;
+      this.zoomSource = null;
+      this.zoomIntent = false;
+      if (this.thumbResizeObserver) this.thumbResizeObserver.disconnect();
+      if (this.descriptionFrame) window.cancelAnimationFrame(this.descriptionFrame);
+      this.descriptionFrame = null;
+      (this.stickySyncTimers || []).forEach(timer => clearTimeout(timer));
+      this.stickySyncTimers = [];
       if (this.actionButtons) {
         this.actionButtons.forEach(button => button.removeEventListener('click', this.handleActionClick));
-      }
-      if (this.mainImg) {
-        this.mainImg.removeEventListener('mousemove', this.setupZoom);
       }
       if (this.tabButtons && this.handleTabClick && this.handleTabKeydown) {
         this.tabButtons.forEach(tab => {
@@ -2599,10 +2760,12 @@
       }
       if (this.stickyMediaResizeObserver) this.stickyMediaResizeObserver.disconnect();
       if (this.stickyMediaFrame) window.cancelAnimationFrame(this.stickyMediaFrame);
+      this.stickyMediaFrame = null;
     }
   }
 
-  customElements.define('pdp-bundle-{{ ai_gen_id }}', PdpBundle{{ ai_gen_id }});
+  PdpBundle{{ ai_gen_id }}.configure = configure;
+  customElements.define(tagName, PdpBundle{{ ai_gen_id }});
 })();
 </script>
 

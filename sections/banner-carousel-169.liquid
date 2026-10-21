@@ -6,12 +6,9 @@ Alle Bilder werden auf 16:9 zugeschnitten
 {% stylesheet %}
 .banner-carousel-section {
   width: 100%;
-  padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
-  background: {{ section.settings.bg_color }};
 }
 
 .banner-carousel-container {
-  max-width: {{ section.settings.max_width }}px;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -19,7 +16,6 @@ Alle Bilder werden auf 16:9 zugeschnitten
 .banner-swiper {
   position: relative;
   overflow: hidden;
-  border-radius: {{ section.settings.radius }}px;
 }
 
 .banner-track {
@@ -34,13 +30,15 @@ Alle Bilder werden auf 16:9 zugeschnitten
 
 /* 强制 16:9 容器 */
 .aspect-16-9 {
+  display: block;
   width: 100%;
   padding-top: 56.25%;
   position: relative;
   overflow: hidden;
 }
 
-.aspect-16-9 img {
+.aspect-16-9 img,
+.aspect-16-9 svg {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -82,8 +80,6 @@ Alle Bilder werden auf 16:9 zugeschnitten
 .banner-btn {
   display: inline-block;
   padding: 14px 32px;
-  background: {{ section.settings.btn_color }};
-  color: {{ section.settings.btn_text_color }};
   border-radius: 4px;
   text-decoration: none;
   font-weight: 600;
@@ -156,14 +152,45 @@ Alle Bilder werden auf 16:9 zugeschnitten
 }
 {% endstylesheet %}
 
-<section class="banner-carousel-section">
+<style>
+  #BannerCarousel-{{ section.id }} {
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    background: {{ section.settings.bg_color }};
+  }
+  #BannerCarousel-{{ section.id }} .banner-carousel-container {
+    max-width: {{ section.settings.max_width }}px;
+  }
+  #BannerCarousel-{{ section.id }} .banner-swiper {
+    border-radius: {{ section.settings.radius }}px;
+  }
+  #BannerCarousel-{{ section.id }} .banner-btn {
+    background: {{ section.settings.btn_color }};
+    color: {{ section.settings.btn_text_color }};
+  }
+</style>
+
+<section id="BannerCarousel-{{ section.id }}" class="banner-carousel-section">
   <div class="banner-carousel-container">
     <div class="banner-swiper" data-autoplay="{{ section.settings.autoplay }}">
       <div class="banner-track">
         {% for block in section.blocks %}
-        <div class="banner-slide">
+        <div class="banner-slide" {{ block.shopify_attributes }}>
           <a href="{{ block.settings.link }}" class="aspect-16-9">
-            <img src="{{ block.settings.image }}" alt="{{ block.settings.alt }}">
+            {% if block.settings.image != blank %}
+              {% liquid
+                assign banner_alt = block.settings.alt | default: block.settings.image.alt
+                assign banner_loading = 'lazy'
+                assign banner_priority = 'auto'
+                if forloop.first and section.index == 1
+                  assign banner_loading = 'eager'
+                  assign banner_priority = 'high'
+                endif
+              %}
+              {% capture banner_sizes %}(min-width: {{ section.settings.max_width | plus: 32 }}px) {{ section.settings.max_width }}px, calc(100vw - 32px){% endcapture %}
+              {{ block.settings.image | image_url: width: 1920 | image_tag: widths: '750, 1100, 1500, 1920', sizes: banner_sizes, loading: banner_loading, fetchpriority: banner_priority, alt: banner_alt }}
+            {% else %}
+              {{ 'lifestyle-1' | placeholder_svg_tag }}
+            {% endif %}
             <div class="banner-overlay"></div>
             <div class="banner-text-wrap">
               <h2 class="banner-title">{{ block.settings.title }}</h2>
@@ -184,65 +211,115 @@ Alle Bilder werden auf 16:9 zugeschnitten
 </section>
 
 {% javascript %}
-document.addEventListener('DOMContentLoaded', function(){
-  const swiperWrap = document.querySelector('.banner-swiper');
-  const track = swiperWrap.querySelector('.banner-track');
-  const slides = swiperWrap.querySelectorAll('.banner-slide');
-  const dotsWrap = document.querySelector('.banner-dots');
-  const prevBtn = document.querySelector('.arrow-prev');
-  const nextBtn = document.querySelector('.arrow-next');
-  const autoplay = swiperWrap.dataset.autoplay === 'true';
+(function () {
+  const instances = new WeakMap();
 
-  let index = 0;
-  let timer;
+  function initCarousel(container) {
+    const swiperWrap = container.querySelector('.banner-swiper');
+    if (!swiperWrap || swiperWrap.dataset.bannerCarouselInitialized === 'true') return;
 
-  slides.forEach((_, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'banner-dot' + (i === 0 ? ' active' : '');
-    dot.addEventListener('click', () => goSlide(i));
-    dotsWrap.appendChild(dot);
-  });
+    const track = swiperWrap.querySelector('.banner-track');
+    const slides = swiperWrap.querySelectorAll('.banner-slide');
+    const dotsWrap = container.querySelector('.banner-dots');
+    const prevBtn = swiperWrap.querySelector('.arrow-prev');
+    const nextBtn = swiperWrap.querySelector('.arrow-next');
+    if (!track || !dotsWrap || !prevBtn || !nextBtn || !slides.length) return;
 
-  const dots = document.querySelectorAll('.banner-dot');
+    swiperWrap.dataset.bannerCarouselInitialized = 'true';
+    const autoplay = swiperWrap.dataset.autoplay === 'true';
+    const dots = [];
+    let index = 0;
+    let timer;
 
-  function updateSlide(){
-    track.style.transform = `translateX(-${index * 100}%)`;
-    dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-  }
+    function updateSlide() {
+      track.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+    }
 
-  function goSlide(i){
-    index = i;
+    function stopTimer() {
+      clearInterval(timer);
+      timer = undefined;
+    }
+
+    function startTimer() {
+      stopTimer();
+      if (!autoplay || slides.length < 2) return;
+      timer = setInterval(nextSlide, 5000);
+    }
+
+    function goSlide(i) {
+      index = i;
+      updateSlide();
+      startTimer();
+    }
+
+    function nextSlide() {
+      index = (index + 1) % slides.length;
+      updateSlide();
+    }
+
+    function prevSlide() {
+      index = (index - 1 + slides.length) % slides.length;
+      updateSlide();
+    }
+
+    dotsWrap.replaceChildren();
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'banner-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goSlide(i));
+      dotsWrap.appendChild(dot);
+      dots.push(dot);
+    });
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    swiperWrap.addEventListener('mouseenter', stopTimer);
+    swiperWrap.addEventListener('mouseleave', startTimer);
+
+    instances.set(container, function () {
+      stopTimer();
+      prevBtn.removeEventListener('click', prevSlide);
+      nextBtn.removeEventListener('click', nextSlide);
+      swiperWrap.removeEventListener('mouseenter', stopTimer);
+      swiperWrap.removeEventListener('mouseleave', startTimer);
+      dotsWrap.replaceChildren();
+      delete swiperWrap.dataset.bannerCarouselInitialized;
+      instances.delete(container);
+    });
+
     updateSlide();
-    resetTimer();
-  }
-
-  function nextSlide(){
-    index = (index + 1) % slides.length;
-    updateSlide();
-  }
-
-  function prevSlide(){
-    index = (index - 1 + slides.length) % slides.length;
-    updateSlide();
-  }
-
-  function startTimer(){
-    if(!autoplay) return;
-    timer = setInterval(nextSlide, 5000);
-  }
-
-  function resetTimer(){
-    clearInterval(timer);
     startTimer();
   }
 
-  prevBtn.addEventListener('click', prevSlide);
-  nextBtn.addEventListener('click', nextSlide);
-  swiperWrap.addEventListener('mouseenter', () => clearInterval(timer));
-  swiperWrap.addEventListener('mouseleave', startTimer);
+  function forEachCarousel(scope, callback) {
+    if (scope.matches && scope.matches('.banner-carousel-section')) callback(scope);
+    scope.querySelectorAll('.banner-carousel-section').forEach(callback);
+  }
 
-  startTimer();
-});
+  function initCarousels(scope) {
+    forEachCarousel(scope, initCarousel);
+  }
+
+  document.addEventListener('shopify:section:load', function (event) {
+    initCarousels(event.target);
+  });
+
+  document.addEventListener('shopify:section:unload', function (event) {
+    forEachCarousel(event.target, function (container) {
+      const destroy = instances.get(container);
+      if (destroy) destroy();
+    });
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      initCarousels(document);
+    }, { once: true });
+  } else {
+    initCarousels(document);
+  }
+})();
 {% endjavascript %}
 
 {% schema %}
