@@ -6,53 +6,47 @@
       if (this.video) return;
       this.video = this.querySelector('video');
       if (!this.video) return;
-      this.button = this.querySelector('[data-video-play]');
       this.message = this.querySelector('[data-video-message]');
       this.abort = new AbortController();
       var options = { signal: this.abort.signal };
       this.visible = false;
       this.resumeTime = 0;
-      this.manual = false;
-      this.userPaused = false;
-      this.internalPause = false;
       this.loaded = false;
+      this.retryCount = 0;
+      this.terminalError = false;
+      this.video.controls = false;
+      this.video.removeAttribute('controls');
+      this.video.muted = true;
+      this.video.defaultMuted = true;
+      this.video.loop = true;
+      this.video.playsInline = true;
       this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
       this.onVisibility = this.update.bind(this);
       this.onMotion = this.update.bind(this);
       this.video.addEventListener('playing', () => {
-        clearTimeout(this.stallTimer);
-        this.dataset.state = 'playing';
-        if (this.message) this.message.textContent = '';
+        if (!this.shouldPlay()) {
+          this.pauseInternally();
+          return;
+        }
+        this.retryCount = 0;
+        this.setState('playing');
       }, options);
       this.video.addEventListener('pause', () => {
-        if (!this.internalPause && this.loaded) this.userPaused = true;
-        this.internalPause = false;
-        if (this.dataset.state !== 'error') this.dataset.state = 'paused';
+        if (!this.video || !this.video.paused) return;
+        if (this.dataset.state !== 'error' && !this.retryTimer) this.setState('paused');
       }, options);
-      this.video.addEventListener('play', () => { this.userPaused = false; }, options);
       this.video.addEventListener('loadedmetadata', () => {
         if (this.resumeTime > 0 && this.resumeTime < this.video.duration) {
-          try { this.video.currentTime = this.resumeTime; } catch (error) { /* Some streams are not seekable yet. */ }
+          try { this.video.currentTime = this.resumeTime; } catch (error) { /* The stream may not be seekable yet. */ }
         }
         this.resumeTime = 0;
       }, options);
-      this.video.addEventListener('error', () => this.showError(), options);
+      this.video.addEventListener('error', () => this.retry(), options);
+      this.video.querySelectorAll('source[data-src]').forEach(source => {
+        source.addEventListener('error', () => this.retry(), options);
+      });
       this.video.addEventListener('waiting', () => {
-        this.dataset.state = 'buffering';
-        clearTimeout(this.stallTimer);
-        this.stallTimer = setTimeout(() => {
-          if (this.visible && this.video.readyState < 3) {
-            this.video.controls = true;
-            this.dataset.state = 'paused';
-          }
-        }, 12000);
-      }, options);
-      if (this.button) this.button.addEventListener('click', () => {
-        this.manual = true;
-        this.userPaused = false;
-        this.video.controls = true;
-        if (this.video.error) this.release();
-        this.update();
+        if (this.loaded && this.shouldPlay()) this.setState('buffering');
       }, options);
       document.addEventListener('visibilitychange', this.onVisibility, options);
       this.reducedMotion.addEventListener('change', this.onMotion);
@@ -68,29 +62,45 @@
       }
     }
 
+    setState(state) {
+      this.dataset.state = state;
+      this.setAttribute('aria-busy', String(state === 'loading' || state === 'buffering'));
+      if (this.message) this.message.textContent = state === 'error' ? this.dataset.errorLabel || '' : '';
+    }
+
+    shouldPlay() {
+      var saveData = navigator.connection && navigator.connection.saveData;
+      return this.visible && !document.hidden && this.dataset.autoplay === 'true' &&
+        !this.reducedMotion.matches && !saveData;
+    }
+
     update() {
       if (!this.video) return;
-      var shouldPlay = this.shouldPlay();
       clearTimeout(this.releaseTimer);
-      if (!shouldPlay) {
+      if (!this.shouldPlay()) {
+        clearTimeout(this.retryTimer);
+        this.retryTimer = null;
         this.pauseInternally();
-        clearTimeout(this.stallTimer);
-        // Stop background downloads as well as decoding when the video leaves view.
-        if (this.loaded && (!this.visible || document.hidden)) {
-          this.releaseTimer = setTimeout(() => this.release(), 1500);
-        }
+        this.setState('paused');
+        if (this.loaded) this.releaseTimer = setTimeout(() => this.release(), 1500);
         return;
       }
+      if (this.terminalError) {
+        this.setState('error');
+        return;
+      }
+      if (this.retryTimer) return;
       if (!this.loaded) {
-        if (this.dataset.controls === 'true') this.video.controls = true;
         this.video.querySelectorAll('source[data-src]').forEach(source => {
           source.src = source.dataset.src;
         });
         this.loaded = true;
-        this.dataset.state = 'loading';
+        this.setState('loading');
         this.video.load();
       }
       if (this.playingPromise || !this.video.paused) return;
+      this.video.muted = true;
+      this.setState(this.video.readyState < 3 ? 'loading' : 'buffering');
       var playbackVideo = this.video;
       var playbackConnection = this.abort;
       var request = playbackVideo.play();
@@ -98,55 +108,54 @@
         this.playingPromise = request;
         var interrupted = false;
         request.catch(error => {
-          interrupted = error.name === 'AbortError';
           if (this.video !== playbackVideo || this.abort !== playbackConnection) return;
-          if (error.name !== 'AbortError' && this.visible) {
-            this.dataset.state = 'paused';
-            this.video.controls = true;
-          }
+          interrupted = error.name === 'AbortError';
+          if (!this.shouldPlay()) return;
+          if (error.name === 'NotAllowedError') this.setState('blocked');
+          else if (!interrupted) this.retry();
         }).finally(() => {
-          if (this.playingPromise === request) {
-            this.playingPromise = null;
-            // A fast scroll out and back may interrupt play before its promise settles.
-            if (interrupted && this.video && this.shouldPlay()) this.update();
-          }
+          if (this.playingPromise !== request) return;
+          this.playingPromise = null;
+          if (interrupted && this.video && !this.terminalError && this.shouldPlay() && !this.retryTimer) this.update();
         });
       }
     }
 
-    shouldPlay() {
-      var saveData = navigator.connection && navigator.connection.saveData;
-      return this.visible && !document.hidden && !this.userPaused &&
-        (this.manual || (this.dataset.autoplay === 'true' && !this.reducedMotion.matches && !saveData));
-    }
-
-    showError() {
-      clearTimeout(this.stallTimer);
-      this.dataset.state = 'error';
-      this.video.controls = true;
-      if (this.message) this.message.textContent = this.dataset.errorLabel || '';
+    retry() {
+      if (!this.video || !this.loaded || this.retryTimer) return;
+      this.release();
+      if (!this.shouldPlay()) return;
+      if (this.retryCount >= 2) {
+        this.terminalError = true;
+        this.setState('error');
+        return;
+      }
+      this.retryCount += 1;
+      this.setState('loading');
+      this.retryTimer = setTimeout(() => {
+        this.retryTimer = null;
+        if (this.video && this.shouldPlay()) this.update();
+      }, this.retryCount * 1500);
     }
 
     pauseInternally() {
-      if (this.video && !this.video.paused) {
-        this.internalPause = true;
-        this.video.pause();
-      }
+      if (this.video && !this.video.paused) this.video.pause();
     }
 
     release() {
       if (!this.video || !this.loaded) return;
-      this.resumeTime = this.video.currentTime || 0;
+      this.resumeTime = this.video.currentTime || this.resumeTime || 0;
       this.loaded = false;
       this.pauseInternally();
       this.video.querySelectorAll('source[data-src]').forEach(source => source.removeAttribute('src'));
       this.video.load();
-      this.dataset.state = 'paused';
+      this.setState('paused');
     }
 
     disconnectedCallback() {
       clearTimeout(this.releaseTimer);
-      clearTimeout(this.stallTimer);
+      clearTimeout(this.retryTimer);
+      this.retryTimer = null;
       if (this.observer) this.observer.disconnect();
       if (this.abort) this.abort.abort();
       if (this.reducedMotion) this.reducedMotion.removeEventListener('change', this.onMotion);

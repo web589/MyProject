@@ -87,7 +87,7 @@
 
       {%- if has_managed_video -%}
         {% assign hero_video_id = 'Mp4Video-' | append: section.id %}
-        {% render 'pdp-video', hosted_video: section.settings.hosted_video, video_url: section.settings.video_url, poster: section.settings.video_poster, video_id: hero_video_id, autoplay: section.settings.autoplay_video, controls: true, fit: section.settings.video_object_fit, target_height: 1080 %}
+        {% render 'pdp-video', hosted_video: section.settings.hosted_video, video_url: section.settings.video_url, poster: section.settings.video_poster, video_id: hero_video_id, autoplay: section.settings.autoplay_video, fit: section.settings.video_object_fit, target_height: 1080 %}
       {%- else -%}
       {%- if section.settings.video_url contains 'youtube.com/watch' -%}
         {%- assign video_id = section.settings.video_url | split: 'v=' -%}

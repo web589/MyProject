@@ -24,14 +24,11 @@
   endif
 -%}
 {%- if media_url != blank -%}
-  <pdp-video data-autoplay="{% if autoplay %}true{% else %}false{% endif %}" data-controls="{% if controls %}true{% else %}false{% endif %}" data-state="paused" data-error-label="{{ 'general.accessibility.video_error' | t | escape }}" style="--pdp-video-fit:{{ fit | default: 'cover' }}">
-    <video{% if video_id != blank %} id="{{ video_id }}"{% endif %}{% if classes != blank %} class="{{ classes }}"{% endif %} muted loop playsinline preload="none"{% if media_poster != blank %} poster="{{ media_poster | image_url: width: 1200 }}"{% endif %}>
+  <pdp-video data-autoplay="{% if autoplay %}true{% else %}false{% endif %}" data-state="paused" data-error-label="{{ 'general.accessibility.video_error' | t | escape }}" aria-busy="false" style="--pdp-video-fit:{{ fit | default: 'cover' }}">
+    <video{% if video_id != blank %} id="{{ video_id }}"{% endif %}{% if classes != blank %} class="{{ classes }}"{% endif %} muted loop playsinline preload="none" tabindex="-1" draggable="false" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback noplaybackrate"{% if media_poster != blank %} poster="{{ media_poster | image_url: width: 1200 }}"{% endif %}>
       <source data-src="{{ media_url | escape }}" type="video/mp4">
     </video>
-    <button type="button" class="pdp-video__play" data-video-play aria-label="{{ 'general.accessibility.play_video' | t | escape }}">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 3v18l14-9z"/></svg>
-    </button>
+    <span class="pdp-video__loading" aria-hidden="true"></span>
     <span class="visually-hidden" data-video-message aria-live="polite"></span>
-    <noscript><style>pdp-video>video,pdp-video>.pdp-video__play{display:none}</style><video controls playsinline preload="none"{% if media_poster != blank %} poster="{{ media_poster | image_url: width: 1200 }}"{% endif %}><source src="{{ media_url | escape }}" type="video/mp4"></video></noscript>
   </pdp-video>
 {%- endif -%}
