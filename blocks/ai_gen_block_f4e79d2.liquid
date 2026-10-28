@@ -549,10 +549,11 @@
             assign feature_image = block.settings[image_key]
             assign feature_title = block.settings[title_key]
             assign feature_description = block.settings[description_key]
+            assign feature_alt = feature_image.alt | default: feature_title | default: ''
           %}
           {% if feature_image != blank or feature_title != blank or feature_description != blank %}
             <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}"{% if feature_description != blank %} tabindex="0"{% endif %}>
-              {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 50vw', alt: feature_title }}{% else %}<div class="ai-feature-card-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>{% endif %}
+              {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 50vw', alt: feature_alt }}{% else %}<div class="ai-feature-card-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>{% endif %}
               <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
               <div class="ai-feature-card-text-{{ ai_gen_id }}">
                 {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
@@ -567,10 +568,11 @@
         assign feature_image = pdp_feature.image.value
         assign feature_title = pdp_feature.title.value
         assign feature_description = pdp_feature.description.value
+        assign feature_alt = feature_image.alt | default: feature_title | default: ''
       %}
       {% if feature_image != blank or feature_title != blank or feature_description != blank %}
       <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ forloop.index }}"{% if feature_description != blank %} tabindex="0"{% endif %}>
-        {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 50vw', alt: feature_title }}{% endif %}
+        {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 50vw', alt: feature_alt }}{% endif %}
         <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
         <div class="ai-feature-card-text-{{ ai_gen_id }}">
           {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
@@ -592,10 +594,11 @@
             assign feature_image = block.settings[image_key]
             assign feature_title = block.settings[title_key]
             assign feature_description = block.settings[description_key]
+            assign feature_alt = feature_image.alt | default: feature_title | default: ''
           %}
           {% if feature_image != blank or feature_title != blank or feature_description != blank %}
             <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}"{% if feature_description != blank %} tabindex="0"{% endif %}>
-              {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 33vw', alt: feature_title }}{% else %}<div class="ai-feature-card-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>{% endif %}
+              {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 33vw', alt: feature_alt }}{% else %}<div class="ai-feature-card-placeholder-{{ ai_gen_id }}">{{ 'image' | placeholder_svg_tag }}</div>{% endif %}
               <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
               <div class="ai-feature-card-text-{{ ai_gen_id }}">
                 {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
@@ -610,11 +613,12 @@
           assign feature_image = pdp_feature.image.value
           assign feature_title = pdp_feature.title.value
           assign feature_description = pdp_feature.description.value
+          assign feature_alt = feature_image.alt | default: feature_title | default: ''
           assign feature_index = forloop.index | plus: 4
         %}
         {% if feature_image != blank or feature_title != blank or feature_description != blank %}
           <div class="ai-feature-card-{{ ai_gen_id }} ai-feature-card-{{ ai_gen_id }}--{{ feature_index }}"{% if feature_description != blank %} tabindex="0"{% endif %}>
-            {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 33vw', alt: feature_title }}{% endif %}
+            {% if feature_image != blank %}{{ feature_image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1400, 2000', sizes: '(max-width: 768px) 100vw, 33vw', alt: feature_alt }}{% endif %}
             <div class="ai-feature-card-overlay-{{ ai_gen_id }}"></div>
             <div class="ai-feature-card-text-{{ ai_gen_id }}">
               {% if feature_title != blank %}<div class="ai-feature-card-title-{{ ai_gen_id }}">{{ feature_title | escape }}</div>{% endif %}
