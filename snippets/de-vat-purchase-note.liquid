@@ -1,0 +1,19 @@
+{% comment %}
+  Merchant-editable German operator-only purchasing policy.
+  Tax eligibility and checkout enforcement are configured separately.
+  @param candidate - Whether the current purchase can contain a DE VAT candidate.
+{% endcomment %}
+{%- if settings.de_vat_operator_only and candidate and localization.country.iso_code == 'DE' -%}
+  {%- liquid
+    assign operator_notice = settings.de_vat_operator_notice
+    assign inquiry_email = settings.de_vat_inquiry_email | default: shop.email | strip
+  -%}
+  <div class="product__policies de-vat-purchase-note" data-de-vat-purchase-note>
+    {%- if operator_notice != blank -%}
+      <p>{{ operator_notice | escape | newline_to_br }}</p>
+    {%- endif -%}
+    {%- if inquiry_email != blank -%}
+      <p><a href="mailto:{{ inquiry_email | escape }}">Anfrage für Wiederverkauf oder andere Verwendungen per E-Mail</a></p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

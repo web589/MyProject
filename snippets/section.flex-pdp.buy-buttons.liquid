@@ -16,19 +16,13 @@
 {%- liquid
   assign form_id = 'section.flex-pdp.form-' | append: section.id
   assign enable_dynamic_checkout = enable_dynamic_checkout | default: block.settings.show_dynamic_checkout, allow_false: true | default: true, allow_false: true
-  assign de_vat_candidate = product.metafields.custom.de_zero_vat_eligible.value
-  if de_vat_candidate != true
-    if product.tags contains 'DE-0-VAT-PV' or product.tags contains 'DE 0% MwSt. PV'
-      assign de_vat_candidate = true
-    endif
-  endif
-  if de_vat_candidate != true
-    for de_vat_variant in product.variants
-      if de_vat_variant.metafields.custom.de_zero_vat_variant.value != blank or de_vat_variant.metafields.custom.de_standard_vat_variant.value != blank
-        assign de_vat_candidate = true
-        break
-      endif
-    endfor
+  capture de_vat_candidate_result
+    render 'de-vat-product-policy', policy_product: product, output: 'candidate'
+  endcapture
+  assign de_vat_candidate_result = de_vat_candidate_result | strip
+  assign de_vat_candidate = false
+  if de_vat_candidate_result == 'true'
+    assign de_vat_candidate = true
   endif
   if de_vat_candidate == true
     assign enable_dynamic_checkout = false
@@ -63,7 +57,11 @@
 {% endcapture %}
 
 {% capture product_buy_buttons %}
+  {% render 'de-vat-meter-notice', notice_product: product %}
+
   {{ product_add_to_cart_stack }}
+
+  {% render 'de-vat-purchase-note', candidate: de_vat_candidate %}
 
   {% if enable_dynamic_checkout %}
     {{ dynamic_checkout_buttons }}

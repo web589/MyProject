@@ -1,0 +1,225 @@
+{%- comment -%}
+  Shared tax policy resolver. The theme settings are isolated to this theme;
+  they do not change product tax overrides, inventory or product metafields.
+
+  policy_product: product object; policy_variant: optional current variant.
+  line_properties: optional cart properties, used only for legacy restoration.
+  output: 'candidate' returns true/false; 'json' returns policy JSON;
+  any other value renders the cart item's data attributes.
+
+  Theme meter pairs deliberately require four distinct, single-variant products.
+  Their identities determine both directions and the mode, never a cart property
+  or a zero-rate tag. Selected products remain candidates when setup is invalid.
+  The explicit component-taxed list is independent of the meter-pair switch;
+  selected meter products cannot use that list to bypass pair validation.
+  With the pair switch off, a selected taxable standard meter may use its
+  existing standard variant for regular tax only; this never enables 0%.
+{%- endcomment -%}
+{%- liquid
+  assign vat_product = policy_product
+  assign vat_variant = policy_variant | default: vat_product.selected_or_first_available_variant
+  assign vat_candidate = false
+  assign vat_strategy = vat_product.metafields.custom.de_vat_strategy.value | default: '' | strip | downcase
+  unless vat_strategy == 'single_product' or vat_strategy == 'bundle_components' or vat_strategy == 'paired_variants'
+    assign vat_strategy = ''
+  endunless
+  if vat_strategy != blank or vat_product.metafields.custom.de_zero_vat_eligible.value == true or vat_product.tags contains 'DE-0-VAT-PV' or vat_product.tags contains 'DE 0% MwSt. PV'
+    assign vat_candidate = true
+  endif
+  for candidate_variant in vat_product.variants
+    if candidate_variant.metafields.custom.de_zero_vat_variant.value != blank or candidate_variant.metafields.custom.de_standard_vat_variant.value != blank or candidate_variant.metafields.custom.de_canonical_variant.value != blank
+      assign vat_candidate = true
+      break
+    endif
+  endfor
+
+  assign zero_variant = vat_variant.metafields.custom.de_zero_vat_variant.value
+  assign standard_variant = vat_variant.metafields.custom.de_standard_vat_variant.value
+  assign vat_mode = line_properties['_de_vat_mode']
+  unless vat_mode == 'zero' or vat_mode == 'standard'
+    assign vat_mode = 'standard'
+    if vat_product.tags contains 'DE-0-VAT-PV' or vat_product.tags contains 'DE 0% MwSt. PV' or standard_variant != blank
+      assign vat_mode = 'zero'
+    endif
+  endunless
+  assign standard_variant_id = vat_variant.id
+  assign zero_variant_id = zero_variant.id
+  if vat_mode == 'zero'
+    assign standard_variant_id = standard_variant.id
+    assign zero_variant_id = vat_variant.id
+  endif
+  assign vat_configured = false
+  assign vat_single_source = false
+  assign vat_policy_invalid = false
+  assign canonical_variant_id = blank
+  assign vat_regular_online_ready = false
+  assign ct002_standard = settings.de_vat_ct002_standard_product
+  assign ct002_zero = settings.de_vat_ct002_zero_product
+  assign ct003_standard = settings.de_vat_ct003_standard_product
+  assign ct003_zero = settings.de_vat_ct003_zero_product
+  assign canonical_variant = vat_variant.metafields.custom.de_canonical_variant.value
+  assign canonical_strategy = canonical_variant.product.metafields.custom.de_vat_strategy.value | default: '' | strip | downcase
+  if canonical_variant != blank and canonical_strategy == 'single_product'
+    assign canonical_variant_id = canonical_variant.id
+    assign vat_candidate = true
+  endif
+  if vat_strategy == 'single_product' or vat_strategy == 'bundle_components'
+    assign vat_configured = true
+    assign vat_single_source = true
+    assign vat_mode = 'single'
+    assign standard_variant_id = vat_variant.id
+    assign zero_variant_id = blank
+  elsif vat_strategy == 'paired_variants'
+    assign vat_policy_invalid = true
+    if zero_variant != blank and standard_variant == blank
+      assign vat_mode = 'standard'
+      assign standard_variant_id = vat_variant.id
+      assign zero_variant_id = zero_variant.id
+      assign reverse_variant = zero_variant.metafields.custom.de_standard_vat_variant.value
+      assign reverse_strategy = zero_variant.product.metafields.custom.de_vat_strategy.value | default: '' | strip | downcase
+      if reverse_variant.id == vat_variant.id and zero_variant.id != vat_variant.id and reverse_strategy == 'paired_variants' and zero_variant.metafields.custom.de_zero_vat_variant.value == blank
+        assign vat_configured = true
+        assign vat_policy_invalid = false
+      endif
+    elsif standard_variant != blank and zero_variant == blank
+      assign vat_mode = 'zero'
+      assign standard_variant_id = standard_variant.id
+      assign zero_variant_id = vat_variant.id
+      assign reverse_variant = standard_variant.metafields.custom.de_zero_vat_variant.value
+      assign reverse_strategy = standard_variant.product.metafields.custom.de_vat_strategy.value | default: '' | strip | downcase
+      if reverse_variant.id == vat_variant.id and standard_variant.id != vat_variant.id and reverse_strategy == 'paired_variants' and standard_variant.metafields.custom.de_standard_vat_variant.value == blank
+        assign vat_configured = true
+        assign vat_policy_invalid = false
+      endif
+    endif
+  endif
+
+  unless settings.de_vat_theme_policy_enabled
+    if vat_variant.taxable and canonical_variant == nil
+      if ct002_standard != blank and vat_product.id == ct002_standard.id
+        if ct002_standard.variants.size == 1 and vat_variant.id == ct002_standard.variants.first.id
+          if ct002_zero == blank or ct002_zero.id != ct002_standard.id
+            assign vat_candidate = true
+            assign vat_strategy = 'paired_variants'
+            assign vat_configured = false
+            assign vat_single_source = false
+            assign vat_policy_invalid = false
+            assign vat_mode = 'standard'
+            assign standard_variant_id = vat_variant.id
+            assign zero_variant_id = blank
+            assign vat_regular_online_ready = true
+          endif
+        endif
+      elsif ct003_standard != blank and vat_product.id == ct003_standard.id
+        if ct003_standard.variants.size == 1 and vat_variant.id == ct003_standard.variants.first.id
+          if ct003_zero == blank or ct003_zero.id != ct003_standard.id
+            assign vat_candidate = true
+            assign vat_strategy = 'paired_variants'
+            assign vat_configured = false
+            assign vat_single_source = false
+            assign vat_policy_invalid = false
+            assign vat_mode = 'standard'
+            assign standard_variant_id = vat_variant.id
+            assign zero_variant_id = blank
+            assign vat_regular_online_ready = true
+          endif
+        endif
+      endif
+    endif
+  endunless
+
+  if settings.de_vat_theme_policy_enabled
+    assign theme_pair_candidate = false
+    if vat_product.id != blank
+      if vat_product.id == ct002_standard.id or vat_product.id == ct002_zero.id or vat_product.id == ct003_standard.id or vat_product.id == ct003_zero.id
+        assign theme_pair_candidate = true
+      endif
+    endif
+    if theme_pair_candidate
+      assign vat_candidate = true
+      assign vat_strategy = 'paired_variants'
+      assign vat_configured = false
+      assign vat_single_source = false
+      assign vat_policy_invalid = true
+      assign canonical_variant_id = blank
+      assign standard_variant_id = blank
+      assign zero_variant_id = blank
+      assign vat_mode = 'standard'
+      if vat_product.id == ct002_zero.id or vat_product.id == ct003_zero.id
+        assign vat_mode = 'zero'
+      endif
+      assign theme_pairs_valid = true
+      if ct002_standard == blank or ct002_zero == blank or ct003_standard == blank or ct003_zero == blank
+        assign theme_pairs_valid = false
+      elsif ct002_standard.variants.size != 1 or ct002_zero.variants.size != 1 or ct003_standard.variants.size != 1 or ct003_zero.variants.size != 1
+        assign theme_pairs_valid = false
+      elsif ct002_standard.id == ct002_zero.id or ct002_standard.id == ct003_standard.id or ct002_standard.id == ct003_zero.id or ct002_zero.id == ct003_standard.id or ct002_zero.id == ct003_zero.id or ct003_standard.id == ct003_zero.id
+        assign theme_pairs_valid = false
+      elsif ct002_standard.variants.first.id == ct002_zero.variants.first.id or ct002_standard.variants.first.id == ct003_standard.variants.first.id or ct002_standard.variants.first.id == ct003_zero.variants.first.id or ct002_zero.variants.first.id == ct003_standard.variants.first.id or ct002_zero.variants.first.id == ct003_zero.variants.first.id or ct003_standard.variants.first.id == ct003_zero.variants.first.id
+        assign theme_pairs_valid = false
+      endif
+      for component_tax_product in settings.de_vat_bundle_components_products
+        if component_tax_product.id == ct002_standard.id or component_tax_product.id == ct002_zero.id or component_tax_product.id == ct003_standard.id or component_tax_product.id == ct003_zero.id
+          assign theme_pairs_valid = false
+          break
+        endif
+      endfor
+      if theme_pairs_valid
+        if vat_product.id == ct002_standard.id or vat_product.id == ct002_zero.id
+          assign standard_variant_id = ct002_standard.variants.first.id
+          assign zero_variant_id = ct002_zero.variants.first.id
+        else
+          assign standard_variant_id = ct003_standard.variants.first.id
+          assign zero_variant_id = ct003_zero.variants.first.id
+        endif
+        if vat_variant.id == standard_variant_id or vat_variant.id == zero_variant_id
+          assign vat_configured = true
+          assign vat_policy_invalid = false
+        endif
+      endif
+    endif
+  endif
+
+  assign theme_bundle_candidate = false
+  for component_tax_product in settings.de_vat_bundle_components_products
+    if vat_product.id != blank and component_tax_product.id == vat_product.id
+      assign theme_bundle_candidate = true
+      break
+    endif
+  endfor
+  if theme_bundle_candidate
+    assign vat_candidate = true
+    assign vat_strategy = 'bundle_components'
+    assign vat_configured = true
+    assign vat_single_source = true
+    assign vat_policy_invalid = false
+    assign vat_mode = 'single'
+    assign canonical_variant_id = blank
+    assign standard_variant_id = vat_variant.id
+    assign zero_variant_id = blank
+    assign vat_regular_online_ready = false
+    if vat_product.id == settings.de_vat_ct002_standard_product.id or vat_product.id == settings.de_vat_ct002_zero_product.id or vat_product.id == settings.de_vat_ct003_standard_product.id or vat_product.id == settings.de_vat_ct003_zero_product.id
+      assign vat_configured = false
+      assign vat_single_source = false
+      assign vat_policy_invalid = true
+      assign standard_variant_id = blank
+    endif
+  endif
+-%}
+{%- if output == 'candidate' -%}
+  {{- vat_candidate -}}
+{%- elsif output == 'json' -%}
+  {"candidate":{{ vat_candidate | json }},"strategy":{{ vat_strategy | json }},"configured":{{ vat_configured | json }},"mode":{{ vat_mode | json }},"singleSource":{{ vat_single_source | json }},"invalid":{{ vat_policy_invalid | json }},"standardVariantId":{{ standard_variant_id | append: '' | json }},"zeroVariantId":{{ zero_variant_id | append: '' | json }},"canonicalVariantId":{{ canonical_variant_id | append: '' | json }}}
+{%- else -%}
+  data-de-zero-vat-eligible="{{ vat_candidate }}"
+  data-de-vat-mode="{{ vat_mode }}"
+  data-de-vat-is-zero-product="{% if vat_mode == 'zero' %}true{% else %}false{% endif %}"
+  data-de-vat-strategy="{{ vat_strategy }}"
+  data-de-vat-configured="{{ vat_configured }}"
+  data-de-vat-canonical-variant-id="{{ canonical_variant_id }}"
+  data-de-vat-single-source="{{ vat_single_source }}"
+  data-de-vat-regular-online-ready="{{ vat_regular_online_ready }}"
+  data-de-standard-vat-variant-id="{{ standard_variant_id }}"
+  data-de-zero-vat-variant-id="{{ zero_variant_id }}"
+  data-de-vat-policy-invalid="{{ vat_policy_invalid }}"
+{%- endif -%}

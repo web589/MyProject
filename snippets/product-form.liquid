@@ -12,19 +12,13 @@
         assign enable_dynamic_buttons = true
       endunless
     endif
-    assign de_vat_candidate = product.metafields.custom.de_zero_vat_eligible.value
-    if de_vat_candidate != true
-      if product.tags contains 'DE-0-VAT-PV' or product.tags contains 'DE 0% MwSt. PV'
-        assign de_vat_candidate = true
-      endif
-    endif
-    if de_vat_candidate != true
-      for de_vat_variant in product.variants
-        if de_vat_variant.metafields.custom.de_zero_vat_variant.value != blank or de_vat_variant.metafields.custom.de_standard_vat_variant.value != blank
-          assign de_vat_candidate = true
-          break
-        endif
-      endfor
+    capture de_vat_candidate_result
+      render 'de-vat-product-policy', policy_product: product, output: 'candidate'
+    endcapture
+    assign de_vat_candidate_result = de_vat_candidate_result | strip
+    assign de_vat_candidate = false
+    if de_vat_candidate_result == 'true'
+      assign de_vat_candidate = true
     endif
     if de_vat_candidate == true
       assign enable_dynamic_buttons = false
@@ -34,6 +28,8 @@
   {%- if gift_card_recipient_feature_active -%}
     {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
   {%- endif -%}
+
+  {%- render 'de-vat-meter-notice', notice_product: product -%}
 
   {%- if enable_dynamic_buttons -%}
     <div class="payment-buttons">
@@ -61,6 +57,8 @@
         {{ button_text }}
       </span>
     </button>
+
+    {%- render 'de-vat-purchase-note', candidate: de_vat_candidate -%}
 
     {%- if enable_dynamic_buttons -%}
       {{ form | payment_button }}

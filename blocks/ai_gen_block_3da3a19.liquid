@@ -574,17 +574,12 @@
   assign sticky_price = sticky_variant.price
   assign sticky_compare_price = sticky_variant.compare_at_price
   assign sticky_is_de_vat_candidate = false
-  assign sticky_de_zero_vat_eligible = sticky_product.metafields.custom.de_zero_vat_eligible.value
-  if sticky_de_zero_vat_eligible == true or sticky_product.tags contains 'DE-0-VAT-PV' or sticky_product.tags contains 'DE 0% MwSt. PV'
+  capture sticky_de_vat_candidate_result
+    render 'de-vat-product-policy', policy_product: sticky_product, output: 'candidate'
+  endcapture
+  assign sticky_de_vat_candidate_result = sticky_de_vat_candidate_result | strip
+  if sticky_de_vat_candidate_result == 'true'
     assign sticky_is_de_vat_candidate = true
-  endif
-  if sticky_is_de_vat_candidate == false
-    for sticky_variant_candidate in sticky_product.variants
-      if sticky_variant_candidate.metafields.custom.de_zero_vat_variant.value != blank or sticky_variant_candidate.metafields.custom.de_standard_vat_variant.value != blank
-        assign sticky_is_de_vat_candidate = true
-        break
-      endif
-    endfor
   endif
 %}
 

@@ -1144,6 +1144,99 @@
     ]
   },
   {
+    "name": "DE 0 % MwSt.",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "de_vat_theme_policy_enabled",
+        "label": "Steuerzuordnung für Smart Meter aktivieren",
+        "default": false,
+        "info": "Nur für die vier Zähler-Produkte. Erst nach Bestätigung der Steuervorgaben und des gemeinsamen Lagerbestands aktivieren. Geprüfte Komponentenprodukte werden unabhängig über die Liste unten freigegeben."
+      },
+      {
+        "type": "product",
+        "id": "de_vat_ct002_standard_product",
+        "label": "CT002 – reguläres Produkt"
+      },
+      {
+        "type": "product",
+        "id": "de_vat_ct002_zero_product",
+        "label": "CT002 – 0-%-Produkt"
+      },
+      {
+        "type": "product",
+        "id": "de_vat_ct003_standard_product",
+        "label": "CT003 – reguläres Produkt"
+      },
+      {
+        "type": "product",
+        "id": "de_vat_ct003_zero_product",
+        "label": "CT003 – 0-%-Produkt"
+      },
+      {
+        "type": "product_list",
+        "id": "de_vat_bundle_components_products",
+        "label": "Geprüfte Produkte mit Komponentenbesteuerung",
+        "limit": 12,
+        "info": "Diese Liste aktiviert die Komponentenbesteuerung unabhängig vom Smart-Meter-Schalter. Nur nach Prüfung aller Komponenten auswählen. Ohne separate Standardsteuer-Zuordnung bleibt der reguläre Online-Kauf gesperrt."
+      },
+      {
+        "type": "checkbox",
+        "id": "de_vat_operator_only",
+        "label": "Nur qualifizierte Betreiber",
+        "default": false,
+        "info": "Erst nach bestätigten Steuervorgaben und erfolgreicher Checkout-Prüfung aktivieren."
+      },
+      {
+        "type": "textarea",
+        "id": "de_vat_operator_notice",
+        "label": "Hinweis im Kaufbereich",
+        "default": "Online-Bestellungen mit Lieferung nach Deutschland sind nur für Betreiber einer begünstigten Photovoltaikanlage zum Nullsteuersatz vorgesehen. Käufe zum Weiterverkauf sowie Bestellungen ohne erfüllte Voraussetzungen bitte per E-Mail anfragen."
+      },
+      {
+        "type": "text",
+        "id": "de_vat_inquiry_email",
+        "label": "E-Mail für Anfragen",
+        "info": "Leer lassen, um die Kontakt-E-Mail des Shops zu verwenden."
+      }
+    ]
+  },
+  {
+    "name": "B2B-Kaufhinweise",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "b2b_pdp_hint_enabled",
+        "label": "Hinweis auf den sechs VENUS E Produktseiten anzeigen",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "b2b_cart_drawer_hint_enabled",
+        "label": "Hinweis im Warenkorb-Drawer anzeigen",
+        "default": true
+      },
+      {
+        "type": "page",
+        "id": "b2b_partner_page",
+        "label": "Seite für Installateure & Partner",
+        "info": "Leer lassen, um die bestehende Seite /pages/installateure-partner zu verwenden."
+      },
+      {
+        "type": "textarea",
+        "id": "b2b_purchase_hint_text",
+        "label": "Hinweistext",
+        "default": "Du bist Händler oder Installateur und möchtest Produkte zum Weiterverkauf beziehen?"
+      },
+      {
+        "type": "text",
+        "id": "b2b_purchase_hint_link_text",
+        "label": "Linktext",
+        "default": "Für Installateure & Partner →"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.extras.name",
     "settings": [
       {

@@ -8,33 +8,6 @@
   if product.properties['_venus_pack_size'] != blank
     assign is_venus_shared_inventory = true
   endif
-  assign de_zero_vat_metafield = product.product.metafields.custom.de_zero_vat_eligible
-  assign de_zero_vat_eligible = de_zero_vat_metafield.value
-  if de_zero_vat_eligible != true
-    if product.product.tags contains 'DE-0-VAT-PV' or product.product.tags contains 'DE 0% MwSt. PV'
-      assign de_zero_vat_eligible = true
-    endif
-  endif
-  assign de_zero_vat_variant = product.variant.metafields.custom.de_zero_vat_variant.value
-  assign de_standard_vat_variant = product.variant.metafields.custom.de_standard_vat_variant.value
-  assign de_vat_mode = product.properties['_de_vat_mode']
-  if de_vat_mode != 'zero' and de_vat_mode != 'standard'
-    if product.product.tags contains 'DE-0-VAT-PV' or product.product.tags contains 'DE 0% MwSt. PV' or de_standard_vat_variant != blank
-      assign de_vat_mode = 'zero'
-    else
-      assign de_vat_mode = 'standard'
-    endif
-  endif
-  if de_zero_vat_variant != blank
-    assign de_zero_vat_eligible = true
-  endif
-  if de_vat_mode == 'zero' and de_standard_vat_variant != blank
-    assign de_zero_vat_eligible = true
-  endif
-  assign de_vat_single_source = false
-  if de_zero_vat_eligible == true and de_vat_mode == 'standard' and de_zero_vat_variant == blank and de_standard_vat_variant == blank
-    assign de_vat_single_source = true
-  endif
   assign has_visible_variant_option = false
   assign bundle_capacity_option_value = blank
   assign bundle_capacity_display_value = blank
@@ -59,14 +32,9 @@
 <div
   class="cart__item"
   data-key="{{ product.key }}"
-  data-de-zero-vat-eligible="{{ de_zero_vat_eligible | default: false }}"
-  data-de-vat-mode="{{ de_vat_mode }}"
   data-de-vat-product-id="{{ product.product.id }}"
   data-de-vat-variant-id="{{ product.variant_id }}"
-  data-de-vat-is-zero-product="{% if de_vat_mode == 'zero' %}true{% else %}false{% endif %}"
-  data-de-vat-single-source="{{ de_vat_single_source }}"
-  data-de-standard-vat-variant-id="{% if de_vat_mode == 'zero' %}{{ de_standard_vat_variant.id }}{% else %}{{ product.variant_id }}{% endif %}"
-  data-de-zero-vat-variant-id="{% if de_vat_mode == 'zero' %}{{ product.variant_id }}{% else %}{{ de_zero_vat_variant.id }}{% endif %}"
+  {% render 'de-vat-product-policy', policy_product: product.product, policy_variant: product.variant, line_properties: product.properties %}
   {% if is_venus_shared_inventory %}
     data-venus-shared-variant-id="{{ product.variant_id }}"
     data-venus-shared-inventory-limit="{{ product.variant.inventory_quantity | default: 0 }}"

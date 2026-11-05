@@ -1010,18 +1010,24 @@
 {% assign bundle_description = bundle_product.description %}
 {% liquid
   assign bundle_is_de_vat_candidate = false
-  assign bundle_de_zero_vat_eligible = bundle_product.metafields.custom.de_zero_vat_eligible.value
-  if bundle_de_zero_vat_eligible == true or bundle_product.tags contains 'DE-0-VAT-PV' or bundle_product.tags contains 'DE 0% MwSt. PV'
+  capture bundle_de_vat_candidate_result
+    render 'de-vat-product-policy', policy_product: bundle_product, output: 'candidate'
+  endcapture
+  assign bundle_de_vat_candidate_result = bundle_de_vat_candidate_result | strip
+  if bundle_de_vat_candidate_result == 'true'
     assign bundle_is_de_vat_candidate = true
   endif
-  if bundle_is_de_vat_candidate == false
-    for bundle_variant in bundle_product.variants
-      if bundle_variant.metafields.custom.de_zero_vat_variant.value != blank or bundle_variant.metafields.custom.de_standard_vat_variant.value != blank
-        assign bundle_is_de_vat_candidate = true
-        break
-      endif
-    endfor
-  endif
+  assign purchase_has_de_vat_candidate = bundle_is_de_vat_candidate
+  for accessory_product in block.settings.opt2_products
+    capture accessory_de_vat_candidate_result
+      render 'de-vat-product-policy', policy_product: accessory_product, output: 'candidate'
+    endcapture
+    assign accessory_de_vat_candidate_result = accessory_de_vat_candidate_result | strip
+    if accessory_de_vat_candidate_result == 'true'
+      assign purchase_has_de_vat_candidate = true
+      break
+    endif
+  endfor
 %}
 {% if is_product_context == false and bundle_description == blank %}
   {% assign bundle_description = block.settings.description %}
@@ -1312,6 +1318,8 @@
           <span class="pdp-checkout-orig-{{ ai_gen_id }}" data-checkout-orig{% unless initial_original > initial_total %} hidden{% endunless %}>{% if initial_original > initial_total %}{{ initial_original | money }}{% else %}{{ block.settings.checkout_orig }}{% endif %}</span>
         </div>
 
+        {% render 'de-vat-meter-notice', notice_product: bundle_product %}
+
         {% if block.settings.installment_text != blank %}
           <div class="pdp-installment-{{ ai_gen_id }}">{{ block.settings.installment_text }}</div>
         {% endif %}
@@ -1324,6 +1332,8 @@
             <span data-bundle-button-label>{{ block.settings.buy_now_text }}</span>
           </button>
         </div>
+        {% render 'de-vat-purchase-note', candidate: purchase_has_de_vat_candidate %}
+        {% render 'b2b-purchase-hint', placement: 'pdp' %}
         <div class="pdp-cart-status-{{ ai_gen_id }}" data-cart-status role="status" aria-live="polite"></div>
       </div>
 
@@ -1411,7 +1421,7 @@
                   {%- endfor -%}
                 {%- endif -%}
               {%- endcapture -%}
-              { productTitle: {{ bundle_product.title | json }}, title: {{ option_title | json }}, price: '', origPrice: '', image: {% if option_image %}{{ option_image | image_url: width: 400 | json }}{% else %}{{ '' | json }}{% endif %}, imageId: {{ option_image.id | json }}, mainImage: {% if option_image %}{{ option_image | image_url: width: 900 | json }}{% else %}null{% endif %}, imageSrcset: {{ option_image_srcset | strip | json }}, zoomImage: {% if option_image %}{{ option_image | image_url: width: 2400 | json }}{% else %}null{% endif %}, imageAlt: {{ option_image.alt | default: bundle_product.title | json }}, variantId: {{ option_variant.id | json }}, priceCents: {{ option_variant.price | json }}, compareAtPriceCents: {{ option_variant.compare_at_price | json }}, available: {{ option_variant.available | json }}, inventoryManagement: {{ option_variant.inventory_management | json }}, inventoryPolicy: {{ option_variant.inventory_policy | json }}, inventoryQuantity: {{ option_variant.inventory_quantity | json }}, packSize: {{ forloop.index | json }} }{% unless forloop.last %},{% endunless %}
+              { productTitle: {{ bundle_product.title | json }}, requiresVatReview: {{ bundle_is_de_vat_candidate | json }}, title: {{ option_title | json }}, price: '', origPrice: '', image: {% if option_image %}{{ option_image | image_url: width: 400 | json }}{% else %}{{ '' | json }}{% endif %}, imageId: {{ option_image.id | json }}, mainImage: {% if option_image %}{{ option_image | image_url: width: 900 | json }}{% else %}null{% endif %}, imageSrcset: {{ option_image_srcset | strip | json }}, zoomImage: {% if option_image %}{{ option_image | image_url: width: 2400 | json }}{% else %}null{% endif %}, imageAlt: {{ option_image.alt | default: bundle_product.title | json }}, variantId: {{ option_variant.id | json }}, priceCents: {{ option_variant.price | json }}, compareAtPriceCents: {{ option_variant.compare_at_price | json }}, available: {{ option_variant.available | json }}, inventoryManagement: {{ option_variant.inventory_management | json }}, inventoryPolicy: {{ option_variant.inventory_policy | json }}, inventoryQuantity: {{ option_variant.inventory_quantity | json }}, packSize: {{ forloop.index | json }} }{% unless forloop.last %},{% endunless %}
             {% endfor %}
           ]
         },
@@ -1422,8 +1432,16 @@
               {% liquid
                 assign option_variant = option_product.selected_or_first_available_variant
                 assign option_image = option_variant.featured_image | default: option_product.featured_image
+                assign option_requires_vat_review = false
+                capture option_de_vat_candidate_result
+                  render 'de-vat-product-policy', policy_product: option_product, output: 'candidate'
+                endcapture
+                assign option_de_vat_candidate_result = option_de_vat_candidate_result | strip
+                if option_de_vat_candidate_result == 'true'
+                  assign option_requires_vat_review = true
+                endif
               %}
-              { title: {{ option_product.title | json }}, productHandle: {{ option_product.handle | json }}, price: {% if option_variant %}{{ option_variant.price | money | json }}{% else %}{{ '' | json }}{% endif %}, origPrice: {% if option_variant and option_variant.compare_at_price > option_variant.price %}{{ option_variant.compare_at_price | money | json }}{% else %}{{ '' | json }}{% endif %}, image: {% if option_image %}{{ option_image | image_url: width: 400 | json }}{% else %}{{ '' | json }}{% endif %}, variantTitle: {% if option_variant and option_variant.title != 'Default Title' %}{{ option_variant.title | json }}{% else %}{{ '' | json }}{% endif %}, variantId: {% if option_variant %}{{ option_variant.id | json }}{% else %}null{% endif %}, priceCents: {% if option_variant %}{{ option_variant.price | json }}{% else %}null{% endif %}, compareAtPriceCents: {% if option_variant %}{{ option_variant.compare_at_price | json }}{% else %}null{% endif %}, available: {% if option_variant %}{{ option_variant.available | json }}{% else %}false{% endif %}, inventoryManagement: {% if option_variant %}{{ option_variant.inventory_management | json }}{% else %}null{% endif %}, inventoryPolicy: {% if option_variant %}{{ option_variant.inventory_policy | json }}{% else %}null{% endif %}, inventoryQuantity: {% if option_variant %}{{ option_variant.inventory_quantity | json }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
+              { title: {{ option_product.title | json }}, requiresVatReview: {{ option_requires_vat_review | json }}, productHandle: {{ option_product.handle | json }}, price: {% if option_variant %}{{ option_variant.price | money | json }}{% else %}{{ '' | json }}{% endif %}, origPrice: {% if option_variant and option_variant.compare_at_price > option_variant.price %}{{ option_variant.compare_at_price | money | json }}{% else %}{{ '' | json }}{% endif %}, image: {% if option_image %}{{ option_image | image_url: width: 400 | json }}{% else %}{{ '' | json }}{% endif %}, variantTitle: {% if option_variant and option_variant.title != 'Default Title' %}{{ option_variant.title | json }}{% else %}{{ '' | json }}{% endif %}, variantId: {% if option_variant %}{{ option_variant.id | json }}{% else %}null{% endif %}, priceCents: {% if option_variant %}{{ option_variant.price | json }}{% else %}null{% endif %}, compareAtPriceCents: {% if option_variant %}{{ option_variant.compare_at_price | json }}{% else %}null{% endif %}, available: {% if option_variant %}{{ option_variant.available | json }}{% else %}false{% endif %}, inventoryManagement: {% if option_variant %}{{ option_variant.inventory_management | json }}{% else %}null{% endif %}, inventoryPolicy: {% if option_variant %}{{ option_variant.inventory_policy | json }}{% else %}null{% endif %}, inventoryQuantity: {% if option_variant %}{{ option_variant.inventory_quantity | json }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
             {% endfor %}
           ]
         }
@@ -1467,6 +1485,13 @@
       this.thumbsPerPage = 4;
     }
 
+    get requiresVatReview() {
+      const selectedOptions = Object.entries(this.optionConfig || {}).map(([groupKey, group]) => (
+        group.options[this.selectedIndex[groupKey]]
+      ));
+      return this.mainProductRequiresVatReview || selectedOptions.some(option => option && option.requiresVatReview === true);
+    }
+
     connectedCallback() {
       if (this.connected) return;
       this.connected = true;
@@ -1498,9 +1523,9 @@
       this.cartStatus = this.querySelector('[data-cart-status]');
       this.directCheckoutForm = this.querySelector('[data-direct-checkout-form]');
       this.directCheckoutSubmit = this.querySelector('[data-direct-checkout-submit]');
-      this.requiresVatReview = this.dataset.deVatCandidate === 'true';
-      this.addToCartButtons = document.querySelectorAll('[data-bundle-action="add-cart"]');
-      this.buyNowButtons = document.querySelectorAll('[data-bundle-action="buy-now"]');
+      this.mainProductRequiresVatReview = this.dataset.deVatCandidate === 'true';
+      this.addToCartButtons = this.getOwnedActionButtons('add-cart');
+      this.buyNowButtons = this.getOwnedActionButtons('buy-now');
       this.actionButtons = [...this.addToCartButtons, ...this.buyNowButtons];
       this.handleActionClick = this.handleActionClick.bind(this);
       this.actionButtons.forEach(button => this.listen(button, 'click', this.handleActionClick));
@@ -1526,6 +1551,31 @@
 
     listen(target, type, listener, options = {}) {
       if (target) target.addEventListener(type, listener, { ...options, signal: this.eventAbort.signal });
+    }
+
+    ownsActionButton(button) {
+      const localOwner = button.closest('[data-pdp-bundle]');
+      if (localOwner) return localOwner === this;
+
+      // A sticky bar can live in a different section. Its product anchor owns
+      // the buttons; otherwise only the page's first purchase module does.
+      let stickyBar = button.parentElement;
+      while (stickyBar && !String(stickyBar.localName || '').startsWith('sticky-buy-bar-')) {
+        stickyBar = stickyBar.parentElement;
+      }
+      if (!stickyBar) return false;
+      const anchors = stickyBar.querySelectorAll('a[href^="#"]');
+      for (const anchor of anchors) {
+        const target = document.getElementById(anchor.getAttribute('href').slice(1));
+        const owner = target && (target.matches('[data-pdp-bundle]') ? target : target.querySelector('[data-pdp-bundle]'));
+        if (owner) return owner === this;
+      }
+      return document.querySelector('[data-pdp-bundle]') === this;
+    }
+
+    getOwnedActionButtons(actionType) {
+      return [...document.querySelectorAll(`[data-bundle-action="${actionType}"]`)]
+        .filter(button => this.ownsActionButton(button));
     }
 
     setupTabs() {
@@ -1752,6 +1802,7 @@
 
       // Find sticky bar elements in DOM
       const stickyTitle = document.querySelector('[data-sticky-title]');
+      if (stickyTitle && !this.ownsActionButton(stickyTitle)) return;
       const stickySub1 = document.querySelector('[data-sticky-sub1]');
       const stickySub2 = document.querySelector('[data-sticky-sub2]');
       const stickySubtitleDot = document.querySelector('[data-sticky-subtitle-dot]');
@@ -2092,7 +2143,7 @@
 
     updateActionAvailability() {
       if (!this.actionButtons || this.isAdding) return;
-      const isAvailable = this.isCurrentSelectionAvailable();
+      const isAvailable = !this.hasUncertainCartOperation() && this.isCurrentSelectionAvailable();
       this.actionButtons.forEach(button => {
         button.disabled = !isAvailable;
         button.setAttribute('aria-disabled', String(!isAvailable));
@@ -2155,9 +2206,10 @@
     }
 
     handleActionClick(event) {
+      if (!this.ownsActionButton(event.currentTarget)) return;
       const actionType = event.currentTarget.dataset.bundleAction;
       if (!actionType) return;
-      const loadingButtons = document.querySelectorAll(`[data-bundle-action="${actionType}"]`);
+      const loadingButtons = this.getOwnedActionButtons(actionType);
       // A VAT candidate must always pass through the cart delivery/tax review.
       // Keep the normal product flow unchanged for non-candidates.
       const goToCheckout = actionType === 'buy-now' && !this.requiresVatReview;
@@ -2340,6 +2392,9 @@
     cartLineMatchesItem(line, item) {
       const lineVariantId = line && (line.variant_id || line.id);
       if (!line || !item || Number(lineVariantId) !== Number(item.id)) return false;
+      const linePlan = line.selling_plan_allocation?.selling_plan?.id || line.selling_plan || '';
+      const itemPlan = item.selling_plan_allocation?.selling_plan?.id || item.selling_plan || '';
+      if (String(linePlan) !== String(itemPlan)) return false;
 
       // Private VAT/implementation metadata must not split an otherwise
       // identical product into a new cart line. Keep meaningful public
@@ -2368,12 +2423,64 @@
       }, []).filter(item => item.quantity > 0);
     }
 
+    cartItemIdentity(item) {
+      const properties = Object.keys(item.properties || {}).sort().reduce((result, key) => {
+        if (item.properties[key] !== null && item.properties[key] !== undefined && String(item.properties[key]) !== '') {
+          result[key] = String(item.properties[key]);
+        }
+        return result;
+      }, {});
+      return JSON.stringify([
+        String(item.variant_id || item.id),
+        String(item.selling_plan_allocation?.selling_plan?.id || item.selling_plan || ''),
+        properties
+      ]);
+    }
+
+    cartQuantitySignature(cart) {
+      const quantities = new Map();
+      (cart.items || []).forEach(item => {
+        const identity = this.cartItemIdentity(item);
+        quantities.set(identity, (quantities.get(identity) || 0) + Number(item.quantity));
+      });
+      return JSON.stringify([...quantities.entries()].filter(([, quantity]) => quantity > 0).sort());
+    }
+
+    isNativeBundleCartItem(item) {
+      const main = this.optionConfig?.group1?.options[this.selectedIndex?.group1];
+      return this.useNativeBundleCartValidation && main && Number(main.variantId) === Number(item.id);
+    }
+
+    uncertainCartMessage() {
+      return 'Der Warenkorb konnte nicht sicher geprüft werden. Bitte lade die Seite neu und prüfe den Warenkorb, bevor du erneut hinzufügst.';
+    }
+
+    hasUncertainCartOperation() {
+      return Boolean(this.cartOperationUncertain || window.PVTaxCart?._pdpCartTransactionUncertain);
+    }
+
+    lockUncertainCart() {
+      this.cartOperationUncertain = true;
+      window.PVTaxCart = window.PVTaxCart || {};
+      window.PVTaxCart._pdpCartTransactionUncertain = true;
+      this.updateActionAvailability();
+      document.querySelectorAll('[data-pdp-bundle]').forEach(instance => {
+        if (instance !== this && typeof instance.updateActionAvailability === 'function') instance.updateActionAvailability();
+      });
+      document.dispatchEvent(new CustomEvent('cart:transaction-uncertain'));
+      return new Error(this.uncertainCartMessage());
+    }
+
     async incrementOrAddCartItems(items, root) {
       const run = async () => {
+        if (this.hasUncertainCartOperation()) throw new Error(this.uncertainCartMessage());
         const cart = await this.fetchCartSnapshot(root);
         const selectedItems = this.mergeSelectedCartItems(items);
         const existingUpdates = [];
         const additions = [];
+        const operationId = window.crypto?.randomUUID
+          ? window.crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
         selectedItems.forEach(item => {
           const existingLine = cart.items.find(line => this.cartLineMatchesItem(line, item));
@@ -2384,70 +2491,92 @@
               quantity: (Number(existingLine.quantity) || 0) + item.quantity
             });
           } else {
-            additions.push(item);
+            additions.push(this.isNativeBundleCartItem(item) ? item : {
+              ...item,
+              properties: { ...item.properties, _venus_add_operation: operationId }
+            });
           }
         });
 
-        const changedLines = [];
-        let addedKeys = [];
+        let expectedCart = cart;
+        const confirmedSteps = [];
+
+        const readMatchingCart = async expected => {
+          const actual = await this.fetchCartSnapshot(root);
+          return this.cartQuantitySignature(actual) === this.cartQuantitySignature(expected) ? actual : null;
+        };
+
+        const mutate = async (endpoint, body, nextCart, fallback) => {
+          let response;
+          try {
+            response = await fetch(`${root}cart/${endpoint}.js`, {
+              method: 'POST', credentials: 'same-origin',
+              headers: this.getCartRequestHeaders(), body: JSON.stringify(body)
+            });
+            const result = await this.parseCartApiResponse(response, fallback);
+            if (!result || !Array.isArray(result.items)) throw new Error(fallback);
+          } catch (error) {
+            // A real Shopify rejection must stay an error. A lost successful
+            // response can be accepted only when the exact cart delta proves it.
+            if (response && !response.ok) throw error;
+            const reconciled = await readMatchingCart(nextCart).catch(() => null);
+            if (!reconciled) throw this.lockUncertainCart();
+          }
+        };
 
         const rollback = async () => {
-          for (const line of changedLines.reverse()) {
-            await fetch(`${root}cart/change.js`, {
-              method: 'POST',
-              credentials: 'same-origin',
-              headers: this.getCartRequestHeaders(),
-              body: JSON.stringify({ id: line.key, quantity: line.previousQuantity })
-            }).catch(() => {});
-          }
-
-          if (addedKeys.length) {
-            const updates = {};
-            addedKeys.forEach(key => { updates[key] = 0; });
-            await fetch(`${root}cart/update.js`, {
-              method: 'POST',
-              credentials: 'same-origin',
-              headers: this.getCartRequestHeaders(),
-              body: JSON.stringify({ updates })
-            }).catch(() => {});
+          let actual = await readMatchingCart(expectedCart);
+          if (!actual) throw this.lockUncertainCart();
+          for (const step of [...confirmedSteps].reverse()) {
+            if (step.update) {
+              const line = actual.items.find(item => item.key === step.update.key);
+              if (!line) throw this.lockUncertainCart();
+              await mutate('change', { id: line.key, quantity: step.update.previousQuantity }, step.before, this.uncertainCartMessage());
+            } else {
+              const identities = new Set(step.additions.map(item => this.cartItemIdentity(item)));
+              const addedLines = actual.items.filter(item => identities.has(this.cartItemIdentity(item)));
+              if (!addedLines.length) throw this.lockUncertainCart();
+              const updates = Object.fromEntries(addedLines.map(item => [item.key, 0]));
+              await mutate('update', { updates }, step.before, this.uncertainCartMessage());
+            }
+            actual = await readMatchingCart(step.before);
+            if (!actual) throw this.lockUncertainCart();
           }
         };
 
         try {
           for (const update of existingUpdates) {
-            changedLines.push(update);
-            const response = await fetch(`${root}cart/change.js`, {
-              method: 'POST',
-              credentials: 'same-origin',
-              headers: this.getCartRequestHeaders(),
-              body: JSON.stringify({ id: update.key, quantity: update.quantity })
-            });
-            await this.parseCartApiResponse(
-              response,
+            const nextCart = { items: expectedCart.items.map(item => item.key === update.key ? { ...item, quantity: update.quantity } : item) };
+            await mutate('change', { id: update.key, quantity: update.quantity }, nextCart,
               'Die Auswahl konnte nicht aktualisiert werden. Bitte prüfe die Produktverfügbarkeit und versuche es erneut.'
             );
+            confirmedSteps.push({ before: expectedCart, update });
+            expectedCart = nextCart;
           }
 
           if (additions.length) {
-            const response = await fetch(`${root}cart/add.js`, {
-              method: 'POST',
-              credentials: 'same-origin',
-              headers: this.getCartRequestHeaders(),
-              body: JSON.stringify({ items: additions })
-            });
-            const result = await this.parseCartApiResponse(
-              response,
+            const nextCart = { items: [...expectedCart.items, ...additions] };
+            await mutate('add', { items: additions }, nextCart,
               'Die Auswahl konnte nicht hinzugefügt werden. Bitte prüfe die Produktverfügbarkeit und versuche es erneut.'
             );
-            addedKeys = (result.items || []).map(item => item.key).filter(Boolean);
+            confirmedSteps.push({ before: expectedCart, additions });
+            expectedCart = nextCart;
           }
 
+          const finalCart = await this.fetchCartSnapshot(root).catch(() => { throw this.lockUncertainCart(); });
           return {
-            cart: await this.fetchCartSnapshot(root),
+            cart: finalCart,
             items: selectedItems
           };
         } catch (error) {
-          await rollback();
+          if (!this.hasUncertainCartOperation()) {
+            try {
+              await rollback();
+            } catch (rollbackError) {
+              this.lockUncertainCart();
+              throw new Error(`${error.message} ${this.uncertainCartMessage()}`);
+            }
+          }
           throw error;
         }
       };
@@ -2537,7 +2666,7 @@
         if (label && button.dataset.bundleOriginalLabel !== undefined) {
           label.textContent = button.dataset.bundleOriginalLabel;
         }
-        const isAvailable = this.isCurrentSelectionAvailable();
+        const isAvailable = !this.hasUncertainCartOperation() && this.isCurrentSelectionAvailable();
         button.disabled = !isAvailable;
         button.setAttribute('aria-disabled', String(!isAvailable));
         button.classList.remove('bundle-button--loading');
@@ -2666,6 +2795,10 @@
 
     async addSelectionsToCart(goToCheckout, loadingButtons) {
       if (this.isAdding) return;
+      if (this.hasUncertainCartOperation()) {
+        if (this.cartStatus) this.cartStatus.textContent = this.uncertainCartMessage();
+        return;
+      }
       this.isAdding = true;
       this.setActionButtonsLoading(loadingButtons, true);
       if (this.cartStatus) this.cartStatus.textContent = loadingButtons[0]?.dataset.loadingText || 'Wird geladen …';
@@ -2690,6 +2823,7 @@
       } finally {
         this.isAdding = false;
         this.setActionButtonsLoading(loadingButtons, false);
+        this.updateActionAvailability();
       }
     }
 

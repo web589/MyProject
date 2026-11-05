@@ -261,14 +261,10 @@
         this.cartFingerprint = window.CartShippingRates && window.CartShippingRates.getCartFingerprint
           ? window.CartShippingRates.getCartFingerprint(cart)
           : 'unknown-cart';
-        this.shippingAmountCents = null;
-        this.shippingRequestKey = '';
-        this.shippingHasMultipleRates = false;
-        this.setShippingSummary('Im Checkout berechnet', false);
+        this.clearShippingEstimate();
         if (window.CartShippingRates && window.CartShippingRates.invalidate) {
           window.CartShippingRates.invalidate(this.cartFingerprint);
         }
-        this.renderCartTotal();
       }
 
       handleCartChanged(event) {

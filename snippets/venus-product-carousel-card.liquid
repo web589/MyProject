@@ -54,17 +54,12 @@
   assign primary_label = carousel_product.metafields.custom.carousel_primary_label.value | default: carousel_settings.view_button_text
   assign secondary_label = carousel_product.metafields.custom.carousel_secondary_label.value | default: carousel_settings.details_button_text
   assign card_is_de_vat_candidate = false
-  assign card_de_zero_vat_eligible = carousel_product.metafields.custom.de_zero_vat_eligible.value
-  if card_de_zero_vat_eligible == true or carousel_product.tags contains 'DE-0-VAT-PV' or carousel_product.tags contains 'DE 0% MwSt. PV'
+  capture card_de_vat_candidate_result
+    render 'de-vat-product-policy', policy_product: carousel_product, output: 'candidate'
+  endcapture
+  assign card_de_vat_candidate_result = card_de_vat_candidate_result | strip
+  if card_de_vat_candidate_result == 'true'
     assign card_is_de_vat_candidate = true
-  endif
-  if card_is_de_vat_candidate == false
-    for card_variant_candidate in carousel_product.variants
-      if card_variant_candidate.metafields.custom.de_zero_vat_variant.value != blank or card_variant_candidate.metafields.custom.de_standard_vat_variant.value != blank
-        assign card_is_de_vat_candidate = true
-        break
-      endif
-    endfor
   endif
   assign preorder_enabled = carousel_product.metafields.custom.preorder_enabled.value
   assign product_has_inventory = false

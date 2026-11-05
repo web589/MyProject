@@ -814,9 +814,14 @@
             assign selected_delivery_postcode = cart.attributes['Lieferland PLZ']
             assign selected_vat_status = cart.attributes['DE 0% MwSt. Status']
             assign selected_vat_confirmed = false
-            if cart.attributes['DE 0% MwSt. Bestätigung'] == 'Bestätigt'
+            if cart.attributes['DE 0% MwSt. Bestätigung'] == 'Bestätigt' and cart.attributes['DE 0% MwSt. Erklärungsversion'] == 'DE-UStG-12-3-v2'
               assign selected_vat_confirmed = true
             endif
+            assign selected_vat_declaration_complete = false
+            if selected_delivery_country == 'DE' and selected_vat_status == 'Voraussetzungen erfüllt' and selected_vat_confirmed
+              assign selected_vat_declaration_complete = true
+            endif
+            assign de_vat_inquiry_email = settings.de_vat_inquiry_email | default: shop.email | strip
           %}
           <cart-drawer-extras
             data-product-id="{{ product.id }}"
@@ -834,6 +839,8 @@
               data-initial-postcode="{{ selected_delivery_postcode | escape }}"
               data-initial-vat-status="{{ selected_vat_status | escape }}"
               data-initial-vat-confirmed="{{ selected_vat_confirmed }}"
+              data-vat-declaration-version="DE-UStG-12-3-v2"
+              data-vat-operator-only="{{ settings.de_vat_operator_only | default: false }}"
               data-cart-currency="{{ cart.currency | default: shop.currency }}"
               data-localization-form-id="CartDrawerLocalizationForm"
             >
@@ -862,28 +869,33 @@
               </div>
 
               <section class="cart-vat-qualification" data-vat-qualification hidden>
-                <h3 class="cart-vat-title">MwSt.-Befreiung (0 %) bestätigen</h3>
+                <h3 class="cart-vat-title">Voraussetzungen für 0 % USt. bestätigen</h3>
                 <p class="cart-vat-copy">Der Nullsteuersatz nach § 12 Abs. 3 UStG gilt nur, wenn die gesetzlichen Voraussetzungen tatsächlich erfüllt sind.</p>
                 <details class="cart-vat-conditions">
                   <summary>Voraussetzungen anzeigen</summary>
                   <ul>
                     <li>Lieferung und begünstigte Verwendung erfolgen in Deutschland.</li>
                     <li>Du bist Betreiber der Photovoltaikanlage; sie wird auf oder in der Nähe einer Privatwohnung oder eines anderen begünstigten Gebäudes installiert. Bei höchstens 30 kWp laut Marktstammdatenregister gilt die gesetzliche Vereinfachungsregel.</li>
-                    <li>Ein Stromspeicher wird für eine Photovoltaikanlage verwendet, die diese Voraussetzungen erfüllt.</li>
+                    <li>Der Stromspeicher dient dazu, den mit einer begünstigten Photovoltaikanlage erzeugten Strom zu speichern. Ein Smart Meter wird als Bestandteil des zugehörigen PV-Energiemanagements eingesetzt.</li>
+                    <li>Du kaufst als endgültiger Anlagenbetreiber, nicht zum Weiterverkauf oder zur Weiterlieferung an andere Betreiber. Auch Unternehmen können Anlagenbetreiber sein.</li>
                   </ul>
                 </details>
                 <label class="cart-vat-choice">
                   <input type="radio" name="cart-vat-choice" value="eligible" data-vat-choice{% if selected_vat_status == 'Voraussetzungen erfüllt' %} checked{% endif %}>
-                  <span>Ja, 0 % MwSt. (Privat-PV)</span>
+                  <span>Ja, ich erfülle die Voraussetzungen als Anlagenbetreiber.</span>
                 </label>
                 <label class="cart-vat-choice">
                   <input type="radio" name="cart-vat-choice" value="regular" data-vat-choice{% if selected_vat_status == 'Voraussetzungen nicht erfüllt' %} checked{% endif %}>
-                  <span>Nein, regulärer MwSt.-Satz</span>
+                  <span>{% if settings.de_vat_operator_only %}Nein / Einkauf zum Weiterverkauf – Angebot per E-Mail{% else %}Nein, regulärer MwSt.-Satz{% endif %}</span>
                 </label>
                 <label class="cart-vat-confirm" data-vat-confirm-wrap{% unless selected_vat_status == 'Voraussetzungen erfüllt' %} hidden{% endunless %}>
                   <input type="checkbox" data-vat-confirm{% if selected_vat_confirmed %} checked{% endif %}>
                   <span>Ich bestätige wahrheitsgemäß, dass die oben genannten Voraussetzungen für den Nullsteuersatz erfüllt sind und ich die Ware entsprechend verwenden werde.</span>
                 </label>
+                <p class="cart-vat-copy" data-vat-inquiry{% unless selected_vat_status == 'Voraussetzungen nicht erfüllt' and settings.de_vat_operator_only %} hidden{% endunless %}>
+                  Diese Bestellung kann nicht online zum Nullsteuersatz abgeschlossen werden.
+                  {% if de_vat_inquiry_email != blank %}<a href="mailto:{{ de_vat_inquiry_email | escape }}?subject=Anfrage%20VENUS%20E">Angebot per E-Mail anfragen</a>.{% else %}<a href="{{ routes.root_url }}pages/kontakt">Bitte kontaktiere uns für ein Angebot</a>.{% endif %}
+                </p>
               </section>
 
               <input type="hidden" name="attributes[Lieferland]" value="" data-delivery-country-name>
@@ -892,7 +904,8 @@
               <input type="hidden" name="attributes[DE 0% MwSt. Status]" value="{{ selected_vat_status | escape }}" data-vat-status-attribute>
               <input type="hidden" name="attributes[DE 0% MwSt. Bestätigung]" value="{% if selected_vat_confirmed %}Bestätigt{% endif %}" data-vat-confirm-attribute>
               <input type="hidden" name="attributes[DE 0% MwSt. Lieferland]" value="{% if selected_delivery_country == 'DE' %}Deutschland{% endif %}" data-vat-country-attribute>
-              <input type="hidden" name="attributes[DE 0% MwSt. Erklärungsversion]" value="{% if selected_vat_confirmed %}DE-UStG-12-3-v1{% endif %}">
+              <input type="hidden" name="attributes[DE 0% MwSt. Erklärungsversion]" value="{% if selected_vat_confirmed %}DE-UStG-12-3-v2{% endif %}" data-vat-version-attribute>
+              <input type="hidden" name="attributes[DE 0% MwSt. Erklärung vollständig]" value="{% if selected_vat_declaration_complete %}Vollständig{% endif %}" data-vat-declaration-complete-attribute>
               <p class="cart-delivery-status" data-delivery-status role="alert"></p>
               <button type="button" class="cart-vat-fallback" data-vat-fallback hidden>
                 Regulären MwSt.-Satz verwenden
@@ -959,6 +972,7 @@
           <span>Warenkorb gesamt</span>
           <span class="cart-drawer-summary-value" data-subtotal>{{ cart.total_price | money_without_currency }} €</span>
         </div>
+        {%- render 'b2b-purchase-hint', placement: 'drawer' -%}
         <div class="cart__checkout-wrapper">
           <button type="submit" name="checkout" data-terms-required="{{ settings.cart_terms_conditions_enable }}" class="btn cart__checkout">
             Zur Kasse
@@ -1039,6 +1053,79 @@
         }
       };
     }
+    if (!window.PVTaxCart.rollbackVatReplacements) {
+      window.PVTaxCart.rollbackVatReplacements = async function(rootUrl, sourceKeysByToken, addedItems) {
+        const request = (url, options) => window.PVTaxCart.enqueue(() => fetch(url, {
+          credentials: 'same-origin', ...options
+        }));
+        try {
+          // A lost response does not establish whether the original was removed.
+          // Delete a replacement only after a fresh read proves its original exists.
+          const response = await request(`${rootUrl}cart.js?t=${Date.now()}`, {
+            cache: 'no-store', headers: { Accept: 'application/json' }
+          });
+          if (!response.ok) return false;
+          const cart = await window.PVTaxCart.readJsonResponse(response, '');
+          const existingKeys = new Set((cart.items || []).map(item => item.key));
+          const updates = {};
+          let allOriginalsExist = true;
+          addedItems.forEach(item => {
+            const properties = item.properties || {};
+            const token = properties._de_vat_switch_token || properties._de_vat_restore_token;
+            if (item.key && existingKeys.has(sourceKeysByToken[token])) updates[item.key] = 0;
+            else allOriginalsExist = false;
+          });
+          if (!Object.keys(updates).length) return false;
+          const rollbackResponse = await request(`${rootUrl}cart/update.js`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ updates })
+          });
+          return rollbackResponse.ok && allOriginalsExist;
+        } catch (error) {
+          // Preserve the goods and block this checkout if reconciliation is unknown.
+          console.warn('Warenkorb konnte nach einem Übertragungsfehler nicht vollständig geprüft werden.');
+          return false;
+        }
+      };
+    }
+    if (!window.PVTaxCart.readVatReplacements) {
+      window.PVTaxCart.matchVatReplacements = function(additions, items) {
+        if (!Array.isArray(items)) return null;
+        const replacements = additions.map(addition => {
+          const token = addition.properties && (addition.properties._de_vat_switch_token || addition.properties._de_vat_restore_token);
+          const matches = items.filter(item => {
+            const properties = item.properties || {};
+            return token && (properties._de_vat_switch_token === token || properties._de_vat_restore_token === token);
+          });
+          const line = matches[0];
+          const planId = line && line.selling_plan_allocation && line.selling_plan_allocation.selling_plan
+            ? line.selling_plan_allocation.selling_plan.id : '';
+          return matches.length === 1 && line.key && String(line.variant_id || line.id) === String(addition.id)
+            && Number(line.quantity) === Number(addition.quantity) && String(planId || '') === String(addition.selling_plan || '') ? line : null;
+        });
+        return replacements.every(Boolean) ? replacements : null;
+      };
+      window.PVTaxCart.readVatReplacements = async function(rootUrl, additions) {
+        const message = 'Die Warenkorbänderung konnte nicht eindeutig bestätigt werden. Bitte lade die Seite neu und prüfe den Warenkorb, bevor du fortfährst.';
+        try {
+          const response = await window.PVTaxCart.enqueue(() => fetch(`${rootUrl}cart.js?t=${Date.now()}`, {
+            credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' }
+          }));
+          const cart = await window.PVTaxCart.readJsonResponse(response, message);
+          if (!response.ok || !Array.isArray(cart.items)) throw new Error(message);
+          const replacements = window.PVTaxCart.matchVatReplacements(additions, cart.items);
+          if (!replacements) throw new Error(message);
+          return replacements;
+        } catch (error) {
+          // An add may have reached Shopify even when its response was lost.
+          // Keep every line and require an explicit cart review instead of
+          // issuing another add or guessing which goods can be removed.
+          window.PVTaxCart._vatTransactionUncertain = true;
+          throw new Error(message);
+        }
+      };
+    }
     if (!window.PVTaxCart.restorePendingVatMerchandise) {
       window.PVTaxCart._vatRestorePromise = null;
       window.PVTaxCart.restorePendingVatMerchandise = function(rootUrl) {
@@ -1065,6 +1152,7 @@
         };
 
         const restore = async () => {
+          if (window.PVTaxCart._vatTransactionUncertain || window.PVTaxCart._pdpCartTransactionUncertain) throw new Error('Bitte lade die Seite neu und prüfe den Warenkorb, bevor du fortfährst.');
           const cartResponse = await request(`${root}cart.js?t=${Date.now()}`, {
             cache: 'no-store',
             headers: {
@@ -1074,8 +1162,15 @@
           });
           const cart = await window.PVTaxCart.readJsonResponse(cartResponse, 'Der Warenkorb konnte nicht geladen werden.');
           if (!cartResponse.ok) throw new Error(cart.description || cart.message || 'Der Warenkorb konnte nicht geladen werden.');
+          const renderedItems = [...document.querySelectorAll('[data-de-vat-variant-id]')];
+          if (renderedItems.some(item => item.dataset.deVatPolicyInvalid === 'true')) throw new Error('Die steuerliche Produktzuordnung ist unvollständig. Bitte kontaktiere uns, bevor du die Bestellung abschließt.');
 
           const pendingItems = (cart.items || []).filter(item => {
+            const renderedItem = renderedItems
+              .find(element => element.dataset.key === item.key);
+            if (renderedItem && (renderedItem.dataset.deVatCanonicalVariantId
+              || (renderedItem.dataset.deVatConfigured === 'true'
+                && ['single_product', 'bundle_components', 'paired_variants'].includes(renderedItem.dataset.deVatStrategy)))) return false;
             const properties = item.properties || {};
             const hasRestoreMetadata = properties._de_vat_restore_token
               && properties._de_vat_restore_variant_id
@@ -1088,13 +1183,14 @@
 
           const additions = [];
           const removals = {};
+          const sourceKeysByToken = {};
           pendingItems.forEach((line, index) => {
             const properties = line.properties || {};
             const variantId = Number(
               properties._de_vat_restore_variant_id
                 || (properties._de_vat_mode === 'zero' && properties._de_standard_vat_variant_id)
             );
-            const quantity = Number(properties._de_vat_restore_quantity || line.quantity);
+            const quantity = Number(line.quantity);
             if (!Number.isInteger(variantId) || variantId < 1 || !Number.isInteger(quantity) || quantity < 1) {
               throw new Error('Die ursprüngliche Produktvariante konnte nicht wiederhergestellt werden.');
             }
@@ -1102,26 +1198,40 @@
             const restoreToken = `de-vat-restore-${Date.now()}-${index}`;
             const restoreProperties = cleanVatProperties(properties);
             restoreProperties._de_vat_restore_token = restoreToken;
-            additions.push({ id: variantId, quantity, properties: restoreProperties });
+            sourceKeysByToken[restoreToken] = line.key;
+            additions.push({
+              id: variantId,
+              quantity,
+              properties: restoreProperties,
+              ...(line.selling_plan_allocation && line.selling_plan_allocation.selling_plan
+                ? { selling_plan: line.selling_plan_allocation.selling_plan.id }
+                : {})
+            });
             removals[line.key] = 0;
           });
 
-          const addResponse = await request(`${root}cart/add.js`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-              'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({ items: additions })
-          });
-          const addResult = await window.PVTaxCart.readJsonResponse(addResponse, 'Das ursprüngliche Produkt konnte nicht wiederhergestellt werden.');
-          if (!addResponse.ok) throw new Error(addResult.description || addResult.message || 'Das ursprüngliche Produkt konnte nicht wiederhergestellt werden.');
-
-          const addedItems = (addResult.items || []).filter(item => item.key);
+          let addResponse;
+          let addResult;
+          let addedItems;
+          try {
+            addResponse = await request(`${root}cart/add.js`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json', Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest'
+              },
+              body: JSON.stringify({ items: additions })
+            });
+            addResult = await window.PVTaxCart.readJsonResponse(addResponse, 'Das ursprüngliche Produkt konnte nicht wiederhergestellt werden.');
+          } catch (error) {
+            addedItems = await window.PVTaxCart.readVatReplacements(root, additions);
+          }
+          if (addResponse && addResult && !addResponse.ok) throw new Error(addResult.description || addResult.message || 'Das ursprüngliche Produkt konnte nicht wiederhergestellt werden.');
+          if (!addedItems) addedItems = window.PVTaxCart.matchVatReplacements(additions, addResult && addResult.items)
+            || await window.PVTaxCart.readVatReplacements(root, additions);
           const addedKeys = addedItems.map(item => item.key);
           if (!addedKeys.length) throw new Error('Das ursprüngliche Produkt konnte im Warenkorb nicht gefunden werden.');
 
+          let originalRemovalAccepted = false;
           try {
             const updateResponse = await request(`${root}cart/update.js`, {
               method: 'POST',
@@ -1132,6 +1242,7 @@
               },
               body: JSON.stringify({ updates: removals })
             });
+            originalRemovalAccepted = updateResponse.ok;
             let updatedCart = await window.PVTaxCart.readJsonResponse(updateResponse, 'Die temporäre Steuerposition konnte nicht entfernt werden.');
             if (!updateResponse.ok) throw new Error(updatedCart.description || updatedCart.message || 'Die temporäre Steuerposition konnte nicht entfernt werden.');
 
@@ -1157,26 +1268,13 @@
 
             return { cart: updatedCart, restored: true };
           } catch (error) {
-            if (addedKeys.length) {
-              const rollbackUpdates = {};
-              addedKeys.forEach(key => { rollbackUpdates[key] = 0; });
-              await request(`${root}cart/update.js`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Accept: 'application/json',
-                  'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify({ updates: rollbackUpdates })
-              }).catch(() => {});
-            }
+            if (!originalRemovalAccepted && !await window.PVTaxCart.rollbackVatReplacements(root, sourceKeysByToken, addedItems)) window.PVTaxCart._vatTransactionUncertain = true;
             throw error;
           }
         };
 
-        const promise = restore().catch(error => {
-          window.PVTaxCart._vatRestorePromise = null;
-          throw error;
+        const promise = restore().finally(() => {
+          if (window.PVTaxCart._vatRestorePromise === promise) window.PVTaxCart._vatRestorePromise = null;
         });
         window.PVTaxCart._vatRestorePromise = promise;
         return promise;
@@ -1337,6 +1435,10 @@
           this.vatStatusAttribute = this.querySelector('[data-vat-status-attribute]');
           this.vatConfirmAttribute = this.querySelector('[data-vat-confirm-attribute]');
           this.vatCountryAttribute = this.querySelector('[data-vat-country-attribute]');
+          this.vatVersionAttribute = this.querySelector('[data-vat-version-attribute]');
+          this.vatDeclarationCompleteAttribute = this.querySelector('[data-vat-declaration-complete-attribute]');
+          this.vatDeclarationVersion = this.dataset.vatDeclarationVersion || 'DE-UStG-12-3-v2';
+          this.operatorOnly = this.dataset.vatOperatorOnly === 'true';
           this.countryButtons = [...this.querySelectorAll('[data-delivery-country]')];
           this.shippingButton = this.querySelector('[data-shipping-calculate]');
           this.postcodeToggle = this.querySelector('[data-postcode-toggle]');
@@ -1348,6 +1450,7 @@
           this.vatChoices = [...this.querySelectorAll('[data-vat-choice]')];
           this.vatConfirm = this.querySelector('[data-vat-confirm]');
           this.vatConfirmWrap = this.querySelector('[data-vat-confirm-wrap]');
+          this.vatInquiry = this.querySelector('[data-vat-inquiry]');
           this.status = this.querySelector('[data-delivery-status]');
           this.vatFallbackButton = this.querySelector('[data-vat-fallback]');
           this.localizationForm = document.getElementById(this.dataset.localizationFormId);
@@ -1357,6 +1460,7 @@
             || 'EUR';
           this.cartTotal = 0;
           this.cartFingerprint = 'unknown-cart';
+          this.cartMerchandiseFingerprint = '';
           this.shippingAmountCents = null;
           this.shippingRequestKey = '';
           this.shippingHasMultipleRates = false;
@@ -1391,6 +1495,7 @@
           this.handleCheckout = this.handleCheckout.bind(this);
           this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
           this.handleDeliveryStateChanged = this.handleDeliveryStateChanged.bind(this);
+          this.handleCartTransactionUncertain = this.handleCartTransactionUncertain.bind(this);
           this.handlePageShow = this.handlePageShow.bind(this);
 
           this.countryButtons.forEach(button => button.addEventListener('click', this.handleCountryClick));
@@ -1404,6 +1509,7 @@
           document.addEventListener('cart:updated', this.handleCartChanged);
           document.addEventListener('ajaxProduct:added', this.handleCartChanged);
           document.addEventListener('cart:delivery-state-changed', this.handleDeliveryStateChanged);
+          document.addEventListener('cart:transaction-uncertain', this.handleCartTransactionUncertain);
           document.addEventListener('drawerOpen.CartDrawer', this.handleDrawerOpen);
           window.addEventListener('pageshow', this.handlePageShow);
           this.form.addEventListener('submit', this.handleCheckout, true);
@@ -1429,6 +1535,7 @@
           document.removeEventListener('cart:updated', this.handleCartChanged);
           document.removeEventListener('ajaxProduct:added', this.handleCartChanged);
           document.removeEventListener('cart:delivery-state-changed', this.handleDeliveryStateChanged);
+          document.removeEventListener('cart:transaction-uncertain', this.handleCartTransactionUncertain);
           document.removeEventListener('drawerOpen.CartDrawer', this.handleDrawerOpen);
           window.removeEventListener('pageshow', this.handlePageShow);
           this.form && this.form.removeEventListener('submit', this.handleCheckout, true);
@@ -1446,6 +1553,7 @@
             if (window.PVTaxCart && window.PVTaxCart.restorePendingVatMerchandise) {
               const restoration = await window.PVTaxCart.restorePendingVatMerchandise(this.rootUrl);
               cart = restoration && restoration.cart;
+              if (restoration && restoration.restored) this.cartMerchandiseReordered = true;
             }
             if (!cart) {
               const response = await fetch(`${this.rootUrl}cart.js`, {
@@ -1488,23 +1596,31 @@
             input.checked = (input.value === 'eligible' && status === 'Voraussetzungen erfüllt')
               || (input.value === 'regular' && status === 'Voraussetzungen nicht erfüllt');
           });
-          this.vatConfirm.checked = attributes['DE 0% MwSt. Bestätigung'] === 'Bestätigt';
+          this.vatConfirm.checked = attributes['DE 0% MwSt. Bestätigung'] === 'Bestätigt'
+            && attributes['DE 0% MwSt. Erklärungsversion'] === this.vatDeclarationVersion;
         }
 
         applyCartState(cart) {
+          // Availability failures belong to the goods and quantities that failed,
+          // not to later attribute, price or delivery-context updates.
+          const merchandiseFingerprint = JSON.stringify((cart.items || []).map(item => [
+            String(item.key || ''), String(item.variant_id || item.id || ''), Number(item.quantity) || 0
+          ]).sort((left, right) => left[0].localeCompare(right[0]) || left[1].localeCompare(right[1])));
+          if (this.cartMerchandiseFingerprint && this.cartMerchandiseFingerprint !== merchandiseFingerprint) {
+            this.zeroVatVariantUnavailable = false;
+          }
+          this.cartMerchandiseFingerprint = merchandiseFingerprint;
           this.cartCurrency = cart.currency || this.cartCurrency || 'EUR';
           this.cartTotal = Number(cart.total_price) || 0;
           this.cartFingerprint = window.CartShippingRates && window.CartShippingRates.getCartFingerprint
             ? window.CartShippingRates.getCartFingerprint(cart)
             : 'unknown-cart';
-          this.shippingAmountCents = null;
-          this.shippingRequestKey = '';
-          this.shippingHasMultipleRates = false;
-          this.setShippingSummary('Im Checkout berechnet', false);
+          // A quote started for the previous cart must not repopulate the
+          // shipping estimate after this cart response has cleared it.
+          this.clearShippingEstimate();
           if (window.CartShippingRates && window.CartShippingRates.invalidate) {
             window.CartShippingRates.invalidate(this.cartFingerprint);
           }
-          this.renderCartTotal();
         }
 
         handleCartChanged(event) {
@@ -1530,6 +1646,11 @@
           this.setShippingSummary('Im Checkout berechnet', false);
         }
 
+        handleCartTransactionUncertain() {
+          this.updateVatUI();
+          this.setStatus(this.validationMessage());
+        }
+
         handlePageShow() {
           this.loadCartContext({ forceRefresh: true });
         }
@@ -1548,16 +1669,7 @@
 
           const eligibleItems = this.getEligibleVatItems();
           this.hasEligibleProduct = eligibleItems.length > 0;
-          this.hasVatSwitchConfiguration = eligibleItems.every(item => {
-            return Boolean(
-              item.dataset.deStandardVatVariantId
-              && (item.dataset.deZeroVatVariantId || item.dataset.deVatSingleSource === 'true')
-            );
-          });
-          if (this.acceleratedCheckout) {
-            const containsZeroVatItem = eligibleItems.some(item => item.dataset.deVatMode === 'zero');
-            this.acceleratedCheckout.hidden = containsZeroVatItem || (this.selectedCountry === 'DE' && this.hasEligibleProduct);
-          }
+          this.hasVatSwitchConfiguration = eligibleItems.every(item => this.isVatItemConfigured(item));
           if (!this.shouldShowVatQualification() && this.hasVatSelection()) {
             this.clearVatState();
             this.persistAttributes()
@@ -1728,7 +1840,10 @@
         renderCartTotal() {
           const totalElement = this.drawer.querySelector('[data-subtotal]');
           if (!totalElement || !window.theme || !theme.Currency) return;
-          const total = this.cartTotal + (Number.isFinite(this.shippingAmountCents) ? this.shippingAmountCents : 0);
+          const cartItems = this.drawer.querySelector('.cart__items[data-cart-total]');
+          const renderedCartTotal = cartItems ? Number(cartItems.dataset.cartTotal) : NaN;
+          const merchandiseTotal = Number.isFinite(renderedCartTotal) ? renderedCartTotal : this.cartTotal;
+          const total = merchandiseTotal + (Number.isFinite(this.shippingAmountCents) ? this.shippingAmountCents : 0);
           const formatted = theme.Currency.formatMoney(total, theme.settings.moneyFormat);
           totalElement.innerHTML = this.shippingHasMultipleRates && Number.isFinite(this.shippingAmountCents)
             ? `ab ${formatted}`
@@ -1759,6 +1874,34 @@
           return [...this.drawer.querySelectorAll('[data-de-zero-vat-eligible="true"]')];
         }
 
+        isSingleSourceVatItem(item) {
+          return item.dataset.deVatConfigured === 'true'
+            && (item.dataset.deVatStrategy === 'single_product' || item.dataset.deVatStrategy === 'bundle_components');
+        }
+
+        isVatItemConfigured(item) {
+          if (item.dataset.deVatCanonicalVariantId) return true;
+          if (this.isSingleSourceVatItem(item)) return true;
+          return item.dataset.deVatStrategy === 'paired_variants'
+            && item.dataset.deVatConfigured === 'true'
+            && Boolean(item.dataset.deStandardVatVariantId && item.dataset.deZeroVatVariantId);
+        }
+
+        isRegularTaxCheckoutReady(item) {
+          if (item.dataset.deVatCanonicalVariantId) return false;
+          if (item.dataset.deVatRegularOnlineReady === 'true') return true;
+          return this.isVatItemConfigured(item) && !this.isSingleSourceVatItem(item);
+        }
+
+        getVatTargetVariantId(item, mode) {
+          // This ID is rendered only from a merchant-configured reference to an
+          // approved single-product strategy, never from cart line properties.
+          if (item.dataset.deVatCanonicalVariantId) return item.dataset.deVatCanonicalVariantId;
+          if (this.isSingleSourceVatItem(item)) return item.dataset.deVatVariantId;
+          if (mode === 'zero' && !this.isVatItemConfigured(item)) return '';
+          return mode === 'zero' ? item.dataset.deZeroVatVariantId : item.dataset.deStandardVatVariantId;
+        }
+
         getTargetVatMode() {
           return this.selectedCountry === 'DE'
             && this.getVatChoice() === 'eligible'
@@ -1769,12 +1912,12 @@
 
         allEligibleItemsUseMode(mode) {
           const items = this.getEligibleVatItems();
-          return items.length > 0 && items.every(item => item.dataset.deVatMode === mode);
+          return items.length > 0 && items.every(item => this.isSingleSourceVatItem(item) || item.dataset.deVatMode === mode);
         }
 
         allEligibleItemsUseSingleSource() {
           const items = this.getEligibleVatItems();
-          return items.length > 0 && items.every(item => item.dataset.deVatSingleSource === 'true');
+          return items.length > 0 && items.every(item => this.isSingleSourceVatItem(item));
         }
 
         hasVatSelection() {
@@ -1787,26 +1930,38 @@
           this.vatStatusAttribute.value = '';
           this.vatConfirmAttribute.value = '';
           this.vatCountryAttribute.value = '';
+          if (this.vatVersionAttribute) this.vatVersionAttribute.value = '';
+        }
+
+        updateAcceleratedCheckout() {
+          if (!this.acceleratedCheckout) return;
+          const eligibleItems = this.drawer ? this.getEligibleVatItems() : [];
+          const containsZeroVatItem = eligibleItems.some(item => item.dataset.deVatMode === 'zero');
+          this.acceleratedCheckout.hidden = Boolean(window.PVTaxCart && (window.PVTaxCart._vatTransactionUncertain || window.PVTaxCart._pdpCartTransactionUncertain))
+            || eligibleItems.some(item => item.dataset.deVatPolicyInvalid === 'true')
+            || containsZeroVatItem
+            || (this.selectedCountry === 'DE' && eligibleItems.length > 0);
         }
 
         updateVatUI() {
+          this.updateAcceleratedCheckout();
           const showQualification = this.shouldShowVatQualification();
           this.qualification.hidden = !showQualification;
           const choice = showQualification ? this.getVatChoice() : '';
           this.vatConfirmWrap.hidden = choice !== 'eligible';
+          const regularNeedsInquiry = choice === 'regular' && (this.operatorOnly || this.getEligibleVatItems().some(item => !this.isRegularTaxCheckoutReady(item)));
+          if (this.vatInquiry) this.vatInquiry.hidden = !regularNeedsInquiry;
 
           if (!showQualification) {
             this.taxSummary.textContent = 'Im Checkout berechnet';
           } else if (choice === 'eligible' && this.vatConfirm.checked && !this.hasVatSwitchConfiguration) {
-            this.taxSummary.textContent = '0-%-Komponente fehlt · Checkout gesperrt';
+            this.taxSummary.textContent = 'Steuerliche Zuordnung fehlt · bitte kontaktiere uns';
           } else if (choice === 'eligible' && this.vatConfirm.checked && this.allEligibleItemsUseMode('zero')) {
-            this.taxSummary.textContent = '0-%-Komponente aktiv · Checkout prüft Lieferadresse';
-          } else if (choice === 'eligible' && this.vatConfirm.checked && this.allEligibleItemsUseSingleSource()) {
-            this.taxSummary.textContent = '0-%-Steuer wird im Checkout anhand der Produktkomponenten geprüft';
+            this.taxSummary.textContent = 'Steuersatz wird im Checkout anhand der Lieferadresse geprüft';
           } else if (choice === 'eligible' && this.vatConfirm.checked) {
             this.taxSummary.textContent = '0-%-Komponente wird vorbereitet …';
           } else if (choice === 'regular') {
-            this.taxSummary.textContent = 'Regulär · im Checkout berechnet';
+            this.taxSummary.textContent = regularNeedsInquiry ? 'Angebot per E-Mail erforderlich' : 'Regulär · im Checkout berechnet';
           } else {
             this.taxSummary.textContent = 'Auswahl erforderlich';
           }
@@ -1828,6 +1983,15 @@
           this.vatStatusAttribute.value = vatStatus;
           this.vatConfirmAttribute.value = vatConfirmed;
           this.vatCountryAttribute.value = vatCountry;
+          const declarationVersion = vatConfirmed ? this.vatDeclarationVersion : '';
+          if (this.vatVersionAttribute) this.vatVersionAttribute.value = declarationVersion;
+          const declarationComplete = this.selectedCountry === 'DE'
+            && vatStatus === 'Voraussetzungen erfüllt'
+            && vatConfirmed === 'Bestätigt'
+            && declarationVersion === this.vatDeclarationVersion
+            ? 'Vollständig'
+            : '';
+          if (this.vatDeclarationCompleteAttribute) this.vatDeclarationCompleteAttribute.value = declarationComplete;
 
           return {
             Lieferland: this.countryNames[this.selectedCountry],
@@ -1836,7 +2000,8 @@
             'DE 0% MwSt. Status': vatStatus,
             'DE 0% MwSt. Bestätigung': vatConfirmed,
             'DE 0% MwSt. Lieferland': vatCountry,
-            'DE 0% MwSt. Erklärungsversion': vatConfirmed ? 'DE-UStG-12-3-v1' : ''
+            'DE 0% MwSt. Erklärungsversion': declarationVersion,
+            'DE 0% MwSt. Erklärung vollständig': declarationComplete
           };
         }
 
@@ -1879,36 +2044,39 @@
         }
 
         async syncVatMerchandise(rebuildCart) {
+          if (window.PVTaxCart._vatTransactionUncertain || window.PVTaxCart._pdpCartTransactionUncertain) throw new Error('Bitte lade die Seite neu und prüfe den Warenkorb, bevor du fortfährst.');
           if (this.isSyncingVatMerchandise) {
             this.vatSyncRetryScheduled = true;
             return;
           }
           const eligibleElements = this.getEligibleVatItems();
           if (!eligibleElements.length) return;
+          if (eligibleElements.some(item => item.dataset.deVatPolicyInvalid === 'true')) {
+            throw new Error('Die steuerliche Produktzuordnung ist unvollständig. Bitte kontaktiere uns, bevor du die Bestellung abschließt.');
+          }
 
           const targetMode = this.getTargetVatMode();
+          if (targetMode === 'zero' && eligibleElements.some(item => !this.isVatItemConfigured(item))) {
+            throw new Error('Die steuerliche Produktzuordnung ist noch nicht vollständig eingerichtet. Bitte kontaktiere uns für ein Angebot.');
+          }
           if (targetMode === 'zero' && this.zeroVatVariantUnavailable) {
-            const unavailableError = new Error('Die 0-%-MwSt.-Variante ist derzeit nicht verfügbar. Bitte wähle den regulären MwSt.-Satz oder stelle den Lagerbestand der 0-%-Variante im Shopify-Admin wieder her.');
+            const unavailableError = new Error('Der Artikel ist derzeit nicht in der erforderlichen steuerlichen Zuordnung verfügbar. Bitte kontaktiere uns.');
             unavailableError.canFallbackToStandardVat = true;
             throw unavailableError;
           }
           const switches = eligibleElements.filter(item => {
-            // A normal Bundle can be the only merchandise line when its
-            // component inventory/tax is managed by Shopify Bundles. Keep
-            // that line unchanged instead of requiring a duplicate 0-% SKU.
-            if (targetMode === 'zero' && item.dataset.deVatSingleSource === 'true') return false;
-            const targetVariantId = targetMode === 'zero'
-              ? item.dataset.deZeroVatVariantId
-              : item.dataset.deStandardVatVariantId;
-            return item.dataset.deVatMode !== targetMode
+            const targetVariantId = this.getVatTargetVariantId(item, targetMode);
+            if (this.isSingleSourceVatItem(item) && !item.dataset.deVatCanonicalVariantId) return false;
+            // A standard line with no configured strategy can still be bought
+            // outside the German zero-rate flow. Never infer its tax rate.
+            if (targetMode === 'standard' && !targetVariantId && item.dataset.deVatMode !== 'zero') return false;
+            return (!item.dataset.deVatCanonicalVariantId && item.dataset.deVatMode !== targetMode)
               || String(item.dataset.deVatVariantId) !== String(targetVariantId);
           });
           if (!switches.length) return;
 
           const missingMapping = switches.some(item => {
-            const targetVariantId = targetMode === 'zero'
-              ? item.dataset.deZeroVatVariantId
-              : item.dataset.deStandardVatVariantId;
+            const targetVariantId = this.getVatTargetVariantId(item, targetMode);
             return !targetVariantId;
           });
           if (missingMapping) {
@@ -1929,6 +2097,7 @@
 
             const additions = [];
             const removals = {};
+            const sourceKeysByToken = {};
             let missingLine = false;
             switches.forEach(element => {
               const line = cart.items.find(item => item.key === element.dataset.key);
@@ -1938,17 +2107,20 @@
               }
               const standardVariantId = element.dataset.deStandardVatVariantId;
               const zeroVariantId = element.dataset.deZeroVatVariantId;
+              const canonicalVariantId = element.dataset.deVatCanonicalVariantId;
               const switchToken = `de-vat-${Date.now()}-${++this.vatSyncRevision}`;
+              sourceKeysByToken[switchToken] = line.key;
               const sourceProperties = { ...(line.properties || {}) };
               const restoreVariantId = sourceProperties._de_vat_restore_variant_id || line.variant_id;
-              const restoreQuantity = sourceProperties._de_vat_restore_quantity || line.quantity;
+              const restoreQuantity = line.quantity;
               delete sourceProperties._de_vat_restore_variant_id;
               delete sourceProperties._de_vat_restore_quantity;
               delete sourceProperties._de_vat_restore_token;
-              additions.push({
-                id: Number(targetMode === 'zero' ? zeroVariantId : standardVariantId),
-                quantity: line.quantity,
-                properties: {
+              const replacementProperties = canonicalVariantId
+                ? Object.fromEntries(Object.entries(sourceProperties).filter(([key]) => ![
+                    '_de_vat_mode', '_de_standard_vat_variant_id', '_de_zero_vat_variant_id', '_de_vat_switch_token'
+                  ].includes(key)))
+                : {
                   ...sourceProperties,
                   _de_vat_mode: targetMode,
                   _de_standard_vat_variant_id: String(standardVariantId),
@@ -1961,7 +2133,17 @@
                         _de_vat_restore_token: switchToken
                       }
                     : {})
-                }
+                };
+              // A temporary token keeps the replacement separate from an
+              // existing canonical line, so rollback cannot remove other goods.
+              replacementProperties._de_vat_switch_token = switchToken;
+              additions.push({
+                id: Number(this.getVatTargetVariantId(element, targetMode)),
+                quantity: line.quantity,
+                properties: replacementProperties,
+                ...(line.selling_plan_allocation && line.selling_plan_allocation.selling_plan
+                  ? { selling_plan: line.selling_plan_allocation.selling_plan.id }
+                  : {})
               });
               removals[line.key] = 0;
             });
@@ -1978,27 +2160,34 @@
               },
               body: JSON.stringify({ items: additions })
             });
-            const addResponse = await (window.PVTaxCart && window.PVTaxCart.enqueue
-              ? window.PVTaxCart.enqueue(addRequest)
-              : addRequest());
-            const addResult = await window.PVTaxCart.readJsonResponse(addResponse, 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.');
-            if (!addResponse.ok) {
+            let addResponse;
+            let addResult;
+            let addedItems;
+            try {
+              addResponse = await (window.PVTaxCart && window.PVTaxCart.enqueue
+                ? window.PVTaxCart.enqueue(addRequest)
+                : addRequest());
+              addResult = await window.PVTaxCart.readJsonResponse(addResponse, 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.');
+            } catch (error) {
+              addedItems = await window.PVTaxCart.readVatReplacements(this.rootUrl, additions);
+            }
+            if (addResponse && addResult && !addResponse.ok) {
               const addMessage = [addResult && addResult.description, addResult && addResult.message]
                 .filter(value => typeof value === 'string' && value.trim())
                 .join(' ');
               const isZeroVatInventoryError = targetMode === 'zero'
                 && this.isInventoryErrorResponse(addResponse.status, addMessage);
               const addError = new Error(isZeroVatInventoryError
-                ? 'Die 0-%-MwSt.-Variante ist derzeit nicht verfügbar. Bitte wähle den regulären MwSt.-Satz oder stelle den Lagerbestand der 0-%-Variante im Shopify-Admin wieder her.'
+                ? 'Der Artikel ist derzeit nicht in der erforderlichen steuerlichen Zuordnung verfügbar. Bitte kontaktiere uns für ein Angebot.'
                 : (addMessage || 'Die steuerliche Produktvariante konnte nicht hinzugefügt werden.'));
               addError.canFallbackToStandardVat = isZeroVatInventoryError;
               if (isZeroVatInventoryError) this.zeroVatVariantUnavailable = true;
               throw addError;
             }
 
-            const addedKeys = (addResult.items || [])
-              .map(item => item.key)
-              .filter(Boolean);
+            if (!addedItems) addedItems = window.PVTaxCart.matchVatReplacements(additions, addResult && addResult.items)
+              || await window.PVTaxCart.readVatReplacements(this.rootUrl, additions);
+            let originalRemovalAccepted = false;
             try {
               const updateRequest = () => fetch(`${this.rootUrl}cart/update.js`, {
                 method: 'POST',
@@ -2013,6 +2202,8 @@
               const updateResponse = await (window.PVTaxCart && window.PVTaxCart.enqueue
                 ? window.PVTaxCart.enqueue(updateRequest)
                 : updateRequest());
+              originalRemovalAccepted = updateResponse.ok;
+              if (originalRemovalAccepted) this.cartMerchandiseReordered = true;
               const updatedCart = await window.PVTaxCart.readJsonResponse(updateResponse, 'Die bisherige Produktvariante konnte nicht entfernt werden.');
               if (!updateResponse.ok) throw new Error(updatedCart.description || updatedCart.message || 'Die bisherige Produktvariante konnte nicht entfernt werden.');
 
@@ -2021,34 +2212,18 @@
                 document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: updatedCart } }));
               }
             } catch (error) {
-              // The add-then-remove API sequence is not atomic. Remove only the
-              // uniquely tagged replacement lines if the old line cannot be removed.
-              if (addedKeys.length) {
-                const rollbackUpdates = {};
-                addedKeys.forEach(key => { rollbackUpdates[key] = 0; });
-                const rollbackRequest = () => fetch(`${this.rootUrl}cart/update.js`, {
-                  method: 'POST',
-                  credentials: 'same-origin',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                  },
-                  body: JSON.stringify({ updates: rollbackUpdates })
-                });
-                await (window.PVTaxCart && window.PVTaxCart.enqueue
-                  ? window.PVTaxCart.enqueue(rollbackRequest)
-                  : rollbackRequest()).catch(() => {});
-              }
+              if (!originalRemovalAccepted && !await window.PVTaxCart.rollbackVatReplacements(this.rootUrl, sourceKeysByToken, addedItems)) window.PVTaxCart._vatTransactionUncertain = true;
               throw error;
             }
           } finally {
             this.isSyncingVatMerchandise = false;
-            if (this.vatSyncRetryScheduled) {
+            if (this.vatSyncRetryScheduled && !window.PVTaxCart._vatTransactionUncertain && !window.PVTaxCart._pdpCartTransactionUncertain) {
               this.vatSyncRetryScheduled = false;
               window.setTimeout(() => this.syncVatMerchandise(true).catch(error => {
                 this.setStatus(error.message || 'Die steuerliche Produktvariante konnte nicht synchronisiert werden.');
               }), 500);
+            } else if (window.PVTaxCart._vatTransactionUncertain || window.PVTaxCart._pdpCartTransactionUncertain) {
+              this.vatSyncRetryScheduled = false;
             }
           }
         }
@@ -2190,6 +2365,11 @@
         }
 
         selectRegularVat() {
+          if (this.operatorOnly && this.shouldShowVatQualification()) {
+            this.showVatFallback(false);
+            this.setStatus('Bitte kontaktiere uns per E-Mail für ein Angebot. Diese Bestellung kann nicht online abgeschlossen werden.');
+            return Promise.resolve(false);
+          }
           const regularChoice = this.vatChoices.find(input => input.value === 'regular');
           if (!regularChoice) return Promise.resolve(false);
 
@@ -2279,8 +2459,9 @@
 
         showVatFallback(show) {
           if (!this.vatFallbackButton) return;
-          this.vatFallbackButton.hidden = !show;
-          this.vatFallbackButton.setAttribute('aria-hidden', String(!show));
+          const visible = Boolean(show) && !(this.operatorOnly && this.shouldShowVatQualification());
+          this.vatFallbackButton.hidden = !visible;
+          this.vatFallbackButton.setAttribute('aria-hidden', String(!visible));
         }
 
         isInventoryErrorResponse(status, message) {
@@ -2289,11 +2470,16 @@
         }
 
         validationMessage() {
+          if (window.PVTaxCart && (window.PVTaxCart._vatTransactionUncertain || window.PVTaxCart._pdpCartTransactionUncertain)) return 'Der Warenkorb konnte nach einem Übertragungsfehler nicht sicher geprüft werden. Bitte lade die Seite neu und prüfe die Artikel vor dem Checkout.';
+          const items = this.getEligibleVatItems();
+          if (items.some(item => item.dataset.deVatPolicyInvalid === 'true')) return 'Die steuerliche Produktzuordnung ist unvollständig. Bitte kontaktiere uns, bevor du die Bestellung abschließt.';
           if (!this.shouldShowVatQualification()) return '';
           const choice = this.getVatChoice();
           if (!choice) return 'Bitte wähle aus, ob du die Voraussetzungen für 0 % MwSt. erfüllst.';
+          if (choice === 'regular' && this.operatorOnly) return 'Für Einkäufe zum Weiterverkauf oder ohne erfüllte Voraussetzungen erstellen wir ein Angebot per E-Mail. Ein Online-Abschluss ist hier nicht möglich.';
+          if (choice === 'regular' && items.some(item => !this.isRegularTaxCheckoutReady(item))) return 'Für mindestens einen Artikel ist kein regulär besteuerter Online-Kauf eingerichtet. Bitte kontaktiere uns für ein Angebot per E-Mail.';
           if (choice === 'eligible' && !this.vatConfirm.checked) return 'Bitte bestätige die Richtigkeit deiner Angaben für 0 % MwSt.';
-          if (choice === 'eligible' && !this.hasVatSwitchConfiguration) return '0 % MwSt. ist für mindestens einen Artikel technisch noch nicht eingerichtet. Bitte wähle den regulären MwSt.-Satz oder kontaktiere uns.';
+          if (choice === 'eligible' && !this.hasVatSwitchConfiguration) return 'Die steuerliche Zuordnung ist für mindestens einen Artikel noch nicht vollständig eingerichtet. Bitte kontaktiere uns für ein Angebot.';
           return '';
         }
 
@@ -2304,13 +2490,33 @@
             delete this.form.dataset.deliveryContextResubmit;
             return;
           }
-          if (this.isSyncingVatMerchandise || this.vatSyncRetryScheduled) {
+          if (this.isPreparingCheckout || this.isSyncingVatMerchandise || this.vatSyncRetryScheduled) {
             event.preventDefault();
             event.stopImmediatePropagation();
             this.resetCheckoutButton(submitter);
             this.setStatus('Die MwSt.-Auswahl wird noch angewendet. Bitte erneut versuchen.');
             return;
           }
+          if (this.drawer.querySelector('.js-qty__wrapper.is-loading, [data-cart-remove][disabled]')) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            this.resetCheckoutButton(submitter);
+            this.setStatus('Warenkorb wird aktualisiert. Bitte warte, bis die Mengenänderung abgeschlossen ist.');
+            return;
+          }
+          if (!this.cartContextReady || this.isCountryLoading) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            this.resetCheckoutButton(submitter);
+            this.setStatus('Der Warenkorb und das Lieferland werden noch geladen. Bitte versuche es gleich erneut.');
+            return;
+          }
+
+          // Product HTML can arrive before the debounced cart:updated handler.
+          // Always derive eligibility from the current DOM at the submission boundary.
+          const checkoutItems = this.getEligibleVatItems();
+          this.hasEligibleProduct = checkoutItems.length > 0;
+          this.hasVatSwitchConfiguration = checkoutItems.every(item => this.isVatItemConfigured(item));
 
           const validationMessage = this.validationMessage();
           if (validationMessage) {
@@ -2324,10 +2530,19 @@
 
           event.preventDefault();
           event.stopImmediatePropagation();
+          this.isPreparingCheckout = true;
+          const checkoutControls = this.form.querySelectorAll
+            ? [...this.form.querySelectorAll('input:not([type="hidden"]), button:not([name="checkout"]), select, textarea')]
+                .filter(control => !control.disabled)
+            : [];
+          checkoutControls.forEach(control => { control.disabled = true; });
           submitter.disabled = true;
           this.setStatus('');
           this.showVatFallback(false);
           try {
+            const selectionRevision = this.vatSelectionRevision;
+            const deliveryRevision = this.deliveryRevision;
+            const checkoutCountry = this.selectedCountry;
             const targetMode = this.getTargetVatMode();
             await this.syncVatMerchandise(false);
             try {
@@ -2338,6 +2553,10 @@
               if (targetMode !== 'standard') throw error;
             }
             await this.syncLocalization(this.selectedCountry);
+            if (selectionRevision !== this.vatSelectionRevision || deliveryRevision !== this.deliveryRevision
+              || checkoutCountry !== this.selectedCountry) {
+              throw new Error('Deine Auswahl wurde während der Prüfung geändert. Bitte prüfe den Warenkorb und versuche es erneut.');
+            }
             this.form.dataset.checkoutBaseAction = this.form.dataset.checkoutBaseAction
               || this.form.getAttribute('action')
               || this.form.action;
@@ -2346,21 +2565,35 @@
             if (window.PVTaxCart && window.PVTaxCart.rememberCheckoutReturn) {
               window.PVTaxCart.rememberCheckoutReturn();
             }
+            checkoutControls.forEach(control => { control.disabled = false; });
+            // Ajax replacement can reorder cart lines. Their quantities have
+            // already been persisted, so the old positional form array must not
+            // overwrite the quantities of different goods on native submission.
+            const quantityFields = this.cartMerchandiseReordered && this.form.querySelectorAll
+              ? [...this.form.querySelectorAll('input[name="updates[]"]')].filter(input => !input.disabled)
+              : [];
+            quantityFields.forEach(input => { input.disabled = true; });
             submitter.disabled = false;
-            this.form.requestSubmit(submitter);
+            try {
+              this.form.requestSubmit(submitter);
+            } finally {
+              quantityFields.forEach(input => { input.disabled = false; });
+            }
           } catch (error) {
             this.updateVatUI();
             this.resetCheckoutButton(submitter);
             if (error && error.canFallbackToStandardVat) {
-              // Never change the tax mode implicitly. Keep the 0% choice
-              // visible and let the shopper explicitly choose the regular
-              // VAT mode if that is what they want.
               this.showVatFallback(true);
-              this.setStatus('Die 0-%-MwSt.-Variante ist nicht verfügbar. Bitte prüfe den Lagerbestand oder wähle den regulären MwSt.-Satz manuell.');
+              this.setStatus(this.operatorOnly
+                ? 'Der Artikel ist derzeit nicht in der erforderlichen steuerlichen Zuordnung verfügbar. Bitte kontaktiere uns für ein Angebot.'
+                : 'Die 0-%-MwSt.-Variante ist nicht verfügbar. Bitte kontaktiere uns oder wähle den regulären MwSt.-Satz manuell.');
             } else {
               this.showVatFallback(false);
               this.setStatus(error.message || 'Die MwSt.-Auswahl konnte nicht angewendet werden.');
             }
+          } finally {
+            this.isPreparingCheckout = false;
+            checkoutControls.forEach(control => { control.disabled = false; });
           }
         }
       }

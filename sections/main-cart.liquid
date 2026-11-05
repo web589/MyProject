@@ -27,10 +27,12 @@
         elsif item.properties['_de_vat_mode'] == 'zero' and item.properties['_de_standard_vat_variant_id'] != blank
           assign has_pending_vat_restore = true
         endif
-        assign item_de_vat_eligible = item.product.metafields.custom.de_zero_vat_eligible.value
-        if item_de_vat_eligible == true or item.product.tags contains 'DE-0-VAT-PV' or item.product.tags contains 'DE 0% MwSt. PV' or item.variant.metafields.custom.de_zero_vat_variant.value != blank or item.variant.metafields.custom.de_standard_vat_variant.value != blank
+        capture item_de_vat_candidate_result
+          render 'de-vat-product-policy', policy_product: item.product, policy_variant: item.variant, output: 'candidate'
+        endcapture
+        assign item_de_vat_candidate_result = item_de_vat_candidate_result | strip
+        if item_de_vat_candidate_result == 'true'
           assign has_de_vat_candidate = true
-          break
         endif
       endfor
     -%}

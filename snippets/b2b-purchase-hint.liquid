@@ -1,0 +1,72 @@
+{%- comment -%}
+  Optional informational link to the existing partner page.
+  placement: 'pdp' (the six VENUS E templates) or 'drawer'.
+{%- endcomment -%}
+{%- liquid
+  assign show_b2b_hint = false
+  if placement == 'drawer' and settings.b2b_cart_drawer_hint_enabled != false
+    assign show_b2b_hint = true
+  elsif placement == 'pdp' and settings.b2b_pdp_hint_enabled != false and request.page_type == 'product'
+    assign b2b_pdp_templates = 'venus-e-mini,venus-e-3,venus-e-4,venus-e-max,venus-e-ct002,venus-e-ct003' | split: ','
+    if b2b_pdp_templates contains template.suffix
+      assign show_b2b_hint = true
+    endif
+  endif
+  assign b2b_partner_page = settings.b2b_partner_page | default: pages['installateure-partner']
+  assign b2b_hint_text = settings.b2b_purchase_hint_text | default: 'Du bist Händler oder Installateur und möchtest Produkte zum Weiterverkauf beziehen?'
+  assign b2b_hint_link_text = settings.b2b_purchase_hint_link_text | default: 'Für Installateure & Partner →'
+-%}
+{%- if show_b2b_hint and b2b_partner_page.url != blank -%}
+  {% style %}
+    .b2b-purchase-hint {
+      min-width: 0;
+      margin: 0;
+      border-top: 1px solid #e2e5e9;
+      padding-top: 12px;
+      color: #62666d;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    .b2b-purchase-hint .b2b-purchase-hint__text {
+      margin: 0 0 3px;
+      font: inherit;
+      color: inherit;
+    }
+
+    .b2b-purchase-hint .b2b-purchase-hint__link {
+      display: inline-block;
+      padding: 3px 0;
+      color: #006fbb;
+      font: inherit;
+      font-weight: 600;
+      text-decoration: none;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .b2b-purchase-hint .b2b-purchase-hint__link:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .b2b-purchase-hint .b2b-purchase-hint__link:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .b2b-purchase-hint--drawer {
+      margin: 0 0 10px;
+      padding-top: 8px;
+      font-size: 12px;
+      text-align: left;
+    }
+  {% endstyle %}
+  <div class="b2b-purchase-hint b2b-purchase-hint--{{ placement | escape }}" lang="de">
+    <p class="b2b-purchase-hint__text">{{ b2b_hint_text | escape }}</p>
+    <a class="b2b-purchase-hint__link" href="{{ b2b_partner_page.url | escape }}">{{ b2b_hint_link_text | escape }}</a>
+  </div>
+{%- endif -%}

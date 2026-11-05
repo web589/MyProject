@@ -1,0 +1,101 @@
+{%- comment -%}
+  Shared informational notice for the CT002 / CT003 product purchase areas.
+  Product selectors identify the meters even when tax mapping is disabled.
+  This notice does not determine eligibility or change cart / tax behavior.
+  notice_product: the product being purchased.
+{%- endcomment -%}
+{%- liquid
+  assign show_meter_notice = false
+  if request.page_type == 'product' and localization.country.iso_code == 'DE' and notice_product != blank
+    if notice_product.handle == 'ct002-smart-meter' or notice_product.handle == 'ct003-smart-meter' or notice_product.handle == 'ct002-smart-meter-de-0-mwst' or notice_product.handle == 'ct003-smart-meter-de-0-mwst'
+      assign show_meter_notice = true
+    elsif notice_product.id != blank
+      if notice_product.id == settings.de_vat_ct002_standard_product.id or notice_product.id == settings.de_vat_ct002_zero_product.id or notice_product.id == settings.de_vat_ct003_standard_product.id or notice_product.id == settings.de_vat_ct003_zero_product.id
+        assign show_meter_notice = true
+      endif
+    endif
+  endif
+-%}
+{%- if show_meter_notice -%}
+  {% style %}
+    .de-vat-meter-notice {
+      width: 100%;
+      min-width: 0;
+      margin: 0;
+      color: #444;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: left;
+      overflow-wrap: anywhere;
+    }
+
+    .product-single__form > .de-vat-meter-notice {
+      margin-bottom: 12px;
+    }
+
+    .de-vat-meter-notice > summary {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 4px 0;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .de-vat-meter-notice > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .de-vat-meter-notice > summary:focus-visible {
+      outline: 2px solid #0b6fb9;
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+
+    .de-vat-meter-notice__icon,
+    .de-vat-meter-notice__chevron {
+      flex: 0 0 16px;
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+    }
+
+    .de-vat-meter-notice__label {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .de-vat-meter-notice[open] .de-vat-meter-notice__chevron {
+      transform: rotate(180deg);
+    }
+
+    .de-vat-meter-notice__content {
+      padding: 8px 0 0 24px;
+    }
+
+    .de-vat-meter-notice__content p {
+      margin: 0 0 8px;
+    }
+
+    .de-vat-meter-notice__content p:last-child {
+      margin-bottom: 0;
+    }
+  {% endstyle %}
+  <details class="de-vat-meter-notice" lang="de">
+    <summary>
+      <svg class="de-vat-meter-notice__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+        <circle cx="10" cy="10" r="8" />
+        <path d="M10 9v5M10 6v1" />
+      </svg>
+      <span class="de-vat-meter-notice__label">Hinweis zur Mehrwertsteuer: 0 % nur bei Erfüllung der gesetzlichen Voraussetzungen.</span>
+      <svg class="de-vat-meter-notice__chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+        <path d="m5 7.5 5 5 5-5" />
+      </svg>
+    </summary>
+    <div class="de-vat-meter-notice__content">
+      <p><strong>Hinweis zur Mehrwertsteuer (0 % gemäß § 12 Abs. 3 UStG)</strong></p>
+      <p>Der Nullsteuersatz kann angewendet werden, wenn der Smart Meter als begünstigte wesentliche Komponente für den Betrieb einer Photovoltaikanlage geliefert wird und sämtliche gesetzlichen Voraussetzungen erfüllt sind.</p>
+      <p>Sind die gesetzlichen Voraussetzungen nicht erfüllt, gilt der reguläre Umsatzsteuersatz von 19 %.</p>
+    </div>
+  </details>
+{%- endif -%}
