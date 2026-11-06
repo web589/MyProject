@@ -7,7 +7,7 @@
       <p class="vpp-ready__subtext">{{ section.settings.subtext }}</p>
       <div class="vpp-ready__media vpp-ready__media--community">
         {% if section.settings.video != blank %}
-          {{ section.settings.video | video_tag: image_size: '2000x', autoplay: false, loop: false, muted: false, controls: true, playsinline: true, preload: 'metadata', class: 'vpp-ready__community-video' }}
+          {{ section.settings.video | video_tag: image_size: '2000x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'vpp-ready__community-video' }}
         {% elsif section.settings.image != blank %}
           {{ section.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '720, 960, 1280, 1600, 2000', sizes: '100vw', alt: section.settings.image_alt }}
         {% else %}
