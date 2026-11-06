@@ -6,7 +6,13 @@
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span>{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
       <p class="vpp-ready__subtext">{{ section.settings.subtext }}</p>
       <div class="vpp-ready__media vpp-ready__media--community">
-        {% if section.settings.image != blank %}{{ section.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '720, 960, 1280, 1600, 2000', sizes: '100vw', alt: section.settings.image_alt }}{% else %}<div class="vpp-ready__placeholder">{{ section.settings.image_placeholder }}</div>{% endif %}
+        {% if section.settings.video != blank %}
+          {{ section.settings.video | video_tag: image_size: '2000x', autoplay: false, loop: false, muted: false, controls: true, playsinline: true, preload: 'metadata', class: 'vpp-ready__community-video' }}
+        {% elsif section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '720, 960, 1280, 1600, 2000', sizes: '100vw', alt: section.settings.image_alt }}
+        {% else %}
+          <div class="vpp-ready__placeholder">{{ section.settings.image_placeholder }}</div>
+        {% endif %}
       </div>
       {% if section.settings.caption != blank %}<p class="vpp-ready__caption">{{ section.settings.caption }}</p>{% endif %}
       {% if section.settings.virtual_text != blank %}<p class="vpp-ready__virtual"><strong>{{ section.settings.virtual_label }}</strong> {{ section.settings.virtual_text }}</p>{% endif %}
@@ -36,10 +42,11 @@
     {"type":"text","id":"heading_before","label":"标题前半部分","default":"Wie funktioniert ein virtuelles Kraftwerk mit"},
     {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"Heimspeichern?"},
     {"type":"textarea","id":"subtext","label":"副标题","default":"Ein virtuelles Kraftwerk verbindet verteilte Speicher digital über eine Plattform und koordiniert ihre verfügbare Flexibilität innerhalb festgelegter Betriebsgrenzen. Die Speicher bleiben dabei an ihrem jeweiligen Standort."},
+    {"type":"video","id":"video","label":"社区场景视频","info":"可上传或选择 Shopify 视频；视频优先显示并提供播放控件。"},
     {"type":"image_picker","id":"image","label":"社区场景图片"},
     {"type":"text","id":"image_alt","label":"社区场景替代文字","default":"Schematische Darstellung mehrerer Heimspeicher, die über eine VPP-Plattform digital koordiniert werden"},
     {"type":"text","id":"image_placeholder","label":"图片占位文字","default":"请选择多户社区 VPP 场景图，不使用方框流程图"},
-    {"type":"text","id":"caption","label":"图片说明","default":"Prinzipdarstellung eines virtuellen Kraftwerks, kein Installationsplan."},
+    {"type":"text","id":"caption","label":"媒体说明","default":"Prinzipdarstellung eines virtuellen Kraftwerks, kein Installationsplan."},
     {"type":"text","id":"virtual_label","label":"虚拟释义标签","default":"Virtuell"},
     {"type":"textarea","id":"virtual_text","label":"虚拟释义内容","default":"bedeutet: Die Speicher bleiben an ihren Standorten, werden aber digital gemeinsam koordiniert."},
     {"type":"header","content":"版式与字体"},
