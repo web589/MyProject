@@ -1897,6 +1897,8 @@
           // This ID is rendered only from a merchant-configured reference to an
           // approved single-product strategy, never from cart line properties.
           if (item.dataset.deVatCanonicalVariantId) return item.dataset.deVatCanonicalVariantId;
+          // Original bundle prices remain in use for destinations outside DE.
+          if (this.selectedCountry !== 'DE' && item.dataset.deVatInternationalVariantId) return item.dataset.deVatInternationalVariantId;
           if (this.isSingleSourceVatItem(item)) return item.dataset.deVatVariantId;
           if (mode === 'zero' && !this.isVatItemConfigured(item)) return '';
           return mode === 'zero' ? item.dataset.deZeroVatVariantId : item.dataset.deStandardVatVariantId;
@@ -1936,7 +1938,8 @@
         updateAcceleratedCheckout() {
           if (!this.acceleratedCheckout) return;
           const eligibleItems = this.drawer ? this.getEligibleVatItems() : [];
-          const containsZeroVatItem = eligibleItems.some(item => item.dataset.deVatMode === 'zero');
+          const containsZeroVatItem = eligibleItems.some(item => item.dataset.deVatMode === 'zero'
+            && !(this.selectedCountry !== 'DE' && item.dataset.deVatInternationalVariantId === item.dataset.deVatVariantId));
           this.acceleratedCheckout.hidden = Boolean(window.PVTaxCart && (window.PVTaxCart._vatTransactionUncertain || window.PVTaxCart._pdpCartTransactionUncertain))
             || eligibleItems.some(item => item.dataset.deVatPolicyInvalid === 'true')
             || containsZeroVatItem
@@ -2043,6 +2046,110 @@
           return this.savePromise;
         }
 
+        nativeBundleCartSignature(cart) {
+          const quantities = new Map();
+          (cart.items || []).forEach(item => {
+            const properties = Object.fromEntries(Object.entries(item.properties || {})
+              .filter(([, value]) => value !== null && value !== undefined && String(value) !== '')
+              .sort(([a], [b]) => a.localeCompare(b)));
+            const identity = JSON.stringify([String(item.variant_id || item.id),
+              String(item.selling_plan_allocation?.selling_plan?.id || item.selling_plan || ''), properties]);
+            quantities.set(identity, (quantities.get(identity) || 0) + Number(item.quantity));
+          });
+          return JSON.stringify([...quantities].filter(([, quantity]) => quantity > 0).sort());
+        }
+
+        async syncNativeBundleMerchandise(elements, targetMode, rebuildCart) {
+          // Native Bundle parents reject custom properties. Prove the complete
+          // cart delta instead of attaching a transaction token to the parent.
+          const run = async () => {
+            const uncertain = () => {
+              window.PVTaxCart._vatTransactionUncertain = true;
+              document.dispatchEvent(new CustomEvent('cart:build'));
+              document.dispatchEvent(new CustomEvent('cart:transaction-uncertain'));
+              return new Error('Die Bundle-Änderung konnte nicht eindeutig bestätigt werden. Bitte lade die Seite neu und prüfe den Warenkorb.');
+            };
+            const readCart = async () => {
+              const response = await fetch(`${this.rootUrl}cart.js?t=${Date.now()}`, {
+                credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' }
+              });
+              const cart = await window.PVTaxCart.readJsonResponse(response, 'Der Warenkorb konnte nicht geladen werden.');
+              if (!response.ok || !Array.isArray(cart.items)) throw new Error('Der Warenkorb konnte nicht geladen werden.');
+              return cart;
+            };
+            const mutate = async (endpoint, body) => {
+              let response;
+              try {
+                response = await fetch(`${this.rootUrl}cart/${endpoint}.js`, {
+                  method: 'POST', credentials: 'same-origin',
+                  headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                  body: JSON.stringify(body)
+                });
+                const result = await window.PVTaxCart.readJsonResponse(response, 'Die Bundle-Änderung konnte nicht gespeichert werden.');
+                if (!response.ok) throw new Error(result.description || result.message || 'Die Bundle-Änderung wurde abgelehnt.');
+                return null;
+              } catch (error) {
+                if (response && !response.ok) error.status = response.status;
+                return error;
+              }
+            };
+            const before = await readCart();
+            const removals = {};
+            const additions = elements.map(element => {
+              const source = before.items.find(item => item.key === element.dataset.key);
+              if (!source || String(source.variant_id || source.id) !== String(element.dataset.deVatVariantId)) {
+                throw new Error('Der Warenkorb wurde geändert. Bitte prüfe die Bundle-Auswahl erneut.');
+              }
+              if (Object.keys(source.properties || {}).length || source.selling_plan_allocation || source.selling_plan) {
+                throw new Error('Dieses Bundle enthält zusätzliche Angaben. Bitte prüfe den Warenkorb, bevor du die Steuerzuordnung änderst.');
+              }
+              removals[source.key] = 0;
+              return { id: Number(this.getVatTargetVariantId(element, targetMode)), quantity: source.quantity };
+            });
+            const afterAdd = { items: [...before.items, ...additions] };
+            const afterSwitch = { items: [...before.items.filter(item => !Object.hasOwn(removals, item.key)), ...additions] };
+            const signature = cart => this.nativeBundleCartSignature(cart);
+            const addFailure = await mutate('add', { items: additions });
+            let actual = await readCart().catch(() => { throw uncertain(); });
+            if (signature(actual) === signature(before)) {
+              const error = addFailure || new Error('Das Bundle konnte nicht hinzugefügt werden. Bitte prüfe die Verfügbarkeit.');
+              if (targetMode === 'zero' && this.isInventoryErrorResponse(error.status, error.message)) {
+                error.canFallbackToStandardVat = true;
+                this.zeroVatVariantUnavailable = true;
+              }
+              throw error;
+            }
+            if (signature(actual) !== signature(afterAdd) || (addFailure && addFailure.status)) throw uncertain();
+
+            const removalFailure = await mutate('update', { updates: removals });
+            actual = await readCart().catch(() => { throw uncertain(); });
+            if (signature(actual) !== signature(afterSwitch)) {
+              // Roll back only when every source and every unrelated line is
+              // unchanged. Preserve quantities already present in the target.
+              if (signature(actual) !== signature(afterAdd)) throw uncertain();
+              const rollback = {};
+              const targetIds = new Set(additions.map(item => String(item.id)));
+              for (const targetId of targetIds) {
+                const matches = cart => cart.items.filter(item => String(item.variant_id || item.id) === targetId
+                  && !Object.keys(item.properties || {}).length && !item.selling_plan_allocation && !item.selling_plan);
+                const targetLines = matches(actual);
+                if (targetLines.length !== 1 || !targetLines[0].key) throw uncertain();
+                rollback[targetLines[0].key] = matches(before).reduce((sum, item) => sum + Number(item.quantity), 0);
+              }
+              await mutate('update', { updates: rollback });
+              actual = await readCart().catch(() => { throw uncertain(); });
+              if (signature(actual) !== signature(before)) throw uncertain();
+              throw removalFailure || new Error('Die bisherige Bundle-Auswahl konnte nicht entfernt werden.');
+            }
+            this.cartMerchandiseReordered = true;
+            if (rebuildCart) {
+              document.dispatchEvent(new CustomEvent('cart:build'));
+              document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: actual } }));
+            }
+          };
+          return window.PVTaxCart.enqueue(run);
+        }
+
         async syncVatMerchandise(rebuildCart) {
           if (window.PVTaxCart._vatTransactionUncertain || window.PVTaxCart._pdpCartTransactionUncertain) throw new Error('Bitte lade die Seite neu und prüfe den Warenkorb, bevor du fortfährst.');
           if (this.isSyncingVatMerchandise) {
@@ -2066,6 +2173,8 @@
           }
           const switches = eligibleElements.filter(item => {
             const targetVariantId = this.getVatTargetVariantId(item, targetMode);
+            if (this.selectedCountry !== 'DE' && item.dataset.deVatInternationalVariantId
+              && String(item.dataset.deVatVariantId) === String(targetVariantId)) return false;
             if (this.isSingleSourceVatItem(item) && !item.dataset.deVatCanonicalVariantId) return false;
             // A standard line with no configured strategy can still be bought
             // outside the German zero-rate flow. Never infer its tax rate.
@@ -2085,6 +2194,12 @@
 
           this.isSyncingVatMerchandise = true;
           try {
+            const nativeSwitches = switches.filter(item => item.dataset.deVatInternationalVariantId);
+            const ordinarySwitches = switches.filter(item => !item.dataset.deVatInternationalVariantId);
+            if (nativeSwitches.length) {
+              await this.syncNativeBundleMerchandise(nativeSwitches, targetMode, rebuildCart && !ordinarySwitches.length);
+            }
+            if (!ordinarySwitches.length) return;
             const cartResponse = await fetch(`${this.rootUrl}cart.js`, {
               cache: 'no-store',
               headers: {
@@ -2099,7 +2214,7 @@
             const removals = {};
             const sourceKeysByToken = {};
             let missingLine = false;
-            switches.forEach(element => {
+            ordinarySwitches.forEach(element => {
               const line = cart.items.find(item => item.key === element.dataset.key);
               if (!line) {
                 missingLine = true;
@@ -2528,6 +2643,12 @@
             return;
           }
 
+          // Checkout saves the current postcode itself. A delayed quote must
+          // not change the delivery revision while merchandise is being swapped.
+          if (this.shippingInputTimer) {
+            window.clearTimeout(this.shippingInputTimer);
+            this.shippingInputTimer = null;
+          }
           event.preventDefault();
           event.stopImmediatePropagation();
           this.isPreparingCheckout = true;
@@ -2580,6 +2701,11 @@
               quantityFields.forEach(input => { input.disabled = false; });
             }
           } catch (error) {
+            // A replacement may already be committed when a later step fails.
+            // Refresh its new key before another attempt uses the rendered cart.
+            if (this.cartMerchandiseReordered) {
+              document.dispatchEvent(new CustomEvent('cart:build'));
+            }
             this.updateVatUI();
             this.resetCheckoutButton(submitter);
             if (error && error.canFallbackToStandardVat) {

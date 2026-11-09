@@ -14,6 +14,8 @@
   selected meter products cannot use that list to bypass pair validation.
   With the pair switch off, a selected taxable standard meter may use its
   existing standard variant for regular tax only; this never enables 0%.
+  Bundle pairs use distinct native components and inventory pools. Match their
+  three capacities by option value, and retain the original product outside DE.
 {%- endcomment -%}
 {%- liquid
   assign vat_product = policy_product
@@ -205,11 +207,89 @@
       assign standard_variant_id = blank
     endif
   endif
+
+  assign theme_bundle_pair_candidate = false
+  assign international_variant_id = blank
+  for bundle_pair_index in (1..4)
+    assign bundle_zero_key = 'de_vat_bundle_' | append: bundle_pair_index | append: '_zero_product'
+    assign bundle_standard_key = 'de_vat_bundle_' | append: bundle_pair_index | append: '_standard_product'
+    assign bundle_zero = settings[bundle_zero_key]
+    assign bundle_standard = settings[bundle_standard_key]
+    if vat_product.id != blank
+      if vat_product.id == bundle_zero.id or vat_product.id == bundle_standard.id
+        assign theme_bundle_pair_candidate = true
+        assign vat_candidate = true
+        assign vat_strategy = 'paired_variants'
+        assign vat_configured = false
+        assign vat_single_source = false
+        assign vat_policy_invalid = true
+        assign vat_regular_online_ready = false
+        assign canonical_variant_id = blank
+        assign standard_variant_id = blank
+        assign zero_variant_id = blank
+        assign international_variant_id = blank
+        assign vat_mode = 'standard'
+        if vat_product.id == bundle_zero.id
+          assign vat_mode = 'zero'
+        endif
+        assign bundle_pair_valid = true
+        if bundle_zero == blank or bundle_standard == blank or bundle_zero.id == bundle_standard.id
+          assign bundle_pair_valid = false
+        elsif bundle_zero.variants.size != 3 or bundle_standard.variants.size != 3 or bundle_zero.options.size != 1 or bundle_standard.options.size != 1
+          assign bundle_pair_valid = false
+        elsif bundle_zero.options.first != bundle_standard.options.first
+          assign bundle_pair_valid = false
+        endif
+        if bundle_zero.id == ct002_zero.id or bundle_zero.id == ct002_standard.id or bundle_zero.id == ct003_zero.id or bundle_zero.id == ct003_standard.id or bundle_standard.id == ct002_zero.id or bundle_standard.id == ct002_standard.id or bundle_standard.id == ct003_zero.id or bundle_standard.id == ct003_standard.id
+          assign bundle_pair_valid = false
+        endif
+        for other_pair_index in (1..4)
+          unless other_pair_index == bundle_pair_index
+            assign other_zero_key = 'de_vat_bundle_' | append: other_pair_index | append: '_zero_product'
+            assign other_standard_key = 'de_vat_bundle_' | append: other_pair_index | append: '_standard_product'
+            assign other_zero = settings[other_zero_key]
+            assign other_standard = settings[other_standard_key]
+            if bundle_zero.id == other_zero.id or bundle_zero.id == other_standard.id or bundle_standard.id == other_zero.id or bundle_standard.id == other_standard.id
+              assign bundle_pair_valid = false
+            endif
+          endunless
+        endfor
+        assign matched_bundle_zero_id = ''
+        assign matched_bundle_standard_id = ''
+        for bundle_zero_variant in bundle_zero.variants
+          assign zero_matches = bundle_zero.variants | where: 'option1', bundle_zero_variant.option1
+          assign standard_matches = bundle_standard.variants | where: 'option1', bundle_zero_variant.option1
+          if bundle_zero_variant.option1 == blank or zero_matches.size != 1 or standard_matches.size != 1
+            assign bundle_pair_valid = false
+          else
+            assign bundle_standard_variant = standard_matches.first
+            if bundle_zero_variant.id == bundle_standard_variant.id
+              assign bundle_pair_valid = false
+            endif
+            if vat_mode == 'zero' and vat_variant.id == bundle_zero_variant.id
+              assign matched_bundle_zero_id = bundle_zero_variant.id
+              assign matched_bundle_standard_id = bundle_standard_variant.id
+            elsif vat_mode == 'standard' and vat_variant.id == bundle_standard_variant.id
+              assign matched_bundle_zero_id = bundle_zero_variant.id
+              assign matched_bundle_standard_id = bundle_standard_variant.id
+            endif
+          endif
+        endfor
+        if bundle_pair_valid and matched_bundle_zero_id != blank and matched_bundle_standard_id != blank
+          assign vat_configured = true
+          assign vat_policy_invalid = false
+          assign standard_variant_id = matched_bundle_standard_id
+          assign zero_variant_id = matched_bundle_zero_id
+          assign international_variant_id = matched_bundle_zero_id
+        endif
+      endif
+    endif
+  endfor
 -%}
 {%- if output == 'candidate' -%}
   {{- vat_candidate -}}
 {%- elsif output == 'json' -%}
-  {"candidate":{{ vat_candidate | json }},"strategy":{{ vat_strategy | json }},"configured":{{ vat_configured | json }},"mode":{{ vat_mode | json }},"singleSource":{{ vat_single_source | json }},"invalid":{{ vat_policy_invalid | json }},"standardVariantId":{{ standard_variant_id | append: '' | json }},"zeroVariantId":{{ zero_variant_id | append: '' | json }},"canonicalVariantId":{{ canonical_variant_id | append: '' | json }}}
+  {"candidate":{{ vat_candidate | json }},"strategy":{{ vat_strategy | json }},"configured":{{ vat_configured | json }},"mode":{{ vat_mode | json }},"singleSource":{{ vat_single_source | json }},"invalid":{{ vat_policy_invalid | json }},"standardVariantId":{{ standard_variant_id | append: '' | json }},"zeroVariantId":{{ zero_variant_id | append: '' | json }},"canonicalVariantId":{{ canonical_variant_id | append: '' | json }}{% if theme_bundle_pair_candidate %},"internationalVariantId":{{ international_variant_id | append: '' | json }}{% endif %}}
 {%- else -%}
   data-de-zero-vat-eligible="{{ vat_candidate }}"
   data-de-vat-mode="{{ vat_mode }}"
@@ -217,6 +297,7 @@
   data-de-vat-strategy="{{ vat_strategy }}"
   data-de-vat-configured="{{ vat_configured }}"
   data-de-vat-canonical-variant-id="{{ canonical_variant_id }}"
+  data-de-vat-international-variant-id="{{ international_variant_id }}"
   data-de-vat-single-source="{{ vat_single_source }}"
   data-de-vat-regular-online-ready="{{ vat_regular_online_ready }}"
   data-de-standard-vat-variant-id="{{ standard_variant_id }}"
