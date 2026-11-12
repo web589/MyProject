@@ -12,7 +12,7 @@
       assign video_label = section.settings.image_alt | default: section.settings.video.alt | default: section.settings.heading
     %}
     <div class="et-media et-flow-media">
-      {{ section.settings.video | video_tag: image_size: '1600x', poster: video_poster_url, controls: true, playsinline: true, preload: 'metadata', class: 'et-flow-video', aria-label: video_label }}
+      {{ section.settings.video | video_tag: image_size: '1600x', poster: video_poster_url, autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', class: 'et-flow-video', aria-label: video_label }}
       {% if section.settings.image_badge != blank %}<span class="et-media-badge">{{ section.settings.image_badge | escape }}</span>{% endif %}
     </div>
   {% else %}
@@ -164,7 +164,7 @@
       "type": "video",
       "id": "video",
       "label": "能源流视频",
-      "info": "可上传或从 Shopify 文件中选择视频；选中后优先显示视频。建议 2.2:1，默认点击播放，可暂停。"
+      "info": "可上传或从 Shopify 文件中选择视频；选中后优先显示视频。建议 2.2:1，静音自动循环播放，不显示播放控件。"
     },
     {
       "type": "image_picker",
