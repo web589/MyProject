@@ -5,9 +5,16 @@
 
   <div class="acdc-flow-media">
     {% if section.settings.video != blank %}
-      {% assign video_poster = section.settings.poster | default: section.settings.video.preview_image %}
+      {% liquid
+        assign video_poster = section.settings.poster | default: section.settings.video.preview_image
+        # Prefer the largest MP4 so the looping diagram does not start with a low-resolution HLS rendition.
+        assign video_sources = section.settings.video.sources | where: 'format', 'mp4' | sort: 'height' | reverse
+        if video_sources == empty
+          assign video_sources = section.settings.video.sources
+        endif
+      %}
       <video class="acdc-flow-video" autoplay loop muted playsinline preload="metadata" aria-label="{{ section.settings.video_alt | escape }}"{% if video_poster != blank %} poster="{{ video_poster | image_url: width: 1600 | escape }}"{% endif %}>
-        {% for source in section.settings.video.sources %}
+        {% for source in video_sources %}
           <source src="{{ source.url | escape }}" type="{{ source.mime_type | escape }}">
         {% endfor %}
         {% if video_poster != blank %}{{ video_poster | image_url: width: 1600 | image_tag: loading: 'lazy', alt: section.settings.video_alt }}{% endif %}
