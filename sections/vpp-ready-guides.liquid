@@ -6,19 +6,7 @@
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span>{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
       {% if section.settings.subtext != blank %}<p class="vpp-ready__subtext">{{ section.settings.subtext }}</p>{% endif %}
       <div class="vpp-ready__guide-grid">
-        {% for block in section.blocks %}
-          <article class="vpp-ready__guide-card" {{ block.shopify_attributes }}>
-            <a class="vpp-ready__guide-media" href="{{ block.settings.url | default: '/blogs/blog-center' }}">
-              {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 981px) 33vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}{% else %}<div class="vpp-ready__placeholder">请选择 Ratgeber 图片</div>{% endif %}
-            </a>
-            <div class="vpp-ready__guide-copy">
-              {% if block.settings.tag != blank %}<p class="vpp-ready__tag">{{ block.settings.tag }}</p>{% endif %}
-              <h3>{{ block.settings.title }}</h3>
-              <p>{{ block.settings.excerpt }}</p>
-              {% if block.settings.link_label != blank %}<a class="vpp-ready__text-link" href="{{ block.settings.url | default: '/blogs/blog-center' }}">{{ block.settings.link_label }}</a>{% endif %}
-            </div>
-          </article>
-        {% endfor %}
+        {% render 'latest-guide-articles', section: section, variant: 'vpp-ready' %}
       </div>
       {% if section.settings.cta_label != blank %}<p class="vpp-ready__center-cta"><a class="vpp-ready__button vpp-ready__button--secondary" href="{{ section.settings.cta_url | default: '/blogs/blog-center' }}">{{ section.settings.cta_label }}</a></p>{% endif %}
     </div>
@@ -31,6 +19,8 @@
   "tag":"section",
   "class":"vpp-ready-guides-section",
   "settings":[
+    {"type":"blog","id":"blog","label":"文章来源（可选）","info":"留空时汇总博客中心各分类，按发布时间显示最新 3 篇文章。"},
+    {"type":"paragraph","content":"标题、摘要、封面和链接自动读取文章；下方卡片仅控制标签和阅读文字。"},
     {"type":"text","id":"eyebrow","label":"眉题","default":"Weiterführende Themen"},
     {"type":"text","id":"heading_before","label":"标题前半部分","default":"Ratgeber &"},
     {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"Energie-Wissen"},

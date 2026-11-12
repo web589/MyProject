@@ -5,7 +5,7 @@
   assign storage_url = section.settings.storage_url | default: '/pages/balkonkraftwerk-mit-speicher'
   assign eauto_url = section.settings.eauto_url | default: '/pages/e-auto'
   assign smart_meter_url = section.settings.smart_meter_url | default: '/products/ct002-smart-meter'
-  assign blog_url = section.settings.blog_url | default: '/blogs/balkonkraftwerk-mit-speicher'
+  assign blog_url = section.settings.blog_url | default: '/blogs/blog-center'
   assign ct002_product = section.settings.ct002_product
   assign ct003_product = section.settings.ct003_product
   if ct002_product == blank
@@ -483,26 +483,7 @@
         {% assign blog_heading_before_accent = section.settings.heading | remove_last: blog_heading_accent | strip %}
         <h2>{{ blog_heading_before_accent }}{% if blog_heading_before_accent != blank %} {% endif %}<span>{{ blog_heading_accent }}</span></h2>
         <div class="ac-storage-page__blog-grid">
-          {% for block in section.blocks %}
-            {% if block.type == 'article' %}
-              {% assign article_url = block.settings.url | default: blog_url %}
-              <article class="ac-storage-page__blog-card" style="--ac-card-title-size: {{ block.settings.title_size | default: 17 }}px; --ac-card-body-size: {{ block.settings.body_size | default: 13 }}px; --ac-card-image-height: {{ block.settings.image_height | default: 140 }}px; --ac-card-image-width: {{ block.settings.image_width | default: 100 }}%;" {{ block.shopify_attributes }}>
-                <a class="ac-storage-page__media ac-storage-page__media--blog" href="{{ article_url }}">
-                  {% if block.settings.image != blank %}
-                    {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '420, 640, 900', sizes: '(min-width: 1000px) 33vw, 100vw', alt: block.settings.alt }}
-                  {% else %}
-                    <span class="ac-storage-page__placeholder">{{ block.settings.placeholder }}</span>
-                  {% endif %}
-                </a>
-                <div class="ac-storage-page__card-body">
-                  <span class="ac-storage-page__tag">{{ block.settings.tag }}</span>
-                  <h3>{{ block.settings.title }}</h3>
-                  <p>{{ block.settings.copy }}</p>
-                  <a class="ac-storage-page__link" href="{{ article_url }}">{{ block.settings.link_label | default: section.settings.card_link_label }}</a>
-                </div>
-              </article>
-            {% endif %}
-          {% endfor %}
+          {% render 'latest-guide-articles', section: section, variant: 'ac-storage' %}
         </div>
         <a class="ac-storage-page__link ac-storage-page__blog-cta" href="{{ section.settings.blog_url | default: blog_url }}">{{ section.settings.blog_link_label }}</a>
       </div>

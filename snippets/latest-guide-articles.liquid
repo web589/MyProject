@@ -1,0 +1,127 @@
+{%- comment -%}
+  Latest published articles for the energy guide sections.
+  With no blog selected, use the same blog-center menu sources as the blog index.
+  Existing blocks supply presentation settings only, never article content or URLs.
+{%- endcomment -%}
+{%- liquid
+  assign guide_articles = '' | split: ''
+  assign selected_blog = blogs[section.settings.blog]
+  if selected_blog != blank
+    assign guide_articles = selected_blog.articles
+  else
+    assign guide_blog_handles = '|blog-center|'
+    for link in linklists['blog-center'].links
+      assign source_blog_handle = blank
+      if link.type == 'blog_link' and link.object.handle != blank
+        assign source_blog_handle = link.object.handle
+      elsif link.url contains '/blogs/'
+        assign source_blog_handle = link.url | split: '/blogs/' | last | split: '/' | first | split: '?' | first | split: '#' | first
+      endif
+      assign source_blog_key = '|' | append: source_blog_handle | append: '|'
+      if source_blog_handle != blank
+        unless guide_blog_handles contains source_blog_key
+          assign guide_blog_handles = guide_blog_handles | append: source_blog_handle | append: '|'
+        endunless
+      endif
+    endfor
+    assign guide_blog_handles = guide_blog_handles | split: '|'
+    for source_blog_handle in guide_blog_handles
+      assign source_blog = blogs[source_blog_handle]
+      if source_blog != blank and source_blog.articles_count > 0
+        assign guide_articles = guide_articles | concat: source_blog.articles
+      endif
+    endfor
+  endif
+  assign guide_articles = guide_articles | sort: 'published_at' | reverse
+
+  assign tag_element = 'p'
+  assign media_style = ''
+  assign image_class = ''
+  assign image_sizes = '(min-width: 1100px) 33vw, (min-width: 769px) 50vw, 100vw'
+  case variant
+    when 'ac-storage'
+      assign card_class = 'ac-storage-page__blog-card'
+      assign media_class = 'ac-storage-page__media ac-storage-page__media--blog'
+      assign placeholder_class = 'ac-storage-page__placeholder'
+      assign body_class = 'ac-storage-page__card-body'
+      assign tag_class = 'ac-storage-page__tag'
+      assign tag_element = 'span'
+      assign link_class = 'ac-storage-page__link'
+    when 'ai-energy'
+      assign card_class = 'ai-energy__guide-card'
+      assign media_class = 'ai-energy__guide-media'
+      assign placeholder_class = 'ph ai-energy__placeholder'
+      assign body_class = 'ai-energy__guide-copy'
+      assign tag_class = 'ai-energy__tag'
+      assign link_class = 'ai-energy__text-link'
+    when 'smart-meter'
+      assign card_class = 'sm-guide-card'
+      assign media_class = 'sm-guide-card__media'
+      assign placeholder_class = 'sm-placeholder'
+      assign body_class = 'sm-guide-card__body'
+      assign tag_class = 'sm-number'
+      assign link_class = 'sm-text-link sm-guide-card__link'
+    when 'vpp-ready'
+      assign card_class = 'vpp-ready__guide-card'
+      assign media_class = 'vpp-ready__guide-media'
+      assign placeholder_class = 'vpp-ready__placeholder'
+      assign body_class = 'vpp-ready__guide-copy'
+      assign tag_class = 'vpp-ready__tag'
+      assign link_class = 'vpp-ready__text-link'
+    when 'acdc'
+      assign card_class = 'acdc-art'
+      assign media_class = 'acdc-art-media'
+      assign media_style = 'display: block;'
+      assign image_class = 'acdc-art-image'
+      assign image_sizes = '(max-width: 720px) 100vw, (max-width: 1180px) 50vw, 33vw'
+      assign placeholder_class = 'acdc-media-placeholder'
+      assign body_class = 'acdc-art-body'
+      assign tag_class = 'acdc-tag'
+      assign tag_element = 'span'
+      assign link_class = 'acdc-link'
+    when 'erfahrungen-tests'
+      assign card_class = 'et-art'
+      assign media_class = 'et-media et-article-media'
+      assign media_style = 'display: block;'
+      assign image_class = 'et-media-image'
+      assign image_sizes = '(min-width: 1640px) 465px, (min-width: 1181px) 30vw, (min-width: 721px) 45vw, 100vw'
+      assign placeholder_class = 'et-media-placeholder'
+      assign body_class = 'et-art-body'
+      assign tag_class = 'et-tag'
+      assign tag_element = 'span'
+      assign link_class = 'et-lnk'
+  endcase
+-%}
+
+{%- for article in guide_articles limit: 3 -%}
+  {%- liquid
+    assign card_block = section.blocks[forloop.index0]
+    if variant == 'erfahrungen-tests' and card_block.settings.show_block == false
+      continue
+    endif
+    assign card_tag = 'RATGEBER'
+    if card_block != blank
+      assign card_tag = card_block.settings.tag
+    endif
+    assign card_link_label = card_block.settings.link_label | default: section.settings.card_link_label | default: 'Weiterlesen →'
+    assign card_image_alt = article.image.alt | default: article.title
+    assign card_excerpt = article.excerpt_or_content | strip_html | strip | truncatewords: 28
+  -%}
+  <article class="{{ card_class }}"{% if variant == 'ac-storage' %} style="--ac-card-title-size: {{ card_block.settings.title_size | default: 17 }}px; --ac-card-body-size: {{ card_block.settings.body_size | default: 13 }}px; --ac-card-image-height: {{ card_block.settings.image_height | default: 140 }}px; --ac-card-image-width: {{ card_block.settings.image_width | default: 100 }}%;"{% endif %} {{ card_block.shopify_attributes }}>
+    <a class="{{ media_class }}"{% if media_style != blank %} style="{{ media_style }}"{% endif %} href="{{ article.url }}" aria-label="{{ article.title | escape }}">
+      {% if article.image != blank %}
+        {{ article.image | image_url: width: 1000 | image_tag: class: image_class, loading: 'lazy', widths: '360, 600, 900, 1000', sizes: image_sizes, alt: card_image_alt }}
+      {% else %}
+        <span class="{{ placeholder_class }}"{% if variant == 'acdc' %} style="display: block;"{% endif %} aria-hidden="true">{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}</span>
+      {% endif %}
+    </a>
+    <div class="{{ body_class }}">
+      {% if card_tag != blank %}<{{ tag_element }} class="{{ tag_class }}">{{ card_tag | escape }}</{{ tag_element }}>{% endif %}
+      <h3>{{ article.title | escape }}</h3>
+      {% if card_excerpt != blank %}<p>{{ card_excerpt | escape }}</p>{% endif %}
+      <a class="{{ link_class }}" href="{{ article.url }}">{{ card_link_label | escape }}</a>
+    </div>
+  </article>
+{%- else -%}
+  {%- if request.design_mode -%}<p>暂无已发布文章。请选择有文章的博客，或检查博客中心菜单中的分类。</p>{%- endif -%}
+{%- endfor -%}

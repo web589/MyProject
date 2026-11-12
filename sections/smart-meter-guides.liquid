@@ -5,25 +5,9 @@
     {% if section.settings.eyebrow != blank %}<p class="sm-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
     <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }}{% if section.settings.heading_highlight != blank %} <span class="sm-accent">{{ section.settings.heading_highlight }}</span>{% endif %}</h2>
     <div class="sm-guide-grid">
-      {% for block in section.blocks %}
-        <article class="sm-guide-card" {{ block.shopify_attributes }}>
-          <a class="sm-guide-card__media" href="{{ block.settings.url | default: '/pages/ratgeber' }}">
-            {% if block.settings.image != blank %}
-              {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '360, 600, 900, 1000', sizes: '(min-width: 981px) 33vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}
-            {% else %}
-              <div class="sm-placeholder">{{ block.settings.image_placeholder }}</div>
-            {% endif %}
-          </a>
-          <div class="sm-guide-card__body">
-            {% if block.settings.tag != blank %}<p class="sm-number">{{ block.settings.tag }}</p>{% endif %}
-            <h3>{{ block.settings.title }}</h3>
-            {% if block.settings.text != blank %}<p>{{ block.settings.text }}</p>{% endif %}
-            {% if block.settings.link_label != blank %}<a class="sm-text-link sm-guide-card__link" href="{{ block.settings.url | default: '/pages/ratgeber' }}">{{ block.settings.link_label }}</a>{% endif %}
-          </div>
-        </article>
-      {% endfor %}
+      {% render 'latest-guide-articles', section: section, variant: 'smart-meter' %}
     </div>
-    {% if section.settings.cta_label != blank %}<p class="sm-guides__cta"><a class="sm-button sm-button--secondary" href="{{ section.settings.cta_url | default: '/pages/ratgeber' }}">{{ section.settings.cta_label }}</a></p>{% endif %}
+    {% if section.settings.cta_label != blank %}<p class="sm-guides__cta"><a class="sm-button sm-button--secondary" href="{{ section.settings.cta_url | default: '/blogs/blog-center' }}">{{ section.settings.cta_label }}</a></p>{% endif %}
   </div>
 </section>
 
@@ -32,6 +16,8 @@
   "name": "智能电表 · 指南",
   "class": "section-smart-meter-guides",
   "settings": [
+    {"type":"blog","id":"blog","label":"文章来源（可选）","info":"留空时汇总博客中心各分类，按发布时间显示最新 3 篇文章。"},
+    {"type":"paragraph","content":"标题、摘要、封面和链接自动读取文章；下方卡片仅控制标签和阅读文字。"},
     {"type":"text","id":"eyebrow","label":"眉题","default":"Mehr erfahren"},
     {"type":"text","id":"heading_before","label":"标题前半部分","default":"Ratgeber &"},
     {"type":"text","id":"heading_highlight","label":"标题高亮部分","default":"Energie-Wissen"},

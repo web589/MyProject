@@ -10,12 +10,7 @@
       <h2 id="{{ page_id }}-heading">{{ section.settings.heading_before }} <span>{{ section.settings.heading_highlight }}</span></h2>
       {% if section.settings.subtext != blank %}<p class="ai-energy__subtext">{{ section.settings.subtext }}</p>{% endif %}
       <div class="ai-energy__guide-grid">
-        {% for block in section.blocks %}
-          <article class="ai-energy__guide-card" {{ block.shopify_attributes }}>
-            <a class="ai-energy__guide-media" href="{{ block.settings.url | default: blog_url }}">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 600, 900', sizes: '(min-width: 960px) 33vw, 100vw', alt: block.settings.image_alt | default: block.settings.title }}{% else %}<div class="ph ai-energy__placeholder">Ratgeberbild auswählen</div>{% endif %}</a>
-            <div class="ai-energy__guide-copy"><p class="ai-energy__tag">{{ block.settings.tag }}</p><h3>{{ block.settings.title }}</h3><p>{{ block.settings.excerpt }}</p><a class="ai-energy__text-link" href="{{ block.settings.url | default: blog_url }}">{{ block.settings.link_label }}</a></div>
-          </article>
-        {% endfor %}
+        {% render 'latest-guide-articles', section: section, variant: 'ai-energy' %}
       </div>
       {% if section.settings.cta_label != blank %}<a class="ai-energy__button ai-energy__button--{{ section.settings.cta_style }} ai-energy__center-cta" href="{{ section.settings.cta_url | default: blog_url }}">{{ section.settings.cta_label }}</a>{% endif %}
     </div>
@@ -28,6 +23,8 @@
   "tag":"section",
   "class":"section-ai-energy-guides",
   "settings":[
+    {"type":"blog","id":"blog","label":"文章来源（可选）","info":"留空时汇总博客中心各分类，按发布时间显示最新 3 篇文章。"},
+    {"type":"paragraph","content":"标题、摘要、封面和链接自动读取文章；下方卡片仅控制标签和阅读文字。"},
     {"type":"text","id":"eyebrow","label":"眉题","default":"Mehr erfahren"},
     {"type":"text","id":"heading_before","label":"标题前半部分","default":"Ratgeber &"},
     {"type":"text","id":"heading_highlight","label":"标题高亮","default":"Energie-Wissen"},

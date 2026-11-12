@@ -2,33 +2,9 @@
   {% capture section_content %}
     {% render 'et-heading', section: section %}
     <div class="et-art-grid">
-      {%- for block in section.blocks -%}
-        {%- if block.settings.show_block -%}
-          {%- liquid
-            assign selected_article = block.settings.article
-            assign article_image = block.settings.image | default: selected_article.image
-            assign article_title = block.settings.custom_title | default: selected_article.title | default: block.settings.fallback_title
-            assign article_text = block.settings.custom_text
-            if article_text == blank and selected_article != blank
-              assign article_text = selected_article.excerpt_or_content | strip_html | strip | truncate: 180
-            endif
-            assign article_text = article_text | default: block.settings.fallback_text
-            assign article_link = block.settings.link | default: selected_article.url | default: block.settings.fallback_link
-            assign article_alt = block.settings.image_alt | default: article_image.alt | default: article_title
-          -%}
-          <article class="et-art" {{ block.shopify_attributes }}>
-            {% render 'et-media', image: article_image, alt: article_alt, wrapper_class: 'et-article-media', sizes: '(min-width: 1640px) 465px, (min-width: 1181px) 30vw, (min-width: 721px) 45vw, 100vw' %}
-            <div class="et-art-body">
-              {% if block.settings.tag != blank %}<span class="et-tag">{{ block.settings.tag | escape }}</span>{% endif %}
-              {% if article_title != blank %}<h3>{{ article_title | escape }}</h3>{% endif %}
-              {% if article_text != blank %}<p>{{ article_text | escape }}</p>{% endif %}
-              {% if block.settings.link_label != blank and article_link != blank %}<a class="et-lnk" href="{{ article_link | escape }}">{{ block.settings.link_label | escape }}</a>{% endif %}
-            </div>
-          </article>
-        {%- endif -%}
-      {%- endfor -%}
+      {% render 'latest-guide-articles', section: section, variant: 'erfahrungen-tests' %}
     </div>
-    {% if section.settings.link_label != blank and section.settings.link != blank %}<div class="et-topic-links"><a class="et-lnk" href="{{ section.settings.link | escape }}">{{ section.settings.link_label | escape }}</a></div>{% endif %}
+    {% if section.settings.link_label != blank %}<div class="et-topic-links"><a class="et-lnk" href="{{ section.settings.link | default: '/blogs/blog-center' | escape }}">{{ section.settings.link_label | escape }}</a></div>{% endif %}
   {% endcapture %}
   {% render 'et-section', section: section, anchor_id: 'et-ratgeber', extra_class: 'et-articles', content: section_content %}
 {%- endif -%}
@@ -45,6 +21,16 @@
     ]
   },
   "settings": [
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "文章来源（可选）",
+      "info": "留空时汇总博客中心各分类，按发布时间显示最新 3 篇文章。"
+    },
+    {
+      "type": "paragraph",
+      "content": "标题、摘要、封面和链接自动读取文章；下方卡片仅控制显示开关、标签和阅读文字。"
+    },
     {
       "type": "checkbox",
       "id": "show_section",
@@ -242,7 +228,7 @@
     {
       "name": "13 指南文章",
       "settings": {
-        "link": "/blogs/ratgeber"
+        "link": "/blogs/blog-center"
       },
       "blocks": [
         {

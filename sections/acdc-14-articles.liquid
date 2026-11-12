@@ -4,30 +4,10 @@
     <h2 id="acdc-articles-title-{{ section.id }}" class="acdc-h2">{{ section.settings.heading | escape }} <span class="acdc-accent">{{ section.settings.heading_accent | escape }}</span></h2>
     {%- if section.settings.subtext != blank -%}<p class="acdc-sub">{{ section.settings.subtext | escape }}</p>{%- endif -%}
     <div class="acdc-art-grid">
-      {%- for block in section.blocks -%}
-        {%- assign selected_article = block.settings.article -%}
-        {%- assign card_title = block.settings.title | default: selected_article.title -%}
-        {%- assign card_image = block.settings.image | default: selected_article.image -%}
-        <article class="acdc-art" {{ block.shopify_attributes }}>
-          <div class="acdc-art-media">
-            {%- if card_image != blank -%}
-              {%- assign card_alt = block.settings.image_alt | default: card_image.alt | default: card_title -%}
-              {{ card_image | image_url: width: 1200 | image_tag: class: 'acdc-art-image', alt: card_alt, loading: 'lazy', widths: '360, 540, 720, 960, 1200', sizes: '(max-width: 720px) 100vw, (max-width: 1180px) 50vw, 33vw' }}
-            {%- else -%}
-              <div class="acdc-media-placeholder" aria-hidden="true"></div>
-            {%- endif -%}
-          </div>
-          <div class="acdc-art-body">
-            {%- if block.settings.tag != blank -%}<span class="acdc-tag">{{ block.settings.tag | escape }}</span>{%- endif -%}
-            {%- if card_title != blank -%}<h3>{{ card_title | escape }}</h3>{%- endif -%}
-            {%- if block.settings.description != blank -%}<p>{{ block.settings.description | escape }}</p>{%- endif -%}
-            {%- if selected_article != blank -%}<a class="acdc-link" href="{{ selected_article.url }}">{{ block.settings.link_label | escape }}</a>{%- endif -%}
-          </div>
-        </article>
-      {%- endfor -%}
+      {% render 'latest-guide-articles', section: section, variant: 'acdc' %}
     </div>
-    {%- if section.settings.all_articles_link != blank -%}
-      <div class="acdc-topic-links"><a class="acdc-link" href="{{ section.settings.all_articles_link }}">{{ section.settings.all_articles_label | escape }}</a></div>
+    {%- if section.settings.all_articles_label != blank -%}
+      <div class="acdc-topic-links"><a class="acdc-link" href="{{ section.settings.all_articles_link | default: '/blogs/blog-center' }}">{{ section.settings.all_articles_label | escape }}</a></div>
     {%- endif -%}
   </div>
 </section>
@@ -37,6 +17,8 @@
   "name":"14 精选文章",
   "class":"acdc-articles-section",
   "settings":[
+    {"type":"blog","id":"blog","label":"文章来源（可选）","info":"留空时汇总博客中心各分类，按发布时间显示最新 3 篇文章。"},
+    {"type":"paragraph","content":"标题、摘要、封面和链接自动读取文章；下方卡片仅控制标签和阅读文字。"},
     {"type":"text","id":"eyebrow","label":"眉题","default":"Ratgeber"},
     {"type":"text","id":"heading","label":"标题前半部分","default":"Ratgeber zu"},
     {"type":"text","id":"heading_accent","label":"标题蓝色部分","default":"Speichertechnik und Nachrüstung"},
@@ -63,7 +45,7 @@
   "presets":[
     {
       "name":"14 精选文章",
-      "settings":{"all_articles_link":"/pages/ratgeber"},
+      "settings":{"all_articles_link":"/blogs/blog-center"},
       "blocks":[
         {"type":"article_card","settings":{"title":"AC- oder DC-Speicher bei bestehender PV?","description":"Welche Architektur zu einer vorhandenen Anlage passt und welche Punkte vorher zu klären sind.","image_alt":"Bestehende PV-Anlage mit Solarspeicher"}},
         {"type":"article_card","settings":{"title":"Speicher nachrüsten: Was muss zum Wechselrichter passen?","description":"Warum die Frage nach dem Wechselrichter bei Nachrüstungen eine zentrale Rolle spielt.","image_alt":"Wechselrichter und Speicher im Hausanschlussraum"}},
