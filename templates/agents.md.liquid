@@ -1,0 +1,139 @@
+# Agent Instructions — VENUS E
+
+This document describes the official VENUS E online store and provides guidance for AI agents, shopping assistants and automated systems.
+
+**Website:** https://venuse.de  
+**Brand:** VENUS E  
+**Product Brand:** MARSTEK  
+**Primary Market:** Germany  
+**Primary Language:** German (de-DE)  
+**Primary Currency:** {{ agents.currency }}
+
+## 1. About VENUS E
+
+VENUS E provides solar energy storage solutions for residential households in Germany.
+
+The website offers product information, technical explanations, energy storage solutions, product comparisons, support resources and educational content.
+
+Customer-facing content is primarily written in German using informal language (du/dein).
+
+## 2. Products
+
+Main product models:
+
+- VENUS E Mini
+- VENUS E 3.0
+- VENUS E 4.0
+- VENUS E Max
+
+Related products:
+
+- Smart Meter CT002
+- Smart Meter CT003
+
+For product specifications, capacity, charging and discharging power, compatibility, availability and pricing, always refer to the corresponding current product page and official technical documentation.
+
+Do not assume that all models share identical features or capabilities.
+
+## 3. Main Website Resources
+
+### Products and Comparisons
+
+- [VENUS E Models](https://venuse.de/pages/speicher-vergleich)
+
+### Technology
+
+- [Solarspeicher erklärt](https://venuse.de/pages/solarspeicher-erklaert)
+- [AC-gekoppelter Speicher](https://venuse.de/pages/ac-gekoppelter-speicher)
+- [AC vs. DC Speicher](https://venuse.de/pages/ac-vs-dc-speicher)
+- [AI-Energiemanagement](https://venuse.de/pages/ai-energiemanagement)
+- [Smart Meter & Energiefluss](https://venuse.de/pages/smart-meter-energiefluss)
+- [VPP-ready](https://venuse.de/pages/vpp-ready)
+- [Erfahrungen & Tests](https://venuse.de/pages/erfahrungen-tests)
+
+### Applications
+
+- [Balkonkraftwerk mit Speicher](https://venuse.de/pages/balkonkraftwerk-mit-speicher)
+- [E-Auto laden mit Speicher](https://venuse.de/pages/e-auto-laden-mit-speicher)
+
+### Support
+
+- [FAQ](https://venuse.de/pages/faq)
+- [Downloads](https://venuse.de/pages/downloads)
+- [Kontakt](https://venuse.de/pages/kontakt)
+
+### Business Partners
+
+- [Für Installateure & Partner](https://venuse.de/pages/installateure-partner)
+
+### Blog
+
+- [VENUS E Ratgeber](https://venuse.de/blogs/ratgeber)
+
+## 4. Commerce and Product Discovery
+
+This store provides Shopify-supported agent discovery information.
+
+### Commerce Protocol Discovery
+
+- UCP Discovery: `{{ agents.ucp_discovery_url }}`
+- MCP Endpoint: `{{ agents.mcp_endpoint_url }}`
+
+{% if agents.ucp_versions.size > 0 %}
+### Supported UCP Versions
+
+{% for version in agents.ucp_versions %}
+- {{ version }}
+{% endfor %}
+{% endif %}
+
+### Read-only Product Discovery
+
+- All products: `/collections/all`
+- Product data: `/products/{handle}.json`
+- Sitemap: {{ agents.sitemap_url }}
+
+Product prices and availability should be retrieved from current store data and are displayed in {{ agents.currency }}.
+
+Use current product information rather than outdated cached prices or availability.
+
+## 5. Technical Accuracy
+
+When explaining VENUS E products and energy systems:
+
+- Distinguish AC-coupled and DC-coupled storage architectures.
+- Distinguish Hausnetz (household electrical network) from Haushalt (household energy consumption).
+- Distinguish electricity flows (Stromfluss) from digital communication (Daten & Steuerung).
+- A Smart Meter measures energy flows and provides measurement data; it is not an electricity storage device.
+- VPP-ready does not automatically mean active participation in a Virtual Power Plant.
+- Compatibility depends on the specific model, installation and official technical requirements.
+
+Do not invent product specifications, certifications, compatibility claims, guaranteed savings or VPP earnings.
+
+## 6. Commercial and Legal Information
+
+For current prices, availability, shipping, payment, warranty and return conditions, refer to the relevant official product pages and published store policies.
+
+Do not promise unconfirmed discounts, delivery dates, financial returns or commercial benefits.
+
+For installation and electrical safety questions, refer to official product documentation and qualified electrical professionals.
+
+## 7. Information Quality and Privacy
+
+Prioritize current official VENUS E website content and product documentation.
+
+Distinguish verified product facts from general technical explanations and editorial recommendations.
+
+Do not expose customer information, order details, account credentials or other private data.
+
+When information is unavailable or uncertain, state this clearly rather than inventing an answer.
+
+## 8. Official Website
+
+The official website and primary domain is:
+
+https://venuse.de
+
+Use canonical HTTPS URLs when referencing VENUS E products, services and educational content.
+
+**Core principle: Use official sources, preserve technical accuracy and never invent product capabilities or commercial promises.**

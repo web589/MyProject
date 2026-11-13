@@ -1,0 +1,36 @@
+
+{% for group in robots.default_groups %}
+  {{- group.user_agent }}
+  {% for rule in group.rules %}
+    {{ rule }}
+  {% endfor %}
+
+  {%- if group.user_agent.value == '*' or group.user_agent.value == 'adsbot-google' %}
+
+    # VENUS E - Exclude special tax-related products
+
+    {{ 'Disallow: /products/marstek-venus-e-max-10-bis-30-kwh-solarspeicher-19-mwst' }}
+    {{ 'Disallow: /products/marstek-venus-e-4-0-5-bis-15-kwh-solarspeicher-19-mwst' }}
+    {{ 'Disallow: /products/marstek-venus-e-3-0-5-12-bis-15-36-kwh-solarspeicher-19-mwst' }}
+    {{ 'Disallow: /products/marstek-venus-e-max-base-unit-19-mwst' }}
+    {{ 'Disallow: /products/marstek-venus-e-4-0-base-unit-19-mwst' }}
+    {{ 'Disallow: /products/marstek-venus-e-3-0-base-unit-19-mwst' }}
+    {{ 'Disallow: /products/marstek-venus-e-mini-2-bis-6-kwh-solarspeicher-19-mwst' }}
+    {{ 'Disallow: /products/marstek-venus-e-mini-base-unit-19-mwst' }}
+    {{ 'Disallow: /products/ct003-smart-meter-de-0-mwst' }}
+    {{ 'Disallow: /products/ct002-smart-meter-de-0-mwst' }}
+    {{ 'Disallow: /products/marstek-venus-e-max-base-unit' }}
+    {{ 'Disallow: /products/marstek-venus-e-4-0-base-unit' }}
+    {{ 'Disallow: /products/marstek-venus-e-mini-base-unit' }}
+    {{ 'Disallow: /products/marstek-venus-e-3-0-base-unit' }}
+
+    # Exclude internal search pages
+
+    {{ 'Disallow: /search' }}
+
+  {%- endif %}
+
+  {%- if group.sitemap != blank %}
+    {{ group.sitemap }}
+  {%- endif %}
+{% endfor %}
